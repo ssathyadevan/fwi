@@ -227,23 +227,13 @@ public:
             }
         }
 
-        volComplexField<T> **chi_p = new volComplexField<T>*[nFreq * nSrc];
-        volComplexField<T> **dW = new volComplexField<T>*[nFreq * nSrc];
         volComplexField<T> **p_est = new volComplexField<T>*[nFreq * nSrc];
-        volComplexField<T> **chi_p_old = new volComplexField<T>*[nFreq * nSrc];
         for(int iFreq=0; iFreq<nFreq; iFreq++) {
             for(int iSrc=0; iSrc<nSrc; iSrc++) {
-                chi_p[iFreq * nSrc + iSrc] = new volComplexField<T>(*p_0[iFreq][iSrc]);
-                dW[iFreq * nSrc + iSrc] = new volComplexField<T>(*p_0[iFreq][iSrc]);
                 p_est[iFreq * nSrc + iSrc] = new volComplexField<T>(*p_0[iFreq][iSrc]);
-                chi_p_old[iFreq * nSrc + iSrc] = new volComplexField<T>(grid);
-
             }
         }
 
-        volComplexField<T> **phi = new volComplexField<T>*[nFreq * nSrc * maxIt];
-
-        std::vector< volComplexField<T>* > A;
         volField<T> diff(grid);
 
         // Main loop
@@ -328,32 +318,14 @@ public:
         } // End of main loop
 
         // Clean up
-        for(int i=0; i<nIt; i++){
-            delete A[i];
-        }
 
         for(int iFreq=0; iFreq<nFreq; iFreq++) {
             for(int iSrc=0; iSrc<nSrc; iSrc++) {
-                delete chi_p[iFreq * nSrc + iSrc];
-                delete dW[iFreq * nSrc + iSrc];
                 delete p_est[iFreq * nSrc + iSrc];
-                delete chi_p_old[iFreq * nSrc + iSrc];
             }
         }
 
-        delete[] chi_p;
-        delete[] dW;
         delete[] p_est;
-        delete[] chi_p_old;
-
-        for(int iFreq=0; iFreq<nFreq; iFreq++) {
-            for(int iSrc=0; iSrc<nSrc; iSrc++) {
-                for(int it=0; it < nIt; it++) {
-                    delete phi[iFreq * nSrc * maxIt + iSrc * maxIt + it];
-                }
-            }
-        }
-        delete[] phi;
 
         delete[] r;
 
