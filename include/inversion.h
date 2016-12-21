@@ -315,89 +315,14 @@ public:
 
             // Start of field update
             std::cout << "Field update" << std::endl;
-            A.push_back(new volComplexField<T>(grid));
-
-            for(int iFreq=0; iFreq<nFreq; iFreq++) {
-                for(int iSrc=0; iSrc<nSrc; iSrc++) {
-
-
-                    *chi_p[iFreq * nSrc + iSrc] = chi_est * *p_est[iFreq * nSrc + iSrc];
-
-                    if(it == 0) {
-                        *dW[iFreq * nSrc + iSrc] = *chi_p[iFreq * nSrc + iSrc];
-                    }
-                    else {
-                        *dW[iFreq * nSrc + iSrc] = *chi_p[iFreq * nSrc + iSrc];
-                        *dW[iFreq * nSrc + iSrc] -= *chi_p_old[iFreq * nSrc + iSrc];
-                    }
-
-                    //T dWNorm = dW.Norm();
-                    //T chi_pNorm = chi_p.Norm();
-
-                    //T res_field = dWNorm / chi_pNorm;
-                    //std::cout << "Residual (field) = " << res_field << std::endl;
-
-                    /*if(res_field < tol && it != 0) {
-            std::cout << "Convergence after " << it << " iterations." << std::endl;
-            break;
-          }*/
-
-                    phi[it * nFreq * nSrc + iFreq * nSrc + iSrc] = new volComplexField<T>(grid);
+            profiler.StartRegion("Field update");
+            for (int iFreq=0; iFreq < nFreq; iFreq++) {
+                std::cout << "Frequency " << iFreq+1 << "  of " << nFreq << std::endl;
+                for (int iSrc=0; iSrc < nSrc; iSrc++) {
+                    *p_est[iFreq * nSrc + iSrc] = calcField(*greens[iFreq], chi_est, *p_0[iFreq][iSrc], 30, tol);
                 }
             }
-
-            profiler.StartRegion("Contract_dW");
-
-            /*for(int k=0; k<nFreq*nSrc; k++) {
-        int iFreq = k / nSrc;
-        int iSrc = k % nSrc;
-
-          *phi[it * nFreq * nSrc + iFreq * nSrc + iSrc] = greens[iFreq]->ContractWithField(*dW[iFreq * nSrc + iSrc]);
-
-      } // End loop k*/
-
-            Greens<T>::ContractWithField(greens, dW, &phi[it * nFreq * nSrc], nFreq, nSrc);
-
             profiler.EndRegion();
-
-            for(int iFreq=0; iFreq<nFreq; iFreq++) {
-                for(int iSrc=0; iSrc<nSrc; iSrc++) {
-
-//                    std::cout << "phi = " << phi[iFreq * nSrc * maxIt + iSrc * maxIt + it]->Norm() << std::endl;
-
-                    volComplexField<T> temp = chi_est * *p_0[iFreq][iSrc];
-
-                    volComplexField<T> f = greens[iFreq]->ContractWithField(temp);
-                    //std::cout << "norm(f) = " << f.Norm() << std::endl;
-
-                    for(int j=0; j<it+1; j++) {
-                        *A[j] = *phi[j * nFreq * nSrc + iFreq * nSrc + iSrc];
-                        temp = *phi[j * nFreq * nSrc + iFreq * nSrc + iSrc];
-                        temp *= chi_est;
-                        *A[j] -= greens[iFreq]->ContractWithField(temp);
-                        //std::cout << "A[j] = " << A[j]->Norm() << std::endl;
-                    }
-
-                    std::complex<T> *alpha = new std::complex<T>[it + 1];
-                    f.GetLSCoefficients(A, alpha, it + 1);
-
-                    *p_est[iFreq * nSrc + iSrc] = *p_0[iFreq][iSrc];
-                    for(int i=0; i < it+1; i++) {
-                        volComplexField<T> alpha_phi = *phi[i * nFreq * nSrc + iFreq * nSrc + iSrc];
-                        alpha_phi *= alpha[i];
-                        *p_est[iFreq * nSrc + iSrc] += alpha_phi;
-                    }
-
-//                    T p_estNorm = p_est[iFreq * nSrc + iSrc]->Norm();
-//                    std::cout << "p_estNorm = " << p_estNorm << std::endl;
-
-                    delete[] alpha;
-
-                    *chi_p_old[iFreq * nSrc + iSrc] = *chi_p[iFreq * nSrc + iSrc];
-
-                } // End loop iSrc
-            }  // End loop iFreq
-
             // End of field update
 
         } // End of main loop

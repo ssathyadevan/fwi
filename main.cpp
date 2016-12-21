@@ -47,13 +47,13 @@ int main()
 
 
     //sine
-    int ret = sineInversion<REAL>(nx, nz, nSrc, nFreq);
+//    int ret = sineInversion<REAL>(nx, nz, nSrc, nFreq);
 
 
 
     //Temple
-//        std::string filename = "C:/Users/Alten/Dropbox/Werk/Alten/Full Waveform Inversion/cpp implementatie Michiel/fullwaveforminversion_CPU/temple.txt";
-//        int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename);
+    std::string filename = "../parallelized-fwi/temple.txt";
+    int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename);
 
 
 
@@ -100,7 +100,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu>(grid, src, recv, freq, *profiler);
 
 
-    chi.toFile("./src/chi.txt");
+    chi.toFile("../parallelized-fwi/src/chi.txt");
 
     std::cout << "Creating Greens function field..." << std::endl;
     inverse->createGreens();
@@ -119,7 +119,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     std::cout << "Estimating Chi..." << std::endl;
     volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data, nItReconstructFields, tol);
     std::cout << "Done, writing to file" << std::endl;
-    chi_est.toFile("./src/chi_est_temple.txt");
+    chi_est.toFile("../parallelized-fwi/src/chi_est_temple.txt");
 
     delete[] p_data;
 
