@@ -11,7 +11,7 @@
 
 
 
-template<typename T, template<typename> class volComplexField, template<typename> class volField>
+template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens>
 class einsum
 {
     const grid_rect_2D<T> &m_grid;
@@ -33,12 +33,9 @@ class einsum
  //       einsum<T,volComplexField,volField> & operator=(const einsum<T,volComplexField,volField> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
-        volComplexField<T> ** einsum_Gr_Pest(const volComplexField<T> *const *G_r, const volComplexField<T> *const *P_est) const
+        void einsum_Gr_Pest(volComplexField<T> **Kappa, const Greens<T> *const *green, const volComplexField<T> *const *P_est) const
         {
-            volComplexField<T> **Kappa;
             int l_i, l_j;
-
-            Kappa = new volComplexField<T>*[m_n_freq*m_n_recv*m_n_src];
 
             for (int i = 0; i < m_n_freq; i++)
             {
@@ -48,37 +45,23 @@ class einsum
                     l_j = j*m_n_src;
                     for(int k = 0; k < m_n_src; k++)
                     {
-                        Kappa[l_i + l_j + k] = new volComplexField<T>(m_grid);
-                        *Kappa[l_i + l_j + k] = (*G_r[l_i + l_j]) * (*P_est[l_i + k]);
+                        *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i*m_n_src + k]);
                     }
                 }
             }
-            return Kappa;
         }
 
 
-        void einsum_K_zeta(const volComplexField<T> *const *const  *const *Kappa, const volField<T> &chi_est, std::complex<T> *K_zeta) const
+        void einsum_K_zeta(const volComplexField<T> *const *Kappa, const volField<T> &chi_est, std::complex<T> *K_zeta) const
         {
-            int l_i, l_j;
-
-            for (int i = 0; i < m_n_freq; i++)
+            for (int i = 0; i < m_n_freq*m_n_recv*m_n_src; i++)
             {
-                l_i = i*m_n_recv*m_n_src;
-
-                for (int j = 0; j < m_n_recv; j++)
-                {
-                    l_j = j*m_n_src;
-
-                    for(int k = 0; k < m_n_src; k++)
-                    {
-                        K_zeta[l_i + l_j + k] = Summation( (*Kappa[i][j][k]), chi_est);
-                    }
-                }
+                K_zeta[i] = Summation( *Kappa[i], chi_est);
             }
         }
 
 
-        void einsum_K_res(const volComplexField<T> *const *const *const *Kappa, const std::complex<T> *res, volComplexField<T> &K_res) const
+        void einsum_K_res(const volComplexField<T> *const *Kappa, const std::complex<T> *res, volComplexField<T> &K_res) const
         {
             int l_i, l_j;
 
@@ -95,9 +78,11 @@ class einsum
 
                     for(int k = 0; k < m_n_src; k++)
                     {
-                        K_dummy = *Kappa[i][j][k];
+                        K_dummy = *Kappa[l_i + l_j + k];
                         K_dummy.Conjugate(); //take conjugate of elements of Kappa (required for algorithm einsum('ijkl,ijk->l',conk(K),r) )
                         K_res += K_dummy * res[l_i + l_j + k];
+  //                      std::cout << *K_res.GetDataPtr() << "   " << *K_dummy.GetDataPtr()* res[l_i + l_j + k] << std::endl;
+  //                      std::cout << *K_res.GetDataPtr() << "   " << *K_dummy.GetDataPtr()* res[l_i + l_j + k] << std::endl;
                     }
                 }
             }

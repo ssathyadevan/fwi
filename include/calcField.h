@@ -12,7 +12,7 @@
 using namespace Eigen;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Green>
-volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const volComplexField<T> &p_init, int maxIt, T tol)
+volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const volComplexField<T> &p_init)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -37,7 +37,7 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
 
     p_tot = p_init;
 
-    for(int it = 0; it < maxIt; it++)
+    for(int it = 0; it < n_iter2; it++)
     {
         chi_p = p_tot * chi;
 
@@ -49,7 +49,7 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         res = dWNorm / chi_pNorm;
         //std::cout << "Residual = " << res << std::endl;
 
-        if(res < tol && it != 0)
+        if(res < tol2 && it != 0)
         {
             std::cout << "Convergence after " << it << " iterations." << std::endl;
             break;
@@ -77,7 +77,6 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
 
             alpha = matA.jacobiSvd(ComputeThinU | ComputeThinV).solve(b_f_rhs);
 
-            std::cout << alpha << std::endl;
             p_tot = p_init;
             for(int j=0; j<it+1; j++)
                 p_tot += alpha[j]*phi[j];
@@ -95,9 +94,9 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
 
 
 
-    if(res >= tol)
+    if(res >= tol2)
     {
-        std::cout << "No convergence after " <<  maxIt << " iterations. Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  n_iter2 << " iterations. Res = " << res << std::endl;
     }
 
     return p_tot;
