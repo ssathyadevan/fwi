@@ -10,7 +10,7 @@ const double tol1 = 1e-6; //CG tol for chi update
 const double tol2 = 5e-5; //tol for p_tot update
 
 const int do_reg = 0; //put 1 to turn on regularization
-
+const int interactive = 1; //put 1 to turn on interactive python session
 
 #endif // INPUT_PARAMETERS
 

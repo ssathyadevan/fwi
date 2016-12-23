@@ -17,6 +17,7 @@
 #include "receivers_rect_2D.h"
 #include "frequencies.h"
 #include "inversion.h"
+#include "helper.h"
 
 #include "tests_helper.h"
 
@@ -121,6 +122,8 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     chi_est.toFile("./src/chi_est_temple.txt");
 
     delete[] p_data;
+
+    MakeFigure("./src/chi.txt", "./src/chi_est_temple.txt", "./src/temple_result.png", nx, nz, interactive);
 
     return 0;
 }

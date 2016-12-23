@@ -316,6 +316,7 @@ public:
         delete[] p_est;
         p_est = nullptr;
 
+
         delete[] r;
         delete[] K_zeta;
 
