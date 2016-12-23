@@ -17,6 +17,7 @@
 #include "receivers_rect_2D.h"
 #include "frequencies.h"
 #include "inversion.h"
+#include "helper.h"
 
 #include "tests_helper.h"
 
@@ -76,8 +77,8 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     volField_rect_2D_cpu<T> chi(grid);
     chi.fromFile(fileName);
 
-    std::array<T,2> x_src_min = {-480.0, -100.0};
-    std::array<T,2> x_src_max = {480.0, -100.0};
+    std::array<T,2> x_src_min = {-480.0, -5.0};
+    std::array<T,2> x_src_max = {480.0, -5.0};
 
     Sources_rect_2D<T> src(x_src_min, x_src_max, nSrc);
     src.Print();
@@ -86,7 +87,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     Receivers_rect_2D<T> recv(src);
     recv.Print();
 
-    T c_0 = 4000.0;
+    T c_0 = 2000.0;
     T f_min = 10.0;
     T f_max = 40.0;
     Frequencies<T> freq(f_min, f_max, nFreq, c_0);
@@ -100,7 +101,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu>(grid, src, recv, freq, *profiler);
 
 
-    chi.toFile("../parallelized-fwi/src/chi.txt");
+    chi.toFile("./src/chi.txt");
 
     std::cout << "Creating Greens function field..." << std::endl;
     inverse->createGreens();
@@ -119,9 +120,11 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     std::cout << "Estimating Chi..." << std::endl;
     volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data, nItReconstructFields, tol);
     std::cout << "Done, writing to file" << std::endl;
-    chi_est.toFile("../parallelized-fwi/src/chi_est_temple.txt");
+    chi_est.toFile("./src/chi_est_temple.txt");
 
     delete[] p_data;
+
+    MakeFigure("./src/chi.txt", "./src/chi_est_temple.txt", "./src/temple_result.png", nx, nz, 1);
 
     return 0;
 }
