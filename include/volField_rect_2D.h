@@ -34,6 +34,7 @@ public:
 
   virtual void Zero() = 0;
   virtual void Square() = 0;
+  virtual void Sqrt() = 0;
   virtual void Random() = 0;
 
   virtual void toBuffer(T *buffer) const = 0;
@@ -45,6 +46,7 @@ public:
 
   virtual T Norm() const = 0;
   virtual T RelNorm() const = 0;
+  virtual T Summation() const = 0;
 
 };
 
