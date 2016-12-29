@@ -39,8 +39,8 @@ int main()
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    const int nx = 64;
-    const int nz = 32;
+    const int nx = 120;
+    const int nz = 60;
 
     int nFreq = 10;
 
@@ -53,7 +53,7 @@ int main()
 
 
     //Temple
-    std::string filename = "./temple.txt";
+    std::string filename = "./temple2.txt";
     int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename);
 
 

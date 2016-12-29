@@ -8,6 +8,7 @@
 #include "grid_rect_2D.h"
 #include "input_parameters.h"
 #include <Eigen/Dense>
+#include "ProfileCpu.h"
 
 using namespace Eigen;
 
@@ -28,6 +29,7 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
     Matrix< std::complex<T>, Dynamic, 1, ColMajor > alpha;
 
     std::complex<T> *rhs_data, *matA_j_data;
+    ProfileCpu profiler, prof2;
 
     matA.conservativeResize(n_cell, 1);
     b_f_rhs.conservativeResize(n_cell, 1);
@@ -36,9 +38,10 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
     T res = 0.0;
 
     p_tot = p_init;
-
+    prof2.StartRegion("full iter");
     for(int it = 0; it < n_iter2; it++)
     {
+
         chi_p = p_tot * chi;
 
         dW = chi_p - chi_p_old;
@@ -83,13 +86,17 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         }
         else if(calc_alpha==0)
         {
-            p_tot += G.ContractWithField(dW);
+         //   profiler.StartRegion("contracting field");
+            //p_tot += G.ContractWithField(dW);
+            p_tot += G.dot1(dW);
+         //   profiler.EndRegion();
         }
 
         chi_p_old = chi_p;
         chi_p.Zero();
-    }
 
+    }
+    prof2.EndRegion();
 
 
 

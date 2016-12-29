@@ -2,7 +2,9 @@ TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG += qt
-
+QMAKE_CXXFLAGS_RELEASE = -O3 -march=native -ftree-loop-distribution -malign-double
+QMAKE_CFLAGS_RELEASE -= -O2 -march=native
+QMAKE_CXXFLAGS_RELEASE -= -g -Wall
 
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += $$PWD/src

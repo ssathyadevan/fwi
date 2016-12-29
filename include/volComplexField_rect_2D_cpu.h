@@ -35,7 +35,6 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         virtual ~volComplexField_rect_2D_cpu()
         {
             delete[] data;
-
         }
 
 
