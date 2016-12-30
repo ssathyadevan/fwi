@@ -8,7 +8,7 @@
 #include "receivers_rect_2D.h"
 #include "frequencies.h"
 #include "grid_rect_2D.h"
-
+#include "mpi.h"
 
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens>
@@ -64,8 +64,8 @@ class einsum
         void einsum_K_res(const volComplexField<T> *const *Kappa, const std::complex<T> *res, volComplexField<T> &K_res) const
         {
             int l_i, l_j;
-
-            K_res = T(0.0);
+           // volComplexField<T> K_res(m_grid);
+            K_res.Zero();
             volComplexField<T> K_dummy(m_grid);
 
             for (int i = 0; i < m_n_freq; i++)
@@ -86,6 +86,13 @@ class einsum
                     }
                 }
             }
+            if ( sizeof(T) == sizeof(double) )
+            {
+                //std::cout << "hello" << m_grid.GetNumberOfGridPoints() << std::endl;
+                MPI::COMM_WORLD.Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI::DOUBLE_COMPLEX, MPI_SUM);
+            }
+            else
+                MPI_Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
         }
 
 

@@ -15,6 +15,8 @@
 
 #include "calcField.h"
 #include "einsum.h"
+#include <array>
+#include "mpi.h"
 
 template <class T>
 T normSq(const std::complex<T> *data, int n) {
@@ -36,10 +38,10 @@ public:
     virtual void SetBackground(const volField_rect_2D_cpu<T> &chi_) = 0;
     virtual void createP0() = 0;
     virtual void deleteP0() = 0;
-    virtual void createTotalField() = 0;
+    virtual void createTotalField(const int &rank) = 0;
     virtual void deleteTotalField() = 0;
     virtual void calculateData(std::complex<T> *p_data) = 0;
-    virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *p_data) = 0;
+    virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *p_data, const int &rank) = 0;
 
 };
 
@@ -140,7 +142,7 @@ public:
         p_0 = nullptr;
     }
 
-    void createTotalField()
+    void createTotalField(const int &rank )
     {
         assert(m_greens != nullptr);
         assert(p_0 != nullptr);
@@ -154,18 +156,24 @@ public:
         {
             p_tot[i] = new volComplexField<T>*[m_nsrc];
 
-            std::cout << "  " << std::endl;
-            std::cout << "Creating P_tot for " << i+1 << "/ " << m_nfreq << "freq" << std::endl;
-            std::cout << "  " << std::endl;
+            if (rank==0)
+            {
+                std::cout << "  " << std::endl;
+                std::cout << "Creating P_tot for " << i+1 << "/ " << m_nfreq << "freq" << std::endl;
+                std::cout << "  " << std::endl;
+            }
 
             for (int j=0; j<m_nsrc; j++)
             {
                 p_tot[i][j] = new volComplexField<T>(m_grid);
-                *p_tot[i][j] = calcField<T,volComplexField,volField,Greens>(*m_greens[i], m_chi, *p_0[i][j]);
+                *p_tot[i][j] = calcField<T,volComplexField,volField,Greens>(*m_greens[i], m_chi, *p_0[i][j], rank);
             }
 
-            std::cout << "  " << std::endl;
-            std::cout << "  " << std::endl;
+            if(rank==0)
+            {
+                std::cout << "  " << std::endl;
+                std::cout << "  " << std::endl;
+            }
         }
 
         m_profiler.EndRegion();
@@ -203,10 +211,21 @@ public:
         }
     }
 
-    volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data)
+    volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data, const int &rank)
     {
-        T eta = 1.0/normSq(p_data,m_nfreq*m_nrecv*m_nsrc);
-        T res, gamma, alpha, alpha_num = T(0.0), alpha_den = T(0.0);
+        T const1 = normSq(p_data,m_nfreq*m_nrecv*m_nsrc);
+        T const2;
+
+        if ( sizeof(const1) == sizeof(double) )
+            MPI_Allreduce(&const1, &const2, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+        else
+            MPI_Allreduce(&const1, &const2, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+
+        T eta = 1.0/const2;
+
+        T gamma, alpha, res, res2;
+
+        std::array<T,2> alpha_div, alpha_div1;
 
         volComplexField<T> **Kappa, **p_est;
         int l_i;
@@ -251,13 +270,20 @@ public:
                     for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
                         r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
-                    res = eta*normSq(r,n_total);
+                    res2 = eta*normSq(r,n_total);
 
-                    if (it1 > 0)
-                        std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " << std::abs(res_first_it[it1-1] - res) << "    " << it1+1 << '/' << n_iter1 << std::endl;
+                    if ( sizeof(res) == sizeof(double) )
+                        MPI_Allreduce(&res2, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                     else
-                        std::cout << "inner loop residual = " << std::setprecision(17) << res << std::endl;
+                        MPI_Allreduce(&res2, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 
+                    if (rank==0)
+                    {
+                        if (it1 > 0)
+                            std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " << std::abs(res_first_it[it1-1] - res) << "    " << it1+1 << '/' << n_iter1 << std::endl;
+                        else
+                            std::cout << "inner loop residual = " << std::setprecision(17) << res << std::endl;
+                    }
 
                     res_first_it.push_back(res);
 
@@ -275,19 +301,31 @@ public:
                         zeta = g + gamma*zeta;
                     }
 
+                    alpha_div[0] = 0.0;
+                    alpha_div[1] = 0.0;
                     for (int i = 0; i < n_total; i++)
                     {
                         K_zeta[i] = Summation( *Kappa[i], zeta );
-                        alpha_num += std::real( conj(r[i]) * K_zeta[i] );
-                        alpha_den += std::real( conj(K_zeta[i]) * K_zeta[i] );
+                        alpha_div[0] += std::real( conj(r[i]) * K_zeta[i] );
+                        alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                     }
 
-                    alpha = alpha_num / alpha_den;
+                    if ( sizeof(alpha) == sizeof(double) )
+                        MPI_Allreduce(&alpha_div[0], &alpha_div1[0], alpha_div.size(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+                    else
+                        MPI_Allreduce(&alpha_div[0], &alpha_div1[0], alpha_div.size(), MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+
+                    alpha = alpha_div1[0] / alpha_div1[1];
+
+                    /*if (rank==1)
+                    {
+                        for (int i=0; i < m_grid.GetNumberOfGridPoints(); i++)
+                            std::cout << i << "   " << *(g.GetDataPtr() + i) << std::endl;
+                    }*/
+                    //std::cout << rank << "  " << alpha << std::endl;
 
                     chi_est += alpha*zeta;
                     g_old = g;
-                    alpha_num = T(0.0);
-                    alpha_den = T(0.0);
                 }
             }
 
@@ -296,11 +334,14 @@ public:
             for (int i=0; i<m_nfreq; i++)
             {
                 l_i = i*m_nsrc;
-                std::cout << "  " << std::endl;
-                std::cout << "Creating P_tot for " << i+1 << "/ " << m_nfreq << "freq" << std::endl;
-                std::cout << "  " << std::endl;
+                if (rank==0)
+                {
+                    std::cout << "  " << std::endl;
+                    std::cout << "Creating P_tot for " << i+1 << "/ " << m_nfreq << "freq" << std::endl;
+                    std::cout << "  " << std::endl;
+                }
                 for (int j=0; j<m_nsrc;j++)
-                    *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*m_greens[i], chi_est, *p_0[i][j]);
+                    *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*m_greens[i], chi_est, *p_0[i][j], rank);
             }
 
         }

@@ -20,10 +20,10 @@
 #include "helper.h"
 
 #include "tests_helper.h"
-
+#include "mpi.h"
 
 template <typename T>
-int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName);
+int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop);
 
 template <typename T>
 int sineInversion(int nx, int nz, int nSrc, int nFreq);
@@ -34,18 +34,25 @@ const int nItCreateFields = 30;
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
 
 
-int main()
+int main(int argc, char* argv[])
 {
+    MPI_Init(&argc, &argv);
+    int rank, nop;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nop);
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    const int nx = 120;
-    const int nz = 60;
-
-    int nFreq = 10;
+    const int nx = 64;
+    const int nz = 32;
 
     int nSrc = 17;
+    int nFreq = nFreq_Total/nop; //distributing frequencies
 
+    int freq_left = nFreq_Total - nFreq*nop;
+
+    if (rank < freq_left) //distributing the left over frequencies
+        nFreq += 1;
 
     //sine
 //    int ret = sineInversion<REAL>(nx, nz, nSrc, nFreq);
@@ -53,21 +60,22 @@ int main()
 
 
     //Temple
-    std::string filename = "./temple2.txt";
-    int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename);
+    std::string filename = "../temple.txt";
+    int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename, rank, nop);
 
 
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
+    MPI_Finalize();
     return 0;
 }
 
 
 //temple from here
 template <typename T>
-int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName) {
-
+int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop)
+{
     std::array<T,2> x_min = {-300.0, 0.0};
     std::array<T,2> x_max = {300.0, 300.0};
     std::array<int,2> ngrid = {nx, nz};
@@ -75,23 +83,48 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     grid_rect_2D<T> grid(x_min, x_max, ngrid);
 
     volField_rect_2D_cpu<T> chi(grid);
-    chi.fromFile(fileName);
+
+    if (rank==0)
+        chi.fromFile(fileName);
+
+    if ( sizeof(x_min[0]) == sizeof(double) )
+        MPI_Bcast(chi.GetDataPtr(), grid.GetNumberOfGridPoints(), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    else
+        MPI_Bcast(chi.GetDataPtr(), grid.GetNumberOfGridPoints(), MPI_FLOAT, 0, MPI_COMM_WORLD);
 
     std::array<T,2> x_src_min = {-480.0, -5.0};
     std::array<T,2> x_src_max = {480.0, -5.0};
 
     Sources_rect_2D<T> src(x_src_min, x_src_max, nSrc);
-    src.Print();
+    if (rank==0)
+        src.Print();
 
     int nRecv = nSrc;
     Receivers_rect_2D<T> recv(src);
-    recv.Print();
+    if (rank==0)
+        recv.Print();
 
     T c_0 = 2000.0;
-    T f_min = 10.0;
-    T f_max = 40.0;
-    Frequencies<T> freq(f_min, f_max, nFreq, c_0);
-    freq.Print();
+    T f_min;
+    T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
+
+    T d_freq_proc = d_freq*nop;
+    f_min = F_min1 + rank*d_freq;
+
+ /*   int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
+    std::cout << F_min1 << "  " << F_max1 << "   " << d_freq << std::endl;
+
+    if (rank<freq_left)
+        f_min = F_min1 + d_freq*(nFreq)*rank;
+    else
+        f_min = F_min1 + freq_left*d_freq*(nFreq+1) + d_freq*(nFreq)*(rank-freq_left);
+
+    T f_max = f_min + d_freq*(nFreq-1);
+
+    std::cout << rank << "   " << f_min << "  " << f_max << std::endl;*/
+    MPI_Barrier(MPI_COMM_WORLD);
+    Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
+    //freq.Print();
 
     Inversion<T> *inverse;
     ProfileInterface *profiler;
@@ -100,30 +133,43 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     profiler = new ProfileCpu();
     inverse = new InversionConcrete<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu>(grid, src, recv, freq, *profiler);
 
+    if (rank==0)
+        chi.toFile("../src/chi.txt");
 
-    chi.toFile("./src/chi.txt");
-
-    std::cout << "Creating Greens function field..." << std::endl;
+    if (rank==0)
+        std::cout << "Creating Greens function field..." << std::endl;
     inverse->createGreens();
     inverse->SetBackground(chi);
-    std::cout << "Creating P0..." << std::endl;
+
+
+    if (rank==0)
+        std::cout << "Creating P0..." << std::endl;
     inverse->createP0();
 
-    std::cout << "Creating total field..." << std::endl;
-    inverse->createTotalField();
+
+    if (rank==0)
+        std::cout << "Creating total field..." << std::endl;
+    inverse->createTotalField(rank);
 
     std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrc];
     inverse->calculateData(p_data);
     //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
 
-    std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data);
-    std::cout << "Done, writing to file" << std::endl;
-    chi_est.toFile("./src/chi_est_temple.txt");
+
+    if (rank==0)
+        std::cout << "Estimating Chi..." << std::endl;
+    volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+
+    if (rank==0)
+    {
+        std::cout << "Done, writing to file" << std::endl;
+        chi_est.toFile("../src/chi_est_temple.txt");
+    }
 
     delete[] p_data;
 
-    MakeFigure("./src/chi.txt", "./src/chi_est_temple.txt", "./src/temple_result.png", nx, nz, interactive);
+    if (rank==0)
+        MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nx, nz, interactive);
 
     return 0;
 }

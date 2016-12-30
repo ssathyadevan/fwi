@@ -9,11 +9,12 @@
 #include "input_parameters.h"
 #include <Eigen/Dense>
 #include "ProfileCpu.h"
+#include <string>
 
 using namespace Eigen;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Green>
-volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const volComplexField<T> &p_init)
+volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const volComplexField<T> &p_init, const int &rank1)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -38,7 +39,14 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
     T res = 0.0;
 
     p_tot = p_init;
-    prof2.StartRegion("full iter");
+
+    int rank = rank1;
+    std::string name = "full iter " + std::to_string(rank);
+    int rank_print = 0;
+
+    if (rank1==rank_print)
+        prof2.StartRegion(name);
+
     for(int it = 0; it < n_iter2; it++)
     {
 
@@ -52,9 +60,9 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         res = dWNorm / chi_pNorm;
         //std::cout << "Residual = " << res << std::endl;
 
-        if(res < tol2 && it != 0)
+        if(res < tol2 && it != 0 && rank1==rank_print)
         {
-            std::cout << "Convergence after " << it << " iterations." << std::endl;
+            std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
             break;
         }
 
@@ -96,14 +104,15 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         chi_p.Zero();
 
     }
-    prof2.EndRegion();
+    if (rank1==rank_print)
+        prof2.EndRegion();
 
 
 
 
-    if(res >= tol2)
+    if((res >= tol2) && (rank1==rank_print))
     {
-        std::cout << "No convergence after " <<  n_iter2 << " iterations. Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  n_iter2 << " iterations." << " rank " << rank << "Res = " << res << std::endl;
     }
 
     return p_tot;
