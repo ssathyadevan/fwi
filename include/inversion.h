@@ -8,7 +8,6 @@
 #include "GreensFunctions.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
-#include "frequencies.h"
 #include "grid_rect_2D.h"
 
 #include <volField_rect_2D_cpu.h>
@@ -17,6 +16,7 @@
 #include "einsum.h"
 #include <array>
 #include "mpi.h"
+#include <string>
 
 template <class T>
 T normSq(const std::complex<T> *data, int n) {
@@ -46,7 +46,7 @@ public:
 };
 
 
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens>
+template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class InversionConcrete : public Inversion<T>
 {
     const grid_rect_2D<T> &m_grid;
@@ -66,8 +66,8 @@ class InversionConcrete : public Inversion<T>
     const int m_nsrc;
 
 public:
-    InversionConcrete(const InversionConcrete<T,volComplexField,volField,Greens>&) = delete;
-    InversionConcrete<T,volComplexField,volField,Greens>& operator=(const InversionConcrete<T,volComplexField,volField,Greens>&) = delete;
+    InversionConcrete(const InversionConcrete<T,volComplexField,volField,Greens,Frequencies>&) = delete;
+    InversionConcrete<T,volComplexField,volField,Greens,Frequencies>& operator=(const InversionConcrete<T,volComplexField,volField,Greens,Frequencies>&) = delete;
 
     InversionConcrete(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
         : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
@@ -148,7 +148,9 @@ public:
         assert(p_0 != nullptr);
         assert(p_tot == nullptr);
 
-        m_profiler.StartRegion("createTotalField");
+        std::string name = "createTotalField" + std::to_string(rank);
+
+        m_profiler.StartRegion(name);
 
         p_tot = new volComplexField<T>**[m_nfreq];
 
@@ -234,7 +236,7 @@ public:
         std::complex<T> *r = new std::complex<T>[n_total];
         std::complex<T> *K_zeta = new std::complex<T>[n_total];
 
-        einsum<T,volComplexField,volField,Greens> ein(m_grid,m_src,m_recv,m_freq);
+        einsum<T,volComplexField,volField,Greens,Frequencies> ein(m_grid,m_src,m_recv,m_freq);
 
         volField<T> chi_est(m_grid), g(m_grid), g_old(m_grid), zeta(m_grid);
         volComplexField<T> tmp(m_grid);

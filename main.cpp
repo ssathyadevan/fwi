@@ -15,14 +15,15 @@
 
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
-#include "frequencies.h"
+#include "frequencies_group.h"
+#include "frequencies_alternate.h"
 #include "inversion.h"
 #include "helper.h"
 
 #include "tests_helper.h"
 #include "mpi.h"
 
-template <typename T>
+template <typename T, template<typename> class Frequencies>
 int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop);
 
 template <typename T>
@@ -43,26 +44,34 @@ int main(int argc, char* argv[])
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    const int nx = 64;
-    const int nz = 32;
+    const int nx = 120;
+    const int nz = 60;
 
     int nSrc = 17;
-    int nFreq = nFreq_Total/nop; //distributing frequencies
+    int nFreq;
+    if (sizeof(nFreq_input) == sizeof(int))
+    {
+        nFreq = nFreq_Total/nop; //distributing frequencies
 
-    int freq_left = nFreq_Total - nFreq*nop;
+        int freq_left = nFreq_Total - nFreq*nop;
 
-    if (rank < freq_left) //distributing the left over frequencies
-        nFreq += 1;
-
+        if (rank < freq_left) //distributing the left over frequencies
+            nFreq += 1;
+    }
+    else
+    {
+        nFreq = nFreq_input[rank];
+    }
     //sine
 //    int ret = sineInversion<REAL>(nx, nz, nSrc, nFreq);
 
 
-
     //Temple
-    std::string filename = "../temple.txt";
-    int ret = templeInversion<REAL>(nx, nz, nSrc, nFreq, filename, rank, nop);
-
+    std::string filename = "../temple2.txt";
+    if (freq_dist_group == 1)
+        int ret = templeInversion<REAL,Frequencies_group>(nx, nz, nSrc, nFreq, filename, rank, nop);
+    else if (freq_dist_group == 0)
+        int ret = templeInversion<REAL,Frequencies_alternate>(nx, nz, nSrc, nFreq, filename, rank, nop);
 
 
     std::time_t finish = std::time(nullptr);
@@ -73,7 +82,7 @@ int main(int argc, char* argv[])
 
 
 //temple from here
-template <typename T>
+template <typename T, template<typename> class Frequencies>
 int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop)
 {
     std::array<T,2> x_min = {-300.0, 0.0};
@@ -105,33 +114,53 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
         recv.Print();
 
     T c_0 = 2000.0;
-    T f_min;
-    T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
+    T f_min, d_freq_proc;
 
-    T d_freq_proc = d_freq*nop;
-    f_min = F_min1 + rank*d_freq;
+    //use this section for alternate frequency distribution//
+    if (freq_dist_group == 0)
+    {
+        T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
 
- /*   int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
-    std::cout << F_min1 << "  " << F_max1 << "   " << d_freq << std::endl;
+        d_freq_proc = d_freq*nop;
+        f_min = F_min1 + rank*d_freq;
+    }
+    //use this section for alternate frequency distribution//
 
-    if (rank<freq_left)
-        f_min = F_min1 + d_freq*(nFreq)*rank;
-    else
-        f_min = F_min1 + freq_left*d_freq*(nFreq+1) + d_freq*(nFreq)*(rank-freq_left);
 
-    T f_max = f_min + d_freq*(nFreq-1);
+    //use this section for group frequency distribution//
+    else if (freq_dist_group == 1)
+    {
+        T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
+        int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
 
-    std::cout << rank << "   " << f_min << "  " << f_max << std::endl;*/
-    MPI_Barrier(MPI_COMM_WORLD);
+        if (sizeof(nFreq_input) == sizeof(int))
+        {
+            if (rank<freq_left)
+                f_min = F_min1 + d_freq*(nFreq)*rank;
+            else
+                f_min = F_min1 + freq_left*d_freq*(nFreq+1) + d_freq*(nFreq)*(rank-freq_left);
+        }
+        else
+        {
+            int sum = 0;
+            for (int i=0; i<rank; i++)
+                sum += nFreq_input[i];
+            f_min = F_min1 + sum*d_freq;
+        }
+        d_freq_proc = d_freq;
+    }
+     //use this section for group frequency distribution//
+
+
     Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
-    //freq.Print();
+    freq.Print();
 
     Inversion<T> *inverse;
     ProfileInterface *profiler;
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu>(grid, src, recv, freq, *profiler);
+    inverse = new InversionConcrete<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
 
     if (rank==0)
         chi.toFile("../src/chi.txt");
@@ -170,7 +199,6 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
 
     if (rank==0)
         MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nx, nz, interactive);
-
     return 0;
 }
 
@@ -226,7 +254,7 @@ int sineInversion(int nx, int nz, int nSrc, int nFreq) {
     T c_0 = 3000.0;
     T f_min = 15.0;
     T f_max = 30.0;
-    Frequencies<T> freq(f_min, f_max, nFreq, c_0);
+    Frequencies_group<T> freq(f_min, f_max, nFreq, c_0);
     freq.Print();
 
     Inversion<T> *inverse;
@@ -234,7 +262,7 @@ int sineInversion(int nx, int nz, int nSrc, int nFreq) {
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu>(grid, src, recv, freq, *profiler);
+    inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
 
 
     inverse->createGreens();

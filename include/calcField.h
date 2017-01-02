@@ -44,8 +44,8 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
     std::string name = "full iter " + std::to_string(rank);
     int rank_print = 0;
 
-    if (rank1==rank_print)
-        prof2.StartRegion(name);
+  // if (rank1==rank_print)
+  //      prof2.StartRegion(name);
 
     for(int it = 0; it < n_iter2; it++)
     {
@@ -104,8 +104,8 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         chi_p.Zero();
 
     }
-    if (rank1==rank_print)
-        prof2.EndRegion();
+    //if (rank1==rank_print)
+    //    prof2.EndRegion();
 
 
 

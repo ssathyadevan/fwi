@@ -12,10 +12,13 @@ const double tol2 = 5e-5; //tol for p_tot update
 const int do_reg = 0; //put 1 to turn on regularization
 const int interactive = 1; //put 1 to turn on interactive python session
 
-const int nFreq_Total = 10;
+const int nFreq_Total = 20;
 
 const double F_min1 = 10.0;
 const double F_max1 = 40.0;
 
+const int freq_dist_group = 1; //if group distribution of frequency is required
+
+const int nFreq_input[] = {8,3,3,3,3};
 #endif // INPUT_PARAMETERS
 

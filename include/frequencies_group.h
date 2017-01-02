@@ -1,5 +1,5 @@
-#ifndef FREQUENCIES_H
-#define FREQUENCIES_H
+#ifndef FREQUENCIES_GROUP_H
+#define FREQUENCIES_GROUP_H
 
 #include <cassert>
 #include <iostream>
@@ -7,10 +7,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-template <typename T>
-class Frequencies {
+template <typename T>  //use this one for group frequency distribution
+class Frequencies_group {
 
-	Frequencies<T> operator=(const Frequencies<T>&);
+    Frequencies_group<T> operator=(const Frequencies_group<T>&);
 
 public:
 
@@ -19,7 +19,7 @@ public:
   std::vector<T> freq;
   std::vector<T> k;
 
-  Frequencies(T freqMin, const T &dfreq, int nFreq_, T c_0_)
+  Frequencies_group(T freqMin, const T &dfreq, int nFreq_, T c_0_)
   : nFreq(nFreq_), c_0(c_0_), d_freq(dfreq), freq(), k()
   {
 
@@ -43,4 +43,4 @@ public:
 
 };
 
-#endif /* FREQUENCIES_H */
+#endif /* FREQUENCIES_GROUP_H */

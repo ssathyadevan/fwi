@@ -6,12 +6,11 @@
 
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
-#include "frequencies.h"
 #include "grid_rect_2D.h"
 #include "mpi.h"
 
 
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens>
+template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class einsum
 {
     const grid_rect_2D<T> &m_grid;
