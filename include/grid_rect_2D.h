@@ -43,6 +43,7 @@ public:
 
   int GetNumberOfGridPoints() const { return nGridPoints; }
   T GetCellVolume() const { return cellVolume; }
+  T GetDomainArea() const { return (x_max[0] - x_min[0]) * (x_max[1] - x_min[1]); }
 
 };
 

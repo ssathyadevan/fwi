@@ -22,12 +22,13 @@
 
 #include "tests_helper.h"
 #include "mpi.h"
+#include "input_parameters.h"
 
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop);
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
 
 template <typename T>
-int sineInversion(int nx, int nz, int nSrc, int nFreq);
+int sineInversion(int nFreq);
 
 #define REAL double
 
@@ -44,10 +45,7 @@ int main(int argc, char* argv[])
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    const int nx = 120;
-    const int nz = 60;
 
-    int nSrc = 17;
     int nFreq;
     if (sizeof(nFreq_input) == sizeof(int))
     {
@@ -63,15 +61,15 @@ int main(int argc, char* argv[])
         nFreq = nFreq_input[rank];
     }
     //sine
-//    int ret = sineInversion<REAL>(nx, nz, nSrc, nFreq);
+//    int ret = sineInversion<REAL>(nFreq);
 
 
     //Temple
     std::string filename = "../temple2.txt";
     if (freq_dist_group == 1)
-        int ret = templeInversion<REAL,Frequencies_group>(nx, nz, nSrc, nFreq, filename, rank, nop);
+        int ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
     else if (freq_dist_group == 0)
-        int ret = templeInversion<REAL,Frequencies_alternate>(nx, nz, nSrc, nFreq, filename, rank, nop);
+        int ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
 
 
     std::time_t finish = std::time(nullptr);
@@ -83,11 +81,11 @@ int main(int argc, char* argv[])
 
 //temple from here
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &fileName, const int &rank, const int &nop)
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop)
 {
     std::array<T,2> x_min = {-300.0, 0.0};
     std::array<T,2> x_max = {300.0, 300.0};
-    std::array<int,2> ngrid = {nx, nz};
+    std::array<int,2> ngrid = {nxt, nzt};
 
     grid_rect_2D<T> grid(x_min, x_max, ngrid);
 
@@ -104,11 +102,11 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     std::array<T,2> x_src_min = {-480.0, -5.0};
     std::array<T,2> x_src_max = {480.0, -5.0};
 
-    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrc);
+    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct);
     if (rank==0)
         src.Print();
 
-    int nRecv = nSrc;
+    int nRecv = nSrct;
     Receivers_rect_2D<T> recv(src);
     if (rank==0)
         recv.Print();
@@ -180,7 +178,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
         std::cout << "Creating total field..." << std::endl;
     inverse->createTotalField(rank);
 
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrc];
+    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
     inverse->calculateData(p_data);
     //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
 
@@ -198,7 +196,7 @@ int templeInversion(int nx, int nz, int nSrc, int nFreq, const std::string &file
     delete[] p_data;
 
     if (rank==0)
-        MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nx, nz, interactive);
+        MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
     return 0;
 }
 
@@ -222,11 +220,11 @@ T zeroEdgeSine(T x, T z) {
 }
 
 template <typename T>
-int sineInversion(int nx, int nz, int nSrc, int nFreq) {
+int sineInversion(int nFreq) {
 
     std::array<T,2> x_min = {-50.0, -50.0};
     std::array<T,2> x_max = {50.0, 50.0};
-    std::array<int,2> ngrid = {nx, nz};
+    std::array<int,2> ngrid = {nxt, nzt};
 
     grid_rect_2D<T> grid(x_min, x_max, ngrid);
 
@@ -244,10 +242,10 @@ int sineInversion(int nx, int nz, int nSrc, int nFreq) {
     std::array<T,2> x_src_min = {-150.0, 75.0};
     std::array<T,2> x_src_max = {150.0, 75.0};
 
-    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrc);
+    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct);
     src.Print();
 
-    int nRecv = nSrc;
+    int nRecv = nSrct;
     Receivers_rect_2D<T> recv(src);
     recv.Print();
 
@@ -279,9 +277,9 @@ int sineInversion(int nx, int nz, int nSrc, int nFreq) {
     //const volComplexField<REAL> &P_0 = inverse.GetP0(iFreq, iSrc);
     //const volComplexField<REAL> &P_tot = inverse.GetTotalField(iFreq, iSrc);
 
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrc];
+    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
     inverse->calculateData(p_data);
-    complexToFile(p_data, nFreq * nRecv * nSrc, "./src/p_data.txt");
+    complexToFile(p_data, nFreq * nRecv * nSrct, "./src/p_data.txt");
 
     volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data, nItReconstructFields, tol);
 

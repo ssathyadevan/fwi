@@ -91,7 +91,7 @@ class einsum
                 MPI::COMM_WORLD.Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI::DOUBLE_COMPLEX, MPI_SUM);
             }
             else
-                MPI_Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+                MPI::COMM_WORLD.Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI::COMPLEX, MPI_SUM);
         }
 
 

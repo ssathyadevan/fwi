@@ -62,5 +62,6 @@ HEADERS += \
     include/volField_rect_2D_cpu.h \
     include/volField_rect_2D.h \
     include/input_parameters.h \
-    include/frequencies_alternate.h
+    include/frequencies_alternate.h \
+    include/greens_rect_2D_gpu.h
 
