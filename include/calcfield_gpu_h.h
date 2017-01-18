@@ -299,7 +299,6 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             std::cout << "No convergence after " <<  n_iter2 << " iterations." << " rank " << rank << "Res = " << res << std::endl;
         }
 
-        return p_tot;
     }
 
 }

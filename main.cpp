@@ -11,6 +11,7 @@
 #include "volField_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include "greens_rect_2D_cpu.h"
+#include "greens_rect_2D_gpu.h"
 #include "ProfileCpu.h"
 
 #include "sources_rect_2D.h"
@@ -18,6 +19,7 @@
 #include "frequencies_group.h"
 #include "frequencies_alternate.h"
 
+#include "inversion.h"
 #include "inversion_cpu.h"
 #include "inversion_gpu.h"
 #include "helper.h"
@@ -25,6 +27,9 @@
 #include "tests_helper.h"
 #include "mpi.h"
 #include "input_parameters.h"
+
+
+#include <CL/cl2.hpp>
 
 template <typename T, template<typename> class Frequencies>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
@@ -163,12 +168,15 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
     freq.Print();
 
-    Inversion<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
+    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies> *inverse;
     ProfileInterface *profiler;
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+    if(gpu==1)
+        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies>(grid, src, recv, freq, *profiler);
+    else
+        inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
 
     if (rank==0)
         chi.toFile("../src/chi.txt");
@@ -265,7 +273,7 @@ int sineInversion(int nFreq) {
     Frequencies_group<T> freq(f_min, f_max, nFreq, c_0);
     freq.Print();
 
-    Inversion<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
+    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
     ProfileInterface *profiler;
 
 
@@ -278,7 +286,7 @@ int sineInversion(int nFreq) {
     inverse->createP0();
 
     T tol = 1.0e-6;
-    inverse->createTotalField(nItCreateFields, tol);
+    inverse->createTotalField(0);
 
     //int iFreq = 0;
     //int iSrc = 0;
