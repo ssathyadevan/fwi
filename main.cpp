@@ -17,7 +17,9 @@
 #include "receivers_rect_2D.h"
 #include "frequencies_group.h"
 #include "frequencies_alternate.h"
-#include "inversion.h"
+
+#include "inversion_cpu.h"
+#include "inversion_gpu.h"
 #include "helper.h"
 
 #include "tests_helper.h"
@@ -45,6 +47,14 @@ int main(int argc, char* argv[])
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
+
+
+    //check if nx_t and nz_t are multiples of 32 required only for gpu//
+    if( (gpu==1) && ( (nxt%32 == 0) || (nzt%32 == 0) ) )
+    {
+        std::cout << "nx_t and nz_t must be multiple of 32 to run on GPU" << std::endl;
+        exit(1);
+    }
 
     int nFreq;
     if (sizeof(nFreq_input) == sizeof(int))
@@ -153,12 +163,12 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
     freq.Print();
 
-    Inversion<T> *inverse;
+    Inversion<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
     ProfileInterface *profiler;
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+    inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
 
     if (rank==0)
         chi.toFile("../src/chi.txt");
@@ -255,12 +265,12 @@ int sineInversion(int nFreq) {
     Frequencies_group<T> freq(f_min, f_max, nFreq, c_0);
     freq.Print();
 
-    Inversion<T> *inverse;
+    Inversion<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
     ProfileInterface *profiler;
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
+    inverse = new InversionConcrete_cpu<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
 
 
     inverse->createGreens();

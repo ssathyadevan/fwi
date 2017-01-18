@@ -1,8 +1,8 @@
 #ifndef INPUT_PARAMETERS
 #define INPUT_PARAMETERS
 
-const int nxt = 120;
-const int nzt = 60;
+const int nxt = 64;
+const int nzt = 32;
 const int nSrct = 17;
 const int nFreq_Total = 10;
 
@@ -23,6 +23,8 @@ const double F_max1 = 40.0;
 const int freq_dist_group = 1; //if group distribution of frequency is required
 
 const int nFreq_input[] = {1};//{9,4,4,3};
+
+const int gpu = 1; //to turn on gpu computations
 
 // weight of the regularization
 const double delta_amplification_start = 100.0;
