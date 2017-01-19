@@ -2,7 +2,6 @@
 #define INVERSION_GPU
 
 
-
 #include <complex>
 
 #include <ProfileInterface.h>
@@ -21,9 +20,6 @@
 #include <string>
 
 
-
-
-
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class InversionConcrete_gpu : public Inversion<T, volComplexField, volField, Greens, Frequencies>
 {
@@ -33,9 +29,10 @@ public:
     InversionConcrete_gpu<T,volComplexField,volField,Greens,Frequencies>& operator=(const InversionConcrete_gpu<T,volComplexField,volField,Greens,Frequencies>&) = delete;
 
     InversionConcrete_gpu(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
-        : Inversion<T, volComplexField, volField, Greens, Frequencies>(grid, src, recv, freq, profiler)
+    : Inversion<T, volComplexField, volField, Greens, Frequencies>(grid, src, recv, freq, profiler)
     {
     }
+
 
     ~InversionConcrete_gpu()
     {

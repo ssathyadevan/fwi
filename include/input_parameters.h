@@ -22,7 +22,7 @@ const double F_max1 = 40.0;
 
 const int freq_dist_group = 1; //if group distribution of frequency is required
 
-const int nFreq_input[] = {1};//{9,4,4,3};
+const int nFreq_input[] = {1};//{4,2,2,2};//{9,4,4,3};
 
 const int gpu = 1; //to turn on gpu computations
 

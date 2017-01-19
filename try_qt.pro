@@ -20,7 +20,7 @@ QMAKE_CFLAGS_RELEASE -= -O2 -march=native
 
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += $$PWD/src
-INCLUDEPATH += /home/amittal/Eigen
+INCLUDEPATH += /home/admin/Eigen
 INCLUDEPATH += /usr/include/python2.7
 LIBS += -lpython2.7
 

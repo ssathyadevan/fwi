@@ -28,10 +28,11 @@
 #include "mpi.h"
 #include "input_parameters.h"
 
+#define CL_MINIMUM_VERSION 110
+#define CL_HPP_TARGET_VERSION 120
+#include <CL/cl.hpp>
 
-#include <CL/cl2.hpp>
-
-template <typename T, template<typename> class Frequencies>
+template <typename T, template<typename> class Frequencies, template<typename> class Greens>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
 
 template <typename T>
@@ -55,10 +56,16 @@ int main(int argc, char* argv[])
 
 
     //check if nx_t and nz_t are multiples of 32 required only for gpu//
-    if( (gpu==1) && ( (nxt%32 == 0) || (nzt%32 == 0) ) )
+    if( (gpu==1) && ( (nxt%32 != 0) || (nzt%32 != 0) ) )
     {
         std::cout << "nx_t and nz_t must be multiple of 32 to run on GPU" << std::endl;
         exit(1);
+
+        if( (nxt>2048) && (nxt%1024!=0) )
+        {
+            std::cout << "If nxt > 2048, then nx_t must be a factor of 1024 to run on GPU" << std::endl;
+            exit(1);
+        }
     }
 
     int nFreq;
@@ -78,14 +85,34 @@ int main(int argc, char* argv[])
     //sine
 //    int ret = sineInversion<REAL>(nFreq);
 
-
+    int ret;
     //Temple
-    std::string filename = "../temple2.txt";
+    std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
-        int ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
+    {
+        if(gpu==1)
+        {
+            ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_gpu>(nFreq, filename, rank, nop);
+        }
+        else
+        {
+         //   ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
+        }
+    }
     else if (freq_dist_group == 0)
-        int ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
+    {
+        if(gpu==1)
+        {
+            ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_gpu>(nFreq, filename, rank, nop);
+        }
+        else
+        {
+         //   ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
+        }
+    }
 
+    if(rank==0)
+        std::cout << ret << std::endl;
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -95,7 +122,7 @@ int main(int argc, char* argv[])
 
 
 //temple from here
-template <typename T, template<typename> class Frequencies>
+template <typename T, template<typename> class Frequencies, template<typename> class Greens>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop)
 {
     std::array<T,2> x_min = {-300.0, 0.0};
@@ -168,15 +195,21 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
     freq.Print();
 
-    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies> *inverse;
+
     ProfileInterface *profiler;
-
-
     profiler = new ProfileCpu();
+
+    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies> *inverse;
     if(gpu==1)
-        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies>(grid, src, recv, freq, *profiler);
+    {
+        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
+    }
     else
-        inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+    {
+        //inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
+    }
+
+
 
     if (rank==0)
         chi.toFile("../src/chi.txt");

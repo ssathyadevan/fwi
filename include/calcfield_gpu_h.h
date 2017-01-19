@@ -10,18 +10,18 @@
 #include <Eigen/Dense>
 #include "ProfileCpu.h"
 #include <string>
-#include <CL/cl2.hpp>
+#include <CL/cl.hpp>
 #include <fstream>
 
 using namespace Eigen;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Green>
-void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexField<T> *const *p_init, volComplexField<T> *const *p, const int &rank1, const int &n_src)
+void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexField<T> *const *p_init, volComplexField<T> *const *p_tot, const int &rank1, const int &n_src)
 {
-    assert(&G.GetGrid() == &p_init.GetGrid());
+    assert(&G.GetGrid() == &p_init[0]->GetGrid());
     const grid_rect_2D<T> &m_grid = G.GetGrid();
     volComplexField<T> chi_p(m_grid), chi_p_old(m_grid);
-    volComplexField<T> dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
+    volComplexField<T> dW(m_grid), f_rhs(m_grid), matA_j(m_grid);
 
     int n_cell = m_grid.GetNumberOfGridPoints();
 
@@ -39,7 +39,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     const std::array<int,2> &nx = m_grid.GetGridDimensions();
 
  /*////////////////////////////////////////////////////////////GPU STUFF////////////////////////////////////////////////////////////*/
-    uint ierr;
+    cl_int ierr;
 
     //create platform//
     std::vector< cl::Platform > platform;
@@ -60,7 +60,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     }
 
     //create context//
-    cl_context_properties prop[] = {CL_CONTEXT_PLATFORM, platform[0], 0};
+    cl_context_properties prop[] = {CL_CONTEXT_PLATFORM, (cl_context_properties)(platform[0])(), 0};
     cl::Context context(device, prop, NULL, NULL, &ierr);
     if (ierr!=0)
     {
@@ -69,29 +69,37 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     }
 
     //creating source//
-    std::string f_name = "mat_vec.cl";
+    std::string f_name = "../include/mat_vec.cl";
     std::fstream k_file;
     k_file.open(f_name);
+
+    //assert if file is open//
+    assert(k_file.is_open());
+
     std::string src_kernel, str_dummy;
     while(std::getline(k_file,str_dummy))
     {
         src_kernel += str_dummy;
         src_kernel.push_back('\n');
     }
+    k_file.close();
     size_t k_len = src_kernel.length();
 
     cl::Program::Sources source;
     source.push_back({src_kernel.c_str(), k_len});
 
+    //print the kernel//
+    std::cout << src_kernel << std::endl;
+
     //creating program//
-    cl::Program program(context, source, ierr);
+    cl::Program program(context, source, &ierr);
     if (ierr!=0)
     {
         std::cout << "error in creating program, error id - " << ierr << std::endl;
         exit(1);
     }
 
-    program.build(device, NULL, NULL, NULL);
+    ierr = program.build(device, NULL, NULL, NULL);
     if (ierr!=0)
     {
         std::cout << "error in building program, error id - " << ierr << std::endl;
@@ -118,11 +126,11 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     if (ierr != 0)
         std::cout << "error in creating buffer_dot - error id  " << ierr << std::endl;
 
-    cl::Event event_Gxx, event_dW;
+    cl::Event event_Gxx, event_dW, event_clear;
 
     //creating queue//
     cl_command_queue_properties prop2[] = {CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, 0};
-    cl::CommandQueue queue(context, device, *prop2, ierr);
+    cl::CommandQueue queue(context, device[0], *prop2, &ierr);
     if (ierr!=0)
     {
         std::cout << "error in creating command queue, error id - " << ierr << std::endl;
@@ -130,7 +138,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     }
 
     //sending G_xx/
-    ierr = queue.enqueueWriteBuffer(buffer_Gxx, CL_FALSE, 0, nx[0] * m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), G.get_Gxx_Ptr(), NULL, event_Gxx);
+    ierr = queue.enqueueWriteBuffer(buffer_Gxx, CL_FALSE, 0, nx[0] * m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), G.get_Gxx_Ptr(), NULL, &event_Gxx);
     if (ierr != 0)
             std::cout << "error in writing to buffer_matA - error id  " << ierr << std::endl;
 
@@ -146,12 +154,12 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
 
     std::vector<size_t> block_size;
     kernel.getWorkGroupInfo(device[0], CL_KERNEL_WORK_GROUP_SIZE, &block_size);
-
+    size_t max_block_size = block_size[0];
     if (nx[0]<block_size[0]) ///if this is not true nx[0] must be a multiple of block_size[0](which is generally 1024)
     {
         block_size[0] = (size_t)(nx[0]);
     }
-    else if(nx[0] > block_size[0])
+    else if( (nx[0] > block_size[0]) && (nx[0] <= 2048) )
     {
         block_size[0] = nx[0]/2;
     }
@@ -165,15 +173,24 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         std::cout << "error in setting argument 1st of kernel - error id  " << ierr << std::endl;
 
     //set kernel argument dot//
-    ierr = kernel.setArg(3,buffer_dot);
+    ierr = kernel.setArg(2,buffer_dot);
     if (ierr != 0)
         std::cout << "error in setting argument 3rd of kernel - error id  " << ierr << std::endl;
 
     //set kernel argument nx//
-    ierr = kernel.setArg(4,nx[0]);
+    ierr = kernel.setArg(3,nx[0]);
     if (ierr != 0)
         std::cout << "error in setting argument 4th of kernel - error id  " << ierr << std::endl;
 
+    //set kernel argument ny//
+    ierr = kernel.setArg(4,nx[1]);
+    if (ierr != 0)
+        std::cout << "error in setting argument 5th of kernel - error id  " << ierr << std::endl;
+
+    //set kernel argument l_sum//
+    ierr = kernel.setArg( 8, cl::Local(block_size[0]*sizeof(cl_double2)) );
+    if (ierr != 0)
+        std::cout << "error in setting argument 9th of kernel - error id  " << ierr << std::endl;
 
     //creating copy kernel//
     std::string kernel_name1 = "vec_copy";
@@ -184,10 +201,32 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         std::cout << "error in creating copy kernel, error id - " << ierr << std::endl;
         exit(1);
     }
-    //set kernel argument G_xx//
-    ierr = kernel_copy.setArg(0,buffer_Gxx);
+    //set kernel argument buffer_dot//
+    ierr = kernel_copy.setArg(0,buffer_dot);
     if (ierr != 0)
         std::cout << "error in setting argument 1st of copy kernel - error id  " << ierr << std::endl;
+
+    //set kernel argument nx//
+    ierr = kernel_copy.setArg(3,nx[0]);
+    if (ierr != 0)
+        std::cout << "error in setting argument 4th of copy kernel - error id  " << ierr << std::endl;
+
+    //creating clear kernel//
+    std::string kernel_name2 = "vec_clear";
+
+    cl::Kernel kernel_clear(program, kernel_name2.c_str(), &ierr);
+    if (ierr!=0)
+    {
+        std::cout << "error in creating clear kernel, error id - " << ierr << std::endl;
+        exit(1);
+    }
+
+    //set kernel argument dot//
+    ierr = kernel_clear.setArg(0,buffer_dot);
+    if (ierr != 0)
+        std::cout << "error in setting argument 1st of clear kernel - error id  " << ierr << std::endl;
+
+    event_Gxx.wait();
  /*////////////////////////////////////////////////////////////GPU STUFF////////////////////////////////////////////////////////////*/
 
 
@@ -210,7 +249,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         for(int it = 0; it < n_iter2; it++)
         {
 
-            chi_p = p_tot * chi;
+            chi_p = (*p_tot[k]) * chi;
 
             dW = chi_p - chi_p_old;
 
@@ -224,7 +263,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             }
 
             //write dW on GPU//
-            ierr = queue.enqueueWriteBuffer(buffer_dW, CL_FALSE, 0, m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), cl_dW, NULL, event_dW);
+            ierr = queue.enqueueWriteBuffer(buffer_dW, CL_FALSE, 0, m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), cl_dW, NULL, &event_dW);
             if (ierr != 0)
                     std::cout << "error in writing to buffer_matA - error id  " << ierr << std::endl;
 
@@ -234,7 +273,6 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
                 std::cout << "error in setting argument 3rd of kernel - error id  " << ierr << std::endl;
 
             std::vector<cl::Event> events;
-            events.push_back(event_Gxx);
             events.push_back(event_dW);
             /*******************************************GPU*************************************************/
 
@@ -254,7 +292,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             if (calc_alpha == 1)
             {
                 phi.push_back(G.ContractWithField(dW));
-                f_rhs = G.ContractWithField(chi*p_init);
+                f_rhs = G.ContractWithField(chi * (*p_init[k]) );
 
                 rhs_data = f_rhs.GetDataPtr();  //calculate rhs
 
@@ -272,15 +310,17 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
 
                 alpha = matA.jacobiSvd(ComputeThinU | ComputeThinV).solve(b_f_rhs);
 
-                p_tot = p_init;
+                (*p_tot[k]) = (*p_init[k]);
                 for(int j=0; j<it+1; j++)
-                    p_tot += alpha[j]*phi[j];
+                    (*p_tot[k]) += alpha[j]*phi[j];
             }
             else if(calc_alpha==0)
             {
              //   profiler.StartRegion("contracting field");
                 //p_tot += G.ContractWithField(dW);
-                p_tot += G.dot1(dW, context, queue, events, program, kernel, kernel_copy, global, local, dot, buffer_dot);
+                queue.enqueueNDRangeKernel(kernel_clear, cl::NullRange, cl::NDRange(nx[1]*nx[0]), cl::NDRange(max_block_size), NULL, &event_clear);
+                events.push_back(event_clear);
+                (*p_tot[k]) += G.dot1(dW, queue, events, kernel, kernel_copy, global, local, dot, buffer_dot);
              //   profiler.EndRegion();
             }
 
