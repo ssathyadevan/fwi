@@ -4,6 +4,10 @@
 #include <string>
 #include <ctime>
 
+#define CL_HPP_MINIMUM_OPENCL_VERSION 110
+#define CL_HPP_TARGET_OPENCL_VERSION 120
+#include <CL/cl2.hpp>
+
 #include "calcField.h"
 
 #include "grid_rect_2D.h"
@@ -28,9 +32,7 @@
 #include "mpi.h"
 #include "input_parameters.h"
 
-#define CL_MINIMUM_VERSION 110
-#define CL_HPP_TARGET_VERSION 120
-#include <CL/cl.hpp>
+
 
 template <typename T, template<typename> class Frequencies, template<typename> class Greens>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
@@ -87,7 +89,7 @@ int main(int argc, char* argv[])
 
     int ret;
     //Temple
-    std::string filename = "../temple.txt";
+    std::string filename = "../temple2.txt";
     if (freq_dist_group == 1)
     {
         if(gpu==1)

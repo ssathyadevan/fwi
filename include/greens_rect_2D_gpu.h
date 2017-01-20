@@ -13,7 +13,7 @@
 #include "receivers_rect_2D.h"
 #include "contraction.h"
 #include "ProfileCpu.h"
-#include <CL/cl.hpp>
+#include <CL/cl2.hpp>
 
 template <typename T>
 class Greens_rect_2D_gpu {
@@ -130,7 +130,7 @@ public:
 
 
   volComplexField_rect_2D_cpu<T> dot1(const volComplexField_rect_2D_cpu<T> &dW, const cl::CommandQueue &queue, std::vector<cl::Event> &events,
-                                      cl::Kernel &kernel, cl::Kernel &k_copy, const cl::NDRange &global, const cl::NDRange &local, cl_double2 *dot, cl::Buffer buffer_dot) const
+                                      cl::Kernel &kernel, const cl::NDRange &global, const cl::NDRange &local, cl_double2 *dot, cl::Buffer buffer_dot) const
   {
       const std::array<int, 2> &nx1 = grid.GetGridDimensions();
 
@@ -138,7 +138,7 @@ public:
       const int &nz = nx1[1];
 
       volComplexField_rect_2D_cpu<T> prod1(grid);
-      int l1, l2, l3, l4;
+      int l1, l2, l3;
       ProfileCpu profiler;
 
       prod1.Zero();
@@ -171,32 +171,26 @@ public:
               ierr = kernel.setArg(7, sp_dot);
               if (ierr != 0)
                   std::cout << "error in setting argument 8th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(9, i);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 9th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(10, j);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 10th of kernel - error id  " << ierr << std::endl;
 
-              queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+              ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+              if (ierr != 0)
+              {
+                  std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                  exit(1);
+              }
               events.pop_back();
               events.push_back(event_enq);
 
-              if ( (2*i + j < nz) && (i>0) )
-              {
-                  l4 = 2*l1 + l2;
-
-                  cl_int sp_dot1 = l4;
-                  ierr = k_copy.setArg(1, sp_dot);
-                  if (ierr != 0)
-                      std::cout << "error in setting argument 2nd of copy kernel - error id  " << ierr << std::endl;
-                  ierr = k_copy.setArg(2, sp_dot1);
-                  if (ierr != 0)
-                      std::cout << "error in setting argument 3rd of copy kernel - error id  " << ierr << std::endl;
-
-                  queue.enqueueNDRangeKernel(k_copy, cl::NullRange, cl::NDRange(nx), local, &events, &event_enq2);
-
-              }
           }
       }
-      //event_enq2.wait();
       //profiler.EndRegion();
-      events.clear();
-      events.push_back(event_enq2);
+
 
       //profiler.StartRegion("dot_product");
       for(int i=1; i < nz; i++)
@@ -223,7 +217,12 @@ public:
                   if (ierr != 0)
                       std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
 
-                  queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  if (ierr != 0)
+                  {
+                      std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                      exit(1);
+                  }
                   events.pop_back();
                   events.push_back(event_enq);
 
@@ -252,7 +251,12 @@ public:
                   if (ierr != 0)
                       std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
 
-                  queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  if (ierr != 0)
+                  {
+                      std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                      exit(1);
+                  }
                   events.pop_back();
                   events.push_back(event_enq);
               }

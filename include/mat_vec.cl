@@ -1,4 +1,4 @@
-__kernel void mat_vec(__global double2* A, __global double2* vec, __global double2 *res, int nx, int ny, int s_Gxx, int s_dW, int s_dot, __local double2 *l_sum)
+__kernel void mat_vec(__global double2* A, __global double2* vec, __global double2 *res, int nx, int ny, int s_Gxx, int s_dW, int s_dot, __local double2 *l_sum, int i, int j)
 {
 
 	int gid = get_group_id(0);
@@ -21,13 +21,17 @@ __kernel void mat_vec(__global double2* A, __global double2* vec, __global doubl
 	
 	for(int i=block_size/2; i>=1; i/=2)
 	{
+		barrier(CLK_LOCAL_MEM_FENCE);
 		if(lid < i)
 			l_sum[lid] += l_sum[lid+i]; 
 	}
 	
 	if (lid==0)
-		res[gid] += l_sum[0];
-		
+	{
+		res[s_dot + gid] += l_sum[0];
+		if( (2*i+j < ny) && (i>0) )	
+			res[s_Gxx + s_dW + gid]	+= l_sum[0];
+	}	
 }
 
 

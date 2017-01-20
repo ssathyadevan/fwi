@@ -1,8 +1,8 @@
 #ifndef INPUT_PARAMETERS
 #define INPUT_PARAMETERS
 
-const int nxt = 64;
-const int nzt = 32;
+const int nxt = 128;
+const int nzt = 64;
 const int nSrct = 17;
 const int nFreq_Total = 10;
 

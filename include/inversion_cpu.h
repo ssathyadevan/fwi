@@ -55,7 +55,7 @@ public:
 
         std::string name = "createTotalField" + std::to_string(rank);
 
-        this->m_profiler.StartRegion(name);
+
 
         this->p_tot = new volComplexField<T>**[this->m_nfreq];
 
@@ -70,11 +70,13 @@ public:
                 std::cout << "  " << std::endl;
             }
 
+            this->m_profiler.StartRegion(name);
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField<T>(this->m_grid);
                 *this->p_tot[i][j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
             }
+            this->m_profiler.EndRegion();
 
             if(rank==0)
             {
@@ -83,7 +85,7 @@ public:
             }
         }
 
-        this->m_profiler.EndRegion();
+
     }
 
     virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data, const int &rank)

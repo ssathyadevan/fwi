@@ -10,7 +10,7 @@
 #include <Eigen/Dense>
 #include "ProfileCpu.h"
 #include <string>
-#include <CL/cl.hpp>
+#include <CL/cl2.hpp>
 #include <fstream>
 
 using namespace Eigen;
@@ -155,11 +155,11 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     std::vector<size_t> block_size;
     kernel.getWorkGroupInfo(device[0], CL_KERNEL_WORK_GROUP_SIZE, &block_size);
     size_t max_block_size = block_size[0];
-    if (nx[0]<block_size[0]) ///if this is not true nx[0] must be a multiple of block_size[0](which is generally 1024)
+    if (nx[0] < (int)(block_size[0]) ) ///if this is not true nx[0] must be a multiple of block_size[0](which is generally 1024)
     {
         block_size[0] = (size_t)(nx[0]);
     }
-    else if( (nx[0] > block_size[0]) && (nx[0] <= 2048) )
+    else if( (nx[0] > (int)(block_size[0]) ) && ( nx[0] <= 2048) )
     {
         block_size[0] = nx[0]/2;
     }
@@ -192,6 +192,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     if (ierr != 0)
         std::cout << "error in setting argument 9th of kernel - error id  " << ierr << std::endl;
 
+    /*
     //creating copy kernel//
     std::string kernel_name1 = "vec_copy";
 
@@ -210,6 +211,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     ierr = kernel_copy.setArg(3,nx[0]);
     if (ierr != 0)
         std::cout << "error in setting argument 4th of copy kernel - error id  " << ierr << std::endl;
+    */
 
     //creating clear kernel//
     std::string kernel_name2 = "vec_clear";
@@ -268,7 +270,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
                     std::cout << "error in writing to buffer_matA - error id  " << ierr << std::endl;
 
             //set kernel argument//
-            ierr = kernel.setArg(2, buffer_dW);
+            ierr = kernel.setArg(1, buffer_dW);
             if (ierr != 0)
                 std::cout << "error in setting argument 3rd of kernel - error id  " << ierr << std::endl;
 
@@ -318,9 +320,14 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             {
              //   profiler.StartRegion("contracting field");
                 //p_tot += G.ContractWithField(dW);
-                queue.enqueueNDRangeKernel(kernel_clear, cl::NullRange, cl::NDRange(nx[1]*nx[0]), cl::NDRange(max_block_size), NULL, &event_clear);
+                ierr = queue.enqueueNDRangeKernel(kernel_clear, cl::NullRange, cl::NDRange(nx[1]*nx[0]), cl::NDRange(max_block_size), NULL, &event_clear);
+                if (ierr != 0)
+                {
+                    std::cout << "error in running clear kernel - error id  " << ierr << std::endl;
+                    exit(1);
+                }
                 events.push_back(event_clear);
-                (*p_tot[k]) += G.dot1(dW, queue, events, kernel, kernel_copy, global, local, dot, buffer_dot);
+                (*p_tot[k]) += G.dot1(dW, queue, events, kernel, global, local, dot, buffer_dot);
              //   profiler.EndRegion();
             }
 
