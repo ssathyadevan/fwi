@@ -89,7 +89,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     source.push_back({src_kernel.c_str(), k_len});
 
     //print the kernel//
-    std::cout << src_kernel << std::endl;
+    //std::cout << src_kernel << std::endl;
 
     //creating program//
     cl::Program program(context, source, &ierr);

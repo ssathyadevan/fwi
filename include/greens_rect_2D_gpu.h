@@ -173,6 +173,7 @@ public:
                   std::cout << "error in setting argument 8th of kernel - error id  " << ierr << std::endl;
 
               queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+              events.pop_back();
               events.push_back(event_enq);
 
               if ( (2*i + j < nz) && (i>0) )
@@ -192,8 +193,10 @@ public:
               }
           }
       }
-      event_enq2.wait();
+      //event_enq2.wait();
       //profiler.EndRegion();
+      events.clear();
+      events.push_back(event_enq2);
 
       //profiler.StartRegion("dot_product");
       for(int i=1; i < nz; i++)
@@ -221,6 +224,7 @@ public:
                       std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
 
                   queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  events.pop_back();
                   events.push_back(event_enq);
 
               }
@@ -249,12 +253,15 @@ public:
                       std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
 
                   queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  events.pop_back();
                   events.push_back(event_enq);
               }
           }
       }
 
-      ierr = queue.enqueueReadBuffer(buffer_dot, CL_TRUE, 0, grid.GetNumberOfGridPoints() * sizeof(cl_double2), dot, &events, NULL);
+      event_enq.wait();
+
+      ierr = queue.enqueueReadBuffer(buffer_dot, CL_TRUE, 0, grid.GetNumberOfGridPoints() * sizeof(cl_double2), dot, NULL, NULL);
       if (ierr != 0)
           std::cout << "error in reading from buffer_dot - error id  " << ierr << std::endl;
 
