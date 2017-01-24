@@ -55,10 +55,11 @@ public:
 
         std::string name = "createTotalField" + std::to_string(rank);
 
-        //this->m_profiler.StartRegion(name);
+
 
         this->p_tot = new volComplexField<T>**[this->m_nfreq];
 
+        this->m_profiler.StartRegion(name);
         for (int i=0; i<this->m_nfreq; i++)
         {
             this->p_tot[i] = new volComplexField<T>*[this->m_nsrc];
@@ -72,9 +73,11 @@ public:
 
             for (int j=0; j<this->m_nsrc; j++)
                 this->p_tot[i][j] = new volComplexField<T>(this->m_grid);
-            this->m_profiler.StartRegion(name);
+
+            //this->m_profiler.StartRegion(name);
             calcField_gpu<T,volComplexField,volField,Greens>(*this->m_greens[i], this->m_chi, this->p_0[i], this->p_tot[i], rank, this->m_nsrc);
-            this->m_profiler.EndRegion();
+            //this->m_profiler.EndRegion();
+
             if(rank==0)
             {
                 std::cout << "  " << std::endl;
@@ -82,7 +85,7 @@ public:
             }
         }
 
-        //this->m_profiler.EndRegion();
+        this->m_profiler.EndRegion();
     }
 
 

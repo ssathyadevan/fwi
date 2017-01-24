@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
     int ret;
     //Temple
-    std::string filename = "../temple2.txt";
+    std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
         if(gpu==1)
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-         //   ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
+        //    ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
         }
     }
     else if (freq_dist_group == 0)
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-         //   ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
+        //    ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
         }
     }
 
@@ -208,7 +208,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     }
     else
     {
-        //inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
+     //   inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
     }
 
 

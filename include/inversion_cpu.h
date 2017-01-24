@@ -58,7 +58,7 @@ public:
 
 
         this->p_tot = new volComplexField<T>**[this->m_nfreq];
-
+        this->m_profiler.StartRegion(name);
         for (int i=0; i<this->m_nfreq; i++)
         {
             this->p_tot[i] = new volComplexField<T>*[this->m_nsrc];
@@ -70,13 +70,13 @@ public:
                 std::cout << "  " << std::endl;
             }
 
-            this->m_profiler.StartRegion(name);
+
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField<T>(this->m_grid);
                 *this->p_tot[i][j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
             }
-            this->m_profiler.EndRegion();
+
 
             if(rank==0)
             {
@@ -84,6 +84,7 @@ public:
                 std::cout << "  " << std::endl;
             }
         }
+        this->m_profiler.EndRegion();
 
 
     }

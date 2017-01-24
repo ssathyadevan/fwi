@@ -17,8 +17,8 @@ import time
 
 # templefile = './chi_soil.txt'
 temple = load('./temple_small.npy')
-nx = 128
-nz = 64
+nx = 64
+nz = 32
 
 #temple = load('./temple_thesissize.npy')
 #nx = 120
@@ -102,7 +102,7 @@ def calcField(G_xx, chi, p_init, maxIt, tol):
             
 
         tmp = prod
-        #import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
  #       tmp = dot(G_xx, dW)
         phi.append(tmp)
 

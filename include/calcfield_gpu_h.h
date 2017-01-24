@@ -107,7 +107,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     }
 
     //creating buffer for G_xx//
-    cl::Buffer buffer_Gxx(context, CL_MEM_READ_ONLY, nx[0] * m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), G.get_Gxx_Ptr(), &ierr);
+    cl::Buffer buffer_Gxx(context, CL_MEM_READ_WRITE, nx[0] * m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), G.get_Gxx_Ptr(), &ierr);
     if (ierr != 0)
         std::cout << "error in creating buffer_Gxx - error id  " << ierr << std::endl;
 
@@ -117,7 +117,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
 
 
     //creating buffer for dW//
-    cl::Buffer buffer_dW(context, CL_MEM_READ_ONLY, m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), cl_dW, &ierr);
+    cl::Buffer buffer_dW(context, CL_MEM_READ_WRITE, m_grid.GetNumberOfGridPoints() * sizeof(cl_double2), cl_dW, &ierr);
     if (ierr != 0)
         std::cout << "error in creating buffer_dW - error id  " << ierr << std::endl;
 
@@ -126,7 +126,8 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
     if (ierr != 0)
         std::cout << "error in creating buffer_dot - error id  " << ierr << std::endl;
 
-    cl::Event event_Gxx, event_dW, event_clear;
+    cl::Event event_Gxx, event_dW, event_enq;
+    std::vector<cl::Event> events;
 
     //creating queue//
     cl_command_queue_properties prop2[] = {CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, 0};
@@ -154,17 +155,13 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
 
     std::vector<size_t> block_size;
     kernel.getWorkGroupInfo(device[0], CL_KERNEL_WORK_GROUP_SIZE, &block_size);
-    size_t max_block_size = block_size[0];
-    if (nx[0] < (int)(block_size[0]) ) ///if this is not true nx[0] must be a multiple of block_size[0](which is generally 1024)
+
+    if (nx[0]*nx[1] < (int)(block_size[0]) ) ///if this is not true nx[0] must be a multiple of block_size[0](which is generally 1024)
     {
-        block_size[0] = (size_t)(nx[0]);
-    }
-    else if( (nx[0] > (int)(block_size[0]) ) && ( nx[0] <= 2048) )
-    {
-        block_size[0] = nx[0]/2;
+        block_size[0] = (size_t)(nx[0]*nx[1]);
     }
 
-    cl::NDRange global( (size_t)(nx[0]*block_size[0]) );
+    cl::NDRange global( (size_t)(nx[0]*nx[1]*block_size[0]) );
     cl::NDRange local( (size_t)(block_size[0]) );
 
     //set kernel argument G_xx//
@@ -188,47 +185,12 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         std::cout << "error in setting argument 5th of kernel - error id  " << ierr << std::endl;
 
     //set kernel argument l_sum//
-    ierr = kernel.setArg( 8, cl::Local(block_size[0]*sizeof(cl_double2)) );
+    ierr = kernel.setArg( 5, cl::Local(block_size[0]*sizeof(cl_double2)) );
     if (ierr != 0)
         std::cout << "error in setting argument 9th of kernel - error id  " << ierr << std::endl;
 
-    /*
-    //creating copy kernel//
-    std::string kernel_name1 = "vec_copy";
-
-    cl::Kernel kernel_copy(program, kernel_name1.c_str(), &ierr);
-    if (ierr!=0)
-    {
-        std::cout << "error in creating copy kernel, error id - " << ierr << std::endl;
-        exit(1);
-    }
-    //set kernel argument buffer_dot//
-    ierr = kernel_copy.setArg(0,buffer_dot);
-    if (ierr != 0)
-        std::cout << "error in setting argument 1st of copy kernel - error id  " << ierr << std::endl;
-
-    //set kernel argument nx//
-    ierr = kernel_copy.setArg(3,nx[0]);
-    if (ierr != 0)
-        std::cout << "error in setting argument 4th of copy kernel - error id  " << ierr << std::endl;
-    */
-
-    //creating clear kernel//
-    std::string kernel_name2 = "vec_clear";
-
-    cl::Kernel kernel_clear(program, kernel_name2.c_str(), &ierr);
-    if (ierr!=0)
-    {
-        std::cout << "error in creating clear kernel, error id - " << ierr << std::endl;
-        exit(1);
-    }
-
-    //set kernel argument dot//
-    ierr = kernel_clear.setArg(0,buffer_dot);
-    if (ierr != 0)
-        std::cout << "error in setting argument 1st of clear kernel - error id  " << ierr << std::endl;
-
     event_Gxx.wait();
+
  /*////////////////////////////////////////////////////////////GPU STUFF////////////////////////////////////////////////////////////*/
 
 
@@ -240,6 +202,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         T res = 0.0;
 
         *p_tot[k] = *p_init[k];
+        std::complex<T> *data_ptr = p_tot[k]->GetDataPtr();
 
         int rank = rank1;
         std::string name = "full iter " + std::to_string(rank);
@@ -272,9 +235,8 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             //set kernel argument//
             ierr = kernel.setArg(1, buffer_dW);
             if (ierr != 0)
-                std::cout << "error in setting argument 3rd of kernel - error id  " << ierr << std::endl;
+                std::cout << "error in setting argument 2nd of kernel - error id  " << ierr << std::endl;
 
-            std::vector<cl::Event> events;
             events.push_back(event_dW);
             /*******************************************GPU*************************************************/
 
@@ -284,11 +246,14 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             res = dWNorm / chi_pNorm;
             //std::cout << "Residual = " << res << std::endl;
 
-            if(res < tol2 && it != 0 && rank1==rank_print)
+            if(res < tol2 && it != 0)
             {
-                std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
+                if(rank1==rank_print)
+                    std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
                 break;
             }
+
+
 
             //calculate new phi
             if (calc_alpha == 1)
@@ -318,18 +283,28 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             }
             else if(calc_alpha==0)
             {
-             //   profiler.StartRegion("contracting field");
+            //    profiler.StartRegion("contracting field");
                 //p_tot += G.ContractWithField(dW);
-                ierr = queue.enqueueNDRangeKernel(kernel_clear, cl::NullRange, cl::NDRange(nx[1]*nx[0]), cl::NDRange(max_block_size), NULL, &event_clear);
+                ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
                 if (ierr != 0)
                 {
-                    std::cout << "error in running clear kernel - error id  " << ierr << std::endl;
+                    std::cout << "error in running kernel - error id  " << ierr << std::endl;
                     exit(1);
                 }
-                events.push_back(event_clear);
-                (*p_tot[k]) += G.dot1(dW, queue, events, kernel, global, local, dot, buffer_dot);
-             //   profiler.EndRegion();
+                event_enq.wait();
+                events.clear();
+
+                ierr = queue.enqueueReadBuffer(buffer_dot, CL_TRUE, 0, nx[0]*nx[1] * sizeof(cl_double2), dot, NULL, NULL);
+                if (ierr != 0)
+                    std::cout << "error in reading from buffer_dot - error id  " << ierr << std::endl;
+
+                for(int i=0; i<m_grid.GetNumberOfGridPoints(); i++)
+                    data_ptr[i] += std::complex<T>( (double)(dot[i].s[0]), (double)(dot[i].s[1]) );
+
+               // (*p_tot[k]) += G.dot1(dW, queue, events, kernel, global, local, dot, buffer_dot);
+           //     profiler.EndRegion();
             }
+
 
             chi_p_old = chi_p;
             chi_p.Zero();
@@ -347,6 +322,7 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
         }
 
     }
+    queue.finish();
 
 }
 
