@@ -34,7 +34,7 @@
 
 
 
-template <typename T, template<typename> class Frequencies, template<typename> class Greens>
+template <typename T, template<typename> class Frequencies>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
 
 template <typename T>
@@ -92,25 +92,11 @@ int main(int argc, char* argv[])
     std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
-        if(gpu==1)
-        {
-            ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_gpu>(nFreq, filename, rank, nop);
-        }
-        else
-        {
-        //    ret = templeInversion<REAL,Frequencies_group,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
-        }
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
     }
     else if (freq_dist_group == 0)
     {
-        if(gpu==1)
-        {
-            ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_gpu>(nFreq, filename, rank, nop);
-        }
-        else
-        {
-        //    ret = templeInversion<REAL,Frequencies_alternate,Greens_rect_2D_cpu>(nFreq, filename, rank, nop);
-        }
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
     }
 
     if(rank==0)
@@ -124,7 +110,7 @@ int main(int argc, char* argv[])
 
 
 //temple from here
-template <typename T, template<typename> class Frequencies, template<typename> class Greens>
+template <typename T, template<typename> class Frequencies>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop)
 {
     std::array<T,2> x_min = {-300.0, 0.0};
@@ -201,52 +187,84 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     ProfileInterface *profiler;
     profiler = new ProfileCpu();
 
-    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies> *inverse;
-    if(gpu==1)
-    {
-        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
-    }
-    else
-    {
-     //   inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, *profiler);
-    }
-
-
+    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
 
     if (rank==0)
         chi.toFile("../src/chi.txt");
 
-    if (rank==0)
-        std::cout << "Creating Greens function field..." << std::endl;
-    inverse->createGreens();
-    inverse->SetBackground(chi);
-
-
-    if (rank==0)
-        std::cout << "Creating P0..." << std::endl;
-    inverse->createP0();
-
-
-    if (rank==0)
-        std::cout << "Creating total field..." << std::endl;
-    inverse->createTotalField(rank);
-
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
-    inverse->calculateData(p_data);
-    //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
-
-
-    if (rank==0)
-        std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
-
-    if (rank==0)
+    if(gpu==1)
     {
-        std::cout << "Done, writing to file" << std::endl;
-        chi_est.toFile("../src/chi_est_temple.txt");
+        Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies> *inverse;
+        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies>(grid, src, recv, freq, *profiler);
+
+        if (rank==0)
+            std::cout << "Creating Greens function field..." << std::endl;
+        inverse->createGreens();
+        inverse->SetBackground(chi);
+
+
+        if (rank==0)
+            std::cout << "Creating P0..." << std::endl;
+        inverse->createP0();
+
+
+        if (rank==0)
+            std::cout << "Creating total field..." << std::endl;
+        inverse->createTotalField(rank);
+
+        inverse->calculateData(p_data);
+        //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
+
+
+        if (rank==0)
+            std::cout << "Estimating Chi..." << std::endl;
+        volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+
+        if (rank==0)
+        {
+            std::cout << "Done, writing to file" << std::endl;
+            chi_est.toFile("../src/chi_est_temple.txt");
+        }
+    }
+    else
+    {
+        Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies> *inverse;
+        inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+
+        if (rank==0)
+            std::cout << "Creating Greens function field..." << std::endl;
+        inverse->createGreens();
+        inverse->SetBackground(chi);
+
+
+        if (rank==0)
+            std::cout << "Creating P0..." << std::endl;
+        inverse->createP0();
+
+
+        if (rank==0)
+            std::cout << "Creating total field..." << std::endl;
+        inverse->createTotalField(rank);
+
+
+        inverse->calculateData(p_data);
+        //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
+
+
+        if (rank==0)
+            std::cout << "Estimating Chi..." << std::endl;
+        volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+
+        if (rank==0)
+        {
+            std::cout << "Done, writing to file" << std::endl;
+            chi_est.toFile("../src/chi_est_temple.txt");
+        }
     }
 
     delete[] p_data;
+
+
 
     if (rank==0)
         MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);

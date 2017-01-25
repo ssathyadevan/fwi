@@ -104,8 +104,7 @@ public:
 
         std::array<T,2> alpha_div;
 
-        volComplexField<T> **Kappa, **p_est;
-        int l_i;
+        volComplexField<T> **Kappa, ***p_est;
         const int n_total = this->m_nfreq*this->m_nrecv*this->m_nsrc;
 
         std::complex<T> *r = new std::complex<T>[n_total];
@@ -126,12 +125,13 @@ public:
             Kappa[i] = new volComplexField<T>(this->m_grid);
         }
 
-        p_est = new volComplexField<T>*[this->m_nfreq*this->m_nsrc];
+        p_est = new volComplexField<T>**[this->m_nfreq];
         for (int i=0; i<this->m_nfreq; i++)
         {
-            l_i = i*this->m_nsrc;
+            p_est[i] = new volComplexField<T>*[this->m_nsrc];
+
             for (int j=0; j<this->m_nsrc;j++)
-                p_est[l_i + j] = new volComplexField<T>(*this->p_0[i][j]);
+                p_est[i][j] = new volComplexField<T>(*this->p_0[i][j]);
         }
 
         volField<T> **gradient_chi_old = new volField<T>*[2];
@@ -390,11 +390,28 @@ public:
             }
 
 
-
-            /* TURN THIS ON FOR MAIN CALCULATION
-            //calculate p_data
+            //calculate p_data (TURN THIS ON FOR MAIN CALCULATION)
             for (int i=0; i<this->m_nfreq; i++)
             {
+
+                if (rank==0)
+                {
+                    std::cout << "  " << std::endl;
+                    std::cout << "Creating this->p_tot for " << i+1 << "/ " << this->m_nfreq << "freq" << std::endl;
+                    std::cout << "  " << std::endl;
+                }
+
+                //this->m_profiler.StartRegion(name);
+                calcField_gpu<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, this->p_0[i], p_est[i], rank, this->m_nsrc);
+                //this->m_profiler.EndRegion();
+
+                if(rank==0)
+                {
+                    std::cout << "  " << std::endl;
+                    std::cout << "  " << std::endl;
+                }
+
+                /*
                 l_i = i*this->m_nsrc;
                 if (rank==0)
                 {
@@ -404,8 +421,8 @@ public:
                 }
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
-            }*/
+                    *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);*/
+            }
 
         }
 
@@ -415,8 +432,13 @@ public:
         delete[] Kappa;
         Kappa = nullptr;
 
-        for (int i = 0; i < this->m_nfreq*this->m_nsrc; i++)
-            delete p_est[i];
+        for (int i=0; i<this->m_nfreq; i++)
+        {
+            for (int j=0; j<this->m_nsrc;j++)
+                delete p_est[i][j];
+
+            delete[] p_est[i];
+        }
         delete[] p_est;
         p_est = nullptr;
 
