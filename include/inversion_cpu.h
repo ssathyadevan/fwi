@@ -117,9 +117,6 @@ public:
         volComplexField<T> tmp(this->m_grid);
         chi_est.Zero();
 
-        std::vector<std::complex<T>> res_first_it;
-
-
         Kappa = new volComplexField<T>*[n_total];
         for (int i = 0; i < n_total; i++)
         {
@@ -149,6 +146,7 @@ public:
         //main loop//
         for(int it=0; it<n_max; it++)
         {
+            std::vector<std::complex<T>> res_first_it;
             if (do_reg == 0)
             {
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
@@ -390,8 +388,9 @@ public:
             }
 
 
+            std::string name = "createTotalField" + std::to_string(rank);
 
-
+            this->m_profiler.StartRegion(name);
             //calculate p_data
             for (int i=0; i<this->m_nfreq; i++)
             {
@@ -403,10 +402,11 @@ public:
                     std::cout << "  " << std::endl;
                 }
 
+
                 for (int j=0; j<this->m_nsrc;j++)
                     *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
             }
-
+            this->m_profiler.EndRegion();
         }
 
         //free memory

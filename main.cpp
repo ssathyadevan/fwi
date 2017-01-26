@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 
     int ret;
     //Temple
-    std::string filename = "../temple.txt";
+    std::string filename = "../temple2.txt";
     if (freq_dist_group == 1)
     {
             ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);

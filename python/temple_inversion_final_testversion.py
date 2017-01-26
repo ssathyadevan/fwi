@@ -30,13 +30,13 @@ nz = 32
 
 # n_max determines how many extra functions we add to the equation for the final chi
 n_max = 3
-n_freq = 10 #  amount of frequencies to explore
+n_freq = 20 #  amount of frequencies to explore
 
 # these are the max iterations and the tolerance of the inner loop, added by Ankit
-maxit2 = 30
+maxit2 = 500
 tol2 = 1.0e-6
 
-maxit2nd = 25
+maxit2nd = 100
 eps_2 = 5.0e-5
 
 nsrc = 17
@@ -102,7 +102,7 @@ def calcField(G_xx, chi, p_init, maxIt, tol):
             
 
         tmp = prod
-        import ipdb; ipdb.set_trace()
+       # import ipdb; ipdb.set_trace()
  #       tmp = dot(G_xx, dW)
         phi.append(tmp)
 

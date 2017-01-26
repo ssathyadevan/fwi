@@ -116,9 +116,6 @@ public:
         volComplexField<T> tmp(this->m_grid);
         chi_est.Zero();
 
-        std::vector<std::complex<T>> res_first_it;
-
-
         Kappa = new volComplexField<T>*[n_total];
         for (int i = 0; i < n_total; i++)
         {
@@ -149,6 +146,8 @@ public:
         //main loop//
         for(int it=0; it<n_max; it++)
         {
+            std::vector<std::complex<T>> res_first_it;
+
             if (do_reg == 0)
             {
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
@@ -360,15 +359,15 @@ public:
                         else
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 
-                        if (rank==0)
-                            std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
-
                         Fdata_old = res;
                         res_first_it.push_back(res);
 
                         //breakout check
                         if ( (it1 > 0) && ( (res < T(tol1)) || ( std::abs(res_first_it[it1-1] - res) < T(tol1) ) ) )
                             break;
+
+                        if (rank==0)
+                            std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
                         chi_est.Gradient(gradient_chi_old);
                         volField<T> gradient_chi_normsquared(this->m_grid);
@@ -390,6 +389,8 @@ public:
             }
 
 
+            std::string name = "createTotalField" + std::to_string(rank);
+            this->m_profiler.StartRegion(name);
             //calculate p_data (TURN THIS ON FOR MAIN CALCULATION)
             for (int i=0; i<this->m_nfreq; i++)
             {
@@ -401,9 +402,7 @@ public:
                     std::cout << "  " << std::endl;
                 }
 
-                //this->m_profiler.StartRegion(name);
                 calcField_gpu<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, this->p_0[i], p_est[i], rank, this->m_nsrc);
-                //this->m_profiler.EndRegion();
 
                 if(rank==0)
                 {
@@ -423,7 +422,7 @@ public:
                 for (int j=0; j<this->m_nsrc;j++)
                     *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);*/
             }
-
+            this->m_profiler.EndRegion();
         }
 
         //free memory

@@ -28,8 +28,8 @@ class einsum
         {
         }
 
- //       einsum(const einsum<T,volComplexField,volField> &) = delete; //delete the copy constructor to forbid copying of objects of this class
- //       einsum<T,volComplexField,volField> & operator=(const einsum<T,volComplexField,volField> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum<T,volComplexField,volField, Greens, Frequencies> &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum<T,volComplexField,volField,Greens,Frequencies> & operator=(const einsum<T,volComplexField,volField,Greens,Frequencies> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
         void einsum_Gr_Pest(volComplexField<T> **Kappa, const Greens<T> *const *green, const volComplexField<T> *const *P_est) const
