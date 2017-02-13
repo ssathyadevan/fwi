@@ -1,0 +1,2 @@
+#ifndef INPUT_PARAMETERS#define INPUT_PARAMETERSconst int nxt = 6;
+const int nzt = 1;
