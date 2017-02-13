@@ -13,6 +13,7 @@
 #include "receivers_rect_2D.h"
 #include "contraction.h"
 #include "ProfileCpu.h"
+#include <CL/cl2.hpp>
 
 template <typename T>
 class Greens_rect_2D_gpu {
@@ -26,7 +27,7 @@ class Greens_rect_2D_gpu {
 
   std::complex<T> *G_vol;  ////G_vol = G_xx
   std::vector< volComplexField_rect_2D_cpu<T> *> G_recv;
-  std::vector< volComplexField_rect_2D_cpu<T> > G_vol2; //G_vol2 = G_xx ankit style
+  cl_double2*  G_vol2; //G_vol2 = G_xx ankit style
 
   Greens_rect_2D_gpu(const Greens_rect_2D_gpu<T>&) = delete;
   Greens_rect_2D_gpu& operator=(const Greens_rect_2D_gpu<T>&) = delete;
@@ -52,6 +53,9 @@ public:
     delete_Greens_recv();
 
     delete[] G_vol;
+
+    delete[] G_vol2;
+    G_vol2 = nullptr;
   }
 
   const std::complex<T>* GetGreensVolume() const { return G_vol; }
@@ -61,7 +65,7 @@ public:
   }
 
 
-
+  cl_double2* get_Gxx_Ptr() const { return G_vol2; }
 
 
   volComplexField_rect_2D_cpu<T> ContractWithField(const volComplexField_rect_2D_cpu<T> &x) const
@@ -125,55 +129,68 @@ public:
 
 
 
-  volComplexField_rect_2D_cpu<T> dot1(const volComplexField_rect_2D_cpu<T> &dW) const
+  volComplexField_rect_2D_cpu<T> dot1(const volComplexField_rect_2D_cpu<T> &dW, const cl::CommandQueue &queue, std::vector<cl::Event> &events,
+                                      cl::Kernel &kernel, const cl::NDRange &global, const cl::NDRange &local, cl_double2 *dot, cl::Buffer buffer_dot) const
   {
       const std::array<int, 2> &nx1 = grid.GetGridDimensions();
 
       const int &nx = nx1[0];
       const int &nz = nx1[1];
-      std::complex<T> *dummy = new std::complex<T>[nx];
+
       volComplexField_rect_2D_cpu<T> prod1(grid);
-      int l1, l2, l3, l4;
+      int l1, l2, l3;
       ProfileCpu profiler;
 
       prod1.Zero();
       std::complex<T> *p_prod = prod1.GetDataPtr();
-      const std::complex<T> *p_dW = dW.GetDataPtr();
 
       assert(&grid == &dW.GetGrid());
       //profiler.StartRegion("dot_product");
 
+      cl_int ierr, sp_Gxx, sp_dW, sp_dot;
+      cl::Event event_enq, event_enq2;
+
       for(int i=0; i < nz; i++)
       {
           l1 = i*nx;
-          int l1nx = l1 + nx;
           for (int j=0; j < nz-i; j++)
           {
               l2 = j*nx;
               l3 = l1 + l2;
 
-              for(int k=0; k<nx; k++)
+              sp_Gxx = l1;
+              sp_dW = l3;
+              sp_dot = l2;
+
+              ierr = kernel.setArg(5, sp_Gxx);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 6th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(6, sp_dW);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(7, sp_dot);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 8th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(9, i);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 9th of kernel - error id  " << ierr << std::endl;
+              ierr = kernel.setArg(10, j);
+              if (ierr != 0)
+                  std::cout << "error in setting argument 10th of kernel - error id  " << ierr << std::endl;
+
+              ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+              if (ierr != 0)
               {
-                  const std::complex<T> *p_Gxx = G_vol2[k].GetDataPtr();
-                  dummy[k] = T(0.);
-
-                  for(int l=l1; l<l1nx; l++)
-                      dummy[k] += p_Gxx[ l ] * p_dW[ l2 + l ];
+                  std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                  exit(1);
               }
+              events.pop_back();
+              events.push_back(event_enq);
 
-
-              for(int k=0; k<nx; k++)
-                  p_prod[ l2 + k ] += dummy[k];
-
-              if ( (2*i + j < nz) && (i>0) )
-              {
-                  l4 = 2*l1 + l2;
-                  for(int k=0; k<nx; k++)
-                      p_prod[ l4 + k ] += dummy[k];
-              }
           }
       }
       //profiler.EndRegion();
+
 
       //profiler.StartRegion("dot_product");
       for(int i=1; i < nz; i++)
@@ -186,12 +203,29 @@ public:
                   l2 = j*nx;
                   l3 = l1 + l2;
 
-                  for(int k=0; k<nx; k++)
+                  sp_Gxx = l1;
+                  sp_dW = l2;
+                  sp_dot = l3;
+
+                  ierr = kernel.setArg(5, sp_Gxx);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 5th of kernel - error id  " << ierr << std::endl;
+                  ierr = kernel.setArg(6, sp_dW);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 6th of kernel - error id  " << ierr << std::endl;
+                  ierr = kernel.setArg(7, sp_dot);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
+
+                  ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  if (ierr != 0)
                   {
-                      const std::complex<T> *p_Gxx = G_vol2[k].GetDataPtr();
-                      for(int l=0; l<nx; l++)
-                          p_prod[ l3 + k ] += p_Gxx[ l1 + l ] * p_dW[ l2 + l ];
+                      std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                      exit(1);
                   }
+                  events.pop_back();
+                  events.push_back(event_enq);
+
               }
           }
           else
@@ -203,23 +237,46 @@ public:
                   l2 = j*nx;
                   l3 = l1 + l2;
 
-                  for(int k=0; k<nx; k++)
-                  {
-                      const std::complex<T> *p_Gxx = G_vol2[k].GetDataPtr();
+                  sp_Gxx = l1;
+                  sp_dW = l2;
+                  sp_dot = l3;
 
-                      for(int l=0; l<nx; l++)
-                          p_prod[ l3 + k ] += p_Gxx[ l1 + l ] * p_dW[ l2 + l ];
+                  ierr = kernel.setArg(5, sp_Gxx);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 5th of kernel - error id  " << ierr << std::endl;
+                  ierr = kernel.setArg(6, sp_dW);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 6th of kernel - error id  " << ierr << std::endl;
+                  ierr = kernel.setArg(7, sp_dot);
+                  if (ierr != 0)
+                      std::cout << "error in setting argument 7th of kernel - error id  " << ierr << std::endl;
+
+                  ierr = queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local, &events, &event_enq);
+                  if (ierr != 0)
+                  {
+                      std::cout << "error in running kernel - error id  " << ierr << std::endl;
+                      exit(1);
                   }
+                  events.pop_back();
+                  events.push_back(event_enq);
               }
           }
       }
+
+      event_enq.wait();
+
+      ierr = queue.enqueueReadBuffer(buffer_dot, CL_TRUE, 0, grid.GetNumberOfGridPoints() * sizeof(cl_double2), dot, NULL, NULL);
+      if (ierr != 0)
+          std::cout << "error in reading from buffer_dot - error id  " << ierr << std::endl;
+
       //profiler.EndRegion();
-      delete[] dummy;
-      dummy = nullptr;
+
+      for(int i=0; i<grid.GetNumberOfGridPoints(); i++)
+          *(p_prod + i) = std::complex<T>( (double)(dot[i].s[0]), (double)(dot[i].s[1]) );
+
       return prod1;
 
   }
-
 
 
 private:
@@ -256,13 +313,21 @@ private:
       const int &nx = nx1[0];
 
       T p2_z = x_min[1] + dx[1]/T(2.0);
+      G_vol2 = new cl_double2[nx*grid.GetNumberOfGridPoints()];
       for(int i=0; i < nx; i++)
       {
           T p2_x = x_min[0] + (i + T(0.5) )*dx[0];
-          volComplexField_rect_2D_cpu<T> G_x(grid);
+          volComplexField_rect_2D_cpu<T> Gxx(grid);
+          Gxx.SetField( [this,vol,p2_x,p2_z] (const T &x, const T &y) {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
 
-          G_x.SetField( [this,vol,p2_x,p2_z] (const T &x, const T &y) {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
-          G_vol2.push_back(G_x);
+          std::complex<T> *Gxx_ptr = Gxx.GetDataPtr();
+          int l1 = i * grid.GetNumberOfGridPoints();
+
+          for(int j=0; j<grid.GetNumberOfGridPoints(); j++)
+          {
+              G_vol2[l1+j].s[0] = (cl_double)( ( Gxx_ptr + j )->real() );
+              G_vol2[l1+j].s[1] = (cl_double)( ( Gxx_ptr + j )->imag() );
+          }
       }
 
   }

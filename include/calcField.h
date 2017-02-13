@@ -60,9 +60,10 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         res = dWNorm / chi_pNorm;
         //std::cout << "Residual = " << res << std::endl;
 
-        if(res < tol2 && it != 0 && rank1==rank_print)
+        if(res < tol2 && it != 0)
         {
-            std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
+            if(rank1==rank_print)
+                std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
             break;
         }
 

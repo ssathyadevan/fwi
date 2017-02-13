@@ -28,8 +28,8 @@ class einsum
         {
         }
 
- //       einsum(const einsum<T,volComplexField,volField> &) = delete; //delete the copy constructor to forbid copying of objects of this class
- //       einsum<T,volComplexField,volField> & operator=(const einsum<T,volComplexField,volField> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum<T,volComplexField,volField, Greens, Frequencies> &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum<T,volComplexField,volField,Greens,Frequencies> & operator=(const einsum<T,volComplexField,volField,Greens,Frequencies> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
         void einsum_Gr_Pest(volComplexField<T> **Kappa, const Greens<T> *const *green, const volComplexField<T> *const *P_est) const
@@ -50,6 +50,23 @@ class einsum
             }
         }
 
+        void einsum_Gr_Pest(volComplexField<T> **Kappa, const Greens<T> *const *green, const volComplexField<T> *const *const *P_est) const
+        {
+            int l_i, l_j;
+
+            for (int i = 0; i < m_n_freq; i++)
+            {
+                l_i = i*m_n_recv*m_n_src;
+                for (int j = 0; j < m_n_recv; j++)
+                {
+                    l_j = j*m_n_src;
+                    for(int k = 0; k < m_n_src; k++)
+                    {
+                        *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i][k]);
+                    }
+                }
+            }
+        }
 
         void einsum_K_zeta(const volComplexField<T> *const *Kappa, const volField<T> &chi_est, std::complex<T> *K_zeta) const
         {

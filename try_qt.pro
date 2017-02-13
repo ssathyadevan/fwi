@@ -8,6 +8,7 @@ QMAKE_CXX_RELEASE = $$QMAKE_CXX
 QMAKE_CXX_DEBUG = $$QMAKE_CXX
 QMAKE_LINK = $$QMAKE_CXX
 QMAKE_CC = mpicc
+LIBS+= /usr/local/cuda-8.0/lib64/libOpenCL.so
 
 QMAKE_CFLAGS += $$system(mpicc --showme:compile)
 QMAKE_LFLAGS += $$system(mpicxx --showme:link)
@@ -63,5 +64,8 @@ HEADERS += \
     include/volField_rect_2D.h \
     include/input_parameters.h \
     include/frequencies_alternate.h \
-    include/greens_rect_2D_gpu.h
+    include/greens_rect_2D_gpu.h \
+    include/inversion_gpu.h \
+    include/calcfield_gpu_h.h \
+    include/inversion_cpu.h
 

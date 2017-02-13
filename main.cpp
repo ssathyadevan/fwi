@@ -4,6 +4,10 @@
 #include <string>
 #include <ctime>
 
+#define CL_HPP_MINIMUM_OPENCL_VERSION 110
+#define CL_HPP_TARGET_OPENCL_VERSION 120
+#include <CL/cl2.hpp>
+
 #include "calcField.h"
 
 #include "grid_rect_2D.h"
@@ -11,18 +15,24 @@
 #include "volField_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include "greens_rect_2D_cpu.h"
+#include "greens_rect_2D_gpu.h"
 #include "ProfileCpu.h"
 
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "frequencies_group.h"
 #include "frequencies_alternate.h"
+
 #include "inversion.h"
+#include "inversion_cpu.h"
+#include "inversion_gpu.h"
 #include "helper.h"
 
 #include "tests_helper.h"
 #include "mpi.h"
 #include "input_parameters.h"
+
+
 
 template <typename T, template<typename> class Frequencies>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
@@ -46,6 +56,20 @@ int main(int argc, char* argv[])
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
 
+
+    //check if nx_t and nz_t are multiples of 32 required only for gpu//
+    if( (gpu==1) && ( (nxt%32 != 0) || (nzt%32 != 0) ) )
+    {
+        std::cout << "nx_t and nz_t must be multiple of 32 to run on GPU" << std::endl;
+        exit(1);
+
+        if( (nxt>2048) && (nxt%1024!=0) )
+        {
+            std::cout << "If nxt > 2048, then nx_t must be a factor of 1024 to run on GPU" << std::endl;
+            exit(1);
+        }
+    }
+
     int nFreq;
     if (sizeof(nFreq_input) == sizeof(int))
     {
@@ -63,14 +87,20 @@ int main(int argc, char* argv[])
     //sine
 //    int ret = sineInversion<REAL>(nFreq);
 
-
+    int ret;
     //Temple
     std::string filename = "../temple2.txt";
     if (freq_dist_group == 1)
-        int ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
+    {
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
+    }
     else if (freq_dist_group == 0)
-        int ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
+    {
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
+    }
 
+    if(rank==0)
+        std::cout << ret << std::endl;
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -153,47 +183,88 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
     freq.Print();
 
-    Inversion<T> *inverse;
+
     ProfileInterface *profiler;
-
-
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+
+    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
 
     if (rank==0)
         chi.toFile("../src/chi.txt");
 
-    if (rank==0)
-        std::cout << "Creating Greens function field..." << std::endl;
-    inverse->createGreens();
-    inverse->SetBackground(chi);
-
-
-    if (rank==0)
-        std::cout << "Creating P0..." << std::endl;
-    inverse->createP0();
-
-
-    if (rank==0)
-        std::cout << "Creating total field..." << std::endl;
-    inverse->createTotalField(rank);
-
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
-    inverse->calculateData(p_data);
-    //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
-
-
-    if (rank==0)
-        std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
-
-    if (rank==0)
+    if(gpu==1)
     {
-        std::cout << "Done, writing to file" << std::endl;
-        chi_est.toFile("../src/chi_est_temple.txt");
+        Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies> *inverse;
+        inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies>(grid, src, recv, freq, *profiler);
+
+        if (rank==0)
+            std::cout << "Creating Greens function field..." << std::endl;
+        inverse->createGreens();
+        inverse->SetBackground(chi);
+
+
+        if (rank==0)
+            std::cout << "Creating P0..." << std::endl;
+        inverse->createP0();
+
+
+        if (rank==0)
+            std::cout << "Creating total field..." << std::endl;
+        inverse->createTotalField(rank);
+
+        inverse->calculateData(p_data);
+        //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
+
+
+        if (rank==0)
+            std::cout << "Estimating Chi..." << std::endl;
+        volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+
+        if (rank==0)
+        {
+            std::cout << "Done, writing to file" << std::endl;
+            chi_est.toFile("../src/chi_est_temple.txt");
+        }
+    }
+    else
+    {
+        Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies> *inverse;
+        inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+
+        if (rank==0)
+            std::cout << "Creating Greens function field..." << std::endl;
+        inverse->createGreens();
+        inverse->SetBackground(chi);
+
+
+        if (rank==0)
+            std::cout << "Creating P0..." << std::endl;
+        inverse->createP0();
+
+
+        if (rank==0)
+            std::cout << "Creating total field..." << std::endl;
+        inverse->createTotalField(rank);
+
+
+        inverse->calculateData(p_data);
+        //complexToFile(p_data, nFreq * nRecv * nSrc, "p_data.txt");
+
+
+        if (rank==0)
+            std::cout << "Estimating Chi..." << std::endl;
+        volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+
+        if (rank==0)
+        {
+            std::cout << "Done, writing to file" << std::endl;
+            chi_est.toFile("../src/chi_est_temple.txt");
+        }
     }
 
     delete[] p_data;
+
+
 
     if (rank==0)
         MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
@@ -255,12 +326,12 @@ int sineInversion(int nFreq) {
     Frequencies_group<T> freq(f_min, f_max, nFreq, c_0);
     freq.Print();
 
-    Inversion<T> *inverse;
+    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
     ProfileInterface *profiler;
 
 
     profiler = new ProfileCpu();
-    inverse = new InversionConcrete<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
+    inverse = new InversionConcrete_cpu<T, volField_rect_2D_cpu, volComplexField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
 
 
     inverse->createGreens();
@@ -268,7 +339,7 @@ int sineInversion(int nFreq) {
     inverse->createP0();
 
     T tol = 1.0e-6;
-    inverse->createTotalField(nItCreateFields, tol);
+    inverse->createTotalField(0);
 
     //int iFreq = 0;
     //int iSrc = 0;

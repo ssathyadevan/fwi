@@ -340,39 +340,41 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-      void GetLSCoefficients(std::vector< volComplexField_rect_2D_cpu<T>* > A_vectors, std::complex<T> *x, int n) {
+      /*void GetLSCoefficients(std::vector< volComplexField_rect_2D_cpu<T>* > A_vectors, std::complex<T> *x, int n)
+       {
 
-        for(int i=0; i<n; i++) {
-          x[i] = std::complex<T>(1.0, 0.0);
-        }
+            for(int i=0; i<n; i++)
+            {
+              x[i] = std::complex<T>(1.0, 0.0);
+            }
 
-    /*
-    int nGrid = this->GetGrid().this->GetNumberOfGridPoints();
 
-    std::complex<T> *A = new std::complex<T>[nGrid * n];
-    std::complex<T> *f = new std::complex<T>[nGrid];
+            int nGrid = this->GetGrid().this->GetNumberOfGridPoints();
 
-    this->toBuffer(f);
+            std::complex<T> *A = new std::complex<T>[nGrid * n];
+            std::complex<T> *f = new std::complex<T>[nGrid];
 
-    for(int i=0; i<n; i++) {
-      A_vectors[i]->toBuffer(&A[i * nGrid]);
-    }
+            this->toBuffer(f);
 
-#ifndef NDEBUG
-    int info = gels_wrap(nGrid, n, A, f);
-    assert(info == 0);
-#else
-    gels_wrap(nGrid, n, A, f);
-#endif
+            for(int i=0; i<n; i++) {
+              A_vectors[i]->toBuffer(&A[i * nGrid]);
+            }
 
-    for(int i=0; i<n; i++) {
-      x[i] = f[i];
-    }
+        #ifndef NDEBUG
+            int info = gels_wrap(nGrid, n, A, f);
+            assert(info == 0);
+        #else
+            gels_wrap(nGrid, n, A, f);
+        #endif
 
-    delete[] A;
-    delete[] f;*/
+            for(int i=0; i<n; i++) {
+              x[i] = f[i];
+            }
 
-  }
+            delete[] A;
+            delete[] f;
+
+       }*/
 
 
     protected:
