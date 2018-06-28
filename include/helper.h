@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include <Python.h>
+#include <python2.7/Python.h>
 
 template <typename T>
 inline T dist(T x, T z) {
@@ -13,7 +13,7 @@ inline T dist(T x, T z) {
 
 inline void MakeFigure(const std::string &file1, const std::string &file2, const std::string &outputfile, const int nx, const int nz, const int interactive) {
 
-    std::string pythonfile = "/home/harm/parallelized-fwi/src/ShowChi.py";
+    std::string pythonfile = "../src/ShowChi.py";
     int nargs = 7;
     FILE* file;
     char * argv[nargs];

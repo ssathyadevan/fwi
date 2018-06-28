@@ -8,22 +8,24 @@ QMAKE_CXX_RELEASE = $$QMAKE_CXX
 QMAKE_CXX_DEBUG = $$QMAKE_CXX
 QMAKE_LINK = $$QMAKE_CXX
 QMAKE_CC = mpicc
-LIBS+= /usr/local/cuda-8.0/lib64/libOpenCL.so
 
-QMAKE_CFLAGS += $$system(mpicc --showme:compile)
-QMAKE_LFLAGS += $$system(mpicxx --showme:link)
-QMAKE_CXXFLAGS += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
-QMAKE_CXXFLAGS_RELEASE += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
+#QMAKE_CFLAGS += $$system(mpicc --showme:compile)
+QMAKE_CFLAGS += $$system(mpicc -compile-info)
+#QMAKE_LFLAGS += $$system(mpicxx --showme:link)
+#QMAKE_LFLAGS += $$system(mpicxx -link-info)
+#QMAKE_CXXFLAGS += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
+#QMAKE_CXXFLAGS_RELEASE += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
+#QMAKE_CXXFLAGS += $$system(mpicxx -compile-info) -DMPICH_IGNORE_CXX_SEEK
+#QMAKE_CXXFLAGS_RELEASE += $$system(mpicxx -compile-info) -DMPICH_IGNORE_CXX_SEEK
 
 QMAKE_CXXFLAGS_RELEASE = -O3 -march=native -ftree-loop-distribution -malign-double
 QMAKE_CFLAGS_RELEASE -= -O2 -march=native
 
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += $$PWD/src
-INCLUDEPATH += /home/amittal/Eigen
 INCLUDEPATH += /usr/include/python2.7
 LIBS += -lpython2.7
-
+LIBS += -lOpenCL
 
 SOURCES += main.cpp \
     src/contraction.cpp \

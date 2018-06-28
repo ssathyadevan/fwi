@@ -13,7 +13,7 @@
 #include "receivers_rect_2D.h"
 #include "contraction.h"
 #include "ProfileCpu.h"
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include "input_parameters.h"
 
 using namespace Eigen;

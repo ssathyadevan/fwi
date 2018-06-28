@@ -7,7 +7,7 @@
 
 #include "grid_rect_2D.h"
 #include "input_parameters.h"
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include "ProfileCpu.h"
 #include <string>
 

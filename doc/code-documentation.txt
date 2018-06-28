@@ -1,0 +1,4 @@
+This document will try to explain how the code works and in what
+sequence parts of the code are being processed.
+
+1) 

@@ -53,9 +53,12 @@ int main(int argc, char* argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nop);
 
-    std::time_t start = std::time(nullptr);
-    std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-
+    // Ludwig
+    if(rank == 0)
+    {
+        std::time_t start = std::time(nullptr);
+        std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
+    }
 
     //check if nx_t and nz_t are multiples of 32 required only for gpu//
     if( (gpu==1) && ( (nxt%32 != 0) || (nzt%32 != 0) ) )
@@ -84,12 +87,20 @@ int main(int argc, char* argv[])
     {
         nFreq = nFreq_input[rank];
     }
+
+
+    // Ludwig debug
+    if(rank == 0)
+    {
+        std::cout << "nFreq= " << nFreq << std::endl;
+    }
+
     //sine
 //    int ret = sineInversion<REAL>(nFreq);
 
     int ret;
     //Temple
-    std::string filename = "../temple2.txt";
+    std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
             ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
@@ -141,7 +152,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     if (rank==0)
         recv.Print();
 
-    T c_0 = 2000.0;
+    T c_0 = 2000.0; // Speed of sound through the material being studied???
     T f_min, d_freq_proc;
 
     //use this section for alternate frequency distribution//

@@ -53,9 +53,7 @@ public:
         assert(this->p_0 != nullptr);
         assert(this->p_tot == nullptr);
 
-        std::string name = "createTotalField" + std::to_string(rank);
-
-
+        std::string name = "createTotalField rank=" + std::to_string(rank);
 
         this->p_tot = new volComplexField<T>**[this->m_nfreq];
         this->m_profiler.StartRegion(name);
