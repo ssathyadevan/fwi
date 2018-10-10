@@ -42,7 +42,7 @@ int sineInversion(int nFreq);
 
 #define REAL double
 
-const int nItCreateFields = 30;
+
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
 
 
