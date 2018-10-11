@@ -1,4 +1,81 @@
-Steps to run the code.
+Note: the previous steps to run the code did not work flawlessly. It has been repeated at the bottom of this Readme.txt.
+
+The "new" Getting Started steps are:
+====================================
+
+1) Prepare a Linux machine with git, development environment, opencl, eigen, python and matplotlib
+
+    See 1) Lubuntu Web (minimal) install
+    
+2) Clone the repository and build it
+
+    See 2) First checkout and Build 
+    
+3) Run the application
+    
+    ./qt_pro
+
+
+1) Lubuntu Web (minimal) install:
+---------------------------------
+
+    for VBox Guest Additions:
+    
+        sudo apt-get install gcc make perl
+        sudo ./media/andre/VBox_GAs_5.2.16/VBoxLinuxAdditions.run
+        
+        
+    for Development "tools":
+    
+        sudo apt-get install git    # For checking out the repos
+
+        sudo apt-get install qt5-default    # For QtCreator and to get qmake available for building
+        sudo apt-get install g++            # For compiling
+        sudo apt-get install mpich          # Needed during qmake... (Why, why, why?)
+        
+        # For OpenCL
+        sudo apt-get install opencl-headers
+        sudo apt-get install ocl-icd-libopencl1
+        sudo apt-get install ocl-icd-opencl-dev
+        
+        # For Eigen
+        sudo apt-get install libeigen3-dev
+
+        
+        # For using "makeFigure"...
+        sudo apt-get install python2.7-dev
+        
+        
+        # For the GUI:
+        sudo apt-get install python2.7      # Or python2.7-dev?  For GUI/gui.py 
+        sudo apt-get install python-tk      # For the actual, ugly Tk Gui.
+        sudo apt-get install python-numpy       # Apparently also necessary for a simple GUI?
+        sudo apt-get install python-matplotlib  # Apparently also necessary for a simple GUI?
+        
+        
+        
+2) First checkout and build:
+----------------------------
+    
+        git clone https://git.alten.nl/parallelized-fwi.git .
+        # Move to docs-libraires-getting-started
+        git checkout docs-libraires-getting-started
+        
+        # Note: This creates a build folder inside the top-level dir of the repository
+        mkdir Build
+        cd Build
+        qmake ../
+        make -j4
+
+
+
+
+
+
+
+
+
+Steps to run the code with Qt-Creator on a Linux machine:
 
 1. Create a QT project (with the given try_qt.pro) file.
 2. Make sure that build-try_qt-Desktop-Release and build-try_qt-Desktop-Debug folders are in the same folder as the main.cpp (change QT settings for this).
