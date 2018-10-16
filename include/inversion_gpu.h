@@ -19,6 +19,7 @@
 #include "mpi.h"
 #include <string>
 
+extern const int g_verbosity;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class InversionConcrete_gpu : public Inversion<T, volComplexField, volField, Greens, Frequencies>
@@ -366,9 +367,10 @@ public:
                         if ( (it1 > 0) && ( (res < T(tol1)) || ( std::abs(res_first_it[it1-1] - res) < T(tol1) ) ) )
                             break;
 
-                        if (rank==0)
+                        if (rank==0){
+		            std::cout << "Now in invervesion_gpu Verbosity level" << g_verbosity << std::endl;
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
-
+			}
                         chi_est.Gradient(gradient_chi_old);
                         volField<T> gradient_chi_normsquared(this->m_grid);
                         gradient_chi_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);

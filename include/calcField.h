@@ -11,6 +11,8 @@
 #include "ProfileCpu.h"
 #include <string>
 
+extern const int g_verbosity;
+
 using namespace Eigen;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Green>
@@ -62,8 +64,14 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
 
         if(res < tol2 && it != 0)
         {
-            if(rank1==rank_print)
-                std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
+            if(rank1==rank_print){
+		std::cout << "Verbosity level" << g_verbosity << std::endl; 
+		//std::string line_to_print = "Convergence after " + std::to_string(it) + "iterations. rank" + std::to_string(rank) + std::endl;
+		std::string itstring = std::to_string(it);// + "iterations. rank" + std::to_string(rank) + std::endl;
+		std::string rankstring = std::to_string(rank);//std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
+		std::string line_to_print = "Convergence after "+itstring+"iterations. rank"+rankstring;
+		std::cout << line_to_print;
+	    }
             break;
         }
 

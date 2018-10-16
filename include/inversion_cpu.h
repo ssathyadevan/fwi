@@ -19,6 +19,7 @@
 #include "mpi.h"
 #include <string>
 
+extern const int g_verbosity;
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class InversionConcrete_cpu : public Inversion<T, volComplexField, volField, Greens, Frequencies>
@@ -268,9 +269,10 @@ public:
                         else
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 
-                        if (rank==0)
+                        if (rank==0){
+		       	    std::cout << "Verbosity level" << g_verbosity << std::endl;
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
-
+			}
                         Fdata_old = res;
                         res_first_it.push_back(res);
                     }

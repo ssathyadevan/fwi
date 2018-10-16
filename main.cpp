@@ -32,13 +32,20 @@
 #include "mpi.h"
 #include "input_parameters.h"
 
-
+/* 
+MELISSEN 2018-10-16
+Introducing global variable (code base broad) g_ (global) verbosity
+It controls the couts, because the couts in the original code are time consuming.
+0 means silent (production mode: fast), 10 means verbose (diagnosis mode: slow)
+In the future we can add more flavors of verbosity.
+*/
+const int g_verbosity = 0;
 
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop);
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt);
 
 template <typename T>
-int sineInversion(int nFreq);
+int sineInversion(int nFreq, const int& nxt);
 
 #define REAL double
 
@@ -48,6 +55,27 @@ const int nItReconstructFields = 2; //number of iterations to reconstruct the im
 
 int main(int argc, char* argv[])
 {
+    const int nxt = 32;
+  //const int nSrct = 17;
+  //const int nFreq_Total = 20;
+  //const int calc_alpha = 0;
+  //const int n_max = 5;
+  //const int n_iter1 = 50;
+  //const int n_iter2 = 100;
+  //const double tol1 = 1e-8;
+  //const double tol2 = 5e-05;
+  //const int do_reg = 1;
+  //const int interactive = 0;
+  //const double F_min1 = 10.0;
+  //const double F_max1 = 40.0;
+  //const int freq_dist_group = 1;
+  //const int nFreq_input[] = {1};
+  //const int gpu = 0;
+  //const double delta_amplification_start = 100.0;
+  //const double delta_amplification_slope = 10.0;
+ 
+    
+    
     MPI_Init(&argc, &argv);
     int rank, nop;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -103,11 +131,11 @@ int main(int argc, char* argv[])
     std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
-            ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop);
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop, nxt);
     }
     else if (freq_dist_group == 0)
     {
-            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop);
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop, nxt);
     }
 
     if(rank==0)
@@ -122,10 +150,10 @@ int main(int argc, char* argv[])
 
 //temple from here
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop)
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt)
 {
-    std::array<T,2> x_min = {-300.0, 0.0};
-    std::array<T,2> x_max = {300.0, 300.0};
+    std::array<T,2> x_min = {-300.0, 0.0}; // Rectangle in meters Comment by MELISSEN 2018 10 16 see PhD Haffinger p 53
+    std::array<T,2> x_max = {300.0, 300.0};// Rectangle in meters Comment by MELISSEN see above
     std::array<int,2> ngrid = {nxt, nzt};
 
     grid_rect_2D<T> grid(x_min, x_max, ngrid);
@@ -302,7 +330,7 @@ T zeroEdgeSine(T x, T z) {
 }
 
 template <typename T>
-int sineInversion(int nFreq) {
+int sineInversion(int nFreq, const int& nxt) {
 
     std::array<T,2> x_min = {-50.0, -50.0};
     std::array<T,2> x_max = {50.0, 50.0};
