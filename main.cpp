@@ -39,7 +39,7 @@ It controls the couts, because the couts in the original code are time consuming
 0 means silent (production mode: fast), 10 means verbose (diagnosis mode: slow)
 In the future we can add more flavors of verbosity.
 */
-const int g_verbosity = 0;
+const int g_verbosity = 10;
 
 template <typename T, template<typename> class Frequencies>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt);
@@ -55,6 +55,16 @@ const int nItReconstructFields = 2; //number of iterations to reconstruct the im
 
 int main(int argc, char* argv[])
 {
+   // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
+   if (g_verbosity == 0)
+   {
+	std::cout << "Printing the program output onto a file named program_output.txt" << std::endl;
+
+	if (freopen("program_output.txt","w", stdout)) {}
+   }
+
+
+
     const int nxt = 32;
   //const int nSrct = 17;
   //const int nFreq_Total = 20;

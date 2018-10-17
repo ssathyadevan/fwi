@@ -368,7 +368,7 @@ public:
                             break;
 
                         if (rank==0){
-		            std::cout << "Now in invervesion_gpu Verbosity level" << g_verbosity << std::endl;
+		            std::cout << "Now in invervesion_gpu" << std::endl;
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 			}
                         chi_est.Gradient(gradient_chi_old);

@@ -270,7 +270,6 @@ public:
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
 
                         if (rank==0){
-		       	    std::cout << "Verbosity level" << g_verbosity << std::endl;
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 			}
                         Fdata_old = res;

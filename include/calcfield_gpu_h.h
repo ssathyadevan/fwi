@@ -249,7 +249,6 @@ void calcField_gpu(const Green<T> &G, const volField<T> &chi, const volComplexFi
             if(res < tol2 && it != 0)
             {
 	        if(rank1==rank_print){
-                std::cout << "Verbosity level" << g_verbosity << std::endl;
                 std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
 
 		}
