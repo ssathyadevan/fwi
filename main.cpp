@@ -41,11 +41,13 @@ In the future we can add more flavors of verbosity.
 */
 const int g_verbosity = 0;
 
+//vector<string> reader();
+
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt);
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu); // , const int& freq_dist_group);
 
 template <typename T>
-int sineInversion(int nFreq, const int& nxt);
+int sineInversion(int nFreq, const int& nxt, const int& nzt);
 
 #define REAL double
 
@@ -56,8 +58,9 @@ const int nItReconstructFields = 2; //number of iterations to reconstruct the im
 int main(int argc, char* argv[])
 {
     const int nxt = 32;
-  //const int nSrct = 17;
-  //const int nFreq_Total = 20;
+    const int nzt = 32;
+    const int nSrct = 17;
+    const int nFreq_Total = 20;
   //const int calc_alpha = 0;
   //const int n_max = 5;
   //const int n_iter1 = 50;
@@ -65,17 +68,46 @@ int main(int argc, char* argv[])
   //const double tol1 = 1e-8;
   //const double tol2 = 5e-05;
   //const int do_reg = 1;
-  //const int interactive = 0;
-  //const double F_min1 = 10.0;
-  //const double F_max1 = 40.0;
+    const int interactive = 0;
+    const double F_min1 = 10.0;
+    const double F_max1 = 40.0;
+    const double top_left_corner_coord_x_in_m =     -300.0;
+    const double top_left_corner_coord_z_in_m =        0.0;
+    const double bottom_right_corner_coord_x_in_m =  300.0;
+    const double bottom_right_corner_coord_z_in_m =  300.0;
   //const int freq_dist_group = 1;
+    const std::string fileName = "../temple.txt";
   //const int nFreq_input[] = {1};
-  //const int gpu = 0;
+    const int gpu = 0;
   //const double delta_amplification_start = 100.0;
   //const double delta_amplification_slope = 10.0;
+  //    //We read all lines and store relevant values in a big vector of strings input_parameters
+
+/*
+    vector<string> input_parameters = reader();
+
+    //We transfer what is in input_parameters to the relevant constants
+    int parameterCounter=0;
+    const double    c_0                          = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    c_1                          = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    f_min                        = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    f_max                        = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       nxt                          = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       nzt                          = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       nSrct                        = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       nFreq                        = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    tol1                         = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    tol2                         = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    F_min1                       = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    F_max1                       = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    delta_amplification_start    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double    delta_amplification_slope    = stod(input_parameters[parameterCounter]);
+*/
  
-    
-    
+    const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
+
+
+
     MPI_Init(&argc, &argv);
     int rank, nop;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -101,7 +133,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    int nFreq;
+    int nFreq(nFreq_Total);
     if (sizeof(nFreq_input) == sizeof(int))
     {
         nFreq = nFreq_Total/nop; //distributing frequencies
@@ -128,14 +160,14 @@ int main(int argc, char* argv[])
 
     int ret;
     //Temple
-    std::string filename = "../temple.txt";
+    //std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
-            ret = templeInversion<REAL,Frequencies_group>(nFreq, filename, rank, nop, nxt);
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
     }
     else if (freq_dist_group == 0)
     {
-            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, filename, rank, nop, nxt);
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
     }
 
     if(rank==0)
@@ -150,10 +182,10 @@ int main(int argc, char* argv[])
 
 //temple from here
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt)
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu) // , const int& freq_dist_group)
 {
-    std::array<T,2> x_min = {-300.0, 0.0}; // Rectangle in meters Comment by MELISSEN 2018 10 16 see PhD Haffinger p 53
-    std::array<T,2> x_max = {300.0, 300.0};// Rectangle in meters Comment by MELISSEN see above
+    std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
+    std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
     std::array<int,2> ngrid = {nxt, nzt};
 
     grid_rect_2D<T> grid(x_min, x_max, ngrid);
@@ -330,7 +362,7 @@ T zeroEdgeSine(T x, T z) {
 }
 
 template <typename T>
-int sineInversion(int nFreq, const int& nxt) {
+int sineInversion(int nFreq, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1) {
 
     std::array<T,2> x_min = {-50.0, -50.0};
     std::array<T,2> x_max = {50.0, 50.0};
@@ -352,7 +384,7 @@ int sineInversion(int nFreq, const int& nxt) {
     std::array<T,2> x_src_min = {-150.0, 75.0};
     std::array<T,2> x_src_max = {150.0, 75.0};
 
-    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct);
+    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct, nFreq_Total, F_min1, F_max1);
     src.Print();
 
     int nRecv = nSrct;
