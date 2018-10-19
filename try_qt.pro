@@ -28,7 +28,7 @@ LIBS += -lpython2.7
 LIBS += -lOpenCL
 
 SOURCES += main.cpp \
-    src/fwiread.cpp \
+#   src/fwiread.cpp \
     src/contraction.cpp \
     src/einsum.cpp \
     src/frequencies_group.cpp \
