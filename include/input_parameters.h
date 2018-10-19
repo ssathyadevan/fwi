@@ -6,7 +6,7 @@
 //const int nFreq_Total = 20;
 const int calc_alpha = 0;
 const int n_max = 5;
-const int n_iter1 = 50;
+const int n_iter1 = 10; //ATTENTION CHANGED FROM 50 TO 10 TO GO FASTER
 const int n_iter2 = 100;
 const double tol1 = 1e-8;
 const double tol2 = 5e-05;

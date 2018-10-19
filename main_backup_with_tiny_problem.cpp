@@ -32,16 +32,6 @@
 #include "mpi.h"
 #include "input_parameters.h"
 
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <ios>
-#include <vector>
-#include "read_input_fwi_into_vec.h"
-
-using std::cout;
-using std::endl;
-
 /* 
 MELISSEN 2018-10-16
 Introducing global variable (code base broad) g_ (global) verbosity
@@ -51,13 +41,11 @@ In the future we can add more flavors of verbosity.
 */
 const int g_verbosity = 0;
 
-std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
-
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu);
+int templeInversion(int nFreq, const std::string& fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& freq_dist_group);
 
 template <typename T>
-int sineInversion(int nFreq, const int& nxt, const int& nzt); // MELISSEN 2018 10 18 Saurabh turned off sine and it still compiles.
+int sineInversion(int nFreq, const int& nxt, const int& nzt);
 
 #define REAL double
 
@@ -67,48 +55,39 @@ const int nItReconstructFields = 2; //number of iterations to reconstruct the im
 
 int main(int argc, char* argv[])
 {
-    MPI_Init(&argc, &argv);
-    int rank, nop;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &nop);
-    cout << " rankcheckstart = " << rank << ", nopcheckstart = " << nop <<  endl;
-    std::vector<std::string> input_parameters = reader(); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
-
-    //We transfer what is in input_parameters to the relevant constants
-    int parameterCounter=0;
-    const double    c_0                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
-    const double    c_1                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound material "1"
-    const double    F_min1                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
-    const double    F_max1                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Maximum frequency
-    const double    top_left_corner_coord_x_in_m      = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double    top_left_corner_coord_z_in_m      = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double    bottom_right_corner_coord_x_in_m  = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double    bottom_right_corner_coord_z_in_m  = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const int       nxt                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points horizontal
-    const int       nzt                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points vertical
-    const int       nFreq_Total                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Total number of frequencies used
-    const int       nSrct                             = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
-    const std::string  fileName                       =     (input_parameters[parameterCounter]);    ++parameterCounter; //Filename to be used for inversion
-    const double    tol1_to_be_implemented            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    const double    tol2_to_be_implemented            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    const double    delta_amplification_start_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    const double    delta_amplification_slope_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-//  const int       Verbosity                         = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Saurabh worked on this
-    const int       gpu                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Use GPU yes or no
-    const int       interactive                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; 
-
+    const int nxt = 32;
+    const int nzt = 32;
+    const int nSrct = 17;
+    const int nFreq_Total = 20;
+  //const int calc_alpha = 0;
+  //const int n_max = 5;
+  //const int n_iter1 = 50;
+  //const int n_iter2 = 100;
+  //const double tol1 = 1e-8;
+  //const double tol2 = 5e-05;
+  //const int do_reg = 1;
+    const int interactive = 0;
+    const double F_min1 = 10.0;
+    const double F_max1 = 40.0;
+    const double top_left_corner_coord_x_in_m =     -300.0;
+    const double top_left_corner_coord_z_in_m =        0.0;
+    const double bottom_right_corner_coord_x_in_m =  300.0;
+    const double bottom_right_corner_coord_z_in_m =  300.0;
+    const int freq_dist_group = 1;
+    const std::string fileName = "../temple.txt";
+  //const int nFreq_input[] = {1};
+  //const int gpu = 0;
+  //const double delta_amplification_start = 100.0;
+  //const double delta_amplification_slope = 10.0;
  
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
 
-    //MELISSEN 2018 10 18 this snippe of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
-    std::ofstream outputfwi;
-    outputfwi.open("outputfwi.txt");
-    outputfwi << "This run was parametrized as follows:" << std::endl;
-    outputfwi << "c_0   = " << c_0    << std::endl;
-    outputfwi << "c_1   = " << c_1    << std::endl; // etc
-    outputfwi.close();
 
+    MPI_Init(&argc, &argv);
+    int rank, nop;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nop);
 
     // Ludwig
     if(rank == 0)
@@ -157,14 +136,14 @@ int main(int argc, char* argv[])
 
     int ret;
     //Temple
-    //std::string filename = "../temple.txt";
+    //std::string fileName = "../temple.txt";
     if (freq_dist_group == 1)
     {
-            ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, freq_dist_group);
     }
     else if (freq_dist_group == 0)
     {
-            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, freq_dist_group);
     }
 
     if(rank==0)
@@ -174,12 +153,12 @@ int main(int argc, char* argv[])
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
     MPI_Finalize();
     return 0;
-    }
+}
 
 
 //temple from here
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu) // , const int& freq_dist_group)
+int templeInversion(int nFreq, const std::string& fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
@@ -267,19 +246,17 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
         if (rank==0)
             std::cout << "Creating Greens function field..." << std::endl;
-	cout << "rank = " << rank << endl;
         inverse->createGreens();
         inverse->SetBackground(chi);
 
 
-        if (rank==0) std::cout << "Creating P0..." << std::endl;
-	cout << "rank = " << rank << endl;
+        if (rank==0)
+            std::cout << "Creating P0..." << std::endl;
         inverse->createP0();
 
 
         if (rank==0)
             std::cout << "Creating total field..." << std::endl;
-	cout << "rank = " << rank << endl;
         inverse->createTotalField(rank);
 
         inverse->calculateData(p_data);
@@ -288,7 +265,6 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
         if (rank==0)
             std::cout << "Estimating Chi..." << std::endl;
-	cout << "rank = " << rank << endl;
         volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
 
         if (rank==0)
@@ -303,21 +279,18 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
         inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
 
         if (rank==0)
-            std::cout << "Creating Greens function field" << std::endl;
-	cout << endl << " rank = " << rank << endl;
+            std::cout << "Creating Greens function field..." << std::endl;
         inverse->createGreens();
         inverse->SetBackground(chi);
 
 
         if (rank==0)
             std::cout << "Creating P0..." << std::endl;
-	cout << endl << " rank = " << rank << endl;
         inverse->createP0();
 
 
         if (rank==0)
             std::cout << "Creating total field..." << std::endl;
-	cout << endl << " rank = " << rank << endl;
         inverse->createTotalField(rank);
 
 
@@ -327,7 +300,6 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
         if (rank==0)
             std::cout << "Estimating Chi..." << std::endl;
-	cout << endl << " rank = " << rank << endl;
         volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
 
         if (rank==0)
