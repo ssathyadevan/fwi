@@ -34,7 +34,7 @@
                         15
 # I4. VARIABLE          nSrct          TYPE const int      DEFAULT    17
                         17
-# S1. VARIABLE          fileName       TYPE const string   DEFAULT    temple.txt
+# S1. VARIABLE          fileName       TYPE const string   DEFAULT    ../temple.txt
                         ../temple.txt
 
 ##########################################################################################

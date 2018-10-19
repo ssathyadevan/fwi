@@ -1,0 +1,3 @@
+This run was parametrized as follows:
+c_0   = 2000
+c_1   = 2218
