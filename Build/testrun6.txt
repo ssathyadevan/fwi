@@ -1,0 +1,538 @@
+Starting at Wed Oct 17 16:22:03 2018
+
+nFreq= 20
+Total number is sources is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number is receivers is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number of frequencies is 20. Values:
+f = 10, k = 0.0314159
+f = 11.5789, k = 0.0363763
+f = 13.1579, k = 0.0413367
+f = 14.7368, k = 0.0462972
+f = 16.3158, k = 0.0512576
+f = 17.8947, k = 0.056218
+f = 19.4737, k = 0.0611784
+f = 21.0526, k = 0.0661388
+f = 22.6316, k = 0.0710992
+f = 24.2105, k = 0.0760596
+f = 25.7895, k = 0.08102
+f = 27.3684, k = 0.0859804
+f = 28.9474, k = 0.0909408
+f = 30.5263, k = 0.0959012
+f = 32.1053, k = 0.100862
+f = 33.6842, k = 0.105822
+f = 35.2632, k = 0.110782
+f = 36.8421, k = 0.115743
+f = 38.4211, k = 0.120703
+f = 40, k = 0.125664
+
+Creating Greens function field...
+Creating P0...
+Creating total field...
+  
+Creating this->p_tot for 1/ 20freq
+  
+Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0  
+  
+  
+Creating this->p_tot for 2/ 20freq
+  
+Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 5iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0  
+  
+  
+Creating this->p_tot for 3/ 20freq
+  
+Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0  
+  
+  
+Creating this->p_tot for 4/ 20freq
+  
+Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0  
+  
+  
+Creating this->p_tot for 5/ 20freq
+  
+Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0  
+  
+  
+Creating this->p_tot for 6/ 20freq
+  
+Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 6iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0  
+  
+  
+Creating this->p_tot for 7/ 20freq
+  
+Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0  
+  
+  
+Creating this->p_tot for 8/ 20freq
+  
+Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0  
+  
+  
+Creating this->p_tot for 9/ 20freq
+  
+Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0  
+  
+  
+Creating this->p_tot for 10/ 20freq
+  
+Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 7iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0  
+  
+  
+Creating this->p_tot for 11/ 20freq
+  
+Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0  
+  
+  
+Creating this->p_tot for 12/ 20freq
+  
+Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0  
+  
+  
+Creating this->p_tot for 13/ 20freq
+  
+Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 8iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0  
+  
+  
+Creating this->p_tot for 14/ 20freq
+  
+Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0  
+  
+  
+Creating this->p_tot for 15/ 20freq
+  
+Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0  
+  
+  
+Creating this->p_tot for 16/ 20freq
+  
+Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 9iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0  
+  
+  
+Creating this->p_tot for 17/ 20freq
+  
+Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 10iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0  
+  
+  
+Creating this->p_tot for 18/ 20freq
+  
+Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0  
+  
+  
+Creating this->p_tot for 19/ 20freq
+  
+Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 14iterations. rank0Verbosity level0
+Convergence after 14iterations. rank0  
+  
+  
+Creating this->p_tot for 20/ 20freq
+  
+Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 11iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 12iterations. rank0Verbosity level0
+Convergence after 13iterations. rank0Verbosity level0
+Convergence after 14iterations. rank0Verbosity level0
+Convergence after 14iterations. rank0  
+  
+Computation time for createTotalField rank=0 was 3.45847 seconds
+Estimating Chi...
+Verbosity level0
+1/50	 (1/5)	 res: 0.72493137412824693
+2/50	 (1/5)	 res: nan
+3/50	 (1/5)	 res: nan
+4/50	 (1/5)	 res: nan
+5/50	 (1/5)	 res: nan
+6/50	 (1/5)	 res: nan
+7/50	 (1/5)	 res: nan
+8/50	 (1/5)	 res: nan
+9/50	 (1/5)	 res: nan
+10/50	 (1/5)	 res: nan
+11/50	 (1/5)	 res: nan
+12/50	 (1/5)	 res: nan
+13/50	 (1/5)	 res: nan
+14/50	 (1/5)	 res: nan
+15/50	 (1/5)	 res: nan
+16/50	 (1/5)	 res: nan
+17/50	 (1/5)	 res: nan
+18/50	 (1/5)	 res: nan
+19/50	 (1/5)	 res: nan
+20/50	 (1/5)	 res: nan
+21/50	 (1/5)	 res: nan
+22/50	 (1/5)	 res: nan
+23/50	 (1/5)	 res: nan
+24/50	 (1/5)	 res: nan
+25/50	 (1/5)	 res: nan
+26/50	 (1/5)	 res: nan
+27/50	 (1/5)	 res: nan
+28/50	 (1/5)	 res: nan
+29/50	 (1/5)	 res: nan
