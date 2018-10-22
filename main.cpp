@@ -80,42 +80,12 @@ int main(int argc, char* argv[])
    }
 
 
-
-    const int nxt = 32;
-  //const int nSrct = 17;
-  //const int nFreq_Total = 20;
-  //const int calc_alpha = 0;
-  //const int n_max = 5;
-  //const int n_iter1 = 50;
-  //const int n_iter2 = 100;
-  //const double tol1 = 1e-8;
-  //const double tol2 = 5e-05;
-  //const int do_reg = 1;
-  //const int interactive = 0;
-  //const double F_min1 = 10.0;
-  //const double F_max1 = 40.0;
-  //const int freq_dist_group = 1;
-  //const int nFreq_input[] = {1};
-  //const int gpu = 0;
-  //const double delta_amplification_start = 100.0;
-  //const double delta_amplification_slope = 10.0;
- 
-    
-    
     MPI_Init(&argc, &argv);
     int rank, nop;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nop);
     cout << " rankcheckstart = " << rank << ", nopcheckstart = " << nop <<  endl;
     std::vector<std::string> input_parameters = reader(); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
-
-/*
-    bool string_1_for_true_0_for_false(std::string const& string_for_bool){
-	//if (string_for_bool.size != 1 || string_for_bool[0] < '0' || string_for_bool[0] > '1') throw input_exception();
-	bool string_1_for_true_0_for_fal = true;//( string_for_bool[0] == '1');
-	return string_1_for_true_0_for_fal;
-    }
-*/
 
     //We transfer what is in input_parameters to the relevant constants
     int parameterCounter=0;
@@ -142,8 +112,6 @@ int main(int argc, char* argv[])
     const bool      gpu                               = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
     if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
     const bool      interactive                       = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
-//  const int       gpu                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Use GPU yes or no
-//  const int       interactive                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; 
 
  
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
