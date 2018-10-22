@@ -16,8 +16,11 @@
 #include "calcField.h"
 #include "einsum.h"
 #include <array>
-#include "mpi.h"
+//#include "mpi.h"
 #include <string>
+
+using std::cout;
+using std::endl;
 
 extern const int g_verbosity;
 
@@ -62,12 +65,12 @@ public:
         {
             this->p_tot[i] = new volComplexField<T>*[this->m_nsrc];
 
-            if (rank==0)
-            {
+//          if (rank==0)
+//          {
                 std::cout << "  " << std::endl;
                 std::cout << "Creating this->p_tot for " << i+1 << "/ " << this->m_nfreq << "freq" << std::endl;
                 std::cout << "  " << std::endl;
-            }
+//          }
 
 
             for (int j=0; j<this->m_nsrc; j++)
@@ -77,11 +80,11 @@ public:
             }
 
 
-            if(rank==0)
-            {
+//          if(rank==0)
+//          {
                 std::cout << "  " << std::endl;
                 std::cout << "  " << std::endl;
-            }
+//          }
         }
         this->m_profiler.EndRegion();
 
@@ -91,14 +94,14 @@ public:
     virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data, const int &rank)
     {
         T const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
-
+/*
         if ( sizeof(const1) == sizeof(double) )
             MPI_Allreduce(MPI_IN_PLACE, &const1, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
         else
             MPI_Allreduce(MPI_IN_PLACE, &const1, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
+*/
         T eta = 1.0/const1;
-
+cout << "line 101 visible" << endl;
         T gamma, alpha, res;
 
         std::array<T,2> alpha_div;
@@ -121,7 +124,7 @@ public:
         {
             Kappa[i] = new volComplexField<T>(this->m_grid);
         }
-
+cout << "line 124 visible" << endl;
         p_est = new volComplexField<T>*[this->m_nfreq*this->m_nsrc];
         for (int i=0; i<this->m_nfreq; i++)
         {
@@ -141,7 +144,7 @@ public:
             gradient_zeta_tmp[i] = new volField<T>(this->m_grid);
         }
 
-
+cout << "line 145 visible" << endl;
         //main loop//
         for(int it=0; it<n_max; it++)
         {
@@ -156,13 +159,13 @@ public:
                         r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
                     res = eta*normSq(r,n_total);
-
+/*
                     if ( sizeof(res) == sizeof(double) )
                         MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                     else
                         MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
-                    if (rank==0)
+*/
+//                  if (rank==0)
                     {
                         if (it1 > 0)
                             std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " << std::abs(res_first_it[it1-1] - res) << "    " << it1+1 << '/' << n_iter1 << std::endl;
@@ -185,7 +188,7 @@ public:
                         gamma = g.InnerProduct(g-g_old) / g_old.InnerProduct(g_old);
                         zeta = g + gamma*zeta;
                     }
-
+cout << "line 191 visible" << endl;
                     alpha_div[0] = 0.0;
                     alpha_div[1] = 0.0;
                     for (int i = 0; i < n_total; i++)
@@ -194,12 +197,12 @@ public:
                         alpha_div[0] += std::real( conj(r[i]) * K_zeta[i] );
                         alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                     }
-
+/*
                     if ( sizeof(alpha) == sizeof(double) )
                         MPI_Allreduce(MPI_IN_PLACE, &alpha_div[0], alpha_div.size(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                     else
                         MPI_Allreduce(MPI_IN_PLACE, &alpha_div[0], alpha_div.size(), MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
+*/
                     alpha = alpha_div[0] / alpha_div[1];
 
                     /*if (rank==1)
@@ -213,8 +216,8 @@ public:
                     g_old = g;
                 }
             }
-
             else if (do_reg == 1) {
+cout << "line 220 visible" << endl;
                 T deltasquared_old = T(0.0);
                 volField<T> bsquared_old(this->m_grid);
                 bsquared_old.Zero();
@@ -229,17 +232,17 @@ public:
                 for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
                     r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
-
+cout << "line 235 visible" << endl;
                 //start the inner loop
                 for (int it1=0; it1<n_iter1; it1++)
                 {
                     if (it1 == 0)
-                    {
-                        ein.einsum_K_res(Kappa, r, tmp);  //tmp = einsum('ijkl,ijk->l', conj(K), r)
+                    {   cout << "line 240 visible" << endl;
+                        ein.einsum_K_res(Kappa, r, tmp); cout << "line 241 visible" << endl; //tmp = einsum('ijkl,ijk->l', conj(K), r)
                         g = eta * tmp.GetRealPart();
-
+cout << "line 243 visible" << endl;
                         zeta = g;
-
+cout << "line 245 visible" << endl;
                         alpha_div[0] = T(0.0);
                         alpha_div[1] = T(0.0);
                         for (int i = 0; i < n_total; i++)
@@ -248,14 +251,14 @@ public:
                             alpha_div[0] += std::real( conj(r[i]) * K_zeta[i] );
                             alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                         }
-
-                        if ( sizeof(alpha) == sizeof(double) )
+cout << "line 254 visible" << endl;
+/*                      if ( sizeof(alpha) == sizeof(double) )
                             MPI_Allreduce(MPI_IN_PLACE, &alpha_div[0], alpha_div.size(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                         else
                             MPI_Allreduce(MPI_IN_PLACE, &alpha_div[0], alpha_div.size(), MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
+*/
                         alpha = alpha_div[0] / alpha_div[1];
-
+cout << "line 261 visible" << endl;
                         chi_est += alpha*zeta;
                         g_old = g;
 
@@ -263,15 +266,15 @@ public:
                             r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
                         res = eta*normSq(r,n_total);
-
+/*
                         if ( sizeof(res) == sizeof(double) )
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                         else
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
-                        if (rank==0){
+*/
+//                      if (rank==0){
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
-			}
+//	}
                         Fdata_old = res;
                         res_first_it.push_back(res);
                     }
@@ -280,7 +283,7 @@ public:
                         chi_est.Gradient(gradient_chi_old);
                         volField<T> gradient_chi_old_normsquared(this->m_grid);
                         gradient_chi_old_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
-
+cout << "line 286 visible" << endl;
 
                         volField<T> bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
                         bsquared.Reciprocal();
@@ -302,7 +305,7 @@ public:
                         tmpvolfield2.Gradient(gradient_greg_tmp);
                         tmpvolfield2 = *gradient_greg_tmp[1];
                         volField<T> g_reg = tmpvolfield + tmpvolfield2; //g_reg = gradient(bsquared_old * gradient_chi_old[0], dz, dx)[0] + gradient(bsquared_old*gradient_chi_old[1], dz, dx)[1]  # eq. 2.24
-
+cout << "line 308 visible" << endl;
                         tmp.Zero();
                         ein.einsum_K_res(Kappa, r, tmp);  //tmp = einsum('ijkl,ijk->l', conj(K), r)
                         g = eta * Freg_old * tmp.GetRealPart() + Fdata_old * g_reg; //g = real(eta * (einsum('ijkl,ijk', conj(K), r)) * Freg_old + (Fdata_old * g_reg).reshape(nx*nz))  # eq. 2.25
@@ -319,10 +322,10 @@ public:
                             A[0] += T(-2.0) * eta * std::real( conj(r[i]) * K_zeta[i] );
                         }
 
-                        MPI_Allreduce(MPI_IN_PLACE, &A[0], A.size(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+//                      MPI_Allreduce(MPI_IN_PLACE, &A[0], A.size(), MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
                         T A0 = Fdata_old;
-
+cout << "line 329 visible" << endl;
                         zeta.Gradient(gradient_zeta_tmp);
                         tmpvolfield = b * *gradient_zeta_tmp[0];
                         tmpvolfield2 = b * *gradient_zeta_tmp[1];
@@ -349,15 +352,15 @@ public:
 
                         for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
                             r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
-
+cout << "line 356 visible" << endl;
                         res = eta*normSq(r,n_total);
-
+/*
                         if ( sizeof(res) == sizeof(double) )
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
                         else
                             MPI_Allreduce(MPI_IN_PLACE, &res, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-
-                        if (rank==0)
+*/
+//                      if (rank==0)
                             std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
                         Fdata_old = res;
@@ -407,7 +410,7 @@ public:
             }
             this->m_profiler.EndRegion();
         }
-
+cout << "line 410 visible" << endl;
         //free memory
         for (int i = 0; i < n_total; i++)
             delete Kappa[i];

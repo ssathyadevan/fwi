@@ -102,14 +102,14 @@ class einsum
                     }
                 }
             }
-            if ( sizeof(T) == sizeof(double) )
+/*          if ( sizeof(T) == sizeof(double) )
             {
                 //std::cout << "hello" << m_grid.GetNumberOfGridPoints() << std::endl;
                 MPI::COMM_WORLD.Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI::DOUBLE_COMPLEX, MPI_SUM);
             }
             else
                 MPI::COMM_WORLD.Allreduce(MPI_IN_PLACE, K_res.GetDataPtr(), m_grid.GetNumberOfGridPoints(), MPI::COMPLEX, MPI_SUM);
-        }
+*/      }
 
 
         std::complex<T> einsum_dot(const std::complex<T> *x, const std::complex<T> *y) const
