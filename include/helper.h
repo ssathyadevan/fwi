@@ -11,7 +11,7 @@ inline T dist(T x, T z) {
   return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5);
 }
 
-inline void MakeFigure(const std::string &file1, const std::string &file2, const std::string &outputfile, const int nx, const int nz, const int interactive) {
+inline void MakeFigure(const std::string &file1, const std::string &file2, const std::string &outputfile, const int nx, const int nz, const bool& interactive) {
 
     std::string pythonfile = "../src/ShowChi.py";
     int nargs = 7;

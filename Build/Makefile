@@ -432,8 +432,7 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/inversion_gpu.h \
 		../include/calcfield_gpu_h.h \
 		../include/tests_helper.h \
-		../include/read_input_fwi_into_vec.h \
-		../src/fwiread.cpp
+		../include/read_input_fwi_into_vec.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 contraction.o: ../src/contraction.cpp ../include/helper.h \

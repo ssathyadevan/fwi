@@ -38,6 +38,7 @@
 #include <ios>
 #include <vector>
 #include "read_input_fwi_into_vec.h"
+#include <stdexcept>
 
 using std::cout;
 using std::endl;
@@ -54,7 +55,7 @@ const int g_verbosity = 0;
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu);
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0);
 
 template <typename T>
 int sineInversion(int nFreq, const int& nxt, const int& nzt); // MELISSEN 2018 10 18 Saurabh turned off sine and it still compiles.
@@ -64,6 +65,9 @@ int sineInversion(int nFreq, const int& nxt, const int& nzt); // MELISSEN 2018 1
 
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
 
+//Here we determine (is_this_our_kind_of_booL) if the reader correctly gave us a Boolean (1 or 0) and then set the Boolean from the input string (string_1_for_true_0_for_false)
+bool is_this_our_kind_of_bool(std::string const& string_for_bool) { return (string_for_bool.size() == 1 && (string_for_bool[0] == '0' || string_for_bool[0] == '1'));}
+bool string_1_for_true_0_for_false(std::string const& string_for_bool)	{return string_for_bool[0] == '1';}
 
 int main(int argc, char* argv[])
 {
@@ -74,12 +78,20 @@ int main(int argc, char* argv[])
     cout << " rankcheckstart = " << rank << ", nopcheckstart = " << nop <<  endl;
     std::vector<std::string> input_parameters = reader(); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
 
+/*
+    bool string_1_for_true_0_for_false(std::string const& string_for_bool){
+	//if (string_for_bool.size != 1 || string_for_bool[0] < '0' || string_for_bool[0] > '1') throw input_exception();
+	bool string_1_for_true_0_for_fal = true;//( string_for_bool[0] == '1');
+	return string_1_for_true_0_for_fal;
+    }
+*/
+
     //We transfer what is in input_parameters to the relevant constants
     int parameterCounter=0;
     const double    c_0                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
     const double    c_1                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound material "1"
-    const double    F_min1                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
-    const double    F_max1                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Maximum frequency
+    const double    Freq_min                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
+    const double    Freq_max                            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Maximum frequency
     const double    top_left_corner_coord_x_in_m      = stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const double    top_left_corner_coord_z_in_m      = stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const double    bottom_right_corner_coord_x_in_m  = stod(input_parameters[parameterCounter]);    ++parameterCounter;
@@ -94,8 +106,13 @@ int main(int argc, char* argv[])
     const double    delta_amplification_start_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const double    delta_amplification_slope_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
 //  const int       Verbosity                         = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Saurabh worked on this
-    const int       gpu                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Use GPU yes or no
-    const int       interactive                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; 
+    
+    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
+    const bool      gpu                               = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
+    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
+    const bool      interactive                       = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
+//  const int       gpu                               = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Use GPU yes or no
+//  const int       interactive                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; 
 
  
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
@@ -118,7 +135,7 @@ int main(int argc, char* argv[])
     }
 
     //check if nx_t and nz_t are multiples of 32 required only for gpu//
-    if( (gpu==1) && ( (nxt%32 != 0) || (nzt%32 != 0) ) )
+    if( (gpu==true) && ( (nxt%32 != 0) || (nzt%32 != 0) ) )
     {
         std::cout << "nx_t and nz_t must be multiple of 32 to run on GPU" << std::endl;
         exit(1);
@@ -160,11 +177,11 @@ int main(int argc, char* argv[])
     //std::string filename = "../temple.txt";
     if (freq_dist_group == 1)
     {
-            ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
+            ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive, reservoir_corner_points_in_m, gpu, c_0); // , freq_dist_group);
     }
     else if (freq_dist_group == 0)
     {
-            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, F_min1, F_max1, interactive, reservoir_corner_points_in_m, gpu); // , freq_dist_group);
+            ret = templeInversion<REAL,Frequencies_alternate>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive, reservoir_corner_points_in_m, gpu, c_0); // , freq_dist_group);
     }
 
     if(rank==0)
@@ -179,7 +196,7 @@ int main(int argc, char* argv[])
 
 //temple from here
 template <typename T, template<typename> class Frequencies>
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1, const int& interactive, const double (&reservoir_corner_points_in_m)[2][2], const int& gpu) // , const int& freq_dist_group)
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
@@ -209,16 +226,16 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     if (rank==0)
         recv.Print();
 
-    T c_0 = 2000.0; // Speed of sound through the material being studied???
+    //T c_0 = 2000.0; // Speed of sound through the material being studied???
     T f_min, d_freq_proc;
 
     //use this section for alternate frequency distribution//
     if (freq_dist_group == 0)
     {
-        T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
+        T d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
 
         d_freq_proc = d_freq*nop;
-        f_min = F_min1 + rank*d_freq;
+        f_min = Freq_min + rank*d_freq;
     }
     //use this section for alternate frequency distribution//
 
@@ -226,22 +243,22 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     //use this section for group frequency distribution//
     else if (freq_dist_group == 1)
     {
-        T d_freq = (F_max1 - F_min1)/(nFreq_Total -1);
+        T d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
         int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
 
         if (sizeof(nFreq_input) == sizeof(int))
         {
             if (rank<freq_left)
-                f_min = F_min1 + d_freq*(nFreq)*rank;
+                f_min = Freq_min + d_freq*(nFreq)*rank;
             else
-                f_min = F_min1 + freq_left*d_freq*(nFreq+1) + d_freq*(nFreq)*(rank-freq_left);
+                f_min = Freq_min + freq_left*d_freq*(nFreq+1) + d_freq*(nFreq)*(rank-freq_left);
         }
         else
         {
             int sum = 0;
             for (int i=0; i<rank; i++)
                 sum += nFreq_input[i];
-            f_min = F_min1 + sum*d_freq;
+            f_min = Freq_min + sum*d_freq;
         }
         d_freq_proc = d_freq;
     }
@@ -260,7 +277,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     if (rank==0)
         chi.toFile("../src/chi.txt");
 
-    if(gpu==1)
+    if(gpu==true)
     {
         Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies> *inverse;
         inverse = new InversionConcrete_gpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_gpu, Frequencies>(grid, src, recv, freq, *profiler);
@@ -366,7 +383,7 @@ T zeroEdgeSine(T x, T z) {
 }
 
 template <typename T>
-int sineInversion(int nFreq, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& F_min1, const double& F_max1) {
+int sineInversion(int nFreq, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max) {
 
     std::array<T,2> x_min = {-50.0, -50.0};
     std::array<T,2> x_max = {50.0, 50.0};
@@ -388,7 +405,7 @@ int sineInversion(int nFreq, const int& nxt, const int& nzt, const int& nSrct, c
     std::array<T,2> x_src_min = {-150.0, 75.0};
     std::array<T,2> x_src_max = {150.0, 75.0};
 
-    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct, nFreq_Total, F_min1, F_max1);
+    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct, nFreq_Total, Freq_min, Freq_max);
     src.Print();
 
     int nRecv = nSrct;
