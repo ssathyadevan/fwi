@@ -9,14 +9,13 @@
 #include <ios>
 #include <vector>
 
-//#include "fwiread.cpp"
 
 using namespace std;
 
 vector<string> reader()
 {
     vector<string> thevec;
-    fstream f1("inputfwi.txt");
+    fstream f1("../inputfwi.txt");
     string line,w1;
     while ( getline(f1,line) ) 
     {
