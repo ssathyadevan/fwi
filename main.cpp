@@ -39,6 +39,7 @@
 #include <ios>
 #include <vector>
 #include "read_input_fwi_into_vec.h"
+#include "chi_visualisation_in_integer_form.h"
 #include <stdexcept>
 
 using std::cout;
@@ -51,7 +52,7 @@ It controls the couts, because the couts in the original code are time consuming
 0 means silent (production mode: fast), 10 means verbose (diagnosis mode: slow)
 In the future we can add more flavors of verbosity.
 */
-const int g_verbosity = 10;
+const int g_verbosity = 0;
 
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
@@ -70,6 +71,38 @@ const int nItReconstructFields = 2; //number of iterations to reconstruct the im
 bool is_this_our_kind_of_bool(std::string const& string_for_bool) { return (string_for_bool.size() == 1 && (string_for_bool[0] == '0' || string_for_bool[0] == '1'));}
 bool string_1_for_true_0_for_false(std::string const& string_for_bool)	{return string_for_bool[0] == '1';}
 
+
+
+//void chi_visualisation_in_integer_form(string filename, int nxt)
+//{
+//    string line;
+//           ifstream myfile (filename);
+//        int x = 0;
+//        int z = 0;
+//        int rock_character = 6;
+//        int background_character = 3;
+//        int resolution = rock_character-background_character;
+//        double contrast = 1.869132054239392993e-01;
+//        double no_contrast = 0.0;
+//        double contrast_difference = contrast-no_contrast;
+//        double contrast_resolution = contrast_difference/(2.0*resolution);
+//        //double minidelta = 0.0000000001;
+//        double value = 0.0;
+//        int dummy = 0;
+//               while (getline(myfile, line)){
+//               value = stod(line);
+//               //if (value < 0.05) dummy = 2;
+//               //else dummy = 7;
+//               dummy=static_cast<int>((value+contrast_resolution)/contrast_difference*resolution+background_character);
+//               if (dummy < 0) dummy = 0;
+//               else if (dummy > 9) dummy = 9;
+//           cout << dummy;
+//           x++;
+//           if (x == (nxt)) { z++; x=0; cout <<endl;}
+//           }
+//    myfile.close();
+//}
+
 int main(int argc, char* argv[])
 {
    // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
@@ -79,7 +112,6 @@ int main(int argc, char* argv[])
 
 	if (freopen("program_output.txt","w", stdout)) {}
    }
-
 
  //   MPI_Init(&argc, &argv);
  //   int rank, nop;
@@ -117,7 +149,6 @@ int main(int argc, char* argv[])
  
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
-
     //MELISSEN 2018 10 18 this snippe of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
     std::ofstream outputfwi;
     outputfwi.open("outputfwi.txt");
@@ -126,6 +157,8 @@ int main(int argc, char* argv[])
     outputfwi << "c_1   = " << c_1    << std::endl; // etc
     outputfwi.close();
 
+    cout << "Input Temple Visualisation" << endl;
+    chi_visualisation_in_integer_form("../temple.txt", nxt);
 
     // Ludwig
 //    if(rank == 0)
@@ -188,6 +221,10 @@ int main(int argc, char* argv[])
 
 //  if(rank==0)
     std::cout << ret << std::endl;
+
+    cout << "Visualisation of the estimated temple using FWI" << endl;
+    chi_visualisation_in_integer_form("../src/chi_est_temple.txt", nxt);
+
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;

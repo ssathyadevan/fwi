@@ -71,5 +71,6 @@ HEADERS += \
 #   include/greens_rect_2D_gpu.h \
 #   include/inversion_gpu.h \
 #   include/calcfield_gpu_h.h \
-    include/inversion_cpu.h 
+    include/inversion_cpu.h \ 
+    include/chi_visualisation_in_integer_form.h
 

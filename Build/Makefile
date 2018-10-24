@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = try_qt1.0.0
-DISTDIR = /home/sigi/Documents/FULL_WAVEFORM_INVERSION_GIT3/parallelized-fwi/Build/.tmp/try_qt1.0.0
+DISTDIR = /home/s240194/Documents/parallelized-fwi/Build/.tmp/try_qt1.0.0
 LINK          = mpicxx
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) -lpython2.7 -lOpenCL -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -166,7 +166,8 @@ DIST          = ../src/chi_est_sine.txt \
 		../include/volField_rect_2D_cpu.h \
 		../include/volField_rect_2D.h \
 		../include/input_parameters.h \
-		../include/inversion_cpu.h ../main.cpp \
+		../include/inversion_cpu.h \
+		../include/chi_visualisation_in_integer_form.h ../main.cpp \
 		../src/contraction.cpp \
 		../src/einsum.cpp \
 		../src/frequencies_group.cpp \
@@ -353,7 +354,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../include/read_input_fwi_into_vec.h ../include/calcField.h ../include/contraction.h ../include/einsum.h ../include/frequencies_group.h ../include/greens_rect_2D_cpu.h ../include/GreensFunctions.h ../include/grid_rect_2D.h ../include/grid.h ../include/helper.h ../include/inversion.h ../include/ProfileCpu.h ../include/ProfileInterface.h ../include/receivers_rect_2D.h ../include/sources_rect_2D.h ../include/tests_helper.h ../include/volComplexField_rect_2D_cpu.h ../include/volComplexField_rect_2D.h ../include/volField_rect_2D_cpu.h ../include/volField_rect_2D.h ../include/input_parameters.h ../include/inversion_cpu.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../include/read_input_fwi_into_vec.h ../include/calcField.h ../include/contraction.h ../include/einsum.h ../include/frequencies_group.h ../include/greens_rect_2D_cpu.h ../include/GreensFunctions.h ../include/grid_rect_2D.h ../include/grid.h ../include/helper.h ../include/inversion.h ../include/ProfileCpu.h ../include/ProfileInterface.h ../include/receivers_rect_2D.h ../include/sources_rect_2D.h ../include/tests_helper.h ../include/volComplexField_rect_2D_cpu.h ../include/volComplexField_rect_2D.h ../include/volField_rect_2D_cpu.h ../include/volField_rect_2D.h ../include/input_parameters.h ../include/inversion_cpu.h ../include/chi_visualisation_in_integer_form.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../main.cpp ../src/contraction.cpp ../src/einsum.cpp ../src/frequencies_group.cpp ../src/grid_rect_2D.cpp ../src/ProfileCpu.cpp ../src/receivers_rect_2D.cpp ../src/sources_rect_2D.cpp ../src/volComplexField_rect_2D_cpu.cpp ../src/volField_rect_2D_cpu.cpp $(DISTDIR)/
 
 
@@ -419,8 +420,10 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/inversion.h \
 		../include/GreensFunctions.h \
 		../include/einsum.h \
+		../include/inversion_cpu.h \
 		../include/tests_helper.h \
-		../include/read_input_fwi_into_vec.h
+		../include/read_input_fwi_into_vec.h \
+		../include/chi_visualisation_in_integer_form.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 contraction.o: ../src/contraction.cpp ../include/helper.h \

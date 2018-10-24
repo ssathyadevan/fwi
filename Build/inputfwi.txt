@@ -27,7 +27,7 @@
 # L6. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
                         300.0
 # I1. VARIABLE          nxt            TYPE const int      DEFAULT    32
-                        32
+                        64
 # I2. VARIABLE          nzt            TYPE const int      DEFAULT    32
                         32
 # I3. VARIABLE          nFreq_Total    TYPE const int      DEFAULT    15

@@ -1,0 +1,6832 @@
+2236622222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222227777222222222222222222222222222222
+2222222222222222222222222222777777777222222222222222222222222222
+2222222222222222222222222777777777777772222222222222222222222222
+2222222222222222222222277777722222277777722222222222222222222222
+2222222222222222222277777777777777777777777222222222222222222222
+2222222222222222227777777777777777777777777777222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+Starting at Wed Oct 24 11:54:34 2018
+
+nFreq= 15
+Total number is sources is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number is receivers is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number of frequencies is 15. Values:
+f = 10, k = 0.0314159
+f = 12.1429, k = 0.0381479
+f = 14.2857, k = 0.0448799
+f = 16.4286, k = 0.0516119
+f = 18.5714, k = 0.0583439
+f = 20.7143, k = 0.0650758
+f = 22.8571, k = 0.0718078
+f = 25, k = 0.0785398
+f = 27.1429, k = 0.0852718
+f = 29.2857, k = 0.0920038
+f = 31.4286, k = 0.0987358
+f = 33.5714, k = 0.105468
+f = 35.7143, k = 0.1122
+f = 37.8571, k = 0.118932
+f = 40, k = 0.125664
+
+Creating Greens function field
+Creating P0...
+Creating total field...
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+  
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+  
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+  
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+  
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+  
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+  
+  
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+  
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+  
+  
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+  
+  
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+  
+  
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+  
+  
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 20iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 20iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 21iterations. rank0
+  
+  
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 24iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 24iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 23iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 22iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 22iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 22iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 23iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+  
+  
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 28iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 28iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 28iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 27iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 27iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 23iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 22iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 23iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 25iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 26iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 27iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 27iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 27iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 28iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 28iterations. rank0
+  
+  
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 37iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 38iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 37iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 36iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 34iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 33iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 32iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 30iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 30iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 30iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 32iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 34iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 34iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 36iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 37iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 38iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 37iterations. rank0
+  
+  
+Computation time for createTotalField rank=0 was 20.9812 seconds
+Estimating Chi...
+line 101 visible
+line 124 visible
+line 145 visible
+line 220 visible
+line 235 visible
+line 240 visible
+line 241 visible
+line 243 visible
+line 245 visible
+line 254 visible
+line 261 visible
+1/10	 (1/5)	 res: 0.51818905706765839
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+2/10	 (1/5)	 res: 0.55763462520969675
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+3/10	 (1/5)	 res: 0.54415342616763007
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+4/10	 (1/5)	 res: 0.35131027930891612
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+5/10	 (1/5)	 res: 0.24260881875655801
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+6/10	 (1/5)	 res: 0.13876038447490169
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+7/10	 (1/5)	 res: 0.11052591009229601
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+8/10	 (1/5)	 res: 0.094779317594244322
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+9/10	 (1/5)	 res: 0.085397749428874514
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+10/10	 (1/5)	 res: 0.077630308186030811
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+Computation time for createTotalField0 was 10.395132955999999 seconds
+line 220 visible
+line 235 visible
+line 240 visible
+line 241 visible
+line 243 visible
+line 245 visible
+line 254 visible
+line 261 visible
+1/10	 (2/5)	 res: 0.11432209229475426
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+2/10	 (2/5)	 res: 0.084081269019775778
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+3/10	 (2/5)	 res: 0.075799407064812363
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+4/10	 (2/5)	 res: 0.063835496800574293
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+5/10	 (2/5)	 res: 0.056214473911641083
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+6/10	 (2/5)	 res: 0.052988780666461677
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+7/10	 (2/5)	 res: 0.04891011805925171
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+8/10	 (2/5)	 res: 0.044008891480071581
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+9/10	 (2/5)	 res: 0.042106051600365096
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+10/10	 (2/5)	 res: 0.038157885346656553
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 4iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+Computation time for createTotalField0 was 12.072629212000001 seconds
+line 220 visible
+line 235 visible
+line 240 visible
+line 241 visible
+line 243 visible
+line 245 visible
+line 254 visible
+line 261 visible
+1/10	 (3/5)	 res: 0.041152980532374123
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+2/10	 (3/5)	 res: 0.034581374241605761
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+3/10	 (3/5)	 res: 0.029731450025036677
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+4/10	 (3/5)	 res: 0.027779602055123923
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+5/10	 (3/5)	 res: 0.025602481235877682
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+6/10	 (3/5)	 res: 0.024349794665449037
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+7/10	 (3/5)	 res: 0.023301185446851492
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+8/10	 (3/5)	 res: 0.022171059364896887
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+9/10	 (3/5)	 res: 0.020971562922046331
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+10/10	 (3/5)	 res: 0.02037434371562076
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+Computation time for createTotalField0 was 12.363418579999999 seconds
+line 220 visible
+line 235 visible
+line 240 visible
+line 241 visible
+line 243 visible
+line 245 visible
+line 254 visible
+line 261 visible
+1/10	 (4/5)	 res: 0.019001684137981013
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+2/10	 (4/5)	 res: 0.017912214418964595
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+3/10	 (4/5)	 res: 0.01661592079878358
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+4/10	 (4/5)	 res: 0.016060864407813909
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+5/10	 (4/5)	 res: 0.015286742175710475
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+6/10	 (4/5)	 res: 0.014573381675494389
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+7/10	 (4/5)	 res: 0.01392497275467112
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+8/10	 (4/5)	 res: 0.013096427085881115
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+9/10	 (4/5)	 res: 0.012062478368124466
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+10/10	 (4/5)	 res: 0.011643844465326004
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+Computation time for createTotalField0 was 13.760320042 seconds
+line 220 visible
+line 235 visible
+line 240 visible
+line 241 visible
+line 243 visible
+line 245 visible
+line 254 visible
+line 261 visible
+1/10	 (5/5)	 res: 0.012238609815328672
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+2/10	 (5/5)	 res: 0.0094996397361779266
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+3/10	 (5/5)	 res: 0.0087174608094832285
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+4/10	 (5/5)	 res: 0.0083001179610975306
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+5/10	 (5/5)	 res: 0.0080615550820871025
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+6/10	 (5/5)	 res: 0.0076767797836285153
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+7/10	 (5/5)	 res: 0.0073765381703377432
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+8/10	 (5/5)	 res: 0.0071207711900404527
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+9/10	 (5/5)	 res: 0.006956897799960394
+line 286 visible
+line 308 visible
+line 329 visible
+line 356 visible
+10/10	 (5/5)	 res: 0.006760227369215218
+  
+Creating this->p_tot for 1/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 5iterations. rank0
+  
+Creating this->p_tot for 2/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+  
+Creating this->p_tot for 3/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 6iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+  
+Creating this->p_tot for 4/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 7iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 5/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 8iterations. rank0
+  
+Creating this->p_tot for 6/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+  
+Creating this->p_tot for 7/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 8/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 9iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+  
+Creating this->p_tot for 9/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+  
+Creating this->p_tot for 10/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 10iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+  
+Creating this->p_tot for 11/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 11iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+  
+Creating this->p_tot for 12/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 12iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+  
+Creating this->p_tot for 13/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+  
+Creating this->p_tot for 14/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 13iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 14iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+  
+Creating this->p_tot for 15/ 15freq
+  
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 15iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 16iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 18iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 17iterations. rank0
+
+rankincalcfield = 0
+ erbosity level0
+Convergence after 19iterations. rank0
+Computation time for createTotalField0 was 14.211150634999999 seconds
+line 410 visible
+Done, writing to file
+in main.cpp just before MakeFigure line 364
+in main.cpp just after MakeFigure line 366
+0
+2236532222223122323111232212122222212123322123232213222212223222
+2323322322222332222332221223222122223211222332222332222232222232
+2222212222222222221222221222221222222221222222222222222222222222
+2222222222232232222222222321112332111232222223222222322222222222
+2222222222222232222222212211235665322112122222222322222222222222
+2222222222222222222222211234578898766322122222222222222222222222
+2223223222222322232221124567666556578654212223332232232223223222
+2222222222222322222222246777533322357776432122222232222222222222
+2222332233222233223467777778766776677777776433223322223322232222
+2233332222233222235666666666666876665666676555322223333222333322
+2233233222233322223320012220111211100222110244322233322223323323
+3333333333222332221121121111221001221101111211222332223333333333
+2333333233332222221257753135763235665313577521222222233332333333
+3333333233333222232257663125652135665213677522322222332322333333
+3333333332222332222246653015652025665103566422222332222333333333
+3333322222221222221257753125762135775213577521222221222222233343
+4333322222321222221234432223432233442222354322222221222222233334
+5333322222221121111100001210001210000121000012111111222222233335
+4332222221111111111100001100000110000011000011111112211211222334
+3332222223223233333222233223333333323323322222333332223222222333
+2345545555655666676666567776667777667777666666766665566555455432
+2357777777887888888877678887678887677888777788888888887777777532
+3334554554555555554433444444444443334444443344555555554554554333
+2210010000000001000000001100000000000111100000011000000100100122
+1110000000000000001000001110001100000111010000000000000000000111
+1011011111111111111111111122111111211111111111111111111011101110
+1101001110111111101122111112211111112111112211111111111111001011
+1111101111111111111122211112221111222111122211111111111110011111
+1111111111111111111222211122221111222111222221111111111111111211
+2222221122112111111222111112211111122111122222111122212211212222
+2222122122212222222222222222222222222222222222222221112222222222
+3322222222222222222222122222122222212222222222221212222222222233
+Finished at Wed Oct 24 11:56:12 2018
+
