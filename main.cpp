@@ -31,6 +31,7 @@
 #include <vector>
 #include "read_input_fwi_into_vec.h"
 #include "chi_visualisation_in_integer_form.h"
+#include "create_csv_files_for_chi.h"
 #include <stdexcept>
 
 using std::cout;
@@ -67,13 +68,13 @@ bool string_1_for_true_0_for_false(std::string const& string_for_bool)
 
 int main(int argc, char* argv[])
 {
-   // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
-   if (g_verbosity == 0)
-   {
-	std::cout << "Printing the program output onto a file named program_output.txt" << std::endl;
+    // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
+    if (g_verbosity == 0)
+    {
+        std::cout << "Printing the program output onto a file named program_output.txt" << std::endl;
 
-	if (freopen("program_output.txt","w", stdout)) {}
-   }
+        if (freopen("../program_output.txt","w", stdout)) {}
+    }
 
     std::vector<std::string> input_parameters = reader(); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
 
@@ -104,7 +105,7 @@ int main(int argc, char* argv[])
 
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
-    //MELISSEN 2018 10 18 this snippe of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
+    //MELISSEN 2018 10 18 this snippet of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
     std::ofstream outputfwi;
     outputfwi.open("../outputfwi.txt");
     outputfwi << "This run was parametrized as follows:" << std::endl;
@@ -114,6 +115,9 @@ int main(int argc, char* argv[])
 
     cout << "Input Temple Visualisation" << endl;
     chi_visualisation_in_integer_form("../temple.txt", nxt);
+
+    // creates a csv file using the reference temple.txt files and saves it as chi_reference_temple.csv file
+    create_csv_files_for_chi("../temple.txt","chi_reference_temple",nxt);
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
@@ -130,6 +134,8 @@ int main(int argc, char* argv[])
     cout << "Visualisation of the estimated temple using FWI" << endl;
     chi_visualisation_in_integer_form("../src/chi_est_temple.txt", nxt);
 
+    // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
+    create_csv_files_for_chi("../src/chi_est_temple.txt","chi_est_temple",nxt);
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -209,7 +215,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     delete[] p_data;
 
-    MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
+    //MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
     return 0;
 }
 

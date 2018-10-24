@@ -66,5 +66,6 @@ HEADERS += \
     include/volField_rect_2D.h \
     include/input_parameters.h \
     include/inversion_cpu.h \ 
-    include/chi_visualisation_in_integer_form.h
+    include/chi_visualisation_in_integer_form.h \
+    include/create_csv_files_for_chi.h
 
