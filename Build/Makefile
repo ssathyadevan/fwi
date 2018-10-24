@@ -419,6 +419,7 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/inversion.h \
 		../include/GreensFunctions.h \
 		../include/einsum.h \
+		../include/inversion_cpu.h \
 		../include/tests_helper.h \
 		../include/read_input_fwi_into_vec.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp

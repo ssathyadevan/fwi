@@ -27,14 +27,14 @@
 # L6. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
                         300.0
 # I1. VARIABLE          nxt            TYPE const int      DEFAULT    32
-                        32
+                        64
 # I2. VARIABLE          nzt            TYPE const int      DEFAULT    32
                         32
 # I3. VARIABLE          nFreq_Total    TYPE const int      DEFAULT    15
                         15
 # I4. VARIABLE          nSrct          TYPE const int      DEFAULT    17
                         17
-# S1. VARIABLE          fileName       TYPE const string   DEFAULT    temple.txt
+# S1. VARIABLE          fileName       TYPE const string   DEFAULT    ../temple.txt
                         ../temple.txt
 
 ##########################################################################################
@@ -51,7 +51,7 @@
                         100.0
 # IDLE l6. VARIABLE     see list       TYPE const lng dbl  DEFAULT    10.      PHYS UNIT ?
                         10.0
-# i2. VARIALBE          gpu            TYPE const int      DEFAULT    0        PHYS UNIT -
+# i2. VARIABLE          gpu            TYPE const int      DEFAULT    0        PHYS UNIT -
                         0
 # i3. VARIABLE          interactive    TYPE const int      DEFAULT    0        PHYS UNIT -
                         0

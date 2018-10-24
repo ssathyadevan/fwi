@@ -28,7 +28,6 @@ LIBS += -lpython2.7
 LIBS += -lOpenCL
 
 SOURCES += main.cpp \
-#   src/fwiread.cpp \
     src/contraction.cpp \
     src/einsum.cpp \
     src/frequencies_group.cpp \
@@ -38,7 +37,6 @@ SOURCES += main.cpp \
     src/sources_rect_2D.cpp \
     src/volComplexField_rect_2D_cpu.cpp \
     src/volField_rect_2D_cpu.cpp \
-#   src/frequencies_alternate.cpp 
 
 DISTFILES += \
     src/chi_est_sine.txt \
@@ -67,9 +65,5 @@ HEADERS += \
     include/volField_rect_2D_cpu.h \
     include/volField_rect_2D.h \
     include/input_parameters.h \
-#   include/frequencies_alternate.h \
-#   include/greens_rect_2D_gpu.h \
-#   include/inversion_gpu.h \
-#   include/calcfield_gpu_h.h \
     include/inversion_cpu.h 
 
