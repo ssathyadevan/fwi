@@ -53,7 +53,6 @@ HEADERS += \
     include/GreensFunctions.h \
     include/grid_rect_2D.h \
     include/grid.h \
-    include/helper.h \
     include/inversion.h \
     include/ProfileCpu.h \
     include/ProfileInterface.h \
