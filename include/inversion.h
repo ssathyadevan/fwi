@@ -18,6 +18,9 @@
 #include "mpi.h"
 #include <string>
 
+
+//Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
+
 template <class T>
 T normSq(const std::complex<T> *data, int n) {
     T result = T(0.0);
@@ -83,8 +86,10 @@ public:
         assert(p_0 == nullptr);
 
         p_0 = new volComplexField<T>**[m_nfreq];
+        // Babak 2018 10 23: not clear how this p0 is calculated from the equations.
+        // I assume the p0 can be calculated from the Born approximation by considering p_tot ~ p0; Maybe this is
 
-        for (int i=0; i<m_nfreq; i++)
+         for (int i=0; i<m_nfreq; i++)
         {
             p_0[i] = new volComplexField<T>*[m_nsrc];
 
