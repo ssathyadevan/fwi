@@ -19,7 +19,7 @@
 #include <string>
 
 
-//Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
+// Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
 
 template <class T>
 T normSq(const std::complex<T> *data, int n) {
@@ -79,15 +79,14 @@ public:
         assert(&m_chi.GetGrid() == &chi_.GetGrid());
         m_chi = chi_;
     }
-
+    // Babak 2018 10 23: not clear how this p0 is calculated in createP0 from the equations.
+    // I assume the p0 can be calculated from the Born approximation by considering p_tot ~ p0; Maybe this is
     virtual void createP0()
     {
         assert(m_greens != nullptr);
         assert(p_0 == nullptr);
 
         p_0 = new volComplexField<T>**[m_nfreq];
-        // Babak 2018 10 23: not clear how this p0 is calculated from the equations.
-        // I assume the p0 can be calculated from the Born approximation by considering p_tot ~ p0; Maybe this is
 
          for (int i=0; i<m_nfreq; i++)
         {
@@ -115,7 +114,8 @@ public:
         p_0 = nullptr;
     }
 
-    //pure virtual function//
+    // Babak 2018 10 25: in createTotalField we use calcField class which is responsible
+    // for creating the total field with Equation ID: "weightingFactorField"
     virtual void createTotalField(const int &rank) = 0;
 
 
@@ -133,7 +133,7 @@ public:
     }
 
 
-
+    // Babak 2018 10 25: calculation of p_data based on Equation ID: "dataEq"
     virtual void calculateData(std::complex<T> *p_data)
     {
         int l_i, l_j;
