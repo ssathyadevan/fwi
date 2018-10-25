@@ -215,7 +215,6 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     delete[] p_data;
 
-    //MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
     return 0;
 }
 

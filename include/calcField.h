@@ -52,11 +52,6 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
     std::string name = "full iter " + std::to_string(rank);
     int rank_print = 0;
 
-    // if (rank1==rank_print)
-    //      prof2.StartRegion(name);
-    std::cout << std::endl << "rankin = " << rank <<std::endl;
-
-
     for(int it = 0; it < n_iter2; it++)
     {
 
@@ -73,13 +68,12 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
         if(res < tol2 && it != 0)
         {
             if(rank1==rank_print){
-                std::cout << " erbosity level" << g_verbosity << std::endl;
-                //std::string line_to_print = "Convergence after " + std::to_string(it) + "iterations. rank" + std::to_string(rank) + std::endl;
-                std::string itstring = std::to_string(it);// + "iterations. rank" + std::to_string(rank) + std::endl;
-                std::string rankstring = std::to_string(rank);//std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
-                std::string line_to_print = "Convergence after "+itstring+"iterations. rank"+rankstring;
-                std::cout << line_to_print << std::endl;
-            }
+		//std::string line_to_print = "Convergence after " + std::to_string(it) + "iterations. rank" + std::to_string(rank) + std::endl;
+		std::string itstring = std::to_string(it);// + "iterations. rank" + std::to_string(rank) + std::endl;
+//		std::string rankstring = std::to_string(rank);//std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
+        std::string line_to_print = "Convergence after "+itstring+"iterations";
+		std::cout << line_to_print << std::endl;
+	    }
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
