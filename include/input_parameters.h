@@ -5,9 +5,9 @@
 //const int nSrct = 17;
 //const int nFreq_Total = 20;
 const int calc_alpha = 0;
-const int n_max = 5;
-const int n_iter1 = 50; //ATTENTION CHANGED FROM 50 TO 10 TO GO FASTER
-const int n_iter2 = 100;
+const int n_max = 2; //ATTENTION CHANGED FROM 5 TO 3 TO GO FASTER
+const int n_iter1 = 3; //ATTENTION CHANGED FROM 50 TO 3 TO GO FASTER
+const int n_iter2 = 10; // ATTENTION CHANGED FROM 100 to 10 to go faster
 const double tol1 = 1e-8;
 const double tol2 = 5e-05;
 const int do_reg = 1;

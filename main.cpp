@@ -65,7 +65,7 @@ bool string_1_for_true_0_for_false(std::string const& string_for_bool)
 {return string_for_bool[0] == '1';}
 
 
-int main(int argc, char* argv[])
+int main()
 {
    // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
    if (g_verbosity == 0)
@@ -105,11 +105,19 @@ int main(int argc, char* argv[])
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
     //MELISSEN 2018 10 18 this snippe of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
+    //MELISSEN 2018 10 24 PLEASE DO NOT CHANGE THE OUTPUT CODE BELOW ASK ME WHY AT sigismund.melissen@alten.nl
     std::ofstream outputfwi;
     outputfwi.open("../outputfwi.txt");
-    outputfwi << "This run was parametrized as follows:" << std::endl;
-    outputfwi << "c_0   = " << c_0    << std::endl;
-    outputfwi << "c_1   = " << c_1    << std::endl; // etc
+    outputfwi << "This run was parametrized as follows:"   << std::endl;
+    outputfwi << "nxt   = "                                << nxt                                   << std::endl;
+    outputfwi << "nzt   = "                                << nzt                                   << std::endl; // etc
+    outputfwi << "interactive   = "                        << interactive                           << std::endl; // etc
+    outputfwi << "tol1_to_be_implemented    = "            << tol1_to_be_implemented                << std::endl; // etc
+    outputfwi << "tol2_to_be_implemented    = "            << tol2_to_be_implemented                << std::endl; // etc
+    outputfwi << "delta_amplification_start_to_be_i = "    << delta_amplification_start_to_be_i     << std::endl; // etc
+    outputfwi << "delta_amplification_slope_to_be_i = "    << delta_amplification_slope_to_be_i     << std::endl; // etc
+    outputfwi << "gpu   = "                                << gpu                                   << std::endl; // etc
+    outputfwi << "c_1   = "                                << c_1                                   << std::endl; // etc
     outputfwi.close();
 
     cout << "Input Temple Visualisation" << endl;
@@ -209,7 +217,6 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     delete[] p_data;
 
-    MakeFigure("../src/chi.txt", "../src/chi_est_temple.txt", "../src/temple_result.png", nxt, nzt, interactive);
     return 0;
 }
 
