@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = try_qt1.0.0
-DISTDIR = /home/s240194/Documents/parallelized-fwi/Build/.tmp/try_qt1.0.0
+DISTDIR = /home/sigi/Documents/FULL_WAVEFORM_INVERSION_GIT3/parallelized-fwi/Build/.tmp/try_qt1.0.0
 LINK          = mpicxx
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) -lpython2.7 -lOpenCL -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -154,6 +154,7 @@ DIST          = ../src/chi_est_sine.txt \
 		../include/GreensFunctions.h \
 		../include/grid_rect_2D.h \
 		../include/grid.h \
+		../include/inversion.h \
 		../include/helper.h \
 		../include/inversion.h \
 		../include/ProfileCpu.h \
@@ -422,6 +423,7 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/GreensFunctions.h \
 		../include/einsum.h \
 		../include/inversion_cpu.h \
+		../include/helper.h \
 		../include/tests_helper.h \
 		../include/read_input_fwi_into_vec.h \
 		../include/chi_visualisation_in_integer_form.h \
