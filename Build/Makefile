@@ -154,8 +154,8 @@ DIST          = ../src/chi_est_sine.txt \
 		../include/GreensFunctions.h \
 		../include/grid_rect_2D.h \
 		../include/grid.h \
-		../include/helper.h \
 		../include/inversion.h \
+		../include/helper.h \
 		../include/ProfileCpu.h \
 		../include/ProfileInterface.h \
 		../include/receivers_rect_2D.h \
@@ -354,7 +354,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../include/read_input_fwi_into_vec.h ../include/calcField.h ../include/contraction.h ../include/einsum.h ../include/frequencies_group.h ../include/greens_rect_2D_cpu.h ../include/GreensFunctions.h ../include/grid_rect_2D.h ../include/grid.h ../include/helper.h ../include/inversion.h ../include/ProfileCpu.h ../include/ProfileInterface.h ../include/receivers_rect_2D.h ../include/sources_rect_2D.h ../include/tests_helper.h ../include/volComplexField_rect_2D_cpu.h ../include/volComplexField_rect_2D.h ../include/volField_rect_2D_cpu.h ../include/volField_rect_2D.h ../include/input_parameters.h ../include/inversion_cpu.h ../include/chi_visualisation_in_integer_form.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../include/read_input_fwi_into_vec.h ../include/calcField.h ../include/contraction.h ../include/einsum.h ../include/frequencies_group.h ../include/greens_rect_2D_cpu.h ../include/GreensFunctions.h ../include/grid_rect_2D.h ../include/grid.h ../include/inversion.h ../include/helper.h ../include/ProfileCpu.h ../include/ProfileInterface.h ../include/receivers_rect_2D.h ../include/sources_rect_2D.h ../include/tests_helper.h ../include/volComplexField_rect_2D_cpu.h ../include/volComplexField_rect_2D.h ../include/volField_rect_2D_cpu.h ../include/volField_rect_2D.h ../include/input_parameters.h ../include/inversion_cpu.h ../include/chi_visualisation_in_integer_form.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../main.cpp ../src/contraction.cpp ../src/einsum.cpp ../src/frequencies_group.cpp ../src/grid_rect_2D.cpp ../src/ProfileCpu.cpp ../src/receivers_rect_2D.cpp ../src/sources_rect_2D.cpp ../src/volComplexField_rect_2D_cpu.cpp ../src/volField_rect_2D_cpu.cpp $(DISTDIR)/
 
 
@@ -412,7 +412,6 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/volComplexField_rect_2D.h \
 		../include/volField_rect_2D_cpu.h \
 		../include/greens_rect_2D_cpu.h \
-		../include/helper.h \
 		../include/sources_rect_2D.h \
 		../include/receivers_rect_2D.h \
 		../include/contraction.h \
@@ -421,6 +420,7 @@ main.o: ../main.cpp ../include/calcField.h \
 		../include/GreensFunctions.h \
 		../include/einsum.h \
 		../include/inversion_cpu.h \
+		../include/helper.h \
 		../include/tests_helper.h \
 		../include/read_input_fwi_into_vec.h \
 		../include/chi_visualisation_in_integer_form.h
@@ -440,7 +440,6 @@ einsum.o: ../src/einsum.cpp ../include/einsum.h \
 		../include/volField_rect_2D.h \
 		../include/volField_rect_2D_cpu.h \
 		../include/greens_rect_2D_cpu.h \
-		../include/helper.h \
 		../include/contraction.h \
 		../include/ProfileCpu.h \
 		../include/ProfileInterface.h \
