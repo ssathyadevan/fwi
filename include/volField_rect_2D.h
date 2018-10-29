@@ -12,7 +12,8 @@ class volField_rect_2D {
 
 protected:
 
-  const grid_rect_2D<T> &grid;
+  //const grid_rect_2D<T> &grid;// Babak 2018 10 29: get rid of template for grid_rect_2D
+  const grid_rect_2D &grid;
   const int nGridPoints;
   const T cellVolume;
 
@@ -21,14 +22,17 @@ protected:
 
 public:
 
-  volField_rect_2D(const grid_rect_2D<T> &grid_) :
+  //volField_rect_2D(const grid_rect_2D<T> &grid_) :// Babak 2018 10 29: get rid of template for grid_rect_2D
+  volField_rect_2D(const grid_rect_2D &grid_) :
     grid(grid_),
     nGridPoints(grid.GetNumberOfGridPoints()),
     cellVolume(grid.GetCellVolume()) {}
 
   virtual ~volField_rect_2D() {}
 
-  const grid_rect_2D<T> &GetGrid() const { return grid; }
+  //const grid_rect_2D<T> &GetGrid() const { return grid; } // Babak 2018 10 29: get rid of template for grid_rect_2D
+  const grid_rect_2D &GetGrid() const { return grid; }
+
   int GetNumberOfGridPoints() const { return nGridPoints; }
   T getCellVolume() const { return cellVolume; }
 

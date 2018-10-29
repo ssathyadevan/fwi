@@ -16,6 +16,8 @@
 #include <eigen3/Eigen/Dense>
 #include "input_parameters.h"
 
+// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+
 using namespace Eigen;
 
 template <typename T>
@@ -23,7 +25,8 @@ class Greens_rect_2D_cpu {
 
   std::function< std::complex<T>(T,T) > G_func;
 
-  const grid_rect_2D<T> &grid;
+  //const grid_rect_2D<T> &grid; // Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  const grid_rect_2D &grid;
   const Sources_rect_2D<T> &src;
   const Receivers_rect_2D<T> &recv;
   const T k;
@@ -38,9 +41,12 @@ class Greens_rect_2D_cpu {
 
 public:
 
-  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
-  : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
-  {
+//  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
+//  : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv() // Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
+    : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
+
+{
 
     const std::array<int, 2> &nx = grid.GetGridDimensions();
 
@@ -101,7 +107,8 @@ public:
     }
 #endif
 
-    const grid_rect_2D<T> &grid = greens[0]->GetGrid();
+    //const grid_rect_2D<T> &grid = greens[0]->GetGrid();// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+    const grid_rect_2D &grid = greens[0]->GetGRid();
 
     const std::complex<T> **y_data = new const std::complex<T>*[nFreq * nSrc];
     std::complex<T> **x_data = new std::complex<T>*[nFreq * nSrc];
@@ -125,7 +132,8 @@ public:
 
   }
 
-  const grid_rect_2D<T>& GetGrid() const { return grid; }
+  //const grid_rect_2D<T>& GetGrid() const { return grid; }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  const grid_rect_2D &GetGrid() const { return grid; }
 
 
   // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW

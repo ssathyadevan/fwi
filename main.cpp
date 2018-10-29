@@ -159,8 +159,8 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
     std::array<int,2> ngrid = {nxt, nzt};
 
-    grid_rect_2D<T> grid(x_min, x_max, ngrid);
-
+    //grid_rect_2D<T> grid(x_min, x_max, ngrid); //Babak 2018 10 29: get rid of template for grid_rect_2D
+    grid_rect_2D grid(x_min, x_max, ngrid);
     volField_rect_2D_cpu<T> chi(grid);
 
     chi.fromFile(fileName);

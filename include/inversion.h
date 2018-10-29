@@ -35,7 +35,8 @@ template<typename T, template<typename> class volComplexField, template<typename
 class Inversion
 {
 protected:
-    const grid_rect_2D<T> &m_grid;
+    // const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+    const grid_rect_2D &m_grid;
     const Sources_rect_2D<T> &m_src;
     const Receivers_rect_2D<T> &m_recv;
     const Frequencies<T> &m_freq;
@@ -52,8 +53,11 @@ protected:
     const int m_nsrc;
 
 public:
-    Inversion(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
-        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
+//    Inversion(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
+//        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
+        // Babak 2018 10 29: Get rid of template in grid_rect_2D class
+    Inversion(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
+            : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
     {
     }
 

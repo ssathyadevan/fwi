@@ -9,11 +9,14 @@
 #include "grid_rect_2D.h"
 #include "mpi.h"
 
+//Babak 2018 10 29: Get rid of templates of grid_rect_2D class
+
 
 template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
 class einsum
 {
-    const grid_rect_2D<T> &m_grid;
+    //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
+    const grid_rect_2D &m_grid;
     const Sources_rect_2D<T> &m_src;
     const Receivers_rect_2D<T> &m_recv;
     const Frequencies<T> &m_freq;
@@ -23,7 +26,11 @@ class einsum
     const int &m_n_recv;
 
     public:
-        einsum(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq)
+    //        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq)
+    //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
+    //        {
+    //        } // Babak 2018 10 29: get rid of template for grid_rect_2D
+        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq)
         : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
         {
         }

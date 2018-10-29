@@ -13,7 +13,8 @@ template <class T>
 class volComplexField_rect_2D {
 
 
-  const grid_rect_2D<T> &grid;
+  //const grid_rect_2D<T> &grid;// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  const grid_rect_2D &grid;
   const int nGridPoints;
   const T cellVolume;
 
@@ -22,14 +23,17 @@ class volComplexField_rect_2D {
 
 public:
 
-  volComplexField_rect_2D(const grid_rect_2D<T> &grid_) :
+  //volComplexField_rect_2D(const grid_rect_2D<T> &grid_) :// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  volComplexField_rect_2D(const grid_rect_2D &grid_) :// Babak 2018 10 29: Get rid of template in grid_rect_2D class
     grid(grid_),
     nGridPoints(grid.GetNumberOfGridPoints()),
     cellVolume(grid.GetCellVolume()) {}
 
   virtual ~volComplexField_rect_2D() {}
 
-  const grid_rect_2D<T> &GetGrid() const { return grid; }
+  //const grid_rect_2D<T> &GetGrid() const { return grid; }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+  const grid_rect_2D &GetGrid() const { return grid; }
+
   int GetNumberOfGridPoints() const { return nGridPoints; }
   T getCellVolume() const { return cellVolume; }
 

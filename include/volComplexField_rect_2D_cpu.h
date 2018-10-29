@@ -20,8 +20,9 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
     std::complex<T> * const data;
 
     public:
-        volComplexField_rect_2D_cpu(const grid_rect_2D<T> &grid)
-        : volComplexField_rect_2D<T>(grid), data(new std::complex<T>[this->GetNumberOfGridPoints()])
+    // volComplexField_rect_2D_cpu(const grid_rect_2D<T> &grid)// Babak 2018 10 29: get rid of template for grid_rect_2D
+    volComplexField_rect_2D_cpu(const grid_rect_2D &grid)// Babak 2018 10 29: get rid of template for grid_rect_2D
+    : volComplexField_rect_2D<T>(grid), data(new std::complex<T>[this->GetNumberOfGridPoints()])
         {
         }
 
@@ -41,8 +42,10 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         virtual void SetField(const std::function< std::complex<T>(T,T) > func)
         {
             const std::array<int,2> &nx = this->GetGrid().GetGridDimensions();
-            const std::array<T,2> &dx = this->GetGrid().GetCellDimensions();
-            const std::array<T,2> &x_min = this->GetGrid().GetGridStart();
+            //const std::array<T,2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
+            //const std::array<T,2> &x_min = this->GetGrid().GetGridStart();// Babak 2018 10 29: get rid of template for grid_rect_2D
+            const std::array<double,2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
+            const std::array<double,2> &x_min = this->GetGrid().GetGridStart();// Babak 2018 10 29: get rid of template for grid_rect_2D
 
             for (int j=0; j<nx[1]; j++)
             {

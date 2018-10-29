@@ -19,8 +19,9 @@ class volField_rect_2D_cpu : public volField_rect_2D<T> {
 
 public:
 
-    volField_rect_2D_cpu(const grid_rect_2D<T> &grid) :
-        volField_rect_2D<T>(grid),
+    //volField_rect_2D_cpu(const grid_rect_2D<T> &grid) ://Babak 2018 10 29: get rid of template for grid_rect_2D
+    volField_rect_2D_cpu(const grid_rect_2D &grid) :
+    volField_rect_2D<T>(grid),
         data(new T[this->GetNumberOfGridPoints()]) {}
 
     volField_rect_2D_cpu(const volField_rect_2D_cpu<T> &rhs) :
@@ -81,8 +82,10 @@ public:
     virtual void SetField(const std::function< T(T,T) > func) {
 
         const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
-        const std::array<T, 2> &dx = this->GetGrid().GetCellDimensions();
-        const std::array<T, 2> &x_min = this->GetGrid().GetGridStart();
+//        const std::array<T, 2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
+//        const std::array<T, 2> &x_min = this->GetGrid().GetGridStart();// Babak 2018 10 29: get rid of template for grid_rect_2D
+        const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions();
+        const std::array<double, 2> &x_min = this->GetGrid().GetGridStart();
 
         for(int i=0; i<nx[1]; i++) {
             T z = x_min[1] + (i + T(0.5)) * dx[1];
@@ -152,7 +155,8 @@ public:
         //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
 
         const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
-        const std::array<T, 2> &dx = this->GetGrid().GetCellDimensions();
+        //const std::array<T, 2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
+        const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
 
         for(int i=0; i<nx[1]; i++) {
             for(int j=0; j<nx[0]; j++) {

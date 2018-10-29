@@ -26,7 +26,9 @@ volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const vo
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
-    const grid_rect_2D<T> &m_grid = G.GetGrid();
+    //const grid_rect_2D<T> &m_grid = G.GetGrid();//Babak 2018 10 29: get rid of templat
+    const grid_rect_2D &m_grid = G.GetGrid();
+
     volComplexField<T> chi_p(m_grid), chi_p_old(m_grid);
     volComplexField<T> dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
 
