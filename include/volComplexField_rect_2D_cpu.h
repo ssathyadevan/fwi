@@ -17,19 +17,19 @@ template <class T>
 class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
 {
     private:
-    std::complex<T> * const data;
+    std::complex<double> * const data;
 
     public:
     // volComplexField_rect_2D_cpu(const grid_rect_2D<T> &grid)// Babak 2018 10 29: get rid of template for grid_rect_2D
     volComplexField_rect_2D_cpu(const grid_rect_2D &grid)// Babak 2018 10 29: get rid of template for grid_rect_2D
-    : volComplexField_rect_2D<T>(grid), data(new std::complex<T>[this->GetNumberOfGridPoints()])
+    : volComplexField_rect_2D<T>(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
         {
         }
 
         volComplexField_rect_2D_cpu(const volComplexField_rect_2D_cpu<T> &rhs)
         : volComplexField_rect_2D_cpu<T>(rhs.GetGrid())
         {
-            memcpy(data, rhs.data, this->GetNumberOfGridPoints() * sizeof(std::complex<T>));
+            memcpy(data, rhs.data, this->GetNumberOfGridPoints() * sizeof(std::complex<double>));
         }
 
 
@@ -39,7 +39,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        virtual void SetField(const std::function< std::complex<T>(T,T) > func)
+        virtual void SetField(const std::function< std::complex<double>(T,T) > func)
         {
             const std::array<int,2> &nx = this->GetGrid().GetGridDimensions();
             //const std::array<T,2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
@@ -60,14 +60,14 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
             }
         }
 
-        virtual void toBuffer(std::complex<T> *buffer) const
+        virtual void toBuffer(std::complex<double> *buffer) const
         {
-            memcpy(buffer, data, sizeof(std::complex<T>)*this->GetNumberOfGridPoints());
+            memcpy(buffer, data, sizeof(std::complex<double>)*this->GetNumberOfGridPoints());
         }
 
-        virtual void fromBuffer(const std::complex<T> *buffer)
+        virtual void fromBuffer(const std::complex<double> *buffer)
         {
-            memcpy(data, buffer, sizeof(std::complex<T>)*this->GetNumberOfGridPoints());
+            memcpy(data, buffer, sizeof(std::complex<double>)*this->GetNumberOfGridPoints());
         }
 
 
@@ -100,7 +100,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
 
         virtual void Zero()
         {
-            memset( data, 0, sizeof(std::complex<T>)*this->GetNumberOfGridPoints() );
+            memset( data, 0, sizeof(std::complex<double>)*this->GetNumberOfGridPoints() );
         }
 
         virtual void Square()
@@ -112,7 +112,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         virtual void Reciprocal()
         {
             for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-                data[i] = T(1.0)/data[i];
+                data[i] = double(1.0)/data[i];
         }
 
         virtual void Conjugate()
@@ -124,7 +124,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         virtual void Random()
         {
             for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-                data[i] = std::complex<T>( T(std::rand())/T(RAND_MAX), T(std::rand())/T(RAND_MAX) );
+                data[i] = std::complex<double>( T(std::rand())/T(RAND_MAX), T(std::rand())/T(RAND_MAX) );
         }
 
         virtual T Norm() const
@@ -137,12 +137,12 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
             return std::sqrt( std::real(InnerProduct(*this)) ) / this->GetNumberOfGridPoints();
         }
 
-        const std::complex<T>* GetDataPtr() const
+        const std::complex<double>* GetDataPtr() const
         {
             return data;
         }
 
-        std::complex<T>* GetDataPtr()
+        std::complex<double>* GetDataPtr()
         {
             return data;
         }
@@ -152,24 +152,24 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
             if (this != &rhs)
             {
                 assert(&this->GetGrid() == &rhs.GetGrid());
-                memcpy(data, rhs.data, sizeof(std::complex<T>)*this->GetNumberOfGridPoints() );
+                memcpy(data, rhs.data, sizeof(std::complex<double>)*this->GetNumberOfGridPoints() );
             }
 
             return *this;
         }
 
-        volComplexField_rect_2D_cpu<T>& operator=(const volField_rect_2D_cpu<T>& rhs)
+        volComplexField_rect_2D_cpu<T>& operator=(const volField_rect_2D_cpu& rhs)
         {
             assert(&this->GetGrid() == &rhs.GetGrid());
-            const T *rhs_data = rhs.GetDataPtr();
-            memcpy(data, rhs_data, sizeof(std::complex<T>)*this->GetNumberOfGridPoints() );
+            const double *rhs_data = rhs.GetDataPtr();
+            memcpy(data, rhs_data, sizeof(std::complex<double>)*this->GetNumberOfGridPoints() );
             return *this;
         }
 
         volComplexField_rect_2D_cpu<T>& operator=(const T& rhs)
         {
             for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-                data[i] = std::complex<T>(rhs, 0.0);
+                data[i] = std::complex<double>(rhs, 0.0);
 
             return *this;
         }
@@ -205,11 +205,11 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        volComplexField_rect_2D_cpu<T>& operator*=(const volField_rect_2D_cpu<T>& rhs)
+        volComplexField_rect_2D_cpu<T>& operator*=(const volField_rect_2D_cpu& rhs)
         {
             assert(&this->GetGrid() == &rhs.GetGrid());
 
-            const T *rhs_data = rhs.GetDataPtr();
+            const double *rhs_data = rhs.GetDataPtr();
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data[i] *= rhs_data[i];
 
@@ -252,7 +252,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        volComplexField_rect_2D_cpu<T> & operator+=(const std::complex<T>& rhs)
+        volComplexField_rect_2D_cpu<T> & operator+=(const std::complex<double>& rhs)
         {
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data[i] += rhs;
@@ -261,7 +261,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        volComplexField_rect_2D_cpu<T> & operator-=(const std::complex<T>& rhs)
+        volComplexField_rect_2D_cpu<T> & operator-=(const std::complex<double>& rhs)
         {
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data[i] -= rhs;
@@ -269,7 +269,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
             return *this;
         }
 
-        volComplexField_rect_2D_cpu<T> & operator*=(const std::complex<T>& rhs)
+        volComplexField_rect_2D_cpu<T> & operator*=(const std::complex<double>& rhs)
         {
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data[i] *= rhs;
@@ -278,7 +278,7 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        volComplexField_rect_2D_cpu<T> & operator/=(const std::complex<T>& rhs)
+        volComplexField_rect_2D_cpu<T> & operator/=(const std::complex<double>& rhs)
         {
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data[i] /= rhs;
@@ -287,18 +287,18 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        std::complex<T> InnerProduct(const volComplexField_rect_2D_cpu<T>& rhs) const
+        std::complex<double> InnerProduct(const volComplexField_rect_2D_cpu<T>& rhs) const
         {
-            std::complex<T> prod(0.0,0.0);
+            std::complex<double> prod(0.0,0.0);
             assert(&this->GetGrid() == &rhs.GetGrid());
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 prod += data[i]*conj(rhs.data[i]);
             return prod;
         }
 
-        std::complex<T> Summation(const volComplexField_rect_2D_cpu<T>& rhs) const
+        std::complex<double> Summation(const volComplexField_rect_2D_cpu<T>& rhs) const
         {
-            std::complex<T> sum(0.0,0.0);
+            std::complex<double> sum(0.0,0.0);
             assert(&this->GetGrid() == &rhs.GetGrid());
 
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
@@ -307,9 +307,9 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-        /*std::complex<T> Summation(const volField_rect_2D_cpu<T>& rhs, const int &conju) const
+        /*std::complex<double> Summation(const volField_rect_2D_cpu<T>& rhs, const int &conju) const
         {
-            std::complex<T> sum(0.0,0.0);
+            std::complex<double> sum(0.0,0.0);
             assert(&this->GetGrid() == &rhs.GetGrid());
             const T *rhs_data = rhs.GetDataPtr();
 
@@ -319,22 +319,22 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }*/
 
 
-        std::complex<T> Summation(const volField_rect_2D_cpu<T>& rhs) const
+        std::complex<double> Summation(const volField_rect_2D_cpu& rhs) const
         {
-            std::complex<T> sum(0.0,0.0);
+            std::complex<double> sum(0.0,0.0);
             assert(&this->GetGrid() == &rhs.GetGrid());
 
-            const T *rhs_data = rhs.GetDataPtr();
+            const double *rhs_data = rhs.GetDataPtr();
             for (int i=0; i<this->GetNumberOfGridPoints(); i++)
                 sum += data[i] * rhs_data[i];
             return sum;
         }
 
 
-        volField_rect_2D_cpu<T> GetRealPart() const
+        volField_rect_2D_cpu GetRealPart() const
         {
-            volField_rect_2D_cpu<T> result(this->GetGrid());
-            T *data_ptr = result.GetDataPtr();
+            volField_rect_2D_cpu result(this->GetGrid());
+            double *data_ptr = result.GetDataPtr();
 
             for(int i=0; i<this->GetNumberOfGridPoints(); i++)
                 data_ptr[i] = std::real(data[i]);
@@ -343,19 +343,19 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
         }
 
 
-      /*void GetLSCoefficients(std::vector< volComplexField_rect_2D_cpu<T>* > A_vectors, std::complex<T> *x, int n)
+      /*void GetLSCoefficients(std::vector< volComplexField_rect_2D_cpu<T>* > A_vectors, std::complex<double> *x, int n)
        {
 
             for(int i=0; i<n; i++)
             {
-              x[i] = std::complex<T>(1.0, 0.0);
+              x[i] = std::complex<double>(1.0, 0.0);
             }
 
 
             int nGrid = this->GetGrid().this->GetNumberOfGridPoints();
 
-            std::complex<T> *A = new std::complex<T>[nGrid * n];
-            std::complex<T> *f = new std::complex<T>[nGrid];
+            std::complex<double> *A = new std::complex<double>[nGrid * n];
+            std::complex<double> *f = new std::complex<double>[nGrid];
 
             this->toBuffer(f);
 
@@ -388,23 +388,23 @@ class volComplexField_rect_2D_cpu : public volComplexField_rect_2D<T>
 
 
 template<typename T>
-std::complex<T> InnerProduct(const volComplexField_rect_2D_cpu<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
+std::complex<double> InnerProduct(const volComplexField_rect_2D_cpu<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
 {
     return t1.InnerProduct(t2);
 }
 
 
 template<typename T>
-std::complex<T> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
+std::complex<double> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
 {
     return t1.Summation(t2);
 }
 
 
 /*template<typename T>
-std::complex<T> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2, const int &conju)
+std::complex<double> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2, const int &conju)
 {
-    std::complex<T> sum;
+    std::complex<double> sum;
     if (conju==0) ////if conju==0 then do not take the conjugate of Kappa
         sum = t1.Summation(t2);
     else if(conju == 1) ////if conju==1 then take the conjugate of Kappa
@@ -415,7 +415,7 @@ std::complex<T> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volFie
 
 
 template<typename T>
-std::complex<T> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2)
+std::complex<double> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu &t2)
 {
     return t1.Summation(t2);
 }
@@ -431,7 +431,7 @@ volComplexField_rect_2D_cpu<T> operator-(const volComplexField_rect_2D_cpu<T> &t
 
 
 template<typename T>
-volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2)
+volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu &t2)
 {
     volComplexField_rect_2D_cpu<T> t3(t1);
     t3 *= t2;
@@ -449,7 +449,7 @@ volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t
 
 
 template<typename T>
-volComplexField_rect_2D_cpu<T> operator*(const volField_rect_2D_cpu<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
+volComplexField_rect_2D_cpu<T> operator*(const volField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu<T> &t2)
 {
     return t2*t1;
 }
@@ -457,7 +457,7 @@ volComplexField_rect_2D_cpu<T> operator*(const volField_rect_2D_cpu<T> &t1, cons
 
 
 template<typename T>
-volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t1, const std::complex<T> &t2)
+volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t1, const std::complex<double> &t2)
 {
     volComplexField_rect_2D_cpu<T> t3(t1);
     t3 *= t2;
@@ -466,7 +466,7 @@ volComplexField_rect_2D_cpu<T> operator*(const volComplexField_rect_2D_cpu<T> &t
 
 
 template<typename T>
-volComplexField_rect_2D_cpu<T> operator*(const std::complex<T> &t1, const volComplexField_rect_2D_cpu<T> &t2)
+volComplexField_rect_2D_cpu<T> operator*(const std::complex<double> &t1, const volComplexField_rect_2D_cpu<T> &t2)
 {
     return t2*t1;
 }

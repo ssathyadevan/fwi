@@ -21,8 +21,8 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Green>
-volComplexField<T> calcField(const Green<T> &G, const volField<T> &chi, const volComplexField<T> &p_init, const int &rank1)
+template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Green>
+volComplexField<T> calcField(const Green<T> &G, const volField_rect_2D_cpu &chi, const volComplexField<T> &p_init, const int &rank1)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 

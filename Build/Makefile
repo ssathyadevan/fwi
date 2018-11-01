@@ -432,13 +432,13 @@ contraction.o: ../src/contraction.cpp ../include/helper.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o contraction.o ../src/contraction.cpp
 
 einsum.o: ../src/einsum.cpp ../include/einsum.h \
+		../include/volField_rect_2D_cpu.h \
+		../include/volField_rect_2D.h \
+		../include/grid_rect_2D.h \
 		../include/sources_rect_2D.h \
 		../include/receivers_rect_2D.h \
-		../include/grid_rect_2D.h \
 		../include/volComplexField_rect_2D_cpu.h \
 		../include/volComplexField_rect_2D.h \
-		../include/volField_rect_2D.h \
-		../include/volField_rect_2D_cpu.h \
 		../include/greens_rect_2D_cpu.h \
 		../include/helper.h \
 		../include/contraction.h \

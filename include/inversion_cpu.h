@@ -23,14 +23,14 @@ using std::cout;
 using std::endl;
 
 extern const int g_verbosity;
-
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
-class InversionConcrete_cpu : public Inversion<T, volComplexField, volField, Greens, Frequencies>
+//Babak and Saurabh 2018 10 30: Remove templates
+template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
+class InversionConcrete_cpu : public Inversion<T, volComplexField, volField_rect_2D_cpu, Greens, Frequencies>
 {
 
 public:
-    InversionConcrete_cpu(const InversionConcrete_cpu<T,volComplexField,volField,Greens,Frequencies>&) = delete;
-    InversionConcrete_cpu<T,volComplexField,volField,Greens,Frequencies>& operator=(const InversionConcrete_cpu<T,volComplexField,volField,Greens,Frequencies>&) = delete;
+    InversionConcrete_cpu(const InversionConcrete_cpu<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies>&) = delete;
+    InversionConcrete_cpu<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies>& operator=(const InversionConcrete_cpu<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies>&) = delete;
 
 //    InversionConcrete_cpu(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
 //    : Inversion<T, volComplexField, volField, Greens, Frequencies>(grid, src, recv, freq, profiler)
@@ -38,7 +38,7 @@ public:
 //    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
 
     InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
-    : Inversion<T, volComplexField, volField, Greens, Frequencies>(grid, src, recv, freq, profiler)
+    : Inversion<T, volComplexField, volField_rect_2D_cpu, Greens, Frequencies>(grid, src, recv, freq, profiler)
     {
     }
 
@@ -78,7 +78,7 @@ public:
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField<T>(this->m_grid);
-                *this->p_tot[i][j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
+                *this->p_tot[i][j] = calcField<T,volComplexField,volField_rect_2D_cpu,Greens>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
             }
 
                 std::cout << "  " << std::endl;
@@ -89,7 +89,7 @@ public:
 
     }
 
-    virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data, const int &rank)
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<T> *const p_data, const int &rank)
     {
         T const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
         T eta = 1.0/const1;
@@ -104,9 +104,9 @@ public:
         std::complex<T> *r = new std::complex<T>[n_total];
         std::complex<T> *K_zeta = new std::complex<T>[n_total];
 
-        einsum<T,volComplexField,volField,Greens,Frequencies> ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
+        einsum<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies> ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
 
-        volField<T> chi_est(this->m_grid), g(this->m_grid), g_old(this->m_grid), zeta(this->m_grid);
+        volField_rect_2D_cpu chi_est(this->m_grid), g(this->m_grid), g_old(this->m_grid), zeta(this->m_grid);
         volComplexField<T> tmp(this->m_grid);
         chi_est.Zero();
 
@@ -123,15 +123,15 @@ public:
                 p_est[l_i + j] = new volComplexField<T>(*this->p_0[i][j]);
         }
 
-        volField<T> **gradient_chi_old = new volField<T>*[2];
-        volField<T> **gradient_greg_tmp = new volField<T>*[2];
-        volField<T> **gradient_zeta_tmp = new volField<T>*[2];
+        volField_rect_2D_cpu **gradient_chi_old = new volField_rect_2D_cpu*[2];
+        volField_rect_2D_cpu **gradient_greg_tmp = new volField_rect_2D_cpu*[2];
+        volField_rect_2D_cpu **gradient_zeta_tmp = new volField_rect_2D_cpu*[2];
 
         for (int i = 0; i < 2; i++)
         {
-            gradient_chi_old[i] = new volField<T>(this->m_grid);
-            gradient_greg_tmp[i] = new volField<T>(this->m_grid);
-            gradient_zeta_tmp[i] = new volField<T>(this->m_grid);
+            gradient_chi_old[i] = new volField_rect_2D_cpu(this->m_grid);
+            gradient_greg_tmp[i] = new volField_rect_2D_cpu(this->m_grid);
+            gradient_zeta_tmp[i] = new volField_rect_2D_cpu(this->m_grid);
         }
 
         //main loop//
@@ -185,7 +185,7 @@ public:
             }
             else if (do_reg == 1) {
                 T deltasquared_old = T(0.0);
-                volField<T> bsquared_old(this->m_grid);
+                volField_rect_2D_cpu bsquared_old(this->m_grid);
                 bsquared_old.Zero();
                 T Freg_old = T(1.0);
                 T Fdata_old = T(0.0);
@@ -229,18 +229,18 @@ public:
                     else
                     {
                         chi_est.Gradient(gradient_chi_old);
-                        volField<T> gradient_chi_old_normsquared(this->m_grid);
+                        volField_rect_2D_cpu gradient_chi_old_normsquared(this->m_grid);
                         gradient_chi_old_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
-                        volField<T> bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
+                        volField_rect_2D_cpu bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
                         bsquared.Reciprocal();
                         bsquared *= (T(1.0) / (this->m_grid.GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
-                        volField<T> b = bsquared;
+                        volField_rect_2D_cpu b = bsquared;
                         b.Sqrt();
 
-                        volField<T> tmpvolfield = b * *gradient_chi_old[0];
+                        volField_rect_2D_cpu tmpvolfield = b * *gradient_chi_old[0];
                         tmpvolfield.Square();
-                        volField<T> tmpvolfield2 = b * *gradient_chi_old[1];
+                        volField_rect_2D_cpu tmpvolfield2 = b * *gradient_chi_old[1];
                         tmpvolfield2.Square();
                         tmpvolfield += tmpvolfield2;
                         T deltasquared = delta_amplification * T(0.5) * tmpvolfield.Summation() / bsquared.Summation(); //deltasquared = const*0.5*sum( sum( (b*gradient_chi_old[0])**2 + (b*gradient_chi_old[1])**2 ) ) / ( sum( sum(bsquared) ) ) # eq. 2.23
@@ -251,7 +251,7 @@ public:
                         tmpvolfield2 = bsquared_old * *gradient_chi_old[1];
                         tmpvolfield2.Gradient(gradient_greg_tmp);
                         tmpvolfield2 = *gradient_greg_tmp[1];
-                        volField<T> g_reg = tmpvolfield + tmpvolfield2; //g_reg = gradient(bsquared_old * gradient_chi_old[0], dz, dx)[0] + gradient(bsquared_old*gradient_chi_old[1], dz, dx)[1]  # eq. 2.24
+                        volField_rect_2D_cpu g_reg = tmpvolfield + tmpvolfield2; //g_reg = gradient(bsquared_old * gradient_chi_old[0], dz, dx)[0] + gradient(bsquared_old*gradient_chi_old[1], dz, dx)[1]  # eq. 2.24
                         tmp.Zero();
                         ein.einsum_K_res(Kappa, r, tmp);  //tmp = einsum('ijkl,ijk->l', conj(K), r)
                         g = eta * Freg_old * tmp.GetRealPart() + Fdata_old * g_reg; //g = real(eta * (einsum('ijkl,ijk', conj(K), r)) * Freg_old + (Fdata_old * g_reg).reshape(nx*nz))  # eq. 2.25
@@ -306,7 +306,7 @@ public:
                             break;
 
                         chi_est.Gradient(gradient_chi_old);
-                        volField<T> gradient_chi_normsquared(this->m_grid);
+                        volField_rect_2D_cpu gradient_chi_normsquared(this->m_grid);
                         gradient_chi_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
                         tmpvolfield = (gradient_chi_normsquared + deltasquared_old) / (gradient_chi_old_normsquared + deltasquared_old);
@@ -341,7 +341,7 @@ public:
 
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField<T,volComplexField,volField,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
+                    *p_est[l_i + j] = calcField<T,volComplexField,volField_rect_2D_cpu,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
             }
             this->m_profiler.EndRegion();
         }
@@ -373,7 +373,7 @@ public:
 
 
 
-        volField_rect_2D_cpu<T> result(this->m_grid);
+        volField_rect_2D_cpu result(this->m_grid);
         chi_est.CopyTo(result);
         return result;
 

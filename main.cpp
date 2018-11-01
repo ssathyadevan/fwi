@@ -161,7 +161,8 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     //grid_rect_2D<T> grid(x_min, x_max, ngrid); //Babak 2018 10 29: get rid of template for grid_rect_2D
     grid_rect_2D grid(x_min, x_max, ngrid);
-    volField_rect_2D_cpu<T> chi(grid);
+    //volField_rect_2D_cpu<T> chi(grid); //Babak 2018 10 29: get rid of template for grid_rect_2D_cpu
+    volField_rect_2D_cpu chi(grid);//Babak 2018 10 29: get rid of template for volField_rect_2D and volField_rect_2D
 
     chi.fromFile(fileName);
 
@@ -216,7 +217,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
 
     std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu<T> chi_est = inverse->Reconstruct(p_data,rank);
+    volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data,rank);
 
     std::cout << "Done, writing to file" << std::endl;
     chi_est.toFile("../src/chi_est_temple.txt");

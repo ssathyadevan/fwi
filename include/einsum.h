@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <complex>
-
+#include "volField_rect_2D_cpu.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
@@ -11,8 +11,8 @@
 
 //Babak 2018 10 29: Get rid of templates of grid_rect_2D class
 
-
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
+// Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
+template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
 class einsum
 {
     //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
@@ -35,8 +35,8 @@ class einsum
         {
         }
 
-        einsum(const einsum<T,volComplexField,volField, Greens, Frequencies> &) = delete; //delete the copy constructor to forbid copying of objects of this class
-        einsum<T,volComplexField,volField,Greens,Frequencies> & operator=(const einsum<T,volComplexField,volField,Greens,Frequencies> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum<T,volComplexField,volField_rect_2D_cpu, Greens, Frequencies> &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies> & operator=(const einsum<T,volComplexField,volField_rect_2D_cpu,Greens,Frequencies> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
         void einsum_Gr_Pest(volComplexField<T> **Kappa, const Greens<T> *const *green, const volComplexField<T> *const *P_est) const
@@ -75,7 +75,7 @@ class einsum
             }
         }
 
-        void einsum_K_zeta(const volComplexField<T> *const *Kappa, const volField<T> &chi_est, std::complex<T> *K_zeta) const
+        void einsum_K_zeta(const volComplexField<T> *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<T> *K_zeta) const
         {
             for (int i = 0; i < m_n_freq*m_n_recv*m_n_src; i++)
             {

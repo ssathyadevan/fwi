@@ -30,8 +30,9 @@ T normSq(const std::complex<T> *data, int n) {
     return result;
 }
 
-
-template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
+// Babak 2018 10 29: remove templates from volField_rect_2D
+//template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
+template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
 class Inversion
 {
 protected:
@@ -45,7 +46,7 @@ protected:
     volComplexField<T> ***p_0;
     volComplexField<T> ***p_tot;
 
-    volField<T> m_chi;
+    volField_rect_2D_cpu m_chi;
     ProfileInterface &m_profiler;
 
     const int m_nfreq;
@@ -79,7 +80,7 @@ public:
         m_greens = nullptr;
     }
 
-    virtual void SetBackground(const volField_rect_2D_cpu<T> &chi_) {
+    virtual void SetBackground(const volField_rect_2D_cpu &chi_) {
         assert(&m_chi.GetGrid() == &chi_.GetGrid());
         m_chi = chi_;
     }
@@ -178,7 +179,7 @@ public:
     }
 
     //purely virtual function//
-    virtual volField_rect_2D_cpu<T> Reconstruct(const std::complex<T> *const p_data, const int &rank) = 0;
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<T> *const p_data, const int &rank) = 0;
 
 
 };
