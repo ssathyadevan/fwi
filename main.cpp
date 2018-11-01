@@ -21,7 +21,7 @@
 #include "inversion_cpu.h"
 #include "helper.h"
 
-#include "tests_helper.h"
+//#include "tests_helper.h"
 #include "input_parameters.h"
 
 #include <fstream>

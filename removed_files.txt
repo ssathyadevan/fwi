@@ -1,0 +1,3 @@
+1.) Removed tests_helper.h (from include/ and also commented from .pro file)
+2.) commented first template from contraction.h & contraction.cpp (never used)
+3.) removed grid.h (made redundant by babak, grid_rect_2D was iheriting from grid.h, but not really needed) 

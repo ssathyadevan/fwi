@@ -18,7 +18,7 @@
 inline float Helmholtz2D_real(float k, float r) {
   //const float R = 4.0f;
   //return (r == 0.0f ? -1.0f - 0.5f * k * M_PI * y1f(k * R) : -0.25f * y0f(k * r) * k * k);
-  return (r == 0.0f ? 0.0f : 0.25f * static_cast<float>(y0(k * r)) * k * k);// Babak 2018 10 25: GreensFunc2d (first part of lhs). y0 indicates the Bessel function of the first kind.
+  return (r == 0.0f ? 0.0f : 0.25f * static_cast<float>(y0(k * r)) * k * k);// Babak 2018 10 25: GreensFunc2d (first part of rhs). y0 indicates the Bessel function of the first kind.
 }
 
 inline float Helmholtz2D_imag(float k, float r) {
