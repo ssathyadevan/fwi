@@ -7,13 +7,14 @@
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
+#include "greens_rect_2D_cpu.h"
 #include <volComplexField_rect_2D_cpu.h>
 #include "mpi.h"
 
 //Babak 2018 10 29: Get rid of templates of grid_rect_2D class
 
 // Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
-template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, class Frequencies_group>
+template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
 class einsum
 {
     //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
@@ -36,11 +37,11 @@ class einsum
         {
         }
 
-        einsum(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu, Greens, Frequencies_group> &) = delete; //delete the copy constructor to forbid copying of objects of this class
-        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group> & operator=(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> & operator=(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
-        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens<T> *const *green, const volComplexField_rect_2D_cpu *const *P_est) const
+        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const
         {
             int l_i, l_j;
 
@@ -58,7 +59,7 @@ class einsum
             }
         }
 
-        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens<T> *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const
+        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const
         {
             int l_i, l_j;
 

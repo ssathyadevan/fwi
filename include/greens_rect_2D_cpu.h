@@ -16,41 +16,40 @@
 #include <eigen3/Eigen/Dense>
 #include "input_parameters.h"
 
-// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+// Babak 2018 11 02: Detemplating
 
 using namespace Eigen;
 
-template <typename T>
 class Greens_rect_2D_cpu {
 
-  std::function< std::complex<T>(T,T) > G_func;
+  std::function< std::complex<double>(double,double) > G_func;
 
   //const grid_rect_2D<T> &grid; // Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &grid;
   const Sources_rect_2D &src;
   const Receivers_rect_2D &recv;
-  const T k;
+  const double k;
 
-  std::complex<T> *G_vol;  ////G_vol = G_xx
+  std::complex<double> *G_vol;  ////G_vol = G_xx
   std::vector< volComplexField_rect_2D_cpu *> G_recv;
 
-  Matrix<std::complex<T>, Dynamic, Dynamic, RowMajor> G_vol2; //G_vol2 = G_xx ankit style
+  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2; //G_vol2 = G_xx ankit style
 
-  Greens_rect_2D_cpu(const Greens_rect_2D_cpu<T>&) = delete;
-  Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu<T>&) = delete;
+  Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
+  Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
 
 public:
 
-//  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
+//  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<double>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
 //  : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv() // Babak 2018 10 29: Get rid of template in grid_rect_2D class
-  Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D &src_, const Receivers_rect_2D &recv_, T k_)
+  Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<double>(double,double) > G_func_, const Sources_rect_2D &src_, const Receivers_rect_2D &recv_, double k_)
     : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 
 {
 
     const std::array<int, 2> &nx = grid.GetGridDimensions();
 
-    G_vol = new std::complex<T>[(2 * nx[1] - 1) * (2 * nx[0] - 1)];
+    G_vol = new std::complex<double>[(2 * nx[1] - 1) * (2 * nx[0] - 1)];
     create_Greens_volume();
 
     create_Greens_recv();
@@ -65,7 +64,7 @@ public:
     delete[] G_vol;
   }
 
-  const std::complex<T>* GetGreensVolume() const { return G_vol; }
+  const std::complex<double>* GetGreensVolume() const { return G_vol; }
 
   const volComplexField_rect_2D_cpu* GetReceiverCont(int iRecv) const {
     return G_recv[iRecv];
@@ -82,7 +81,7 @@ public:
 
     volComplexField_rect_2D_cpu y(grid);
 
-    std::complex<T> *y_data = y.GetDataPtr();
+    std::complex<double> *y_data = y.GetDataPtr();
 
     const std::array<int, 2> &nx = grid.GetGridDimensions();
 
@@ -95,7 +94,7 @@ public:
 
 
 
-  static void ContractWithField(Greens_rect_2D_cpu<T> **greens, volComplexField_rect_2D_cpu **y, volComplexField_rect_2D_cpu **x, int nFreq, int nSrc) {
+  static void ContractWithField(Greens_rect_2D_cpu **greens, volComplexField_rect_2D_cpu **y, volComplexField_rect_2D_cpu **x, int nFreq, int nSrc) {
 
     // Assure we are working on the same grid
 #ifndef NDEBUG
@@ -108,11 +107,11 @@ public:
 #endif
 
     //const grid_rect_2D<T> &grid = greens[0]->GetGrid();// Babak 2018 10 29: Get rid of template in grid_rect_2D class
-    const grid_rect_2D &grid = greens[0]->GetGRid();
+    const grid_rect_2D &grid = greens[0]->GetGrid();
 
-    const std::complex<T> **y_data = new const std::complex<T>*[nFreq * nSrc];
-    std::complex<T> **x_data = new std::complex<T>*[nFreq * nSrc];
-    const std::complex<T> **G_vol = new const std::complex<T>*[nFreq];
+    const std::complex<double> **y_data = new const std::complex<double>*[nFreq * nSrc];
+    std::complex<double> **x_data = new std::complex<double>*[nFreq * nSrc];
+    const std::complex<double> **G_vol = new const std::complex<double>*[nFreq];
 
     for(int i=0; i<nFreq * nSrc; i++) {
       y_data[i] = y[i]->GetDataPtr();
@@ -151,14 +150,14 @@ public:
       int l1, l2, l3, l4;
       ProfileCpu profiler;
 
-      std::complex<T> *p_prod = prod1.GetDataPtr();
-      const std::complex<T> *p_dW = dW.GetDataPtr();
+      std::complex<double> *p_prod = prod1.GetDataPtr();
+      const std::complex<double> *p_dW = dW.GetDataPtr();
 
       assert(&grid == &dW.GetGrid());
       //profiler.StartRegion("dot_product");
 
-      Matrix< std::complex<T>, Dynamic, 1, ColMajor> dW_vec, eigprod;
-      Matrix< std::complex<T>, Dynamic, 1, ColMajor> dummy;
+      Matrix< std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
+      Matrix< std::complex<double>, Dynamic, 1, ColMajor> dummy;
 
       dW_vec.resize(nx*nz,NoChange);
       eigprod.resize(nx*nz,NoChange);
@@ -169,7 +168,7 @@ public:
 
 
       for(int i=0; i < nx*nz; i++)
-          eigprod(i) = T(0.0);
+          eigprod(i) = double(0.0);
 
       for(int i=0; i < nz; i++)
       {
@@ -234,18 +233,18 @@ private:
 
   void create_Greens_volume() {   ////creating G_xx weird algorithm//////
 
-    T vol = grid.GetCellVolume();
+    double vol = grid.GetCellVolume();
     const std::array<int, 2> &nx = grid.GetGridDimensions();
-    const std::array<T, 2> &dx = grid.GetCellDimensions();
+    const std::array<double, 2> &dx = grid.GetCellDimensions();
 
     for(int i=-nx[1]+1; i <= nx[1]-1; i++) {
-      T z = i * dx[1];
+      double z = i * dx[1];
       for(int j=-nx[0]+1; j <= nx[0]-1; j++) {
-        T x = j * dx[0];
+        double x = j * dx[0];
 
-        T r = dist(z, x);
+        double r = dist(z, x);
 
-        std::complex<T> val = G_func(k, r);
+        std::complex<double> val = G_func(k, r);
 
         G_vol[(nx[1] + i - 1) * (2 * nx[0] - 1) + (nx[0] + j - 1)] = val * vol;
 
@@ -256,23 +255,23 @@ private:
 
   void create_Greens_volume_ankit()
   {
-      T vol = grid.GetCellVolume();
+      double vol = grid.GetCellVolume();
       const std::array<int, 2> &nx1 = grid.GetGridDimensions();
-      const std::array<T, 2> &dx = grid.GetCellDimensions();
-      const std::array<T, 2> &x_min = grid.GetGridStart();
+      const std::array<double, 2> &dx = grid.GetCellDimensions();
+      const std::array<double, 2> &x_min = grid.GetGridStart();
 
       const int &nx = nx1[0];
       const int &nz = nx1[1];
 
       G_vol2.resize(nx,nx*nz);
 
-      T p2_z = x_min[1] + dx[1]/T(2.0);
+      double p2_z = x_min[1] + dx[1]/double(2.0);
       for(int i=0; i < nx; i++)
       {
-          T p2_x = x_min[0] + (i + T(0.5) )*dx[0];
+          double p2_x = x_min[0] + (i + double(0.5) )*dx[0];
           volComplexField_rect_2D_cpu G_x(grid);
 
-          G_x.SetField( [this,vol,p2_x,p2_z] (const T &x, const T &y) {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
+          G_x.SetField( [this,vol,p2_x,p2_z] (const double &x, const double &y) {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
 
           for (int j=0; j<nx*nz; j++)
               G_vol2(i,j) = *(G_x.GetDataPtr() + j);
@@ -285,17 +284,17 @@ private:
 
   void create_Greens_recv() {
 
-    T vol = grid.GetCellVolume();
+    double vol = grid.GetCellVolume();
 
     volComplexField_rect_2D_cpu G_bound_cpu(grid);
 
     for(int i=0; i < recv.nRecv; i++) {
-      T x_recv = recv.xRecv[i][0];
-      T z_recv = recv.xRecv[i][1];
+      double x_recv = recv.xRecv[i][0];
+      double z_recv = recv.xRecv[i][1];
 
       volComplexField_rect_2D_cpu *G_bound = new volComplexField_rect_2D_cpu(grid);
       G_bound->SetField(
-          [this, vol, x_recv, z_recv](const T x, const T z)
+          [this, vol, x_recv, z_recv](const double x, const double z)
           { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
 
       G_recv.push_back(G_bound);

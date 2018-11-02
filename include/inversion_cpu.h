@@ -25,21 +25,21 @@ using std::endl;
 
 extern const int g_verbosity;
 //Babak and Saurabh 2018 10 30: Remove templates
-template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, class Frequencies_group>
-class InversionConcrete_cpu : public Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies_group>
+template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
+class InversionConcrete_cpu : public Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>
 {
 
 public:
-    InversionConcrete_cpu(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group>&) = delete;
-    InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group>& operator=(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group>&) = delete;
+    InversionConcrete_cpu(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>&) = delete;
+    InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>& operator=(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>&) = delete;
 
-//    InversionConcrete_cpu(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies_group<T> &freq, ProfileInterface &profiler)
-//    : Inversion<T, volComplexField_rect_2D_cpu, volField, Greens, Frequencies_group>(grid, src, recv, freq, profiler)
+//    InversionConcrete_cpu(const grid_rect_2D<double> &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group<double> &freq, ProfileInterface &profiler)
+//    : Inversion<T, volComplexField_rect_2D_cpu, volField, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, profiler)
 //    {
 //    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
 
     InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
-    : Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens, Frequencies_group>(grid, src, recv, freq, profiler)
+    : Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, profiler)
     {
     }
 
@@ -79,7 +79,7 @@ public:
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
+                *this->p_tot[i][j] = calcField<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu>(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
             }
 
                 std::cout << "  " << std::endl;
@@ -90,7 +90,7 @@ public:
 
     }
 
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<T> *const p_data, const int &rank)
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank)
     {
         T const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
         T eta = 1.0/const1;
@@ -102,10 +102,10 @@ public:
         int l_i;
         const int n_total = this->m_nfreq*this->m_nrecv*this->m_nsrc;
 
-        std::complex<T> *r = new std::complex<T>[n_total];
-        std::complex<T> *K_zeta = new std::complex<T>[n_total];
+        std::complex<double> *r = new std::complex<double>[n_total];
+        std::complex<double> *K_zeta = new std::complex<double>[n_total];
 
-        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group> ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
+        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
 
         volField_rect_2D_cpu chi_est(this->m_grid), g(this->m_grid), g_old(this->m_grid), zeta(this->m_grid);
         volComplexField_rect_2D_cpu tmp(this->m_grid);
@@ -138,7 +138,7 @@ public:
         //main loop//
         for(int it=0; it<n_max; it++)
         {
-            std::vector<std::complex<T>> res_first_it;
+            std::vector<std::complex<double>> res_first_it;
             if (do_reg == 0)
             {
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
@@ -342,7 +342,7 @@ public:
 
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
+                    *p_est[l_i + j] = calcField<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu>(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
             }
             this->m_profiler.EndRegion();
         }

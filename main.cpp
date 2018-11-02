@@ -193,7 +193,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     ProfileInterface *profiler;
     profiler = new ProfileCpu();
 
-    std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
+    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
 
     chi.toFile("../src/chi.txt");
 

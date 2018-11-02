@@ -5,11 +5,12 @@
 
 #include <ProfileInterface.h>
 
-#include "GreensFunctions.h"
+#include "greens_rect_2D_cpu.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
 #include "frequencies_group.h"
+#include "GreensFunctions.h"
 #include <volField_rect_2D_cpu.h>
 
 #include "calcField.h"
@@ -31,8 +32,8 @@ T normSq(const std::complex<T> *data, int n) {
 }
 
 // Babak 2018 10 29: remove templates from volField_rect_2D
-//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies_group>
-template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, class Frequencies_group>
+//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens_rect_2D_cpu, template<typename> class Frequencies_group>
+template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
 class Inversion
 {
 protected:
@@ -42,7 +43,7 @@ protected:
     const Receivers_rect_2D &m_recv;
     const Frequencies_group &m_freq;
 
-    Greens<T> **m_greens;
+    Greens_rect_2D_cpu **m_greens;
     volComplexField_rect_2D_cpu ***p_0;
     volComplexField_rect_2D_cpu ***p_tot;
 
@@ -64,11 +65,11 @@ public:
 
     virtual void createGreens()
     {
-        m_greens = new Greens<T>*[m_nfreq];
+        m_greens = new Greens_rect_2D_cpu*[m_nfreq];
 
         for (int i=0; i<m_nfreq; i++)
         {
-            m_greens[i] = new Greens<T>(m_grid, Helmholtz2D<T>, m_src, m_recv, m_freq.k[i]);
+            m_greens[i] = new Greens_rect_2D_cpu(m_grid, Helmholtz2D, m_src, m_recv, m_freq.k[i]);
         }
     }
 

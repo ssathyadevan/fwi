@@ -32,27 +32,26 @@ inline double Helmholtz2D_real(double k, double r) {
 }
 
 inline double Helmholtz2D_imag(double k, double r) {
-  return (r == 0.0 ? 0.0 : -0.25 * j0(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": (second part of lhs). j0 indicates the Bessel function of the second kind.
+  return (r == 0.0 ? 0.0 : -0.25 * j0(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": (second pardouble  of lhs). j0 indicates the Bessel function of the second kind.
 }
 
-template <typename T>
-inline std::complex<T> Helmholtz2D(T k, T r) {
-  return std::complex<T>(Helmholtz2D_real(k, r), Helmholtz2D_imag(k, r));// Babak 2018 10 25: Equation ID "GreensFunc2d": Creating a complex Greens function.
+
+inline std::complex<double> Helmholtz2D(double k, double r) {
+  return std::complex<double> (Helmholtz2D_real(k, r), Helmholtz2D_imag(k, r));// Babak 2018 10 25: Equation ID "GreensFunc2d": Creating a complex Greens function.
 }
 
-template <typename T>
-inline T Helmholtz3D_real(T k, T r) {
-  return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::cos(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": real part of Greens function from a 3D Helmhotz equation.
+inline double Helmholtz3D_real(double k, double r) {
+  return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::cos(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": real pardouble of Greens function from a 3D Helmhotz equation.
 }
 
-template <typename T>
-inline T Helmholtz3D_imag(T k, T r) {
-  return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::sin(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": imnaginary part of Greens function from a 3D Helmhotz equation
+
+inline double Helmholtz3D_imag(double k, double r) {
+  return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::sin(k * r) * k * k);// Babak 2018 10 25: Equation ID "GreensFunc2d": imnaginary pardouble of Greens function from a 3D Helmhotz equation
 }
 
-template <typename T>
-inline std::complex<T> Helmholtz3D(T k, T r) {
-  return std::complex<T>(Helmholtz3D_real(k, r), Helmholtz3D_imag(k, r));// Babak 2018 10 25: Equation ID "GreensFunc2d": Creating complex Greens fucntion
+
+inline std::complex<double>  Helmholtz3D(double k, double r) {
+  return std::complex<double> (Helmholtz3D_real(k, r), Helmholtz3D_imag(k, r));// Babak 2018 10 25: Equation ID "GreensFunc2d": Creating complex Greens fucntion
 }
 
 #endif /* GREENSFUNCTIONS_H */

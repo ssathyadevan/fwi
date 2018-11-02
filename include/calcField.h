@@ -9,6 +9,7 @@
 #include "input_parameters.h"
 #include <eigen3/Eigen/Dense>
 #include "ProfileCpu.h"
+#include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include <string>
 
@@ -22,8 +23,8 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Green>
-volComplexField_rect_2D_cpu calcField(const Green<T> &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1)
+template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Green_rect_2D_cpu>
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
