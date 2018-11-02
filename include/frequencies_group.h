@@ -7,19 +7,19 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-template <typename T>  //use this one for group frequency distribution
+//use this one for group frequency distribution
 class Frequencies_group {
 
-    Frequencies_group<T> operator=(const Frequencies_group<T>&);
+    Frequencies_group operator=(const Frequencies_group&);
 
 public:
 
   const int nFreq;
-  const T c_0, &d_freq;
-  std::vector<T> freq;
-  std::vector<T> k;
+  const double c_0, &d_freq;
+  std::vector<double> freq;
+  std::vector<double> k;
 
-  Frequencies_group(T freqMin, const T &dfreq, int nFreq_, T c_0_)
+  Frequencies_group(double freqMin, const double &dfreq, int nFreq_, double c_0_)
   : nFreq(nFreq_), c_0(c_0_), d_freq(dfreq), freq(), k()
   {
 
@@ -27,7 +27,7 @@ public:
 
     for(int i=0; i < nFreq; i++) {
       freq.push_back(freqMin + i * dfreq);
-      T omega = 2.0 * M_PI * freq[i];
+      double omega = 2.0 * M_PI * freq[i];
       k.push_back(omega / c_0);
     }
 

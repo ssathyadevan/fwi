@@ -9,7 +9,7 @@
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
-
+#include "frequencies_group.h"
 #include <volField_rect_2D_cpu.h>
 
 #include "calcField.h"
@@ -31,8 +31,8 @@ T normSq(const std::complex<T> *data, int n) {
 }
 
 // Babak 2018 10 29: remove templates from volField_rect_2D
-//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
-template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
+//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies_group>
+template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, class Frequencies_group>
 class Inversion
 {
 protected:
@@ -40,7 +40,7 @@ protected:
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
-    const Frequencies<T> &m_freq;
+    const Frequencies_group &m_freq;
 
     Greens<T> **m_greens;
     volComplexField_rect_2D_cpu ***p_0;
@@ -54,10 +54,10 @@ protected:
     const int m_nsrc;
 
 public:
-//    Inversion(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
+//    Inversion(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies_group &freq, ProfileInterface &profiler)
 //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
         // Babak 2018 10 29: Get rid of template in grid_rect_2D class
-    Inversion(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies<T> &freq, ProfileInterface &profiler)
+    Inversion(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
             : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
     {
     }

@@ -13,31 +13,31 @@
 //Babak 2018 10 29: Get rid of templates of grid_rect_2D class
 
 // Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
-template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
+template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, class Frequencies_group>
 class einsum
 {
     //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
-    const Frequencies<T> &m_freq;
+    const Frequencies_group &m_freq;
 
     const int &m_n_freq;
     const int &m_n_src;
     const int &m_n_recv;
 
     public:
-    //        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq)
+    //        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies_group &freq)
     //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
     //        {
     //        } // Babak 2018 10 29: get rid of template for grid_rect_2D
-        einsum(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies<T> &freq)
+        einsum(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq)
         : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
         {
         }
 
-        einsum(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu, Greens, Frequencies> &) = delete; //delete the copy constructor to forbid copying of objects of this class
-        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies> & operator=(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu, Greens, Frequencies_group> &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group> & operator=(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens,Frequencies_group> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
         void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens<T> *const *green, const volComplexField_rect_2D_cpu *const *P_est) const

@@ -23,7 +23,7 @@
 
 #include "tests_helper.h"
 #include "input_parameters.h"
-
+#include "frequencies_group.h"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -48,7 +48,7 @@ const int g_verbosity = 0;
 
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
-template <typename T, template<typename> class Frequencies>
+template <typename T, class Frequencies_group>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0);
 
 template <typename T>
@@ -152,7 +152,7 @@ int main()
 
 
 //temple from here
-template <typename T, template<typename> class Frequencies>
+template <typename T, class Frequencies_group>
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
@@ -176,9 +176,9 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     Receivers_rect_2D recv(src);
     recv.Print();
 
-    T f_min, d_freq_proc;
+    double f_min, d_freq_proc;
 
-    T d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
+    double d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
     int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
 
     int sum = 0;
@@ -187,18 +187,18 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     f_min = Freq_min + sum*d_freq;
     d_freq_proc = d_freq;
 
-    Frequencies<T> freq(f_min, d_freq_proc, nFreq, c_0);
+    Frequencies_group freq(f_min, d_freq_proc, nFreq, c_0);
     freq.Print();
 
     ProfileInterface *profiler;
     profiler = new ProfileCpu();
 
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
+    std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
 
     chi.toFile("../src/chi.txt");
 
-    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies> *inverse;
-    inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies>(grid, src, recv, freq, *profiler);
+    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
+    inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
 
     std::cout << "Creating Greens function field" << std::endl;
     inverse->createGreens();
