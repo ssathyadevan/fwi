@@ -31,8 +31,8 @@ T normSq(const std::complex<T> *data, int n) {
 }
 
 // Babak 2018 10 29: remove templates from volField_rect_2D
-//template<typename T, template<typename> class volComplexField, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
-template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
+//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens, template<typename> class Frequencies>
+template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Greens, template<typename> class Frequencies>
 class Inversion
 {
 protected:
@@ -43,8 +43,8 @@ protected:
     const Frequencies<T> &m_freq;
 
     Greens<T> **m_greens;
-    volComplexField<T> ***p_0;
-    volComplexField<T> ***p_tot;
+    volComplexField_rect_2D_cpu ***p_0;
+    volComplexField_rect_2D_cpu ***p_tot;
 
     volField_rect_2D_cpu m_chi;
     ProfileInterface &m_profiler;
@@ -91,15 +91,15 @@ public:
         assert(m_greens != nullptr);
         assert(p_0 == nullptr);
 
-        p_0 = new volComplexField<T>**[m_nfreq];
+        p_0 = new volComplexField_rect_2D_cpu**[m_nfreq];
 
          for (int i=0; i<m_nfreq; i++)
         {
-            p_0[i] = new volComplexField<T>*[m_nsrc];
+            p_0[i] = new volComplexField_rect_2D_cpu*[m_nsrc];
 
             for (int j=0; j<m_nsrc; j++)
             {
-                p_0[i][j] = new volComplexField<T>(m_grid);
+                p_0[i][j] = new volComplexField_rect_2D_cpu(m_grid);
                 *p_0[i][j] = *( m_greens[i]->GetReceiverCont(j) ) / (m_freq.k[i] * m_freq.k[i] * m_grid.GetCellVolume());
             }
         }

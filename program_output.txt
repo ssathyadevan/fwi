@@ -31,7 +31,7 @@ Input Temple Visualisation
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
-Starting at Fri Nov  2 14:04:04 2018
+Starting at Fri Nov  2 15:21:00 2018
 
 nFreq= 15
 Total number is sources is 17. Positions:
@@ -422,7 +422,7 @@ Convergence after 38iterations
 Convergence after 38iterations
   
   
-Computation time for createTotalField rank=0 was 21.1242 seconds
+Computation time for createTotalField rank=0 was 16.7242 seconds
 Estimating Chi...
 1/50	 (1/5)	 res: 0.52347870629892468
 2/50	 (1/5)	 res: 0.56636097945261965
@@ -774,7 +774,7 @@ Convergence after 23iterations
 Convergence after 24iterations
 Convergence after 22iterations
 Convergence after 23iterations
-Computation time for createTotalField0 was 11.534985272 seconds
+Computation time for createTotalField0 was 12.587973475 seconds
 1/50	 (2/5)	 res: 0.26172460013403448
 2/50	 (2/5)	 res: 0.1093543521778977
 3/50	 (2/5)	 res: 0.094121204006147416
@@ -1125,7 +1125,7 @@ Convergence after 51iterations
 Convergence after 52iterations
 Convergence after 51iterations
 Convergence after 52iterations
-Computation time for createTotalField0 was 16.894917626000002 seconds
+Computation time for createTotalField0 was 18.630880261000001 seconds
 1/50	 (3/5)	 res: 0.064056647358167865
 2/50	 (3/5)	 res: 0.043479263882686997
 3/50	 (3/5)	 res: 0.03030017012017092
@@ -1476,7 +1476,7 @@ Convergence after 44iterations
 Convergence after 45iterations
 Convergence after 45iterations
 Convergence after 46iterations
-Computation time for createTotalField0 was 16.977915982999999 seconds
+Computation time for createTotalField0 was 18.759093288999999 seconds
 1/50	 (4/5)	 res: 0.028232027907643779
 2/50	 (4/5)	 res: 0.019218716406609864
 3/50	 (4/5)	 res: 0.010449833047394422
@@ -1827,7 +1827,7 @@ Convergence after 85iterations
 Convergence after 86iterations
 Convergence after 87iterations
 Convergence after 89iterations
-Computation time for createTotalField0 was 34.018518188000002 seconds
+Computation time for createTotalField0 was 26.493284604999999 seconds
 1/50	 (5/5)	 res: 0.017333736500900695
 2/50	 (5/5)	 res: 0.010344295684109198
 3/50	 (5/5)	 res: 0.0070343153251246817
@@ -2178,7 +2178,7 @@ No convergence after 100 iterations. rank 0Res = 0.00061355402362615701
 No convergence after 100 iterations. rank 0Res = 0.00062260428555383906
 No convergence after 100 iterations. rank 0Res = 0.0005628337230140321
 No convergence after 100 iterations. rank 0Res = 0.00071824073499484361
-Computation time for createTotalField0 was 30.14863102 seconds
+Computation time for createTotalField0 was 32.538532631000002 seconds
 Done, writing to file
 0
 Visualisation of the estimated temple using FWI
@@ -2214,5 +2214,5 @@ Visualisation of the estimated temple using FWI
 0111000222233333222212221232221222222221222112322333323210001110
 1222112322233322210112211121221121222111222100122233222233112221
 1211101322233322222222222222222112312222222222222233322321011121
-Finished at Fri Nov  2 14:07:12 2018
+Finished at Fri Nov  2 15:24:08 2018
 

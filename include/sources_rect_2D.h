@@ -6,7 +6,7 @@
 #include <vector>
 #include <array>
 
-
+//Babak 2018 11 02: got rid of templates
 class Sources_rect_2D {
 
 public:

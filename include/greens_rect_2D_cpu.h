@@ -32,7 +32,7 @@ class Greens_rect_2D_cpu {
   const T k;
 
   std::complex<T> *G_vol;  ////G_vol = G_xx
-  std::vector< volComplexField_rect_2D_cpu<T> *> G_recv;
+  std::vector< volComplexField_rect_2D_cpu *> G_recv;
 
   Matrix<std::complex<T>, Dynamic, Dynamic, RowMajor> G_vol2; //G_vol2 = G_xx ankit style
 
@@ -67,7 +67,7 @@ public:
 
   const std::complex<T>* GetGreensVolume() const { return G_vol; }
 
-  const volComplexField_rect_2D_cpu<T>* GetReceiverCont(int iRecv) const {
+  const volComplexField_rect_2D_cpu* GetReceiverCont(int iRecv) const {
     return G_recv[iRecv];
   }
 
@@ -75,12 +75,12 @@ public:
 
 
 
-  volComplexField_rect_2D_cpu<T> ContractWithField(const volComplexField_rect_2D_cpu<T> &x) const
+  volComplexField_rect_2D_cpu ContractWithField(const volComplexField_rect_2D_cpu &x) const
   {
     // Assure we are working on the same grid
     assert(&grid == &x.GetGrid());
 
-    volComplexField_rect_2D_cpu<T> y(grid);
+    volComplexField_rect_2D_cpu y(grid);
 
     std::complex<T> *y_data = y.GetDataPtr();
 
@@ -95,7 +95,7 @@ public:
 
 
 
-  static void ContractWithField(Greens_rect_2D_cpu<T> **greens, volComplexField_rect_2D_cpu<T> **y, volComplexField_rect_2D_cpu<T> **x, int nFreq, int nSrc) {
+  static void ContractWithField(Greens_rect_2D_cpu<T> **greens, volComplexField_rect_2D_cpu **y, volComplexField_rect_2D_cpu **x, int nFreq, int nSrc) {
 
     // Assure we are working on the same grid
 #ifndef NDEBUG
@@ -140,14 +140,14 @@ public:
   // Equation ID: "buildField"
 
 
-  volComplexField_rect_2D_cpu<T> dot1(const volComplexField_rect_2D_cpu<T> &dW) const
+  volComplexField_rect_2D_cpu dot1(const volComplexField_rect_2D_cpu &dW) const
   {
       const std::array<int, 2> &nx1 = grid.GetGridDimensions();
 
       const int &nx = nx1[0];
       const int &nz = nx1[1];
 
-      volComplexField_rect_2D_cpu<T> prod1(grid);
+      volComplexField_rect_2D_cpu prod1(grid);
       int l1, l2, l3, l4;
       ProfileCpu profiler;
 
@@ -270,7 +270,7 @@ private:
       for(int i=0; i < nx; i++)
       {
           T p2_x = x_min[0] + (i + T(0.5) )*dx[0];
-          volComplexField_rect_2D_cpu<T> G_x(grid);
+          volComplexField_rect_2D_cpu G_x(grid);
 
           G_x.SetField( [this,vol,p2_x,p2_z] (const T &x, const T &y) {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
 
@@ -287,13 +287,13 @@ private:
 
     T vol = grid.GetCellVolume();
 
-    volComplexField_rect_2D_cpu<T> G_bound_cpu(grid);
+    volComplexField_rect_2D_cpu G_bound_cpu(grid);
 
     for(int i=0; i < recv.nRecv; i++) {
       T x_recv = recv.xRecv[i][0];
       T z_recv = recv.xRecv[i][1];
 
-      volComplexField_rect_2D_cpu<T> *G_bound = new volComplexField_rect_2D_cpu<T>(grid);
+      volComplexField_rect_2D_cpu *G_bound = new volComplexField_rect_2D_cpu(grid);
       G_bound->SetField(
           [this, vol, x_recv, z_recv](const T x, const T z)
           { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });

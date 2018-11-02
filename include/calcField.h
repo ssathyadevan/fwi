@@ -9,6 +9,7 @@
 #include "input_parameters.h"
 #include <eigen3/Eigen/Dense>
 #include "ProfileCpu.h"
+#include "volComplexField_rect_2D_cpu.h"
 #include <string>
 
 extern const int g_verbosity;
@@ -21,20 +22,20 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-template<typename T, template<typename> class volComplexField, class volField_rect_2D_cpu, template<typename> class Green>
-volComplexField<T> calcField(const Green<T> &G, const volField_rect_2D_cpu &chi, const volComplexField<T> &p_init, const int &rank1)
+template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, template<typename> class Green>
+volComplexField_rect_2D_cpu calcField(const Green<T> &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
     //const grid_rect_2D<T> &m_grid = G.GetGrid();//Babak 2018 10 29: get rid of templat
     const grid_rect_2D &m_grid = G.GetGrid();
 
-    volComplexField<T> chi_p(m_grid), chi_p_old(m_grid);
-    volComplexField<T> dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
+    volComplexField_rect_2D_cpu chi_p(m_grid), chi_p_old(m_grid);
+    volComplexField_rect_2D_cpu dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
 
     int n_cell = m_grid.GetNumberOfGridPoints();
 
-    std::vector< volComplexField<T> > phi;
+    std::vector< volComplexField_rect_2D_cpu > phi;
     Matrix< std::complex<T>, Dynamic, Dynamic, ColMajor > matA;
     Matrix< std::complex<T>, Dynamic, 1, ColMajor > b_f_rhs;
     Matrix< std::complex<T>, Dynamic, 1, ColMajor > alpha;
