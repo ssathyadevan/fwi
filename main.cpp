@@ -166,14 +166,14 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     chi.fromFile(fileName);
 
-    std::array<T,2> x_src_min = {-480.0, -5.0};
-    std::array<T,2> x_src_max = {480.0, -5.0};
+    std::array<double,2> x_src_min = {-480.0, -5.0};
+    std::array<double,2> x_src_max = {480.0, -5.0};
 
-    Sources_rect_2D<T> src(x_src_min, x_src_max, nSrct);
+    Sources_rect_2D src(x_src_min, x_src_max, nSrct);
     src.Print();
 
     int nRecv = nSrct;
-    Receivers_rect_2D<T> recv(src);
+    Receivers_rect_2D recv(src);
     recv.Print();
 
     T f_min, d_freq_proc;

@@ -7,17 +7,16 @@
 
 #include "sources_rect_2D.h"
 
-template <typename T>
 class Receivers_rect_2D {
 
-	Receivers_rect_2D<T>& operator=(const Receivers_rect_2D<T>&);
+    Receivers_rect_2D& operator=(const Receivers_rect_2D&);
 
 public:
 
   const int nRecv;
-  const std::vector< std::array<T, 2> > xRecv;
+  const std::vector< std::array<double, 2> > xRecv;
 
-  Receivers_rect_2D(const Sources_rect_2D<T> &src) : nRecv(src.nSrc), xRecv(src.xSrc) {}
+  Receivers_rect_2D(const Sources_rect_2D &src) : nRecv(src.nSrc), xRecv(src.xSrc) {}
 
   void Print() {
     std::cout << "Total number is receivers is " << nRecv << ". Positions:" << std::endl;

@@ -17,8 +17,8 @@ class einsum
 {
     //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
     const grid_rect_2D &m_grid;
-    const Sources_rect_2D<T> &m_src;
-    const Receivers_rect_2D<T> &m_recv;
+    const Sources_rect_2D &m_src;
+    const Receivers_rect_2D &m_recv;
     const Frequencies<T> &m_freq;
 
     const int &m_n_freq;
@@ -30,7 +30,7 @@ class einsum
     //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
     //        {
     //        } // Babak 2018 10 29: get rid of template for grid_rect_2D
-        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies<T> &freq)
+        einsum(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies<T> &freq)
         : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
         {
         }

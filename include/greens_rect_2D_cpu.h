@@ -27,8 +27,8 @@ class Greens_rect_2D_cpu {
 
   //const grid_rect_2D<T> &grid; // Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &grid;
-  const Sources_rect_2D<T> &src;
-  const Receivers_rect_2D<T> &recv;
+  const Sources_rect_2D &src;
+  const Receivers_rect_2D &recv;
   const T k;
 
   std::complex<T> *G_vol;  ////G_vol = G_xx
@@ -43,7 +43,7 @@ public:
 
 //  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
 //  : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv() // Babak 2018 10 29: Get rid of template in grid_rect_2D class
-  Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
+  Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<T>(T,T) > G_func_, const Sources_rect_2D &src_, const Receivers_rect_2D &recv_, T k_)
     : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 
 {
