@@ -23,12 +23,11 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Green_rect_2D_cpu>
 volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
-    //const grid_rect_2D<T> &m_grid = G.GetGrid();//Babak 2018 10 29: get rid of templat
+    //const grid_rect_2D<double>  &m_grid = G.GetGrid();//Babak 2018 10 29: get rid of templat
     const grid_rect_2D &m_grid = G.GetGrid();
 
     volComplexField_rect_2D_cpu chi_p(m_grid), chi_p_old(m_grid);
@@ -37,18 +36,18 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
     int n_cell = m_grid.GetNumberOfGridPoints();
 
     std::vector< volComplexField_rect_2D_cpu > phi;
-    Matrix< std::complex<T>, Dynamic, Dynamic, ColMajor > matA;
-    Matrix< std::complex<T>, Dynamic, 1, ColMajor > b_f_rhs;
-    Matrix< std::complex<T>, Dynamic, 1, ColMajor > alpha;
+    Matrix< std::complex<double> , Dynamic, Dynamic, ColMajor > matA;
+    Matrix< std::complex<double> , Dynamic, 1, ColMajor > b_f_rhs;
+    Matrix< std::complex<double> , Dynamic, 1, ColMajor > alpha;
 
-    std::complex<T> *rhs_data, *matA_j_data;
+    std::complex<double>  *rhs_data, *matA_j_data;
     ProfileCpu profiler, prof2;
 
     matA.conservativeResize(n_cell, 1);
     b_f_rhs.conservativeResize(n_cell, 1);
 
     chi_p_old.Zero();// Babak 2018 10 25: initializing the chi_p (chi*p_tot);
-    T res = 0.0;
+    double res = 0.0;
 
     p_tot = p_init;//
 
@@ -63,8 +62,8 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
         dW = chi_p - chi_p_old;// Babak 2018 10 25: Equation ID: "incrementalContrastSrcs"
 
-        T dWNorm = dW.Norm();
-        T chi_pNorm = chi_p.Norm();
+        double dWNorm = dW.Norm();
+        double chi_pNorm = chi_p.Norm();
 
         res = dWNorm / chi_pNorm;//
         //std::cout << "Residual = " << res << std::endl;
