@@ -48,13 +48,9 @@ const int g_verbosity = 0;
 
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
-template <typename T, class Frequencies_group>
+
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0);
 
-template <typename T>
-int sineInversion(int nFreq, const int& nxt, const int& nzt); // MELISSEN 2018 10 18 Saurabh turned off sine and it still compiles.
-
-#define REAL double
 
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
 
@@ -136,7 +132,7 @@ int main()
     nFreq = nFreq_Total;///nop; //distributing frequencies
     std::cout << "nFreq= " << nFreq << std::endl;
     int ret;
-    ret = templeInversion<REAL,Frequencies_group>(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive, reservoir_corner_points_in_m, gpu, c_0);
+    ret = templeInversion(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive, reservoir_corner_points_in_m, gpu, c_0);
     std::cout << ret << std::endl;
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
@@ -152,7 +148,7 @@ int main()
 
 
 //temple from here
-template <typename T, class Frequencies_group>
+
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
