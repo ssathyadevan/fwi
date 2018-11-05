@@ -52,14 +52,12 @@ HEADERS += \
     include/greens_rect_2D_cpu.h \
     include/GreensFunctions.h \
     include/grid_rect_2D.h \
-    include/grid.h \
     include/inversion.h \
     include/helper.h \
     include/ProfileCpu.h \
     include/ProfileInterface.h \
     include/receivers_rect_2D.h \
     include/sources_rect_2D.h \
-    include/tests_helper.h \
     include/volComplexField_rect_2D_cpu.h \
     include/volComplexField_rect_2D.h \
     include/volField_rect_2D_cpu.h \

@@ -146,8 +146,8 @@ public:
     }
 
 
-    // Babak 2018 10 25: calculation of p_data based on Equation ID: "dataEq"
     virtual void calculateData(std::complex<double> *p_data)
+    // Babak 2018 10 25: calculation of p_data based on "eq:calculateData" modified MELISSEN 2018 11 01
     {
         int l_i, l_j;
         for (int i=0; i<m_nfreq; i++)
