@@ -10,14 +10,14 @@
 #include "greens_rect_2D_cpu.h"
 #include <volComplexField_rect_2D_cpu.h>
 #include "mpi.h"
+#include <frequencies_group.h>
 
 //Babak 2018 10 29: Get rid of templates of grid_rect_2D class
 
 // Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
-template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
 class einsum
 {
-    //const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of templates
+    //const grid_rect_2D<double> &m_grid;// Babak 2018 10 29: Get rid of templates
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
@@ -28,7 +28,7 @@ class einsum
     const int &m_n_recv;
 
     public:
-    //        einsum(const grid_rect_2D &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies_group &freq)
+    //        einsum(const grid_rect_2D &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group &freq)
     //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_n_freq(m_freq.nFreq), m_n_src(m_src.nSrc), m_n_recv(m_recv.nRecv)
     //        {
     //        } // Babak 2018 10 29: get rid of template for grid_rect_2D
@@ -37,8 +37,8 @@ class einsum
         {
         }
 
-        einsum(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> &) = delete; //delete the copy constructor to forbid copying of objects of this class
-        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> & operator=(const einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
+        einsum(const einsum &) = delete; //delete the copy constructor to forbid copying of objects of this class
+        einsum & operator=(const einsum &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
         void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const
@@ -77,7 +77,7 @@ class einsum
             }
         }
 
-        void einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<T> *K_zeta) const
+        void einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<double> *K_zeta) const
         {
             for (int i = 0; i < m_n_freq*m_n_recv*m_n_src; i++)
             {
@@ -86,7 +86,7 @@ class einsum
         }
 
 
-        void einsum_K_res(const volComplexField_rect_2D_cpu *const *Kappa, const std::complex<T> *res, volComplexField_rect_2D_cpu &K_res) const
+        void einsum_K_res(const volComplexField_rect_2D_cpu *const *Kappa, const std::complex<double> *res, volComplexField_rect_2D_cpu &K_res) const
         {
             int l_i, l_j;
            // volComplexField_rect_2D_cpu K_res(m_grid);
@@ -121,9 +121,9 @@ class einsum
 */      }
 
 
-        std::complex<T> einsum_dot(const std::complex<T> *x, const std::complex<T> *y) const
+        std::complex<double> einsum_dot(const std::complex<double> *x, const std::complex<double> *y) const
         {
-            std::complex<T> dot = 0;
+            std::complex<double> dot = 0;
             int l_i, l_j;
 
             for (int i = 0; i < m_n_freq; i++)

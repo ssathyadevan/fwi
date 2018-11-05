@@ -25,13 +25,12 @@ using std::endl;
 
 extern const int g_verbosity;
 //Babak and Saurabh 2018 10 30: Remove templates
-template<typename T,  class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
-class InversionConcrete_cpu : public Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>
+class InversionConcrete_cpu : public Inversion
 {
 
 public:
-    InversionConcrete_cpu(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>&) = delete;
-    InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>& operator=(const InversionConcrete_cpu<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group>&) = delete;
+    InversionConcrete_cpu(const InversionConcrete_cpu&) = delete;
+    InversionConcrete_cpu& operator=(const InversionConcrete_cpu&) = delete;
 
 //    InversionConcrete_cpu(const grid_rect_2D<double> &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group<double> &freq, ProfileInterface &profiler)
 //    : Inversion<T, volComplexField_rect_2D_cpu, volField, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, profiler)
@@ -39,7 +38,7 @@ public:
 //    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
 
     InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
-    : Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, profiler)
+    : Inversion(grid, src, recv, freq, profiler)
     {
     }
 
@@ -92,11 +91,11 @@ public:
 
     virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank)
     {
-        T const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
-        T eta = 1.0/const1;
-        T gamma, alpha, res;
+        double const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
+        double eta = 1.0/const1;
+        double gamma, alpha, res;
 
-        std::array<T,2> alpha_div;
+        std::array<double,2> alpha_div;
 
         volComplexField_rect_2D_cpu **Kappa, **p_est;
         int l_i;
@@ -105,7 +104,7 @@ public:
         std::complex<double> *r = new std::complex<double>[n_total];
         std::complex<double> *K_zeta = new std::complex<double>[n_total];
 
-        einsum<T,volComplexField_rect_2D_cpu,volField_rect_2D_cpu,Greens_rect_2D_cpu,Frequencies_group> ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
+        einsum ein(this->m_grid,this->m_src,this->m_recv,this->m_freq);
 
         volField_rect_2D_cpu chi_est(this->m_grid), g(this->m_grid), g_old(this->m_grid), zeta(this->m_grid);
         volComplexField_rect_2D_cpu tmp(this->m_grid);
@@ -158,7 +157,7 @@ public:
 
                     res_first_it.push_back(res);
 
-                    if ( (it1 > 0) && ( (res < T(tol1)) || ( std::abs(res_first_it[it1-1] - res) < T(tol1) ) ) )
+                    if ( (it1 > 0) && ( (res < double(tol1)) || ( std::abs(res_first_it[it1-1] - res) < double(tol1) ) ) )
                         break;
 
                     ein.einsum_K_res(Kappa, r, tmp);  //tmp = einsum('ijkl,ijk->l', conj(K), r)
@@ -185,13 +184,13 @@ public:
                 }
             }
             else if (do_reg == 1) {
-                T deltasquared_old = T(0.0);
+                double deltasquared_old = double(0.0);
                 volField_rect_2D_cpu bsquared_old(this->m_grid);
                 bsquared_old.Zero();
-                T Freg_old = T(1.0);
-                T Fdata_old = T(0.0);
+                double Freg_old = double(1.0);
+                double Fdata_old = double(0.0);
 
-                T delta_amplification = delta_amplification_start / (delta_amplification_slope * it + T(1.0));
+                double delta_amplification = delta_amplification_start / (delta_amplification_slope * it + double(1.0));
 
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
 
@@ -207,8 +206,8 @@ public:
                         ein.einsum_K_res(Kappa, r, tmp);
                         g = eta * tmp.GetRealPart();
                         zeta = g;
-                        alpha_div[0] = T(0.0);
-                        alpha_div[1] = T(0.0);
+                        alpha_div[0] = double(0.0);
+                        alpha_div[1] =double(0.0);
                         for (int i = 0; i < n_total; i++)
                         {
                             K_zeta[i] = Summation( *Kappa[i], zeta );
@@ -235,7 +234,7 @@ public:
 
                         volField_rect_2D_cpu bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
                         bsquared.Reciprocal();
-                        bsquared *= (T(1.0) / (this->m_grid.GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
+                        bsquared *= (double(1.0) / (this->m_grid.GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
                         volField_rect_2D_cpu b = bsquared;
                         b.Sqrt();
 
@@ -244,7 +243,7 @@ public:
                         volField_rect_2D_cpu tmpvolfield2 = b * *gradient_chi_old[1];
                         tmpvolfield2.Square();
                         tmpvolfield += tmpvolfield2;
-                        T deltasquared = delta_amplification * T(0.5) * tmpvolfield.Summation() / bsquared.Summation(); //deltasquared = const*0.5*sum( sum( (b*gradient_chi_old[0])**2 + (b*gradient_chi_old[1])**2 ) ) / ( sum( sum(bsquared) ) ) # eq. 2.23
+                        double deltasquared = delta_amplification * double(0.5) * tmpvolfield.Summation() / bsquared.Summation(); //deltasquared = const*0.5*sum( sum( (b*gradient_chi_old[0])**2 + (b*gradient_chi_old[1])**2 ) ) / ( sum( sum(bsquared) ) ) # eq. 2.23
 
                         tmpvolfield = bsquared_old * *gradient_chi_old[0];
                         tmpvolfield.Gradient(gradient_greg_tmp);
@@ -261,34 +260,34 @@ public:
 
                         zeta = g + gamma*zeta; //note that this zeta is actually the zeta of the last iteration, replace with zeta_old for comprehensive code?
 
-                        std::array<T,2> A = {0.0, 0.0};
+                        std::array<double,2> A = {0.0, 0.0};
                         for (int i = 0; i < n_total; i++)
                         {
                             K_zeta[i] = Summation( *Kappa[i], zeta );
                             A[1] += eta * std::real( conj(K_zeta[i]) * K_zeta[i] );
-                            A[0] += T(-2.0) * eta * std::real( conj(r[i]) * K_zeta[i] );
+                            A[0] += double(-2.0) * eta * std::real( conj(r[i]) * K_zeta[i] );
                         }
 
-                        T A0 = Fdata_old;
+                        double A0 = Fdata_old;
                         zeta.Gradient(gradient_zeta_tmp);
                         tmpvolfield = b * *gradient_zeta_tmp[0];
                         tmpvolfield2 = b * *gradient_zeta_tmp[1];
                         tmpvolfield.Square();
                         tmpvolfield2.Square();
-                        T B2 = (tmpvolfield.Summation() + tmpvolfield2.Summation()) * this->m_grid.GetCellVolume();
+                        double B2 = (tmpvolfield.Summation() + tmpvolfield2.Summation()) * this->m_grid.GetCellVolume();
 
                         tmpvolfield = (b * *gradient_zeta_tmp[0]) * (b * *gradient_chi_old[0]);
                         tmpvolfield2 = (b * *gradient_zeta_tmp[1]) * (b * *gradient_chi_old[1]);
-                        T B1 = T(2.0) * (tmpvolfield.Summation() + tmpvolfield2.Summation()) * this->m_grid.GetCellVolume();
+                        double B1 = double(2.0) * (tmpvolfield.Summation() + tmpvolfield2.Summation()) * this->m_grid.GetCellVolume();
 
                         tmpvolfield = (b * *gradient_chi_old[0]) * (b * *gradient_chi_old[0]);
                         tmpvolfield2 = (b * *gradient_chi_old[1]) * (b * *gradient_chi_old[1]);
-                        T B0 = ((tmpvolfield.Summation() + tmpvolfield2.Summation()) + deltasquared_old * bsquared.Summation()) * this->m_grid.GetCellVolume();
+                        double B0 = ((tmpvolfield.Summation() + tmpvolfield2.Summation()) + deltasquared_old * bsquared.Summation()) * this->m_grid.GetCellVolume();
 
-                        T der_a = T(4.0) * A[1] * B2;
-                        T der_b = T(3.0) * (A[1] * B1 + A[0] * B2);
-                        T der_c = T(2.0) * (A[1] * B0 + A[0] * B1 + A0 * B2);
-                        T der_d = A[0] * B0 + A0 * B1;
+                        double der_a = double(4.0) * A[1] * B2;
+                        double der_b = double(3.0) * (A[1] * B1 + A[0] * B2);
+                        double der_c = double(2.0) * (A[1] * B0 + A[0] * B1 + A0 * B2);
+                        double der_d = A[0] * B0 + A0 * B1;
 
                         alpha = this->findRealRootFromCubic(der_a, der_b, der_c, der_d);
 
@@ -303,7 +302,7 @@ public:
                         res_first_it.push_back(res);
 
                         //breakout check
-                        if ( (it1 > 0) && ( (res < T(tol1)) || ( std::abs(res_first_it[it1-1] - res) < T(tol1) ) ) )
+                        if ( (it1 > 0) && ( (res < double(tol1)) || ( std::abs(res_first_it[it1-1] - res) < double(tol1) ) ) )
                             break;
 
                         chi_est.Gradient(gradient_chi_old);
@@ -311,7 +310,7 @@ public:
                         gradient_chi_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
                         tmpvolfield = (gradient_chi_normsquared + deltasquared_old) / (gradient_chi_old_normsquared + deltasquared_old);
-                        Freg_old = (T(1.0) / (this->m_grid.GetDomainArea()) ) * tmpvolfield.Summation() * this->m_grid.GetCellVolume();
+                        Freg_old = (double(1.0) / (this->m_grid.GetDomainArea()) ) * tmpvolfield.Summation() * this->m_grid.GetCellVolume();
 
                         deltasquared_old = deltasquared;
                         g_old = g;

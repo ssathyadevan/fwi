@@ -22,9 +22,9 @@
 
 // Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
 
-template <class T>
-T normSq(const std::complex<T> *data, int n) {
-    T result = T(0.0);
+
+inline double normSq(const std::complex<double> *data, int n) {
+    double result = double(0.0);
     for(int i=0; i<n; i++) {
         result += std::norm(data[i]);
     }
@@ -33,11 +33,10 @@ T normSq(const std::complex<T> *data, int n) {
 
 // Babak 2018 10 29: remove templates from volField_rect_2D
 //template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens_rect_2D_cpu, template<typename> class Frequencies_group>
-template<typename T, class volComplexField_rect_2D_cpu, class volField_rect_2D_cpu, class Greens_rect_2D_cpu, class Frequencies_group>
 class Inversion
 {
 protected:
-    // const grid_rect_2D<T> &m_grid;// Babak 2018 10 29: Get rid of template in grid_rect_2D class
+    // const grid_rect_2D<double> &m_grid;// Babak 2018 10 29: Get rid of template in grid_rect_2D class
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
@@ -55,7 +54,7 @@ protected:
     const int m_nsrc;
 
 public:
-//    Inversion(const grid_rect_2D<T> &grid, const Sources_rect_2D<T> &src, const Receivers_rect_2D<T> &recv, const Frequencies_group &freq, ProfileInterface &profiler)
+//    Inversion(const grid_rect_2D<double> &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group &freq, ProfileInterface &profiler)
 //        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
         // Babak 2018 10 29: Get rid of template in grid_rect_2D class
     Inversion(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
@@ -140,7 +139,7 @@ public:
 
 
     // Babak 2018 10 25: calculation of p_data based on Equation ID: "dataEq"
-    virtual void calculateData(std::complex<T> *p_data)
+    virtual void calculateData(std::complex<double> *p_data)
     {
         int l_i, l_j;
         for (int i=0; i<m_nfreq; i++)
@@ -158,29 +157,29 @@ public:
     }
 
 
-    virtual T findRealRootFromCubic(T a, T b, T c, T d)
+    virtual double findRealRootFromCubic(double a, double b, double c, double d)
     {
         // assuming ax^3 + bx^2 +cx + d and assuming only one real root, which is expected in this algorithm
         // uses Cardano's formula
-        T f = ((T(3.0) * c / a) - (std::pow(b,2) / std::pow(a,2)))/T(3.0);
-        T g = ((T(2.0) * std::pow(b,3) / std::pow(a,3)) - (T(9.0) * b * c / std::pow(a,2)) + (T(27.0) * d / a)) / T(27.0);
-        T h = ( std::pow(g, 2) / T(4.0) ) + ( std::pow(f, 3) / T(27.0));
-        T r = -(g / T(2.0)) + std::sqrt(h);
-        T s = std::cbrt(r);
-        T t = -(g / T(2.0)) - std::sqrt(h);
-        T u = std::cbrt(t);
+        double f = ((double(3.0) * c / a) - (std::pow(b,2) / std::pow(a,2)))/double(3.0);
+        double g = ((double(2.0) * std::pow(b,3) / std::pow(a,3)) - (double(9.0) * b * c / std::pow(a,2)) + (double(27.0) * d / a)) / double(27.0);
+        double h = ( std::pow(g, 2) / double(4.0) ) + ( std::pow(f, 3) / double(27.0));
+        double r = -(g / double(2.0)) + std::sqrt(h);
+        double s = std::cbrt(r);
+        double t = -(g / double(2.0)) - std::sqrt(h);
+        double u = std::cbrt(t);
 
-        T realroot = s + u - (b/(T(3.0) * a));
+        double realroot = s + u - (b/(double(3.0) * a));
         return realroot;
 
         // note that the other (complex) roots should be
-        // std::complex<T>(x2) = -(s+u)/T(2.0) - (b/T(3.0)*a) + 1.0i * (s-u) * (std::sqrt(3)/2)
-        // std::complex<T>(x3) = -(s+u)/T(2.0) - (b/T(3.0)*a) - 1.0i * (s-u) * (std::sqrt(3)/2)
+        // std::complex<double>(x2) = -(s+u)/T(2.0) - (b/T(3.0)*a) + 1.0i * (s-u) * (std::sqrt(3)/2)
+        // std::complex<double>(x3) = -(s+u)/T(2.0) - (b/T(3.0)*a) - 1.0i * (s-u) * (std::sqrt(3)/2)
         // but this is not tested
     }
 
     //purely virtual function//
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<T> *const p_data, const int &rank) = 0;
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank) = 0;
 
 
 };

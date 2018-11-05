@@ -159,9 +159,9 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
     std::array<int,2> ngrid = {nxt, nzt};
 
-    //grid_rect_2D<T> grid(x_min, x_max, ngrid); //Babak 2018 10 29: get rid of template for grid_rect_2D
+    //grid_rect_2D<double> grid(x_min, x_max, ngrid); //Babak 2018 10 29: get rid of template for grid_rect_2D
     grid_rect_2D grid(x_min, x_max, ngrid);
-    //volField_rect_2D_cpu<T> chi(grid); //Babak 2018 10 29: get rid of template for grid_rect_2D_cpu
+    //volField_rect_2D_cpu<double> chi(grid); //Babak 2018 10 29: get rid of template for grid_rect_2D_cpu
     volField_rect_2D_cpu chi(grid);//Babak 2018 10 29: get rid of template for volField_rect_2D and volField_rect_2D
 
     chi.fromFile(fileName);
@@ -193,12 +193,12 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     ProfileInterface *profiler;
     profiler = new ProfileCpu();
 
-    std::complex<T> *p_data = new std::complex<T>[nFreq * nRecv * nSrct];
+    std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
 
     chi.toFile("../src/chi.txt");
 
-    Inversion<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group> *inverse;
-    inverse = new InversionConcrete_cpu<T, volComplexField_rect_2D_cpu, volField_rect_2D_cpu, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, *profiler);
+    Inversion *inverse;
+    inverse = new InversionConcrete_cpu(grid, src, recv, freq, *profiler);
 
     std::cout << "Creating Greens function field" << std::endl;
     inverse->createGreens();
