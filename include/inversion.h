@@ -21,7 +21,15 @@
 
 
 // Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
+//Babak 2018 10 29: Got rid of template
+//Babak 2018 10 29: Gott rid of inheritence
 
+/*
+    Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
+    Babak 2018 10 29: Got rid of template
+    Babak 2018 10 29: Gott rid of inheritence
+    Babak 2018 11 05: Detemplating the class
+*/
 
 inline double normSq(const std::complex<double> *data, int n) {
     double result = double(0.0);

@@ -7,7 +7,9 @@
 
 #include "sources_rect_2D.h"
 
-//Babak 2018 11 02: got rid of templates
+/*
+    Babak 2018 11 02: Detemplating the class
+*/
 class Receivers_rect_2D {
 
     Receivers_rect_2D& operator=(const Receivers_rect_2D&);

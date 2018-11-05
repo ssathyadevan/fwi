@@ -7,7 +7,11 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+/*
+   Babak 2018 11 05: Detemplating the class
+*/
 //use this one for group frequency distribution
+
 class Frequencies_group {
 
     Frequencies_group operator=(const Frequencies_group&);

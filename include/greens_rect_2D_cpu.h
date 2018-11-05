@@ -16,7 +16,9 @@
 #include <eigen3/Eigen/Dense>
 #include "input_parameters.h"
 
-// Babak 2018 11 02: Detemplating
+/*
+  Babak 2018 11 02: Detemplating the class
+*/
 
 using namespace Eigen;
 

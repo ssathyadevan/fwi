@@ -2,8 +2,13 @@
 #define GRID_2D_RECT_H
 
 #include <array>
-//Babak 2018 10 29: Got rid of template
-//Babak 2018 10 29: Gott rid of inheritence
+
+/*
+    Babak 2018 10 29: Got rid of template
+    Babak 2018 10 29: Gott rid of inheritence
+    Babak 2018 11 05: Detemplating the class
+*/
+
 class grid_rect_2D{
 
     const std::array<double, 2> x_min;

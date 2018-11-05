@@ -14,6 +14,9 @@
    Babak 2018 10 23: These are not the Helmholtz equations but the Greens function for the Helmholtz equation.
    For clarification, the equation ID is indicated in the code correspondent to the equation ID in the FWI_document.
    comment: It is more clear to choose a different method names related to Greens.
+
+   Babak 2018 11 05: Detemplating the class
+
 */
 inline float Helmholtz2D_real(float k, float r) {
   //const float R = 4.0f;

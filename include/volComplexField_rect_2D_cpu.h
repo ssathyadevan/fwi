@@ -13,7 +13,9 @@
 #include "grid_rect_2D.h"
 #include "volField_rect_2D_cpu.h"
 
-// Babak 2018 11 02: Got rid of templates
+/*
+    Babak 2018 11 02: Detemplating the class
+*/
 class volComplexField_rect_2D_cpu : public volComplexField_rect_2D
 {
     private:

@@ -12,9 +12,11 @@
 #include "mpi.h"
 #include <frequencies_group.h>
 
-//Babak 2018 10 29: Get rid of templates of grid_rect_2D class
-
-// Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
+/*
+   Babak 2018 10 29: Get rid of templates of grid_rect_2D class
+   Babak and Saurabh 2019 10 30: REmoving template from volField and replace with volField_rect_cpu
+   Babak 2018 11 05: Detemplating the class
+*/
 class einsum
 {
     //const grid_rect_2D<double> &m_grid;// Babak 2018 10 29: Get rid of templates

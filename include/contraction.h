@@ -11,13 +11,10 @@
 #include <functional>
 #include <complex>
 
-template <typename T>
-void create_Greens_rect_2D(std::complex<T> *G, const std::array<T, 2> &dx, const std::array<int, 2> &nx, std::function< std::complex<T>(T,T) > G_func, T k);
+void create_Greens_rect_2D(std::complex<double> *G, const std::array<double, 2> &dx, const std::array<int, 2> &nx, std::function< std::complex<double>(double,double) > G_func, double k);
 
-template <typename T>
-void contract_Greens_rect_2D(const std::complex<T> *G, const std::complex<T> *x, std::complex<T> *y, const std::array<int, 2> &nx, int ldG);
+void contract_Greens_rect_2D(const std::complex<double> *G, const std::complex<double> *x, std::complex<double> *y, const std::array<int, 2> &nx, int ldG);
 
-template <typename T>
-void contract_Greens_rect_2D_array(const std::complex<T> **G, const std::complex<T> **x, std::complex<T> **y, int nFreq, int nSrc, const std::array<int,2> &nx, int ldG);
+void contract_Greens_rect_2D_array(const std::complex<double> **G, const std::complex<double> **x, std::complex<double> **y, int nFreq, int nSrc, const std::array<int,2> &nx, int ldG);
 
 #endif /* CONTRACTION_H */

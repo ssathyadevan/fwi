@@ -20,11 +20,15 @@
 //#include "mpi.h"
 #include <string>
 
+/*
+    Babak 2018 11 05: Detemplating the class
+*/
+
 using std::cout;
 using std::endl;
 
 extern const int g_verbosity;
-//Babak and Saurabh 2018 10 30: Remove templates
+
 class InversionConcrete_cpu : public Inversion
 {
 
