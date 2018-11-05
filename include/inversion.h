@@ -137,7 +137,7 @@ public:
     }
 
 
-    // Babak 2018 10 25: calculation of p_data based on Equation ID: "dataEq"
+    // Babak 2018 10 25: calculation of p_data based on "eq:calculateData" modified MELISSEN 2018 11 01
     virtual void calculateData(std::complex<T> *p_data)
     {
         int l_i, l_j;
@@ -156,7 +156,7 @@ public:
     }
 
 
-    virtual T findRealRootFromCubic(T a, T b, T c, T d)
+    virtual T findRealRootFromCubic(T a, T b, T c, T d) //MELISSEN 2018 This should probably be replaced by a more powerful library function
     {
         // assuming ax^3 + bx^2 +cx + d and assuming only one real root, which is expected in this algorithm
         // uses Cardano's formula

@@ -137,7 +137,7 @@ public:
 
 
   // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
-  // Equation ID: "buildField"
+  // Equation ID: "rel:buildField"
 
 
   volComplexField_rect_2D_cpu<T> dot1(const volComplexField_rect_2D_cpu<T> &dW) const
