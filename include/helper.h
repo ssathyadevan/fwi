@@ -5,8 +5,7 @@
 #include <iostream>
 #include <string>
 
-template <typename T>
-inline T dist(T x, T z) {
+inline double dist(double x, double z) {
   return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5);
 }
 

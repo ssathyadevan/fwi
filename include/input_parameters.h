@@ -1,11 +1,11 @@
 #ifndef INPUT_PARAMETERS
 #define INPUT_PARAMETERS
 const int calc_alpha = 0;
-const int n_max = 2; //default seems to be 5
-const int n_iter1 = 5; // default seems to be 50
-const int n_iter2 = 10; // default seems to be 100
-const double tol1 = 1e-7; // default seems to be 1e-8
-const double tol2 = 5e-04; //default seems to 5e-5
+const int n_max = 5; //default seems to be 5
+const int n_iter1 = 50; // default seems to be 50
+const int n_iter2 = 100; // default seems to be 100
+const double tol1 = 1e-8; // default seems to be 1e-8
+const double tol2 = 5e-05; //default seems to 5e-5
 const int do_reg = 1;
 const int freq_dist_group = 1;
 const int nFreq_input[] = {1};
