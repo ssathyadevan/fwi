@@ -1,6 +1,0 @@
-/home/babak/parallelized-fwi/CMakeBuild/CMakeFiles/rebuild_cache.dir
-/home/babak/parallelized-fwi/CMakeBuild/CMakeFiles/FWI.dir
-/home/babak/parallelized-fwi/CMakeBuild/CMakeFiles/edit_cache.dir
-/home/babak/parallelized-fwi/CMakeBuild/libraries/CMakeFiles/rebuild_cache.dir
-/home/babak/parallelized-fwi/CMakeBuild/libraries/CMakeFiles/inversion_library.dir
-/home/babak/parallelized-fwi/CMakeBuild/libraries/CMakeFiles/edit_cache.dir
