@@ -16,8 +16,8 @@
 #include "calcField.h"
 #include "einsum.h"
 #include <array>
-#include "mpi.h"
 #include <string>
+//#include  "/usr/include/mpi/mpi.h"
 
 
 // Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.

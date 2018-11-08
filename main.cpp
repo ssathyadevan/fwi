@@ -136,10 +136,10 @@ int main()
     std::cout << ret << std::endl;
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form("../src/chi_est_temple.txt", nxt);
+    chi_visualisation_in_integer_form("../libraries/src/chi_est_temple.txt", nxt);
 
     // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
-    create_csv_files_for_chi("../src/chi_est_temple.txt","chi_est_temple",nxt);
+    create_csv_files_for_chi("../libraries/src/chi_est_temple.txt","chi_est_temple",nxt);
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -191,7 +191,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
     std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
 
-    chi.toFile("../src/chi.txt");
+    chi.toFile("../libraries/src/chi.txt");
 
     Inversion *inverse;
     inverse = new InversionConcrete_cpu(grid, src, recv, freq, *profiler);
@@ -216,7 +216,7 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data,rank);
 
     std::cout << "Done, writing to file" << std::endl;
-    chi_est.toFile("../src/chi_est_temple.txt");
+    chi_est.toFile("../libraries/src/chi_est_temple.txt");
 
     delete[] p_data;
 

@@ -9,8 +9,9 @@
 #include "grid_rect_2D.h"
 #include "greens_rect_2D_cpu.h"
 #include <volComplexField_rect_2D_cpu.h>
-#include "mpi.h"
 #include <frequencies_group.h>
+//#include  "/usr/include/mpi/mpi.h"
+
 
 /*
    Babak 2018 10 29: Get rid of templates of grid_rect_2D class
