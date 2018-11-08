@@ -15,7 +15,7 @@ CXX           = mpicxx
 DEFINES       = -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe gcc -Wl,-Bsymbolic-functions -Wl,-z,relro -I/usr/include/mpich -L/usr/lib/x86_64-linux-gnu -lmpich -D_REENTRANT -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O3 -march=native -ftree-loop-distribution -malign-double -std=gnu++11 -D_REENTRANT -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I../../parallelized-fwi -I. -I. -I../src -isystem /usr/include/python2.7 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I../../parallelized-fwi -I. -I../include -I../src -isystem /usr/include/python2.7 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = try_qt1.0.0
-DISTDIR = /home/sigi/Documents/FULL_WAVEFORM_INVERSION_GIT2/parallelized-fwi/include/.tmp/try_qt1.0.0
+DISTDIR = /home/babak/parallelized-fwi/Build/.tmp/try_qt1.0.0
 LINK          = mpicxx
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) -lpython2.7 -lOpenCL -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -59,8 +59,7 @@ SOURCES       = ../main.cpp \
 		../src/receivers_rect_2D.cpp \
 		../src/sources_rect_2D.cpp \
 		../src/volComplexField_rect_2D_cpu.cpp \
-		../src/volField_rect_2D_cpu.cpp \
-		../src/frequencies_alternate.cpp 
+		../src/volField_rect_2D_cpu.cpp 
 OBJECTS       = main.o \
 		contraction.o \
 		einsum.o \
@@ -70,8 +69,7 @@ OBJECTS       = main.o \
 		receivers_rect_2D.o \
 		sources_rect_2D.o \
 		volComplexField_rect_2D_cpu.o \
-		volField_rect_2D_cpu.o \
-		frequencies_alternate.o
+		volField_rect_2D_cpu.o
 DIST          = ../src/chi_est_sine.txt \
 		../src/chi.txt \
 		../src/p_data.txt \
@@ -129,6 +127,7 @@ DIST          = ../src/chi_est_sine.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -146,32 +145,28 @@ DIST          = ../src/chi_est_sine.txt \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../try_qt.pro read_input_fwi_into_vec.h \
-		calcField.h \
-		contraction.h \
-		einsum.h \
-		frequencies_group.h \
-		greens_rect_2D_cpu.h \
-		GreensFunctions.h \
-		grid_rect_2D.h \
-		grid.h \
-		helper.h \
-		inversion.h \
-		ProfileCpu.h \
-		ProfileInterface.h \
-		receivers_rect_2D.h \
-		sources_rect_2D.h \
-		tests_helper.h \
-		volComplexField_rect_2D_cpu.h \
-		volComplexField_rect_2D.h \
-		volField_rect_2D_cpu.h \
-		volField_rect_2D.h \
-		input_parameters.h \
-		frequencies_alternate.h \
-		greens_rect_2D_gpu.h \
-		inversion_gpu.h \
-		calcfield_gpu_h.h \
-		inversion_cpu.h ../main.cpp \
+		../../try_qt.pro ../include/read_input_fwi_into_vec.h \
+		../include/calcField.h \
+		../include/contraction.h \
+		../include/einsum.h \
+		../include/frequencies_group.h \
+		../include/greens_rect_2D_cpu.h \
+		../include/GreensFunctions.h \
+		../include/grid_rect_2D.h \
+		../include/inversion.h \
+		../include/helper.h \
+		../include/ProfileCpu.h \
+		../include/ProfileInterface.h \
+		../include/receivers_rect_2D.h \
+		../include/sources_rect_2D.h \
+		../include/volComplexField_rect_2D_cpu.h \
+		../include/volComplexField_rect_2D.h \
+		../include/volField_rect_2D_cpu.h \
+		../include/volField_rect_2D.h \
+		../include/input_parameters.h \
+		../include/inversion_cpu.h \
+		../include/chi_visualisation_in_integer_form.h \
+		../include/create_csv_files_for_chi.h ../main.cpp \
 		../src/contraction.cpp \
 		../src/einsum.cpp \
 		../src/frequencies_group.cpp \
@@ -180,8 +175,7 @@ DIST          = ../src/chi_est_sine.txt \
 		../src/receivers_rect_2D.cpp \
 		../src/sources_rect_2D.cpp \
 		../src/volComplexField_rect_2D_cpu.cpp \
-		../src/volField_rect_2D_cpu.cpp \
-		../src/frequencies_alternate.cpp
+		../src/volField_rect_2D_cpu.cpp
 QMAKE_TARGET  = try_qt
 DESTDIR       = 
 TARGET        = try_qt
@@ -247,6 +241,7 @@ Makefile: ../try_qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.co
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -322,6 +317,7 @@ Makefile: ../try_qt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.co
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -357,8 +353,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents read_input_fwi_into_vec.h calcField.h contraction.h einsum.h frequencies_group.h greens_rect_2D_cpu.h GreensFunctions.h grid_rect_2D.h grid.h helper.h inversion.h ProfileCpu.h ProfileInterface.h receivers_rect_2D.h sources_rect_2D.h tests_helper.h volComplexField_rect_2D_cpu.h volComplexField_rect_2D.h volField_rect_2D_cpu.h volField_rect_2D.h input_parameters.h frequencies_alternate.h greens_rect_2D_gpu.h inversion_gpu.h calcfield_gpu_h.h inversion_cpu.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../src/contraction.cpp ../src/einsum.cpp ../src/frequencies_group.cpp ../src/grid_rect_2D.cpp ../src/ProfileCpu.cpp ../src/receivers_rect_2D.cpp ../src/sources_rect_2D.cpp ../src/volComplexField_rect_2D_cpu.cpp ../src/volField_rect_2D_cpu.cpp ../src/frequencies_alternate.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../include/read_input_fwi_into_vec.h ../include/calcField.h ../include/contraction.h ../include/einsum.h ../include/frequencies_group.h ../include/greens_rect_2D_cpu.h ../include/GreensFunctions.h ../include/grid_rect_2D.h ../include/inversion.h ../include/helper.h ../include/ProfileCpu.h ../include/ProfileInterface.h ../include/receivers_rect_2D.h ../include/sources_rect_2D.h ../include/volComplexField_rect_2D_cpu.h ../include/volComplexField_rect_2D.h ../include/volField_rect_2D_cpu.h ../include/volField_rect_2D.h ../include/input_parameters.h ../include/inversion_cpu.h ../include/chi_visualisation_in_integer_form.h ../include/create_csv_files_for_chi.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../src/contraction.cpp ../src/einsum.cpp ../src/frequencies_group.cpp ../src/grid_rect_2D.cpp ../src/ProfileCpu.cpp ../src/receivers_rect_2D.cpp ../src/sources_rect_2D.cpp ../src/volComplexField_rect_2D_cpu.cpp ../src/volField_rect_2D_cpu.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -404,92 +400,74 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: ../main.cpp calcField.h \
-		grid_rect_2D.h \
-		grid.h \
-		input_parameters.h \
-		ProfileCpu.h \
-		ProfileInterface.h \
-		volField_rect_2D_cpu.h \
-		volField_rect_2D.h \
-		volComplexField_rect_2D_cpu.h \
-		volComplexField_rect_2D.h \
-		greens_rect_2D_cpu.h \
-		helper.h \
-		sources_rect_2D.h \
-		receivers_rect_2D.h \
-		contraction.h \
-		greens_rect_2D_gpu.h \
-		frequencies_group.h \
-		frequencies_alternate.h \
-		inversion.h \
-		GreensFunctions.h \
-		einsum.h \
-		inversion_cpu.h \
-		inversion_gpu.h \
-		calcfield_gpu_h.h \
-		tests_helper.h \
-		read_input_fwi_into_vec.h \
-		../src/fwiread.cpp
+main.o: ../main.cpp ../include/calcField.h \
+		../include/grid_rect_2D.h \
+		../include/input_parameters.h \
+		../include/ProfileCpu.h \
+		../include/ProfileInterface.h \
+		../include/greens_rect_2D_cpu.h \
+		../include/helper.h \
+		../include/volField_rect_2D_cpu.h \
+		../include/volField_rect_2D.h \
+		../include/volComplexField_rect_2D_cpu.h \
+		../include/volComplexField_rect_2D.h \
+		../include/sources_rect_2D.h \
+		../include/receivers_rect_2D.h \
+		../include/contraction.h \
+		../include/frequencies_group.h \
+		../include/inversion.h \
+		../include/GreensFunctions.h \
+		../include/einsum.h \
+		../include/inversion_cpu.h \
+		../include/read_input_fwi_into_vec.h \
+		../include/chi_visualisation_in_integer_form.h \
+		../include/create_csv_files_for_chi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
-contraction.o: ../src/contraction.cpp helper.h \
-		contraction.h
+contraction.o: ../src/contraction.cpp ../include/helper.h \
+		../include/contraction.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o contraction.o ../src/contraction.cpp
 
-einsum.o: ../src/einsum.cpp einsum.h \
-		sources_rect_2D.h \
-		receivers_rect_2D.h \
-		grid_rect_2D.h \
-		grid.h \
-		volComplexField_rect_2D_cpu.h \
-		volComplexField_rect_2D.h \
-		volField_rect_2D.h \
-		volField_rect_2D_cpu.h \
-		greens_rect_2D_cpu.h \
-		helper.h \
-		contraction.h \
-		ProfileCpu.h \
-		ProfileInterface.h \
-		input_parameters.h \
-		frequencies_alternate.h \
-		frequencies_group.h
+einsum.o: ../src/einsum.cpp ../include/einsum.h \
+		../include/volField_rect_2D_cpu.h \
+		../include/volField_rect_2D.h \
+		../include/grid_rect_2D.h \
+		../include/sources_rect_2D.h \
+		../include/receivers_rect_2D.h \
+		../include/greens_rect_2D_cpu.h \
+		../include/helper.h \
+		../include/volComplexField_rect_2D_cpu.h \
+		../include/volComplexField_rect_2D.h \
+		../include/contraction.h \
+		../include/ProfileCpu.h \
+		../include/ProfileInterface.h \
+		../include/input_parameters.h \
+		../include/frequencies_group.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o einsum.o ../src/einsum.cpp
 
-frequencies_group.o: ../src/frequencies_group.cpp frequencies_group.h
+frequencies_group.o: ../src/frequencies_group.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o frequencies_group.o ../src/frequencies_group.cpp
 
-grid_rect_2D.o: ../src/grid_rect_2D.cpp grid_rect_2D.h \
-		grid.h
+grid_rect_2D.o: ../src/grid_rect_2D.cpp ../include/grid_rect_2D.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o grid_rect_2D.o ../src/grid_rect_2D.cpp
 
-ProfileCpu.o: ../src/ProfileCpu.cpp ProfileCpu.h \
-		ProfileInterface.h
+ProfileCpu.o: ../src/ProfileCpu.cpp ../include/ProfileCpu.h \
+		../include/ProfileInterface.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ProfileCpu.o ../src/ProfileCpu.cpp
 
-receivers_rect_2D.o: ../src/receivers_rect_2D.cpp receivers_rect_2D.h \
-		sources_rect_2D.h
+receivers_rect_2D.o: ../src/receivers_rect_2D.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o receivers_rect_2D.o ../src/receivers_rect_2D.cpp
 
-sources_rect_2D.o: ../src/sources_rect_2D.cpp sources_rect_2D.h
+sources_rect_2D.o: ../src/sources_rect_2D.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sources_rect_2D.o ../src/sources_rect_2D.cpp
 
-volComplexField_rect_2D_cpu.o: ../src/volComplexField_rect_2D_cpu.cpp volComplexField_rect_2D_cpu.h \
-		volComplexField_rect_2D.h \
-		grid_rect_2D.h \
-		grid.h \
-		volField_rect_2D.h \
-		volField_rect_2D_cpu.h
+volComplexField_rect_2D_cpu.o: ../src/volComplexField_rect_2D_cpu.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o volComplexField_rect_2D_cpu.o ../src/volComplexField_rect_2D_cpu.cpp
 
-volField_rect_2D_cpu.o: ../src/volField_rect_2D_cpu.cpp volField_rect_2D_cpu.h \
-		volField_rect_2D.h \
-		grid_rect_2D.h \
-		grid.h
+volField_rect_2D_cpu.o: ../src/volField_rect_2D_cpu.cpp ../include/volField_rect_2D_cpu.h \
+		../include/volField_rect_2D.h \
+		../include/grid_rect_2D.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o volField_rect_2D_cpu.o ../src/volField_rect_2D_cpu.cpp
-
-frequencies_alternate.o: ../src/frequencies_alternate.cpp frequencies_alternate.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o frequencies_alternate.o ../src/frequencies_alternate.cpp
 
 ####### Install
 
