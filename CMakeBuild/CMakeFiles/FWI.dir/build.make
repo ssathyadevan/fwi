@@ -90,7 +90,7 @@ FWI_EXTERNAL_OBJECTS =
 
 FWI: CMakeFiles/FWI.dir/main.cpp.o
 FWI: CMakeFiles/FWI.dir/build.make
-FWI: include/libinversion_library.a
+FWI: libraries/libinversion_library.a
 FWI: CMakeFiles/FWI.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/babak/parallelized-fwi/CMakeBuild/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable FWI"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/FWI.dir/link.txt --verbose=$(VERBOSE)

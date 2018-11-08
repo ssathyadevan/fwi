@@ -6,5 +6,5 @@ CXX_FLAGS =  --std=c++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/babak/parallelized-fwi/include 
+CXX_INCLUDES = -I/home/babak/parallelized-fwi/libraries/include 
 

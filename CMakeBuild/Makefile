@@ -133,7 +133,7 @@ inversion_library: cmake_check_build_system
 
 # fast build rule for target.
 inversion_library/fast:
-	$(MAKE) -f include/CMakeFiles/inversion_library.dir/build.make include/CMakeFiles/inversion_library.dir/build
+	$(MAKE) -f libraries/CMakeFiles/inversion_library.dir/build.make libraries/CMakeFiles/inversion_library.dir/build
 .PHONY : inversion_library/fast
 
 main.o: main.cpp.o
