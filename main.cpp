@@ -111,6 +111,23 @@ int main()
 
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
+
+    std::ofstream outputfwi;
+
+    outputfwi.open("../outputfwi.txt");
+
+    outputfwi << "This run was parametrized as follows:"   << std::endl;
+
+    outputfwi << "nxt   = "                                << nxt                                   << std::endl;
+
+    outputfwi << "nzt   = "                                << nzt                                   << std::endl; // etc
+
+    outputfwi << "interactive   = "                        << interactive                           << std::endl; // etc
+
+
+    outputfwi.close();
+
+
     cout << "Input Temple Visualisation" << endl;
     chi_visualisation_in_integer_form("../temple.txt", nxt);
 
