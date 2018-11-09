@@ -22,7 +22,6 @@
 #include "helper.h"
 
 //#include "tests_helper.h"
-#include "input_parameters.h"
 #include "frequencies_group.h"
 #include <fstream>
 #include <sstream>
@@ -49,12 +48,15 @@ const int g_verbosity = 0;
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
 
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0);
+int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+                    const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
+                    const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
+                    double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg);
 
 
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
 
-//Here we determine (is_this_our_kind_of_booL) if the reader correctly gave us a Boolean (1 or 0)
+//Here we determine (is_this_our_kind_of_bool) if the reader correctly gave us a Boolean (1 or 0)
 //and then set the Boolean from the input string (string_1_for_true_0_for_false)
 bool is_this_our_kind_of_bool(std::string const& string_for_bool)
 {return (string_for_bool.size() == 1 && (string_for_bool[0] == '0' || string_for_bool[0] == '1'));}
@@ -77,7 +79,6 @@ int main()
     //We transfer what is in input_parameters to the relevant constants
     int parameterCounter=0;
     const double    c_0                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
-    const double    c_1                               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound material "1"
     const double    Freq_min                          = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
     const double    Freq_max                          = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Maximum frequency
     const double    top_left_corner_coord_x_in_m      = stod(input_parameters[parameterCounter]);    ++parameterCounter;
@@ -89,33 +90,26 @@ int main()
     const int       nFreq_Total                       = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Total number of frequencies used
     const int       nSrct                             = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
     const std::string  fileName                       =     (input_parameters[parameterCounter]);    ++parameterCounter; //Filename to be used for inversion
+    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
+    const bool      calc_alpha                        = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
+
+
     const double    tol1_to_be_implemented            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const double    tol2_to_be_implemented            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    const double    delta_amplification_start_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    const double    delta_amplification_slope_to_be_i = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    //  const int       Verbosity                         = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Saurabh worked on this
+    const double    delta_amplification_start         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
+    const double    delta_amplification_slope         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
     const bool      gpu                               = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
     if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
     const bool      interactive                       = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
+    const int       n_max                             = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       n_iter1                           = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    const int       n_iter2                           = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
+    const bool      do_reg                            = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
+
 
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
-
-    //MELISSEN 2018 10 18 this snippet of code is meant to be the start of an outputfile that FIRST prints what the run parametrization IS
-    //MELISSEN 2018 10 24 PLEASE DO NOT CHANGE THE OUTPUT CODE BELOW ASK ME WHY AT sigismund.melissen@alten.nl
-    std::ofstream outputfwi;
-    outputfwi.open("../outputfwi.txt");
-    outputfwi << "This run was parametrized as follows:"   << std::endl;
-    outputfwi << "nxt   = "                                << nxt                                   << std::endl;
-    outputfwi << "nzt   = "                                << nzt                                   << std::endl; // etc
-    outputfwi << "interactive   = "                        << interactive                           << std::endl; // etc
-    outputfwi << "tol1_to_be_implemented    = "            << tol1_to_be_implemented                << std::endl; // etc
-    outputfwi << "tol2_to_be_implemented    = "            << tol2_to_be_implemented                << std::endl; // etc
-    outputfwi << "delta_amplification_start_to_be_i = "    << delta_amplification_start_to_be_i     << std::endl; // etc
-    outputfwi << "delta_amplification_slope_to_be_i = "    << delta_amplification_slope_to_be_i     << std::endl; // etc
-    outputfwi << "gpu   = "                                << gpu                                   << std::endl; // etc
-    outputfwi << "c_1   = "                                << c_1                                   << std::endl; // etc
-    outputfwi.close();
 
     cout << "Input Temple Visualisation" << endl;
     chi_visualisation_in_integer_form("../temple.txt", nxt);
@@ -132,7 +126,9 @@ int main()
     nFreq = nFreq_Total;///nop; //distributing frequencies
     std::cout << "nFreq= " << nFreq << std::endl;
     int ret;
-    ret = templeInversion(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive, reservoir_corner_points_in_m, gpu, c_0);
+    ret = templeInversion(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
+                          reservoir_corner_points_in_m, gpu, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
+                          delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg);
     std::cout << ret << std::endl;
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
@@ -149,7 +145,10 @@ int main()
 
 //temple from here
 
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct, const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive, const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0) // , const int& freq_dist_group)
+int templeInversion (int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+ const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
+ const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
+ double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
@@ -175,11 +174,15 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
     double f_min, d_freq_proc;
 
     double d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
-    int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
+    //int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
 
     int sum = 0;
-    for (int i=0; i<rank; i++)
+
+    // Saurabh: 2018 11 9: the code below is commented as in serial version, this loop is never entered as rank is set to 0
+    /*for (int i=0; i<rank; i++)
         sum += nFreq_input[i];
+    */
+
     f_min = Freq_min + sum*d_freq;
     d_freq_proc = d_freq;
 
@@ -206,14 +209,15 @@ int templeInversion(int nFreq, const std::string &fileName, const int &rank, con
 
 
     std::cout << "Creating total field..." << std::endl;
-    inverse->createTotalField(rank);
+    inverse->createTotalField(rank, tol2_to_be_implemented, calc_alpha, n_iter2);
 
 
     inverse->calculateData(p_data);
 
 
     std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data,rank);
+    volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data,rank,tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start, delta_amplification_slope,
+                                                        calc_alpha, n_max, n_iter1, n_iter2, do_reg);
 
     std::cout << "Done, writing to file" << std::endl;
     chi_est.toFile("../libraries/src/chi_est_temple.txt");

@@ -129,7 +129,7 @@ public:
 
     // Babak 2018 10 25: in createTotalField we use calcField class which is responsible
     // for creating the total field with Equation ID: "weightingFactorField"
-    virtual void createTotalField(const int &rank) = 0;
+    virtual void createTotalField(const int &rank, double tol2, bool calc_alpha, int n_iter2) = 0;
 
 
     virtual void deleteTotalField()
@@ -187,7 +187,8 @@ public:
     }
 
     //purely virtual function//
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank) = 0;
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank, double tol1, double tol2, double delta_amplification_start,
+                                             double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg) = 0;
 
 
 };

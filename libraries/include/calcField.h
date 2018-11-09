@@ -6,7 +6,6 @@
 #include <cassert>
 
 #include "grid_rect_2D.h"
-#include "input_parameters.h"
 #include <eigen3/Eigen/Dense>
 #include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
@@ -23,7 +22,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1)
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1, double tol2, bool calc_alpha, int n_iter2)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -80,7 +79,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
-        if (calc_alpha == 1) // Babak 2018 10 25: alpha (which is the step size of the update of chi in Equation ID: "contrastUpdate") is used
+        if (calc_alpha == 1) // Babak 2018 10 25: alpha (which is the step size of the update of chi in c) is used
         {
             phi.push_back(G.ContractWithField(dW));
             f_rhs = G.ContractWithField(chi*p_init);

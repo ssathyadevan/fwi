@@ -60,7 +60,7 @@ public:
 
 
 
-    void createTotalField(const int &rank)
+    void createTotalField(const int &rank, double tol2, bool calc_alpha, int n_iter2)
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
@@ -82,7 +82,7 @@ public:
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank);
+                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank, tol2, calc_alpha, n_iter2);
             }
 
                 std::cout << "  " << std::endl;
@@ -93,7 +93,8 @@ public:
 
     }
 
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank)
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank, double tol1,
+                                             double tol2, double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg)
     {
         double const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
         double eta = 1.0/const1;
@@ -345,7 +346,7 @@ public:
 
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], rank);
+                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], rank, tol2, calc_alpha, n_iter2);
             }
             this->m_profiler.EndRegion();
         }

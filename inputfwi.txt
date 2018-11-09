@@ -12,8 +12,6 @@
 
 # L1. VARIABLE          c_0            TYPE const lng dbl  DEFAULT    2000.0   PHYS UNIT m per s
                         2000.0
-# L1b. VARIABLE         c_1            TYPE const lng dbl  DEFAULT    2218.0   PHYS UNIT m per s
-                        2218.0
 # L2. VARIABLE          F_min1         TYPE const lng dbl  DEFAULT    10       PHYS UNIT ? Hz ?
                         10.0
 # L3. VARIABLE          F_max1         TYPE const lng dbl  DEFAULT    40       PHYS UNIT ? Hz ?
@@ -36,6 +34,10 @@
                         17
 # S1. VARIABLE          fileName       TYPE const string   DEFAULT    ../temple.txt
                         ../temple.txt
+# b1. VARIABLE          calc_alpha     TYPE const bool     DEFAULT    1        
+                        0
+
+
 
 ##########################################################################################
 #                                                                                        #
@@ -43,18 +45,29 @@
 #                                                                                        #
 ##########################################################################################
 
-# IDLE l1. VARIABLE     tol1           TYPE const lng dbl  DEFAULT    1.e-8    PHYS UNIT ?
+# d1.      VARIABLE     tol1           TYPE const lng dbl  DEFAULT    1.e-8    PHYS UNIT ?
                         1.e-8
-# IDLE l2. VARIABLE     tol2           TYPE const lng dbl  DEFAULT    5.e-8    PHYS UNIT ?
+# d2.      VARIABLE     tol2           TYPE const lng dbl  DEFAULT    5.e-8    PHYS UNIT ?
                         5.e-5
-# IDLE l5. VARIABLE     see list       TYPE const lng dbl  DEFAULT    100.     PHYS UNIT ?
+# d3.      VARIABLE     see list       TYPE const lng dbl  DEFAULT    100.     PHYS UNIT ?
                         100.0
-# IDLE l6. VARIABLE     see list       TYPE const lng dbl  DEFAULT    10.      PHYS UNIT ?
+# d4.      VARIABLE     see list       TYPE const lng dbl  DEFAULT    10.      PHYS UNIT ?
                         10.0
-# i2. VARIABLE          gpu            TYPE const int      DEFAULT    0        PHYS UNIT -
+# b2. VARIABLE          gpu            TYPE const bool     DEFAULT    0        PHYS UNIT -
                         0
-# i3. VARIABLE          interactive    TYPE const int      DEFAULT    0        PHYS UNIT -
+# b3. VARIABLE          interactive    TYPE const bool     DEFAULT    0        PHYS UNIT -
                         0
+# i2. VARIABLE          n_max          TYPE const int      DEFAULT    5        PHYS UNIT -
+                        2
+# i3. VARIABLE          n_iter1        TYPE const int      DEFAULT    50       PHYS UNIT -
+			5
+# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    50       PHYS UNIT -
+                        10
+# b4. VARIABLE          do_reg         TYPE const bool      DEFAULT    0     
+                        1
+
+
+
 
 # L1.    Speed of sound through the reservoir
 # L2.    For the reservoir, horizontal number of data points
@@ -72,15 +85,4 @@
 # i1.    will regulate how much is printed to the cout and how much to a diagnostic file
 # i2.    some regulatory parameter on whether you use gpu or not
 # i3.    unknown
-
-# const int nFreq_Total = 20;
-# const int calc_alpha = 0;
-# const int n_max = 5;
-# const int n_iter1 = 50;
-# const int n_iter2 = 100;
-# const int do_reg = 1;
-# const int interactive = 0;
-# const int freq_dist_group = 1;
-# const int nFreq_input[] = {1};
-# const int gpu = 0;
 
