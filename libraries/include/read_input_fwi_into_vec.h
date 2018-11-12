@@ -12,10 +12,10 @@
 
 using namespace std;
 
-vector<string> reader()
+vector<string> reader(std::string runName)
 {
     vector<string> thevec;
-    fstream f1("../inputfwi.txt");
+    fstream f1("../" + runName + ".in");
     string line,w1;
     while ( getline(f1,line) ) 
     {

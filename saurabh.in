@@ -33,7 +33,7 @@
 # I4. VARIABLE          nSrct          TYPE const int      DEFAULT    17
                         17
 # S1. VARIABLE          fileName       TYPE const string   DEFAULT    ../temple.txt
-                        ../temple.txt
+                        temple
 # b1. VARIABLE          calc_alpha     TYPE const bool     DEFAULT    1        
                         0
 

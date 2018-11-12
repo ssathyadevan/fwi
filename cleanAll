@@ -1,0 +1,2 @@
+rm -rf *.user
+rm -f inputOutput/*

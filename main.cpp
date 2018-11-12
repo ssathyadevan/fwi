@@ -32,7 +32,6 @@
 #include "chi_visualisation_in_integer_form.h"
 #include "create_csv_files_for_chi.h"
 #include <stdexcept>
-
 using std::cout;
 using std::endl;
 
@@ -51,7 +50,7 @@ std::vector<std::string> reader(); // We have to define that we have a reader fu
 int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
                     const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
                     const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
-                    double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg);
+                    double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName);
 
 
 const int nItReconstructFields = 2; //number of iterations to reconstruct the image
@@ -64,17 +63,27 @@ bool string_1_for_true_0_for_false(std::string const& string_for_bool)
 {return string_for_bool[0] == '1';}
 
 
-int main()
+int main(int argc, char** argv)
 {
+    std::string runName;
+    if (argc != 2)
+	{
+    runName = "default";
+	} 
+   else
+	{
+	runName = argv[1];
+	}
     // if g_verbosity is 0, print everything to a file program_output.txt, else if g_verbosity = 10, print everything on screen
     if (g_verbosity == 0)
     {
-        std::cout << "Printing the program output onto a file named program_output.txt" << std::endl;
+        std::cout << "Printing the program output onto a file named: "+runName+".out in the inputOutput folder" << std::endl;
 
-        if (freopen("../program_output.txt","w", stdout)) {}
+        std::string tempString = "../inputOutput/" + runName + ".out";
+        if (freopen(tempString.c_str(),"w", stdout)) {}
     }
 
-    std::vector<std::string> input_parameters = reader(); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
+    std::vector<std::string> input_parameters = reader(runName); // MELISSEN 2018 10 18 we call the reader function to read out the textfile
 
     //We transfer what is in input_parameters to the relevant constants
     int parameterCounter=0;
@@ -113,26 +122,27 @@ int main()
 
 
     std::ofstream outputfwi;
-
-    outputfwi.open("../outputfwi.txt");
-
+    outputfwi.open("../inputOutput/" + runName + ".pythonIn");
     outputfwi << "This run was parametrized as follows:"   << std::endl;
-
     outputfwi << "nxt   = "                                << nxt                                   << std::endl;
-
     outputfwi << "nzt   = "                                << nzt                                   << std::endl; // etc
-
     outputfwi << "interactive   = "                        << interactive                           << std::endl; // etc
-
-
     outputfwi.close();
+
+    std::ofstream lastrun;
+    lastrun.open("../inputOutput/lastRunName.txt");
+    lastrun << runName;
+    lastrun.close();
 
 
     cout << "Input Temple Visualisation" << endl;
-    chi_visualisation_in_integer_form("../temple.txt", nxt);
+
+    chi_visualisation_in_integer_form("../"+fileName+".txt", nxt);
 
     // creates a csv file using the reference temple.txt files and saves it as chi_reference_temple.csv file
-    create_csv_files_for_chi("../temple.txt","chi_reference_temple",nxt);
+
+    create_csv_files_for_chi("../"+fileName+".txt","chi_reference_"+runName,nxt);
+
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
@@ -145,14 +155,14 @@ int main()
     int ret;
     ret = templeInversion(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
                           reservoir_corner_points_in_m, gpu, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
-                          delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg);
+                          delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg, runName);
     std::cout << ret << std::endl;
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form("../libraries/src/chi_est_temple.txt", nxt);
+    chi_visualisation_in_integer_form("../inputOutput/chi_est_"+runName+".txt", nxt);
 
     // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
-    create_csv_files_for_chi("../libraries/src/chi_est_temple.txt","chi_est_temple",nxt);
+    create_csv_files_for_chi("../inputOutput/chi_est_"+runName+".txt","chi_est_"+runName,nxt);
 
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -165,7 +175,7 @@ int main()
 int templeInversion (int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
  const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
  const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
- double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg) // , const int& freq_dist_group)
+ double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]),(reservoir_corner_points_in_m[1][1])}; // Rectangle in meters MELISSEN see above
@@ -184,7 +194,7 @@ int templeInversion (int nFreq, const std::string &fileName, const int &rank, co
     Sources_rect_2D src(x_src_min, x_src_max, nSrct);
     src.Print();
 
-    int nRecv = nSrct;
+    int nRecv = nSrct + 20;
     Receivers_rect_2D recv(src);
     recv.Print();
 
@@ -211,7 +221,7 @@ int templeInversion (int nFreq, const std::string &fileName, const int &rank, co
 
     std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
 
-    chi.toFile("../libraries/src/chi.txt");
+    chi.toFile("../inputOutput/chi_ref_"+runName+".txt");
 
     Inversion *inverse;
     inverse = new InversionConcrete_cpu(grid, src, recv, freq, *profiler);
@@ -237,7 +247,7 @@ int templeInversion (int nFreq, const std::string &fileName, const int &rank, co
                                                         calc_alpha, n_max, n_iter1, n_iter2, do_reg);
 
     std::cout << "Done, writing to file" << std::endl;
-    chi_est.toFile("../libraries/src/chi_est_temple.txt");
+    chi_est.toFile("../inputOutput/chi_est_"+runName+".txt");
 
     delete[] p_data;
 
