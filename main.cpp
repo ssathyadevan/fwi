@@ -47,7 +47,7 @@ const int g_verbosity = 0;
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
 
-int templeInversion(int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+int templeInversion(int nFreq, const std::string &fileName, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
                     const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
                     const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
                     double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName);
@@ -148,12 +148,11 @@ int main(int argc, char** argv)
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
     int nFreq(nFreq_Total);
 
-    int rank = 0;
     int nop = 1;
     nFreq = nFreq_Total;///nop; //distributing frequencies
     std::cout << "nFreq= " << nFreq << std::endl;
     int ret;
-    ret = templeInversion(nFreq, fileName, rank, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
+    ret = templeInversion(nFreq, fileName, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
                           reservoir_corner_points_in_m, gpu, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
                           delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg, runName);
     std::cout << ret << std::endl;
@@ -172,7 +171,7 @@ int main(int argc, char** argv)
 
 //temple from here
 
-int templeInversion (int nFreq, const std::string &fileName, const int &rank, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+int templeInversion (int nFreq, const std::string &fileName, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
  const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
  const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
  double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName) // , const int& freq_dist_group)
@@ -205,10 +204,6 @@ int templeInversion (int nFreq, const std::string &fileName, const int &rank, co
 
     int sum = 0;
 
-    // Saurabh: 2018 11 9: the code below is commented as in serial version, this loop is never entered as rank is set to 0
-    /*for (int i=0; i<rank; i++)
-        sum += nFreq_input[i];
-    */
 
     f_min = Freq_min + sum*d_freq;
     d_freq_proc = d_freq;
@@ -236,14 +231,14 @@ int templeInversion (int nFreq, const std::string &fileName, const int &rank, co
 
 
     std::cout << "Creating total field..." << std::endl;
-    inverse->createTotalField(rank, tol2_to_be_implemented, calc_alpha, n_iter2);
+    inverse->createTotalField(tol2_to_be_implemented, calc_alpha, n_iter2);
 
 
     inverse->calculateData(p_data);
 
 
     std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data,rank,tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start, delta_amplification_slope,
+    volField_rect_2D_cpu chi_est = inverse->Reconstruct(p_data, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start, delta_amplification_slope,
                                                         calc_alpha, n_max, n_iter1, n_iter2, do_reg);
 
     std::cout << "Done, writing to file" << std::endl;

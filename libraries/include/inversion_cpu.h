@@ -60,13 +60,13 @@ public:
 
 
 
-    void createTotalField(const int &rank, double tol2, bool calc_alpha, int n_iter2)
+    void createTotalField(double tol2, bool calc_alpha, int n_iter2)
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
         assert(this->p_tot == nullptr);
 
-        std::string name = "createTotalField rank=" + std::to_string(rank);
+        std::string name = "createTotalFieldCurrentProcessor";
 
         this->p_tot = new volComplexField_rect_2D_cpu**[this->m_nfreq];
         this->m_profiler.StartRegion(name);
@@ -93,7 +93,7 @@ public:
 
     }
 
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, const int &rank, double tol1,
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, double tol1,
                                              double tol2, double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg)
     {
         double const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
@@ -329,20 +329,17 @@ public:
 
             }
 
-
-            std::string name = "createTotalField" + std::to_string(rank);
+            std::string name = "createTotalFieldCurrentProcessor";
 
             this->m_profiler.StartRegion(name);
             //calculate p_data
             for (int i=0; i<this->m_nfreq; i++)
             {
                 l_i = i*this->m_nsrc;
-                if (rank==0)
-                {
+
                     std::cout << "  " << std::endl;
                     std::cout << "Creating this->p_tot for " << i+1 << "/ " << this->m_nfreq << "freq" << std::endl;
                     std::cout << "  " << std::endl;
-                }
 
 
                 for (int j=0; j<this->m_nsrc;j++)
