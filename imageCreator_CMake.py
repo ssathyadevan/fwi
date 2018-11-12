@@ -28,8 +28,8 @@ y,u,v= x.split()
 interactive = int(v)
 
 #zerothfile="src/ShowChi.py"
-filename1="inputOutput/chi_ref_saurabh.txt"              # variable name for the original temple
-filename2="inputOutput/chi_est_saurabh.txt"   # variable name for the calculated temple
+filename1="inputOutput/chi_ref_"+runName+".txt"              # variable name for the original temple
+filename2="inputOutput/chi_est_"+runName+".txt"   # variable name for the calculated temple
 filenameout="inputOutput/"+runName+"_result.png"  # how we store the image
 
 chi1 = np.genfromtxt(filename1)      # start image set up for original temple

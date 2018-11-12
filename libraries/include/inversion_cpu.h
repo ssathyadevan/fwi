@@ -82,7 +82,7 @@ public:
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], rank, tol2, calc_alpha, n_iter2);
+                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], tol2, calc_alpha, n_iter2);
             }
 
                 std::cout << "  " << std::endl;
@@ -346,7 +346,7 @@ public:
 
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], rank, tol2, calc_alpha, n_iter2);
+                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], tol2, calc_alpha, n_iter2);
             }
             this->m_profiler.EndRegion();
         }

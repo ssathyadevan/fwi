@@ -3,3 +3,4 @@ rm -f inputOutput/chi*
 rm -f inputOutput/*.out
 rm -f inputOutput/*.pythonIn
 rm -f inputOutput/lastRunName*
+rm -f inputOutput/*.png

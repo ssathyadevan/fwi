@@ -22,7 +22,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, const int &rank1, double tol2, bool calc_alpha, int n_iter2)
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, double tol2, bool calc_alpha, int n_iter2)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -50,9 +50,6 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
     p_tot = p_init;//
 
-    int rank = rank1;
-    std::string name = "full iter " + std::to_string(rank);
-    int rank_print = 0;
 
     for(int it = 0; it < n_iter2; it++)
     {
@@ -69,13 +66,11 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
         if(res < tol2 && it != 0)
         {
-            if(rank1==rank_print){
-		//std::string line_to_print = "Convergence after " + std::to_string(it) + "iterations. rank" + std::to_string(rank) + std::endl;
-		std::string itstring = std::to_string(it);// + "iterations. rank" + std::to_string(rank) + std::endl;
-//		std::string rankstring = std::to_string(rank);//std::cout << "Convergence after " << it << " iterations." << " rank " << rank << std::endl;
-        std::string line_to_print = "Convergence after "+itstring+"iterations";
-		std::cout << line_to_print << std::endl;
-	    }
+            if(true){
+                std::string itstring = std::to_string(it);
+                std::string line_to_print = "Convergence after "+itstring+"iterations";
+                std::cout << line_to_print << std::endl;
+            }
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
@@ -116,15 +111,12 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
         chi_p.Zero();
 
     }
-    //if (rank1==rank_print)
-    //    prof2.EndRegion();
 
 
 
-
-    if((res >= tol2) && (rank1==rank_print))
+    if(res >= tol2)
     {
-        std::cout << "No convergence after " <<  n_iter2 << " iterations." << " rank " << rank << "Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  n_iter2 << " iterations." << "Res = " << res << std::endl;
     }
 
     return p_tot;
