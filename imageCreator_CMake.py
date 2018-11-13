@@ -23,9 +23,6 @@ nxt = int(v)                         # Cast the third word to an integer, we kno
 x= contents[2]                       # The rest of this block repeats this process for nzt and interactive (dirty non-loop)
 y,u,v= x.split()
 nzt = int(v)
-x= contents[3]
-y,u,v= x.split()
-interactive = int(v)
 
 #zerothfile="src/ShowChi.py"
 filename1="inputOutput/chi_ref_"+runName+".txt"              # variable name for the original temple
@@ -54,13 +51,9 @@ plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 # After that, we save the plot,...
-# ...show it automatically if interactive is on,...
 # ...print ("cout")  that we're done and quit.
 
 plt.savefig(filenameout, dpi=400)
-
-if interactive == 1:
-    plt.show()
 
 print "The picture has been generated with Python" 
 

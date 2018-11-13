@@ -93,45 +93,6 @@ public:
 
 
 
-
-
-  static void ContractWithField(Greens_rect_2D_cpu **greens, volComplexField_rect_2D_cpu **y, volComplexField_rect_2D_cpu **x, int nFreq, int nSrc) {
-
-    // Assure we are working on the same grid
-#ifndef NDEBUG
-    for(int iFreq=0; iFreq<nFreq; iFreq++) {
-      for(int iSrc=0; iSrc<nSrc; iSrc++) {
-        assert(&greens[iFreq]->GetGrid() == &x[iFreq * nSrc + iSrc]->GetGrid());
-        assert(&greens[iFreq]->GetGrid() == &y[iFreq * nSrc + iSrc]->GetGrid());
-      }
-    }
-#endif
-
-    //const grid_rect_2D<T> &grid = greens[0]->GetGrid();// Babak 2018 10 29: Get rid of template in grid_rect_2D class
-    const grid_rect_2D &grid = greens[0]->GetGrid();
-
-    const std::complex<double> **y_data = new const std::complex<double>*[nFreq * nSrc];
-    std::complex<double> **x_data = new std::complex<double>*[nFreq * nSrc];
-    const std::complex<double> **G_vol = new const std::complex<double>*[nFreq];
-
-    for(int i=0; i<nFreq * nSrc; i++) {
-      y_data[i] = y[i]->GetDataPtr();
-      x_data[i] = x[i]->GetDataPtr();
-    }
-
-    for(int i=0; i<nFreq; i++) {
-      G_vol[i] = greens[i]->GetGreensVolume();
-    }
-
-    const std::array<int, 2> &nx = grid.GetGridDimensions();
-
-    contract_Greens_rect_2D_array(G_vol, y_data, x_data, nFreq, nSrc, nx, 2 * nx[0] - 1);
-
-    delete[] y_data;
-    delete[] x_data;
-
-  }
-
   //const grid_rect_2D<T>& GetGrid() const { return grid; }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &GetGrid() const { return grid; }
 

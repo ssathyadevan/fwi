@@ -7,20 +7,22 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-
-template <typename T>   ///use this one for alternate frequency distribution
+/*
+   Saurabh 2018 11 13: Detemplating the class
+*/
+//use this one for alternate frequency distribution
 class Frequencies_alternate {
 
-    Frequencies_alternate<T> operator=(const Frequencies_alternate<T>&);
+    Frequencies_alternate operator=(const Frequencies_alternate&);
 
 public:
 
   const int nFreq;
-  const T c_0, &d_freq;
-  std::vector<T> freq;
-  std::vector<T> k;
+  const double c_0, &d_freq;
+  std::vector<double> freq;
+  std::vector<double> k;
 
-  Frequencies_alternate(T freqMin, const T &dfreq, int nFreq_, T c_0_)
+  Frequencies_alternate(double freqMin, const double &dfreq, int nFreq_, double c_0_)
   : nFreq(nFreq_), c_0(c_0_), d_freq(dfreq), freq(), k()
   {
 
@@ -28,7 +30,7 @@ public:
 
     for(int i=0; i < nFreq; i++) {
       freq.push_back(freqMin + i * dfreq);
-      T omega = 2.0 * M_PI * freq[i];
+      double omega = 2.0 * M_PI * freq[i];
       k.push_back(omega / c_0);
     }
 

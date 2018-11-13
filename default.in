@@ -53,13 +53,11 @@
                         100.0
 # d4.      VARIABLE     see list       TYPE const lng dbl  DEFAULT    10.      PHYS UNIT ?
                         10.0
-# b3. VARIABLE          interactive    TYPE const bool     DEFAULT    0        PHYS UNIT -
-                        0
 # i2. VARIABLE          n_max          TYPE const int      DEFAULT    5        PHYS UNIT -
                         2
 # i3. VARIABLE          n_iter1        TYPE const int      DEFAULT    50       PHYS UNIT -
 			2
-# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    50       PHYS UNIT -
+# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    100       PHYS UNIT -
                         4
 # b4. VARIABLE          do_reg         TYPE const bool      DEFAULT    0     
                         1

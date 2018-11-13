@@ -47,8 +47,8 @@ const int g_verbosity = 0;
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
 
-int templeInversion(int nFreq, const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
-                    const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
+int templeInversion(const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
+                    const int& nFreq_Total, const double& Freq_min, const double& Freq_max,
                     const double (&reservoir_corner_points_in_m)[2][2], const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
                     double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName);
 
@@ -107,8 +107,6 @@ int main(int argc, char** argv)
     const double    tol2_to_be_implemented            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const double    delta_amplification_start         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const double    delta_amplification_slope         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
-    const bool      interactive                       = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
     const int       n_max                             = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
     const int       n_iter1                           = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
     const int       n_iter2                           = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
@@ -124,7 +122,6 @@ int main(int argc, char** argv)
     outputfwi << "This run was parametrized as follows:"   << std::endl;
     outputfwi << "nxt   = "                                << nxt                                   << std::endl;
     outputfwi << "nzt   = "                                << nzt                                   << std::endl; // etc
-    outputfwi << "interactive   = "                        << interactive                           << std::endl; // etc
     outputfwi.close();
 
     std::ofstream lastrun;
@@ -144,13 +141,10 @@ int main(int argc, char** argv)
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    int nFreq(nFreq_Total);
 
-
-    nFreq = nFreq_Total;
-    std::cout << "nFreq= " << nFreq << std::endl;
+    std::cout << "nFreq_Total= " << nFreq_Total << std::endl;
     int ret;
-    ret = templeInversion(nFreq, fileName, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
+    ret = templeInversion(fileName, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max,
                           reservoir_corner_points_in_m, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
                           delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg, runName);
     std::cout << ret << std::endl;
@@ -166,11 +160,10 @@ int main(int argc, char** argv)
     return 0;
 }
 
-
 //temple from here
 
-int templeInversion (int nFreq, const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
- const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
+int templeInversion (const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
+ const int& nFreq_Total, const double& Freq_min, const double& Freq_max,
  const double (&reservoir_corner_points_in_m)[2][2], const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
  double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName) // , const int& freq_dist_group)
 {
@@ -205,13 +198,13 @@ int templeInversion (int nFreq, const std::string &fileName, const int& nxt, con
     f_min = Freq_min + sum*d_freq;
     d_freq_proc = d_freq;
 
-    Frequencies_group freq(f_min, d_freq_proc, nFreq, c_0);
+    Frequencies_group freq(f_min, d_freq_proc, nFreq_Total, c_0);
     freq.Print();
 
     ProfileInterface *profiler;
     profiler = new ProfileCpu();
 
-    std::complex<double> *p_data = new std::complex<double>[nFreq * nRecv * nSrct];
+    std::complex<double> *p_data = new std::complex<double>[nFreq_Total * nRecv * nSrct];
 
     chi.toFile("../inputOutput/chi_ref_"+runName+".txt");
 
