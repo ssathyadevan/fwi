@@ -47,9 +47,9 @@ const int g_verbosity = 0;
 std::vector<std::string> reader(); // We have to define that we have a reader function to read in the run parameters
 
 
-int templeInversion(int nFreq, const std::string &fileName, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+int templeInversion(int nFreq, const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
                     const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
-                    const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
+                    const double (&reservoir_corner_points_in_m)[2][2], const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
                     double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName);
 
 
@@ -108,8 +108,6 @@ int main(int argc, char** argv)
     const double    delta_amplification_start         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const double    delta_amplification_slope         = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
-    const bool      gpu                               = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
-    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){return 1;}
     const bool      interactive                       = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
     const int       n_max                             = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
     const int       n_iter1                           = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
@@ -148,12 +146,12 @@ int main(int argc, char** argv)
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
     int nFreq(nFreq_Total);
 
-    int nop = 1;
-    nFreq = nFreq_Total;///nop; //distributing frequencies
+
+    nFreq = nFreq_Total;
     std::cout << "nFreq= " << nFreq << std::endl;
     int ret;
-    ret = templeInversion(nFreq, fileName, nop, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
-                          reservoir_corner_points_in_m, gpu, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
+    ret = templeInversion(nFreq, fileName, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max, interactive,
+                          reservoir_corner_points_in_m, c_0, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start,
                           delta_amplification_slope, calc_alpha, n_max, n_iter1, n_iter2, do_reg, runName);
     std::cout << ret << std::endl;
 
@@ -171,9 +169,9 @@ int main(int argc, char** argv)
 
 //temple from here
 
-int templeInversion (int nFreq, const std::string &fileName, const int &nop, const int& nxt, const int& nzt, const int& nSrct,
+int templeInversion (int nFreq, const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
  const int& nFreq_Total, const double& Freq_min, const double& Freq_max, const bool& interactive,
- const double (&reservoir_corner_points_in_m)[2][2], const bool& gpu, const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
+ const double (&reservoir_corner_points_in_m)[2][2], const double& c_0, double tol1_to_be_implemented, double tol2_to_be_implemented,
  double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg, std::string runName) // , const int& freq_dist_group)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]),(reservoir_corner_points_in_m[0][1])}; // Rectangle in meters MELISSEN 2018 10 16 see PhD Haffinger p 53
@@ -200,7 +198,6 @@ int templeInversion (int nFreq, const std::string &fileName, const int &nop, con
     double f_min, d_freq_proc;
 
     double d_freq = (Freq_max - Freq_min)/(nFreq_Total -1);
-    //int freq_left = nFreq_Total - (nFreq_Total/nop)*nop;
 
     int sum = 0;
 
