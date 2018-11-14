@@ -30,7 +30,8 @@ const int g_verbosity = 0;
 int generateRefrencePressureFieldFromChi (const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
                                           const int& nFreq_Total, const double& Freq_min, const double& Freq_max,
                                           const double (&reservoir_corner_points_in_m)[2][2], const double& c_0,
-                                          double tol2_to_be_implemented, bool calc_alpha, int n_iter2, std::string runName);
+                                          double tol2_to_be_implemented, bool calc_alpha, int n_iter2, std::string runName,
+					  std::array<int,2>);
 //Here we determine (is_this_our_kind_of_bool) if the reader correctly gave us a Boolean (1 or 0)
 //and then set the Boolean from the input string (string_1_for_true_0_for_false)
 bool is_this_our_kind_of_bool(std::string const& string_for_bool)
@@ -91,6 +92,7 @@ int main(int argc, char** argv)
         ConjGrad conjGrad;
         Iter1 iter1;
         NSourcesReceivers nSourcesReceivers;
+        std::array<int,2> ngrid;//NEW = {nxt, nzt};
         //double reservoirCornerPointsInM[2][2]
     };
 
@@ -123,14 +125,15 @@ int main(int argc, char** argv)
     //We transfer what is in input_parameters to the relevant constants
     const double reservoir_corner_points_in_m[2][2] = {{top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},{bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m}};
 
-    const Input input{
+    Input input{//NEW not a const now to keep things simple
         c_0, n_max, do_reg,
         delta_amplification_start, delta_amplification_slope,
         Freq_min,                  Freq_max,                     nFreq_Total,
         nxt,                       nzt,
         n_iter2,                   tol2_to_be_implemented,       calc_alpha,
         n_iter1,                   tol1_to_be_implemented,
-        nSrct,                     nRecv
+        nSrct,                     nRecv,
+        {nxt, nzt} 
     };
 
     // This part is needed for plotting the chi values in imageCreator_CMake.py
@@ -152,7 +155,7 @@ int main(int argc, char** argv)
     std::cout << "nFreq_Total= " << nFreq_Total << std::endl;
     // Generating the reference pressure field from input data (chi values)
     int ret =generateRefrencePressureFieldFromChi(fileName, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max,
-                                                  reservoir_corner_points_in_m, c_0, calc_alpha, n_iter2, do_reg, runName);
+                                                  reservoir_corner_points_in_m, c_0, calc_alpha, n_iter2, do_reg, runName, input.ngrid);
     std::cout << ret << std::endl;
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
@@ -162,11 +165,11 @@ int main(int argc, char** argv)
 int generateRefrencePressureFieldFromChi (const std::string &fileName, const int& nxt, const int& nzt, const int& nSrct,
                                           const int& nFreq_Total, const double& Freq_min, const double& Freq_max,
                                           const double (&reservoir_corner_points_in_m)[2][2], const double& c_0, double tol2_to_be_implemented,
-                                          bool calc_alpha, int n_iter2, std::string runName)
+                                          bool calc_alpha, int n_iter2, std::string runName, std::array<int,2> ngrid2)
 {
     std::array<double,2> x_min = {(reservoir_corner_points_in_m[0][0]), (reservoir_corner_points_in_m[0][1])};
     std::array<double,2> x_max = {(reservoir_corner_points_in_m[1][0]), (reservoir_corner_points_in_m[1][1])};
-    std::array<int,2> ngrid = {nxt, nzt};
+    std::array<int,2> ngrid = ngrid2;//{nxt, nzt};NEW
 
     grid_rect_2D grid(x_min, x_max, ngrid);
     volField_rect_2D_cpu chi(grid);
