@@ -74,7 +74,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
-        if (calc_alpha == 1) // Babak 2018 10 25: alpha (which is the step size of the update of chi in c) is used
+        if (calc_alpha == 1)
         {
             phi.push_back(G.ContractWithField(dW));
             f_rhs = G.ContractWithField(chi*p_init);
@@ -103,7 +103,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
         {
             //   profiler.StartRegion("contracting field");
             //p_tot += G.ContractWithField(dW);
-            p_tot += G.dot1(dW);// Babak 2018 10 25: Equation ID: "buildField"  dot1 is coded in green_rect_2D_cpu.h
+            p_tot += G.dot1(dW);// Babak 2018 10 25: Equation ID: "weightingFactorField"  dot1 is coded in green_rect_2D_cpu.h
             //   profiler.EndRegion();
         }
 

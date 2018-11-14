@@ -15,7 +15,7 @@ using namespace std;
 vector<string> reader(std::string runName)
 {
     vector<string> thevec;
-    fstream f1("../" + runName + ".in");
+    fstream f1(runName);
     string line,w1;
     while ( getline(f1,line) ) 
     {

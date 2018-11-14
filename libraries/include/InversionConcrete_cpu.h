@@ -184,7 +184,7 @@ public:
                         alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                     }
                     alpha = alpha_div[0] / alpha_div[1];
-                    chi_est += alpha*zeta;
+                    chi_est += alpha*zeta; // Babak 11-13-2018: the step size of the parameter in Eq: ContrastUpdate in the user manual.
                     g_old = g;
                 }
             }
