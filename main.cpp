@@ -141,7 +141,10 @@ int main(int argc, char** argv)
 
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
+    //int nFreq(nFreq_Total);
 
+
+    //nFreq = nFreq_Total;
     std::cout << "nFreq_Total= " << nFreq_Total << std::endl;
     int ret;
     ret = templeInversion(fileName, nxt, nzt, nSrct, nFreq_Total, Freq_min, Freq_max,
@@ -159,6 +162,7 @@ int main(int argc, char** argv)
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
     return 0;
 }
+
 
 //temple from here
 
@@ -184,7 +188,7 @@ int templeInversion (const std::string &fileName, const int& nxt, const int& nzt
     Sources_rect_2D src(x_src_min, x_src_max, nSrct);
     src.Print();
 
-    int nRecv = nSrct + 20;
+    int nRecv = nSrct;
     Receivers_rect_2D recv(src);
     recv.Print();
 
