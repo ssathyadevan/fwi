@@ -1,0 +1,99 @@
+# This is an input file for the FWI program
+# It was first devised on October 8th 2018 by S Melissen on the libraire line
+# With the hashtag you can add comments, like here, but take a whole line!!!
+# The order of the variables and their number is fixed
+# At the bottom every variable is explained
+
+# L1. VARIABLE          c_0            TYPE const lng dbl  DEFAULT    2000.0   PHYS UNIT m per s
+                        2000.0
+
+# L2. VARIABLE          F_min1         TYPE const lng dbl  DEFAULT    10       PHYS UNIT ? Hz ?
+                        10.0
+
+# L3. VARIABLE          F_max1         TYPE const lng dbl  DEFAULT    40       PHYS UNIT ? Hz ?
+                        40.0
+
+# L4. VARIABLE          see list       TYPE const lng dbl  DEFAULT   -300.0    PHYS UNIT m
+                       -300.0
+
+# L5. VARIABLE          see list       TYPE const lng dbl  DEFAULT    0.0      PHYS UNIT m
+                        0.0
+
+# L5. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
+                        300.0
+
+# L6. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
+                        300.0
+
+# I1. VARIABLE          nxt            TYPE const int      DEFAULT    32
+                        64
+
+# I2. VARIABLE          nzt            TYPE const int      DEFAULT    32
+                        32
+
+# I3. VARIABLE          nFreq_Total    TYPE const int      DEFAULT    15
+                        15
+
+# I4. VARIABLE          nSrct          TYPE const int      DEFAULT    17
+                        17
+
+# I4. VARIABLE          nRecv          TYPE const int      DEFAULT    17
+                        17
+#
+# S1. VARIABLE          fileName       TYPE const string   DEFAULT    ../temple.txt
+                        temple
+
+# b1. VARIABLE          calc_alpha     TYPE const bool     DEFAULT    1
+                        0
+
+##########################################################################################
+#                                                                                        #
+#                                COMPUTATIONAL PARAMETERS                                #
+#                                                                                        #
+##########################################################################################
+
+# d1.      VARIABLE     tol1           TYPE const lng dbl  DEFAULT    1.e-8    PHYS UNIT ?
+                        1.e-8
+
+# d2.      VARIABLE     tol2           TYPE const lng dbl  DEFAULT    5.e-8    PHYS UNIT ?
+                        5.e-5
+
+# d3.      VARIABLE     see list       TYPE const lng dbl  DEFAULT    100.     PHYS UNIT ?
+                        100.0
+
+# d4.      VARIABLE     see list       TYPE const lng dbl  DEFAULT    10.      PHYS UNIT ?
+                        10.0
+
+# i2. VARIABLE          n_max          TYPE const int      DEFAULT    5        PHYS UNIT -
+                        2
+
+# i3. VARIABLE          n_iter1        TYPE const int      DEFAULT    50       PHYS UNIT -
+			2
+
+# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    100       PHYS UNIT -
+                        4
+
+# b4. VARIABLE          do_reg         TYPE const bool      DEFAULT    0
+                        1
+
+# b5. VARIABLE          verbosity      TYPE const bool     DEFAULT    0
+                        0
+
+# L1.    Speed of sound through the reservoir
+# L2.    For the reservoir, horizontal number of data points
+# L3.    For the reservoir, please provide the vertical number of data points DEFAULT 32
+# L4-L7  Reservoir corner points in m, notice that going down means z INcreases
+# I1.    What is the minimum frequency you emit?
+# I2.    What is the maximum frequency you emit? See question I1 for details
+# I3.    What is the number of frequencies you emit?
+# l1.    ? A convergence criterion HOMEWORK FIND OUT OF WHAT
+# l2.    ? SEE ABOVE
+# l3.    ? F_min1 what is the difference with f_min?
+# l4.    ? F_max1 what is the difference with f_max?
+# l5.    the variable name is "delta_amplification_start"
+# l6.    the variable name is "delta_amplification_slope"
+# i1.    will regulate how much is printed to the cout and how much to a diagnostic file
+# i2.    some regulatory parameter on whether you use gpu or not
+# i3.    unknown
+# b4.    uknown
+# b5.    verbosity, regulates if the program prints intermediate output to the terminal or a file

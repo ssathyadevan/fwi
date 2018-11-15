@@ -4,7 +4,7 @@
 # The order of the variables and their number is fixed
 # At the bottom every variable is explained
 
-# # L1. VARIABLE        c_0            TYPE const lng dbl  DEFAULT    2000.0   PHYS UNIT m per s
+# L1. VARIABLE          c_0            TYPE const lng dbl  DEFAULT    2000.0   PHYS UNIT m per s
                         2000.0
 
 # L2. VARIABLE          F_min1         TYPE const lng dbl  DEFAULT    10       PHYS UNIT ? Hz ?
@@ -76,6 +76,9 @@
 # b4. VARIABLE          do_reg         TYPE const bool      DEFAULT    0
                         1
 
+# b5. VARIABLE          verbosity      TYPE const bool     DEFAULT    0
+                        0
+
 # L1.    Speed of sound through the reservoir
 # L2.    For the reservoir, horizontal number of data points
 # L3.    For the reservoir, please provide the vertical number of data points DEFAULT 32
@@ -92,3 +95,5 @@
 # i1.    will regulate how much is printed to the cout and how much to a diagnostic file
 # i2.    some regulatory parameter on whether you use gpu or not
 # i3.    unknown
+# b4.    uknown
+# b5.    verbosity, regulates if the program prints intermediate output to the terminal or a file

@@ -1,0 +1,6 @@
+/home/sigi/Documents/parallelized-fwi/build/CMakeFiles/rebuild_cache.dir
+/home/sigi/Documents/parallelized-fwi/build/CMakeFiles/FWI.dir
+/home/sigi/Documents/parallelized-fwi/build/CMakeFiles/edit_cache.dir
+/home/sigi/Documents/parallelized-fwi/build/libraries/CMakeFiles/rebuild_cache.dir
+/home/sigi/Documents/parallelized-fwi/build/libraries/CMakeFiles/inversion_library.dir
+/home/sigi/Documents/parallelized-fwi/build/libraries/CMakeFiles/edit_cache.dir
