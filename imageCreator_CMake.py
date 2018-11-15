@@ -51,6 +51,7 @@ plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 # After that, we save the plot,...
+# ...show it automatically if interactive is on,...
 # ...print ("cout")  that we're done and quit.
 
 plt.savefig(filenameout, dpi=400)
