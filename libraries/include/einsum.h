@@ -8,6 +8,7 @@
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
 #include "greens_rect_2D_cpu.h"
+#include "variable_structure.h"
 #include <volComplexField_rect_2D_cpu.h>
 #include <frequencies_group.h>
 //#include  "/usr/include/mpi/mpi.h"

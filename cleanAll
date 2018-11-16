@@ -4,3 +4,4 @@ rm -f inputOutput/*.out
 rm -f inputOutput/*.pythonIn
 rm -f inputOutput/lastRunName*
 rm -f inputOutput/*.png
+rm -f inputOutput/invertedChiToPressure.txt

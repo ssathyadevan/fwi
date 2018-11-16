@@ -19,6 +19,7 @@
 #include <array>
 //#include "mpi.h"
 #include <string>
+#include "variable_structure.h"
 
 /*
     Babak 2018 11 05: Detemplating the class
@@ -60,7 +61,7 @@ public:
 
 
 
-    void createTotalField(double tol2, bool calc_alpha, int n_iter2)
+    void createTotalField(ConjGrad conjGrad)
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
@@ -82,7 +83,7 @@ public:
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], tol2, calc_alpha, n_iter2);
+                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], conjGrad);
             }
 
                 std::cout << "  " << std::endl;
@@ -93,8 +94,8 @@ public:
 
     }
 
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, double tol1,
-                                             double tol2, double delta_amplification_start, double delta_amplification_slope, bool calc_alpha, int n_max, int n_iter1, int n_iter2, bool do_reg)
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Iter1 iter1,
+                                             ConjGrad conjGrad, DeltaAmplification deltaAmplification, int n_max, bool do_reg)
     {
         double const1 = normSq(p_data,this->m_nfreq*this->m_nrecv*this->m_nsrc);
         double eta = 1.0/const1;
@@ -147,7 +148,7 @@ public:
             {
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
 
-                for (int it1=0; it1<n_iter1; it1++)
+                for (int it1=0; it1<iter1.n; it1++)
                 {
                     for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
                         r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
@@ -155,14 +156,14 @@ public:
                     res = eta*normSq(r,n_total);
                     {
                         if (it1 > 0)
-                            std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " << std::abs(res_first_it[it1-1] - res) << "    " << it1+1 << '/' << n_iter1 << std::endl;
+                            std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " << std::abs(res_first_it[it1-1] - res) << "    " << it1+1 << '/' << iter1.n << std::endl;
                         else
                             std::cout << "inner loop residual = " << std::setprecision(17) << res << std::endl;
                     }
 
                     res_first_it.push_back(res);
 
-                    if ( (it1 > 0) && ( (res < double(tol1)) || ( std::abs(res_first_it[it1-1] - res) < double(tol1) ) ) )
+                    if ( (it1 > 0) && ( (res < double(iter1.tolerance)) || ( std::abs(res_first_it[it1-1] - res) < double(iter1.tolerance) ) ) )
                         break;
 
                     ein.einsum_K_res(Kappa, r, tmp);  //tmp = einsum('ijkl,ijk->l', conj(K), r)
@@ -184,7 +185,7 @@ public:
                         alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                     }
                     alpha = alpha_div[0] / alpha_div[1];
-                    chi_est += alpha*zeta;
+                    chi_est += alpha*zeta; // Babak 11-13-2018: the step size of the parameter in Eq: ContrastUpdate in the user manual.
                     g_old = g;
                 }
             }
@@ -195,7 +196,7 @@ public:
                 double Freg_old = double(1.0);
                 double Fdata_old = double(0.0);
 
-                double delta_amplification = delta_amplification_start / (delta_amplification_slope * it + double(1.0));
+                double delta_amplification = deltaAmplification.start / (deltaAmplification.slope * it + double(1.0));
 
                 ein.einsum_Gr_Pest(Kappa, this->m_greens, p_est);
 
@@ -204,7 +205,7 @@ public:
                     r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
                 //start the inner loop
-                for (int it1=0; it1<n_iter1; it1++)
+                for (int it1=0; it1<iter1.n; it1++)
                 {
                     if (it1 == 0)
                     {
@@ -227,7 +228,7 @@ public:
                             r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
 
                         res = eta*normSq(r,n_total);
-                            std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
+                            std::cout << it1+1 << "/" << iter1.n << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
                         Fdata_old = res;
                         res_first_it.push_back(res);
                     }
@@ -301,13 +302,13 @@ public:
                         for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
                             r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
                         res = eta*normSq(r,n_total);
-                            std::cout << it1+1 << "/" << n_iter1 << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
+                            std::cout << it1+1 << "/" << iter1.n << "\t (" << it+1 << "/" << n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
                         Fdata_old = res;
                         res_first_it.push_back(res);
 
                         //breakout check
-                        if ( (it1 > 0) && ( (res < double(tol1)) || ( std::abs(res_first_it[it1-1] - res) < double(tol1) ) ) )
+                        if ( (it1 > 0) && ( (res < double(iter1.tolerance)) || ( std::abs(res_first_it[it1-1] - res) < double(iter1.tolerance) ) ) )
                             break;
 
                         chi_est.Gradient(gradient_chi_old);
@@ -343,7 +344,7 @@ public:
 
 
                 for (int j=0; j<this->m_nsrc;j++)
-                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], tol2, calc_alpha, n_iter2);
+                    *p_est[l_i + j] = calcField(*this->m_greens[i], chi_est, *this->p_0[i][j], conjGrad);
             }
             this->m_profiler.EndRegion();
         }

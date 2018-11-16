@@ -10,6 +10,7 @@
 #include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
+#include "variable_structure.h"
 #include <string>
 
 extern const int g_verbosity;
@@ -22,7 +23,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, double tol2, bool calc_alpha, int n_iter2)
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, ConjGrad conjGrad)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -51,7 +52,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
     p_tot = p_init;//
 
 
-    for(int it = 0; it < n_iter2; it++)
+    for(int it = 0; it < conjGrad.nIter; it++)
     {
 
         chi_p = p_tot * chi;//Babak 2018 10 25: Equation ID: "incrementalContrastSrcs"
@@ -64,7 +65,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
         res = dWNorm / chi_pNorm;//
         //std::cout << "Residual = " << res << std::endl;
 
-        if(res < tol2 && it != 0)
+        if(res < conjGrad.tolerance && it != 0)
         {
             if(true){
                 std::string itstring = std::to_string(it);
@@ -74,7 +75,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
-        if (calc_alpha == 1) // Babak 2018 10 25: alpha (which is the step size of the update of chi in c) is used
+        if (conjGrad.calcAlpha)
         {
             phi.push_back(G.ContractWithField(dW));
             f_rhs = G.ContractWithField(chi*p_init);
@@ -99,11 +100,11 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
             for(int j=0; j<it+1; j++)
                 p_tot += alpha[j]*phi[j];// Babak 2018 10 25: "weightingFactorField"
         }
-        else if(calc_alpha==0) // alpha is not used
+        else
         {
             //   profiler.StartRegion("contracting field");
             //p_tot += G.ContractWithField(dW);
-            p_tot += G.dot1(dW);// Babak 2018 10 25: Equation ID: "buildField"  dot1 is coded in green_rect_2D_cpu.h
+            p_tot += G.dot1(dW);// Babak 2018 10 25: Equation ID: "weightingFactorField"  dot1 is coded in green_rect_2D_cpu.h
             //   profiler.EndRegion();
         }
 
@@ -114,9 +115,9 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
 
 
-    if(res >= tol2)
+    if(res >= conjGrad.tolerance)
     {
-        std::cout << "No convergence after " <<  n_iter2 << " iterations." << "Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  conjGrad.nIter << " iterations." << "Res = " << res << std::endl;
     }
 
     return p_tot;
