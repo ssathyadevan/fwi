@@ -1,1 +1,0 @@
-/usr/bin/c++   -Wall --std=c++11  -rdynamic CMakeFiles/FWI.dir/main.cpp.o  -o FWI libraries/libinversion_library.a 

@@ -19,11 +19,23 @@
 # L5. VARIABLE          see list       TYPE const lng dbl  DEFAULT    0.0      PHYS UNIT m
                         0.0
 
-# L5. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
-                        300.0
-
 # L6. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
                         300.0
+
+# L7. VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
+                        300.0
+
+# L8. VARIABLE          see list       TYPE const lng dbl  DEFAULT   -300.0    PHYS UNIT m
+                       -480.0
+
+# L9. VARIABLE          see list       TYPE const lng dbl  DEFAULT    0.0      PHYS UNIT m
+                       -5.0
+
+# L10.VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
+                        480.0
+
+# L11.VARIABLE          see list       TYPE const lng dbl  DEFAULT    300.0    PHYS UNIT m
+                       -5.0
 
 # I1. VARIABLE          nxt            TYPE const int      DEFAULT    32
                         64
@@ -83,6 +95,7 @@
 # L2.    For the reservoir, horizontal number of data points
 # L3.    For the reservoir, please provide the vertical number of data points DEFAULT 32
 # L4-L7  Reservoir corner points in m, notice that going down means z INcreases
+# L8-L11 Source corner point in m, notice that going down means z INcreases
 # I1.    What is the minimum frequency you emit?
 # I2.    What is the maximum frequency you emit? See question I1 for details
 # I3.    What is the number of frequencies you emit?
