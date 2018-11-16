@@ -54,11 +54,11 @@ int main(int argc, char** argv)
 
     ClockPreProcessStart(input.freq.nTotal); // WT 2/4: Start clock & cout info 
 
-    chi_visualisation_in_integer_form("../"+fileName+".txt", nxt);
+    chi_visualisation_in_integer_form("../"+input.fileName+".txt", input.ngrid[0]);
 
     // creates a csv file using the reference temple.txt files and saves it as chi_reference_temple.csv file
 
-    create_csv_files_for_chi("../"+fileName+".txt","chi_reference_"+runName,nxt);
+    create_csv_files_for_chi("../"+input.fileName+".txt","chi_reference_"+input.runName,input.ngrid[0]);
 
     int ret =generateReferencePressureFieldFromChi
 	(input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
@@ -68,10 +68,10 @@ int main(int argc, char** argv)
 	 input);
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form("../inputOutput/chi_est_"+runName+".txt", nxt);
+    chi_visualisation_in_integer_form("../inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
 
     // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
-    create_csv_files_for_chi("../inputOutput/chi_est_"+runName+".txt","chi_est_"+runName,nxt);
+    create_csv_files_for_chi("../inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
 
     ClockPreProcessStop(ret); // WT 3/4: Stop clock & cout whether successful
 
@@ -130,8 +130,7 @@ int generateReferencePressureFieldFromChi
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     inverse->calculateData(referencePressureData);
     // writing the referencePressureData to a text file in complex form
-    std::string invertedChiToPressureFileName =
-	"../inputOutput/"+runName+"InvertedChiToPressure.txt";
+    std::string invertedChiToPressureFileName = "../inputOutput/"+runName+"InvertedChiToPressure.txt";
 
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
@@ -152,15 +151,11 @@ int generateReferencePressureFieldFromChi
 
     std::cout << "Estimating Chi..." << std::endl;
 
-    volField_rect_2D_cpu chi_est = inverse->Reconstruct
-	(input, referencePressureData, tol1_to_be_implemented, tol2_to_be_implemented, delta_amplification_start, delta_amplification_slope,
-                                                        calc_alpha, n_max, n_iter1, n_iter2, do_reg);
+    volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input.iter1, conjGrad, input.deltaAmplification, input.n_max, input.do_reg);
 
     std::cout << "Done, writing to file" << std::endl;
 
     chi_est.toFile("../inputOutput/chi_est_"+runName+".txt");
-
-    delete[] referencePressureData;
 
     return 0;
 }
