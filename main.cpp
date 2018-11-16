@@ -23,6 +23,7 @@
 // Babak and Saurabh 2018-11-13: Creating the pre-processing programm.
 
 // Walkthrough ("WT") of this file is made by S. Melissen, 2018-11-16
+// This "WT" is just 4 sequential comments on what happens
 int generateReferencePressureFieldFromChi
     (const std::string, const NSourcesReceivers, const Freq, const double,
      const ConjGrad, const std::string, std::array<int,2>,
@@ -31,7 +32,7 @@ int generateReferencePressureFieldFromChi
 
 int main(int argc, char** argv)
 {
-    // WT1: See "variable_structure.h" to see what the struct "Input" is...
+    // WT 1/4: See "variable_structure.h" to see what the struct "Input" is...
     // ...and "read_input....h" to see how we turn input card into parameters...
     // ...argv is just another parameter, the filename containing the others.
     Input input = reader3(argc, argv);
@@ -39,7 +40,7 @@ int main(int argc, char** argv)
     if (!input.verbose)
 	WriteToFileNotToTerminal(input.runName);
 
-    ClockPreProcessStart(input.freq.nTotal); //WT2: Start clock & cout something
+    ClockPreProcessStart(input.freq.nTotal); // WT 2/4: Start clock & cout info 
 
     int ret =generateReferencePressureFieldFromChi
 	(input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
@@ -47,12 +48,12 @@ int main(int argc, char** argv)
 	 input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
          input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM);
 
-    ClockPreProcessStop(ret); //WT3: Stop the clock & cout whether successful
+    ClockPreProcessStop(ret); // WT 3/4: Stop clock & cout whether successful
 
     return 0;
 }
 
-//WT4: Here the mathematics of the "preprocessing" part of the 
+// WT 4/4: Here the mathematics of the "preprocessing" part of FWI is done.
 int generateReferencePressureFieldFromChi
     (const std::string fileName, const NSourcesReceivers nSourcesReceivers,
      const Freq freq, const double c_0, 
