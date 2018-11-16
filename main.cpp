@@ -20,53 +20,56 @@
 #include <string>
 #include <ctime>
 
-using std::cout; using std::endl; using std::string;
+// Babak and Saurabh 2018-11-13: Creating the pre-processing programm.
 
-/*
-Babak and Saurabh 2018-11-13: Creating the pre-processing programm.
-*/
-
+// Walkthrough ("WT") of this file is made by S. Melissen, 2018-11-16
 int generateReferencePressureFieldFromChi
-    (const std::string, const NSourcesReceivers, const Freq,// const double (&)[2][2],
-     const double, const ConjGrad, const std::string, std::array<int,2>,
+    (const std::string, const NSourcesReceivers, const Freq, const double,
+     const ConjGrad, const std::string, std::array<int,2>,
      std::array<double,2>, std::array<double,2>,
      std::array<double,2>, std::array<double,2>);
 
 int main(int argc, char** argv)
 {
-    Input input = reader3(argc, argv);//findPath, runName + ".in");
+    // WT1: See "variable_structure.h" to see what the struct "Input" is...
+    // ...and "read_input....h" to see how we turn input card into parameters...
+    // ...argv is just another parameter, the filename containing the others.
+    Input input = reader3(argc, argv);
 
     if (!input.verbose)
-	WriteToFileNotToTerminal(input.runName);//runName);
+	WriteToFileNotToTerminal(input.runName);
 
-    ClockPreProcessStart(input.freq.nTotal);
+    ClockPreProcessStart(input.freq.nTotal); //WT2: Start clock & cout something
 
     int ret =generateReferencePressureFieldFromChi
 	(input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
-        input.conjGrad, input.runName, input.ngrid,
-	input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
-    input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM);
+         input.conjGrad, input.runName, input.ngrid,
+	 input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
+         input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM);
 
-    ClockPreProcessStop(ret);
+    ClockPreProcessStop(ret); //WT3: Stop the clock & cout whether successful
 
     return 0;
 }
 
+//WT4: Here the mathematics of the "preprocessing" part of the 
 int generateReferencePressureFieldFromChi
-    (const std::string fileName, const NSourcesReceivers nSourcesReceivers,// nSrct,
-    const Freq freq, const double c_0,  const ConjGrad conjGrad,
-    const std::string runName, std::array<int,2> ngrid,
-    std::array<double,2> reservoirTopLeftCornerInM,
-    std::array<double,2> reservoirBottomRightCornerInM,
-    std::array<double,2> sourcesTopLeftCornerInM,
-    std::array<double,2> sourcesBottomRightCornerInM)
-{
+    (const std::string fileName, const NSourcesReceivers nSourcesReceivers,
+     const Freq freq, const double c_0, 
+     const ConjGrad conjGrad, const std::string runName, std::array<int,2> ngrid,
+     std::array<double,2> reservoirTopLeftCornerInM,
+     std::array<double,2> reservoirBottomRightCornerInM,
+     std::array<double,2> sourcesTopLeftCornerInM,
+     std::array<double,2> sourcesBottomRightCornerInM) {
+
     grid_rect_2D grid(reservoirTopLeftCornerInM, reservoirBottomRightCornerInM, ngrid);
     volField_rect_2D_cpu chi(grid);
 
     chi.fromFile(fileName);
 
-    Sources_rect_2D src(sourcesTopLeftCornerInM, sourcesBottomRightCornerInM, nSourcesReceivers.src);
+    Sources_rect_2D src
+	(sourcesTopLeftCornerInM, sourcesBottomRightCornerInM, nSourcesReceivers.src);
+    
     src.Print();
 
     Receivers_rect_2D recv(src);
@@ -100,7 +103,9 @@ int generateReferencePressureFieldFromChi
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     inverse->calculateData(referencePressureData);
     // writing the referencePressureData to a text file in complex form
-    std::string invertedChiToPressureFileName = "../inputOutput/"+runName+"InvertedChiToPressure.txt";
+    std::string invertedChiToPressureFileName =
+	"../inputOutput/"+runName+"InvertedChiToPressure.txt";
+
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());
@@ -110,7 +115,8 @@ int generateReferencePressureFieldFromChi
     file << std::setprecision(17) << "# First column indicates the real values and the second "
                                      "column indicates the imaginary values." << std::endl;
     for(int i=0; i < magnitude; i++) {
-        file << std::setprecision(17) << referencePressureData[i].real() <<"," << referencePressureData[i].imag() << std::endl;
+        file << std::setprecision(17) << referencePressureData[i].real()
+             <<"," << referencePressureData[i].imag() << std::endl;
     }
     file.close();
     return 0;
