@@ -42,9 +42,14 @@ public:
 //    {
 //    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
 
-    InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
+    InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
     : Inversion(grid, src, recv, freq, profiler)
     {
+        std::cout << "Creating Greens function field..." << std::endl;
+        this->createGreens();
+        this->SetBackground(chi);
+        std::cout << "Creating P0..." << std::endl;
+        this->createP0();
     }
 
     ~InversionConcrete_cpu()

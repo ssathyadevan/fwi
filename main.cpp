@@ -94,8 +94,7 @@ int generateReferencePressureFieldFromChi
 
     chi.fromFile(fileName);
 
-    Sources_rect_2D src
-	(sourcesTopLeftCornerInM, sourcesBottomRightCornerInM, nSourcesReceivers.src);
+    Sources_rect_2D src(sourcesTopLeftCornerInM, sourcesBottomRightCornerInM, nSourcesReceivers.src);
     
     src.Print();
 
@@ -115,14 +114,7 @@ int generateReferencePressureFieldFromChi
     chi.toFile("../inputOutput/chi_ref_" + runName + ".txt");
 
     Inversion *inverse;
-    inverse = new InversionConcrete_cpu(grid, src, recv, freqg, *profiler);
-
-    std::cout << "Creating Greens function field..." << std::endl;
-    inverse->createGreens();
-    inverse->SetBackground(chi);
-
-    std::cout << "Creating P0..." << std::endl;
-    inverse->createP0();
+    inverse = new InversionConcrete_cpu(grid, src, recv, freqg, *profiler, chi);
 
     std::cout << "Creating total field..." << std::endl;
     inverse->createTotalField(conjGrad);
