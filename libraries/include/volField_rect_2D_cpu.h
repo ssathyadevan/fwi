@@ -70,7 +70,7 @@ public:
 
     virtual void fromFile(const std::string &fileName) {
 
-        std::ifstream file("../"+fileName+".txt", std::ios::in);
+        std::ifstream file("../../../"+fileName+".txt", std::ios::in);
         assert(file.is_open());
 
         for(int i=0; i<this->GetNumberOfGridPoints(); i++) {

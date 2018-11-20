@@ -31,33 +31,33 @@
 #include "create_csv_files_for_chi.h"
 #include <stdexcept>
 
-// Babak and Saurabh 2018-11-13: Creating the pre-processing programm.
+// Babak and Saurabh 2018-11-13: Creating the pre-processing program.
 
 // Walkthrough ("WT") of this file is made by S. Melissen, 2018-11-16
 // This "WT" is just 4 sequential comments on what happens
 int generateReferencePressureFieldFromChi
-    (const std::string, const NSourcesReceivers, const Freq, const double,
-     const ConjGrad, const std::string, std::array<int,2>,
-     std::array<double,2>, std::array<double,2>,
-     std::array<double,2>, std::array<double,2>);
+(const std::string, const NSourcesReceivers, const Freq, const double,
+ const ConjGrad, const std::string, std::array<int,2>,
+ std::array<double,2>, std::array<double,2>,
+ std::array<double,2>, std::array<double,2>);
 
 int main(int argc, char** argv)
 {
     // WT 1/4: See "variable_structure.h" to see what the struct "Input" is...
     // ...and "read_input....h" to see how we turn input card into parameters...
-    // ...argv is just another parameter, the filename containing the others.
+    // ...argv is just another parameter i.e. the "filename" of the input card.
     Input input = reader3(argc, argv);
 
     if (!input.verbose)
-    WriteToFileNotToTerminal(input.runName, "PreProcess");
+        WriteToFileNotToTerminal(input.runName, "PreProcess");
 
     ClockStart(input.freq.nTotal); // WT 2/4: Start clock & cout info
 
     int ret =generateReferencePressureFieldFromChi
-	(input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
-         input.conjGrad, input.runName, input.ngrid,
-	 input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
-         input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM);
+            (input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
+             input.conjGrad, input.runName, input.ngrid,
+             input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
+             input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM);
 
     ClockStop(ret); // WT 3/4: Stop clock & cout whether successful
 
@@ -66,13 +66,13 @@ int main(int argc, char** argv)
 
 // WT 4/4: Here the mathematics of the "preprocessing" part of FWI is done.
 int generateReferencePressureFieldFromChi
-    (const std::string fileName, const NSourcesReceivers nSourcesReceivers,
-     const Freq freq, const double c_0, 
-     const ConjGrad conjGrad, const std::string runName, std::array<int,2> ngrid,
-     std::array<double,2> reservoirTopLeftCornerInM,
-     std::array<double,2> reservoirBottomRightCornerInM,
-     std::array<double,2> sourcesTopLeftCornerInM,
-     std::array<double,2> sourcesBottomRightCornerInM) {
+(const std::string fileName, const NSourcesReceivers nSourcesReceivers,
+ const Freq freq, const double c_0,
+ const ConjGrad conjGrad, const std::string runName, std::array<int,2> ngrid,
+ std::array<double,2> reservoirTopLeftCornerInM,
+ std::array<double,2> reservoirBottomRightCornerInM,
+ std::array<double,2> sourcesTopLeftCornerInM,
+ std::array<double,2> sourcesBottomRightCornerInM) {
 
     grid_rect_2D grid(reservoirTopLeftCornerInM, reservoirBottomRightCornerInM, ngrid);
     volField_rect_2D_cpu chi(grid);
@@ -96,7 +96,7 @@ int generateReferencePressureFieldFromChi
 
     std::complex<double> referencePressureData[magnitude];
 
-    chi.toFile("../inputOutput/chi_ref_" + runName + ".txt");
+    chi.toFile("../../../inputOutput/chi_ref_" + runName + ".txt");
 
     Inversion *inverse;
     inverse = new InversionConcrete_cpu(grid, src, recv, freqg, *profiler, chi);
@@ -107,12 +107,12 @@ int generateReferencePressureFieldFromChi
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     inverse->calculateData(referencePressureData);
     // writing the referencePressureData to a text file in complex form
-    std::string invertedChiToPressureFileName = "../inputOutput/"+runName+"InvertedChiToPressure.txt";
+    std::string invertedChiToPressureFileName = "../../../inputOutput/"+runName+"InvertedChiToPressure.txt";
 
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());
-/*    file << std::setprecision(17) << "# This is the file which contains the reference pressure"
+    /*    file << std::setprecision(17) << "# This is the file which contains the reference pressure"
                                      " data obtained from the reference chi values in the form "
                                      "of complex numbers." << std::endl;
     file << std::setprecision(17) << "# First column indicates the real values and the second "

@@ -20,7 +20,7 @@
 
     void WriteToFileNotToTerminal(std::string runName, std::string postfix){
         std::cout << "Printing the program output onto a file named: "+runName+postfix+".out in the inputOutput folder" << std::endl;
-        std::string tempString = "../inputOutput/" + runName + postfix + ".out";
+        std::string tempString = "../../../inputOutput/" + runName + postfix + ".out";
         if (freopen(tempString.c_str(),"w", stdout)) {}
     }
 #endif

@@ -77,13 +77,13 @@
                         10.0
 
 # i2. VARIABLE          n_max          TYPE const int      DEFAULT    5        PHYS UNIT -
-                        2
+                        5
 
 # i3. VARIABLE          n_iter1        TYPE const int      DEFAULT    50       PHYS UNIT -
-			5
+			50
 
-# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    50       PHYS UNIT -
-                        10
+# i3. VARIABLE          n_iter2        TYPE const int      DEFAULT    100      PHYS UNIT -
+                        100
 
 # b4. VARIABLE          do_reg         TYPE const bool      DEFAULT    0
                         1

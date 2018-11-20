@@ -11,7 +11,7 @@ void create_csv_files_for_chi(string input_filename, string output_filename, int
     int z = 0; //counts over the vertical input
     double value; //double to read the chi value
     std::ofstream output;
-    output.open("../inputOutput/"+output_filename+".csv");// open the file to write the chi values into
+    output.open("../../../inputOutput/"+output_filename+".csv");// open the file to write the chi values into
     while (getline(myfile, line))
     {
         value = stod(line);

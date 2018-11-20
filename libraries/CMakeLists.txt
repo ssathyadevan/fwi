@@ -8,4 +8,3 @@ include_directories( ${LIBRARY_INCLUDE_DIRS} )
 message( STATUS "TESTR: ${CPP_SOURCES}")
 
 add_library( inversion_library ${CPP_SOURCES} ${H_HEADERS} )
-

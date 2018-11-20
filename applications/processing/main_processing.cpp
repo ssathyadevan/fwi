@@ -32,69 +32,71 @@
 #include <stdexcept>
 #include "CsvReader.h"
 
-// Babak and Saurabh 2018-11-13: Creating the pre-processing programm.
+// Saurabh 2018-11-19: Creating the processing program.
 
-// Walkthrough ("WT") of this file is made by S. Melissen, 2018-11-16
+// Walkthrough ("WT") of this file, 2018-11-20
 // This "WT" is just 4 sequential comments on what happens
 int performInversion
-    (const std::string, const NSourcesReceivers, const Freq, const double,
-     const ConjGrad, const std::string, std::array<int,2>,
-     std::array<double,2>, std::array<double,2>,
-     std::array<double,2>, std::array<double,2>,
-     DeltaAmplification deltaAmplification,
-     Iter1 iter1,
-     int n_max,
-     bool do_reg);
+(const std::string, const NSourcesReceivers, const Freq, const double,
+ const ConjGrad, const std::string, std::array<int,2>,
+ std::array<double,2>, std::array<double,2>,
+ std::array<double,2>, std::array<double,2>,
+ DeltaAmplification deltaAmplification,
+ Iter1 iter1,
+ int n_max,
+ bool do_reg);
 
 int main(int argc, char** argv)
 {
-    // WT 1/4: See "variable_structure.h" to see what the struct "Input" is...
+    // WT 1/5: See "variable_structure.h" to see what the struct "Input" is...
     // ...and "read_input....h" to see how we turn input card into parameters...
-    // ...argv is just another parameter, the filename containing the others.
+    // ...argv is just another parameter i.e. the "filename" of the input card.
     Input input = reader3(argc, argv);
 
     if (!input.verbose)
-    WriteToFileNotToTerminal(input.runName, "Process");
+        WriteToFileNotToTerminal(input.runName, "Process");
 
-    ClockStart(input.freq.nTotal); // WT 2/4: Start clock & cout info
+    ClockStart(input.freq.nTotal); // WT 2/5: Start clock & cout info
 
     chi_visualisation_in_integer_form("../"+input.fileName+".txt", input.ngrid[0]);
 
     // creates a csv file using the reference temple.txt files and saves it as chi_reference_temple.csv file
 
-    create_csv_files_for_chi("../"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi("../../../"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
 
+    // WT3/5: The full waveform inversion method is called by providing the ...
+    //... relevant input arguments from the "input" struct created above
     int ret = performInversion
-	(input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
-         input.conjGrad, input.runName, input.ngrid,
-	 input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
-         input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM,
-     input.deltaAmplification, input.iter1, input.n_max, input.do_reg);
+            (input.fileName, input.nSourcesReceivers, input.freq, input.c_0,
+             input.conjGrad, input.runName, input.ngrid,
+             input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM,
+             input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM,
+             input.deltaAmplification, input.iter1, input.n_max, input.do_reg);
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form("../inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
+    chi_visualisation_in_integer_form("../../../inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
 
     // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
-    create_csv_files_for_chi("../inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi("../../../inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
 
-    ClockStop(ret); // WT 3/4: Stop clock & cout whether successful
+    ClockStop(ret); // WT 4/5: Stop clock & cout whether successful
 
     return 0;
 }
 
-// WT 4/4: Here the mathematics of the "preprocessing" part of FWI is done.
+// WT 5/5: Here the mathematics of the "Inversion" part of FWI is done.
 int performInversion
-    (const std::string fileName, const NSourcesReceivers nSourcesReceivers,
-     const Freq freq, const double c_0,
-     const ConjGrad conjGrad, const std::string runName, std::array<int,2> ngrid,
-     std::array<double,2> reservoirTopLeftCornerInM,
-     std::array<double,2> reservoirBottomRightCornerInM,
-     std::array<double,2> sourcesTopLeftCornerInM,
-     std::array<double,2> sourcesBottomRightCornerInM,
-     DeltaAmplification deltaAmplification,
-     Iter1 iter1,
-     int n_max,
-     bool do_reg) {
+(const std::string fileName, const NSourcesReceivers nSourcesReceivers,
+ const Freq freq, const double c_0,
+ const ConjGrad conjGrad, const std::string runName, std::array<int,2> ngrid,
+ std::array<double,2> reservoirTopLeftCornerInM,
+ std::array<double,2> reservoirBottomRightCornerInM,
+ std::array<double,2> sourcesTopLeftCornerInM,
+ std::array<double,2> sourcesBottomRightCornerInM,
+ DeltaAmplification deltaAmplification,
+ Iter1 iter1,
+ int n_max,
+ bool do_reg) {
 
     grid_rect_2D grid(reservoirTopLeftCornerInM, reservoirBottomRightCornerInM, ngrid);
     volField_rect_2D_cpu chi(grid);
@@ -114,14 +116,14 @@ int performInversion
 
     int magnitude = freq.nTotal * nSourcesReceivers.src * nSourcesReceivers.rec;
 
-    //read referencePressureData
+    //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file("../inputOutput/"+runName+"InvertedChiToPressure.txt");
+    std::ifstream       file("../../../inputOutput/"+runName+"InvertedChiToPressure.txt");
     CSVRow              row;
     int i = 0;
     while(file >> row)
     {
-        if (i<magnitude) { referencePressureData[i]= { atof(row[0].c_str()), atof(row[1].c_str())};}
+        if (i<magnitude) { referencePressureData[i]= { atof(row[0].c_str()), atof(row[1].c_str())}; }
         i++;
     }
 
@@ -132,7 +134,7 @@ int performInversion
     volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, iter1, conjGrad, deltaAmplification, n_max, do_reg);
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile("../inputOutput/chi_est_"+runName+".txt");
+    chi_est.toFile("../../../inputOutput/chi_est_"+runName+".txt");
 
     return 0;
 }
