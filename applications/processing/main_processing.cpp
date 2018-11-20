@@ -60,8 +60,6 @@ int main(int argc, char** argv)
 
     chi_visualisation_in_integer_form("../"+input.fileName+".txt", input.ngrid[0]);
 
-    // creates a csv file using the reference temple.txt files and saves it as chi_reference_temple.csv file
-
     create_csv_files_for_chi("../../../"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
 
     // WT3/5: The full waveform inversion method is called by providing the ...
@@ -76,7 +74,6 @@ int main(int argc, char** argv)
     cout << "Visualisation of the estimated temple using FWI" << endl;
     chi_visualisation_in_integer_form("../../../inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
 
-    // creates a csv file using the final chi_est_temple.txt files and saves it as chi_est_temple.csv file
     create_csv_files_for_chi("../../../inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
 
     ClockStop(ret); // WT 4/5: Stop clock & cout whether successful
