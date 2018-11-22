@@ -52,7 +52,7 @@ int generateReferencePressureFieldFromChi
 
     chi.toFile("../../../inputOutput/chi_ref_" + input.runName + ".txt");
 
-    ForwardModel *forwardModel;
+    ForwardModelInterface *forwardModel;
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
 
     std::cout << "Creating total field..." << std::endl;

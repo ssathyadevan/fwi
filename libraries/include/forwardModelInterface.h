@@ -39,23 +39,10 @@ public:
     ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
         : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
     {
-        std::cout << "Creating Greens function field..." << std::endl;
-        this->createGreens();
-        this->SetBackground(chi);
-        std::cout << "Creating P0..." << std::endl;
-        this->createP0();
     }
 
     ~ForwardModelInterface()
     {
-        if (this->m_greens!=nullptr)
-            this->deleteGreens();
-
-        if (this->p_0!=nullptr)
-            this->deleteP0();
-
-        if (this->p_tot!=nullptr)
-            this->deleteTotalField();
     }
 
     virtual void createGreens() = 0;

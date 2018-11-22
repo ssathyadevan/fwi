@@ -1,44 +1,14 @@
 #ifndef FORWARDMODEL_H
 #define FORWARDMODEL_H
-#include <complex>
-#include <ProfileInterface.h>
-#include "greens_rect_2D_cpu.h"
-#include "sources_rect_2D.h"
-#include "receivers_rect_2D.h"
-#include "grid_rect_2D.h"
-#include "frequencies_group.h"
-#include "GreensFunctions.h"
-#include <volField_rect_2D_cpu.h>
-#include "variable_structure.h"
-#include "calcField.h"
-#include "einsum.h"
-#include <array>
-#include <string>
 
 #include "forwardModelInterface.h"
 
-class ForwardModel
+class ForwardModel : public ForwardModelInterface
 {
-protected:
-    const grid_rect_2D &m_grid;
-    const Sources_rect_2D &m_src;
-    const Receivers_rect_2D &m_recv;
-    const Frequencies_group &m_freq;
-
-    Greens_rect_2D_cpu **m_greens;
-    volComplexField_rect_2D_cpu ***p_0;
-    volComplexField_rect_2D_cpu ***p_tot;
-
-    volField_rect_2D_cpu m_chi;
-    ProfileInterface &m_profiler;
-
-    const int m_nfreq;
-    const int m_nrecv;
-    const int m_nsrc;
 
 public:
     ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-    : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
+    : ForwardModelInterface (grid, src, recv, freq, profiler, chi)
     {
         std::cout << "Creating Greens function field..." << std::endl;
         this->createGreens();
@@ -59,7 +29,7 @@ public:
             this->deleteTotalField();
     }
 
-    void createGreens()
+    void createGreens() override
     {
         m_greens = new Greens_rect_2D_cpu*[m_nfreq];
 
@@ -69,7 +39,7 @@ public:
         }
     }
 
-    void deleteGreens()
+    void deleteGreens() override
     {
         for (int i=0; i<m_nfreq; i++)
             delete m_greens[i];
@@ -77,12 +47,13 @@ public:
         m_greens = nullptr;
     }
 
-    void SetBackground(const volField_rect_2D_cpu &chi_) {
+    void SetBackground(const volField_rect_2D_cpu &chi_) override
+    {
         assert(&m_chi.GetGrid() == &chi_.GetGrid());
         m_chi = chi_;
     }
 
-    void createP0()
+    void createP0() override
     {
         assert(m_greens != nullptr);
         assert(p_0 == nullptr);
@@ -102,7 +73,7 @@ public:
 
     }
 
-    void deleteP0()
+    void deleteP0() override
     {
         for (int i=0; i<m_nfreq; i++)
         {
@@ -115,7 +86,7 @@ public:
         p_0 = nullptr;
     }
 
-    void deleteTotalField()
+    void deleteTotalField() override
     {
         for (int i=0; i<m_nfreq; i++)
         {
@@ -128,8 +99,7 @@ public:
         p_tot = nullptr;
     }
 
-
-    void calculateData(std::complex<double> *p_data)
+    void calculateData(std::complex<double> *p_data) override
     {
         int l_i, l_j;
         for (int i=0; i<m_nfreq; i++)
@@ -146,7 +116,7 @@ public:
         }
     }
 
-    void createTotalField(ConjGrad conjGrad)
+    void createTotalField(ConjGrad conjGrad) override
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
