@@ -19,7 +19,7 @@ using namespace Eigen;
 
 /*
     Babak 2018 10 24: This is the header file to do nonlinear field update on the domain equation
-    by calculating p_tot from the follwoing equation IDs in the FWI_document:
+    by calculating p_tot from the following equation IDs in the FWI_document:
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
@@ -27,7 +27,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
-    //const grid_rect_2D<double>  &m_grid = G.GetGrid();//Babak 2018 10 29: get rid of templat
+    //const grid_rect_2D<double>  &m_grid = G.GetGrid(); //Babak 2018 10 29: get rid of template
     const grid_rect_2D &m_grid = G.GetGrid();
 
     volComplexField_rect_2D_cpu chi_p(m_grid), chi_p_old(m_grid);

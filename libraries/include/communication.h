@@ -13,7 +13,7 @@
     }
 
     void ClockStop(int ret){
-        std::cout << ret << std::endl;
+        //std::cout << ret << std::endl;
         std::time_t finish = std::time(nullptr);
         std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
     }

@@ -1,0 +1,2218 @@
+Input Temple Visualisation
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222227777222222222222222222222222222222
+2222222222222222222222222222777777777222222222222222222222222222
+2222222222222222222222222777777777777772222222222222222222222222
+2222222222222222222222277777722222277777722222222222222222222222
+2222222222222222222277777777777777777777777222222222222222222222
+2222222222222222227777777777777777777777777777222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+Starting at Mon Nov 19 17:05:54 2018
+
+nFreq_Total= 15
+Total number is sources is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number is receivers is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number of frequencies is 15. Values:
+f = 10, k = 0.0314159
+f = 12.1429, k = 0.0381479
+f = 14.2857, k = 0.0448799
+f = 16.4286, k = 0.0516119
+f = 18.5714, k = 0.0583439
+f = 20.7143, k = 0.0650758
+f = 22.8571, k = 0.0718078
+f = 25, k = 0.0785398
+f = 27.1429, k = 0.0852718
+f = 29.2857, k = 0.0920038
+f = 31.4286, k = 0.0987358
+f = 33.5714, k = 0.105468
+f = 35.7143, k = 0.1122
+f = 37.8571, k = 0.118932
+f = 40, k = 0.125664
+
+Creating Greens function field
+Creating P0...
+Creating total field...
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+  
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+  
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+  
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+  
+  
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+  
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+  
+  
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+  
+  
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+  
+  
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+  
+  
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+  
+  
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 15iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 18iterations
+  
+  
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 21iterations
+Convergence after 22iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 22iterations
+Convergence after 21iterations
+  
+  
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 25iterations
+Convergence after 25iterations
+Convergence after 24iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 18iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 25iterations
+Convergence after 25iterations
+Convergence after 25iterations
+Convergence after 26iterations
+Convergence after 26iterations
+  
+  
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 27iterations
+Convergence after 26iterations
+Convergence after 25iterations
+Convergence after 24iterations
+Convergence after 22iterations
+Convergence after 24iterations
+Convergence after 25iterations
+Convergence after 26iterations
+Convergence after 27iterations
+Convergence after 27iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+  
+  
+  
+Creating this->p_tot for 15/ 15freq
+  
+Convergence after 38iterations
+Convergence after 38iterations
+Convergence after 37iterations
+Convergence after 36iterations
+Convergence after 35iterations
+Convergence after 33iterations
+Convergence after 32iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 32iterations
+Convergence after 34iterations
+Convergence after 35iterations
+Convergence after 36iterations
+Convergence after 37iterations
+Convergence after 38iterations
+Convergence after 38iterations
+  
+  
+Computation time for createTotalFieldCurrentProcessor was 30.0092 seconds
+Estimating Chi...
+1/50	 (1/5)	 res: 0.52347870629892468
+2/50	 (1/5)	 res: 0.56636097945261965
+3/50	 (1/5)	 res: 0.52835195502787391
+4/50	 (1/5)	 res: 0.36963196405615101
+5/50	 (1/5)	 res: 0.24491302749626467
+6/50	 (1/5)	 res: 0.13853015457481638
+7/50	 (1/5)	 res: 0.12055582906181063
+8/50	 (1/5)	 res: 0.096825278690164968
+9/50	 (1/5)	 res: 0.086155509683523701
+10/50	 (1/5)	 res: 0.078631538103504789
+11/50	 (1/5)	 res: 0.075152671733234824
+12/50	 (1/5)	 res: 0.071774293700754166
+13/50	 (1/5)	 res: 0.070029641523591035
+14/50	 (1/5)	 res: 0.068751893146144633
+15/50	 (1/5)	 res: 0.066619654808408965
+16/50	 (1/5)	 res: 0.065925679676956436
+17/50	 (1/5)	 res: 0.06492509828801156
+18/50	 (1/5)	 res: 0.064342813321341119
+19/50	 (1/5)	 res: 0.063750468591650081
+20/50	 (1/5)	 res: 0.063218671099547222
+21/50	 (1/5)	 res: 0.062599715970944672
+22/50	 (1/5)	 res: 0.062335399186514408
+23/50	 (1/5)	 res: 0.061896815046486392
+24/50	 (1/5)	 res: 0.061484051980750902
+25/50	 (1/5)	 res: 0.061199675133137885
+26/50	 (1/5)	 res: 0.060893368052482674
+27/50	 (1/5)	 res: 0.060590125559415578
+28/50	 (1/5)	 res: 0.060424490679271442
+29/50	 (1/5)	 res: 0.060217580159489449
+30/50	 (1/5)	 res: 0.059961704290949873
+31/50	 (1/5)	 res: 0.059873378251489966
+32/50	 (1/5)	 res: 0.059584257685992029
+33/50	 (1/5)	 res: 0.059476235715621224
+34/50	 (1/5)	 res: 0.059364376362716111
+35/50	 (1/5)	 res: 0.059189187905554962
+36/50	 (1/5)	 res: 0.059092877600073118
+37/50	 (1/5)	 res: 0.059014930337826003
+38/50	 (1/5)	 res: 0.058927177874740166
+39/50	 (1/5)	 res: 0.058863644573189329
+40/50	 (1/5)	 res: 0.058819559913020847
+41/50	 (1/5)	 res: 0.058720421531130926
+42/50	 (1/5)	 res: 0.058688062605869597
+43/50	 (1/5)	 res: 0.058646546861660535
+44/50	 (1/5)	 res: 0.058604124992401772
+45/50	 (1/5)	 res: 0.058553732919385815
+46/50	 (1/5)	 res: 0.058527190273757176
+47/50	 (1/5)	 res: 0.058486542571835366
+48/50	 (1/5)	 res: 0.058453166975389784
+49/50	 (1/5)	 res: 0.058430701037445833
+50/50	 (1/5)	 res: 0.05837830341916863
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+Convergence after 5iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 11iterations
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 13iterations
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 16iterations
+  
+Creating this->p_tot for 15/ 15freq
+  
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 24iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 19iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 24iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Computation time for createTotalFieldCurrentProcessor was 25.321339915999999 seconds
+1/50	 (2/5)	 res: 0.26172460013403448
+2/50	 (2/5)	 res: 0.1093543521778977
+3/50	 (2/5)	 res: 0.094121204006147416
+4/50	 (2/5)	 res: 0.074122122649706065
+5/50	 (2/5)	 res: 0.054137234929475246
+6/50	 (2/5)	 res: 0.048515989266658663
+7/50	 (2/5)	 res: 0.046229449498708476
+8/50	 (2/5)	 res: 0.041565576125078239
+9/50	 (2/5)	 res: 0.039856312137712284
+10/50	 (2/5)	 res: 0.038929320929088976
+11/50	 (2/5)	 res: 0.036813466390707768
+12/50	 (2/5)	 res: 0.036029385085164144
+13/50	 (2/5)	 res: 0.035342259824294411
+14/50	 (2/5)	 res: 0.034278656727581576
+15/50	 (2/5)	 res: 0.033939941559054394
+16/50	 (2/5)	 res: 0.033469076831974379
+17/50	 (2/5)	 res: 0.033031742110741169
+18/50	 (2/5)	 res: 0.032778678187842553
+19/50	 (2/5)	 res: 0.032395787561662052
+20/50	 (2/5)	 res: 0.031974535463726236
+21/50	 (2/5)	 res: 0.031795810420489623
+22/50	 (2/5)	 res: 0.031422831770091919
+23/50	 (2/5)	 res: 0.031187520326423787
+24/50	 (2/5)	 res: 0.031038354623947762
+25/50	 (2/5)	 res: 0.030861907640494513
+26/50	 (2/5)	 res: 0.030661117995407713
+27/50	 (2/5)	 res: 0.030573092361366291
+28/50	 (2/5)	 res: 0.030377098812387923
+29/50	 (2/5)	 res: 0.030250343876628515
+30/50	 (2/5)	 res: 0.03017383904762606
+31/50	 (2/5)	 res: 0.030014357182719154
+32/50	 (2/5)	 res: 0.029843368820925219
+33/50	 (2/5)	 res: 0.029783737796870918
+34/50	 (2/5)	 res: 0.029534062932098096
+35/50	 (2/5)	 res: 0.029434570399161374
+36/50	 (2/5)	 res: 0.029328343230413362
+37/50	 (2/5)	 res: 0.029186129386697488
+38/50	 (2/5)	 res: 0.029094178683675673
+39/50	 (2/5)	 res: 0.029011782395948881
+40/50	 (2/5)	 res: 0.028853152353718492
+41/50	 (2/5)	 res: 0.028793127900209183
+42/50	 (2/5)	 res: 0.028697908338848988
+43/50	 (2/5)	 res: 0.028591677454312344
+44/50	 (2/5)	 res: 0.028555158744456667
+45/50	 (2/5)	 res: 0.028500218389802594
+46/50	 (2/5)	 res: 0.028411981563372032
+47/50	 (2/5)	 res: 0.028376214415159237
+48/50	 (2/5)	 res: 0.028308725249262975
+49/50	 (2/5)	 res: 0.028278418381806322
+50/50	 (2/5)	 res: 0.028230492507191004
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 10iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 20iterations
+Convergence after 21iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 21iterations
+Convergence after 21iterations
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 26iterations
+Convergence after 27iterations
+Convergence after 25iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 24iterations
+Convergence after 24iterations
+Convergence after 21iterations
+Convergence after 24iterations
+Convergence after 24iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 25iterations
+Convergence after 27iterations
+Convergence after 26iterations
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 31iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 27iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 31iterations
+  
+Creating this->p_tot for 15/ 15freq
+  
+Convergence after 51iterations
+Convergence after 50iterations
+Convergence after 52iterations
+Convergence after 51iterations
+Convergence after 52iterations
+Convergence after 50iterations
+Convergence after 50iterations
+Convergence after 48iterations
+Convergence after 39iterations
+Convergence after 48iterations
+Convergence after 50iterations
+Convergence after 50iterations
+Convergence after 52iterations
+Convergence after 51iterations
+Convergence after 52iterations
+Convergence after 51iterations
+Convergence after 52iterations
+Computation time for createTotalFieldCurrentProcessor was 49.827148145000002 seconds
+1/50	 (3/5)	 res: 0.064056647358167865
+2/50	 (3/5)	 res: 0.043479263882686997
+3/50	 (3/5)	 res: 0.03030017012017092
+4/50	 (3/5)	 res: 0.02189440002463925
+5/50	 (3/5)	 res: 0.019927234373392142
+6/50	 (3/5)	 res: 0.017445455146057068
+7/50	 (3/5)	 res: 0.015675403458669707
+8/50	 (3/5)	 res: 0.014962487693997684
+9/50	 (3/5)	 res: 0.014488603193224149
+10/50	 (3/5)	 res: 0.014115292245903925
+11/50	 (3/5)	 res: 0.013577549690888953
+12/50	 (3/5)	 res: 0.013312064220500013
+13/50	 (3/5)	 res: 0.013219155470651701
+14/50	 (3/5)	 res: 0.013112826008091745
+15/50	 (3/5)	 res: 0.012941145479265103
+16/50	 (3/5)	 res: 0.012847258790960511
+17/50	 (3/5)	 res: 0.01281439617413427
+18/50	 (3/5)	 res: 0.012746088320845922
+19/50	 (3/5)	 res: 0.012672768305003872
+20/50	 (3/5)	 res: 0.01262532167151431
+21/50	 (3/5)	 res: 0.012600331952878237
+22/50	 (3/5)	 res: 0.012536446071508547
+23/50	 (3/5)	 res: 0.012476060097625308
+24/50	 (3/5)	 res: 0.012453131390787745
+25/50	 (3/5)	 res: 0.012382941707645978
+26/50	 (3/5)	 res: 0.012335155997299944
+27/50	 (3/5)	 res: 0.012312937003953672
+28/50	 (3/5)	 res: 0.012271487276424537
+29/50	 (3/5)	 res: 0.012235748413480081
+30/50	 (3/5)	 res: 0.01221717554575694
+31/50	 (3/5)	 res: 0.012158956035317985
+32/50	 (3/5)	 res: 0.012113513859045388
+33/50	 (3/5)	 res: 0.012082552494966569
+34/50	 (3/5)	 res: 0.012041800529209112
+35/50	 (3/5)	 res: 0.011994037847151591
+36/50	 (3/5)	 res: 0.011950176526371009
+37/50	 (3/5)	 res: 0.011932222821862183
+38/50	 (3/5)	 res: 0.011869391731364757
+39/50	 (3/5)	 res: 0.011840839065189027
+40/50	 (3/5)	 res: 0.011817484367459394
+41/50	 (3/5)	 res: 0.011778346487558846
+42/50	 (3/5)	 res: 0.011750389737561099
+43/50	 (3/5)	 res: 0.011734762213112562
+44/50	 (3/5)	 res: 0.011705326630776601
+45/50	 (3/5)	 res: 0.011669866463531886
+46/50	 (3/5)	 res: 0.011654863218318738
+47/50	 (3/5)	 res: 0.011611478362075099
+48/50	 (3/5)	 res: 0.011596388474048747
+49/50	 (3/5)	 res: 0.011579470968816591
+50/50	 (3/5)	 res: 0.011547288590129084
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 10iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 12iterations
+Convergence after 12iterations
+Convergence after 12iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 18iterations
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 24iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 22iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 22iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 23iterations
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 27iterations
+Convergence after 25iterations
+Convergence after 27iterations
+Convergence after 27iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 28iterations
+Convergence after 30iterations
+Convergence after 29iterations
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 28iterations
+Convergence after 27iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 31iterations
+  
+Creating this->p_tot for 15/ 15freq
+  
+Convergence after 45iterations
+Convergence after 44iterations
+Convergence after 45iterations
+Convergence after 44iterations
+Convergence after 44iterations
+Convergence after 43iterations
+Convergence after 42iterations
+Convergence after 41iterations
+Convergence after 40iterations
+Convergence after 42iterations
+Convergence after 43iterations
+Convergence after 43iterations
+Convergence after 44iterations
+Convergence after 44iterations
+Convergence after 45iterations
+Convergence after 45iterations
+Convergence after 46iterations
+Computation time for createTotalFieldCurrentProcessor was 55.235534350999998 seconds
+1/50	 (4/5)	 res: 0.028232027907643779
+2/50	 (4/5)	 res: 0.019218716406609864
+3/50	 (4/5)	 res: 0.010449833047394422
+4/50	 (4/5)	 res: 0.0086291422166396292
+5/50	 (4/5)	 res: 0.007210352110783763
+6/50	 (4/5)	 res: 0.0067338000778709812
+7/50	 (4/5)	 res: 0.0060888653880752401
+8/50	 (4/5)	 res: 0.0055906051148020865
+9/50	 (4/5)	 res: 0.0051477309710232849
+10/50	 (4/5)	 res: 0.0049886913643644526
+11/50	 (4/5)	 res: 0.0047803324983492317
+12/50	 (4/5)	 res: 0.0047346112020047884
+13/50	 (4/5)	 res: 0.0046049877853213518
+14/50	 (4/5)	 res: 0.0044958227616130027
+15/50	 (4/5)	 res: 0.0044559500833346397
+16/50	 (4/5)	 res: 0.0043946201811905844
+17/50	 (4/5)	 res: 0.0043259459657827449
+18/50	 (4/5)	 res: 0.0042644913160915831
+19/50	 (4/5)	 res: 0.0042299554141400578
+20/50	 (4/5)	 res: 0.0041706370680177169
+21/50	 (4/5)	 res: 0.0041014714931751454
+22/50	 (4/5)	 res: 0.004079562798453916
+23/50	 (4/5)	 res: 0.0040027113039304372
+24/50	 (4/5)	 res: 0.0039735421841291668
+25/50	 (4/5)	 res: 0.0039535302857022425
+26/50	 (4/5)	 res: 0.0039095773151917399
+27/50	 (4/5)	 res: 0.0038614014577712671
+28/50	 (4/5)	 res: 0.0038445193147792611
+29/50	 (4/5)	 res: 0.0038053937550564442
+30/50	 (4/5)	 res: 0.0037561797577006588
+31/50	 (4/5)	 res: 0.0037355693743013492
+32/50	 (4/5)	 res: 0.0037086427028925253
+33/50	 (4/5)	 res: 0.0036823417897211019
+34/50	 (4/5)	 res: 0.0036706099457013935
+35/50	 (4/5)	 res: 0.0036307398061962534
+36/50	 (4/5)	 res: 0.003599903818629702
+37/50	 (4/5)	 res: 0.0035866354355719452
+38/50	 (4/5)	 res: 0.0035515973760063073
+39/50	 (4/5)	 res: 0.0035338637355229211
+40/50	 (4/5)	 res: 0.0035200117090517032
+41/50	 (4/5)	 res: 0.0034965485303839476
+42/50	 (4/5)	 res: 0.0034748427330799211
+43/50	 (4/5)	 res: 0.0034632481914966336
+44/50	 (4/5)	 res: 0.0034337874458745228
+45/50	 (4/5)	 res: 0.0034228981596071185
+46/50	 (4/5)	 res: 0.003400385672945162
+47/50	 (4/5)	 res: 0.003379347447333867
+48/50	 (4/5)	 res: 0.0033705585739266788
+49/50	 (4/5)	 res: 0.0033506954908730799
+50/50	 (4/5)	 res: 0.0033368230767480364
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 10iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 12iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 13iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 11iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 14iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 17iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 18iterations
+Convergence after 16iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 17iterations
+Convergence after 18iterations
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 21iterations
+Convergence after 21iterations
+Convergence after 22iterations
+Convergence after 21iterations
+Convergence after 21iterations
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 27iterations
+Convergence after 28iterations
+Convergence after 27iterations
+Convergence after 27iterations
+Convergence after 27iterations
+Convergence after 26iterations
+Convergence after 25iterations
+Convergence after 24iterations
+Convergence after 23iterations
+Convergence after 24iterations
+Convergence after 25iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 26iterations
+Convergence after 27iterations
+Convergence after 27iterations
+Convergence after 26iterations
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 32iterations
+Convergence after 32iterations
+Convergence after 30iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 30iterations
+Convergence after 31iterations
+Convergence after 30iterations
+Convergence after 32iterations
+Convergence after 31iterations
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 43iterations
+Convergence after 42iterations
+Convergence after 41iterations
+Convergence after 42iterations
+Convergence after 41iterations
+Convergence after 41iterations
+Convergence after 39iterations
+Convergence after 39iterations
+Convergence after 34iterations
+Convergence after 39iterations
+Convergence after 40iterations
+Convergence after 41iterations
+Convergence after 41iterations
+Convergence after 42iterations
+Convergence after 41iterations
+Convergence after 42iterations
+Convergence after 43iterations
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 52iterations
+Convergence after 50iterations
+Convergence after 51iterations
+Convergence after 51iterations
+Convergence after 51iterations
+Convergence after 50iterations
+Convergence after 49iterations
+Convergence after 48iterations
+Convergence after 48iterations
+Convergence after 48iterations
+Convergence after 49iterations
+Convergence after 50iterations
+Convergence after 51iterations
+Convergence after 51iterations
+Convergence after 51iterations
+Convergence after 50iterations
+Convergence after 52iterations
+  
+Creating this->p_tot for 15/ 15freq
+  
+Convergence after 88iterations
+Convergence after 87iterations
+Convergence after 86iterations
+Convergence after 85iterations
+Convergence after 86iterations
+Convergence after 85iterations
+Convergence after 83iterations
+Convergence after 77iterations
+Convergence after 72iterations
+Convergence after 78iterations
+Convergence after 84iterations
+Convergence after 84iterations
+Convergence after 86iterations
+Convergence after 85iterations
+Convergence after 86iterations
+Convergence after 87iterations
+Convergence after 89iterations
+Computation time for createTotalFieldCurrentProcessor was 67.122087742999994 seconds
+1/50	 (5/5)	 res: 0.017333736500900695
+2/50	 (5/5)	 res: 0.010344295684109198
+3/50	 (5/5)	 res: 0.0070343153251246817
+4/50	 (5/5)	 res: 0.0061734717841209165
+5/50	 (5/5)	 res: 0.0052334130807591469
+6/50	 (5/5)	 res: 0.0045261681692503929
+7/50	 (5/5)	 res: 0.0040693257258553354
+8/50	 (5/5)	 res: 0.0038997500785286749
+9/50	 (5/5)	 res: 0.0035683092978816039
+10/50	 (5/5)	 res: 0.0034514198168142983
+11/50	 (5/5)	 res: 0.0033257219947745507
+12/50	 (5/5)	 res: 0.0032213229306181194
+13/50	 (5/5)	 res: 0.0031914021249948733
+14/50	 (5/5)	 res: 0.0031597978398505426
+15/50	 (5/5)	 res: 0.0030897365850468456
+16/50	 (5/5)	 res: 0.0030661249035325838
+17/50	 (5/5)	 res: 0.0030378006768662031
+18/50	 (5/5)	 res: 0.0029934273766462475
+19/50	 (5/5)	 res: 0.0029778803841673733
+20/50	 (5/5)	 res: 0.0029344920406382349
+21/50	 (5/5)	 res: 0.0029144849164932964
+22/50	 (5/5)	 res: 0.002900008345020565
+23/50	 (5/5)	 res: 0.0028745450408502252
+24/50	 (5/5)	 res: 0.0028484618786652556
+25/50	 (5/5)	 res: 0.0028368961291703005
+26/50	 (5/5)	 res: 0.0028176224048648249
+27/50	 (5/5)	 res: 0.0028043438996506916
+28/50	 (5/5)	 res: 0.0027863733127437224
+29/50	 (5/5)	 res: 0.0027707241731343797
+30/50	 (5/5)	 res: 0.002757205836950639
+31/50	 (5/5)	 res: 0.0027435751793330339
+32/50	 (5/5)	 res: 0.002719114357665121
+33/50	 (5/5)	 res: 0.0027117415404046157
+34/50	 (5/5)	 res: 0.0026888191186419962
+35/50	 (5/5)	 res: 0.0026761423629178961
+36/50	 (5/5)	 res: 0.0026644008563239696
+37/50	 (5/5)	 res: 0.002649021975793741
+38/50	 (5/5)	 res: 0.0026371336362101981
+39/50	 (5/5)	 res: 0.0026265598482134744
+40/50	 (5/5)	 res: 0.0026061191699332737
+41/50	 (5/5)	 res: 0.0025997982345687945
+42/50	 (5/5)	 res: 0.0025824926066313563
+43/50	 (5/5)	 res: 0.0025743117702997521
+44/50	 (5/5)	 res: 0.002565626138098338
+45/50	 (5/5)	 res: 0.0025568627421391544
+46/50	 (5/5)	 res: 0.0025510328170754563
+47/50	 (5/5)	 res: 0.0025412949606603862
+48/50	 (5/5)	 res: 0.0025287796742910719
+49/50	 (5/5)	 res: 0.0025238512284621491
+50/50	 (5/5)	 res: 0.0025088103210736752
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 6iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 7iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 8iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 9iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+Convergence after 10iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 12iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 11iterations
+Convergence after 12iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 13iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 12iterations
+Convergence after 13iterations
+Convergence after 14iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 15iterations
+Convergence after 14iterations
+Convergence after 14iterations
+Convergence after 15iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 16iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 17iterations
+Convergence after 16iterations
+Convergence after 17iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 19iterations
+Convergence after 18iterations
+Convergence after 17iterations
+Convergence after 15iterations
+Convergence after 16iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 19iterations
+Convergence after 17iterations
+Convergence after 19iterations
+  
+Creating this->p_tot for 10/ 15freq
+  
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 24iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 22iterations
+Convergence after 22iterations
+Convergence after 21iterations
+Convergence after 20iterations
+Convergence after 20iterations
+Convergence after 22iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 23iterations
+Convergence after 24iterations
+Convergence after 24iterations
+Convergence after 23iterations
+  
+Creating this->p_tot for 11/ 15freq
+  
+Convergence after 31iterations
+Convergence after 32iterations
+Convergence after 32iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 30iterations
+Convergence after 29iterations
+Convergence after 28iterations
+Convergence after 29iterations
+Convergence after 30iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 31iterations
+Convergence after 32iterations
+Convergence after 30iterations
+  
+Creating this->p_tot for 12/ 15freq
+  
+Convergence after 36iterations
+Convergence after 36iterations
+Convergence after 35iterations
+Convergence after 36iterations
+Convergence after 35iterations
+Convergence after 35iterations
+Convergence after 34iterations
+Convergence after 33iterations
+Convergence after 33iterations
+Convergence after 33iterations
+Convergence after 35iterations
+Convergence after 35iterations
+Convergence after 35iterations
+Convergence after 36iterations
+Convergence after 34iterations
+Convergence after 36iterations
+Convergence after 36iterations
+  
+Creating this->p_tot for 13/ 15freq
+  
+Convergence after 59iterations
+Convergence after 57iterations
+Convergence after 57iterations
+Convergence after 58iterations
+Convergence after 57iterations
+Convergence after 57iterations
+Convergence after 55iterations
+Convergence after 54iterations
+Convergence after 40iterations
+Convergence after 54iterations
+Convergence after 55iterations
+Convergence after 57iterations
+Convergence after 57iterations
+Convergence after 58iterations
+Convergence after 57iterations
+Convergence after 57iterations
+Convergence after 59iterations
+  
+Creating this->p_tot for 14/ 15freq
+  
+Convergence after 88iterations
+Convergence after 85iterations
+Convergence after 86iterations
+Convergence after 86iterations
+Convergence after 87iterations
+Convergence after 86iterations
+Convergence after 84iterations
+Convergence after 81iterations
+Convergence after 81iterations
+Convergence after 80iterations
+Convergence after 84iterations
+Convergence after 85iterations
+Convergence after 87iterations
+Convergence after 86iterations
+Convergence after 87iterations
+Convergence after 86iterations
+Convergence after 88iterations
+  
+Creating this->p_tot for 15/ 15freq
+  
+No convergence after 100 iterations.Res = 0.000705097561479574
+No convergence after 100 iterations.Res = 0.00060667269187555202
+No convergence after 100 iterations.Res = 0.00065444522756130717
+No convergence after 100 iterations.Res = 0.00063547605128090189
+No convergence after 100 iterations.Res = 0.00058991010629338406
+No convergence after 100 iterations.Res = 0.00048990642352141772
+No convergence after 100 iterations.Res = 0.00041183658691307923
+No convergence after 100 iterations.Res = 0.000260630443053086
+No convergence after 100 iterations.Res = 0.00019480279465441445
+No convergence after 100 iterations.Res = 0.00029169228593357914
+No convergence after 100 iterations.Res = 0.00042033491923813647
+No convergence after 100 iterations.Res = 0.00045981784744176819
+No convergence after 100 iterations.Res = 0.00057214209240787116
+No convergence after 100 iterations.Res = 0.00061355402362615701
+No convergence after 100 iterations.Res = 0.00062260428555383906
+No convergence after 100 iterations.Res = 0.0005628337230140321
+No convergence after 100 iterations.Res = 0.00071824073499484361
+Computation time for createTotalFieldCurrentProcessor was 81.253240714 seconds
+Done, writing to file
+0
+Visualisation of the estimated temple using FWI
+2223132122133112234112233203051221503123322114322213312212403212
+2312312412302432210442211223222122123221122440122341032132132132
+2221322222222222222322312312321121132132132132222222222222131222
+2232222232133122243212222222123333211222232113323213322222222322
+2222223222122233122232122122124554313311212322213322212223222222
+2222222222222322222232121233688998875411213312222232222222222222
+3222322322422312433311223665774554676764321133342131332222222223
+2222222222322322212223356787532222357776443122132232232223322222
+2223123232222333223367678679767667679668667333123332222322213222
+2223223134333233345678667557558668557558668666433323334313223222
+2223223223333322223410212311001001001132121143232233333223323222
+2322223332233433321311310201431122331020131220242343222333222232
+2323322344333432331367862125752135675212687631332333433432233232
+2313323233333332231266463026562016666203656621322333433323233232
+2404324334344344232167663015663026765103667512333434433334133042
+2504414325434334232147753114651013564103577522323344344243044052
+3313413424523432322234532213541123453212444421232342253142143133
+5123423533643553331211111100101111110011221122343553463343242215
+4023321343443342221100000000000000000000000011112433543431222215
+4123233244344444433322222223333333333322222233345444434422223214
+4158447568668877766555666656655666566556665556677788678667448414
+4159859979989988778766667776566666556777666678777899899799599514
+4326746989988999766544344443344434333444344456679998899786486235
+4300420355665787532100012111000001000111110012357865675530240034
+4200220033333334321100001111111111000111000011244333333300210033
+2210032024323332100001111101111001110011111000122233234302300122
+1120023114544454421001111111101011001111111000244544554213200211
+1110002212333334421122111122222122112111211111234422432111000111
+1111102332344432110012221111111001111111222100112334322332111121
+0111000222233333222212221232221222222221222112322333323210001110
+1222112322233322210112211121221121222111222100122233222233112221
+1211101322233322222222222222222112312222222222222233322321011121
+Finished at Mon Nov 19 17:12:17 2018
+

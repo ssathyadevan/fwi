@@ -18,19 +18,6 @@
 #include "einsum.h"
 #include <array>
 #include <string>
-//#include  "/usr/include/mpi/mpi.h"
-
-
-// Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
-//Babak 2018 10 29: Got rid of template
-//Babak 2018 10 29: Gott rid of inheritence
-
-/*
-    Babak 2018 10 23: Improved the documentation of this header file by indicating the equation ID in the FWI_document.
-    Babak 2018 10 29: Got rid of template
-    Babak 2018 10 29: Gott rid of inheritence
-    Babak 2018 11 05: Detemplating the class
-*/
 
 inline double normSq(const std::complex<double> *data, int n) {
     double result = double(0.0);
@@ -40,12 +27,9 @@ inline double normSq(const std::complex<double> *data, int n) {
     return result;
 }
 
-// Babak 2018 10 29: remove templates from volField_rect_2D
-//template<typename T, template<typename> class volComplexField_rect_2D_cpu, template<typename> class volField, template<typename> class Greens_rect_2D_cpu, template<typename> class Frequencies_group>
 class Inversion
 {
 protected:
-    // const grid_rect_2D<double> &m_grid;// Babak 2018 10 29: Get rid of template in grid_rect_2D class
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
@@ -63,12 +47,15 @@ protected:
     const int m_nsrc;
 
 public:
-//    Inversion(const grid_rect_2D<double> &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group &freq, ProfileInterface &profiler)
-//        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
-        // Babak 2018 10 29: Get rid of template in grid_rect_2D class
-    Inversion(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
-            : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
+
+    Inversion(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
+        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq), m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc)
     {
+        std::cout << "Creating Greens function field..." << std::endl;
+        this->createGreens();
+        this->SetBackground(chi);
+        std::cout << "Creating P0..." << std::endl;
+        this->createP0();
     }
 
     virtual void createGreens()
@@ -93,6 +80,7 @@ public:
         assert(&m_chi.GetGrid() == &chi_.GetGrid());
         m_chi = chi_;
     }
+
     // Babak 2018 10 23: not clear how this p0 is calculated in createP0 from the equations.
     // I assume the p0 can be calculated from the Born approximation by considering p_tot ~ p0; Maybe this is
     virtual void createP0()
@@ -102,7 +90,7 @@ public:
 
         p_0 = new volComplexField_rect_2D_cpu**[m_nfreq];
 
-         for (int i=0; i<m_nfreq; i++)
+        for (int i=0; i<m_nfreq; i++)
         {
             p_0[i] = new volComplexField_rect_2D_cpu*[m_nsrc];
 
@@ -130,8 +118,6 @@ public:
 
     // Babak 2018 10 25: in createTotalField we use calcField class which is responsible
     // for creating the total field with Equation ID: "weightingFactorField"
-    virtual void createTotalField(ConjGrad conjGrad) = 0;
-
 
     virtual void deleteTotalField()
     {
@@ -145,26 +131,6 @@ public:
         delete[] p_tot;
         p_tot = nullptr;
     }
-
-
-    virtual void calculateData(std::complex<double> *p_data)
-    // Babak 2018 10 25: calculation of p_data based on "eq:calculateData" modified MELISSEN 2018 11 01
-    {
-        int l_i, l_j;
-        for (int i=0; i<m_nfreq; i++)
-        {
-            l_i = i*m_nrecv*m_nsrc;
-            for (int j=0; j<m_nrecv; j++)
-            {
-                l_j = j*m_nsrc;
-                for (int k=0; k<m_nsrc; k++)
-                {
-                    p_data[l_i + l_j + k] = Summation( *( m_greens[i]->GetReceiverCont(j) ) , *p_tot[i][k]*m_chi );
-                }
-            }
-        }
-    }
-
 
     virtual double findRealRootFromCubic(double a, double b, double c, double d)
     {
@@ -190,8 +156,6 @@ public:
     //purely virtual function//
     virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Iter1 iter1, ConjGrad conjgrad,
                                              DeltaAmplification deltaAmplification, int n_max, bool do_reg) = 0;
-
-
 };
 
 #endif

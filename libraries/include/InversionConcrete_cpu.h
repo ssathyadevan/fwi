@@ -17,7 +17,6 @@
 #include "calcField.h"
 #include "einsum.h"
 #include <array>
-//#include "mpi.h"
 #include <string>
 #include "variable_structure.h"
 
@@ -28,7 +27,6 @@
 using std::cout;
 using std::endl;
 
-extern const int g_verbosity;
 
 class InversionConcrete_cpu : public Inversion
 {
@@ -43,13 +41,9 @@ public:
 //    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
 
     InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-    : Inversion(grid, src, recv, freq, profiler)
+    : Inversion(grid, src, recv, freq, profiler,chi)
     {
-        std::cout << "Creating Greens function field..." << std::endl;
-        this->createGreens();
-        this->SetBackground(chi);
-        std::cout << "Creating P0..." << std::endl;
-        this->createP0();
+
     }
 
     ~InversionConcrete_cpu()
@@ -65,39 +59,6 @@ public:
     }
 
 
-
-    void createTotalField(ConjGrad conjGrad)
-    {
-        assert(this->m_greens != nullptr);
-        assert(this->p_0 != nullptr);
-        assert(this->p_tot == nullptr);
-
-        std::string name = "createTotalFieldCurrentProcessor";
-
-        this->p_tot = new volComplexField_rect_2D_cpu**[this->m_nfreq];
-        this->m_profiler.StartRegion(name);
-        for (int i=0; i<this->m_nfreq; i++)
-        {
-            this->p_tot[i] = new volComplexField_rect_2D_cpu*[this->m_nsrc];
-
-                std::cout << "  " << std::endl;
-                std::cout << "Creating this->p_tot for " << i+1 << "/ " << this->m_nfreq << "freq" << std::endl;
-                std::cout << "  " << std::endl;
-
-
-            for (int j=0; j<this->m_nsrc; j++)
-            {
-                this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], conjGrad);
-            }
-
-                std::cout << "  " << std::endl;
-                std::cout << "  " << std::endl;
-        }
-        this->m_profiler.EndRegion();
-
-
-    }
 
     virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Iter1 iter1,
                                              ConjGrad conjGrad, DeltaAmplification deltaAmplification, int n_max, bool do_reg)
