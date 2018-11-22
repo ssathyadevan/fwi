@@ -74,24 +74,9 @@ int generateReferencePressureFieldFromChi
  std::array<double,2> sourcesTopLeftCornerInM,
  std::array<double,2> sourcesBottomRightCornerInM) {
 
-    grid_rect_2D grid(reservoirTopLeftCornerInM, reservoirBottomRightCornerInM, ngrid);
-    volField_rect_2D_cpu chi(grid);
-
-    chi.fromFile(fileName);
-
-    Sources_rect_2D src(sourcesTopLeftCornerInM, sourcesBottomRightCornerInM, nSourcesReceivers.src);
     
-    src.Print();
+    #include "setup_input_parameters_for_inverse.h"
 
-    Receivers_rect_2D recv(src);
-    recv.Print();
-
-    Frequencies_group freqg(freq, c_0);
-    freqg.Print(freq.nTotal);
-
-    ProfileInterface *profiler;
-    profiler = new ProfileCpu();
-    
     int magnitude = freq.nTotal * nSourcesReceivers.src * nSourcesReceivers.rec;
 
     std::complex<double> referencePressureData[magnitude];
@@ -104,7 +89,7 @@ int generateReferencePressureFieldFromChi
     std::cout << "Creating total field..." << std::endl;
     inverse->createTotalField(conjGrad);
 
-    std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
+    std::cout << "Calculating pData (the reference pressure-field)..." << std::endl;
     inverse->calculateData(referencePressureData);
     // writing the referencePressureData to a text file in complex form
     std::string invertedChiToPressureFileName = "../../../inputOutput/"+runName+"InvertedChiToPressure.txt";
@@ -126,5 +111,3 @@ int generateReferencePressureFieldFromChi
     
     return 0;
 }
-
-

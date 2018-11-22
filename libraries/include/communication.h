@@ -1,9 +1,9 @@
-#ifndef COMMUNICATION_H 
+#ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
 #include <iostream>
 #include <string>
-#include <ctime>  
+#include <ctime>
 
     void ClockStart(int inputFreqNTotal){
         cout << "Preprocessing the provided input to create the reference pressure-field" << endl;
