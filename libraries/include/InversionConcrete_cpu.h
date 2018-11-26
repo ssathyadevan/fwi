@@ -35,11 +35,6 @@ public:
     InversionConcrete_cpu(const InversionConcrete_cpu&) = delete;
     InversionConcrete_cpu& operator=(const InversionConcrete_cpu&) = delete;
 
-//    InversionConcrete_cpu(const grid_rect_2D<double> &grid, const Sources_rect_2D<double> &src, const Receivers_rect_2D<double> &recv, const Frequencies_group<double> &freq, ProfileInterface &profiler)
-//    : Inversion<T, volComplexField_rect_2D_cpu, volField, Greens_rect_2D_cpu, Frequencies_group>(grid, src, recv, freq, profiler)
-//    {
-//    }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
-
     InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
     : Inversion(grid, src, recv, freq, profiler,chi)
     {
