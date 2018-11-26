@@ -1,5 +1,6 @@
 #ifndef VOLFIELD_RECT_2D_CPU_H
 #define VOLFIELD_RECT_2D_CPU_H
+#include "volField_rect_2D.h"
 
 #include <iostream>
 #include <iomanip>
@@ -10,10 +11,7 @@
 #include <cassert>
 #include <string.h>
 
-#include <volField_rect_2D.h>
 
-//typedef T double;
-//Babak 2018 10 29: get rid of template for volField_rect_2D and volField_rect_2D_cpu
 class volField_rect_2D_cpu : public volField_rect_2D {
 
     double * const data;
@@ -83,8 +81,6 @@ public:
     virtual void SetField(const std::function< double(double,double) > func) {
 
         const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
-        //        const std::array<T, 2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
-        //        const std::array<T, 2> &x_min = this->GetGrid().GetGridStart();// Babak 2018 10 29: get rid of template for grid_rect_2D
         const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions();
         const std::array<double, 2> &x_min = this->GetGrid().GetGridStart();
 

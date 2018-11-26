@@ -1,16 +1,16 @@
 #ifndef CALCFIELD_H
 #define CALCFIELD_H
 
-#include <complex>
-#include <vector>
-#include <cassert>
-
 #include "grid_rect_2D.h"
 #include <eigen3/Eigen/Dense>
 #include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include "variable_structure.h"
+
+#include <complex>
+#include <vector>
+#include <cassert>
 #include <string>
 
 extern const int g_verbosity;
@@ -23,11 +23,10 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, ConjGrad conjGrad)
+inline volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, ConjGrad conjGrad)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
-    //const grid_rect_2D<double>  &m_grid = G.GetGrid(); //Babak 2018 10 29: get rid of template
     const grid_rect_2D &m_grid = G.GetGrid();
 
     volComplexField_rect_2D_cpu chi_p(m_grid), chi_p_old(m_grid);
@@ -125,4 +124,3 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 }
 
 #endif /* CALCFIELD_H */
-

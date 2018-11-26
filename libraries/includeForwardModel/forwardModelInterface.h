@@ -1,20 +1,15 @@
 #ifndef FORWARDMODELINTERFACE_H
 #define FORWARDMODELINTERFACE_H
 
-#include <complex>
-#include <ProfileInterface.h>
-#include "greens_rect_2D_cpu.h"
-#include "sources_rect_2D.h"
-#include "receivers_rect_2D.h"
-#include "grid_rect_2D.h"
+
 #include "frequencies_group.h"
+#include "volField_rect_2D_cpu.h"
+#include "ProfileInterface.h"
 #include "GreensFunctions.h"
-#include <volField_rect_2D_cpu.h>
-#include "variable_structure.h"
 #include "calcField.h"
-#include "einsum.h"
-#include <array>
-#include <string>
+
+#include <complex>
+
 
 class ForwardModelInterface
 {

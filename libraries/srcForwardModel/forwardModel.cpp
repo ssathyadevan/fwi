@@ -1,13 +1,7 @@
-#ifndef FORWARDMODEL_H
-#define FORWARDMODEL_H
+#include "forwardModel.h"
 
-#include "forwardModelInterface.h"
 
-class ForwardModel : public ForwardModelInterface
-{
-
-public:
-    ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
+    ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
     : ForwardModelInterface (grid, src, recv, freq, profiler, chi)
     {
         std::cout << "Creating Greens function field..." << std::endl;
@@ -17,7 +11,7 @@ public:
         this->createP0();
     }
 
-    ~ForwardModel()
+    ForwardModel::~ForwardModel()
     {
         if (this->m_greens!=nullptr)
             this->deleteGreens();
@@ -29,7 +23,7 @@ public:
             this->deleteTotalField();
     }
 
-    void createGreens() override
+    void ForwardModel::createGreens()
     {
         m_greens = new Greens_rect_2D_cpu*[m_nfreq];
 
@@ -39,7 +33,7 @@ public:
         }
     }
 
-    void deleteGreens() override
+    void ForwardModel::deleteGreens()
     {
         for (int i=0; i<m_nfreq; i++)
             delete m_greens[i];
@@ -47,13 +41,13 @@ public:
         m_greens = nullptr;
     }
 
-    void SetBackground(const volField_rect_2D_cpu &chi_) override
+    void ForwardModel::SetBackground(const volField_rect_2D_cpu &chi_)
     {
         assert(&m_chi.GetGrid() == &chi_.GetGrid());
         m_chi = chi_;
     }
 
-    void createP0() override
+    void ForwardModel::createP0()
     {
         assert(m_greens != nullptr);
         assert(p_0 == nullptr);
@@ -73,7 +67,7 @@ public:
 
     }
 
-    void deleteP0() override
+    void ForwardModel::deleteP0()
     {
         for (int i=0; i<m_nfreq; i++)
         {
@@ -86,7 +80,7 @@ public:
         p_0 = nullptr;
     }
 
-    void deleteTotalField() override
+    void ForwardModel::deleteTotalField()
     {
         for (int i=0; i<m_nfreq; i++)
         {
@@ -99,7 +93,7 @@ public:
         p_tot = nullptr;
     }
 
-    void calculateData(std::complex<double> *p_data) override
+    void ForwardModel::calculateData(std::complex<double> *p_data)
     {
         int l_i, l_j;
         for (int i=0; i<m_nfreq; i++)
@@ -116,7 +110,7 @@ public:
         }
     }
 
-    void createTotalField(ConjGrad conjGrad) override
+    void ForwardModel::createTotalField(ConjGrad conjGrad)
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
@@ -149,7 +143,6 @@ public:
 
     }
 
-};
 
-#endif
+
 

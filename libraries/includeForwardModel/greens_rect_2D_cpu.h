@@ -3,21 +3,14 @@
 
 #include <cassert>
 
-#include <helper.h>
-
-#include <grid_rect_2D.h>
-
-#include <volField_rect_2D_cpu.h>
-#include <volComplexField_rect_2D_cpu.h>
+#include "helper.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
+#include "grid_rect_2D.h"
 #include "contraction.h"
 #include "ProfileCpu.h"
 #include <eigen3/Eigen/Dense>
-
-/*
-  Babak 2018 11 02: Detemplating the class
-*/
+#include <volComplexField_rect_2D_cpu.h>
 
 using namespace Eigen;
 
@@ -25,7 +18,6 @@ class Greens_rect_2D_cpu {
 
   std::function< std::complex<double>(double,double) > G_func;
 
-  //const grid_rect_2D<T> &grid; // Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &grid;
   const Sources_rect_2D &src;
   const Receivers_rect_2D &recv;
@@ -41,8 +33,6 @@ class Greens_rect_2D_cpu {
 
 public:
 
-//  Greens_rect_2D_cpu(const grid_rect_2D<T> &grid_, const std::function< std::complex<double>(T,T) > G_func_, const Sources_rect_2D<T> &src_, const Receivers_rect_2D<T> &recv_, T k_)
-//  : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv() // Babak 2018 10 29: Get rid of template in grid_rect_2D class
   Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::function< std::complex<double>(double,double) > G_func_, const Sources_rect_2D &src_, const Receivers_rect_2D &recv_, double k_)
     : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 
@@ -92,44 +82,7 @@ public:
   }
 
 
-//  static void ContractWithField(Greens_rect_2D_cpu **greens, volComplexField_rect_2D_cpu **y, volComplexField_rect_2D_cpu **x, int nFreq, int nSrc) {
 
-//    // Assure we are working on the same grid
-//#ifndef NDEBUG
-//    for(int iFreq=0; iFreq<nFreq; iFreq++) {
-//      for(int iSrc=0; iSrc<nSrc; iSrc++) {
-//        assert(&greens[iFreq]->GetGrid() == &x[iFreq * nSrc + iSrc]->GetGrid());
-//        assert(&greens[iFreq]->GetGrid() == &y[iFreq * nSrc + iSrc]->GetGrid());
-//      }
-//    }
-//#endif
-
-//    //const grid_rect_2D<T> &grid = greens[0]->GetGrid();// Babak 2018 10 29: Get rid of template in grid_rect_2D class
-//    const grid_rect_2D &grid = greens[0]->GetGrid();
-
-//    const std::complex<double> **y_data = new const std::complex<double>*[nFreq * nSrc];
-//    std::complex<double> **x_data = new std::complex<double>*[nFreq * nSrc];
-//    const std::complex<double> **G_vol = new const std::complex<double>*[nFreq];
-
-//    for(int i=0; i<nFreq * nSrc; i++) {
-//      y_data[i] = y[i]->GetDataPtr();
-//      x_data[i] = x[i]->GetDataPtr();
-//    }
-
-//    for(int i=0; i<nFreq; i++) {
-//      G_vol[i] = greens[i]->GetGreensVolume();
-//    }
-
-//    const std::array<int, 2> &nx = grid.GetGridDimensions();
-
-//    contract_Greens_rect_2D_array(G_vol, y_data, x_data, nFreq, nSrc, nx, 2 * nx[0] - 1);
-
-//    delete[] y_data;
-//    delete[] x_data;
-
-//  }
-
-  //const grid_rect_2D<T>& GetGrid() const { return grid; }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &GetGrid() const { return grid; }
 
 

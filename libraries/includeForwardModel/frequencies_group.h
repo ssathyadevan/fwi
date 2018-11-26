@@ -1,12 +1,12 @@
 #ifndef FREQUENCIES_GROUP_H
 #define FREQUENCIES_GROUP_H
+#include "variable_structure.h"
 
 #include <cassert>
 #include <iostream>
 #include <vector>
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "variable_structure.h"
 
 /*
    Babak 2018 11 05: Detemplating the class
