@@ -1,6 +1,15 @@
-//#include "receivers_rect_2D.h"
+#include "receivers_rect_2D.h"
 
-// // Explicitly initiate the template classes we want
+Receivers_rect_2D::Receivers_rect_2D(const Sources_rect_2D &src) :
+    nRecv(src.nSrc), xRecv(src.xSrc) {}
 
-//template class Receivers_rect_2D<float>;
-//template class Receivers_rect_2D<double>;
+void Receivers_rect_2D::Print() {
+    std::cout << "Total number is receivers is " << nRecv << ". Positions:" << std::endl;
+    for(int i=0; i<nRecv; i++) {
+        std::cout << "x = (" << xRecv[i][0] << ", " << xRecv[i][1] << ")" << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+
+
