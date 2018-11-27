@@ -13,7 +13,7 @@
 
 class ForwardModelInterface
 {
-protected:
+public:
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;

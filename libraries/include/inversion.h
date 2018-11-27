@@ -119,18 +119,18 @@ public:
     // Babak 2018 10 25: in createTotalField we use calcField class which is responsible
     // for creating the total field with Equation ID: "weightingFactorField"
 
-    virtual void deleteTotalField()
-    {
-        for (int i=0; i<m_nfreq; i++)
-        {
-            for (int j=0; j<m_nsrc; j++)
-                delete p_tot[i][j];
+//    virtual void deleteTotalField()
+//    {
+//        for (int i=0; i<m_nfreq; i++)
+//        {
+//            for (int j=0; j<m_nsrc; j++)
+//                delete p_tot[i][j];
 
-            delete[] p_tot[i];
-        }
-        delete[] p_tot;
-        p_tot = nullptr;
-    }
+//            delete[] p_tot[i];
+//        }
+//        delete[] p_tot;
+//        p_tot = nullptr;
+//    }
 
     virtual double findRealRootFromCubic(double a, double b, double c, double d)
     {
