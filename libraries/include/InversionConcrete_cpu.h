@@ -36,36 +36,35 @@ public:
     InversionConcrete_cpu(const InversionConcrete_cpu&) = delete;
     InversionConcrete_cpu& operator=(const InversionConcrete_cpu&) = delete;
 
-    InversionConcrete_cpu(const grid_rect_2D &grid, const Sources_rect_2D &src,
-                          const Receivers_rect_2D &recv, const Frequencies_group &freq,
-                          ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-    : Inversion(grid, src, recv, freq, profiler,chi)
-    {
-
-    }
-
-    InversionConcrete_cpu(ForwardModelInterface *forwardModel, const grid_rect_2D &grid,
-                          const Sources_rect_2D &src, const Receivers_rect_2D &recv,
-                          const Frequencies_group &freq, ProfileInterface &profiler,
-                          const volField_rect_2D_cpu chi)
-    : Inversion(grid, src, recv, freq, profiler,chi)
+    InversionConcrete_cpu(ForwardModelInterface *forwardModel)
     {
         forwardModel_ = forwardModel;
     }
 
     ~InversionConcrete_cpu()
     {
-//        if (this->m_greens!=nullptr)
-//            this->deleteGreens();
-
-//        if (this->p_0!=nullptr)
-//            this->deleteP0();
-
-//        if (this->p_tot!=nullptr)
-//            this->deleteTotalField();
     }
 
+    virtual double findRealRootFromCubic(double a, double b, double c, double d)
+    {
+        // assuming ax^3 + bx^2 +cx + d and assuming only one real root, which is expected in this algorithm
+        // uses Cardano's formula
+        double f = ((double(3.0) * c / a) - (std::pow(b,2) / std::pow(a,2)))/double(3.0);
+        double g = ((double(2.0) * std::pow(b,3) / std::pow(a,3)) - (double(9.0) * b * c / std::pow(a,2)) + (double(27.0) * d / a)) / double(27.0);
+        double h = ( std::pow(g, 2) / double(4.0) ) + ( std::pow(f, 3) / double(27.0));
+        double r = -(g / double(2.0)) + std::sqrt(h);
+        double s = std::cbrt(r);
+        double t = -(g / double(2.0)) - std::sqrt(h);
+        double u = std::cbrt(t);
 
+        double realroot = s + u - (b/(double(3.0) * a));
+        return realroot;
+
+        // note that the other (complex) roots should be
+        // std::complex<double>(x2) = -(s+u)/T(2.0) - (b/T(3.0)*a) + 1.0i * (s-u) * (std::sqrt(3)/2)
+        // std::complex<double>(x3) = -(s+u)/T(2.0) - (b/T(3.0)*a) - 1.0i * (s-u) * (std::sqrt(3)/2)
+        // but this is not tested
+    }
 
     virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Iter1 iter1,
                                              ConjGrad conjGrad, DeltaAmplification deltaAmplification, int n_max, bool do_reg)

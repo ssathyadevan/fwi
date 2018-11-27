@@ -82,7 +82,9 @@ int performInversion(const Input& input) {
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
 
     Inversion *inverse;
-    inverse = new InversionConcrete_cpu(forwardModel, grid, src, recv, freqg, *profiler, chi);
+    //inverse = new InversionConcrete_cpu(forwardModel, grid, src, recv, freqg, *profiler, chi);
+    inverse = new InversionConcrete_cpu(forwardModel);
+
 
     std::cout << "Estimating Chi..." << std::endl;
     volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input.iter1, input.conjGrad, input.deltaAmplification, input.n_max, input.do_reg);
