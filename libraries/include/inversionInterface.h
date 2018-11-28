@@ -1,8 +1,7 @@
-#ifndef INVERSION_H
-#define INVERSION_H
+#ifndef INVERSIONINTERFACE_H
+#define INVERSIONINTERFACE_H
 
 #include <complex>
-
 #include <ProfileInterface.h>
 
 #include "greens_rect_2D_cpu.h"
@@ -19,23 +18,23 @@
 #include <array>
 #include <string>
 
-inline double normSq(const std::complex<double> *data, int n) {
+inline double normSq(const std::complex<double> *data, int n)
+{
     double result = double(0.0);
-    for(int i=0; i<n; i++) {
+    for(int i=0; i<n; i++)
+    {
         result += std::norm(data[i]);
     }
     return result;
 }
 
-class Inversion
+class InversionInterface
 {
 
 public:
-    Inversion() {}
+    InversionInterface() {}
 
-    virtual double findRealRootFromCubic(double a, double b, double c, double d) = 0;
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Iter1 iter1, ConjGrad conjgrad,
-                                             DeltaAmplification deltaAmplification, int n_max, bool do_reg) = 0;
+    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Input input) = 0;
 };
 
 #endif

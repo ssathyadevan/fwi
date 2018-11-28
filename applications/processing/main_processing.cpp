@@ -12,8 +12,8 @@
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "frequencies_group.h"
-#include "inversion.h"
-#include "InversionConcrete_cpu.h"
+#include "inversionInterface.h"
+#include "Inversion.h"
 #include "read_input_fwi_into_vec.h"
 #include "variable_structure.h"
 #include "communication.h"
@@ -81,13 +81,12 @@ int performInversion(const Input& input) {
     ForwardModelInterface *forwardModel;
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
 
-    Inversion *inverse;
-    //inverse = new InversionConcrete_cpu(forwardModel, grid, src, recv, freqg, *profiler, chi);
-    inverse = new InversionConcrete_cpu(forwardModel);
+    InversionInterface *inverse;
+    inverse = new Inversion(forwardModel);
 
 
     std::cout << "Estimating Chi..." << std::endl;
-    volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input.iter1, input.conjGrad, input.deltaAmplification, input.n_max, input.do_reg);
+    volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input);
     std::cout << "Done, writing to file" << std::endl;
 
     chi_est.toFile("../../../inputOutput/chi_est_"+input.runName+".txt");

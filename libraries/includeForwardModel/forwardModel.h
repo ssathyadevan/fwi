@@ -11,21 +11,21 @@ public:
 
     ~ForwardModel();
 
-    virtual void createGreens() ;
+    void createGreens() ;
 
-    virtual void deleteGreens() ;
+    void deleteGreens() ;
 
-    virtual void SetBackground(const volField_rect_2D_cpu &chi_) ;
+    void SetBackground(const volField_rect_2D_cpu &chi_) ;
 
-    virtual void createP0() ;
+    void createP0() ;
 
-    virtual void deleteP0() ;
+    void deleteP0() ;
 
-    virtual void deleteTotalField() ;
+    void deleteTotalField() ;
 
-    virtual void calculateData(std::complex<double> *p_data) ;
+    void calculateData(std::complex<double> *p_data) ;
 
-    virtual void createTotalField(ConjGrad conjGrad) ;
+    void createTotalField(ConjGrad conjGrad) ;
 
 
 };
