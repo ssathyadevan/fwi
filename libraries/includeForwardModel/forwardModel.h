@@ -27,6 +27,27 @@ public:
 
     void createTotalField(ConjGrad conjGrad) ;
 
+    const grid_rect_2D& get_m_grid() ;
+
+    const Sources_rect_2D& get_m_src() ;
+
+    const Receivers_rect_2D& get_m_recv() ;
+
+    const Frequencies_group& get_m_freq() ;
+
+    virtual ProfileInterface& get_m_profiler() ;
+
+    virtual const int get_m_nfreq() ;
+
+    virtual const int get_m_nrecv() ;
+
+    virtual const int get_m_nsrc() ;
+
+    virtual volComplexField_rect_2D_cpu*** get_p_0() ;
+
+    virtual Greens_rect_2D_cpu** get_m_greens() ;
+
+
 
 };
 

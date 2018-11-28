@@ -143,6 +143,55 @@
 
     }
 
+    const grid_rect_2D& ForwardModel::get_m_grid()
+    {
+        return m_grid;
+    }
+
+    const Sources_rect_2D& ForwardModel::get_m_src()
+    {
+        return m_src;
+    }
+
+    const Receivers_rect_2D& ForwardModel::get_m_recv()
+    {
+        return m_recv;
+    }
+
+    const Frequencies_group& ForwardModel::get_m_freq()
+    {
+        return m_freq;
+    }
+
+    ProfileInterface& ForwardModel::get_m_profiler()
+    {
+        return m_profiler;
+    }
+
+    const int ForwardModel::get_m_nfreq()
+    {
+        return m_nfreq;
+    }
+
+    const int ForwardModel::get_m_nrecv()
+    {
+        return m_nrecv;
+    }
+
+    const int ForwardModel::get_m_nsrc()
+    {
+        return m_nsrc;
+    }
+
+    volComplexField_rect_2D_cpu*** ForwardModel::get_p_0()
+    {
+        return p_0;
+    }
+
+    Greens_rect_2D_cpu** ForwardModel::get_m_greens()
+    {
+        return m_greens;
+    }
 
 
 

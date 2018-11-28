@@ -24,7 +24,7 @@ double Inversion::findRealRootFromCubic(double a, double b, double c, double d)
 
 volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_data, Input input)
 {
-    double const1 = normSq(p_data,forwardModel_->m_nfreq*forwardModel_->m_nrecv*forwardModel_->m_nsrc);
+    double const1 = normSq(p_data,forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc());
     double eta = 1.0/const1;
     double gamma, alpha, res;
 
@@ -32,28 +32,28 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
     volComplexField_rect_2D_cpu **Kappa, **p_est;
     int l_i;
-    const int n_total = forwardModel_->m_nfreq*forwardModel_->m_nrecv*forwardModel_->m_nsrc;
+    const int n_total = forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc();
 
     std::complex<double> *r = new std::complex<double>[n_total];
     std::complex<double> *K_zeta = new std::complex<double>[n_total];
 
-    einsum ein(forwardModel_->m_grid,forwardModel_->m_src,forwardModel_->m_recv,forwardModel_->m_freq);
+    einsum ein(forwardModel_->get_m_grid(),forwardModel_->get_m_src(),forwardModel_->get_m_recv(),forwardModel_->get_m_freq());
 
-    volField_rect_2D_cpu chi_est(forwardModel_->m_grid), g(forwardModel_->m_grid), g_old(forwardModel_->m_grid), zeta(forwardModel_->m_grid);
-    volComplexField_rect_2D_cpu tmp(forwardModel_->m_grid);
+    volField_rect_2D_cpu chi_est(forwardModel_->get_m_grid()), g(forwardModel_->get_m_grid()), g_old(forwardModel_->get_m_grid()), zeta(forwardModel_->get_m_grid());
+    volComplexField_rect_2D_cpu tmp(forwardModel_->get_m_grid());
     chi_est.Zero();
 
     Kappa = new volComplexField_rect_2D_cpu*[n_total];
     for (int i = 0; i < n_total; i++)
     {
-        Kappa[i] = new volComplexField_rect_2D_cpu(forwardModel_->m_grid);
+        Kappa[i] = new volComplexField_rect_2D_cpu(forwardModel_->get_m_grid());
     }
-    p_est = new volComplexField_rect_2D_cpu*[forwardModel_->m_nfreq*forwardModel_->m_nsrc];
-    for (int i=0; i<forwardModel_->m_nfreq; i++)
+    p_est = new volComplexField_rect_2D_cpu*[forwardModel_->get_m_nfreq()*forwardModel_->get_m_nsrc()];
+    for (int i=0; i<forwardModel_->get_m_nfreq(); i++)
     {
-        l_i = i*forwardModel_->m_nsrc;
-        for (int j=0; j<forwardModel_->m_nsrc;j++)
-            p_est[l_i + j] = new volComplexField_rect_2D_cpu(*forwardModel_->p_0[i][j]);
+        l_i = i*forwardModel_->get_m_nsrc();
+        for (int j=0; j<forwardModel_->get_m_nsrc();j++)
+            p_est[l_i + j] = new volComplexField_rect_2D_cpu(*forwardModel_->get_p_0()[i][j]);
     }
 
     volField_rect_2D_cpu **gradient_chi_old = new volField_rect_2D_cpu*[2];
@@ -62,9 +62,9 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
     for (int i = 0; i < 2; i++)
     {
-        gradient_chi_old[i] = new volField_rect_2D_cpu(forwardModel_->m_grid);
-        gradient_greg_tmp[i] = new volField_rect_2D_cpu(forwardModel_->m_grid);
-        gradient_zeta_tmp[i] = new volField_rect_2D_cpu(forwardModel_->m_grid);
+        gradient_chi_old[i] = new volField_rect_2D_cpu(forwardModel_->get_m_grid());
+        gradient_greg_tmp[i] = new volField_rect_2D_cpu(forwardModel_->get_m_grid());
+        gradient_zeta_tmp[i] = new volField_rect_2D_cpu(forwardModel_->get_m_grid());
     }
 
     //main loop//
@@ -73,7 +73,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
         std::vector<std::complex<double>> res_first_it;
         if (input.do_reg == 0)
         {
-            ein.einsum_Gr_Pest(Kappa, forwardModel_->m_greens, p_est);
+            ein.einsum_Gr_Pest(Kappa, forwardModel_->get_m_greens(), p_est);
 
             for (int it1=0; it1<input.iter1.n; it1++)
             {
@@ -119,14 +119,14 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
         }
         else if (input.do_reg == 1) {
             double deltasquared_old = double(0.0);
-            volField_rect_2D_cpu bsquared_old(forwardModel_->m_grid);
+            volField_rect_2D_cpu bsquared_old(forwardModel_->get_m_grid());
             bsquared_old.Zero();
             double Freg_old = double(1.0);
             double Fdata_old = double(0.0);
 
             double delta_amplification = input.deltaAmplification.start / (input.deltaAmplification.slope * it + double(1.0));
 
-            ein.einsum_Gr_Pest(Kappa, forwardModel_->m_greens, p_est);
+            ein.einsum_Gr_Pest(Kappa, forwardModel_->get_m_greens(), p_est);
 
             //calculate initial residual
             for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
@@ -163,12 +163,12 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                 else
                 {
                     chi_est.Gradient(gradient_chi_old);
-                    volField_rect_2D_cpu gradient_chi_old_normsquared(forwardModel_->m_grid);
+                    volField_rect_2D_cpu gradient_chi_old_normsquared(forwardModel_->get_m_grid());
                     gradient_chi_old_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
                     volField_rect_2D_cpu bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
                     bsquared.Reciprocal();
-                    bsquared *= (double(1.0) / (forwardModel_->m_grid.GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
+                    bsquared *= (double(1.0) / (forwardModel_->get_m_grid().GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
                     volField_rect_2D_cpu b = bsquared;
                     b.Sqrt();
 
@@ -208,15 +208,15 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                     tmpvolfield2 = b * *gradient_zeta_tmp[1];
                     tmpvolfield.Square();
                     tmpvolfield2.Square();
-                    double B2 = (tmpvolfield.Summation() + tmpvolfield2.Summation()) * forwardModel_->m_grid.GetCellVolume();
+                    double B2 = (tmpvolfield.Summation() + tmpvolfield2.Summation()) * forwardModel_->get_m_grid().GetCellVolume();
 
                     tmpvolfield = (b * *gradient_zeta_tmp[0]) * (b * *gradient_chi_old[0]);
                     tmpvolfield2 = (b * *gradient_zeta_tmp[1]) * (b * *gradient_chi_old[1]);
-                    double B1 = double(2.0) * (tmpvolfield.Summation() + tmpvolfield2.Summation()) * forwardModel_->m_grid.GetCellVolume();
+                    double B1 = double(2.0) * (tmpvolfield.Summation() + tmpvolfield2.Summation()) * forwardModel_->get_m_grid().GetCellVolume();
 
                     tmpvolfield = (b * *gradient_chi_old[0]) * (b * *gradient_chi_old[0]);
                     tmpvolfield2 = (b * *gradient_chi_old[1]) * (b * *gradient_chi_old[1]);
-                    double B0 = ((tmpvolfield.Summation() + tmpvolfield2.Summation()) + deltasquared_old * bsquared.Summation()) * forwardModel_->m_grid.GetCellVolume();
+                    double B0 = ((tmpvolfield.Summation() + tmpvolfield2.Summation()) + deltasquared_old * bsquared.Summation()) * forwardModel_->get_m_grid().GetCellVolume();
 
                     double der_a = double(4.0) * A[1] * B2;
                     double der_b = double(3.0) * (A[1] * B1 + A[0] * B2);
@@ -240,11 +240,11 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                         break;
 
                     chi_est.Gradient(gradient_chi_old);
-                    volField_rect_2D_cpu gradient_chi_normsquared(forwardModel_->m_grid);
+                    volField_rect_2D_cpu gradient_chi_normsquared(forwardModel_->get_m_grid());
                     gradient_chi_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
                     tmpvolfield = (gradient_chi_normsquared + deltasquared_old) / (gradient_chi_old_normsquared + deltasquared_old);
-                    Freg_old = (double(1.0) / (forwardModel_->m_grid.GetDomainArea()) ) * tmpvolfield.Summation() * forwardModel_->m_grid.GetCellVolume();
+                    Freg_old = (double(1.0) / (forwardModel_->get_m_grid().GetDomainArea()) ) * tmpvolfield.Summation() * forwardModel_->get_m_grid().GetCellVolume();
 
                     deltasquared_old = deltasquared;
                     g_old = g;
@@ -260,21 +260,21 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
         std::string name = "createTotalFieldCurrentProcessor";
 
-        forwardModel_->m_profiler.StartRegion(name);
+        forwardModel_->get_m_profiler().StartRegion(name);
         //calculate p_data
-        for (int i=0; i<forwardModel_->m_nfreq; i++)
+        for (int i=0; i<forwardModel_->get_m_nfreq(); i++)
         {
-            l_i = i*forwardModel_->m_nsrc;
+            l_i = i*forwardModel_->get_m_nsrc();
 
                 std::cout << "  " << std::endl;
-                std::cout << "Creating this->p_tot for " << i+1 << "/ " << forwardModel_->m_nfreq << "freq" << std::endl;
+                std::cout << "Creating this->p_tot for " << i+1 << "/ " << forwardModel_->get_m_nfreq() << "freq" << std::endl;
                 std::cout << "  " << std::endl;
 
 
-            for (int j=0; j<forwardModel_->m_nsrc;j++)
-                *p_est[l_i + j] = calcField(*forwardModel_->m_greens[i], chi_est, *forwardModel_->p_0[i][j], input.conjGrad);
+            for (int j=0; j<forwardModel_->get_m_nsrc();j++)
+                *p_est[l_i + j] = calcField(*forwardModel_->get_m_greens()[i], chi_est, *forwardModel_->get_p_0()[i][j], input.conjGrad);
         }
-        forwardModel_->m_profiler.EndRegion();
+        forwardModel_->get_m_profiler().EndRegion();
     }
     //free memory
     for (int i = 0; i < n_total; i++)
@@ -282,7 +282,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
     delete[] Kappa;
     Kappa = nullptr;
 
-    for (int i = 0; i < forwardModel_->m_nfreq*forwardModel_->m_nsrc; i++)
+    for (int i = 0; i < forwardModel_->get_m_nfreq()*forwardModel_->get_m_nsrc(); i++)
         delete p_est[i];
     delete[] p_est;
     p_est = nullptr;
@@ -304,7 +304,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
 
 
-    volField_rect_2D_cpu result(forwardModel_->m_grid);
+    volField_rect_2D_cpu result(forwardModel_->get_m_grid());
     chi_est.CopyTo(result);
     return result;
 
