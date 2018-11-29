@@ -1,0 +1,1069 @@
+Input Temple Visualisation
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222227777222222222222222222222222222222
+2222222222222222222222222222777777777222222222222222222222222222
+2222222222222222222222222777777777777772222222222222222222222222
+2222222222222222222222277777722222277777722222222222222222222222
+2222222222222222222277777777777777777777777222222222222222222222
+2222222222222222227777777777777777777777777777222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222277772227772227777222777722222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2277777777777777777777777777777777777777777777777777777777777722
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+Starting at Fri Nov 16 14:17:42 2018
+
+nFreq_Total= 15
+Total number is sources is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number is receivers is 17. Positions:
+x = (-480, -5)
+x = (-420, -5)
+x = (-360, -5)
+x = (-300, -5)
+x = (-240, -5)
+x = (-180, -5)
+x = (-120, -5)
+x = (-60, -5)
+x = (0, -5)
+x = (60, -5)
+x = (120, -5)
+x = (180, -5)
+x = (240, -5)
+x = (300, -5)
+x = (360, -5)
+x = (420, -5)
+x = (480, -5)
+
+Total number of frequencies is 15. Values:
+f = 10, k = 0.0314159
+f = 12.1429, k = 0.0381479
+f = 14.2857, k = 0.0448799
+f = 16.4286, k = 0.0516119
+f = 18.5714, k = 0.0583439
+f = 20.7143, k = 0.0650758
+f = 22.8571, k = 0.0718078
+f = 25, k = 0.0785398
+f = 27.1429, k = 0.0852718
+f = 29.2857, k = 0.0920038
+f = 31.4286, k = 0.0987358
+f = 33.5714, k = 0.105468
+f = 35.7143, k = 0.1122
+f = 37.8571, k = 0.118932
+f = 40, k = 0.125664
+
+Creating Greens function field
+Creating P0...
+Creating total field...
+  
+Creating this->p_tot for 1/ 15freq
+  
+No convergence after 4 iterations.Res = 0.00696003
+No convergence after 4 iterations.Res = 0.00639224
+No convergence after 4 iterations.Res = 0.00561811
+No convergence after 4 iterations.Res = 0.00521588
+No convergence after 4 iterations.Res = 0.00605404
+No convergence after 4 iterations.Res = 0.00647812
+No convergence after 4 iterations.Res = 0.00566839
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.00560108
+No convergence after 4 iterations.Res = 0.00640262
+No convergence after 4 iterations.Res = 0.00598911
+No convergence after 4 iterations.Res = 0.00517703
+No convergence after 4 iterations.Res = 0.00561751
+No convergence after 4 iterations.Res = 0.00641774
+No convergence after 4 iterations.Res = 0.00700121
+  
+  
+  
+Creating this->p_tot for 2/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0145114
+No convergence after 4 iterations.Res = 0.0136294
+No convergence after 4 iterations.Res = 0.0129033
+No convergence after 4 iterations.Res = 0.0134209
+No convergence after 4 iterations.Res = 0.0140494
+No convergence after 4 iterations.Res = 0.0119752
+No convergence after 4 iterations.Res = 0.00970463
+No convergence after 4 iterations.Res = 0.00741978
+No convergence after 4 iterations.Res = 0.00971555
+No convergence after 4 iterations.Res = 0.0078367
+No convergence after 4 iterations.Res = 0.00975022
+No convergence after 4 iterations.Res = 0.0118759
+No convergence after 4 iterations.Res = 0.0138356
+No convergence after 4 iterations.Res = 0.0132285
+No convergence after 4 iterations.Res = 0.012783
+No convergence after 4 iterations.Res = 0.0135035
+No convergence after 4 iterations.Res = 0.0143452
+  
+  
+  
+Creating this->p_tot for 3/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0267756
+No convergence after 4 iterations.Res = 0.0257568
+No convergence after 4 iterations.Res = 0.0251624
+No convergence after 4 iterations.Res = 0.0248414
+No convergence after 4 iterations.Res = 0.0212568
+No convergence after 4 iterations.Res = 0.0173587
+No convergence after 4 iterations.Res = 0.0160189
+No convergence after 4 iterations.Res = 0.0186781
+No convergence after 4 iterations.Res = 0.0157959
+No convergence after 4 iterations.Res = 0.0177673
+No convergence after 4 iterations.Res = 0.0156949
+No convergence after 4 iterations.Res = 0.0172749
+No convergence after 4 iterations.Res = 0.0213244
+No convergence after 4 iterations.Res = 0.0248307
+No convergence after 4 iterations.Res = 0.0249449
+No convergence after 4 iterations.Res = 0.0252941
+No convergence after 4 iterations.Res = 0.0261807
+  
+  
+  
+Creating this->p_tot for 4/ 15freq
+  
+No convergence after 4 iterations.Res = 0.047634
+No convergence after 4 iterations.Res = 0.0452434
+No convergence after 4 iterations.Res = 0.0433717
+No convergence after 4 iterations.Res = 0.0408332
+No convergence after 4 iterations.Res = 0.0352045
+No convergence after 4 iterations.Res = 0.0364888
+No convergence after 4 iterations.Res = 0.0350109
+No convergence after 4 iterations.Res = 0.0344409
+No convergence after 4 iterations.Res = 0.0233798
+No convergence after 4 iterations.Res = 0.0316974
+No convergence after 4 iterations.Res = 0.0326998
+No convergence after 4 iterations.Res = 0.0354273
+No convergence after 4 iterations.Res = 0.0354162
+No convergence after 4 iterations.Res = 0.0413432
+No convergence after 4 iterations.Res = 0.0435797
+No convergence after 4 iterations.Res = 0.0450253
+No convergence after 4 iterations.Res = 0.0471787
+  
+  
+  
+Creating this->p_tot for 5/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0745757
+No convergence after 4 iterations.Res = 0.0651215
+No convergence after 4 iterations.Res = 0.0544112
+No convergence after 4 iterations.Res = 0.0521624
+No convergence after 4 iterations.Res = 0.0546292
+No convergence after 4 iterations.Res = 0.0647957
+No convergence after 4 iterations.Res = 0.0559459
+No convergence after 4 iterations.Res = 0.0468474
+No convergence after 4 iterations.Res = 0.0366646
+No convergence after 4 iterations.Res = 0.0429452
+No convergence after 4 iterations.Res = 0.054458
+No convergence after 4 iterations.Res = 0.0652811
+No convergence after 4 iterations.Res = 0.0561433
+No convergence after 4 iterations.Res = 0.0537965
+No convergence after 4 iterations.Res = 0.0552656
+No convergence after 4 iterations.Res = 0.0657419
+No convergence after 4 iterations.Res = 0.0754392
+  
+  
+  
+Creating this->p_tot for 6/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0989662
+No convergence after 4 iterations.Res = 0.0800154
+No convergence after 4 iterations.Res = 0.0670342
+No convergence after 4 iterations.Res = 0.076808
+No convergence after 4 iterations.Res = 0.0889309
+No convergence after 4 iterations.Res = 0.0901707
+No convergence after 4 iterations.Res = 0.0715555
+No convergence after 4 iterations.Res = 0.0569819
+No convergence after 4 iterations.Res = 0.0456037
+No convergence after 4 iterations.Res = 0.0542518
+No convergence after 4 iterations.Res = 0.0714582
+No convergence after 4 iterations.Res = 0.0907706
+No convergence after 4 iterations.Res = 0.0907492
+No convergence after 4 iterations.Res = 0.0786284
+No convergence after 4 iterations.Res = 0.0683718
+No convergence after 4 iterations.Res = 0.0806379
+No convergence after 4 iterations.Res = 0.0993825
+  
+  
+  
+Creating this->p_tot for 7/ 15freq
+  
+No convergence after 4 iterations.Res = 0.124083
+No convergence after 4 iterations.Res = 0.0926798
+No convergence after 4 iterations.Res = 0.0912465
+No convergence after 4 iterations.Res = 0.11074
+No convergence after 4 iterations.Res = 0.121957
+No convergence after 4 iterations.Res = 0.105582
+No convergence after 4 iterations.Res = 0.0896801
+No convergence after 4 iterations.Res = 0.0677335
+No convergence after 4 iterations.Res = 0.0588359
+No convergence after 4 iterations.Res = 0.0674285
+No convergence after 4 iterations.Res = 0.0922376
+No convergence after 4 iterations.Res = 0.108069
+No convergence after 4 iterations.Res = 0.123188
+No convergence after 4 iterations.Res = 0.109918
+No convergence after 4 iterations.Res = 0.0892598
+No convergence after 4 iterations.Res = 0.0912107
+No convergence after 4 iterations.Res = 0.123185
+  
+  
+  
+Creating this->p_tot for 8/ 15freq
+  
+No convergence after 4 iterations.Res = 0.141772
+No convergence after 4 iterations.Res = 0.109143
+No convergence after 4 iterations.Res = 0.137685
+No convergence after 4 iterations.Res = 0.148677
+No convergence after 4 iterations.Res = 0.1503
+No convergence after 4 iterations.Res = 0.131286
+No convergence after 4 iterations.Res = 0.103448
+No convergence after 4 iterations.Res = 0.066584
+No convergence after 4 iterations.Res = 0.0824229
+No convergence after 4 iterations.Res = 0.0682943
+No convergence after 4 iterations.Res = 0.104757
+No convergence after 4 iterations.Res = 0.131944
+No convergence after 4 iterations.Res = 0.1506
+No convergence after 4 iterations.Res = 0.14747
+No convergence after 4 iterations.Res = 0.136846
+No convergence after 4 iterations.Res = 0.109663
+No convergence after 4 iterations.Res = 0.142374
+  
+  
+  
+Creating this->p_tot for 9/ 15freq
+  
+No convergence after 4 iterations.Res = 0.161846
+No convergence after 4 iterations.Res = 0.153237
+No convergence after 4 iterations.Res = 0.20813
+No convergence after 4 iterations.Res = 0.190304
+No convergence after 4 iterations.Res = 0.176635
+No convergence after 4 iterations.Res = 0.15961
+No convergence after 4 iterations.Res = 0.106115
+No convergence after 4 iterations.Res = 0.0741838
+No convergence after 4 iterations.Res = 0.092516
+No convergence after 4 iterations.Res = 0.0783324
+No convergence after 4 iterations.Res = 0.107509
+No convergence after 4 iterations.Res = 0.158194
+No convergence after 4 iterations.Res = 0.173846
+No convergence after 4 iterations.Res = 0.185281
+No convergence after 4 iterations.Res = 0.203092
+No convergence after 4 iterations.Res = 0.152443
+No convergence after 4 iterations.Res = 0.162825
+  
+  
+  
+Creating this->p_tot for 10/ 15freq
+  
+No convergence after 4 iterations.Res = 0.201066
+No convergence after 4 iterations.Res = 0.231299
+No convergence after 4 iterations.Res = 0.268843
+No convergence after 4 iterations.Res = 0.229226
+No convergence after 4 iterations.Res = 0.210535
+No convergence after 4 iterations.Res = 0.175793
+No convergence after 4 iterations.Res = 0.126143
+No convergence after 4 iterations.Res = 0.0884247
+No convergence after 4 iterations.Res = 0.0917039
+No convergence after 4 iterations.Res = 0.0904701
+No convergence after 4 iterations.Res = 0.127998
+No convergence after 4 iterations.Res = 0.176598
+No convergence after 4 iterations.Res = 0.212795
+No convergence after 4 iterations.Res = 0.23068
+No convergence after 4 iterations.Res = 0.266926
+No convergence after 4 iterations.Res = 0.229417
+No convergence after 4 iterations.Res = 0.199757
+  
+  
+  
+Creating this->p_tot for 11/ 15freq
+  
+No convergence after 4 iterations.Res = 0.264547
+No convergence after 4 iterations.Res = 0.320661
+No convergence after 4 iterations.Res = 0.306111
+No convergence after 4 iterations.Res = 0.276751
+No convergence after 4 iterations.Res = 0.261081
+No convergence after 4 iterations.Res = 0.198175
+No convergence after 4 iterations.Res = 0.15548
+No convergence after 4 iterations.Res = 0.108322
+No convergence after 4 iterations.Res = 0.0922036
+No convergence after 4 iterations.Res = 0.116415
+No convergence after 4 iterations.Res = 0.155225
+No convergence after 4 iterations.Res = 0.195945
+No convergence after 4 iterations.Res = 0.259417
+No convergence after 4 iterations.Res = 0.275835
+No convergence after 4 iterations.Res = 0.302005
+No convergence after 4 iterations.Res = 0.314238
+No convergence after 4 iterations.Res = 0.260657
+  
+  
+  
+Creating this->p_tot for 12/ 15freq
+  
+No convergence after 4 iterations.Res = 0.367393
+No convergence after 4 iterations.Res = 0.403775
+No convergence after 4 iterations.Res = 0.333923
+No convergence after 4 iterations.Res = 0.328684
+No convergence after 4 iterations.Res = 0.300017
+No convergence after 4 iterations.Res = 0.217439
+No convergence after 4 iterations.Res = 0.181282
+No convergence after 4 iterations.Res = 0.136992
+No convergence after 4 iterations.Res = 0.10827
+No convergence after 4 iterations.Res = 0.143395
+No convergence after 4 iterations.Res = 0.179303
+No convergence after 4 iterations.Res = 0.212251
+No convergence after 4 iterations.Res = 0.295046
+No convergence after 4 iterations.Res = 0.325528
+No convergence after 4 iterations.Res = 0.329711
+No convergence after 4 iterations.Res = 0.394559
+No convergence after 4 iterations.Res = 0.357806
+  
+  
+  
+Creating this->p_tot for 13/ 15freq
+  
+No convergence after 4 iterations.Res = 0.458905
+No convergence after 4 iterations.Res = 0.445134
+No convergence after 4 iterations.Res = 0.362642
+No convergence after 4 iterations.Res = 0.368089
+No convergence after 4 iterations.Res = 0.318619
+No convergence after 4 iterations.Res = 0.244279
+No convergence after 4 iterations.Res = 0.213932
+No convergence after 4 iterations.Res = 0.160466
+No convergence after 4 iterations.Res = 0.118069
+No convergence after 4 iterations.Res = 0.164278
+No convergence after 4 iterations.Res = 0.210664
+No convergence after 4 iterations.Res = 0.241625
+No convergence after 4 iterations.Res = 0.318712
+No convergence after 4 iterations.Res = 0.369051
+No convergence after 4 iterations.Res = 0.365196
+No convergence after 4 iterations.Res = 0.443953
+No convergence after 4 iterations.Res = 0.453243
+  
+  
+  
+Creating this->p_tot for 14/ 15freq
+  
+No convergence after 4 iterations.Res = 0.518154
+No convergence after 4 iterations.Res = 0.461148
+No convergence after 4 iterations.Res = 0.400473
+No convergence after 4 iterations.Res = 0.391331
+No convergence after 4 iterations.Res = 0.3396
+No convergence after 4 iterations.Res = 0.267764
+No convergence after 4 iterations.Res = 0.230287
+No convergence after 4 iterations.Res = 0.188156
+No convergence after 4 iterations.Res = 0.152964
+No convergence after 4 iterations.Res = 0.185032
+No convergence after 4 iterations.Res = 0.230468
+No convergence after 4 iterations.Res = 0.265302
+No convergence after 4 iterations.Res = 0.340038
+No convergence after 4 iterations.Res = 0.389876
+No convergence after 4 iterations.Res = 0.400526
+No convergence after 4 iterations.Res = 0.460929
+No convergence after 4 iterations.Res = 0.512355
+  
+  
+  
+Creating this->p_tot for 15/ 15freq
+  
+No convergence after 4 iterations.Res = 0.549302
+No convergence after 4 iterations.Res = 0.481706
+No convergence after 4 iterations.Res = 0.449767
+No convergence after 4 iterations.Res = 0.421394
+No convergence after 4 iterations.Res = 0.377366
+No convergence after 4 iterations.Res = 0.289349
+No convergence after 4 iterations.Res = 0.25456
+No convergence after 4 iterations.Res = 0.191824
+No convergence after 4 iterations.Res = 0.1636
+No convergence after 4 iterations.Res = 0.190358
+No convergence after 4 iterations.Res = 0.252469
+No convergence after 4 iterations.Res = 0.289284
+No convergence after 4 iterations.Res = 0.379787
+No convergence after 4 iterations.Res = 0.423762
+No convergence after 4 iterations.Res = 0.451319
+No convergence after 4 iterations.Res = 0.485205
+No convergence after 4 iterations.Res = 0.548234
+  
+  
+Computation time for createTotalFieldCurrentProcessor was 7.97707 seconds
+Estimating Chi...
+1/2	 (1/2)	 res: 0.53933091805231148
+2/2	 (1/2)	 res: 0.60338839022883417
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0063048816281197784
+No convergence after 4 iterations.Res = 0.0062347392905908443
+No convergence after 4 iterations.Res = 0.0063166144703797489
+No convergence after 4 iterations.Res = 0.005894393406268632
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0057536180408747639
+No convergence after 4 iterations.Res = 0.0062349560441814778
+No convergence after 4 iterations.Res = 0.0061591269769653836
+No convergence after 4 iterations.Res = 0.006224553097786305
+  
+Creating this->p_tot for 10/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0085789546331174107
+No convergence after 4 iterations.Res = 0.0086663497335575639
+No convergence after 4 iterations.Res = 0.0088166903937088037
+No convergence after 4 iterations.Res = 0.0077654143060757507
+No convergence after 4 iterations.Res = 0.0057831540525541862
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0056471358352569974
+No convergence after 4 iterations.Res = 0.0075616278008073566
+No convergence after 4 iterations.Res = 0.0086648478986376346
+No convergence after 4 iterations.Res = 0.0085457640772455754
+No convergence after 4 iterations.Res = 0.0084643928170393175
+  
+Creating this->p_tot for 11/ 15freq
+  
+No convergence after 4 iterations.Res = 0.011517398304313611
+No convergence after 4 iterations.Res = 0.011756576845828653
+No convergence after 4 iterations.Res = 0.011680228469108203
+No convergence after 4 iterations.Res = 0.0098200086106072886
+No convergence after 4 iterations.Res = 0.0072148963093421623
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.007126928151191125
+No convergence after 4 iterations.Res = 0.0095873752057937904
+No convergence after 4 iterations.Res = 0.011447185010281743
+No convergence after 4 iterations.Res = 0.011556222314577758
+No convergence after 4 iterations.Res = 0.011347092961553102
+  
+Creating this->p_tot for 12/ 15freq
+  
+No convergence after 4 iterations.Res = 0.015164325236223066
+No convergence after 4 iterations.Res = 0.01538252158859188
+No convergence after 4 iterations.Res = 0.014833276674167343
+No convergence after 4 iterations.Res = 0.012267428666884562
+No convergence after 4 iterations.Res = 0.0091753797386051848
+No convergence after 4 iterations.Res = 0.005900532703122921
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0059786397343926665
+No convergence after 4 iterations.Res = 0.0091827575260740035
+No convergence after 4 iterations.Res = 0.012043911879766108
+No convergence after 4 iterations.Res = 0.014545345045015083
+No convergence after 4 iterations.Res = 0.015095940599932375
+No convergence after 4 iterations.Res = 0.014923733519340683
+  
+Creating this->p_tot for 13/ 15freq
+  
+No convergence after 4 iterations.Res = 0.019611850261295798
+No convergence after 4 iterations.Res = 0.019510563154997839
+No convergence after 4 iterations.Res = 0.018519037483656131
+No convergence after 4 iterations.Res = 0.015351077611135305
+No convergence after 4 iterations.Res = 0.01194431189131996
+No convergence after 4 iterations.Res = 0.0076101280046535985
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0077576145685467569
+No convergence after 4 iterations.Res = 0.011990299690871196
+No convergence after 4 iterations.Res = 0.015121417082708352
+No convergence after 4 iterations.Res = 0.018176874391368513
+No convergence after 4 iterations.Res = 0.019143091496496279
+No convergence after 4 iterations.Res = 0.019253154616580694
+  
+Creating this->p_tot for 14/ 15freq
+  
+No convergence after 4 iterations.Res = 0.024691823924646594
+No convergence after 4 iterations.Res = 0.024092753312831311
+No convergence after 4 iterations.Res = 0.022781110314415317
+No convergence after 4 iterations.Res = 0.01894960514379616
+No convergence after 4 iterations.Res = 0.015056828845593647
+No convergence after 4 iterations.Res = 0.0095605989847175384
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0097986832258300342
+No convergence after 4 iterations.Res = 0.015042534395328053
+No convergence after 4 iterations.Res = 0.01866841848804433
+No convergence after 4 iterations.Res = 0.022369767006323069
+No convergence after 4 iterations.Res = 0.023679981607653756
+No convergence after 4 iterations.Res = 0.024205544451104392
+  
+Creating this->p_tot for 15/ 15freq
+  
+No convergence after 4 iterations.Res = 0.030444445252205958
+No convergence after 4 iterations.Res = 0.029532478533142854
+No convergence after 4 iterations.Res = 0.027686693284322456
+No convergence after 4 iterations.Res = 0.02284679499982931
+No convergence after 4 iterations.Res = 0.017641363975829442
+No convergence after 4 iterations.Res = 0.01112056659330013
+No convergence after 4 iterations.Res = 0.0053590358489307571
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0053910436421455614
+No convergence after 4 iterations.Res = 0.011360640777486414
+No convergence after 4 iterations.Res = 0.017543187758979461
+No convergence after 4 iterations.Res = 0.022507045069171748
+No convergence after 4 iterations.Res = 0.027209834679675374
+No convergence after 4 iterations.Res = 0.02909836125821709
+No convergence after 4 iterations.Res = 0.029857812967198371
+Computation time for createTotalFieldCurrentProcessor was 5.8494361440000002 seconds
+1/2	 (2/2)	 res: 0.45286289790642686
+2/2	 (2/2)	 res: 0.47469806717232454
+  
+Creating this->p_tot for 1/ 15freq
+  
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+  
+Creating this->p_tot for 2/ 15freq
+  
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+  
+Creating this->p_tot for 3/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 4/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 5/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 6/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 7/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 2iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 8/ 15freq
+  
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+  
+Creating this->p_tot for 9/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0056846751173745503
+No convergence after 4 iterations.Res = 0.0055343664277456486
+No convergence after 4 iterations.Res = 0.0058057315296003026
+No convergence after 4 iterations.Res = 0.0061017962494266413
+No convergence after 4 iterations.Res = 0.0050545934946381044
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0050109763992164788
+No convergence after 4 iterations.Res = 0.0060330678120055735
+No convergence after 4 iterations.Res = 0.005806545063566604
+No convergence after 4 iterations.Res = 0.0055447041803427218
+No convergence after 4 iterations.Res = 0.0056926208351716912
+  
+Creating this->p_tot for 10/ 15freq
+  
+No convergence after 4 iterations.Res = 0.0076286586256145471
+No convergence after 4 iterations.Res = 0.0077897304956331005
+No convergence after 4 iterations.Res = 0.0083617381668894403
+No convergence after 4 iterations.Res = 0.008037701443904418
+No convergence after 4 iterations.Res = 0.0062422287640820492
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0062476239457827116
+No convergence after 4 iterations.Res = 0.0079345205697315662
+No convergence after 4 iterations.Res = 0.0083062872192691591
+No convergence after 4 iterations.Res = 0.0077854831190681253
+No convergence after 4 iterations.Res = 0.0076352057797293644
+  
+Creating this->p_tot for 11/ 15freq
+  
+No convergence after 4 iterations.Res = 0.010266772120399354
+No convergence after 4 iterations.Res = 0.010800859061094681
+No convergence after 4 iterations.Res = 0.011164618766564613
+No convergence after 4 iterations.Res = 0.010079344957068279
+No convergence after 4 iterations.Res = 0.007884281006577282
+No convergence after 4 iterations.Res = 0.0056069181199081925
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0057687443774223756
+No convergence after 4 iterations.Res = 0.0080029850189242881
+No convergence after 4 iterations.Res = 0.010003323601820288
+No convergence after 4 iterations.Res = 0.011040070484968634
+No convergence after 4 iterations.Res = 0.010730625705726573
+No convergence after 4 iterations.Res = 0.010247017155831574
+  
+Creating this->p_tot for 12/ 15freq
+  
+No convergence after 4 iterations.Res = 0.013572534140541478
+No convergence after 4 iterations.Res = 0.014201732521690907
+No convergence after 4 iterations.Res = 0.013897968527488537
+No convergence after 4 iterations.Res = 0.012520151859870127
+No convergence after 4 iterations.Res = 0.0099493134758285653
+No convergence after 4 iterations.Res = 0.0065613544942731495
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0068942344743647089
+No convergence after 4 iterations.Res = 0.010235393247485991
+No convergence after 4 iterations.Res = 0.012552763419706823
+No convergence after 4 iterations.Res = 0.013784907782077475
+No convergence after 4 iterations.Res = 0.014067392219759434
+No convergence after 4 iterations.Res = 0.013523105353132723
+  
+Creating this->p_tot for 13/ 15freq
+  
+No convergence after 4 iterations.Res = 0.017705770889177925
+No convergence after 4 iterations.Res = 0.017927403706702372
+No convergence after 4 iterations.Res = 0.017205541231231716
+No convergence after 4 iterations.Res = 0.015817316688346208
+No convergence after 4 iterations.Res = 0.012892312486312609
+No convergence after 4 iterations.Res = 0.0084073184824432819
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.0088763083050083513
+No convergence after 4 iterations.Res = 0.01325405745258855
+No convergence after 4 iterations.Res = 0.015891181633573268
+No convergence after 4 iterations.Res = 0.017097932527567698
+No convergence after 4 iterations.Res = 0.01771858758600894
+No convergence after 4 iterations.Res = 0.017531982992202787
+  
+Creating this->p_tot for 14/ 15freq
+  
+No convergence after 4 iterations.Res = 0.022277872446560747
+No convergence after 4 iterations.Res = 0.021723070203427286
+No convergence after 4 iterations.Res = 0.021204347104285936
+No convergence after 4 iterations.Res = 0.019617094946591338
+No convergence after 4 iterations.Res = 0.016364856143216689
+No convergence after 4 iterations.Res = 0.010452031300268833
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.01106318795683783
+No convergence after 4 iterations.Res = 0.016712572872607693
+No convergence after 4 iterations.Res = 0.019691251780823531
+No convergence after 4 iterations.Res = 0.02110431561313237
+No convergence after 4 iterations.Res = 0.021548761428736012
+No convergence after 4 iterations.Res = 0.022003538324465301
+  
+Creating this->p_tot for 15/ 15freq
+  
+No convergence after 4 iterations.Res = 0.027269906768217302
+No convergence after 4 iterations.Res = 0.026330998877599276
+No convergence after 4 iterations.Res = 0.025998599098763498
+No convergence after 4 iterations.Res = 0.023815873101852052
+No convergence after 4 iterations.Res = 0.019600700199439363
+No convergence after 4 iterations.Res = 0.012181947932779991
+No convergence after 4 iterations.Res = 0.0054090851445769235
+Convergence after 3iterations
+Convergence after 3iterations
+Convergence after 3iterations
+No convergence after 4 iterations.Res = 0.005592391530979287
+No convergence after 4 iterations.Res = 0.012829152039318009
+No convergence after 4 iterations.Res = 0.019934228017072671
+No convergence after 4 iterations.Res = 0.023895640455491318
+No convergence after 4 iterations.Res = 0.025906702459444337
+No convergence after 4 iterations.Res = 0.026248926117375008
+No convergence after 4 iterations.Res = 0.026921725908682453
+Computation time for createTotalFieldCurrentProcessor was 6.0454625770000003 seconds
+Done, writing to file
+0
+Visualisation of the estimated temple using FWI
+2222223222223222223222222221221111221222222223222223222223222222
+3222223222222222222222222221221001221222222222222223222222222223
+2222222222222332222222222222222112211222222222222332222222222222
+2222222222322322332332222222222222222222222333332332232222222222
+2222222222332333333333322223333443333323333333333332333222232222
+2222232222332333333333333334444554444333333333333332332222322222
+2222222322223333333333334444444444444444333333333233222232222222
+2222222222223233233333334444443333444444333333223323222222222222
+2222222222222223223333333333333333333333333332223222222222222222
+2222222222222222222232222222112222112222222322222222222222222222
+2222222222222222222221111111111111111111111222222222222222222222
+2222222222222222222222111112221112222112112222222222222222222222
+2222222222222222222222222222322222232222222222222222222222222222
+2222222222222222222222322223323333333222332222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222221111111111111111111111111111111111222222222222222
+2222222222222222111111111111111111111111111111112222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222323333333333333333333333333333333333222222222222222
+2222222222333333333333333333333333333333333333333333332222222222
+2222222222222222322333333333333333333333333332232222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222122221112222122222212222111222211222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222
+Finished at Fri Nov 16 14:18:05 2018
+
