@@ -5,46 +5,34 @@ Greens_rect_2D_cpu::Greens_rect_2D_cpu(const grid_rect_2D &grid_, const std::fun
     : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 {
     const std::array<int, 2> &nx = grid.GetGridDimensions();
-
     G_vol = new std::complex<double>[(2 * nx[1] - 1) * (2 * nx[0] - 1)];
     create_Greens_volume();
-
     create_Greens_recv();
     create_Greens_volume_ankit();
-
 }
 
-Greens_rect_2D_cpu::~Greens_rect_2D_cpu() {
+Greens_rect_2D_cpu::~Greens_rect_2D_cpu()
+{
     delete_Greens_recv();
     delete[] G_vol;
 }
-
 
 volComplexField_rect_2D_cpu Greens_rect_2D_cpu::ContractWithField(const volComplexField_rect_2D_cpu &x) const
 {
     // Assure we are working on the same grid
     assert(&grid == &x.GetGrid());
-
     volComplexField_rect_2D_cpu y(grid);
-
     std::complex<double> *y_data = y.GetDataPtr();
-
     const std::array<int, 2> &nx = grid.GetGridDimensions();
-
     contract_Greens_rect_2D(G_vol, x.GetDataPtr(), y_data, nx, 2 * nx[0] - 1);
-
     return y;
 }
 
-
 // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
 // Equation ID: "rel:buildField"
-
-
 volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_2D_cpu &dW) const
 {
     const std::array<int, 2> &nx1 = grid.GetGridDimensions();
-
     const int &nx = nx1[0];
     const int &nz = nx1[1];
 
@@ -56,7 +44,6 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
     const std::complex<double> *p_dW = dW.GetDataPtr();
 
     assert(&grid == &dW.GetGrid());
-    //profiler.StartRegion("dot_product");
 
     Matrix< std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
     Matrix< std::complex<double>, Dynamic, 1, ColMajor> dummy;
@@ -65,12 +52,9 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
     eigprod.resize(nx*nz,NoChange);
     dummy.resize(nx,NoChange);
 
-    for(int i=0; i < nx*nz; i++)
-        dW_vec(i) = p_dW[i];
+    for(int i=0; i < nx*nz; i++) { dW_vec(i) = p_dW[i]; }
 
-
-    for(int i=0; i < nx*nz; i++)
-        eigprod(i) = double(0.0);
+    for(int i=0; i < nx*nz; i++) { eigprod(i) = double(0.0); }
 
     for(int i=0; i < nz; i++)
     {
@@ -90,9 +74,7 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
             }
         }
     }
-    //profiler.EndRegion();
 
-    //profiler.StartRegion("dot_product");
     for(int i=1; i < nz; i++)
     {
         if (i <= nz-i)
@@ -102,7 +84,6 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
             {
                 l2 = j*nx;
                 l3 = l1 + l2;
-
                 eigprod.block(l3,0,nx,1) += ( G_vol2.block(0,l1,nx,nx) ) * dW_vec.block(l2,0,nx,1);
             }
         }
@@ -114,13 +95,11 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
             {
                 l2 = j*nx;
                 l3 = l1 + l2;
-
                 eigprod.block(l3,0,nx,1) += ( G_vol2.block(0,l1,nx,nx) ) * dW_vec.block(l2,0,nx,1);
             }
         }
     }
-    //      std::cout << dW_vec.cols() << "  " << dW_vec.rows() << "hello" << std::endl;
-    //profiler.EndRegion();
+
     for(int i=0; i < nx*nz; i++)
     {
         p_prod[i] = eigprod(i);
@@ -129,28 +108,25 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
 
 }
 
-
-void Greens_rect_2D_cpu::create_Greens_volume() {   ////creating G_xx weird algorithm//////
+void Greens_rect_2D_cpu::create_Greens_volume()
+{
 
     double vol = grid.GetCellVolume();
     const std::array<int, 2> &nx = grid.GetGridDimensions();
     const std::array<double, 2> &dx = grid.GetCellDimensions();
 
-    for(int i=-nx[1]+1; i <= nx[1]-1; i++) {
+    for(int i=-nx[1]+1; i <= nx[1]-1; i++)
+    {
         double z = i * dx[1];
-        for(int j=-nx[0]+1; j <= nx[0]-1; j++) {
+        for(int j=-nx[0]+1; j <= nx[0]-1; j++)
+        {
             double x = j * dx[0];
-
             double r = dist(z, x);
-
             std::complex<double> val = G_func(k, r);
-
             G_vol[(nx[1] + i - 1) * (2 * nx[0] - 1) + (nx[0] + j - 1)] = val * vol;
-
         }
     }
 }
-
 
 void Greens_rect_2D_cpu::create_Greens_volume_ankit()
 {
@@ -158,10 +134,8 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
     const std::array<int, 2> &nx1 = grid.GetGridDimensions();
     const std::array<double, 2> &dx = grid.GetCellDimensions();
     const std::array<double, 2> &x_min = grid.GetGridStart();
-
     const int &nx = nx1[0];
     const int &nz = nx1[1];
-
     G_vol2.resize(nx,nx*nz);
 
     double p2_z = x_min[1] + dx[1]/double(2.0);
@@ -176,17 +150,14 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
         for (int j=0; j<nx*nz; j++)
             G_vol2(i,j) = *(G_x.GetDataPtr() + j);
     }
-
 }
 
-
-
-
-void Greens_rect_2D_cpu::create_Greens_recv() {
-
+void Greens_rect_2D_cpu::create_Greens_recv()
+{
     double vol = grid.GetCellVolume();
     volComplexField_rect_2D_cpu G_bound_cpu(grid);
-    for(int i=0; i < recv.nRecv; i++) {
+    for(int i=0; i < recv.nRecv; i++)
+    {
         double x_recv = recv.xRecv[i][0];
         double z_recv = recv.xRecv[i][1];
         volComplexField_rect_2D_cpu *G_bound = new volComplexField_rect_2D_cpu(grid);
@@ -197,9 +168,10 @@ void Greens_rect_2D_cpu::create_Greens_recv() {
     }
 }
 
-void Greens_rect_2D_cpu::delete_Greens_recv() {
-    for(int i=0; i < recv.nRecv; i++) {
+void Greens_rect_2D_cpu::delete_Greens_recv()
+{
+    for(int i=0; i < recv.nRecv; i++)
+    {
         delete G_recv[i];
     }
 }
-

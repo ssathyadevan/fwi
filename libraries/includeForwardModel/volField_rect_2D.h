@@ -7,7 +7,8 @@
 
 #include <grid_rect_2D.h>
 
-class volField_rect_2D {
+class volField_rect_2D
+{
 
 protected:
 

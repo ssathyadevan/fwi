@@ -30,7 +30,6 @@ class einsum
         einsum(const einsum &) = delete; //delete the copy constructor to forbid copying of objects of this class
         einsum & operator=(const einsum &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
-
         void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const;
 
         void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const;

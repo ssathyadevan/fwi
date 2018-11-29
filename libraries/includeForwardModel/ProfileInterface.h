@@ -3,7 +3,8 @@
 
 #include <string>
 
-class ProfileInterface {
+class ProfileInterface
+{
 	
 public:
 

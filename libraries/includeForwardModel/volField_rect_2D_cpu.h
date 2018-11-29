@@ -12,7 +12,8 @@
 #include <string.h>
 
 
-class volField_rect_2D_cpu : public volField_rect_2D {
+class volField_rect_2D_cpu : public volField_rect_2D
+{
 
     double * const data;
 
@@ -72,56 +73,52 @@ public:
 
 };
 
-
-
-inline double InnerProduct(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y) {
+inline double InnerProduct(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+{
     return x.InnerProduct(y);
 }
 
-
-inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y) {
+inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+{
     volField_rect_2D_cpu result(x);
     result += y;
     return result;
 }
 
-
-inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu& x, const double y) {
+inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu& x, const double y)
+{
     volField_rect_2D_cpu result(x);
     result += y;
     return result;
 }
 
-
-
-inline volField_rect_2D_cpu operator-(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y) {
+inline volField_rect_2D_cpu operator-(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+{
     volField_rect_2D_cpu result(x);
     result -= y;
     return result;
 }
 
-
-inline volField_rect_2D_cpu operator*(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y) {
+inline volField_rect_2D_cpu operator*(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+{
     volField_rect_2D_cpu result(x);
     result *= y;
     return result;
 }
 
-
-inline volField_rect_2D_cpu operator*(const double x, const volField_rect_2D_cpu &y) {
+inline volField_rect_2D_cpu operator*(const double x, const volField_rect_2D_cpu &y)
+{
     volField_rect_2D_cpu result(y);
     result *= x;
     return result;
 }
 
-
-inline volField_rect_2D_cpu operator/(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y) {
+inline volField_rect_2D_cpu operator/(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+{
     volField_rect_2D_cpu result(x);
     result /= y;
     return result;
 }
-
-
 
 #endif /* VOLFIELD_RECT_2D_CPU_H */
 

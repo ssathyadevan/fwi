@@ -7,7 +7,8 @@
 #include <vector>
 #include <chrono>
 
-class ProfileCpu : public ProfileInterface {
+class ProfileCpu : public ProfileInterface
+{
 	
 public:
     ProfileCpu();

@@ -45,16 +45,16 @@ int main(int argc, char** argv)
 
     chi_visualisation_in_integer_form("../"+input.fileName+".txt", input.ngrid[0]);
 
-    create_csv_files_for_chi("../../../"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi("../../../parallelized-fwi/"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
 
     // WT3/5: The full waveform inversion method is called by providing the ...
     //... relevant input arguments from the "input" struct created above
     int ret = performInversion(input);
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form("../../../inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
+    chi_visualisation_in_integer_form("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
 
-    create_csv_files_for_chi("../../../inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
 
     ClockStop(ret); // WT 4/5: Stop clock & cout whether successful
 
@@ -70,10 +70,11 @@ int performInversion(const Input& input) {
 
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file("../../../inputOutput/"+input.runName+"InvertedChiToPressure.txt");
+    std::ifstream       file("../../../parallelized-fwi/inputOutput/"+input.runName+"InvertedChiToPressure.txt");
     CSVRow              row;
     int i = 0;
-    while(file >> row) {
+    while(file >> row)
+    {
         if (i<magnitude) { referencePressureData[i]= { atof(row[0].c_str()), atof(row[1].c_str())}; }
         i++;
     }
@@ -89,7 +90,7 @@ int performInversion(const Input& input) {
     volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input);
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile("../../../inputOutput/chi_est_"+input.runName+".txt");
+    chi_est.toFile("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt");
 
     return 0;
 }

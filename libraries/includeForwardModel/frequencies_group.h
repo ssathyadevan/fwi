@@ -9,7 +9,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-class Frequencies_group {
+class Frequencies_group
+{
 
     Frequencies_group operator=(const Frequencies_group&);
 

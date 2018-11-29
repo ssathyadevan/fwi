@@ -66,7 +66,8 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
         if(res < conjGrad.tolerance && it != 0)
         {
-            if(true){
+            if(true)
+            {
                 std::string itstring = std::to_string(it);
                 std::string line_to_print = "Convergence after "+itstring+"iterations";
                 std::cout << line_to_print << std::endl;
@@ -97,7 +98,9 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
             p_tot = p_init;
             for(int j=0; j<it+1; j++)
+            {
                 p_tot += alpha[j]*phi[j];// Babak 2018 10 25: "weightingFactorField"
+            }
         }
         else
         {

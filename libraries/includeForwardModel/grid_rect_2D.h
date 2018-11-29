@@ -3,7 +3,8 @@
 
 #include <array>
 
-class grid_rect_2D{
+class grid_rect_2D
+{
 
     const std::array<double, 2> x_min;
     const std::array<double, 2> x_max;
