@@ -17,11 +17,12 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
     double contrast_difference = contrast-no_contrast; // just gives you back the contrast
     double value; //value read in from file
     int dummy; //value printed to screen
-    while (getline(myfile, line)){
+    while (getline(myfile, line))
+    {
         value = stod(line);
         dummy = std::round(((value)/contrast_difference*resolution) + rock_character) ; //cast value read to int printed by linear interpol
-        if (dummy < 0) dummy = 0; // below bounds back to 0, signals potential problem
-        else if (dummy > 9) dummy = 9; // above bounds back to 9, see above
+        if (dummy < 0) { dummy = 0;} // below bounds back to 0, signals potential problem
+        else if (dummy > 9) { dummy = 9; } // above bounds back to 9, see above
         std::cout << dummy; //print integer
         //first increment x and then start printing the next line if nxt is reached
         x++;

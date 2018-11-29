@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 }
 
 // WT 4/4: Here the mathematics of the "preprocessing" part of FWI is done.
-int generateReferencePressureFieldFromChi
-(const Input& input) {
+int generateReferencePressureFieldFromChi (const Input& input)
+{
 
     #include "setupInputParametersForFurtherCalculations.h"
 
@@ -41,7 +41,7 @@ int generateReferencePressureFieldFromChi
 
     std::complex<double> referencePressureData[magnitude];
 
-    chi.toFile("../../../inputOutput/chi_ref_" + input.runName + ".txt");
+    chi.toFile("../../../parallelized-fwi/inputOutput/chi_ref_" + input.runName + ".txt");
 
     ForwardModelInterface *forwardModel;
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
@@ -53,11 +53,12 @@ int generateReferencePressureFieldFromChi
     forwardModel->calculateData(referencePressureData);
 
     // writing the referencePressureData to a text file in complex form
-    std::string invertedChiToPressureFileName = "../../../inputOutput/"+input.runName+"InvertedChiToPressure.txt";
+    std::string invertedChiToPressureFileName = "../../../parallelized-fwi/inputOutput/"+input.runName+"InvertedChiToPressure.txt";
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());
-    for(int i=0; i < magnitude; i++) {
+    for(int i=0; i < magnitude; i++)
+    {
         file << std::setprecision(17) << referencePressureData[i].real()
              <<"," << referencePressureData[i].imag() << std::endl;
     }

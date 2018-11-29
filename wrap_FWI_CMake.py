@@ -10,7 +10,7 @@
 # We import (in Cpp we would say hashtag include) the libraries allowing access to "the computer"
 
 import subprocess, os, sys
-os.chdir('build/applications/preProcessing')                    	# Go here and you find the preProcessing executable
+os.chdir('../build/applications/preProcessing')                    	# Go here and you find the preProcessing executable
 run_fwi_cpp = subprocess.Popen('./FWI_PreProcess')              	# Run the preProcessing executable
 run_fwi_cpp.wait()                                              	# Wait for that process to finish
 
@@ -18,6 +18,6 @@ os.chdir('../processing')						# Go to the processing directory
 run_fwi_cpp = subprocess.Popen('./FWI_Process')                 	# Run the Processing executable
 run_fwi_cpp.wait()                                                   	# Wait for that process to finish
 
-os.chdir('../../..')							# Go to the home directory
+os.chdir('../../../parallelized-fwi/')							# Go to the home directory
 run_visualizer = subprocess.call(['python', 'imageCreator_CMake.py']) 	# Run the image visualizer from here. It can run independently
 sys.exit()                                                      	# Back to the terminal, we are done

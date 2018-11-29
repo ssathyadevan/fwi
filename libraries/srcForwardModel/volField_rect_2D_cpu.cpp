@@ -49,7 +49,8 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
     file.open (fileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());
 
-    for(int i=0; i<this->GetNumberOfGridPoints(); i++) {
+    for(int i=0; i<this->GetNumberOfGridPoints(); i++)
+    {
         file << std::setprecision(17) << data[i] << std::endl;
     }
     file.close();
@@ -57,10 +58,11 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
 
 void volField_rect_2D_cpu::fromFile(const std::string &fileName)
 {
-    std::ifstream file("../../../"+fileName+".txt", std::ios::in);
+    std::ifstream file("../../../parallelized-fwi/"+fileName+".txt", std::ios::in);
     assert(file.is_open());
 
-    for(int i=0; i<this->GetNumberOfGridPoints(); i++) {
+    for(int i=0; i<this->GetNumberOfGridPoints(); i++)
+    {
         file >> data[i];
     }
     file.close();
@@ -103,7 +105,8 @@ void volField_rect_2D_cpu::Sqrt()
 }
 
 void volField_rect_2D_cpu::Reciprocal() {
-    for (int i = 0; i < this->GetNumberOfGridPoints(); i++) {
+    for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
+    {
         data[i] = double(1.0) / data[i];
     }
 }
@@ -155,24 +158,30 @@ void volField_rect_2D_cpu::Gradient(volField_rect_2D_cpu **output)
         for(int j=0; j<nx[0]; j++)
         {
             //direction 1 dx
-            if (j == 0) {
+            if (j == 0)
+            {
                 output[0]->data[i * nx[0] + j] = (data[i * nx[0] + j + 2] - 4 * data[i * nx[0] + j + 1] + 3 * data[i * nx[0] + j]) / (-double(2.0)*dx[0]);
             }
-            else if (j == nx[0]-1) {
+            else if (j == nx[0]-1)
+            {
                 output[0]->data[i * nx[0] + j] = (data[i * nx[0] + j - 2] - 4 * data[i * nx[0] + j - 1] + 3 * data[i * nx[0] + j]) / (double(2.0)*dx[0]);
             }
-            else {
+            else
+            {
                 output[0]->data[i * nx[0] + j] = (data[i * nx[0] + j + 1] - data[i * nx[0] + j - 1]) / (double(2.0)*dx[0]);
             }
 
             //direction 2 dz
-            if (i == 0) {
+            if (i == 0)
+            {
                 output[1]->data[i * nx[0] + j] = (data[(i + 2) * nx[0] + j] - 4 * data[(i + 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (-double(2.0)*dx[1]);
             }
-            else if (i == nx[1]-1) {
+            else if (i == nx[1]-1)
+            {
                 output[1]->data[i * nx[0] + j] = (data[(i - 2) * nx[0] + j] - 4 * data[(i - 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (double(2.0)*dx[1]);
             }
-            else {
+            else
+            {
                 output[1]->data[i * nx[0] + j] = (data[(i + 1) * nx[0] + j] - data[(i - 1) * nx[0] + j]) / (double(2.0)*dx[1]);
             }
         }

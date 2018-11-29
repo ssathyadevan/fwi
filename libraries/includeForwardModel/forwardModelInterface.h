@@ -13,7 +13,7 @@
 
 class ForwardModelInterface
 {
-public:
+protected:
     const grid_rect_2D &m_grid;
     const Sources_rect_2D &m_src;
     const Receivers_rect_2D &m_recv;
@@ -76,11 +76,6 @@ public:
     virtual volComplexField_rect_2D_cpu*** get_p_0() = 0;
 
     virtual Greens_rect_2D_cpu** get_m_greens() = 0;
-
-
-
-
-
 
 };
 

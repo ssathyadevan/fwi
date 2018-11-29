@@ -117,7 +117,8 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                 g_old = g;
             }
         }
-        else if (input.do_reg == 1) {
+        else if (input.do_reg == 1)
+        {
             double deltasquared_old = double(0.0);
             volField_rect_2D_cpu bsquared_old(forwardModel_->get_m_grid());
             bsquared_old.Zero();
@@ -130,8 +131,9 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
             //calculate initial residual
             for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
+            {
                 r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
-
+            }
             //start the inner loop
             for (int it1=0; it1<input.iter1.n; it1++)
             {
@@ -152,9 +154,10 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                     chi_est += alpha*zeta;
                     g_old = g;
 
-                    for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
-                        r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
-
+                    for (int i = 0; i < n_total; i++)
+                        {
+                            r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+                        }
                     res = eta*normSq(r,n_total);
                         std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
                     Fdata_old = res;
@@ -227,8 +230,10 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
                     chi_est += alpha*zeta;
 
-                    for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
-                        r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+                    for (int i = 0; i < n_total; i++)
+                        {
+                            r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+                        }
                     res = eta*normSq(r,n_total);
                         std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
@@ -249,12 +254,9 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                     deltasquared_old = deltasquared;
                     g_old = g;
                     bsquared_old = bsquared;
-                    // zeta_old?
                 }
 
             } // end regularisation loop
-
-
 
         }
 
@@ -272,7 +274,9 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
 
             for (int j=0; j<forwardModel_->get_m_nsrc();j++)
+            {
                 *p_est[l_i + j] = calcField(*forwardModel_->get_m_greens()[i], chi_est, *forwardModel_->get_p_0()[i][j], input.conjGrad);
+            }
         }
         forwardModel_->get_m_profiler().EndRegion();
     }

@@ -48,11 +48,11 @@ void volComplexField_rect_2D_cpu::toFile(const std::string &fileName) const
     file.open(fileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());
 
-    for (int i = 0; i<this->GetNumberOfGridPoints(); i++) {
+    for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
+    {
         file << std::showpos << std::setprecision(17) << "(" << real(data[i]) << imag(data[i]) << "j)" << std::endl;
     }
     file.close();
-
 }
 
 void volComplexField_rect_2D_cpu::fromFile(const std::string &fileName)
@@ -61,7 +61,8 @@ void volComplexField_rect_2D_cpu::fromFile(const std::string &fileName)
     std::ifstream file(fileName, std::ios::in);
     assert(file.is_open());
 
-    for (int i = 0; i<this->GetNumberOfGridPoints(); i++) {
+    for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
+    {
         file >> data[i];
     }
     file.close();
@@ -75,26 +76,26 @@ void volComplexField_rect_2D_cpu::Zero()
 
 void volComplexField_rect_2D_cpu::Square()
 {
-    for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-        data[i] *= data[i];
+    for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] *= data[i];}
 }
+
 
 void volComplexField_rect_2D_cpu::Reciprocal()
 {
-    for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-        data[i] = double(1.0)/data[i];
+    for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] = double(1.0)/data[i];}
 }
 
 void volComplexField_rect_2D_cpu::Conjugate()
 {
-    for(int i=0; i<this->GetNumberOfGridPoints(); i++)
-        data[i] = std::conj(data[i]);
+    for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] = std::conj(data[i]);}
 }
 
 void volComplexField_rect_2D_cpu::Random()
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)
+    {
         data[i] = std::complex<double>( double(std::rand())/double(RAND_MAX), double(std::rand())/double(RAND_MAX) );
+    }
 }
 
 double volComplexField_rect_2D_cpu::Norm() const
@@ -277,18 +278,6 @@ std::complex<double> volComplexField_rect_2D_cpu::Summation(const volComplexFiel
 }
 
 
-/*std::complex<double> Summation(const volField_rect_2D_cpu<T>& rhs, const int &conju) const
-        {
-            std::complex<double> sum(0.0,0.0);
-            assert(&this->GetGrid() == &rhs.GetGrid());
-            const T *rhs_data = rhs.GetDataPtr();
-
-            for (int i=0; i<this->GetNumberOfGridPoints(); i++)
-                sum += std::conj(data[i]) * rhs_data[i];
-            return sum;
-        }*/
-
-
 std::complex<double> volComplexField_rect_2D_cpu::Summation(const volField_rect_2D_cpu& rhs) const
 {
     std::complex<double> sum(0.0,0.0);
@@ -311,8 +300,3 @@ volField_rect_2D_cpu volComplexField_rect_2D_cpu::GetRealPart() const
 
     return result;
 }
-
-
-
-
-

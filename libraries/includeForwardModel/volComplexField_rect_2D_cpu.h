@@ -1,6 +1,11 @@
 #ifndef COLCOMPLEXFIELD_RECT_2D_CPU_H
 #define COLCOMPLEXFIELD_RECT_2D_CPU_H
 
+
+#include "volComplexField_rect_2D.h"
+#include "grid_rect_2D.h"
+#include "volField_rect_2D_cpu.h"
+
 #include <iostream>
 #include <complex>
 #include <cassert>
@@ -9,9 +14,6 @@
 #include <vector>
 #include <string>
 
-#include "volComplexField_rect_2D.h"
-#include "grid_rect_2D.h"
-#include "volField_rect_2D_cpu.h"
 
 class volComplexField_rect_2D_cpu : public volComplexField_rect_2D
 {
@@ -100,34 +102,15 @@ inline std::complex<double> InnerProduct(const volComplexField_rect_2D_cpu &t1, 
     return t1.InnerProduct(t2);
 }
 
-
-
 inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
 {
     return t1.Summation(t2);
 }
 
-
-/*template<typename T>
-std::complex<double> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2, const int &conju)
-{
-    std::complex<double> sum;
-    if (conju==0) ////if conju==0 then do not take the conjugate of Kappa
-        sum = t1.Summation(t2);
-    else if(conju == 1) ////if conju==1 then take the conjugate of Kappa
-        sum = t1.Summation(t2,conju);
-
-    return sum;
-}*/
-
-
-
 inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, const volField_rect_2D_cpu &t2)
 {
     return t1.Summation(t2);
 }
-
-
 
 inline volComplexField_rect_2D_cpu operator-(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
 {
@@ -136,15 +119,12 @@ inline volComplexField_rect_2D_cpu operator-(const volComplexField_rect_2D_cpu &
     return t3;
 }
 
-
 inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const volField_rect_2D_cpu &t2)
 {
     volComplexField_rect_2D_cpu t3(t1);
     t3 *= t2;
     return t3;
 }
-
-
 
 inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
 {
@@ -153,12 +133,10 @@ inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &
     return t3;
 }
 
-
 inline volComplexField_rect_2D_cpu operator*(const volField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
 {
     return t2*t1;
 }
-
 
 inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const std::complex<double> &t2)
 {
@@ -167,13 +145,10 @@ inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &
     return t3;
 }
 
-
-
 inline volComplexField_rect_2D_cpu operator*(const std::complex<double> &t1, const volComplexField_rect_2D_cpu &t2)
 {
     return t2*t1;
 }
-
 
 inline volComplexField_rect_2D_cpu operator/(const volComplexField_rect_2D_cpu &t1, const double &t2)
 {

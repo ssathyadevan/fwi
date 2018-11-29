@@ -14,7 +14,8 @@
 
 using namespace Eigen;
 
-class Greens_rect_2D_cpu {
+class Greens_rect_2D_cpu
+{
 
   std::function< std::complex<double>(double,double) > G_func;
 
@@ -23,10 +24,10 @@ class Greens_rect_2D_cpu {
   const Receivers_rect_2D &recv;
   const double k;
 
-  std::complex<double> *G_vol;  ////G_vol = G_xx
+  std::complex<double> *G_vol;
   std::vector< volComplexField_rect_2D_cpu *> G_recv;
 
-  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2; //G_vol2 = G_xx ankit style
+  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
 
   Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
   Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;

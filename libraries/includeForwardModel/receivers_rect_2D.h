@@ -7,7 +7,8 @@
 
 #include "sources_rect_2D.h"
 
-class Receivers_rect_2D {
+class Receivers_rect_2D
+{
 
     Receivers_rect_2D& operator=(const Receivers_rect_2D&);
 

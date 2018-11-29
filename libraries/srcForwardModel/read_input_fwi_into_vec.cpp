@@ -5,12 +5,12 @@ std::array<string, 2> InputPathNName(int argc, char** argv)
     array<string, 2> inLocNName;
     if (argc != 2)
     {
-        inLocNName[0] = "../../../";
+        inLocNName[0] = "../../../parallelized-fwi/";
         inLocNName[1] = "default";
     }
     else
     {
-        inLocNName[0] = "../../../inputOutput/";
+        inLocNName[0] = "../../../parallelized-fwi/inputOutput/";
         inLocNName[1] = argv[1];
     }
     return inLocNName;
@@ -46,12 +46,12 @@ struct Input reader3(int argc, char** argv)
     std::string runName;
     if (argc != 2)
     {
-        pathName = "../../../";
+        pathName = "../../../parallelized-fwi/";
         runName = "default";
     }
     else
     {
-        pathName = "../../../inputOutput/";
+        pathName = "../../../parallelized-fwi/inputOutput/";
         runName = argv[1];
     }
     vector<string> input_parameters = reader(pathName+runName+".in");
@@ -107,14 +107,14 @@ struct Input reader3(int argc, char** argv)
 
     // This part is needed for plotting the chi values in imageCreator_CMake.py
     std::ofstream outputfwi;
-    outputfwi.open("../../../inputOutput/" + runName + ".pythonIn");
+    outputfwi.open("../../../parallelized-fwi/inputOutput/" + runName + ".pythonIn");
     outputfwi << "This run was parametrized as follows:" << std::endl;
     outputfwi << "nxt   = " << input.ngrid[0] << std::endl;
     outputfwi << "nzt   = " << input.ngrid[1] << std::endl;
     outputfwi.close();
     // This part is needed for plotting the chi values in imageCreator_CMake.py
     std::ofstream lastrun;
-    lastrun.open("../../../inputOutput/lastRunName.txt");
+    lastrun.open("../../../parallelized-fwi/inputOutput/lastRunName.txt");
     lastrun << runName;
     lastrun.close();
 

@@ -65,9 +65,9 @@ temple
 # i1.    n_max                              int           5
 5
 # i2.    Iter1.n                            int           50
-4
+10
 # i3.    ConjGrad.nIter                     int           100
-8
+15
 # b1.    do_reg                             bool          1 (true)
 1
 # b2.    verbosity                          bool          0 (false)
