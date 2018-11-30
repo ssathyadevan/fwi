@@ -1,0 +1,85 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+\title{BUILD-RUN-DOCUMENT}
+\author{Saurabh Sharma}
+\date{30 November 2018}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+\noindent This document shows the steps needed to clone, build and run the FWI code and to install the prerequisite packages. 
+\section{Pre-requisites}
+The prerequisite development tools needed can be installed using the following commands.
+
+\begin{enumerate}
+    \item \texttt{sudo apt-get install git}  
+    \item \texttt{sudo apt-get install qt5-default}
+    \item \texttt{sudo apt-get install libeigen3-dev}
+    \item \texttt{sudo apt-get install python2.7-dev}
+    \item \texttt{sudo apt-get install python2.7}
+    \item \texttt{sudo apt-get install python-tk}
+    \item \texttt{sudo apt-get install python-numpy}
+    \item \texttt{sudo apt-get install python-matplotlib}
+
+\end{enumerate}
+
+\section{Cloning the Repository}
+\noindent To clone the FWI repository using git,
+\newline
+\texttt{git clone -o redmine https://git.alten.nl/parallelized-fwi.git}
+\newline
+This will create a copy of the repository, in a folder named \textbf{parallelized-fwi}
+\newline
+Any branch as needed can then be checked out from inside the \texttt{parallelized-fwi} folder, e.g. the develop branch
+\newline
+\texttt{git checkout develop}
+
+\section{Build/Run}
+To build the project, first create a folder titled \textbf{build} outside the \textbf{parallelized-fwi} folder.
+\newline
+\texttt{NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.}
+\newline
+\texttt{mkdir Build}
+\newline
+\texttt{cd Build}
+\newline
+\texttt{cmake -DCMAKE\_BUILD\_TYPE=Release ../parallelized-fwi/}
+\newline
+\texttt{make -j4} (the flag -j is used to build in parallel)
+\newline
+Now, the individual scripts for the preProcessing and the processing part can be run as shown below:
+\newline
+\texttt{cd applications}
+\newline
+\texttt{cd preProcessing}
+\newline
+\texttt{./FWIPreProcess}
+\newline
+\texttt{cd ../processing}
+\newline
+\texttt{./FWIProcess}
+\newline
+The input parameters for the code are provided in the input card i.e. default.in. User can create his/her own input card with a new name e.g. \texttt{newCard.in}. To use this input card use the card name as an argument when running the executables, \texttt{./FWIPreProcess newCard} and \texttt{./FWIProcess newCard}.
+
+\newpage
+\noindent For post-processing (i.e. generation of image using the estimated chi values), the python script \texttt{imageCreator\_CMake.py} can be used. This script is located inside the \textbf{parallelized-fwi} folder and can used as,
+\newline
+\texttt{python imageCreator\_CMake.py}
+\newline
+The pre-processing, processing and the image creation step can all be grouped together using the python wrapper \texttt{wrap\_FWI\_CMake.py} located inside the \textbf{parallelized-fwi} folder.
+\newline
+\texttt{python wrap\_FWI\_CMake.py}
+
+
+\end{document}
