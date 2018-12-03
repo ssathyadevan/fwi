@@ -140,7 +140,6 @@
         }
         this->m_profiler.EndRegion();
 
-
     }
 
     const grid_rect_2D& ForwardModel::get_m_grid()

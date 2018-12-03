@@ -24,41 +24,43 @@ double Inversion::findRealRootFromCubic(double a, double b, double c, double d)
 
 volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_data, Input input)
 {
-    double const1 = normSq(p_data,forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc());
-    double eta = 1.0/const1;
-    double gamma, alpha, res;
+    double const1 = normSq(p_data,forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc()); // used for eta
+    double eta = 1.0/const1; // stays in inversion, passed to forwardModel, in residual calculation function along with chi_est
+    double gamma, alpha, res; // gamma, alpha stay in inversion, res should be moved to forwardModel
 
-    std::array<double,2> alpha_div;
+    std::array<double,2> alpha_div; // stays here
 
-    volComplexField_rect_2D_cpu **Kappa, **p_est;
-    int l_i;
+    volComplexField_rect_2D_cpu **Kappa, **p_est; // move to ForwardModel
+    int l_i; // move to ForwardModel
     const int n_total = forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc();
 
-    std::complex<double> *r = new std::complex<double>[n_total];
-    std::complex<double> *K_zeta = new std::complex<double>[n_total];
+    std::complex<double> *r = new std::complex<double>[n_total]; // move to ForwardModel
+    std::complex<double> *K_zeta = new std::complex<double>[n_total]; // move to ForwardModel
 
-    einsum ein(forwardModel_->get_m_grid(),forwardModel_->get_m_src(),forwardModel_->get_m_recv(),forwardModel_->get_m_freq());
+    einsum ein(forwardModel_->get_m_grid(),forwardModel_->get_m_src(),forwardModel_->get_m_recv(),forwardModel_->get_m_freq()); // move to ForwardModel
 
-    volField_rect_2D_cpu chi_est(forwardModel_->get_m_grid()), g(forwardModel_->get_m_grid()), g_old(forwardModel_->get_m_grid()), zeta(forwardModel_->get_m_grid());
-    volComplexField_rect_2D_cpu tmp(forwardModel_->get_m_grid());
+    volField_rect_2D_cpu chi_est(forwardModel_->get_m_grid()), g(forwardModel_->get_m_grid()), g_old(forwardModel_->get_m_grid()), zeta(forwardModel_->get_m_grid()); // stays here
+    volComplexField_rect_2D_cpu tmp(forwardModel_->get_m_grid()); // stays here, eq: integrandForDiscreteK, tmp is the argument of Re()
     chi_est.Zero();
 
-    Kappa = new volComplexField_rect_2D_cpu*[n_total];
+
+    Kappa = new volComplexField_rect_2D_cpu*[n_total]; // move to ForwardModel
     for (int i = 0; i < n_total; i++)
     {
         Kappa[i] = new volComplexField_rect_2D_cpu(forwardModel_->get_m_grid());
     }
-    p_est = new volComplexField_rect_2D_cpu*[forwardModel_->get_m_nfreq()*forwardModel_->get_m_nsrc()];
+
+    p_est = new volComplexField_rect_2D_cpu*[forwardModel_->get_m_nfreq()*forwardModel_->get_m_nsrc()]; // move to ForwardModel
     for (int i=0; i<forwardModel_->get_m_nfreq(); i++)
     {
         l_i = i*forwardModel_->get_m_nsrc();
         for (int j=0; j<forwardModel_->get_m_nsrc();j++)
-            p_est[l_i + j] = new volComplexField_rect_2D_cpu(*forwardModel_->get_p_0()[i][j]);
+            p_est[l_i + j] = new volComplexField_rect_2D_cpu(*forwardModel_->get_p_0()[i][j]); // p_est is initialized to p_0 (section 3.3.3 of the report)
     }
 
-    volField_rect_2D_cpu **gradient_chi_old = new volField_rect_2D_cpu*[2];
-    volField_rect_2D_cpu **gradient_greg_tmp = new volField_rect_2D_cpu*[2];
-    volField_rect_2D_cpu **gradient_zeta_tmp = new volField_rect_2D_cpu*[2];
+    volField_rect_2D_cpu **gradient_chi_old = new volField_rect_2D_cpu*[2]; // stays here
+    volField_rect_2D_cpu **gradient_greg_tmp = new volField_rect_2D_cpu*[2];// stays here
+    volField_rect_2D_cpu **gradient_zeta_tmp = new volField_rect_2D_cpu*[2];// stays here
 
     for (int i = 0; i < 2; i++)
     {
@@ -70,7 +72,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
     //main loop//
     for(int it=0; it<input.n_max; it++)
     {
-        std::vector<std::complex<double>> res_first_it;
+        std::vector<std::complex<double>> res_first_it; // move to forwardModel, push back each res after calculation to this vector, used for checking break conditions in the for loop
         if (input.do_reg == 0)
         {
             ein.einsum_Gr_Pest(Kappa, forwardModel_->get_m_greens(), p_est);
@@ -117,28 +119,30 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                 g_old = g;
             }
         }
-        else if (input.do_reg == 1) {
-            double deltasquared_old = double(0.0);
-            volField_rect_2D_cpu bsquared_old(forwardModel_->get_m_grid());
+        else if (input.do_reg == 1)
+        {
+            double deltasquared_old = double(0.0); // stays here
+            volField_rect_2D_cpu bsquared_old(forwardModel_->get_m_grid()); // stays here
             bsquared_old.Zero();
-            double Freg_old = double(1.0);
-            double Fdata_old = double(0.0);
+            double Freg_old = double(1.0); // stays here
+            double Fdata_old = double(0.0); // stays here
 
-            double delta_amplification = input.deltaAmplification.start / (input.deltaAmplification.slope * it + double(1.0));
+            double delta_amplification = input.deltaAmplification.start / (input.deltaAmplification.slope * it + double(1.0)); // stays here
 
-            ein.einsum_Gr_Pest(Kappa, forwardModel_->get_m_greens(), p_est);
+            ein.einsum_Gr_Pest(Kappa, forwardModel_->get_m_greens(), p_est); // move to forwardModel
 
             //calculate initial residual
             for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
-                r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+                r[i] = p_data[i] - Summation(*Kappa[i], chi_est); // move to forwardModel
 
             //start the inner loop
             for (int it1=0; it1<input.iter1.n; it1++)
             {
                 if (it1 == 0)
                 {
-                    ein.einsum_K_res(Kappa, r, tmp);
-                    g = eta * tmp.GetRealPart();
+                    ein.einsum_K_res(Kappa, r, tmp);  // stays here
+                    g = eta * tmp.GetRealPart(); //eq: gradientRunc
+                    // stays here from
                     zeta = g;
                     alpha_div[0] = double(0.0);
                     alpha_div[1] =double(0.0);
@@ -148,17 +152,18 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                         alpha_div[0] += std::real( conj(r[i]) * K_zeta[i] );
                         alpha_div[1] += std::real( conj(K_zeta[i]) * K_zeta[i] );
                     }
-                    alpha = alpha_div[0] / alpha_div[1];
+                    alpha = alpha_div[0] / alpha_div[1]; //eq:optimalStepSizeCG in the readme pdf
                     chi_est += alpha*zeta;
                     g_old = g;
+                    // till here
 
                     for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
-                        r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+                        r[i] = p_data[i] - Summation(*Kappa[i], chi_est); // goes to forwardModel, as a resCalculation function with arguments chi_est
 
-                    res = eta*normSq(r,n_total);
+                    res = eta*normSq(r,n_total); // goes to forwardModel
                         std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
                     Fdata_old = res;
-                    res_first_it.push_back(res);
+                    res_first_it.push_back(res); // stays here
                 }
                 else
                 {
@@ -166,7 +171,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                     volField_rect_2D_cpu gradient_chi_old_normsquared(forwardModel_->get_m_grid());
                     gradient_chi_old_normsquared = (*gradient_chi_old[0] * *gradient_chi_old[0]) + (*gradient_chi_old[1] * *gradient_chi_old[1]);
 
-                    volField_rect_2D_cpu bsquared = ( gradient_chi_old_normsquared + deltasquared_old );
+                    volField_rect_2D_cpu bsquared = ( gradient_chi_old_normsquared + deltasquared_old ); // eq: errorFuncRegulWeighting
                     bsquared.Reciprocal();
                     bsquared *= (double(1.0) / (forwardModel_->get_m_grid().GetDomainArea()) ); //bsquared = (1.0 / domain_area) * (1.0 / (gradient_chi_old_normsquared + deltasquared_old * ones((nz, nx))))  # eq. 2.22
                     volField_rect_2D_cpu b = bsquared;
@@ -227,7 +232,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
                     chi_est += alpha*zeta;
 
-                    for (int i = 0; i < n_total; i++)  //r = p_data - einsum('ijkl,l->ijk', K, chi_est)
+                    for (int i = 0; i < n_total; i++)  // move to forwardModel
                         r[i] = p_data[i] - Summation(*Kappa[i], chi_est);
                     res = eta*normSq(r,n_total);
                         std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
@@ -262,6 +267,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
         forwardModel_->get_m_profiler().StartRegion(name);
         //calculate p_data
+        // put this as a function in forwardModel similar to createTotalField (but with 1D p_tot array)
         for (int i=0; i<forwardModel_->get_m_nfreq(); i++)
         {
             l_i = i*forwardModel_->get_m_nsrc();
