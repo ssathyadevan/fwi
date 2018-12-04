@@ -7,7 +7,9 @@ class ForwardModel : public ForwardModelInterface
 {
 
 public:
-    ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi);
+    ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src,
+                 const Receivers_rect_2D &recv, const Frequencies_group &freq,
+                 ProfileInterface &profiler, const volField_rect_2D_cpu chi);
 
     ~ForwardModel();
 
@@ -26,6 +28,8 @@ public:
     void calculateData(std::complex<double> *p_data) ;
 
     void createTotalField(ConjGrad conjGrad) ;
+
+    virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est);
 
     const grid_rect_2D& get_m_grid() ;
 
@@ -47,7 +51,19 @@ public:
 
     virtual Greens_rect_2D_cpu** get_m_greens() ;
 
+    virtual volComplexField_rect_2D_cpu** getKappa();
 
+    virtual void calculateKappa();
+
+    virtual void calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data);
+
+    virtual std::complex<double>* get_residual();
+
+    virtual double calculateResidualNormSq(double eta);
+
+    virtual void calculateK_zeta(volField_rect_2D_cpu zeta);
+
+    virtual std::complex<double>* get_K_zeta();
 
 };
 

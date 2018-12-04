@@ -31,15 +31,15 @@ class einsum
         einsum & operator=(const einsum &) = delete;  //delete the assignment constructor to forbid copying of objects of this class
 
 
-        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const;
+        //void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const;
 
-        void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const;
+        //void einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const;
 
-        void einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<double> *K_zeta) const;
+        //void einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<double> *K_zeta) const;
 
         void einsum_K_res(const volComplexField_rect_2D_cpu *const *Kappa, const std::complex<double> *res, volComplexField_rect_2D_cpu &K_res) const;
 
-        std::complex<double> einsum_dot(const std::complex<double> *x, const std::complex<double> *y) const;
+        //std::complex<double> einsum_dot(const std::complex<double> *x, const std::complex<double> *y) const;
 
 };
 

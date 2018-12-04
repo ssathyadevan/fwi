@@ -9,6 +9,23 @@
         this->SetBackground(chi);
         std::cout << "Creating P0..." << std::endl;
         this->createP0();
+
+        // initialize kappa
+        Kappa = new volComplexField_rect_2D_cpu*[m_nfreq*m_nrecv*m_nsrc];
+        for (int i = 0; i < m_nfreq*m_nrecv*m_nsrc; i++)
+        {
+            Kappa[i] = new volComplexField_rect_2D_cpu(m_grid);
+        }
+
+        // initialize p_tot1D
+        p_tot1D = new volComplexField_rect_2D_cpu*[m_nfreq*m_nsrc];
+        int l_i;
+        for (int i=0; i<m_nfreq; i++)
+        {
+            l_i = i*m_nsrc;
+            for (int j=0; j<m_nsrc;j++)
+                p_tot1D[l_i + j] = new volComplexField_rect_2D_cpu(*p_0[i][j]); // p_tot1D is initialized to p_0 (section 3.3.3 of the report)
+        }
     }
 
     ForwardModel::~ForwardModel()
@@ -142,6 +159,23 @@
 
     }
 
+    void ForwardModel::createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est)
+    {
+        int l_i;
+        for (int i=0; i<m_nfreq; i++)
+        {
+            l_i = i*m_nsrc;
+
+                std::cout << "  " << std::endl;
+                std::cout << "Creating this->p_tot for " << i+1 << "/ " << m_nfreq << "freq" << std::endl;
+                std::cout << "  " << std::endl;
+
+
+            for (int j=0; j<m_nsrc;j++)
+                *p_tot1D[l_i + j] = calcField(*m_greens[i], chi_est, *p_0[i][j], conjGrad);
+        }
+    }
+
     const grid_rect_2D& ForwardModel::get_m_grid()
     {
         return m_grid;
@@ -192,5 +226,59 @@
         return m_greens;
     }
 
+    volComplexField_rect_2D_cpu** ForwardModel::getKappa()
+    {
+        return Kappa;
+    }
 
+    void ForwardModel::calculateKappa()
+    {
+        int l_i, l_j;
 
+        for (int i = 0; i < m_nfreq; i++)
+        {
+            l_i = i*m_nrecv*m_nsrc;
+            for (int j = 0; j < m_nrecv; j++)
+            {
+                l_j = j*m_nsrc;
+                for(int k = 0; k < m_nsrc; k++)
+                {
+                    *Kappa[l_i + l_j + k] = ( *m_greens[i]->GetReceiverCont(j) ) * (*p_tot1D[i*m_nsrc + k]);
+                }
+            }
+        }
+    }
+
+    void ForwardModel::calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data)
+    {
+        std::cout << "Inside-calculateResidual-start" << std::endl;
+
+        for (int i = 0; i < m_nfreq*m_nrecv*m_nsrc; i++)
+            residual[i] = p_data[i] - Summation(*Kappa[i], chi_est);
+
+        std::cout << "Inside-calculateResidual-end" << std::endl;
+
+    }
+
+    std::complex<double>* ForwardModel::get_residual()
+    {
+        return residual;
+    }
+
+    double ForwardModel::calculateResidualNormSq(double eta)
+    {
+        return eta*normSq(residual,n_total);
+    }
+
+    void ForwardModel::calculateK_zeta(volField_rect_2D_cpu zeta)
+    {
+        for (int i = 0; i < m_nfreq*m_nrecv*m_nsrc; i++)
+        {
+            K_zeta[i] = Summation( *Kappa[i], zeta);
+        }
+    }
+
+    std::complex<double>* ForwardModel::get_K_zeta()
+    {
+        return K_zeta;
+    }

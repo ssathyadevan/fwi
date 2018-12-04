@@ -6,49 +6,49 @@ einsum::einsum(const grid_rect_2D &grid, const Sources_rect_2D &src, const Recei
 }
 
 
-void einsum::einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const
-{
-    int l_i, l_j;
+//void einsum::einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *P_est) const
+//{
+//    int l_i, l_j;
 
-    for (int i = 0; i < m_n_freq; i++)
-    {
-        l_i = i*m_n_recv*m_n_src;
-        for (int j = 0; j < m_n_recv; j++)
-        {
-            l_j = j*m_n_src;
-            for(int k = 0; k < m_n_src; k++)
-            {
-                *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i*m_n_src + k]);
-            }
-        }
-    }
-}
+//    for (int i = 0; i < m_n_freq; i++)
+//    {
+//        l_i = i*m_n_recv*m_n_src;
+//        for (int j = 0; j < m_n_recv; j++)
+//        {
+//            l_j = j*m_n_src;
+//            for(int k = 0; k < m_n_src; k++)
+//            {
+//                *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i*m_n_src + k]);
+//            }
+//        }
+//    }
+//}
 
-void einsum::einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const
-{
-    int l_i, l_j;
+//void einsum::einsum_Gr_Pest(volComplexField_rect_2D_cpu **Kappa, const Greens_rect_2D_cpu *const *green, const volComplexField_rect_2D_cpu *const *const *P_est) const
+//{
+//    int l_i, l_j;
 
-    for (int i = 0; i < m_n_freq; i++)
-    {
-        l_i = i*m_n_recv*m_n_src;
-        for (int j = 0; j < m_n_recv; j++)
-        {
-            l_j = j*m_n_src;
-            for(int k = 0; k < m_n_src; k++)
-            {
-                *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i][k]);
-            }
-        }
-    }
-}
+//    for (int i = 0; i < m_n_freq; i++)
+//    {
+//        l_i = i*m_n_recv*m_n_src;
+//        for (int j = 0; j < m_n_recv; j++)
+//        {
+//            l_j = j*m_n_src;
+//            for(int k = 0; k < m_n_src; k++)
+//            {
+//                *Kappa[l_i + l_j + k] = ( *green[i]->GetReceiverCont(j) ) * (*P_est[i][k]);
+//            }
+//        }
+//    }
+//}
 
-void einsum::einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<double> *K_zeta) const
-{
-    for (int i = 0; i < m_n_freq*m_n_recv*m_n_src; i++)
-    {
-        K_zeta[i] = Summation( *Kappa[i], chi_est);
-    }
-}
+//void einsum::einsum_K_zeta(const volComplexField_rect_2D_cpu *const *Kappa, const volField_rect_2D_cpu &chi_est, std::complex<double> *K_zeta) const
+//{
+//    for (int i = 0; i < m_n_freq*m_n_recv*m_n_src; i++)
+//    {
+//        K_zeta[i] = Summation( *Kappa[i], chi_est);
+//    }
+//}
 
 
 void einsum::einsum_K_res(const volComplexField_rect_2D_cpu *const *Kappa, const std::complex<double> *res, volComplexField_rect_2D_cpu &K_res) const
@@ -77,27 +77,27 @@ void einsum::einsum_K_res(const volComplexField_rect_2D_cpu *const *Kappa, const
 }
 
 
-std::complex<double> einsum::einsum_dot(const std::complex<double> *x, const std::complex<double> *y) const
-{
-    std::complex<double> dot = 0;
-    int l_i, l_j;
+//std::complex<double> einsum::einsum_dot(const std::complex<double> *x, const std::complex<double> *y) const
+//{
+//    std::complex<double> dot = 0;
+//    int l_i, l_j;
 
-    for (int i = 0; i < m_n_freq; i++)
-    {
-        l_i = i*m_n_recv*m_n_src;
+//    for (int i = 0; i < m_n_freq; i++)
+//    {
+//        l_i = i*m_n_recv*m_n_src;
 
-        for (int j = 0; j < m_n_recv; j++)
-        {
-            l_j = j*m_n_src;
+//        for (int j = 0; j < m_n_recv; j++)
+//        {
+//            l_j = j*m_n_src;
 
-            for(int k = 0; k < m_n_src; k++)
-            {
-                dot += conj(x[l_i + l_j + k]) * y[l_i + l_j + k];
-            }
-        }
-    }
-    return dot;
-}
+//            for(int k = 0; k < m_n_src; k++)
+//            {
+//                dot += conj(x[l_i + l_j + k]) * y[l_i + l_j + k];
+//            }
+//        }
+//    }
+//    return dot;
+//}
 
 
 
