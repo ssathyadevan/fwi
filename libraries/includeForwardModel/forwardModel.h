@@ -9,7 +9,7 @@ class ForwardModel : public ForwardModelInterface
 public:
     ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src,
                  const Receivers_rect_2D &recv, const Frequencies_group &freq,
-                 ProfileInterface &profiler, const volField_rect_2D_cpu chi);
+                 ProfileInterface &profiler);
 
     ~ForwardModel();
 
@@ -17,17 +17,15 @@ public:
 
     void deleteGreens() ;
 
-    void SetBackground(const volField_rect_2D_cpu &chi_) ;
-
     void createP0() ;
 
     void deleteP0() ;
 
     void deleteTotalField() ;
 
-    void calculateData(std::complex<double> *p_data) ;
+    void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi) ;
 
-    void createTotalField(ConjGrad conjGrad) ;
+    void createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi) ;
 
     virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est);
 

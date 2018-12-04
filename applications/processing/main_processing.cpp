@@ -79,7 +79,7 @@ int performInversion(const Input& input) {
     }
 
     ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
+    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler);
 
     InversionInterface *inverse;
     inverse = new Inversion(forwardModel);

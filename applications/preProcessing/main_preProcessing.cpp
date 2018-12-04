@@ -44,13 +44,13 @@ int generateReferencePressureFieldFromChi
     chi.toFile("../../../inputOutput/chi_ref_" + input.runName + ".txt");
 
     ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, chi);
+    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler);
 
     std::cout << "Creating total field..." << std::endl;
-    forwardModel->createTotalField(input.conjGrad);
+    forwardModel->createTotalField(input.conjGrad, chi);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    forwardModel->calculateData(referencePressureData);
+    forwardModel->calculateData(referencePressureData, chi);
 
     // writing the referencePressureData to a text file in complex form
     std::string invertedChiToPressureFileName = "../../../inputOutput/"+input.runName+"InvertedChiToPressure.txt";

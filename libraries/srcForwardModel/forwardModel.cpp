@@ -1,12 +1,12 @@
 #include "forwardModel.h"
 
 
-    ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-    : ForwardModelInterface (grid, src, recv, freq, profiler, chi)
+    ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq,
+                               ProfileInterface &profiler)
+    : ForwardModelInterface (grid, src, recv, freq, profiler)
     {
         std::cout << "Creating Greens function field..." << std::endl;
         this->createGreens();
-        this->SetBackground(chi);
         std::cout << "Creating P0..." << std::endl;
         this->createP0();
 
@@ -58,12 +58,6 @@
         m_greens = nullptr;
     }
 
-    void ForwardModel::SetBackground(const volField_rect_2D_cpu &chi_)
-    {
-        assert(&m_chi.GetGrid() == &chi_.GetGrid());
-        m_chi = chi_;
-    }
-
     void ForwardModel::createP0()
     {
         assert(m_greens != nullptr);
@@ -110,7 +104,7 @@
         p_tot = nullptr;
     }
 
-    void ForwardModel::calculateData(std::complex<double> *p_data)
+    void ForwardModel::calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi)
     {
         int l_i, l_j;
         for (int i=0; i<m_nfreq; i++)
@@ -121,13 +115,13 @@
                 l_j = j*m_nsrc;
                 for (int k=0; k<m_nsrc; k++)
                 {
-                    p_data[l_i + l_j + k] = Summation( *( m_greens[i]->GetReceiverCont(j) ) , *p_tot[i][k]*m_chi );
+                    p_data[l_i + l_j + k] = Summation( *( m_greens[i]->GetReceiverCont(j) ) , *p_tot[i][k]*chi );
                 }
             }
         }
     }
 
-    void ForwardModel::createTotalField(ConjGrad conjGrad)
+    void ForwardModel::createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi)
     {
         assert(this->m_greens != nullptr);
         assert(this->p_0 != nullptr);
@@ -149,7 +143,7 @@
             for (int j=0; j<this->m_nsrc; j++)
             {
                 this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], conjGrad);
+                *this->p_tot[i][j] = calcField(*this->m_greens[i], chi, *this->p_0[i][j], conjGrad);
             }
 
                 std::cout << "  " << std::endl;

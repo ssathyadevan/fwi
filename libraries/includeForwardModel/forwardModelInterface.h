@@ -33,22 +33,21 @@ inline double normSq(std::complex<double> *data, int n)
 class ForwardModelInterface
 {
 protected:
-    const grid_rect_2D &m_grid;
-    const Sources_rect_2D &m_src;
-    const Receivers_rect_2D &m_recv;
-    const Frequencies_group &m_freq;
+    const grid_rect_2D &m_grid; // pass where needed in main function
+    const Sources_rect_2D &m_src; // pass where needed in main function
+    const Receivers_rect_2D &m_recv; // pass where needed in main function
+    const Frequencies_group &m_freq; // pass where needed in main function
 
-    Greens_rect_2D_cpu **m_greens;
-    volComplexField_rect_2D_cpu ***p_0;
-    volComplexField_rect_2D_cpu ***p_tot;
+    Greens_rect_2D_cpu **m_greens; // belongs in the forward model, but don't know how to implement
+    volComplexField_rect_2D_cpu ***p_0; // belongs in the interface
+    volComplexField_rect_2D_cpu ***p_tot; // belongs in the interface
 
-    volField_rect_2D_cpu m_chi;
-    ProfileInterface &m_profiler;
+    ProfileInterface &m_profiler; // pass where needed in main function
 
-    const int m_nfreq;
-    const int m_nrecv;
-    const int m_nsrc;
-    const int n_total;
+    const int m_nfreq;// read from input
+    const int m_nrecv;// read from input
+    const int m_nsrc;// read from input
+    const int n_total;// read from input
 
     volComplexField_rect_2D_cpu **Kappa; // greens*p_tot in eq:ModelDataGreensConv
     volComplexField_rect_2D_cpu **p_tot1D; // p_tot stored as a 1D array
@@ -58,8 +57,8 @@ protected:
     std::complex<double> *K_zeta ;
 
 public:
-    ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_chi(m_grid), m_profiler(profiler), m_nfreq(m_freq.nFreq),
+    ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler)
+        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_greens(), p_0(), p_tot(), m_profiler(profiler), m_nfreq(m_freq.nFreq),
           m_nrecv(m_recv.nRecv), m_nsrc(m_src.nSrc), n_total(m_freq.nFreq*m_recv.nRecv*m_src.nSrc)
     {
         residual = new std::complex<double>[m_nfreq*m_nrecv*m_nsrc];
@@ -84,17 +83,15 @@ public:
 
     virtual void deleteGreens() = 0;
 
-    virtual void SetBackground(const volField_rect_2D_cpu &chi_) = 0;
-
     virtual void createP0() = 0;
 
     virtual void deleteP0() = 0;
 
     virtual void deleteTotalField() = 0;
 
-    virtual void calculateData(std::complex<double> *p_data) = 0;
+    virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi) = 0;
 
-    virtual void createTotalField(ConjGrad conjGrad) = 0;
+    virtual void createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi) = 0;
 
     virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est) = 0;
 
