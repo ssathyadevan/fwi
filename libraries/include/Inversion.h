@@ -14,7 +14,6 @@
 #include <volComplexField_rect_2D_cpu.h>
 #include "inversionInterface.h"
 #include "calcField.h"
-#include "einsum.h"
 #include <array>
 #include <string>
 #include "variable_structure.h"
@@ -25,6 +24,31 @@
 using std::cout;
 using std::endl;
 
+// this function calculates the argument of the Re() in eq: integrandForDiscreteK
+inline void calculate_K_res(ForwardModelInterface* forwardModel, volComplexField_rect_2D_cpu &K_res)
+{
+    int l_i, l_j;
+    K_res.Zero();
+    volComplexField_rect_2D_cpu K_dummy(forwardModel->get_m_grid());
+
+    for (int i = 0; i < forwardModel->get_m_nfreq(); i++)
+    {
+        l_i = i*forwardModel->get_m_nrecv()*forwardModel->get_m_nsrc();
+
+        for (int j = 0; j < forwardModel->get_m_nrecv(); j++)
+        {
+            l_j = j*forwardModel->get_m_nsrc();
+
+            for(int k = 0; k < forwardModel->get_m_nsrc(); k++)
+            {
+                K_dummy = *forwardModel->getKappa()[l_i + l_j + k];
+                K_dummy.Conjugate(); //take conjugate of elements of Kappa (required for algorithm einsum('ijkl,ijk->l',conk(K),r) )
+                K_res += K_dummy * forwardModel->get_residual()[l_i + l_j + k];
+
+            }
+        }
+    }
+}
 
 class Inversion : public InversionInterface
 {

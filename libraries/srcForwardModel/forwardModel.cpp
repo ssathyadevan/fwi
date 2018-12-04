@@ -251,13 +251,8 @@
 
     void ForwardModel::calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data)
     {
-        std::cout << "Inside-calculateResidual-start" << std::endl;
-
         for (int i = 0; i < m_nfreq*m_nrecv*m_nsrc; i++)
             residual[i] = p_data[i] - Summation(*Kappa[i], chi_est);
-
-        std::cout << "Inside-calculateResidual-end" << std::endl;
-
     }
 
     std::complex<double>* ForwardModel::get_residual()
