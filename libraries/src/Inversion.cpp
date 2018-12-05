@@ -97,6 +97,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
             double Freg_old = double(1.0);
             double Fdata_old = double(0.0);
             double delta_amplification = input.deltaAmplification.start / (input.deltaAmplification.slope * it + double(1.0));
+
             forwardModel_->calculateKappa();
             forwardModel_->calculateResidual(chi_est, p_data);
 

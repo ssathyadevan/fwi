@@ -89,5 +89,5 @@ temple
 # i1.     unknown 
 # i2.     maximum number of iterations outer loop
 # i3.     Conjugate gradient maximum iterations 
-# b1.     uknown
+# b1.     applying multiplicative regularisation when do_reg = 1 
 # b2.     regulates if printing to cout or to diagnostic file

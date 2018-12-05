@@ -47,7 +47,6 @@ public:
 
     }
 
-
     virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, ConjGrad conjGrad) = 0;
 
     virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est) = 0;
@@ -80,12 +79,12 @@ public:
 
 
 protected:
-    const grid_rect_2D &m_grid; // pass where needed in main function
-    const Sources_rect_2D &m_src; // pass where needed in main function
-    const Receivers_rect_2D &m_recv; // pass where needed in main function
-    const Frequencies_group &m_freq; // pass where needed in main function
+    const grid_rect_2D& m_grid;
+    const Sources_rect_2D& m_src;
+    const Receivers_rect_2D& m_recv;
+    const Frequencies_group& m_freq;
 
-    const Input input;
+    const Input& input;
 
 };
 
