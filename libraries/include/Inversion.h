@@ -31,19 +31,19 @@ inline void calculate_K_res(ForwardModelInterface* forwardModel, volComplexField
     K_res.Zero();
     volComplexField_rect_2D_cpu K_dummy(forwardModel->get_m_grid());
 
-    for (int i = 0; i < forwardModel->get_m_nfreq(); i++)
+    for (int i = 0; i < forwardModel->getInput().freq.nTotal; i++)
     {
-        l_i = i*forwardModel->get_m_nrecv()*forwardModel->get_m_nsrc();
+        l_i = i*forwardModel->getInput().nSourcesReceivers.rec*forwardModel->getInput().nSourcesReceivers.src;
 
-        for (int j = 0; j < forwardModel->get_m_nrecv(); j++)
+        for (int j = 0; j < forwardModel->getInput().nSourcesReceivers.rec; j++)
         {
-            l_j = j*forwardModel->get_m_nsrc();
+            l_j = j*forwardModel->getInput().nSourcesReceivers.src;
 
-            for(int k = 0; k < forwardModel->get_m_nsrc(); k++)
+            for(int k = 0; k < forwardModel->getInput().nSourcesReceivers.src; k++)
             {
                 K_dummy = *forwardModel->getKappa()[l_i + l_j + k];
                 K_dummy.Conjugate(); //take conjugate of elements of Kappa (required for algorithm einsum('ijkl,ijk->l',conk(K),r) )
-                K_res += K_dummy * forwardModel->get_residual()[l_i + l_j + k];
+                K_res += K_dummy * forwardModel->getResidual()[l_i + l_j + k];
 
             }
         }

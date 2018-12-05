@@ -62,7 +62,8 @@ int main(int argc, char** argv)
 }
 
 // WT 5/5: Here the mathematics of the "Inversion" part of FWI is done.
-int performInversion(const Input& input) {
+int performInversion(const Input& input)
+{
 
     #include "setupInputParametersForFurtherCalculations.h"
 
@@ -79,7 +80,7 @@ int performInversion(const Input& input) {
     }
 
     ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler);
+    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, input);
 
     InversionInterface *inverse;
     inverse = new Inversion(forwardModel);
@@ -91,5 +92,6 @@ int performInversion(const Input& input) {
 
     chi_est.toFile("../../../inputOutput/chi_est_"+input.runName+".txt");
 
+    delete forwardModel;
     return 0;
 }

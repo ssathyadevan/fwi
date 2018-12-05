@@ -19,13 +19,13 @@ double Inversion::findRealRootFromCubic(double a, double b, double c, double d)
 
 volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_data, Input input)
 {
-    double const1 = normSq(p_data,forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc()); // used for eta
+    double const1 = normSq(p_data,forwardModel_->getInput().freq.nTotal*forwardModel_->getInput().nSourcesReceivers.rec*forwardModel_->getInput().nSourcesReceivers.src); // used for eta
     double eta = 1.0/const1;
     double gamma, alpha, res;
 
     std::array<double,2> alpha_div;
 
-    const int n_total = forwardModel_->get_m_nfreq()*forwardModel_->get_m_nrecv()*forwardModel_->get_m_nsrc();
+    const int n_total = forwardModel_->getInput().freq.nTotal*forwardModel_->getInput().nSourcesReceivers.rec*forwardModel_->getInput().nSourcesReceivers.src;
 
     volField_rect_2D_cpu chi_est(forwardModel_->get_m_grid()), g(forwardModel_->get_m_grid()), g_old(forwardModel_->get_m_grid()), zeta(forwardModel_->get_m_grid()); // stays here
     volComplexField_rect_2D_cpu tmp(forwardModel_->get_m_grid()); // eq: integrandForDiscreteK, tmp is the argument of Re()
@@ -81,7 +81,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                 forwardModel_->calculateK_zeta(zeta);
                 for (int i = 0; i < n_total; i++)
                 {
-                    alpha_div[0] += std::real( conj(forwardModel_->get_residual()[i]) * forwardModel_->get_K_zeta()[i] );
+                    alpha_div[0] += std::real( conj(forwardModel_->getResidual()[i]) * forwardModel_->get_K_zeta()[i] );
                     alpha_div[1] += std::real( conj(forwardModel_->get_K_zeta()[i]) * forwardModel_->get_K_zeta()[i] );
                 }
                 alpha = alpha_div[0] / alpha_div[1];
@@ -114,7 +114,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
 
                     for (int i = 0; i < n_total; i++)
                     {
-                        alpha_div[0] += std::real( conj(forwardModel_->get_residual()[i]) * forwardModel_->get_K_zeta()[i] );
+                        alpha_div[0] += std::real( conj(forwardModel_->getResidual()[i]) * forwardModel_->get_K_zeta()[i] );
                         alpha_div[1] += std::real( conj(forwardModel_->get_K_zeta()[i]) * forwardModel_->get_K_zeta()[i] );
                     }
                     alpha = alpha_div[0] / alpha_div[1]; //eq:optimalStepSizeCG in the readme pdf
@@ -166,7 +166,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const p_
                     for (int i = 0; i < n_total; i++)
                     {
                         A[1] += eta * std::real( conj(forwardModel_->get_K_zeta()[i]) * forwardModel_->get_K_zeta()[i] );
-                        A[0] += double(-2.0) * eta * std::real( conj(forwardModel_->get_residual()[i]) * forwardModel_->get_K_zeta()[i] );
+                        A[0] += double(-2.0) * eta * std::real( conj(forwardModel_->getResidual()[i]) * forwardModel_->get_K_zeta()[i] );
                     }
 
                     double A0 = Fdata_old;
