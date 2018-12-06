@@ -24,7 +24,6 @@ public:
 
   virtual ~volComplexField_rect_2D() {}
 
-  //const grid_rect_2D<T> &GetGrid() const { return grid; }// Babak 2018 10 29: Get rid of template in grid_rect_2D class
   const grid_rect_2D &GetGrid() const { return grid; }
 
   int GetNumberOfGridPoints() const { return nGridPoints; }

@@ -37,35 +37,34 @@ class ForwardModelInterface
 public:
     ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
                           const Frequencies_group &freq, ProfileInterface &profiler, Input input)
-        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), input(input)
+        : grid(grid), src(src), recv(recv), freq(freq), input(input)
     {
 
     }
 
     virtual ~ForwardModelInterface()
     {
-
     }
 
     virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, ConjGrad conjGrad) = 0;
 
     virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est) = 0;
 
-    const grid_rect_2D& get_m_grid() { return m_grid; }
+    const grid_rect_2D& getGrid();
 
-    const Sources_rect_2D& get_m_src() { return m_src; }
+    const Sources_rect_2D& getSrc();
 
-    const Receivers_rect_2D& get_m_recv() {return m_recv;}
+    const Receivers_rect_2D& getRecv();
 
-    const Frequencies_group& get_m_freq() {return m_freq;}
+    const Frequencies_group& getFreq();
 
-    virtual ProfileInterface& get_m_profiler() = 0;
+    virtual void calculateKRes(volComplexField_rect_2D_cpu &kRes) = 0;
 
     virtual Input getInput() = 0;
 
-    virtual volComplexField_rect_2D_cpu** getKappa() = 0; // try to move/rename
+    virtual ProfileInterface& getProfiler() = 0;
 
-    virtual void calculateKappa() = 0; // try to move/rename
+    virtual void intermediateForwardModelStep1() = 0;
 
     virtual void calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data) = 0;
 
@@ -73,18 +72,16 @@ public:
 
     virtual double calculateResidualNormSq(double eta) = 0;
 
-    virtual void calculateK_zeta(volField_rect_2D_cpu zeta) = 0; // try to move/rename
-
-    virtual std::complex<double>* get_K_zeta() = 0; // try to move/rename
+    virtual std::complex<double>* intermediateForwardModelStep2(volField_rect_2D_cpu zeta) = 0;
 
 
 protected:
-    const grid_rect_2D& m_grid;
-    const Sources_rect_2D& m_src;
-    const Receivers_rect_2D& m_recv;
-    const Frequencies_group& m_freq;
+    const grid_rect_2D& grid;
+    const Sources_rect_2D& src;
+    const Receivers_rect_2D& recv;
+    const Frequencies_group& freq;
 
-    const Input& input;
+    const Input input;
 
 };
 

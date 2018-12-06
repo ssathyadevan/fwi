@@ -32,7 +32,7 @@ struct Input{
     std::string runName;
     double c_0;
     int n_max;
-    bool do_reg;
+    bool doReg;
     bool verbose;
     DeltaAmplification deltaAmplification;
     Freq freq;

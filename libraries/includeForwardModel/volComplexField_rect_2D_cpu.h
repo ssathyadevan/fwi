@@ -108,20 +108,6 @@ inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, con
 }
 
 
-/*template<typename T>
-std::complex<double> Summation(const volComplexField_rect_2D_cpu<T> &t1, const volField_rect_2D_cpu<T> &t2, const int &conju)
-{
-    std::complex<double> sum;
-    if (conju==0) ////if conju==0 then do not take the conjugate of Kappa
-        sum = t1.Summation(t2);
-    else if(conju == 1) ////if conju==1 then take the conjugate of Kappa
-        sum = t1.Summation(t2,conju);
-
-    return sum;
-}*/
-
-
-
 inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, const volField_rect_2D_cpu &t2)
 {
     return t1.Summation(t2);
@@ -143,7 +129,6 @@ inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &
     t3 *= t2;
     return t3;
 }
-
 
 
 inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
