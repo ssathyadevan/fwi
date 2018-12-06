@@ -1,197 +1,274 @@
 #include "forwardModel.h"
 
 
-    ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi)
-    : ForwardModelInterface (grid, src, recv, freq, profiler, chi)
+ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
+                           const Frequencies_group &freq, ProfileInterface &profiler, Input input)
+    : ForwardModelInterface (grid, src, recv, freq, profiler, input),
+      greens(), p0(), pTot(), profiler(profiler)
+{
+    residual = new std::complex<double>[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
+    kZeta = new std::complex<double>[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
+
+    std::cout << "Creating Greens function field..." << std::endl;
+    this->createGreens();
+    std::cout << "Creating P0..." << std::endl;
+    this->createP0();
+
+    // initialize kappa
+    Kappa = new volComplexField_rect_2D_cpu*[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
+    for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
     {
-        std::cout << "Creating Greens function field..." << std::endl;
-        this->createGreens();
-        this->SetBackground(chi);
-        std::cout << "Creating P0..." << std::endl;
-        this->createP0();
+        Kappa[i] = new volComplexField_rect_2D_cpu(grid);
     }
 
-    ForwardModel::~ForwardModel()
+    // initialize p_tot1D
+    pTot1D = new volComplexField_rect_2D_cpu*[input.freq.nTotal*input.nSourcesReceivers.src];
+    int li;
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        if (this->m_greens!=nullptr)
-            this->deleteGreens();
-
-        if (this->p_0!=nullptr)
-            this->deleteP0();
-
-        if (this->p_tot!=nullptr)
-            this->deleteTotalField();
+        li = i*input.nSourcesReceivers.src;
+        for (int j=0; j<input.nSourcesReceivers.src;j++)
+            pTot1D[li + j] = new volComplexField_rect_2D_cpu(*p0[i][j]); // p_tot1D is initialized to p_0 (section 3.3.3 of the report)
     }
+}
 
-    void ForwardModel::createGreens()
+ForwardModel::~ForwardModel()
+{
+    if (this->greens!=nullptr)
+        this->deleteGreens();
+
+    if (this->p0!=nullptr)
+        this->deleteP0();
+
+    if (this->pTot!=nullptr)
+        this->deleteTotalField();
+
+    for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
+        delete Kappa[i];
+    delete[] Kappa;
+    Kappa = nullptr;
+
+    for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.src; i++)
+        delete pTot1D[i];
+    delete[] pTot1D;
+    pTot1D = nullptr;
+}
+
+void ForwardModel::createGreens()
+{
+    greens = new Greens_rect_2D_cpu*[input.freq.nTotal];
+
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        m_greens = new Greens_rect_2D_cpu*[m_nfreq];
+        greens[i] = new Greens_rect_2D_cpu(grid, Helmholtz2D, src, recv, freq.k[i]);
+    }
+}
 
-        for (int i=0; i<m_nfreq; i++)
+void ForwardModel::deleteGreens()
+{
+    for (int i=0; i<input.freq.nTotal; i++)
+        delete greens[i];
+    delete[] greens;
+    greens = nullptr;
+}
+
+void ForwardModel::createP0()
+{
+    assert(greens != nullptr);
+    assert(p0 == nullptr);
+
+    p0 = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
+
+    for (int i=0; i<input.freq.nTotal; i++)
+    {
+        p0[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
+
+        for (int j=0; j<input.nSourcesReceivers.src; j++)
         {
-            m_greens[i] = new Greens_rect_2D_cpu(m_grid, Helmholtz2D, m_src, m_recv, m_freq.k[i]);
+            p0[i][j] = new volComplexField_rect_2D_cpu(grid);
+            *p0[i][j] = *( greens[i]->GetReceiverCont(j) ) / (freq.k[i] * freq.k[i] * grid.GetCellVolume());
         }
     }
+}
 
-    void ForwardModel::deleteGreens()
+void ForwardModel::deleteP0()
+{
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        for (int i=0; i<m_nfreq; i++)
-            delete m_greens[i];
-        delete[] m_greens;
-        m_greens = nullptr;
+        for (int j=0; j<input.nSourcesReceivers.src; j++)
+            delete p0[i][j];
+
+        delete[] p0[i];
     }
+    delete[] p0;
+    p0 = nullptr;
+}
 
-    void ForwardModel::SetBackground(const volField_rect_2D_cpu &chi_)
+void ForwardModel::deleteTotalField()
+{
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        assert(&m_chi.GetGrid() == &chi_.GetGrid());
-        m_chi = chi_;
+        for (int j=0; j<input.nSourcesReceivers.src; j++)
+            delete pTot[i][j];
+
+        delete[] pTot[i];
     }
+    delete[] pTot;
+    pTot = nullptr;
+}
 
-    void ForwardModel::createP0()
+void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_cpu chi, ConjGrad conjGrad )
+{
+    this->createTotalField(conjGrad, chi);
+    int li, lj;
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        assert(m_greens != nullptr);
-        assert(p_0 == nullptr);
-
-        p_0 = new volComplexField_rect_2D_cpu**[m_nfreq];
-
-         for (int i=0; i<m_nfreq; i++)
+        li = i*input.nSourcesReceivers.rec*input.nSourcesReceivers.src;
+        for (int j=0; j<input.nSourcesReceivers.rec; j++)
         {
-            p_0[i] = new volComplexField_rect_2D_cpu*[m_nsrc];
-
-            for (int j=0; j<m_nsrc; j++)
+            lj = j*input.nSourcesReceivers.src;
+            for (int k=0; k<input.nSourcesReceivers.src; k++)
             {
-                p_0[i][j] = new volComplexField_rect_2D_cpu(m_grid);
-                *p_0[i][j] = *( m_greens[i]->GetReceiverCont(j) ) / (m_freq.k[i] * m_freq.k[i] * m_grid.GetCellVolume());
+                pData[li + lj + k] = Summation( *( greens[i]->GetReceiverCont(j) ) , *pTot[i][k]*chi );
             }
         }
-
     }
+}
 
-    void ForwardModel::deleteP0()
+void ForwardModel::createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi)
+{
+    assert(this->greens != nullptr);
+    assert(this->p0 != nullptr);
+    assert(this->pTot == nullptr);
+
+    std::string name = "createTotalFieldCurrentProcessor";
+
+    this->pTot = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
+    this->profiler.StartRegion(name);
+    for (int i=0; i<this->input.freq.nTotal; i++)
     {
-        for (int i=0; i<m_nfreq; i++)
-        {
-            for (int j=0; j<m_nsrc; j++)
-                delete p_0[i][j];
+        this->pTot[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
 
-            delete[] p_0[i];
+        std::cout << "  " << std::endl;
+        std::cout << "Creating this->p_tot for " << i+1 << "/ " << input.freq.nTotal << "freq" << std::endl;
+        std::cout << "  " << std::endl;
+
+        for (int j=0; j<this->input.nSourcesReceivers.src; j++)
+        {
+            this->pTot[i][j] = new volComplexField_rect_2D_cpu(this->grid);
+            *this->pTot[i][j] = calcField(*this->greens[i], chi, *this->p0[i][j], conjGrad);
         }
-        delete[] p_0;
-        p_0 = nullptr;
+
+        std::cout << "  " << std::endl;
+        std::cout << "  " << std::endl;
     }
+    this->profiler.EndRegion();
+}
 
-    void ForwardModel::deleteTotalField()
+void ForwardModel::createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chiEst)
+{
+    int l_i;
+    for (int i=0; i<input.freq.nTotal; i++)
     {
-        for (int i=0; i<m_nfreq; i++)
-        {
-            for (int j=0; j<m_nsrc; j++)
-                delete p_tot[i][j];
+        l_i = i*input.nSourcesReceivers.src;
 
-            delete[] p_tot[i];
-        }
-        delete[] p_tot;
-        p_tot = nullptr;
+        std::cout << "  " << std::endl;
+        std::cout << "Creating this->p_tot for " << i+1 << "/ " << input.freq.nTotal << "freq" << std::endl;
+        std::cout << "  " << std::endl;
+
+        for (int j=0; j<input.nSourcesReceivers.src;j++)
+            *pTot1D[l_i + j] = calcField(*greens[i], chiEst, *p0[i][j], conjGrad);
     }
+}
 
-    void ForwardModel::calculateData(std::complex<double> *p_data)
+ProfileInterface& ForwardModel::getProfiler()
+{
+    return profiler;
+}
+
+Input ForwardModel::getInput()
+{
+    return input;
+}
+
+
+void ForwardModel::calculateKappa()
+{
+    int li, lj;
+
+    for (int i = 0; i < input.freq.nTotal; i++)
     {
-        int l_i, l_j;
-        for (int i=0; i<m_nfreq; i++)
+        li = i*input.nSourcesReceivers.rec*input.nSourcesReceivers.src;
+        for (int j = 0; j < input.nSourcesReceivers.rec; j++)
         {
-            l_i = i*m_nrecv*m_nsrc;
-            for (int j=0; j<m_nrecv; j++)
+            lj = j*input.nSourcesReceivers.src;
+            for(int k = 0; k < input.nSourcesReceivers.src; k++)
             {
-                l_j = j*m_nsrc;
-                for (int k=0; k<m_nsrc; k++)
-                {
-                    p_data[l_i + l_j + k] = Summation( *( m_greens[i]->GetReceiverCont(j) ) , *p_tot[i][k]*m_chi );
-                }
+                *Kappa[li + lj + k] = ( *greens[i]->GetReceiverCont(j) ) * (*pTot1D[i*input.nSourcesReceivers.src + k]);
             }
         }
     }
+}
 
-    void ForwardModel::createTotalField(ConjGrad conjGrad)
+void ForwardModel::intermediateForwardModelStep1()
+{
+    this->calculateKappa();
+}
+
+
+void ForwardModel::calculateResidual(volField_rect_2D_cpu chiEst, const std::complex<double> *const pData)
+{
+    for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
     {
-        assert(this->m_greens != nullptr);
-        assert(this->p_0 != nullptr);
-        assert(this->p_tot == nullptr);
+        residual[i] = pData[i] - Summation(*Kappa[i], chiEst);
+    }
+}
 
-        std::string name = "createTotalFieldCurrentProcessor";
+std::complex<double>* ForwardModel::getResidual()
+{
+    return residual;
+}
 
-        this->p_tot = new volComplexField_rect_2D_cpu**[this->m_nfreq];
-        this->m_profiler.StartRegion(name);
-        for (int i=0; i<this->m_nfreq; i++)
+double ForwardModel::calculateResidualNormSq(double eta)
+{
+    return eta*normSq(residual,input.nSourcesReceivers.rec*input.nSourcesReceivers.src*input.freq.nTotal);
+}
+
+void ForwardModel::calculateKZeta(volField_rect_2D_cpu zeta)
+{
+    for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
+    {
+        kZeta[i] = Summation( *Kappa[i], zeta);
+    }
+}
+
+std::complex<double>* ForwardModel::intermediateForwardModelStep2(volField_rect_2D_cpu zeta)
+{
+    calculateKZeta(zeta);
+    return kZeta;
+}
+
+void ForwardModel::calculateKRes(volComplexField_rect_2D_cpu &kRes)
+{
+    int l_i, l_j;
+    kRes.Zero();
+    volComplexField_rect_2D_cpu kDummy(this->getGrid());
+
+    for (int i = 0; i < this->getInput().freq.nTotal; i++)
+    {
+        l_i = i*this->getInput().nSourcesReceivers.rec * this->getInput().nSourcesReceivers.src;
+
+        for (int j = 0; j < this->getInput().nSourcesReceivers.rec; j++)
         {
-            this->p_tot[i] = new volComplexField_rect_2D_cpu*[this->m_nsrc];
+            l_j = j*this->getInput().nSourcesReceivers.src;
 
-                std::cout << "  " << std::endl;
-                std::cout << "Creating this->p_tot for " << i+1 << "/ " << this->m_nfreq << "freq" << std::endl;
-                std::cout << "  " << std::endl;
-
-
-            for (int j=0; j<this->m_nsrc; j++)
+            for(int k = 0; k < this->getInput().nSourcesReceivers.src; k++)
             {
-                this->p_tot[i][j] = new volComplexField_rect_2D_cpu(this->m_grid);
-                *this->p_tot[i][j] = calcField(*this->m_greens[i], this->m_chi, *this->p_0[i][j], conjGrad);
+                kDummy = *Kappa[l_i + l_j + k];
+                kDummy.Conjugate();
+                kRes += kDummy * this->getResidual()[l_i + l_j + k];
             }
-
-                std::cout << "  " << std::endl;
-                std::cout << "  " << std::endl;
         }
-        this->m_profiler.EndRegion();
-
-
     }
-
-    const grid_rect_2D& ForwardModel::get_m_grid()
-    {
-        return m_grid;
-    }
-
-    const Sources_rect_2D& ForwardModel::get_m_src()
-    {
-        return m_src;
-    }
-
-    const Receivers_rect_2D& ForwardModel::get_m_recv()
-    {
-        return m_recv;
-    }
-
-    const Frequencies_group& ForwardModel::get_m_freq()
-    {
-        return m_freq;
-    }
-
-    ProfileInterface& ForwardModel::get_m_profiler()
-    {
-        return m_profiler;
-    }
-
-    const int ForwardModel::get_m_nfreq()
-    {
-        return m_nfreq;
-    }
-
-    const int ForwardModel::get_m_nrecv()
-    {
-        return m_nrecv;
-    }
-
-    const int ForwardModel::get_m_nsrc()
-    {
-        return m_nsrc;
-    }
-
-    volComplexField_rect_2D_cpu*** ForwardModel::get_p_0()
-    {
-        return p_0;
-    }
-
-    Greens_rect_2D_cpu** ForwardModel::get_m_greens()
-    {
-        return m_greens;
-    }
-
-
+}
 

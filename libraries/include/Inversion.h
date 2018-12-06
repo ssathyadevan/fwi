@@ -14,7 +14,6 @@
 #include <volComplexField_rect_2D_cpu.h>
 #include "inversionInterface.h"
 #include "calcField.h"
-#include "einsum.h"
 #include <array>
 #include <string>
 #include "variable_structure.h"
@@ -45,7 +44,7 @@ public:
     }
 
     double findRealRootFromCubic(double a, double b, double c, double d);
-    volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Input input);
+    volField_rect_2D_cpu Reconstruct(const std::complex<double> *const pData, Input input);
 };
 
 #endif // INVERSION_CPU

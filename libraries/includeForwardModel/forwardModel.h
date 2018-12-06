@@ -5,9 +5,11 @@
 
 class ForwardModel : public ForwardModelInterface
 {
-
 public:
-    ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv, const Frequencies_group &freq, ProfileInterface &profiler, const volField_rect_2D_cpu chi);
+
+    ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src,
+                 const Receivers_rect_2D &recv, const Frequencies_group &freq,
+                 ProfileInterface &profiler, Input input);
 
     ~ForwardModel();
 
@@ -15,40 +17,57 @@ public:
 
     void deleteGreens() ;
 
-    void SetBackground(const volField_rect_2D_cpu &chi_) ;
-
     void createP0() ;
 
     void deleteP0() ;
 
     void deleteTotalField() ;
 
-    void calculateData(std::complex<double> *p_data) ;
+    void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, ConjGrad conjGrad) ;
 
-    void createTotalField(ConjGrad conjGrad) ;
+    void createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi) ;
 
-    const grid_rect_2D& get_m_grid() ;
+    virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est);
 
-    const Sources_rect_2D& get_m_src() ;
+    virtual ProfileInterface& getProfiler() ;
 
-    const Receivers_rect_2D& get_m_recv() ;
+    virtual Input getInput() ;
 
-    const Frequencies_group& get_m_freq() ;
+    void calculateKappa();
 
-    virtual ProfileInterface& get_m_profiler() ;
+    virtual void intermediateForwardModelStep1();
 
-    virtual const int get_m_nfreq() ;
+    virtual void calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data);
 
-    virtual const int get_m_nrecv() ;
+    virtual std::complex<double>* getResidual();
 
-    virtual const int get_m_nsrc() ;
+    virtual double calculateResidualNormSq(double eta);
 
-    virtual volComplexField_rect_2D_cpu*** get_p_0() ;
+    virtual void calculateKZeta(volField_rect_2D_cpu zeta);
 
-    virtual Greens_rect_2D_cpu** get_m_greens() ;
+    virtual void calculateKRes(volComplexField_rect_2D_cpu &kRes) ;
+
+    virtual std::complex<double>* intermediateForwardModelStep2(volField_rect_2D_cpu zeta);
 
 
 
+private:
+
+    Greens_rect_2D_cpu **greens;
+
+    volComplexField_rect_2D_cpu ***p0;
+
+    volComplexField_rect_2D_cpu ***pTot;
+
+    volComplexField_rect_2D_cpu **Kappa; // greens*p_tot in eq:ModelDataGreensConv
+
+    volComplexField_rect_2D_cpu **pTot1D; // p_tot stored as a 1D array
+
+    std::complex<double>* residual; // residual for the loop with input.iter1.n
+
+    std::complex<double> *kZeta ;
+
+    ProfileInterface &profiler;
 };
 
 #endif
