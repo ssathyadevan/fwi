@@ -1,21 +1,5 @@
 #include "read_input_fwi_into_vec.h"
 
-std::array<string, 2> InputPathNName(int argc, char** argv)
-{
-    array<string, 2> inLocNName;
-    if (argc != 2)
-    {
-        inLocNName[0] = "../../../parallelized-fwi/";
-        inLocNName[1] = "default";
-    }
-    else
-    {
-        inLocNName[0] = "../../../parallelized-fwi/inputOutput/";
-        inLocNName[1] = argv[1];
-    }
-    return inLocNName;
-}
-
 //Here we determine (is_this_our_kind_of_bool) if the reader correctly gave us a Boolean (1 or 0)
 //and then set the Boolean from the input string (string_1_for_true_0_for_false)
 
@@ -42,19 +26,25 @@ vector<string> reader(std::string runName)
 
 struct Input reader3(int argc, char** argv)
 {
-    std::string pathName;
-    std::string runName;
-    if (argc != 2)
+    std::string inputCardPath;
+    std::string outputLocation;
+    std::string cardName;
+
+    if (argc != 4)
     {
-        pathName = "../../../parallelized-fwi/";
-        runName = "default";
+        std::cout<< "Please enter 3 arguments, 1st the input card path, 2nd the output folder location and 3rd the input card name" << std::endl;
+        std::cout<< "e.g. ./FWI_Process ~/Documents/FWIInstall/ ~/Documents/FWIInstall/Output/ cardName" << std::endl;
+
+        exit(EXIT_FAILURE);
     }
     else
     {
-        pathName = "../../../parallelized-fwi/inputOutput/";
-        runName = argv[1];
+        inputCardPath = argv[1];
+        outputLocation = argv[2];
+        cardName = argv[3];
     }
-    vector<string> input_parameters = reader(pathName+runName+".in");
+
+    vector<string> input_parameters = reader(inputCardPath+cardName+".in");
     int parameterCounter=0;
     const double c_0                                  = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
     const double Freq_min                             = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
@@ -90,7 +80,7 @@ struct Input reader3(int argc, char** argv)
     const double spacing = ((Freq_max-Freq_min)/(nFreq_Total-1));
 
     Input input{//NEW not a const now to keep things simple
-        pathName, runName,
+        inputCardPath, outputLocation, cardName,
                 c_0, n_max, do_reg, verbose,
                 delta_amplification_start, delta_amplification_slope,
                 Freq_min,                  Freq_max,                     nFreq_Total,     spacing ,
@@ -107,15 +97,15 @@ struct Input reader3(int argc, char** argv)
 
     // This part is needed for plotting the chi values in imageCreator_CMake.py
     std::ofstream outputfwi;
-    outputfwi.open("../../../parallelized-fwi/inputOutput/" + runName + ".pythonIn");
+    outputfwi.open(outputLocation + cardName + ".pythonIn");
     outputfwi << "This run was parametrized as follows:" << std::endl;
     outputfwi << "nxt   = " << input.ngrid[0] << std::endl;
     outputfwi << "nzt   = " << input.ngrid[1] << std::endl;
     outputfwi.close();
     // This part is needed for plotting the chi values in imageCreator_CMake.py
     std::ofstream lastrun;
-    lastrun.open("../../../parallelized-fwi/inputOutput/lastRunName.txt");
-    lastrun << runName;
+    lastrun.open(outputLocation + "lastRunName.txt");
+    lastrun << cardName;
     lastrun.close();
 
     return input;

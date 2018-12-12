@@ -9,6 +9,6 @@ void ClockStart(int inputFreqNTotal);
 
 void ClockStop(int ret);
 
-void WriteToFileNotToTerminal(std::string runName, std::string postfix);
+void WriteToFileNotToTerminal(std::string outputLocation, std::string cardName, std::string postfix);
 
 #endif

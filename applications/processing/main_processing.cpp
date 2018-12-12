@@ -36,22 +36,22 @@ int main(int argc, char** argv)
 
     if (!input.verbose)
     {
-        WriteToFileNotToTerminal(input.runName, "Process");
+        WriteToFileNotToTerminal(input.outputLocation, input.cardName, "Process");
     }
 
     ClockStart(input.freq.nTotal);
 
-    chi_visualisation_in_integer_form("../" + input.fileName + ".txt", input.ngrid[0]);
+    chi_visualisation_in_integer_form(input.inputCardPath + input.fileName + ".txt", input.ngrid[0]);
 
-    create_csv_files_for_chi("../../../parallelized-fwi/"+input.fileName+".txt","chi_ref_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_ref_");
 
     int ret = performInversion(input);
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
 
-    chi_visualisation_in_integer_form("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt", input.ngrid[0]);
+    chi_visualisation_in_integer_form(input.outputLocation + "chi_est_" + input.cardName + ".txt", input.ngrid[0]);
 
-    create_csv_files_for_chi("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt","chi_est_"+input.runName,input.ngrid[0]);
+    create_csv_files_for_chi(input.outputLocation + "chi_est_" + input.cardName + ".txt", input, "chi_est_");
 
     ClockStop(ret);
 
@@ -66,7 +66,7 @@ int performInversion(const Input& input)
 
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file("../../../parallelized-fwi/inputOutput/"+input.runName+"InvertedChiToPressure.txt");
+    std::ifstream       file(input.outputLocation+input.cardName+"InvertedChiToPressure.txt");
     CSVRow              row;
     int i = 0;
     while(file >> row)
@@ -90,7 +90,9 @@ int performInversion(const Input& input)
 
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile("../../../parallelized-fwi/inputOutput/chi_est_"+input.runName+".txt");
+    //chi_est.toFile("../../../parallelized-fwi/inputOutput/chi_est_"+input.outputLocation+".txt");
+
+    chi_est.toFile(input.outputLocation + "chi_est_"+ input.cardName+ ".txt");
 
     delete forwardModel;
 

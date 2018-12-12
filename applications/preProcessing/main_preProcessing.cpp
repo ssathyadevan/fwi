@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
     if (!input.verbose)
     {
-        WriteToFileNotToTerminal(input.runName, "PreProcess");
+        WriteToFileNotToTerminal(input.outputLocation, input.cardName, "PreProcess");
     }
     ClockStart(input.freq.nTotal);
     int ret =generateReferencePressureFieldFromChi(input);
@@ -31,7 +31,7 @@ int generateReferencePressureFieldFromChi (const Input& input)
 
     std::complex<double> referencePressureData[magnitude];
 
-    chi.toFile("../../../parallelized-fwi/inputOutput/chi_ref_" + input.runName + ".txt");
+    chi.toFile(input.outputLocation + "chi_ref_"+ input.cardName+ ".txt");
 
     ForwardModelInterface *forwardModel;
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, input);
@@ -40,7 +40,7 @@ int generateReferencePressureFieldFromChi (const Input& input)
     forwardModel->calculateData(referencePressureData, chi, input.conjGrad);
 
     // writing the referencePressureData to a text file in complex form
-    std::string invertedChiToPressureFileName = "../../../parallelized-fwi/inputOutput/"+input.runName+"InvertedChiToPressure.txt";
+    std::string invertedChiToPressureFileName = input.outputLocation + input.cardName + "InvertedChiToPressure.txt";
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
     assert(file.is_open());

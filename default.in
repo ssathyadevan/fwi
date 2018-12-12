@@ -44,7 +44,7 @@
 # I5.    NSourcesReceivers.rcv              int           17          -
 17
 # S1.    fileName                           string        temple.txt  -
-temple
+skullInvert
 # B1.    ConjGrad.calcAlpha                 bool          0 (false)   -
 0
 

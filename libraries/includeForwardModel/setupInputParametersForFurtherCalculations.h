@@ -5,7 +5,7 @@
 grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
 volField_rect_2D_cpu chi(grid);
 
-chi.fromFile(input.fileName);
+chi.fromFile(input);
 
 Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
 

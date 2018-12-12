@@ -56,9 +56,9 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
     file.close();
 }
 
-void volField_rect_2D_cpu::fromFile(const std::string &fileName)
+void volField_rect_2D_cpu::fromFile(const Input& input)
 {
-    std::ifstream file("../../../parallelized-fwi/"+fileName+".txt", std::ios::in);
+    std::ifstream file(input.inputCardPath+input.fileName+".txt", std::ios::in);
     assert(file.is_open());
 
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)

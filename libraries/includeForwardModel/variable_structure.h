@@ -34,8 +34,9 @@ struct NSourcesReceivers
 };
 struct Input
 {
-    std::string pathName;
-    std::string runName;
+    std::string inputCardPath;
+    std::string outputLocation;
+    std::string cardName;
     double c_0;
     int n_max;
     bool doReg;

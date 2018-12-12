@@ -1,6 +1,7 @@
 #ifndef VOLFIELD_RECT_2D_CPU_H
 #define VOLFIELD_RECT_2D_CPU_H
 #include "volField_rect_2D.h"
+#include "variable_structure.h"
 
 #include <iostream>
 #include <iomanip>
@@ -36,7 +37,7 @@ public:
 
     virtual void toFile(const std::string &fileName) const;
 
-    virtual void fromFile(const std::string &fileName);
+    virtual void fromFile(const Input &input);
 
     virtual void SetField(const std::function< double(double,double) > func);
 
