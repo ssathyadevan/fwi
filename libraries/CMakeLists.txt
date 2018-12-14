@@ -13,6 +13,11 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_FORWARDMODEL} )
 
 message( STATUS "TESTR: ${CPP_SOURCES}")
 
+find_package (Eigen3 REQUIRED)
+
 add_library( inversion_library ${CPP_SOURCES} ${H_HEADERS} )
+target_link_libraries (inversion_library Eigen3::Eigen)
+
 add_library( forwardModel_library ${CPP_SOURCES_FORWARDMODEL} ${H_HEADERS_FORWARDMODEL} )
+target_link_libraries (forwardModel_library Eigen3::Eigen)
 

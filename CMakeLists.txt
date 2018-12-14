@@ -26,7 +26,7 @@ if ( MSVC )
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W4")
 endif()
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
 
 add_subdirectory( libraries )
 add_subdirectory( applications )

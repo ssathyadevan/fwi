@@ -9,7 +9,7 @@
 #include "grid_rect_2D.h"
 #include "contraction.h"
 #include "ProfileCpu.h"
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 #include <volComplexField_rect_2D_cpu.h>
 
 using namespace Eigen;

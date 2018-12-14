@@ -2,7 +2,7 @@
 #define CALCFIELD_H
 
 #include "grid_rect_2D.h"
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 #include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
