@@ -1,10 +1,8 @@
 #include "read_input_fwi_into_vec.h"
 #include "communication.h"
-#include "sources_rect_2D.h"
-#include "receivers_rect_2D.h"
 #include "forwardModel.h"
 
-int generateReferencePressureFieldFromChi(const Input& input);
+void generateReferencePressureFieldFromChi(const Input& input);
 
 int main(int argc, char** argv)
 {
@@ -14,18 +12,29 @@ int main(int argc, char** argv)
     {
         WriteToFileNotToTerminal(input.outputLocation, input.cardName, "PreProcess");
     }
-    ClockStart(input.freq.nTotal);
-    int ret =generateReferencePressureFieldFromChi(input);
+    std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
 
-    ClockStop(ret);
+    ClockStart();
+    generateReferencePressureFieldFromChi(input);
+    ClockStop();
 
     return 0;
 }
 
-int generateReferencePressureFieldFromChi (const Input& input)
+void generateReferencePressureFieldFromChi (const Input& input)
 {
-
-    #include "setupInputParametersForFurtherCalculations.h"
+    // initialize the grid, sources, receivers, grouped frequencies and profiler
+    grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
+    volField_rect_2D_cpu chi(grid);
+    chi.fromFile(input);
+    Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
+    src.Print();
+    Receivers_rect_2D recv(src);
+    recv.Print();
+    Frequencies_group freqg(input.freq, input.c_0);
+    freqg.Print(input.freq.nTotal);
+    ProfileInterface *profiler;
+    profiler = new ProfileCpu();
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
 
@@ -37,7 +46,7 @@ int generateReferencePressureFieldFromChi (const Input& input)
     forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, input);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    forwardModel->calculateData(referencePressureData, chi, input.conjGrad);
+    forwardModel->calculateData(referencePressureData, chi, input.iter2);
 
     // writing the referencePressureData to a text file in complex form
     std::string invertedChiToPressureFileName = input.outputLocation + input.cardName + "InvertedChiToPressure.txt";
@@ -50,8 +59,8 @@ int generateReferencePressureFieldFromChi (const Input& input)
              <<"," << referencePressureData[i].imag() << std::endl;
     }
     file.close();
-    
-    return 0;
+    delete forwardModel;
+
 }
 
 

@@ -23,11 +23,11 @@ public:
 
     void deleteTotalField() ;
 
-    void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, ConjGrad conjGrad) ;
+    void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, Iter2 conjGrad) ;
 
-    void createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi) ;
+    void createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi) ;
 
-    virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est);
+    virtual void createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chi_est);
 
     virtual ProfileInterface& getProfiler() ;
 

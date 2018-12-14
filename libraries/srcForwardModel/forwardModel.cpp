@@ -117,7 +117,7 @@ void ForwardModel::deleteTotalField()
     pTot = nullptr;
 }
 
-void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_cpu chi, ConjGrad conjGrad )
+void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_cpu chi, Iter2 conjGrad )
 {
     this->createTotalField(conjGrad, chi);
     int li, lj;
@@ -135,7 +135,7 @@ void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_c
     }
 }
 
-void ForwardModel::createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi)
+void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
 {
     assert(this->greens != nullptr);
     assert(this->p0 != nullptr);
@@ -165,7 +165,7 @@ void ForwardModel::createTotalField(ConjGrad conjGrad, volField_rect_2D_cpu chi)
     this->profiler.EndRegion();
 }
 
-void ForwardModel::createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chiEst)
+void ForwardModel::createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chiEst)
 {
     int l_i;
     for (int i=0; i<input.freq.nTotal; i++)

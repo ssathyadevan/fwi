@@ -44,9 +44,9 @@ public:
     {
     }
 
-    virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, ConjGrad conjGrad) = 0;
+    virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, Iter2 conjGrad) = 0;
 
-    virtual void createTotalField1D(ConjGrad conjGrad, volField_rect_2D_cpu chi_est) = 0;
+    virtual void createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chi_est) = 0;
 
     const grid_rect_2D& getGrid();
 
