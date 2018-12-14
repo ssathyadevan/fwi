@@ -51,6 +51,11 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
         gradientZetaTmp[i] = new volField_rect_2D_cpu(forwardModel_->getGrid() );
     }
 
+    // open the file to store the residual log
+    std::ofstream file;
+    file.open (input.outputLocation+input.cardName+"Residual.log", std::ios::out | std::ios::trunc);
+    assert(file.is_open());
+    int counter = 1;
     //main loop//
     for(int it=0; it < input.n_max; it++)
     {
@@ -144,6 +149,10 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
                     forwardModel_->calculateResidual(chiEst, pData);
                     res = forwardModel_->calculateResidualNormSq(eta);
                     std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
+
+                    file << std::setprecision(17) << res << "," << counter << std::endl;
+                    counter++;// store the residual value in the residual log
+
                     fDataOld = res;
                     vecResFirstIter.push_back(res);
                 }
@@ -222,6 +231,8 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
                     std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: "
                               << std::setprecision(17) << res << std::endl;
 
+                    file << std::setprecision(17) << res << "," << counter << std::endl; // store the residual value in the residual log
+                    counter++;
                     fDataOld = res;
                     vecResFirstIter.push_back(res);
 
@@ -229,6 +240,9 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
                     if ( (it1 > 0) && ( (res < double(input.iter1.tolerance)) ||
                                         ( std::abs(vecResFirstIter[it1-1] - res) < double(input.iter1.tolerance) ) ) )
                         break;
+//                    std::cout << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
+//                    if ( (it1 > 0) && ( res/std::abs(vecResFirstIter[0]) < 0.15 )  )
+//                        break;
 
                     chiEst.Gradient(gradientChiOld);
                     volField_rect_2D_cpu gradientChiNormsquared(forwardModel_->getGrid());
@@ -248,9 +262,10 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
 
         std::string name = "createTotalFieldCurrentProcessor";
         forwardModel_->getProfiler().StartRegion(name);
-        forwardModel_->createTotalField1D(input.conjGrad, chiEst); // estimate p_tot from the newly estimated chi (chi_est)
+        forwardModel_->createTotalField1D(input.iter2, chiEst); // estimate p_tot from the newly estimated chi (chi_est)
         forwardModel_->getProfiler().EndRegion();
     }
+    file.close(); // close the residual.log file
 
     for (int i = 0; i < 2; i++)
     {

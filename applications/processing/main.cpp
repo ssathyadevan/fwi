@@ -28,7 +28,7 @@
 #include "CsvReader.h"
 
 
-int performInversion(const Input& input);
+void performInversion(const Input& input);
 
 int main(int argc, char** argv)
 {
@@ -39,35 +39,38 @@ int main(int argc, char** argv)
         WriteToFileNotToTerminal(input.outputLocation, input.cardName, "Process");
     }
 
-    ClockStart(input.freq.nTotal);
-
     chi_visualisation_in_integer_form(input.inputCardPath + input.fileName + ".txt", input.ngrid[0]);
-
     create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_ref_");
 
-    int ret = performInversion(input);
+    ClockStart();
+    performInversion(input);
+    ClockStop();
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-
     chi_visualisation_in_integer_form(input.outputLocation + "chi_est_" + input.cardName + ".txt", input.ngrid[0]);
-
     create_csv_files_for_chi(input.outputLocation + "chi_est_" + input.cardName + ".txt", input, "chi_est_");
-
-    ClockStop(ret);
 
     return 0;
 }
 
-int performInversion(const Input& input)
+void performInversion(const Input& input)
 {
-    #include "setupInputParametersForFurtherCalculations.h"
+    // initialize the grid, sources, receivers, grouped frequencies and profiler
+    grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
+    Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
+    src.Print();
+    Receivers_rect_2D recv(src);
+    recv.Print();
+    Frequencies_group freqg(input.freq, input.c_0);
+    freqg.Print(input.freq.nTotal);
+    ProfileInterface *profiler;
+    profiler = new ProfileCpu();
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
-
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
     std::ifstream       file(input.outputLocation+input.cardName+"InvertedChiToPressure.txt");
-    CSVRow              row;
+    CSVReader              row;
     int i = 0;
     while(file >> row)
     {
@@ -95,6 +98,6 @@ int performInversion(const Input& input)
     chi_est.toFile(input.outputLocation + "chi_est_"+ input.cardName+ ".txt");
 
     delete forwardModel;
+    delete inverse;
 
-    return 0;
 }

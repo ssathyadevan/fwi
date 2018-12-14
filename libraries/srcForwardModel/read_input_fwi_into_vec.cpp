@@ -101,6 +101,9 @@ struct Input reader3(int argc, char** argv)
     outputfwi << "This run was parametrized as follows:" << std::endl;
     outputfwi << "nxt   = " << input.ngrid[0] << std::endl;
     outputfwi << "nzt   = " << input.ngrid[1] << std::endl;
+    outputfwi << "nMax = " << input.n_max    << std::endl;
+    outputfwi << "iter1 = " << input.iter1.n  << std::endl;
+    outputfwi << "iter2 = " << input.iter2.n  << std::endl;
     outputfwi.close();
     // This part is needed for plotting the chi values in imageCreator_CMake.py
     std::ofstream lastrun;

@@ -5,9 +5,9 @@
 #include <string>
 #include <ctime>
 
-void ClockStart(int inputFreqNTotal);
+void ClockStart();
 
-void ClockStop(int ret);
+void ClockStop();
 
 void WriteToFileNotToTerminal(std::string outputLocation, std::string cardName, std::string postfix);
 

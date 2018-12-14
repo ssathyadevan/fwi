@@ -1,6 +1,16 @@
 #include "CsvReader.h"
 
-void CSVRow::readNextRow(std::istream& str)
+std::string const& CSVReader::operator[](std::size_t index) const
+{
+    return m_data[index];
+}
+
+std::size_t CSVReader::size() const
+{
+    return m_data.size();
+}
+
+void CSVReader::readNextRow(std::istream& str)
 {
     std::string         line;
     std::getline(str, line);
@@ -20,3 +30,5 @@ void CSVRow::readNextRow(std::istream& str)
         m_data.push_back("");
     }
 }
+
+

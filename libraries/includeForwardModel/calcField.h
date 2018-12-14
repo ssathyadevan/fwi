@@ -24,6 +24,6 @@ using namespace Eigen;
     "weightingFactorsField"
 */
 volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi,
-                                      const volComplexField_rect_2D_cpu &p_init, ConjGrad conjGrad);
+                                      const volComplexField_rect_2D_cpu &p_init, Iter2 conjGrad);
 
 #endif /* CALCFIELD_H */

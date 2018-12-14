@@ -1,15 +1,13 @@
 #include "communication.h"
 
 
-void ClockStart(int inputFreqNTotal)
+void ClockStart()
 {
-    std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
     std::time_t start = std::time(nullptr);
     std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
-    std::cout << "input.freq.nTotal= " << inputFreqNTotal << std::endl;
 }
 
-void ClockStop(int ret)
+void ClockStop()
 {
     std::time_t finish = std::time(nullptr);
     std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;

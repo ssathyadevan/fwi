@@ -9,7 +9,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+import sys, csv
 
 outputPath = sys.argv[1]
 
@@ -18,24 +18,35 @@ contents = g.readlines()
 runName = contents[0].rstrip()
 
 f = open(outputPath+"/"+runName+".pythonIn","r")        # Open the file where we printed the settings used in Cpp, we'll reuse them
-contents=f.readlines()               # Just dump the contents of this file into a big variable
-x= contents[1]                       # Take the first line entirely...
-y,u,v= x.split()                     # Split it into its constituent words
-nxt = int(v)                         # Cast the third word to an integer, we know this is nxt, we built the .txt after all
-x= contents[2]                       # The rest of this block repeats this process for nzt and interactive (dirty non-loop)
+contents=f.readlines()               			# Just dump the contents of this file into a big variable
+x= contents[1]                       			# Take the first line entirely...
+y,u,v= x.split()                     			# Split it into its constituent words
+nxt = int(v)                         			# Cast the third word to an integer, we know this is nxt, we built the .txt after all
+x= contents[2]                       			# The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 y,u,v= x.split()
 nzt = int(v)
+x= contents[3]
+y,u,v= x.split()
+nMax = int(v)
+x= contents[4]
+y,u,v= x.split()
+nIter1 = int(v)
+x= contents[5]
+y,u,v= x.split()
+nIter2 = int(v)
+
+
 
 #zerothfile="src/ShowChi.py"
 filename1=outputPath+"/chi_ref_"+runName+".txt"              # variable name for the original temple
 filename2=outputPath+"/chi_est_"+runName+".txt"   # variable name for the calculated temple
-filenameout=outputPath+"/"+runName+"_result.png"  # how we store the image
+filenameout=outputPath+"/"+runName+"Result.png"  # how we store the image
 
 chi1 = np.genfromtxt(filename1)      # start image set up for original temple
-chi1 = chi1.reshape((nzt, nxt))      
+chi1 = chi1.reshape((nzt, nxt))
 
 chi2 = np.genfromtxt(filename2)      # start image set up for calculated temple
-chi2 = chi2.reshape((nzt, nxt))      
+chi2 = chi2.reshape((nzt, nxt))
 
 v_min = chi1.min()                   # set the minimum and maximum values to chi...
 v_max = chi1.max()                   # ...(just copy-pasted this)
@@ -58,6 +69,22 @@ plt.colorbar()
 
 plt.savefig(filenameout, dpi=400)
 
-print "The picture has been generated with Python" 
+####################################
+####  Create the residual plots ####
+####################################
+
+residualLogFileName = outputPath+"/"+runName + "Residual.log"
+reader_residual = csv.reader(open(residualLogFileName),delimiter=',')
+dummy_variable_reader_pr = list(reader_residual)
+reader_residual_array = np.array(dummy_variable_reader_pr).astype("float")
+
+plt.clf()
+plt.plot(reader_residual_array[:,0])
+plt.ylabel("Residual")
+plt.grid(True)
+plt.savefig(outputPath+"/"+runName+"Residual.png", dpi=400)
+
+
+print "The pictures have been generated with Python" 
 
 sys.exit()

@@ -23,7 +23,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, ConjGrad conjGrad)
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, Iter2 conjGrad)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -51,7 +51,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
     p_tot = p_init;//
 
 
-    for(int it = 0; it < conjGrad.nIter; it++)
+    for(int it = 0; it < conjGrad.n; it++)
     {
 
         chi_p = p_tot * chi;//Babak 2018 10 25: Equation ID: "incrementalContrastSrcs"
@@ -119,7 +119,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
     if(res >= conjGrad.tolerance)
     {
-        std::cout << "No convergence after " <<  conjGrad.nIter << " iterations." << "Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  conjGrad.n << " iterations." << "Res = " << res << std::endl;
     }
 
     return p_tot;

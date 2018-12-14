@@ -20,9 +20,9 @@ struct Freq
 {
     double min;   double max;         int nTotal;      double spacing;
 };
-struct ConjGrad
+struct Iter2
 {
-    int nIter;    double tolerance;   bool calcAlpha;
+    int n;    double tolerance;   bool calcAlpha;
 };
 struct Iter1
 {
@@ -43,7 +43,7 @@ struct Input
     bool verbose;
     DeltaAmplification deltaAmplification;
     Freq freq;
-    ConjGrad conjGrad;
+    Iter2 iter2;
     Iter1 iter1;
     NSourcesReceivers nSourcesReceivers;
     std::array<int,2> ngrid;

@@ -44,8 +44,8 @@
 # I5.    NSourcesReceivers.rcv              int           17          -
 17
 # S1.    fileName                           string        temple.txt  -
-skullInvert
-# B1.    ConjGrad.calcAlpha                 bool          0 (false)   -
+temple
+# B1.    Iter2.calcAlpha                    bool          0 (false)   -
 0
 
 ###############################################################################
@@ -56,7 +56,7 @@ skullInvert
 
 # d1.    Iter1.tolerance                    dbl           1.e-8
 1.e-8
-# d2.    ConjGrad.tolerance                 dbl           5.e-5
+# d2.    Iter2.tolerance                    dbl           5.e-5
 5.e-5
 # d3.    DeltaAmplification.start           dbl           100.
 100.0
@@ -66,7 +66,7 @@ skullInvert
 5
 # i2.    Iter1.n                            int           50
 10
-# i3.    ConjGrad.nIter                     int           100
+# i3.    Iter2.n                            int           100
 15
 # b1.    do_reg                             bool          1 (true)
 1
@@ -82,12 +82,12 @@ skullInvert
 # I4-I5.  number of sources and receivers
 # S1.     reservoir file name 
 # B1.     Decision true/false whether to calculate "alpha" 
-# d1.     ? A convergence criterion HOMEWORK FIND OUT OF WHAT
-# d2.     Conjugate gradient conversion criterion 
+# d1.     Convergence criteria for the Conjugate Gradient i.e. chi_estimation loop
+# d2.     Convergence criteria for the calculation of p_tot in ForwardModel
 # d3.     the variable name is "delta_amplification_start"
 # d4.     the variable name is "delta_amplification_slope"
-# i1.     unknown 
-# i2.     maximum number of iterations outer loop
-# i3.     Conjugate gradient maximum iterations 
+# i1.     maximum number of iterations outer loop 
+# i2.     Conjugate gradient maximum iterations
+# i3.     Maximum iterations for p_tot calculation in forwardModel 
 # b1.     applying multiplicative regularisation when do_reg = 1 
 # b2.     regulates if printing to cout or to diagnostic file

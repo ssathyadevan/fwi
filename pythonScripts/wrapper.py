@@ -11,12 +11,15 @@
 
 import subprocess, os, sys
 os.chdir('bin')                    									# Go here and you find the preProcessing executable
-run_fwi_cpp = subprocess.Popen('./FWI_PreProcess ../inputFiles/ ../Output/ default', shell = True)              	# Run the preProcessing executable
+run_fwi_cpp = subprocess.Popen('./FWI_PreProcess ../input/ ../output/ default', shell = True)              	# Run the preProcessing executable
 run_fwi_cpp.wait()                                              					# Wait for that process to finish
 
-run_fwi_cpp = subprocess.Popen('./FWI_Process ../inputFiles/ ../Output/ default', shell = True)                       # Run the Processing executable
+run_fwi_cpp = subprocess.Popen('./FWI_Process ../input/ ../output/ default', shell = True)                       # Run the Processing executable
 run_fwi_cpp.wait()                                                     					# Wait for that process to finish
 
 os.chdir('../')												# Go to the home directory
-run_visualizer = subprocess.call(['python', 'postProcessing.py Output']) 				# Run the image visualizer from here. It can run independently
+run_visualizer = subprocess.check_call(['python', 'postProcessing.py', 'output']) 				# Run the image visualizer from here. It can run independently
 sys.exit()                                                      					# Back to the terminal, we are done
+
+
+
