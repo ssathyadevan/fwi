@@ -144,7 +144,9 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
     std::string name = "createTotalFieldCurrentProcessor";
 
     this->pTot = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
+    std::cout << "before profiler start region " << std::endl;
     this->profiler.StartRegion(name);
+    std::cout << "after profiler start region" << std::endl;
     for (int i=0; i<this->input.freq.nTotal; i++)
     {
         this->pTot[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
@@ -162,7 +164,10 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
         std::cout << "  " << std::endl;
         std::cout << "  " << std::endl;
     }
+    std::cout << "before profiler end region " << std::endl;
     this->profiler.EndRegion();
+    std::cout << "after profiler end region " << std::endl;
+
 }
 
 void ForwardModel::createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chiEst)
