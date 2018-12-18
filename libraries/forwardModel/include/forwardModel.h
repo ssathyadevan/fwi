@@ -9,7 +9,7 @@ public:
 
     ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src,
                  const Receivers_rect_2D &recv, const Frequencies_group &freq,
-                 ProfileInterface &profiler, Input input);
+                 Input input);
 
     ~ForwardModel();
 
@@ -28,8 +28,6 @@ public:
     void createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi) ;
 
     virtual void createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chi_est);
-
-    virtual ProfileInterface& getProfiler() ;
 
     virtual Input getInput() ;
 
@@ -54,20 +52,12 @@ public:
 private:
 
     Greens_rect_2D_cpu **greens;
-
     volComplexField_rect_2D_cpu ***p0;
-
     volComplexField_rect_2D_cpu ***pTot;
-
     volComplexField_rect_2D_cpu **Kappa; // greens*p_tot in eq:ModelDataGreensConv
-
     volComplexField_rect_2D_cpu **pTot1D; // p_tot stored as a 1D array
-
     std::complex<double>* residual; // residual for the loop with input.iter1.n
-
     std::complex<double> *kZeta ;
-
-    ProfileInterface &profiler;
 };
 
 #endif

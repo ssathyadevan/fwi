@@ -8,7 +8,6 @@
 #include "volComplexField_rect_2D_cpu.h"
 #include "volComplexField_rect_2D.h"
 #include "greens_rect_2D_cpu.h"
-#include "ProfileCpu.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "frequencies_group.h"
@@ -16,7 +15,7 @@
 #include "Inversion.h"
 #include "read_input_fwi_into_vec.h"
 #include "variable_structure.h"
-#include "communication.h"
+#include "utilityFunctions.h"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -26,6 +25,7 @@
 #include "create_csv_files_for_chi.h"
 #include <stdexcept>
 #include "CsvReader.h"
+#include "cpuClock.h"
 
 
 void performInversion(const Input& input);
@@ -42,9 +42,12 @@ int main(int argc, char** argv)
     chi_visualisation_in_integer_form(input.inputCardPath + input.fileName + ".txt", input.ngrid[0]);
     create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_ref_");
 
-    ClockStart();
+    cpuClock clock;
+
+    clock.Start();
     performInversion(input);
-    ClockStop();
+    clock.End();
+    clock.PrintTimeElapsed();
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
     chi_visualisation_in_integer_form(input.outputLocation + "chi_est_" + input.cardName + ".txt", input.ngrid[0]);
@@ -55,7 +58,7 @@ int main(int argc, char** argv)
 
 void performInversion(const Input& input)
 {
-    // initialize the grid, sources, receivers, grouped frequencies and profiler
+    // initialize the grid, sources, receivers, grouped frequencies
     grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
     Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
     src.Print();
@@ -63,8 +66,6 @@ void performInversion(const Input& input)
     recv.Print();
     Frequencies_group freqg(input.freq, input.c_0);
     freqg.Print(input.freq.nTotal);
-    ProfileInterface *profiler;
-    profiler = new ProfileCpu();
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
     //read referencePressureData from a CSV file format
@@ -82,7 +83,7 @@ void performInversion(const Input& input)
     }
 
     ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, input);
+    forwardModel = new ForwardModel(grid, src, recv, freqg, input);
 
     InversionInterface *inverse;
     inverse = new Inversion(forwardModel);

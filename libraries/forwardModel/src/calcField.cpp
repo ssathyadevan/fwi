@@ -3,7 +3,6 @@
 
 #include "grid_rect_2D.h"
 #include <Eigen/Dense>
-#include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include "variable_structure.h"
@@ -40,7 +39,6 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
     Matrix< std::complex<double> , Dynamic, 1, ColMajor > alpha;
 
     std::complex<double>  *rhs_data, *matA_j_data;
-    ProfileCpu profiler, prof2;
 
     matA.conservativeResize(n_cell, 1);
     b_f_rhs.conservativeResize(n_cell, 1);
@@ -104,10 +102,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
         }
         else
         {
-            //   profiler.StartRegion("contracting field");
-            //p_tot += G.ContractWithField(dW);
             p_tot += G.dot1(dW);// Babak 2018 10 25: Equation ID: "weightingFactorField"  dot1 is coded in green_rect_2D_cpu.h
-            //   profiler.EndRegion();
         }
 
         chi_p_old = chi_p; // updating the chi with the new chi

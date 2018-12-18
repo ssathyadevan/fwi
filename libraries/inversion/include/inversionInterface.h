@@ -2,7 +2,6 @@
 #define INVERSIONINTERFACE_H
 
 #include <complex>
-#include <ProfileInterface.h>
 
 #include "greens_rect_2D_cpu.h"
 #include "sources_rect_2D.h"

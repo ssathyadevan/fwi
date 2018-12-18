@@ -1,4 +1,4 @@
-#include "helper.h"
+#include "utilityFunctions.h"
 #include "contraction.h"
 
 #include <array>

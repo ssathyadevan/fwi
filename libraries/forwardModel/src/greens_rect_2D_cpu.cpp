@@ -38,7 +38,6 @@ volComplexField_rect_2D_cpu Greens_rect_2D_cpu::dot1(const volComplexField_rect_
 
     volComplexField_rect_2D_cpu prod1(grid);
     int l1, l2, l3, l4;
-    ProfileCpu profiler;
 
     std::complex<double> *p_prod = prod1.GetDataPtr();
     const std::complex<double> *p_dW = dW.GetDataPtr();

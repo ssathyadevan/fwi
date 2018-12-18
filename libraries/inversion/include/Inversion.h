@@ -3,8 +3,6 @@
 
 #include <complex>
 
-#include <ProfileInterface.h>
-
 #include "GreensFunctions.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"

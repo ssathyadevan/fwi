@@ -3,7 +3,6 @@
 
 #include "grid_rect_2D.h"
 #include <Eigen/Dense>
-#include "ProfileCpu.h"
 #include "greens_rect_2D_cpu.h"
 #include "volComplexField_rect_2D_cpu.h"
 #include "variable_structure.h"

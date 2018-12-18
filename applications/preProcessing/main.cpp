@@ -1,6 +1,8 @@
 #include "read_input_fwi_into_vec.h"
-#include "communication.h"
+#include "utilityFunctions.h"
 #include "forwardModel.h"
+#include "cpuClock.h"
+
 
 void generateReferencePressureFieldFromChi(const Input& input);
 
@@ -14,16 +16,19 @@ int main(int argc, char** argv)
     }
     std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
 
-    ClockStart();
+    cpuClock clock;
+
+    clock.Start();
     generateReferencePressureFieldFromChi(input);
-    ClockStop();
+    clock.End();
+    clock.PrintTimeElapsed();
 
     return 0;
 }
 
 void generateReferencePressureFieldFromChi (const Input& input)
 {
-    // initialize the grid, sources, receivers, grouped frequencies and profiler
+    // initialize the grid, sources, receivers, grouped frequencies
     grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
     volField_rect_2D_cpu chi(grid);
     chi.fromFile(input);
@@ -33,8 +38,6 @@ void generateReferencePressureFieldFromChi (const Input& input)
     recv.Print();
     Frequencies_group freqg(input.freq, input.c_0);
     freqg.Print(input.freq.nTotal);
-    ProfileInterface *profiler;
-    profiler = new ProfileCpu();
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
 
@@ -43,7 +46,7 @@ void generateReferencePressureFieldFromChi (const Input& input)
     chi.toFile(input.outputLocation + "chi_ref_"+ input.cardName+ ".txt");
 
     ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, *profiler, input);
+    forwardModel = new ForwardModel(grid, src, recv, freqg, input);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     forwardModel->calculateData(referencePressureData, chi, input.iter2);

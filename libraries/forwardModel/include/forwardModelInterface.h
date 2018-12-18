@@ -3,7 +3,6 @@
 
 #include "frequencies_group.h"
 #include "volField_rect_2D_cpu.h"
-#include "ProfileInterface.h"
 #include "GreensFunctions.h"
 #include "calcField.h"
 
@@ -34,7 +33,7 @@ class ForwardModelInterface
 
 public:
     ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
-                          const Frequencies_group &freq, ProfileInterface &profiler, Input input)
+                          const Frequencies_group &freq, Input input)
         : grid(grid), src(src), recv(recv), freq(freq), input(input)
     {
 
@@ -59,8 +58,6 @@ public:
     virtual void calculateKRes(volComplexField_rect_2D_cpu &kRes) = 0;
 
     virtual Input getInput() = 0;
-
-    virtual ProfileInterface& getProfiler() = 0;
 
     virtual void intermediateForwardModelStep1() = 0;
 

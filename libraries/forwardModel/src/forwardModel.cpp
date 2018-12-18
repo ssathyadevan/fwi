@@ -2,9 +2,9 @@
 
 
 ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
-                           const Frequencies_group &freq, ProfileInterface &profiler, Input input)
-    : ForwardModelInterface (grid, src, recv, freq, profiler, input),
-      greens(), p0(), pTot(), profiler(profiler)
+                           const Frequencies_group &freq, Input input)
+    : ForwardModelInterface (grid, src, recv, freq, input),
+      greens(), p0(), pTot()
 {
     residual = new std::complex<double>[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
     kZeta = new std::complex<double>[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
@@ -141,13 +141,8 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
     assert(this->p0 != nullptr);
     assert(this->pTot == nullptr);
 
-    std::string name = "createTotalFieldCurrentProcessor";
-
     this->pTot = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
-    std::cout << "before profiler start region " << std::endl;
-    this->profiler.StartRegion(name);
-    std::cout << "after profiler start region" << std::endl;
-    for (int i=0; i<this->input.freq.nTotal; i++)
+        for (int i=0; i<this->input.freq.nTotal; i++)
     {
         this->pTot[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
 
@@ -164,9 +159,6 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
         std::cout << "  " << std::endl;
         std::cout << "  " << std::endl;
     }
-    std::cout << "before profiler end region " << std::endl;
-    this->profiler.EndRegion();
-    std::cout << "after profiler end region " << std::endl;
 
 }
 
@@ -184,11 +176,6 @@ void ForwardModel::createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chiEs
         for (int j=0; j<input.nSourcesReceivers.src;j++)
             *pTot1D[l_i + j] = calcField(*greens[i], chiEst, *p0[i][j], conjGrad);
     }
-}
-
-ProfileInterface& ForwardModel::getProfiler()
-{
-    return profiler;
 }
 
 Input ForwardModel::getInput()

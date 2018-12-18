@@ -3,12 +3,11 @@
 
 #include <cassert>
 
-#include "helper.h"
+#include "utilityFunctions.h"
 #include "sources_rect_2D.h"
 #include "receivers_rect_2D.h"
 #include "grid_rect_2D.h"
 #include "contraction.h"
-#include "ProfileCpu.h"
 #include <Eigen/Dense>
 #include <volComplexField_rect_2D_cpu.h>
 

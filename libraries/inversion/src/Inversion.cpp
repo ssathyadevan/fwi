@@ -260,10 +260,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
             } // end regularisation loop
         }
 
-        std::string name = "createTotalFieldCurrentProcessor";
-        forwardModel_->getProfiler().StartRegion(name);
         forwardModel_->createTotalField1D(input.iter2, chiEst); // estimate p_tot from the newly estimated chi (chi_est)
-        forwardModel_->getProfiler().EndRegion();
     }
     file.close(); // close the residual.log file
 
