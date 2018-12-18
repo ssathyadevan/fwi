@@ -1,29 +1,8 @@
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <ctime>
-#include "calcField.h"
-#include "grid_rect_2D.h"
-#include "volField_rect_2D.h"
-#include "volComplexField_rect_2D_cpu.h"
-#include "volComplexField_rect_2D.h"
-#include "greens_rect_2D_cpu.h"
-#include "sources_rect_2D.h"
-#include "receivers_rect_2D.h"
-#include "frequencies_group.h"
-#include "inversionInterface.h"
 #include "Inversion.h"
-#include "read_input_fwi_into_vec.h"
-#include "variable_structure.h"
+#include "inputCardReader.h"
 #include "utilityFunctions.h"
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <ios>
-#include <vector>
 #include "chi_visualisation_in_integer_form.h"
 #include "create_csv_files_for_chi.h"
-#include <stdexcept>
 #include "CsvReader.h"
 #include "cpuClock.h"
 
@@ -32,7 +11,16 @@ void performInversion(const Input& input);
 
 int main(int argc, char** argv)
 {
-    Input input = reader3(argc, argv);
+    if (argc != 4)
+    {
+        std::cout<< "Please enter 3 arguments, 1st the input card path, 2nd the output folder location and 3rd the input card name" << std::endl;
+        std::cout<< "e.g. ./FWI_Process ~/Documents/FWIInstall/ ~/Documents/FWIInstall/Output/ cardName" << std::endl;
+
+        exit(EXIT_FAILURE);
+    }
+    std::vector<std::string> arguments(argc+1, argc+argv);
+
+    Input input = inputCardReader(arguments[0], arguments[1], arguments[2]);
 
     if (!input.verbose)
     {
