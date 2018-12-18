@@ -47,7 +47,11 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
 {
     std::ofstream file;
     file.open (fileName, std::ios::out | std::ios::trunc);
-    assert(file.is_open());
+    if (!file)
+    {
+        std::cout<< "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -59,7 +63,11 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
 void volField_rect_2D_cpu::fromFile(const Input& input)
 {
     std::ifstream file(input.inputCardPath+input.fileName+".txt", std::ios::in);
-    assert(file.is_open());
+    if (!file)
+    {
+        std::cout<< "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)
     {

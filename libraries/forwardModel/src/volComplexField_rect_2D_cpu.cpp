@@ -46,7 +46,11 @@ void volComplexField_rect_2D_cpu::toFile(const std::string &fileName) const
 {
     std::ofstream file;
     file.open(fileName, std::ios::out | std::ios::trunc);
-    assert(file.is_open());
+    if (!file)
+    {
+        std::cout<< "Unable to open the file in .toFile method of volComplexField_rect_2D_cpu class " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -59,8 +63,11 @@ void volComplexField_rect_2D_cpu::fromFile(const std::string &fileName)
 {
 
     std::ifstream file(fileName, std::ios::in);
-    assert(file.is_open());
-
+    if (!file)
+    {
+        std::cout<< "Unable to open the file in .fromFile method of volComplexField_rect_2D_cpu class " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
         file >> data[i];

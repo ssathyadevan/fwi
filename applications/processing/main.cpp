@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
         exit(EXIT_FAILURE);
     }
-    std::vector<std::string> arguments(argc+1, argc+argv);
+    std::vector<std::string> arguments(argv+1, argc+argv);
 
     Input input = inputCardReader(arguments[0], arguments[1], arguments[2]);
 
@@ -59,7 +59,7 @@ void performInversion(const Input& input)
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
     std::ifstream       file(input.outputLocation+input.cardName+"InvertedChiToPressure.txt");
-    CSVReader              row;
+    CSVReader           row;
     int i = 0;
     while(file >> row)
     {

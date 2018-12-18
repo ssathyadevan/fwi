@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 
         exit(EXIT_FAILURE);
     }
-    std::vector<std::string> arguments(argc+1, argc+argv);
+    std::vector<std::string> arguments(argv+1, argc+argv);
 
     Input input = inputCardReader(arguments[0], arguments[1], arguments[2]);
 
@@ -61,16 +61,22 @@ void generateReferencePressureFieldFromChi (const Input& input)
     forwardModel->calculateData(referencePressureData, chi, input.iter2);
 
     // writing the referencePressureData to a text file in complex form
+
     std::string invertedChiToPressureFileName = input.outputLocation + input.cardName + "InvertedChiToPressure.txt";
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
-    assert(file.is_open());
+    if (!file)
+    {
+        std::cout<< "Failed to open the file to store inverted chi to pressure field" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     for(int i=0; i < magnitude; i++)
     {
         file << std::setprecision(17) << referencePressureData[i].real()
              <<"," << referencePressureData[i].imag() << std::endl;
     }
     file.close();
+
     delete forwardModel;
 
 }

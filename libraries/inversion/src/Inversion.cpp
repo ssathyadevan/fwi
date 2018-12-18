@@ -54,7 +54,11 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
     // open the file to store the residual log
     std::ofstream file;
     file.open (input.outputLocation+input.cardName+"Residual.log", std::ios::out | std::ios::trunc);
-    assert(file.is_open());
+    if (!file)
+    {
+        std::cout<< "Failed to open the file to store residuals" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     int counter = 1;
     //main loop//
     for(int it=0; it < input.n_max; it++)
