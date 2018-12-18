@@ -2,8 +2,6 @@
 #define UTILITYFUNCTIONS_H
 
 #include <iostream>
-#include <string>
-#include <ctime>
 #include <cmath>
 
 inline void WriteToFileNotToTerminal(std::string outputLocation, std::string cardName, std::string postfix)

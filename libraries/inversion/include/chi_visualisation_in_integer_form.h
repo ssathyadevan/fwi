@@ -2,7 +2,6 @@
 #define CHI_VISUALISATION_IN_INTEGER_FORM_H
 
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <cmath>
 

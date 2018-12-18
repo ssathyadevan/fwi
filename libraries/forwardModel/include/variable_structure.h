@@ -4,9 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <array>
 #include <sstream>
-#include <iomanip>
-#include <ios>
 #include <vector>
 
 

@@ -1,13 +1,6 @@
 #ifndef READERVAR
 #define READERVAR
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <ios>
-#include <vector>
 #include "variable_structure.h"
 
 using namespace std;

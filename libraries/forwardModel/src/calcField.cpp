@@ -22,7 +22,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, Iter2 conjGrad)
+volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, Iter2 iter2)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -49,7 +49,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
     p_tot = p_init;//
 
 
-    for(int it = 0; it < conjGrad.n; it++)
+    for(int it = 0; it < iter2.n; it++)
     {
 
         chi_p = p_tot * chi;//Babak 2018 10 25: Equation ID: "incrementalContrastSrcs"
@@ -62,7 +62,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
         res = dWNorm / chi_pNorm;//
         //std::cout << "Residual = " << res << std::endl;
 
-        if(res < conjGrad.tolerance && it != 0)
+        if(res < iter2.tolerance && it != 0)
         {
             if(true)
             {
@@ -73,7 +73,7 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
             break;
         }
         // Babak 2018 10 25: This part of the code is related to the Equation ID: "weightingFactorField"
-        if (conjGrad.calcAlpha)
+        if (iter2.calcAlpha)
         {
             phi.push_back(G.ContractWithField(dW));
             f_rhs = G.ContractWithField(chi*p_init);
@@ -112,9 +112,9 @@ volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volFiel
 
 
 
-    if(res >= conjGrad.tolerance)
+    if(res >= iter2.tolerance)
     {
-        std::cout << "No convergence after " <<  conjGrad.n << " iterations." << "Res = " << res << std::endl;
+        std::cout << "No convergence after " <<  iter2.n << " iterations." << "Res = " << res << std::endl;
     }
 
     return p_tot;

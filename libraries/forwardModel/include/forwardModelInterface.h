@@ -2,7 +2,6 @@
 #define FORWARDMODELINTERFACE_H
 
 #include "frequencies_group.h"
-#include "volField_rect_2D_cpu.h"
 #include "GreensFunctions.h"
 #include "calcField.h"
 

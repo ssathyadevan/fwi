@@ -1,21 +1,7 @@
 #ifndef INVERSION_CPU
 #define INVERSION_CPU
 
-#include <complex>
-
-#include "GreensFunctions.h"
-#include "sources_rect_2D.h"
-#include "receivers_rect_2D.h"
-#include "grid_rect_2D.h"
-#include "frequencies_group.h"
-#include <volField_rect_2D_cpu.h>
-#include <volComplexField_rect_2D_cpu.h>
 #include "inversionInterface.h"
-#include "calcField.h"
-#include <array>
-#include <string>
-#include "variable_structure.h"
-#include "forwardModelInterface.h"
 #include "forwardModel.h"
 
 
