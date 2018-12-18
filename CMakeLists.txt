@@ -34,3 +34,4 @@ find_package (Eigen3 REQUIRED)
 
 add_subdirectory( libraries )
 add_subdirectory( applications )
+add_subdirectory( unittest )
