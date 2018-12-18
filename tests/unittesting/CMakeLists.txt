@@ -8,4 +8,5 @@ add_executable ( unittest unittest_1.cpp)
 include_directories( ${LIBRARY_INCLUDE_DIRS_FORWARDMODEL} )
 
 target_link_libraries( unittest ${GTEST_LIBRARIES} pthread forwardModel_library)
+install( TARGETS unittest DESTINATION bin)
 
