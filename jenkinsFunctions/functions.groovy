@@ -32,8 +32,6 @@ def buildAll() {
 
                 mkdir build
 
-                cd ../parallelized-fwi
-
                 cmake -DCMAKE_BUILD_TYPE=Release ../parallelized-fwi
 
                 make
