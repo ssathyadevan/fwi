@@ -30,41 +30,18 @@ def buildAll() {
 
         sh '''
 
-                mkdir -p build
+                mkdir build
 
-                cd $BM_SRC_DIR/bin
+                cd ../parallelized-fwi
 
-                chmod +x *.sh
+                cmake -DCMAKE_BUILD_TYPE=Release ../parallelized-fwi
 
-                source bmInit.sh
-
-                bmBuildAll.sh
+                make
 
         '''
 
 }
 
-def testAll(){
-
-        echo 'Testing..'
-
-        sh '''
-
-                source bmInit.sh
-
-                mkdir -p ${BM_TEST_RESULT_DIR}
-
-                export PATH=$PATH:${BM_INSTALL_DIR}/bin
-
-                bmRunAllTests.sh
-
-                GtestXMLtoJunitXML.sh
-
-        '''
-
-        junit 'build/testing/output/*.xml'
-
-}
 
 def deploy(){
 
@@ -72,8 +49,7 @@ def deploy(){
                 --exclude="Dockerfile" \
                 --exclude="jenkinsFunctions" \
                 --exclude="Jenkinsfile" \
-                --exclude="Jenkinsfile_nightly" \
-                -zcf BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
+                --zcf BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
 
         archiveArtifacts artifacts:"BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
