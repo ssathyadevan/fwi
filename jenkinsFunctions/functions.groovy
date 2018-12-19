@@ -69,18 +69,11 @@ def testAll(){
 def deploy(){
 
         sh 'tar --exclude="build" \
-
                 --exclude="Dockerfile" \
-
                 --exclude="jenkinsFunctions" \
-
                 --exclude="Jenkinsfile" \
-
                 --exclude="Jenkinsfile_nightly" \
-
                 -zcf BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
-
-
 
         archiveArtifacts artifacts:"BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
