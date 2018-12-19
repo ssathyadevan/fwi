@@ -15,6 +15,7 @@ int main(int argc, char** argv)
 
         exit(EXIT_FAILURE);
     }
+
     std::vector<std::string> arguments(argv+1, argc+argv);
 
     Input input = inputCardReader(arguments[0], arguments[1], arguments[2]);

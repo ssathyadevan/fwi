@@ -82,8 +82,6 @@ void performInversion(const Input& input)
 
     std::cout << "Done, writing to file" << std::endl;
 
-    //chi_est.toFile("../../../parallelized-fwi/inputOutput/chi_est_"+input.outputLocation+".txt");
-
     chi_est.toFile(input.outputLocation + "chi_est_"+ input.cardName+ ".txt");
 
     delete forwardModel;
