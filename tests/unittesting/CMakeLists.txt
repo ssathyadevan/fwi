@@ -1,7 +1,7 @@
 add_executable ( unittest unittest_1.cpp)
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
-include_directories( ${GTEST_LIBRARIES} )
+include_directories( ${GTEST_INCLUDE_DIRS} )
 target_link_libraries( unittest ${GTEST_LIBRARIES} pthread)
 
 install( TARGETS unittest DESTINATION bin)
