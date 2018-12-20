@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:18.04
 
 # Create jenkins
 RUN groupadd -g 10000 jenkins && \
