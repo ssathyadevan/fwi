@@ -17,7 +17,7 @@ RUN         apt-get update \
                     vim \
                     git \
                     libeigen3-dev \
-                    cmake=3.10.2-1ubuntu3
+                    cmake
 
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && apt-get -y install gcc-6 g++-6
