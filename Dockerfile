@@ -8,16 +8,16 @@ RUN usermod -aG sudo jenkins
 RUN su jenkins
 WORKDIR /home/jenkins
 # update and install dependencies
-RUN         apt-get update \
-                && apt-get install -y \
+RUN         sudo apt-get update \
+                && sudo apt-get install -y \
                     software-properties-common \
                     wget \
                     g++\
                     make \
                     vim \
                     git \
-                    libeigen3-dev \
-                    cmake=3.10.2
+                    cmake
+		    libeigen3-dev \
 
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update && apt-get -y install gcc-6 g++-6
