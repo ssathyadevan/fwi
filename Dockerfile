@@ -8,8 +8,8 @@ RUN usermod -aG sudo jenkins
 RUN su jenkins
 WORKDIR /home/jenkins
 # update and install dependencies
-RUN         sudo apt-get update \
-                && sudo apt-get install -y \
+RUN         apt-get update \
+                && apt-get install -y \
                     software-properties-common \
                     wget \
                     g++\
