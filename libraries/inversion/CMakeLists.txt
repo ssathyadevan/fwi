@@ -7,9 +7,9 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_FORWARDMODEL} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
 
-find_package (Eigen3 REQUIRED)
-if (Eigen3_FOUND)
-    message("Eigen found in inversion")
-endif()
+#find_package (Eigen3 REQUIRED)
+#if (Eigen3_FOUND)
+#    message("Eigen found in inversion")
+#endif()
 add_library( inversion_library ${CPP_SOURCES} ${H_HEADERS} )
 target_link_libraries (inversion_library Eigen3::Eigen)

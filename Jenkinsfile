@@ -6,7 +6,7 @@ pipeline{
                  dockerfile {
                         customWorkspace "workspace/${env.JOB_NAME}".replace(' ', '_')
                         filename 'Dockerfile'
-                        additionalBuildArgs  '--build-arg BM_SRC_DIR=${WORKSPACE} --build-arg BM_BUILD_DIR=${WORKSPACE}/build --no-cache'
+                        additionalBuildArgs  '--build-arg BM_SRC_DIR=${WORKSPACE} --build-arg BM_BUILD_DIR=${WORKSPACE}/build'
                 }
         }
         stages{
