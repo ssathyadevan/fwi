@@ -6,7 +6,7 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_FORWARDMODEL} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
 
-#find_package (Eigen3 REQUIRED)
+find_package (Eigen3 REQUIRED)
 add_library( forwardModel_library ${CPP_SOURCES_FORWARDMODEL} ${H_HEADERS_FORWARDMODEL} )
 target_link_libraries (forwardModel_library Eigen3::Eigen)
 
