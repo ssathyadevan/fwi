@@ -1,3 +1,4 @@
+include_directories( ${GTEST_INCLUDE_DIRS} )
 add_executable ( unittest unittest_1.cpp)
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
