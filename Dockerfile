@@ -10,30 +10,40 @@ WORKDIR /home/jenkins
 # update and install dependencies
 RUN         apt-get update \
                 && apt-get install -y \
+                   apt-utils\
                     software-properties-common \
-                    wget \
                     g++\
                     make \
                     vim \
                     git \
-                    libeigen3-dev \
-                    cmake=3.5.1-1ubuntu3
+                    cmake
 
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-RUN apt-get update && apt-get -y install gcc-6 g++-6
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-RUN gcc -v
+#RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+#RUN apt-get update && apt-get -y install gcc-6 g++-6
+#RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+#RUN gcc -v
+
+
+# Prepare Eigen3 in system location  /usr/lib/include/something/cmake/
+RUN apt-get install -y libeigen3-dev
+
+RUN ls /usr/lib/cmake/eigen3
+
+
+# Prepare GoogleTest in /home/jenkins/googleTest/install
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git
 RUN cd googleTest/googletest-build ; cmake -DCMAKE_INSTALL_PREFIX=${PWD}/../install ../googletest-src/googletest
 RUN cd googleTest/googletest-build ; make all install -j8
 
+
+
 # Declare here the ENV variables that you wish to be able to overwrite in build time
 ARG GTEST_ROOT=/home/jenkins/googleTest/install
-ARG EIGEN_ROOT=/usr/include/eigen3
+ARG EIGEN_ROOT=/usr/lib/cmake/eigen3
 
 # Here the sets up the variables to be overwritten if specified value on build time.
 
-ENV GTEST_ROOT=$GTEST_ROOT
-ENV EIGEN3_ROOT=$EIGEN3_ROOT
-
+#ENV GTEST_ROOT=$GTEST_ROOT
+#ENV EIGEN3_ROOT=$EIGEN3_ROOT
+RUN cmake --version
