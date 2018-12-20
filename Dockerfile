@@ -35,5 +35,5 @@ ARG EIGEN_ROOT=/usr/include/eigen3
 # Here the sets up the variables to be overwritten if specified value on build time.
 
 ENV GTEST_ROOT=$GTEST_ROOT
-ENV EIGEN_ROOT=$EIGEN_ROOT
+ENV EIGEN3_ROOT=$EIGEN3_ROOT
 
