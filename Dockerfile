@@ -43,5 +43,5 @@ ARG EIGEN3_ROOT=/usr/lib/cmake/eigen3
 # Here the sets up the variables to be overwritten if specified value on build time.
 
 ENV GTEST_ROOT=$GTEST_ROOT
-#ENV EIGEN3_ROOT=$EIGEN3_ROOT
+ENV EIGEN3_ROOT=$EIGEN3_ROOT
 RUN cmake --version
