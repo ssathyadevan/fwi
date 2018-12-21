@@ -49,14 +49,4 @@ pipeline{
                         }
                 }
         }
-        post {
-                always {
-                        echo 'Cleaning the workspace'
-
-                        script {
-                                functions.sendEmail()
-
-                        }
-                }
-        }
 }
