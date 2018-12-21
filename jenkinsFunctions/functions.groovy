@@ -26,6 +26,9 @@ def buildAll() {
         '''
 }
 
+def testAll() {
+    echo 'testing all'
+}
 
 def deploy(){
 
