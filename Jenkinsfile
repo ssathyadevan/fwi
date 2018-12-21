@@ -52,7 +52,7 @@ pipeline{
         post {
                 always {
                         echo 'Cleaning the workspace'
-                        deleteDir()
+                       #deleteDir()
                         script {
                                 functions.sendEmail()
 
