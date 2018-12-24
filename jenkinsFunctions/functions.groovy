@@ -51,27 +51,18 @@ def deploy(){
 }
 
 def sendEmail() {
-        echo 'sendemail-1'
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
-        echo 'sendemail-2'
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
-                echo 'sendemail-3'
                 testSummaryLib = evaluate readTrusted('jenkinsFunctions/testSummary.groovy')
-                echo 'sendemail-4'
                 testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
-                echo 'sendemail-5'
                 testSummary =  testSummaryLib.getTestSummary(testResultAction)
-                echo 'sendemail-6'
                 testResultAction = null
-                echo 'sendemail-7'
                 email.sendEmail(testSummary)
                 echo 'sendemail-8'
         }
 
         if(currentBuild.currentResult == "FAILURE") {
-                echo 'sendemail-failure-1'
                 email.sendEmailFailure()
-                echo 'sendemail-failure-2'
         }
 }
 return this
