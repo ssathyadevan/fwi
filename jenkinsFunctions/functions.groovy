@@ -30,7 +30,7 @@ def testAll() {
     echo 'testing all'
     sh '''
     cd FWIInstall/bin
-    ./unittest
+    ./unittest --gtest_output="xml:FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.xml"
     '''
 }
 
