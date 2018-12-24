@@ -37,10 +37,7 @@ pipeline{
                 }
 
                 stage('Deploy') {
-                        when {
-                                beforeAgent true
-                                }
-                        steps{
+                       steps{
                                 script {
                                         functions.deploy()
 
