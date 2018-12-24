@@ -15,7 +15,7 @@ def getTestSummary(testResultAction) {
                 failedTestString = ""
 
                 summary = "Test results:\n\t"
-                summary = summary + ("Total: " + total)
+                /*summary = summary + ("Total: " + total)
                 summary = summary + (", Passed: " + (total - failed - skipped))
                 summary = summary + (", Failed: " + failed + " " + failDiffString)
                 summary = summary + (", Skipped: " + skipped)
@@ -26,7 +26,7 @@ def getTestSummary(testResultAction) {
 
                         summary = summary + "\n\nFailed tests:\n"
                         summary = summary + failedTestString
-                }
+                }*/
         }
         else {
                 summary = "No tests found"
