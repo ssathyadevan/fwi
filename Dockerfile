@@ -10,15 +10,14 @@ WORKDIR /home/jenkins
 # update and install dependencies
 RUN         apt-get update \
                 && apt-get install -y \
+                   apt-utils\
                     software-properties-common \
-                    wget \
                     g++\
                     make \
                     vim \
                     git \
                     cmake \
                     libeigen3-dev
-
 
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git
@@ -31,4 +30,3 @@ ARG GTEST_ROOT=/home/jenkins/googleTest/install
 # Here the sets up the variables to be overwritten if specified value on build time.
 
 ENV GTEST_ROOT=$GTEST_ROOT
-
