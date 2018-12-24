@@ -2,7 +2,7 @@
 
 def sendEmail(testSummary) {
 
-        mail from: "noreply-jenkins-BM@alten.nl", \
+        mail from: "noreply-jenkins-FWI@alten.nl", \
 
         to: "${COMITTER_EMAIL}", \
 
@@ -20,7 +20,7 @@ def sendEmail(testSummary) {
 
 def sendEmailFailure() {
 
-        mail from: "noreply-jenkins-BM@alten.nl", \
+        mail from: "noreply-jenkins-FWI@alten.nl", \
 
         to: "${COMITTER_EMAIL}", \
 
