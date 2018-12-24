@@ -11,9 +11,9 @@ def sendEmail(testSummary) {
         body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nBranch: ${env.JOB_NAME}\nRan with status: " \
 
         + currentBuild.currentResult +  "\n\n" + \
-        echo 'sendemail-1'
-        "The following is the summary of the test results.\n"+testSummary
-        echo 'sendemail-2'
+
+        "The following is the summary of the test results.\n" + testSummary
+
         echo "Email sent"
 
 }

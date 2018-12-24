@@ -58,7 +58,6 @@ def sendEmail() {
                 testSummary =  testSummaryLib.getTestSummary(testResultAction)
                 testResultAction = null
                 email.sendEmail(testSummary)
-                echo 'sendemail-8'
         }
 
         if(currentBuild.currentResult == "FAILURE") {
