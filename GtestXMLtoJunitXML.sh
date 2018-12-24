@@ -1,6 +1,6 @@
 #/bin/bash
 # Modifies the Google Test XMLoutput file to JUnit compatible MXL outputs
-
+echo 'start script'
 GTESTXML=$(find FWIInstall/bin -name "*.xml" -and -not -name "SystemTests.xml") 
 
 for FILES in ${GTESTXML}
@@ -13,3 +13,5 @@ do
 	 ${FILES}> "${FULL_DIR}/${filename}_s.xml"
 	mv "${FULL_DIR}/${filename}_s.xml" "${FULL_DIR}/${filename}.xml"
 done
+
+echo 'end script'
