@@ -2,9 +2,15 @@
 #include <utilityFunctions.h>
 
 
-TEST (HelperFunctionTest, TwoValues){
-    ASSERT_EQ(19.2094, dist(12,15));
-    ASSERT_EQ(6., dist(4.,4.));
+TEST (HelperFunctionTest, ints){
+    ASSERT_EQ(5, dist(3,4));
+    ASSERT_EQ(10 , dist(6,8));
+
+}
+
+TEST (HelperFunctionTest, DISABLED_doubles){
+    EXPECT_EQ(19.2094, dist(12,15));
+    EXPECT_EQ(6., dist(4.,4.));
 
 }
 

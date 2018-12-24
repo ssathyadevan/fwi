@@ -27,10 +27,8 @@ RUN cd googleTest/googletest-build ; make all install -j8
 
 # Declare here the ENV variables that you wish to be able to overwrite in build time
 ARG GTEST_ROOT=/home/jenkins/googleTest/install
-#ARG EIGEN3_ROOT=/usr/lib/cmake/eigen3
 
 # Here the sets up the variables to be overwritten if specified value on build time.
 
 ENV GTEST_ROOT=$GTEST_ROOT
-#ENV EIGEN3_ROOT=$EIGEN3_ROOT
 
