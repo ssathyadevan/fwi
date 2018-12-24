@@ -39,7 +39,7 @@ pipeline{
                 stage('Deploy') {
                         when {
                                 beforeAgent true
-                                branch 'master'
+                                branch 'jenkinsTest'
                                 }
                         steps{
                                 script {

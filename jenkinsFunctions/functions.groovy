@@ -31,16 +31,18 @@ def testAll() {
 }
 
 def deploy(){
-
-        cp -r inputFiles FWIInstall/
-        cp pythonScripts/* FWIInstall/
-        sh 'tar --exclude="build" \
+                sh 'tar --exclude="build" \
                 --exclude="Dockerfile" \
                 --exclude="jenkinsFunctions" \
                 --exclude="Jenkinsfile" \
-                --zcf BM-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
+                --exclude='libraries' \
+                --exclude='pythonScripts' \
+                --exclude='test' \
+                --exclude='applications' \
+                --exclude='CMakeLists.txt'
+                --zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
 
-        archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+                archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
 
