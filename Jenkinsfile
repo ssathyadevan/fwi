@@ -37,6 +37,11 @@ pipeline{
                 }
 
                 stage('Deploy') {
+                /* when {
+                        beforeAgent true
+                        branch 'master'
+                        } */
+                        // use the above code chunk to deploy only for a certain branch if needed
                        steps{
                                 script {
                                         functions.deploy()
