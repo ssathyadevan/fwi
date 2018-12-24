@@ -31,7 +31,10 @@ def testAll() {
     sh '''
     cd FWIInstall/bin
     ./unittest --gtest_output="xml:FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.xml"
+    chmod +x *.sh
+    GtestXMLtoJunitXML.sh
     '''
+
 }
 
 def deploy(){
