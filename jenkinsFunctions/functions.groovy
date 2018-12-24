@@ -28,6 +28,10 @@ def buildAll() {
 
 def testAll() {
     echo 'testing all'
+    sh '''
+    cd FWIInstall/bin
+    ./unittest
+    '''
 }
 
 def deploy(){
