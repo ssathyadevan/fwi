@@ -10,7 +10,7 @@ TEST (HelperFunctionTest, ints){
 
 TEST (HelperFunctionTest, doubles){
 
-    EXPECT_EQ(5., dist(4.,3.));
+    EXPECT_EQ(5., dist(3.,4.));
 
 }
 
