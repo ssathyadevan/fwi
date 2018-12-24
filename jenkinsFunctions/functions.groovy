@@ -36,16 +36,7 @@ def deploy(){
                 cp -r tests FWIInstall/
                 cp pythonScripts/* FWIInstall/
 
-                tar --exclude="build" \
-                --exclude="Dockerfile" \
-                --exclude="jenkinsFunctions" \
-                --exclude="Jenkinsfile" \
-                --exclude='libraries' \
-                --exclude='pythonScripts' \
-                --exclude='test' \
-                --exclude='applications' \
-                --exclude='CMakeLists.txt'
-                --zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
+                tar --zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall'
                 '''
                 archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
