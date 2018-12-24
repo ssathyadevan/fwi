@@ -8,7 +8,7 @@ def sendEmail(testSummary) {
 
         subject: " ${env.JOB_NAME} returned status " + currentBuild.currentResult, \
 
-        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nBranch: ${env.JOB_NAME}\nRan with status: " \
+        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult + "\n" \
 
         "The following is the summary of the test results.\n" + testSummary
 
