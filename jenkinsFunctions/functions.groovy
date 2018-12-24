@@ -31,7 +31,12 @@ def testAll() {
 }
 
 def deploy(){
-                sh 'tar --exclude="build" \
+                sh '''
+                cp -r inputFiles FWIInstall/
+                cp -r tests FWIInstall/
+                cp pythonScripts/* FWIInstall/
+
+                tar --exclude="build" \
                 --exclude="Dockerfile" \
                 --exclude="jenkinsFunctions" \
                 --exclude="Jenkinsfile" \
@@ -41,7 +46,7 @@ def deploy(){
                 --exclude='applications' \
                 --exclude='CMakeLists.txt'
                 --zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz *'
-
+                '''
                 archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
