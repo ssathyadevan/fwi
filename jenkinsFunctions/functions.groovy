@@ -32,6 +32,8 @@ def testAll() {
 
 def deploy(){
 
+        cp -r inputFiles FWIInstall/
+        cp pythonScripts/* FWIInstall/
         sh 'tar --exclude="build" \
                 --exclude="Dockerfile" \
                 --exclude="jenkinsFunctions" \
