@@ -21,7 +21,7 @@ def buildAll() {
         sh '''
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=FWIInstall ..
         make install
         '''
 }
