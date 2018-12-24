@@ -8,7 +8,7 @@ TEST (HelperFunctionTest, ints){
 
 }
 
-TEST (HelperFunctionTest, DISABLED_doubles){
+TEST (HelperFunctionTest, doubles){
     EXPECT_EQ(19.2094, dist(12,15));
     EXPECT_EQ(6., dist(4.,4.));
 
