@@ -12,7 +12,7 @@ def setEnvironment() {
         env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
         env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
         // Set build name and description accordingly
-        currentBuild.displayName = "BM | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
+        currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
         currentBuild.description = "${COMMIT_MESSAGE}"
 }
 
@@ -31,6 +31,7 @@ def testAll() {
 }
 
 def deploy(){
+                echo 'Deploying'
                 sh '''
                 cp -r inputFiles FWIInstall/
                 cp -r tests FWIInstall/
