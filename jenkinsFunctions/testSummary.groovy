@@ -10,9 +10,9 @@ def getTestSummary(testResultAction) {
                 echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
                 echo 'testSummary-4'
-                failed = testResultAction.getFailCount()
-                echo 'testSummary-5'
                 skipped = testResultAction.getSkipCount()
+                echo 'testSummary-5'
+                failed = testResultAction.getFailCount()
                 echo 'testSummary-6'
                 failDiffString = testResultAction.getFailureDiffString()
                 echo 'testSummary-7'
