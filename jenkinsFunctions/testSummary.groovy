@@ -1,14 +1,13 @@
 #!groovy
 
 @NonCPS
-
 def getTestSummary(testResultAction) {
             echo 'testSummary-1'
             summary = ""
             echo 'testSummary-2'
         if (testResultAction != null) {
                 echo 'testSummary-3'
-                total = testResultAction.getTotalCount(), skipped = testResultAction.getSkipCount()
+                total = testResultAction.getTotalCount()
                 echo 'testSummary-4'
                 echo "total is: ${total}"
                 skipped = testResultAction.getSkipCount().toString()
