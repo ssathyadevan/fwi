@@ -4,7 +4,7 @@ import com.cloudbees.groovy.cps.NonCPS
 @NonCPS
 def getTestSummary(testResultAction) {
             echo 'testSummary-1'
-            summary = ""
+            def summary = ""
             echo 'testSummary-2'
         if (testResultAction != null) {
                 echo 'testSummary-3'
