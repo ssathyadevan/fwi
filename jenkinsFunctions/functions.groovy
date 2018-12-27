@@ -56,7 +56,7 @@ def sendEmail() {
                 echo 'send -email-2'
                 testSummaryLib = evaluate readTrusted('jenkinsFunctions/testSummary.groovy')
                 echo 'send -email-3'
-                testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
+                AbstractTestResultAction testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
                 echo 'send -email-4'
                 testSummary =  testSummaryLib.getTestSummary(testResultAction)
                 echo 'send -email-5'
