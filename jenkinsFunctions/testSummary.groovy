@@ -1,6 +1,6 @@
 #!groovy
 
-@NonCPS
+//@NonCPS
 
 def getTestSummary(testResultAction) {
             echo 'testSummary-1'
