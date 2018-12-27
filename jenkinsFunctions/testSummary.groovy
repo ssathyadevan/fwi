@@ -11,15 +11,15 @@ def getTestSummary(testResultAction) {
                 total = testResultAction.getTotalCount()
                 echo 'testSummary-4'
                 echo "total is: ${total}"
-                def skipped = testResultAction.getSkipCount().toString()
+                def skipped = testResultAction.getSkipCount()
                 echo 'testSummary-5'
-                failed = testResultAction.getFailCount().toString()
+                def failed = testResultAction.getFailCount()
                 echo 'testSummary-6'
-                failDiffString = testResultAction.getFailureDiffString().toString()
+                def failDiffString = testResultAction.getFailureDiffString()
                 echo 'testSummary-7'
-                failedTestList = testResultAction.getFailedTests().toString()
+                def failedTestList = testResultAction.getFailedTests()
                 echo 'testSummary-8'
-                failedTestString = ""
+                def failedTestString = ""
 
                 echo 'reached before summary'
 
