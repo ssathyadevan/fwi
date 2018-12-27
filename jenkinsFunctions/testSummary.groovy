@@ -23,10 +23,15 @@ def getTestSummary(testResultAction) {
                 echo 'reached before summary'
 
                 summary = "Test results:\n\t"
+                echo 'summary-1'
                 summary = summary + ("Total: " + total)
+                echo 'summary-2'
                 summary = summary + (", Passed: " + (total - testResultAction.getFailCount() - testResultAction.getSkipCount()))
+                echo 'summary-3'
                 summary = summary + (", Failed: " + testResultAction.getFailCount() + " " + testResultAction.getFailureDiffString())
+                echo 'summary-4'
                 summary = summary + (", Skipped: " + testResultAction.getSkipCount())
+                echo 'summary-5'
                 if (testResultAction.getFailedTests() != null && !testResultAction.getFailedTests().isEmpty()) {
                         for (failedTests in testResultAction.getFailedTests()) {
                                 failedTestString = failedTestString + "---Test Class: "+failedTests.getClassName()+" Test: "+failedTests.getName()+"\n\t" +failedTests.getErrorDetails()+"\n"
