@@ -1,6 +1,6 @@
 #!groovy
 
-//@NonCPS
+@NonCPS
 
 def getTestSummary(testResultAction) {
             echo 'testSummary-1'
@@ -10,30 +10,25 @@ def getTestSummary(testResultAction) {
                 echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
                 echo 'testSummary-4'
-                //skipped = testResultAction.getSkipCount()
+                skipped = testResultAction.getSkipCount()
                 echo 'testSummary-5'
-                //failed = testResultAction.getFailCount()
+                failed = testResultAction.getFailCount()
                 echo 'testSummary-6'
-                //failDiffString = testResultAction.getFailureDiffString()
+                failDiffString = testResultAction.getFailureDiffString()
                 echo 'testSummary-7'
-                //failedTestList = testResultAction.getFailedTests()
+                failedTestList = testResultAction.getFailedTests()
                 echo 'testSummary-8'
                 failedTestString = ""
 
                 echo 'reached before summary'
 
                 summary = "Test results:\n\t"
-                echo 'summary-1'
                 summary = summary + ("Total: " + total)
-                echo 'summary-2'
-                summary = summary + (", Passed: " + (total - testResultAction.getFailCount() - testResultAction.getSkipCount()))
-                echo 'summary-3'
-                summary = summary + (", Failed: " + testResultAction.getFailCount() + " " + testResultAction.getFailureDiffString())
-                echo 'summary-4'
-                summary = summary + (", Skipped: " + testResultAction.getSkipCount())
-                echo 'summary-5'
-                if (testResultAction.getFailedTests() != null && !testResultAction.getFailedTests().isEmpty()) {
-                        for (failedTests in testResultAction.getFailedTests()) {
+                summary = summary + (", Passed: " + (total - failed - skipped))
+                summary = summary + (", Failed: " + failed + " " + failDiffString)
+                summary = summary + (", Skipped: " + skipped)
+                if (failedTestList != null && !failedTestList.isEmpty()) {
+                        for (failedTests in failedTestList) {
                                 failedTestString = failedTestString + "---Test Class: "+failedTests.getClassName()+" Test: "+failedTests.getName()+"\n\t" +failedTests.getErrorDetails()+"\n"
                         }
 
