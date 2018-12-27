@@ -9,7 +9,7 @@ def getTestSummary(testResultAction) {
         if (testResultAction != null) {
                 echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
-                echo 'testSummary-4'
+                echo total
                 skipped = testResultAction.getSkipCount().toString()
                 echo 'testSummary-5'
                 failed = testResultAction.getFailCount().toString()
