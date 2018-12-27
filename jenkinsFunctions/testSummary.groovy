@@ -10,13 +10,13 @@ def getTestSummary(testResultAction) {
                 echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
                 echo 'testSummary-4'
-                skipped = testResultAction.getSkipCount()
+                skipped = testResultAction.getSkipCount().toString()
                 echo 'testSummary-5'
-                failed = testResultAction.getFailCount()
+                failed = testResultAction.getFailCount().toString()
                 echo 'testSummary-6'
-                failDiffString = testResultAction.getFailureDiffString()
+                failDiffString = testResultAction.getFailureDiffString().toString()
                 echo 'testSummary-7'
-                failedTestList = testResultAction.getFailedTests()
+                failedTestList = testResultAction.getFailedTests().toString()
                 echo 'testSummary-8'
                 failedTestString = ""
 
