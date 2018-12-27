@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.5.1 )
+cmake_minimum_required( VERSION 3.10 )
 
 project( FWI )
 
@@ -15,6 +15,8 @@ set(CMAKE_MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/runtime/lib )
 if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
    set( CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install )
 endif()
+
+#enable_testing()
 
 find_package( GTest REQUIRED )
 
