@@ -8,7 +8,7 @@ def getTestSummary(testResultAction) {
             echo 'testSummary-2'
         if (testResultAction != null) {
                 echo 'testSummary-3'
-                total = testResultAction.getTotalCount()
+                total = testResultAction.getTotalCount(), skipped = testResultAction.getSkipCount()
                 echo 'testSummary-4'
                 echo "total is: ${total}"
                 skipped = testResultAction.getSkipCount().toString()
