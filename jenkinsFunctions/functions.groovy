@@ -54,11 +54,12 @@ def sendEmail() {
         echo 'send -email-1'
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 echo 'send -email-2'
-                testSummaryLib = evaluate readTrusted('jenkinsFunctions/testSummary.groovy')
+                //testSummaryLib = evaluate readTrusted('jenkinsFunctions/testSummary.groovy')
                 echo 'send -email-3'
                 testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
                 echo 'send -email-4'
-                testSummary =  testSummaryLib.getTestSummary(testResultAction)
+                //testSummary =  testSummaryLib.getTestSummary(testResultAction)
+                testSummary =  getTestSummary(testResultAction)
                 echo 'send -email-5'
                 testResultAction = null
                 echo 'send -email-6'
@@ -71,3 +72,40 @@ def sendEmail() {
 }
 return this
 
+@NonCPS
+getTestSummary(testResultAction) {
+            summary = ""
+        if (testResultAction != null) {
+
+                total = testResultAction.getTotalCount()
+
+
+                skipped = testResultAction.getSkipCount()
+
+                failed = testResultAction.getFailCount()
+
+                failDiffString = testResultAction.getFailureDiffString()
+
+                failedTestList = testResultAction.getFailedTests()
+
+                failedTestString = ""
+
+                summary = "Test results:\n\t"
+                summary = summary + ("Total: " + total)
+                summary = summary + (", Passed: " + (total - failed - skipped))
+                summary = summary + (", Failed: " + failed + " " + failDiffString)
+                summary = summary + (", Skipped: " + skipped)
+                if (failedTestList != null && !failedTestList.isEmpty()) {
+                        for (failedTests in failedTestList) {
+                                failedTestString = failedTestString + "---Test Class: "+failedTests.getClassName()+" Test: "+failedTests.getName()+"\n\t" +failedTests.getErrorDetails()+"\n"
+                        }
+
+                        summary = summary + "\n\nFailed tests:\n"
+                        summary = summary + failedTestString
+                }
+        }
+        else {
+                summary = "No tests found"
+        }
+        return summary
+}
