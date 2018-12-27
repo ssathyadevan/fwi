@@ -1,7 +1,7 @@
 #/bin/bash
 # Modifies the Google Test XMLoutput file to JUnit compatible MXL outputs
 echo 'start script'
-GTESTXML=$(find FWIInstall/bin -name "*.xml" -and -not -name "SystemTests.xml") 
+GTESTXML=$(find FWIInstall/bin -name "*.xml")
 
 for FILES in ${GTESTXML}
 do

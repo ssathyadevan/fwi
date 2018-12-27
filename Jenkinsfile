@@ -50,7 +50,7 @@ pipeline{
                         }
                 }
         }
-        post {
+        /*post {
                 always {
                         echo 'Cleaning the workspace'
                         //deleteDir()
@@ -58,5 +58,5 @@ pipeline{
                                 functions.sendEmail()
                         }
                 }
-        }
+        }*/
 }
