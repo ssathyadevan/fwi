@@ -9,10 +9,15 @@ def getTestSummary(testResultAction) {
         if (testResultAction != null) {
                 echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
+                echo 'testSummary-4'
                 failed = testResultAction.getFailCount()
+                echo 'testSummary-5'
                 skipped = testResultAction.getSkipCount()
+                echo 'testSummary-6'
                 failDiffString = testResultAction.getFailureDiffString()
+                echo 'testSummary-7'
                 failedTestList = testResultAction.getFailedTests()
+                echo 'testSummary-8'
                 failedTestString = ""
 
                 echo 'reached before summary'
