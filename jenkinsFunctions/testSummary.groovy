@@ -3,10 +3,11 @@
 @NonCPS
 
 def getTestSummary(testResultAction) {
-
+            echo 'testSummary-1'
             summary = ""
-
+            echo 'testSummary-2'
         if (testResultAction != null) {
+                echo 'testSummary-3'
                 total = testResultAction.getTotalCount()
                 failed = testResultAction.getFailCount()
                 skipped = testResultAction.getSkipCount()
