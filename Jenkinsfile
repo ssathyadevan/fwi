@@ -56,9 +56,9 @@ pipeline{
                         junit 'FWIInstall/bin/*.xml'
                         echo 'Cleaning the workspace'
                         deleteDir()
-                        /*script {
+                        script {
                                 functions.sendEmail()
-                        }*/
+                        }
                 }
         }
 }
