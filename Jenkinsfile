@@ -50,13 +50,15 @@ pipeline{
                         }
                 }
         }
-        /*post {
+        post {
                 always {
+                        echo 'Creating unit-test Result Summary (junit)'
+                        junit 'FWIInstall/bin/*.xml'
                         echo 'Cleaning the workspace'
-                        //deleteDir()
-                        script {
+                        deleteDir()
+                        /*script {
                                 functions.sendEmail()
-                        }
+                        }*/
                 }
-        }*/
+        }
 }

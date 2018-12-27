@@ -35,8 +35,6 @@ def testAll() {
     chmod +x *.sh
     ./GtestXMLtoJunitXML.sh
     '''
-    junit 'FWIInstall/bin/*.xml'
-
 }
 
 def deploy(){
