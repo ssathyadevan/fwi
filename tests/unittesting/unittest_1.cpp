@@ -11,7 +11,13 @@ TEST (HelperFunctionTest, ints){
 TEST (HelperFunctionTest, doubles){
 
     EXPECT_EQ(5., dist(3.,4.));
+    EXPECT_EQ(6., dist(2.,3.));
 
+}
+
+TEST (HelperFunctionTest, DISABLED_doubles2){
+
+    EXPECT_EQ(5., dist(3.,4.));
 }
 
 int main(int argc, char **argv)
