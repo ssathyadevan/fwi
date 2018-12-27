@@ -14,9 +14,9 @@ def getTestSummary(testResultAction) {
                 echo 'testSummary-5'
                 //failed = testResultAction.getFailCount()
                 echo 'testSummary-6'
-                failDiffString = testResultAction.getFailureDiffString()
+                //failDiffString = testResultAction.getFailureDiffString()
                 echo 'testSummary-7'
-                failedTestList = testResultAction.getFailedTests()
+                //failedTestList = testResultAction.getFailedTests()
                 echo 'testSummary-8'
                 failedTestString = ""
 
@@ -25,10 +25,10 @@ def getTestSummary(testResultAction) {
                 summary = "Test results:\n\t"
                 summary = summary + ("Total: " + total)
                 summary = summary + (", Passed: " + (total - testResultAction.getFailCount() - testResultAction.getSkipCount()))
-                summary = summary + (", Failed: " + testResultAction.getFailCount() + " " + failDiffString)
+                summary = summary + (", Failed: " + testResultAction.getFailCount() + " " + testResultAction.getFailureDiffString())
                 summary = summary + (", Skipped: " + testResultAction.getSkipCount())
-                if (failedTestList != null && !failedTestList.isEmpty()) {
-                        for (failedTests in failedTestList) {
+                if (testResultAction.getFailedTests() != null && !testResultAction.getFailedTests().isEmpty()) {
+                        for (failedTests in testResultAction.getFailedTests()) {
                                 failedTestString = failedTestString + "---Test Class: "+failedTests.getClassName()+" Test: "+failedTests.getName()+"\n\t" +failedTests.getErrorDetails()+"\n"
                         }
 
