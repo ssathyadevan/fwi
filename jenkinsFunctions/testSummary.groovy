@@ -42,4 +42,4 @@ def getTestSummary(testResultAction) {
         }
         return summary
 }
-
+return this
