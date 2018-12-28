@@ -3,23 +3,16 @@ import com.cloudbees.groovy.cps.NonCPS
 
 @NonCPS
 def getTestSummary(testResultAction) {
-            echo 'testSummary-1'
-            def summary = ""
-            echo 'testSummary-2'
-        if (testResultAction != null) {
-                echo 'testSummary-3'
+            summary = ""
+
+/*
+                if (testResultAction != null) {
                 total = testResultAction.getTotalCount()
-                echo 'testSummary-4'
-                echo "total is: ${total}"
-                def skipped = testResultAction.getSkipCount()
-                echo 'testSummary-5'
-                def failed = testResultAction.getFailCount()
-                echo 'testSummary-6'
-                def failDiffString = testResultAction.getFailureDiffString()
-                echo 'testSummary-7'
-                def failedTestList = testResultAction.getFailedTests()
-                echo 'testSummary-8'
-                def failedTestString = ""
+                skipped = testResultAction.getSkipCount()
+                failed = testResultAction.getFailCount()
+                failDiffString = testResultAction.getFailureDiffString()
+                failedTestList = testResultAction.getFailedTests()
+                failedTestString = ""
 
                 echo 'reached before summary'
 
@@ -40,6 +33,8 @@ def getTestSummary(testResultAction) {
         else {
                 summary = "No tests found"
         }
+
+*/
         return summary
 }
 return this
