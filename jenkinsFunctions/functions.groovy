@@ -35,6 +35,7 @@ def testAll() {
     cd FWIInstall/bin
     ./unittest --gtest_output="xml:FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.xml"
     cd ../../
+    cp jenkinsFunctions/*.sh .
     chmod +x *.sh
     ./GtestXMLtoJunitXML.sh
     '''
@@ -55,12 +56,7 @@ def deploy(){
 def sendEmail() {
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
-                testSummaryLib = evaluate readTrusted('jenkinsFunctions/testSummary.groovy')
-                testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
-                testSummary =  testSummaryLib.getTestSummary(testResultAction)
-                testSummary =  getTestSummary(testResultAction)
-                testResultAction = null
-                email.sendEmail(testSummary)
+                email.sendEmail()
         }
 
         if(currentBuild.currentResult == "FAILURE") {
