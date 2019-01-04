@@ -1,3 +1,6 @@
 This run was parametrized as follows:
 nxt   = 64
 nzt   = 32
+nMax = 5
+iter1 = 50
+iter2 = 100

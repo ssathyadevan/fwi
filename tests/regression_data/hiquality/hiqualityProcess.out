@@ -1,4 +1,3 @@
-Input Temple Visualisation
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
@@ -31,9 +30,8 @@ Input Temple Visualisation
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
-Starting at Mon Nov 19 17:05:54 2018
+Starting at Thu Jan  3 16:12:55 2019
 
-nFreq_Total= 15
 Total number is sources is 17. Positions:
 x = (-480, -5)
 x = (-420, -5)
@@ -89,391 +87,59 @@ f = 35.7143, k = 0.1122
 f = 37.8571, k = 0.118932
 f = 40, k = 0.125664
 
-Creating Greens function field
+Creating Greens function field...
 Creating P0...
-Creating total field...
-  
-Creating this->p_tot for 1/ 15freq
-  
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-Convergence after 6iterations
-  
-  
-  
-Creating this->p_tot for 2/ 15freq
-  
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-Convergence after 7iterations
-  
-  
-  
-Creating this->p_tot for 3/ 15freq
-  
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 7iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 7iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-Convergence after 8iterations
-  
-  
-  
-Creating this->p_tot for 4/ 15freq
-  
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-Convergence after 9iterations
-  
-  
-  
-Creating this->p_tot for 5/ 15freq
-  
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-Convergence after 10iterations
-  
-  
-  
-Creating this->p_tot for 6/ 15freq
-  
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-Convergence after 11iterations
-  
-  
-  
-Creating this->p_tot for 7/ 15freq
-  
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 13iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 11iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 13iterations
-Convergence after 12iterations
-Convergence after 12iterations
-Convergence after 11iterations
-Convergence after 12iterations
-  
-  
-  
-Creating this->p_tot for 8/ 15freq
-  
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 12iterations
-Convergence after 13iterations
-Convergence after 12iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 13iterations
-Convergence after 14iterations
-  
-  
-  
-Creating this->p_tot for 9/ 15freq
-  
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 15iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 13iterations
-Convergence after 12iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 13iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-  
-  
-  
-Creating this->p_tot for 10/ 15freq
-  
-Convergence after 16iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 16iterations
-Convergence after 16iterations
-Convergence after 16iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 14iterations
-Convergence after 15iterations
-Convergence after 16iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 16iterations
-  
-  
-  
-Creating this->p_tot for 11/ 15freq
-  
-Convergence after 18iterations
-Convergence after 19iterations
-Convergence after 19iterations
-Convergence after 19iterations
-Convergence after 18iterations
-Convergence after 18iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 15iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 17iterations
-Convergence after 18iterations
-Convergence after 18iterations
-Convergence after 18iterations
-Convergence after 19iterations
-Convergence after 18iterations
-  
-  
-  
-Creating this->p_tot for 12/ 15freq
-  
-Convergence after 21iterations
-Convergence after 22iterations
-Convergence after 21iterations
-Convergence after 21iterations
-Convergence after 21iterations
-Convergence after 19iterations
-Convergence after 19iterations
-Convergence after 18iterations
-Convergence after 18iterations
-Convergence after 19iterations
-Convergence after 19iterations
-Convergence after 19iterations
-Convergence after 21iterations
-Convergence after 21iterations
-Convergence after 21iterations
-Convergence after 22iterations
-Convergence after 21iterations
-  
-  
-  
-Creating this->p_tot for 13/ 15freq
-  
-Convergence after 26iterations
-Convergence after 26iterations
-Convergence after 25iterations
-Convergence after 25iterations
-Convergence after 24iterations
-Convergence after 23iterations
-Convergence after 23iterations
-Convergence after 22iterations
-Convergence after 18iterations
-Convergence after 22iterations
-Convergence after 23iterations
-Convergence after 23iterations
-Convergence after 25iterations
-Convergence after 25iterations
-Convergence after 25iterations
-Convergence after 26iterations
-Convergence after 26iterations
-  
-  
-  
-Creating this->p_tot for 14/ 15freq
-  
-Convergence after 28iterations
-Convergence after 28iterations
-Convergence after 28iterations
-Convergence after 28iterations
-Convergence after 27iterations
-Convergence after 26iterations
-Convergence after 25iterations
-Convergence after 24iterations
-Convergence after 22iterations
-Convergence after 24iterations
-Convergence after 25iterations
-Convergence after 26iterations
-Convergence after 27iterations
-Convergence after 27iterations
-Convergence after 28iterations
-Convergence after 28iterations
-Convergence after 28iterations
-  
-  
-  
-Creating this->p_tot for 15/ 15freq
-  
-Convergence after 38iterations
-Convergence after 38iterations
-Convergence after 37iterations
-Convergence after 36iterations
-Convergence after 35iterations
-Convergence after 33iterations
-Convergence after 32iterations
-Convergence after 30iterations
-Convergence after 30iterations
-Convergence after 30iterations
-Convergence after 32iterations
-Convergence after 34iterations
-Convergence after 35iterations
-Convergence after 36iterations
-Convergence after 37iterations
-Convergence after 38iterations
-Convergence after 38iterations
-  
-  
-Computation time for createTotalFieldCurrentProcessor was 30.0092 seconds
 Estimating Chi...
-1/50	 (1/5)	 res: 0.52347870629892468
-2/50	 (1/5)	 res: 0.56636097945261965
-3/50	 (1/5)	 res: 0.52835195502787391
-4/50	 (1/5)	 res: 0.36963196405615101
-5/50	 (1/5)	 res: 0.24491302749626467
-6/50	 (1/5)	 res: 0.13853015457481638
-7/50	 (1/5)	 res: 0.12055582906181063
-8/50	 (1/5)	 res: 0.096825278690164968
-9/50	 (1/5)	 res: 0.086155509683523701
-10/50	 (1/5)	 res: 0.078631538103504789
-11/50	 (1/5)	 res: 0.075152671733234824
-12/50	 (1/5)	 res: 0.071774293700754166
-13/50	 (1/5)	 res: 0.070029641523591035
-14/50	 (1/5)	 res: 0.068751893146144633
-15/50	 (1/5)	 res: 0.066619654808408965
-16/50	 (1/5)	 res: 0.065925679676956436
-17/50	 (1/5)	 res: 0.06492509828801156
-18/50	 (1/5)	 res: 0.064342813321341119
-19/50	 (1/5)	 res: 0.063750468591650081
-20/50	 (1/5)	 res: 0.063218671099547222
-21/50	 (1/5)	 res: 0.062599715970944672
-22/50	 (1/5)	 res: 0.062335399186514408
-23/50	 (1/5)	 res: 0.061896815046486392
-24/50	 (1/5)	 res: 0.061484051980750902
-25/50	 (1/5)	 res: 0.061199675133137885
-26/50	 (1/5)	 res: 0.060893368052482674
-27/50	 (1/5)	 res: 0.060590125559415578
-28/50	 (1/5)	 res: 0.060424490679271442
-29/50	 (1/5)	 res: 0.060217580159489449
-30/50	 (1/5)	 res: 0.059961704290949873
-31/50	 (1/5)	 res: 0.059873378251489966
-32/50	 (1/5)	 res: 0.059584257685992029
-33/50	 (1/5)	 res: 0.059476235715621224
-34/50	 (1/5)	 res: 0.059364376362716111
-35/50	 (1/5)	 res: 0.059189187905554962
-36/50	 (1/5)	 res: 0.059092877600073118
-37/50	 (1/5)	 res: 0.059014930337826003
-38/50	 (1/5)	 res: 0.058927177874740166
-39/50	 (1/5)	 res: 0.058863644573189329
-40/50	 (1/5)	 res: 0.058819559913020847
-41/50	 (1/5)	 res: 0.058720421531130926
-42/50	 (1/5)	 res: 0.058688062605869597
-43/50	 (1/5)	 res: 0.058646546861660535
-44/50	 (1/5)	 res: 0.058604124992401772
-45/50	 (1/5)	 res: 0.058553732919385815
-46/50	 (1/5)	 res: 0.058527190273757176
-47/50	 (1/5)	 res: 0.058486542571835366
-48/50	 (1/5)	 res: 0.058453166975389784
-49/50	 (1/5)	 res: 0.058430701037445833
-50/50	 (1/5)	 res: 0.05837830341916863
+1/50	 (1/5)	 res: 0.52347870629892557
+2/50	 (1/5)	 res: 0.56636097945263209
+3/50	 (1/5)	 res: 0.52835195502787413
+4/50	 (1/5)	 res: 0.36963196405615051
+5/50	 (1/5)	 res: 0.24491302749626345
+6/50	 (1/5)	 res: 0.13853015457481663
+7/50	 (1/5)	 res: 0.12055582906181024
+8/50	 (1/5)	 res: 0.096825278690165092
+9/50	 (1/5)	 res: 0.086155509683524034
+10/50	 (1/5)	 res: 0.078631538103504858
+11/50	 (1/5)	 res: 0.075152671733235005
+12/50	 (1/5)	 res: 0.071774293700753833
+13/50	 (1/5)	 res: 0.07002964152359098
+14/50	 (1/5)	 res: 0.068751893146144452
+15/50	 (1/5)	 res: 0.06661965480840884
+16/50	 (1/5)	 res: 0.065925679676956589
+17/50	 (1/5)	 res: 0.06492509828801149
+18/50	 (1/5)	 res: 0.064342813321341008
+19/50	 (1/5)	 res: 0.063750468591649956
+20/50	 (1/5)	 res: 0.063218671099547361
+21/50	 (1/5)	 res: 0.062599715970944714
+22/50	 (1/5)	 res: 0.062335399186514526
+23/50	 (1/5)	 res: 0.06189681504648635
+24/50	 (1/5)	 res: 0.061484051980750999
+25/50	 (1/5)	 res: 0.061199675133137788
+26/50	 (1/5)	 res: 0.060893368052482737
+27/50	 (1/5)	 res: 0.060590125559415585
+28/50	 (1/5)	 res: 0.060424490679271525
+29/50	 (1/5)	 res: 0.060217580159489678
+30/50	 (1/5)	 res: 0.059961704290949956
+31/50	 (1/5)	 res: 0.059873378251490104
+32/50	 (1/5)	 res: 0.059584257685991779
+33/50	 (1/5)	 res: 0.059476235715621148
+34/50	 (1/5)	 res: 0.059364376362715833
+35/50	 (1/5)	 res: 0.059189187905555198
+36/50	 (1/5)	 res: 0.059092877600072972
+37/50	 (1/5)	 res: 0.059014930337825899
+38/50	 (1/5)	 res: 0.058927177874740229
+39/50	 (1/5)	 res: 0.058863644573189246
+40/50	 (1/5)	 res: 0.05881955991302075
+41/50	 (1/5)	 res: 0.058720421531131113
+42/50	 (1/5)	 res: 0.058688062605869638
+43/50	 (1/5)	 res: 0.058646546861660577
+44/50	 (1/5)	 res: 0.058604124992401849
+45/50	 (1/5)	 res: 0.05855373291938578
+46/50	 (1/5)	 res: 0.058527190273757579
+47/50	 (1/5)	 res: 0.058486542571835221
+48/50	 (1/5)	 res: 0.058453166975389728
+49/50	 (1/5)	 res: 0.05843070103744584
+50/50	 (1/5)	 res: 0.058378303419168477
   
 Creating this->p_tot for 1/ 15freq
   
@@ -774,57 +440,56 @@ Convergence after 23iterations
 Convergence after 24iterations
 Convergence after 22iterations
 Convergence after 23iterations
-Computation time for createTotalFieldCurrentProcessor was 25.321339915999999 seconds
-1/50	 (2/5)	 res: 0.26172460013403448
-2/50	 (2/5)	 res: 0.1093543521778977
-3/50	 (2/5)	 res: 0.094121204006147416
-4/50	 (2/5)	 res: 0.074122122649706065
-5/50	 (2/5)	 res: 0.054137234929475246
-6/50	 (2/5)	 res: 0.048515989266658663
-7/50	 (2/5)	 res: 0.046229449498708476
-8/50	 (2/5)	 res: 0.041565576125078239
-9/50	 (2/5)	 res: 0.039856312137712284
-10/50	 (2/5)	 res: 0.038929320929088976
-11/50	 (2/5)	 res: 0.036813466390707768
-12/50	 (2/5)	 res: 0.036029385085164144
-13/50	 (2/5)	 res: 0.035342259824294411
-14/50	 (2/5)	 res: 0.034278656727581576
-15/50	 (2/5)	 res: 0.033939941559054394
-16/50	 (2/5)	 res: 0.033469076831974379
-17/50	 (2/5)	 res: 0.033031742110741169
-18/50	 (2/5)	 res: 0.032778678187842553
+1/50	 (2/5)	 res: 0.26172460013402749
+2/50	 (2/5)	 res: 0.10935435217793286
+3/50	 (2/5)	 res: 0.094121204006194448
+4/50	 (2/5)	 res: 0.074122122649742717
+5/50	 (2/5)	 res: 0.054137234929484163
+6/50	 (2/5)	 res: 0.048515989266656227
+7/50	 (2/5)	 res: 0.046229449498710468
+8/50	 (2/5)	 res: 0.041565576125086788
+9/50	 (2/5)	 res: 0.039856312137707114
+10/50	 (2/5)	 res: 0.038929320929092508
+11/50	 (2/5)	 res: 0.036813466390705513
+12/50	 (2/5)	 res: 0.036029385085155477
+13/50	 (2/5)	 res: 0.035342259824293759
+14/50	 (2/5)	 res: 0.034278656727578398
+15/50	 (2/5)	 res: 0.033939941559050474
+16/50	 (2/5)	 res: 0.033469076831975406
+17/50	 (2/5)	 res: 0.033031742110739164
+18/50	 (2/5)	 res: 0.032778678187836377
 19/50	 (2/5)	 res: 0.032395787561662052
-20/50	 (2/5)	 res: 0.031974535463726236
-21/50	 (2/5)	 res: 0.031795810420489623
-22/50	 (2/5)	 res: 0.031422831770091919
-23/50	 (2/5)	 res: 0.031187520326423787
-24/50	 (2/5)	 res: 0.031038354623947762
-25/50	 (2/5)	 res: 0.030861907640494513
-26/50	 (2/5)	 res: 0.030661117995407713
-27/50	 (2/5)	 res: 0.030573092361366291
-28/50	 (2/5)	 res: 0.030377098812387923
-29/50	 (2/5)	 res: 0.030250343876628515
-30/50	 (2/5)	 res: 0.03017383904762606
-31/50	 (2/5)	 res: 0.030014357182719154
-32/50	 (2/5)	 res: 0.029843368820925219
-33/50	 (2/5)	 res: 0.029783737796870918
-34/50	 (2/5)	 res: 0.029534062932098096
-35/50	 (2/5)	 res: 0.029434570399161374
-36/50	 (2/5)	 res: 0.029328343230413362
-37/50	 (2/5)	 res: 0.029186129386697488
-38/50	 (2/5)	 res: 0.029094178683675673
-39/50	 (2/5)	 res: 0.029011782395948881
-40/50	 (2/5)	 res: 0.028853152353718492
-41/50	 (2/5)	 res: 0.028793127900209183
-42/50	 (2/5)	 res: 0.028697908338848988
-43/50	 (2/5)	 res: 0.028591677454312344
-44/50	 (2/5)	 res: 0.028555158744456667
-45/50	 (2/5)	 res: 0.028500218389802594
-46/50	 (2/5)	 res: 0.028411981563372032
-47/50	 (2/5)	 res: 0.028376214415159237
-48/50	 (2/5)	 res: 0.028308725249262975
-49/50	 (2/5)	 res: 0.028278418381806322
-50/50	 (2/5)	 res: 0.028230492507191004
+20/50	 (2/5)	 res: 0.031974535463717799
+21/50	 (2/5)	 res: 0.03179581042048632
+22/50	 (2/5)	 res: 0.03142283177008981
+23/50	 (2/5)	 res: 0.031187520326415627
+24/50	 (2/5)	 res: 0.031038354623943599
+25/50	 (2/5)	 res: 0.030861907640493652
+26/50	 (2/5)	 res: 0.030661117995400545
+27/50	 (2/5)	 res: 0.03057309236136373
+28/50	 (2/5)	 res: 0.030377098812386098
+29/50	 (2/5)	 res: 0.030250343876619335
+30/50	 (2/5)	 res: 0.030173839047621095
+31/50	 (2/5)	 res: 0.030014357182717503
+32/50	 (2/5)	 res: 0.029843368820914269
+33/50	 (2/5)	 res: 0.029783737796868003
+34/50	 (2/5)	 res: 0.0295340629320936
+35/50	 (2/5)	 res: 0.029434570399139545
+36/50	 (2/5)	 res: 0.029328343230409629
+37/50	 (2/5)	 res: 0.029186129386698144
+38/50	 (2/5)	 res: 0.029094178683656047
+39/50	 (2/5)	 res: 0.029011782395948753
+40/50	 (2/5)	 res: 0.028853152353716407
+41/50	 (2/5)	 res: 0.028793127900185293
+42/50	 (2/5)	 res: 0.028697908338847264
+43/50	 (2/5)	 res: 0.028591677454309173
+44/50	 (2/5)	 res: 0.028555158744452205
+45/50	 (2/5)	 res: 0.028500218389807066
+46/50	 (2/5)	 res: 0.028411981563355684
+47/50	 (2/5)	 res: 0.028376214415160236
+48/50	 (2/5)	 res: 0.028308725249264692
+49/50	 (2/5)	 res: 0.028278418381797926
+50/50	 (2/5)	 res: 0.02823049250719456
   
 Creating this->p_tot for 1/ 15freq
   
@@ -1125,57 +790,56 @@ Convergence after 51iterations
 Convergence after 52iterations
 Convergence after 51iterations
 Convergence after 52iterations
-Computation time for createTotalFieldCurrentProcessor was 49.827148145000002 seconds
-1/50	 (3/5)	 res: 0.064056647358167865
-2/50	 (3/5)	 res: 0.043479263882686997
-3/50	 (3/5)	 res: 0.03030017012017092
-4/50	 (3/5)	 res: 0.02189440002463925
-5/50	 (3/5)	 res: 0.019927234373392142
-6/50	 (3/5)	 res: 0.017445455146057068
-7/50	 (3/5)	 res: 0.015675403458669707
-8/50	 (3/5)	 res: 0.014962487693997684
-9/50	 (3/5)	 res: 0.014488603193224149
-10/50	 (3/5)	 res: 0.014115292245903925
-11/50	 (3/5)	 res: 0.013577549690888953
-12/50	 (3/5)	 res: 0.013312064220500013
-13/50	 (3/5)	 res: 0.013219155470651701
-14/50	 (3/5)	 res: 0.013112826008091745
-15/50	 (3/5)	 res: 0.012941145479265103
-16/50	 (3/5)	 res: 0.012847258790960511
-17/50	 (3/5)	 res: 0.01281439617413427
-18/50	 (3/5)	 res: 0.012746088320845922
-19/50	 (3/5)	 res: 0.012672768305003872
-20/50	 (3/5)	 res: 0.01262532167151431
-21/50	 (3/5)	 res: 0.012600331952878237
-22/50	 (3/5)	 res: 0.012536446071508547
-23/50	 (3/5)	 res: 0.012476060097625308
-24/50	 (3/5)	 res: 0.012453131390787745
-25/50	 (3/5)	 res: 0.012382941707645978
-26/50	 (3/5)	 res: 0.012335155997299944
-27/50	 (3/5)	 res: 0.012312937003953672
-28/50	 (3/5)	 res: 0.012271487276424537
-29/50	 (3/5)	 res: 0.012235748413480081
-30/50	 (3/5)	 res: 0.01221717554575694
-31/50	 (3/5)	 res: 0.012158956035317985
-32/50	 (3/5)	 res: 0.012113513859045388
-33/50	 (3/5)	 res: 0.012082552494966569
-34/50	 (3/5)	 res: 0.012041800529209112
-35/50	 (3/5)	 res: 0.011994037847151591
-36/50	 (3/5)	 res: 0.011950176526371009
-37/50	 (3/5)	 res: 0.011932222821862183
-38/50	 (3/5)	 res: 0.011869391731364757
-39/50	 (3/5)	 res: 0.011840839065189027
-40/50	 (3/5)	 res: 0.011817484367459394
-41/50	 (3/5)	 res: 0.011778346487558846
-42/50	 (3/5)	 res: 0.011750389737561099
-43/50	 (3/5)	 res: 0.011734762213112562
-44/50	 (3/5)	 res: 0.011705326630776601
-45/50	 (3/5)	 res: 0.011669866463531886
-46/50	 (3/5)	 res: 0.011654863218318738
-47/50	 (3/5)	 res: 0.011611478362075099
-48/50	 (3/5)	 res: 0.011596388474048747
-49/50	 (3/5)	 res: 0.011579470968816591
-50/50	 (3/5)	 res: 0.011547288590129084
+1/50	 (3/5)	 res: 0.064056647357756971
+2/50	 (3/5)	 res: 0.04347926388246906
+3/50	 (3/5)	 res: 0.030300170120053663
+4/50	 (3/5)	 res: 0.02189440002457279
+5/50	 (3/5)	 res: 0.019927234373296864
+6/50	 (3/5)	 res: 0.017445455146007496
+7/50	 (3/5)	 res: 0.015675403458620535
+8/50	 (3/5)	 res: 0.014962487693951461
+9/50	 (3/5)	 res: 0.014488603193182126
+10/50	 (3/5)	 res: 0.014115292245865796
+11/50	 (3/5)	 res: 0.013577549690852023
+12/50	 (3/5)	 res: 0.013312064220462281
+13/50	 (3/5)	 res: 0.013219155470616369
+14/50	 (3/5)	 res: 0.013112826008054907
+15/50	 (3/5)	 res: 0.012941145479229362
+16/50	 (3/5)	 res: 0.012847258790925117
+17/50	 (3/5)	 res: 0.012814396174098172
+18/50	 (3/5)	 res: 0.012746088320810523
+19/50	 (3/5)	 res: 0.012672768304966902
+20/50	 (3/5)	 res: 0.012625321671477686
+21/50	 (3/5)	 res: 0.012600331952842219
+22/50	 (3/5)	 res: 0.012536446071472794
+23/50	 (3/5)	 res: 0.012476060097587456
+24/50	 (3/5)	 res: 0.012453131390751476
+25/50	 (3/5)	 res: 0.012382941707610073
+26/50	 (3/5)	 res: 0.012335155997260549
+27/50	 (3/5)	 res: 0.012312937003916813
+28/50	 (3/5)	 res: 0.012271487276385612
+29/50	 (3/5)	 res: 0.012235748413443145
+30/50	 (3/5)	 res: 0.012217175545716689
+31/50	 (3/5)	 res: 0.012158956035280978
+32/50	 (3/5)	 res: 0.012113513859006012
+33/50	 (3/5)	 res: 0.012082552494925059
+34/50	 (3/5)	 res: 0.0120418005291698
+35/50	 (3/5)	 res: 0.011994037847113984
+36/50	 (3/5)	 res: 0.011950176526332986
+37/50	 (3/5)	 res: 0.011932222821825374
+38/50	 (3/5)	 res: 0.01186939173132869
+39/50	 (3/5)	 res: 0.011840839065154207
+40/50	 (3/5)	 res: 0.011817484367423726
+41/50	 (3/5)	 res: 0.011778346487522634
+42/50	 (3/5)	 res: 0.011750389737527744
+43/50	 (3/5)	 res: 0.011734762213077626
+44/50	 (3/5)	 res: 0.011705326630741893
+45/50	 (3/5)	 res: 0.01166986646350137
+46/50	 (3/5)	 res: 0.011654863218284505
+47/50	 (3/5)	 res: 0.011611478362035731
+48/50	 (3/5)	 res: 0.011596388474014707
+49/50	 (3/5)	 res: 0.011579470968771714
+50/50	 (3/5)	 res: 0.011547288590091019
   
 Creating this->p_tot for 1/ 15freq
   
@@ -1476,57 +1140,56 @@ Convergence after 44iterations
 Convergence after 45iterations
 Convergence after 45iterations
 Convergence after 46iterations
-Computation time for createTotalFieldCurrentProcessor was 55.235534350999998 seconds
-1/50	 (4/5)	 res: 0.028232027907643779
-2/50	 (4/5)	 res: 0.019218716406609864
-3/50	 (4/5)	 res: 0.010449833047394422
-4/50	 (4/5)	 res: 0.0086291422166396292
-5/50	 (4/5)	 res: 0.007210352110783763
-6/50	 (4/5)	 res: 0.0067338000778709812
-7/50	 (4/5)	 res: 0.0060888653880752401
-8/50	 (4/5)	 res: 0.0055906051148020865
-9/50	 (4/5)	 res: 0.0051477309710232849
-10/50	 (4/5)	 res: 0.0049886913643644526
-11/50	 (4/5)	 res: 0.0047803324983492317
-12/50	 (4/5)	 res: 0.0047346112020047884
-13/50	 (4/5)	 res: 0.0046049877853213518
-14/50	 (4/5)	 res: 0.0044958227616130027
-15/50	 (4/5)	 res: 0.0044559500833346397
-16/50	 (4/5)	 res: 0.0043946201811905844
-17/50	 (4/5)	 res: 0.0043259459657827449
-18/50	 (4/5)	 res: 0.0042644913160915831
-19/50	 (4/5)	 res: 0.0042299554141400578
-20/50	 (4/5)	 res: 0.0041706370680177169
-21/50	 (4/5)	 res: 0.0041014714931751454
-22/50	 (4/5)	 res: 0.004079562798453916
-23/50	 (4/5)	 res: 0.0040027113039304372
-24/50	 (4/5)	 res: 0.0039735421841291668
-25/50	 (4/5)	 res: 0.0039535302857022425
-26/50	 (4/5)	 res: 0.0039095773151917399
-27/50	 (4/5)	 res: 0.0038614014577712671
-28/50	 (4/5)	 res: 0.0038445193147792611
-29/50	 (4/5)	 res: 0.0038053937550564442
-30/50	 (4/5)	 res: 0.0037561797577006588
-31/50	 (4/5)	 res: 0.0037355693743013492
-32/50	 (4/5)	 res: 0.0037086427028925253
-33/50	 (4/5)	 res: 0.0036823417897211019
-34/50	 (4/5)	 res: 0.0036706099457013935
-35/50	 (4/5)	 res: 0.0036307398061962534
-36/50	 (4/5)	 res: 0.003599903818629702
-37/50	 (4/5)	 res: 0.0035866354355719452
-38/50	 (4/5)	 res: 0.0035515973760063073
-39/50	 (4/5)	 res: 0.0035338637355229211
-40/50	 (4/5)	 res: 0.0035200117090517032
-41/50	 (4/5)	 res: 0.0034965485303839476
-42/50	 (4/5)	 res: 0.0034748427330799211
-43/50	 (4/5)	 res: 0.0034632481914966336
-44/50	 (4/5)	 res: 0.0034337874458745228
-45/50	 (4/5)	 res: 0.0034228981596071185
-46/50	 (4/5)	 res: 0.003400385672945162
-47/50	 (4/5)	 res: 0.003379347447333867
-48/50	 (4/5)	 res: 0.0033705585739266788
-49/50	 (4/5)	 res: 0.0033506954908730799
-50/50	 (4/5)	 res: 0.0033368230767480364
+1/50	 (4/5)	 res: 0.028232027907821873
+2/50	 (4/5)	 res: 0.019218716406535066
+3/50	 (4/5)	 res: 0.01044983304735725
+4/50	 (4/5)	 res: 0.0086291422165836757
+5/50	 (4/5)	 res: 0.0072103521108389957
+6/50	 (4/5)	 res: 0.0067338000778788256
+7/50	 (4/5)	 res: 0.0060888653880555544
+8/50	 (4/5)	 res: 0.0055906051147835657
+9/50	 (4/5)	 res: 0.0051477309710009807
+10/50	 (4/5)	 res: 0.0049886913643777875
+11/50	 (4/5)	 res: 0.004780332499887103
+12/50	 (4/5)	 res: 0.004734611204738357
+13/50	 (4/5)	 res: 0.0046049877853198192
+14/50	 (4/5)	 res: 0.0044958227616568964
+15/50	 (4/5)	 res: 0.0044559500829791723
+16/50	 (4/5)	 res: 0.0043946201814579694
+17/50	 (4/5)	 res: 0.0043259459656404499
+18/50	 (4/5)	 res: 0.0042644913133725463
+19/50	 (4/5)	 res: 0.0042299554136767132
+20/50	 (4/5)	 res: 0.0041706370677297069
+21/50	 (4/5)	 res: 0.0041014714892112971
+22/50	 (4/5)	 res: 0.004079562797976527
+23/50	 (4/5)	 res: 0.0040027113049281113
+24/50	 (4/5)	 res: 0.0039735421821242766
+25/50	 (4/5)	 res: 0.00395353028626286
+26/50	 (4/5)	 res: 0.0039095773148094606
+27/50	 (4/5)	 res: 0.003861401455075613
+28/50	 (4/5)	 res: 0.0038445193123126525
+29/50	 (4/5)	 res: 0.0038053937547294385
+30/50	 (4/5)	 res: 0.0037561797558757861
+31/50	 (4/5)	 res: 0.0037355693738512995
+32/50	 (4/5)	 res: 0.0037086427044974992
+33/50	 (4/5)	 res: 0.0036823417892833097
+34/50	 (4/5)	 res: 0.0036706099444846233
+35/50	 (4/5)	 res: 0.0036307398061276889
+36/50	 (4/5)	 res: 0.0035999038186237289
+37/50	 (4/5)	 res: 0.0035866354360633837
+38/50	 (4/5)	 res: 0.0035515973775563695
+39/50	 (4/5)	 res: 0.0035338637367489673
+40/50	 (4/5)	 res: 0.0035200117101463332
+41/50	 (4/5)	 res: 0.0034965485323943911
+42/50	 (4/5)	 res: 0.0034748427347628358
+43/50	 (4/5)	 res: 0.0034632481925167208
+44/50	 (4/5)	 res: 0.0034337874467006229
+45/50	 (4/5)	 res: 0.0034228981620746967
+46/50	 (4/5)	 res: 0.0034003856745556571
+47/50	 (4/5)	 res: 0.0033793474498956979
+48/50	 (4/5)	 res: 0.0033705585771166059
+49/50	 (4/5)	 res: 0.0033506954907564375
+50/50	 (4/5)	 res: 0.0033368230797496271
   
 Creating this->p_tot for 1/ 15freq
   
@@ -1827,57 +1490,56 @@ Convergence after 85iterations
 Convergence after 86iterations
 Convergence after 87iterations
 Convergence after 89iterations
-Computation time for createTotalFieldCurrentProcessor was 67.122087742999994 seconds
-1/50	 (5/5)	 res: 0.017333736500900695
-2/50	 (5/5)	 res: 0.010344295684109198
-3/50	 (5/5)	 res: 0.0070343153251246817
-4/50	 (5/5)	 res: 0.0061734717841209165
-5/50	 (5/5)	 res: 0.0052334130807591469
-6/50	 (5/5)	 res: 0.0045261681692503929
-7/50	 (5/5)	 res: 0.0040693257258553354
-8/50	 (5/5)	 res: 0.0038997500785286749
-9/50	 (5/5)	 res: 0.0035683092978816039
-10/50	 (5/5)	 res: 0.0034514198168142983
-11/50	 (5/5)	 res: 0.0033257219947745507
-12/50	 (5/5)	 res: 0.0032213229306181194
-13/50	 (5/5)	 res: 0.0031914021249948733
-14/50	 (5/5)	 res: 0.0031597978398505426
-15/50	 (5/5)	 res: 0.0030897365850468456
-16/50	 (5/5)	 res: 0.0030661249035325838
-17/50	 (5/5)	 res: 0.0030378006768662031
-18/50	 (5/5)	 res: 0.0029934273766462475
-19/50	 (5/5)	 res: 0.0029778803841673733
-20/50	 (5/5)	 res: 0.0029344920406382349
-21/50	 (5/5)	 res: 0.0029144849164932964
-22/50	 (5/5)	 res: 0.002900008345020565
-23/50	 (5/5)	 res: 0.0028745450408502252
-24/50	 (5/5)	 res: 0.0028484618786652556
-25/50	 (5/5)	 res: 0.0028368961291703005
-26/50	 (5/5)	 res: 0.0028176224048648249
-27/50	 (5/5)	 res: 0.0028043438996506916
-28/50	 (5/5)	 res: 0.0027863733127437224
-29/50	 (5/5)	 res: 0.0027707241731343797
-30/50	 (5/5)	 res: 0.002757205836950639
-31/50	 (5/5)	 res: 0.0027435751793330339
-32/50	 (5/5)	 res: 0.002719114357665121
-33/50	 (5/5)	 res: 0.0027117415404046157
-34/50	 (5/5)	 res: 0.0026888191186419962
-35/50	 (5/5)	 res: 0.0026761423629178961
-36/50	 (5/5)	 res: 0.0026644008563239696
-37/50	 (5/5)	 res: 0.002649021975793741
-38/50	 (5/5)	 res: 0.0026371336362101981
-39/50	 (5/5)	 res: 0.0026265598482134744
-40/50	 (5/5)	 res: 0.0026061191699332737
-41/50	 (5/5)	 res: 0.0025997982345687945
-42/50	 (5/5)	 res: 0.0025824926066313563
-43/50	 (5/5)	 res: 0.0025743117702997521
-44/50	 (5/5)	 res: 0.002565626138098338
-45/50	 (5/5)	 res: 0.0025568627421391544
-46/50	 (5/5)	 res: 0.0025510328170754563
-47/50	 (5/5)	 res: 0.0025412949606603862
-48/50	 (5/5)	 res: 0.0025287796742910719
-49/50	 (5/5)	 res: 0.0025238512284621491
-50/50	 (5/5)	 res: 0.0025088103210736752
+1/50	 (5/5)	 res: 0.01733373674247778
+2/50	 (5/5)	 res: 0.010344295709819028
+3/50	 (5/5)	 res: 0.0070343153133764977
+4/50	 (5/5)	 res: 0.0061734717826285486
+5/50	 (5/5)	 res: 0.0052334130544369134
+6/50	 (5/5)	 res: 0.0045261681662016086
+7/50	 (5/5)	 res: 0.0040693257287579042
+8/50	 (5/5)	 res: 0.0038997500778776843
+9/50	 (5/5)	 res: 0.0035683092962271509
+10/50	 (5/5)	 res: 0.0034514198192911487
+11/50	 (5/5)	 res: 0.0033257219919310115
+12/50	 (5/5)	 res: 0.0032213229135960009
+13/50	 (5/5)	 res: 0.0031914021269779463
+14/50	 (5/5)	 res: 0.0031597978260025955
+15/50	 (5/5)	 res: 0.0030897365856601168
+16/50	 (5/5)	 res: 0.003066124909096237
+17/50	 (5/5)	 res: 0.0030378006782006226
+18/50	 (5/5)	 res: 0.0029934273800654543
+19/50	 (5/5)	 res: 0.0029778803905461913
+20/50	 (5/5)	 res: 0.0029344920436501125
+21/50	 (5/5)	 res: 0.0029144849239129862
+22/50	 (5/5)	 res: 0.0029000083521939259
+23/50	 (5/5)	 res: 0.0028745450433350318
+24/50	 (5/5)	 res: 0.0028484618870423173
+25/50	 (5/5)	 res: 0.0028368961312555084
+26/50	 (5/5)	 res: 0.0028176224068271155
+27/50	 (5/5)	 res: 0.0028043439085459099
+28/50	 (5/5)	 res: 0.002786373315793136
+29/50	 (5/5)	 res: 0.0027707241808256461
+30/50	 (5/5)	 res: 0.0027572058460424687
+31/50	 (5/5)	 res: 0.0027435751807525603
+32/50	 (5/5)	 res: 0.0027191143609542594
+33/50	 (5/5)	 res: 0.0027117415435437007
+34/50	 (5/5)	 res: 0.0026888191205469065
+35/50	 (5/5)	 res: 0.0026761423700785878
+36/50	 (5/5)	 res: 0.0026644008632161005
+37/50	 (5/5)	 res: 0.0026490219797067989
+38/50	 (5/5)	 res: 0.00263713363994896
+39/50	 (5/5)	 res: 0.0026265598485314921
+40/50	 (5/5)	 res: 0.0026061191679781063
+41/50	 (5/5)	 res: 0.0025997982352199672
+42/50	 (5/5)	 res: 0.0025824926045665162
+43/50	 (5/5)	 res: 0.0025743117725482911
+44/50	 (5/5)	 res: 0.0025656261412388129
+45/50	 (5/5)	 res: 0.002556862744386225
+46/50	 (5/5)	 res: 0.0025510328182055848
+47/50	 (5/5)	 res: 0.0025412949572102663
+48/50	 (5/5)	 res: 0.0025287796706517447
+49/50	 (5/5)	 res: 0.0025238512232150802
+50/50	 (5/5)	 res: 0.0025088103167697066
   
 Creating this->p_tot for 1/ 15freq
   
@@ -2161,26 +1823,27 @@ Convergence after 88iterations
   
 Creating this->p_tot for 15/ 15freq
   
-No convergence after 100 iterations.Res = 0.000705097561479574
-No convergence after 100 iterations.Res = 0.00060667269187555202
-No convergence after 100 iterations.Res = 0.00065444522756130717
-No convergence after 100 iterations.Res = 0.00063547605128090189
-No convergence after 100 iterations.Res = 0.00058991010629338406
-No convergence after 100 iterations.Res = 0.00048990642352141772
-No convergence after 100 iterations.Res = 0.00041183658691307923
-No convergence after 100 iterations.Res = 0.000260630443053086
-No convergence after 100 iterations.Res = 0.00019480279465441445
-No convergence after 100 iterations.Res = 0.00029169228593357914
-No convergence after 100 iterations.Res = 0.00042033491923813647
-No convergence after 100 iterations.Res = 0.00045981784744176819
-No convergence after 100 iterations.Res = 0.00057214209240787116
-No convergence after 100 iterations.Res = 0.00061355402362615701
-No convergence after 100 iterations.Res = 0.00062260428555383906
-No convergence after 100 iterations.Res = 0.0005628337230140321
-No convergence after 100 iterations.Res = 0.00071824073499484361
-Computation time for createTotalFieldCurrentProcessor was 81.253240714 seconds
+No convergence after 100 iterations.Res = 0.00070509764726679996
+No convergence after 100 iterations.Res = 0.00060667277000211876
+No convergence after 100 iterations.Res = 0.00065444531176853712
+No convergence after 100 iterations.Res = 0.00063547613321855777
+No convergence after 100 iterations.Res = 0.00058991018166380642
+No convergence after 100 iterations.Res = 0.00048990648633318045
+No convergence after 100 iterations.Res = 0.00041183663776959029
+No convergence after 100 iterations.Res = 0.00026063047690790838
+No convergence after 100 iterations.Res = 0.00019480282620720291
+No convergence after 100 iterations.Res = 0.00029169232426351624
+No convergence after 100 iterations.Res = 0.00042033497039819275
+No convergence after 100 iterations.Res = 0.00045981790469463546
+No convergence after 100 iterations.Res = 0.0005721421633975084
+No convergence after 100 iterations.Res = 0.00061355410042216634
+No convergence after 100 iterations.Res = 0.0006226043640954321
+No convergence after 100 iterations.Res = 0.0005628337923119437
+No convergence after 100 iterations.Res = 0.00071824082161322383
 Done, writing to file
-0
+Finished at Thu Jan  3 16:17:20 2019
+
+CPU time: 264.0633544921875 seconds
 Visualisation of the estimated temple using FWI
 2223132122133112234112233203051221503123322114322213312212403212
 2312312412302432210442211223222122123221122440122341032132132132
@@ -2214,5 +1877,3 @@ Visualisation of the estimated temple using FWI
 0111000222233333222212221232221222222221222112322333323210001110
 1222112322233322210112211121221121222111222100122233222233112221
 1211101322233322222222222222222112312222222222222233322321011121
-Finished at Mon Nov 19 17:12:17 2018
-

@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     }
 
     chi_visualisation_in_integer_form(input.inputCardPath + input.fileName + ".txt", input.ngrid[0]);
-    create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_ref_");
+    create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_reference_");
 
     cpuClock clock;
 

@@ -1,7 +1,3 @@
-Preprocessing the provided input to create the reference pressure-field
-Starting at Wed Dec 12 11:12:31 2018
-
-input.freq.nTotal= 15
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
@@ -34,6 +30,8 @@ input.freq.nTotal= 15
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222
+Starting at Thu Jan  3 16:22:46 2019
+
 Total number is sources is 30. Positions:
 x = (-480, -5)
 x = (-446.897, -5)
@@ -118,16 +116,16 @@ f = 40, k = 0.125664
 Creating Greens function field...
 Creating P0...
 Estimating Chi...
-1/10	 (1/5)	 res: 0.54762815038171975
-2/10	 (1/5)	 res: 0.58156645364821768
-3/10	 (1/5)	 res: 0.57037705832457086
-4/10	 (1/5)	 res: 0.43762934454481706
-5/10	 (1/5)	 res: 0.2398782182444413
-6/10	 (1/5)	 res: 0.14834949008612355
-7/10	 (1/5)	 res: 0.13116495993222488
-8/10	 (1/5)	 res: 0.099438046207433323
-9/10	 (1/5)	 res: 0.090757998180528626
-10/10	 (1/5)	 res: 0.083624694357320575
+1/10	 (1/5)	 res: 0.54762815038171919
+2/10	 (1/5)	 res: 0.5815664536482289
+3/10	 (1/5)	 res: 0.57037705832458352
+4/10	 (1/5)	 res: 0.43762934454482461
+5/10	 (1/5)	 res: 0.23987821824444047
+6/10	 (1/5)	 res: 0.14834949008612347
+7/10	 (1/5)	 res: 0.13116495993222527
+8/10	 (1/5)	 res: 0.099438046207432698
+9/10	 (1/5)	 res: 0.09075799818052753
+10/10	 (1/5)	 res: 0.083624694357319604
   
 Creating this->p_tot for 1/ 15freq
   
@@ -623,17 +621,16 @@ Convergence after 11iterations
 Convergence after 11iterations
 Convergence after 11iterations
 Convergence after 11iterations
-Computation time for createTotalFieldCurrentProcessor was 28.046109134999998 seconds
-1/10	 (2/5)	 res: 0.11397344214707474
-2/10	 (2/5)	 res: 0.089298092382762262
-3/10	 (2/5)	 res: 0.08188072543509875
-4/10	 (2/5)	 res: 0.072422905546017768
-5/10	 (2/5)	 res: 0.061723184581959439
-6/10	 (2/5)	 res: 0.056636141713131721
-7/10	 (2/5)	 res: 0.052755501710867632
-8/10	 (2/5)	 res: 0.045588385962689847
-9/10	 (2/5)	 res: 0.040741275825190756
-10/10	 (2/5)	 res: 0.036060287193217098
+1/10	 (2/5)	 res: 0.11397344214707428
+2/10	 (2/5)	 res: 0.089298092382785868
+3/10	 (2/5)	 res: 0.081880725435116569
+4/10	 (2/5)	 res: 0.07242290554604236
+5/10	 (2/5)	 res: 0.061723184581974372
+6/10	 (2/5)	 res: 0.056636141713161496
+7/10	 (2/5)	 res: 0.05275550171089341
+8/10	 (2/5)	 res: 0.045588385962703558
+9/10	 (2/5)	 res: 0.040741275825191062
+10/10	 (2/5)	 res: 0.036060287193228076
   
 Creating this->p_tot for 1/ 15freq
   
@@ -1129,17 +1126,16 @@ Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-Computation time for createTotalFieldCurrentProcessor was 35.177749001999999 seconds
-1/10	 (3/5)	 res: 0.044502831396654653
-2/10	 (3/5)	 res: 0.035646145919772894
-3/10	 (3/5)	 res: 0.031177402013109756
-4/10	 (3/5)	 res: 0.029486772591920753
-5/10	 (3/5)	 res: 0.027124879746449143
-6/10	 (3/5)	 res: 0.025208093636894118
-7/10	 (3/5)	 res: 0.024106271462635234
-8/10	 (3/5)	 res: 0.022243845712307014
-9/10	 (3/5)	 res: 0.02086395397780651
-10/10	 (3/5)	 res: 0.020031434430079868
+1/10	 (3/5)	 res: 0.044502831396951846
+2/10	 (3/5)	 res: 0.035646145919832062
+3/10	 (3/5)	 res: 0.031177402013228224
+4/10	 (3/5)	 res: 0.029486772592072462
+5/10	 (3/5)	 res: 0.027124879746484136
+6/10	 (3/5)	 res: 0.025208093637040119
+7/10	 (3/5)	 res: 0.024106271462715843
+8/10	 (3/5)	 res: 0.022243845712350524
+9/10	 (3/5)	 res: 0.02086395397791305
+10/10	 (3/5)	 res: 0.020031434430137478
   
 Creating this->p_tot for 1/ 15freq
   
@@ -1605,11 +1601,11 @@ Convergence after 13iterations
   
 Creating this->p_tot for 15/ 15freq
   
-No convergence after 15 iterations.Res = 7.1319137409381494e-05
-No convergence after 15 iterations.Res = 5.9360678080114093e-05
+No convergence after 15 iterations.Res = 7.1319137408226019e-05
+No convergence after 15 iterations.Res = 5.9360678079105988e-05
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.9879925581214368e-05
+No convergence after 15 iterations.Res = 5.9879925580390212e-05
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
@@ -1626,26 +1622,25 @@ Convergence after 13iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.3289630828356671e-05
-No convergence after 15 iterations.Res = 5.4988526053127351e-05
-No convergence after 15 iterations.Res = 5.5561128962298609e-05
-No convergence after 15 iterations.Res = 5.6090293176559107e-05
-No convergence after 15 iterations.Res = 6.31847385471487e-05
+No convergence after 15 iterations.Res = 5.3289630827623947e-05
+No convergence after 15 iterations.Res = 5.4988526052371595e-05
+No convergence after 15 iterations.Res = 5.5561128961555578e-05
+No convergence after 15 iterations.Res = 5.6090293175803939e-05
+No convergence after 15 iterations.Res = 6.3184738546322728e-05
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.5312708593846138e-05
-No convergence after 15 iterations.Res = 5.9093693385218462e-05
-Computation time for createTotalFieldCurrentProcessor was 36.619880334000001 seconds
-1/10	 (4/5)	 res: 0.021950078025545543
-2/10	 (4/5)	 res: 0.018968986416899054
-3/10	 (4/5)	 res: 0.017320865501965765
-4/10	 (4/5)	 res: 0.016584303892247371
-5/10	 (4/5)	 res: 0.016111670867953946
-6/10	 (4/5)	 res: 0.014706008365213524
-7/10	 (4/5)	 res: 0.013626118865885406
-8/10	 (4/5)	 res: 0.013022452634463871
-9/10	 (4/5)	 res: 0.012398419503788434
-10/10	 (4/5)	 res: 0.011065932109008469
+No convergence after 15 iterations.Res = 5.5312708593091607e-05
+No convergence after 15 iterations.Res = 5.9093693384400215e-05
+1/10	 (4/5)	 res: 0.021950078025420108
+2/10	 (4/5)	 res: 0.018968986416996868
+3/10	 (4/5)	 res: 0.017320865502030776
+4/10	 (4/5)	 res: 0.016584303892235149
+5/10	 (4/5)	 res: 0.016111670868028075
+6/10	 (4/5)	 res: 0.01470600836527706
+7/10	 (4/5)	 res: 0.013626118866022972
+8/10	 (4/5)	 res: 0.013022452634557098
+9/10	 (4/5)	 res: 0.012398419503882189
+10/10	 (4/5)	 res: 0.011065932109058587
   
 Creating this->p_tot for 1/ 15freq
   
@@ -2045,14 +2040,14 @@ Convergence after 13iterations
   
 Creating this->p_tot for 13/ 15freq
   
-No convergence after 15 iterations.Res = 9.324576357319967e-05
-No convergence after 15 iterations.Res = 0.00010334008023621821
-No convergence after 15 iterations.Res = 9.7588684465826466e-05
-No convergence after 15 iterations.Res = 6.7673212590480593e-05
+No convergence after 15 iterations.Res = 9.3245763571779013e-05
+No convergence after 15 iterations.Res = 0.00010334008023472232
+No convergence after 15 iterations.Res = 9.7588684464470102e-05
+No convergence after 15 iterations.Res = 6.7673212589549955e-05
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.9693086247057963e-05
-No convergence after 15 iterations.Res = 5.749884435822571e-05
-No convergence after 15 iterations.Res = 7.1224174238511173e-05
+No convergence after 15 iterations.Res = 5.9693086246251757e-05
+No convergence after 15 iterations.Res = 5.749884435741327e-05
+No convergence after 15 iterations.Res = 7.1224174237525295e-05
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
@@ -2065,28 +2060,28 @@ Convergence after 13iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.3949525191942684e-05
-No convergence after 15 iterations.Res = 6.0259013958449475e-05
-No convergence after 15 iterations.Res = 7.4647485966280609e-05
-No convergence after 15 iterations.Res = 7.1878071907576294e-05
-No convergence after 15 iterations.Res = 7.5145575008376213e-05
-No convergence after 15 iterations.Res = 6.1972805383049147e-05
-No convergence after 15 iterations.Res = 7.6820798461374831e-05
-No convergence after 15 iterations.Res = 9.2883765518340149e-05
-No convergence after 15 iterations.Res = 8.8080151436934672e-05
-No convergence after 15 iterations.Res = 6.8151866510084827e-05
+No convergence after 15 iterations.Res = 5.3949525191095685e-05
+No convergence after 15 iterations.Res = 6.0259013957492877e-05
+No convergence after 15 iterations.Res = 7.4647485965145829e-05
+No convergence after 15 iterations.Res = 7.1878071906470028e-05
+No convergence after 15 iterations.Res = 7.5145575007226539e-05
+No convergence after 15 iterations.Res = 6.1972805382039362e-05
+No convergence after 15 iterations.Res = 7.6820798460169293e-05
+No convergence after 15 iterations.Res = 9.2883765516915548e-05
+No convergence after 15 iterations.Res = 8.8080151435582278e-05
+No convergence after 15 iterations.Res = 6.8151866509043722e-05
   
 Creating this->p_tot for 14/ 15freq
   
-No convergence after 15 iterations.Res = 0.00012187700259295614
-No convergence after 15 iterations.Res = 0.00011056032275936014
-No convergence after 15 iterations.Res = 8.0647536389257313e-05
+No convergence after 15 iterations.Res = 0.00012187700259075655
+No convergence after 15 iterations.Res = 0.00011056032275744729
+No convergence after 15 iterations.Res = 8.0647536387968088e-05
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.8271605909125157e-05
-No convergence after 15 iterations.Res = 6.4538415950924608e-05
-No convergence after 15 iterations.Res = 5.351321080916853e-05
+No convergence after 15 iterations.Res = 6.8271605907966755e-05
+No convergence after 15 iterations.Res = 6.4538415949844403e-05
+No convergence after 15 iterations.Res = 5.3513210808289323e-05
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.1721502184258073e-05
+No convergence after 15 iterations.Res = 6.1721502183181541e-05
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
@@ -2098,27 +2093,27 @@ Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.6452197616873027e-05
-No convergence after 15 iterations.Res = 7.4495561343567858e-05
-No convergence after 15 iterations.Res = 5.7606257356538915e-05
-No convergence after 15 iterations.Res = 6.0444721906361613e-05
-No convergence after 15 iterations.Res = 7.4657290170441115e-05
-No convergence after 15 iterations.Res = 6.2406055756965233e-05
+No convergence after 15 iterations.Res = 6.6452197615566048e-05
+No convergence after 15 iterations.Res = 7.4495561342153679e-05
+No convergence after 15 iterations.Res = 5.7606257355420981e-05
+No convergence after 15 iterations.Res = 6.0444721905146263e-05
+No convergence after 15 iterations.Res = 7.4657290168956192e-05
+No convergence after 15 iterations.Res = 6.2406055755752146e-05
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.4121328167045153e-05
-No convergence after 15 iterations.Res = 5.2152483892475878e-05
+No convergence after 15 iterations.Res = 5.4121328165957142e-05
+No convergence after 15 iterations.Res = 5.2152483891489654e-05
 Convergence after 14iterations
   
 Creating this->p_tot for 15/ 15freq
   
-No convergence after 15 iterations.Res = 0.00021256924650554811
-No convergence after 15 iterations.Res = 0.00018512920605513142
-No convergence after 15 iterations.Res = 0.00011925440285825365
-No convergence after 15 iterations.Res = 7.476964794396888e-05
-No convergence after 15 iterations.Res = 0.00010871248873362197
-No convergence after 15 iterations.Res = 6.5971743939982191e-05
-No convergence after 15 iterations.Res = 8.5312155869921827e-05
-No convergence after 15 iterations.Res = 6.4959906475860546e-05
+No convergence after 15 iterations.Res = 0.00021256924650347184
+No convergence after 15 iterations.Res = 0.00018512920605341638
+No convergence after 15 iterations.Res = 0.0001192544028570808
+No convergence after 15 iterations.Res = 7.4769647943441646e-05
+No convergence after 15 iterations.Res = 0.00010871248873332804
+No convergence after 15 iterations.Res = 6.5971743939968733e-05
+No convergence after 15 iterations.Res = 8.5312155869686203e-05
+No convergence after 15 iterations.Res = 6.4959906475676692e-05
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
@@ -2129,29 +2124,28 @@ Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.8846723657330184e-05
-No convergence after 15 iterations.Res = 6.4973920757866913e-05
-No convergence after 15 iterations.Res = 9.3753955154059844e-05
-No convergence after 15 iterations.Res = 0.00013564614531287998
-No convergence after 15 iterations.Res = 0.00013477372813855754
-No convergence after 15 iterations.Res = 0.00013836677045809474
-No convergence after 15 iterations.Res = 0.00014428484925287105
-No convergence after 15 iterations.Res = 0.00015837422960900962
-No convergence after 15 iterations.Res = 0.00012205080572017204
-No convergence after 15 iterations.Res = 0.00012143317549462912
-No convergence after 15 iterations.Res = 0.00014957821117608536
-No convergence after 15 iterations.Res = 0.00016522040417296969
-Computation time for createTotalFieldCurrentProcessor was 39.804317073999997 seconds
-1/10	 (5/5)	 res: 0.011572080063883775
-2/10	 (5/5)	 res: 0.0097044764514501447
-3/10	 (5/5)	 res: 0.0090491254587071988
-4/10	 (5/5)	 res: 0.0085163658933885122
-5/10	 (5/5)	 res: 0.0082970685971996104
-6/10	 (5/5)	 res: 0.0079184664795436642
-7/10	 (5/5)	 res: 0.0075577083551197502
-8/10	 (5/5)	 res: 0.0073319681029421274
-9/10	 (5/5)	 res: 0.0070571712501682248
-10/10	 (5/5)	 res: 0.0066028380458137033
+No convergence after 15 iterations.Res = 6.8846723656793531e-05
+No convergence after 15 iterations.Res = 6.4973920757245028e-05
+No convergence after 15 iterations.Res = 9.3753955153246191e-05
+No convergence after 15 iterations.Res = 0.00013564614531179884
+No convergence after 15 iterations.Res = 0.00013477372813747903
+No convergence after 15 iterations.Res = 0.00013836677045702146
+No convergence after 15 iterations.Res = 0.00014428484925176448
+No convergence after 15 iterations.Res = 0.00015837422960786592
+No convergence after 15 iterations.Res = 0.00012205080571927972
+No convergence after 15 iterations.Res = 0.00012143317549368461
+No convergence after 15 iterations.Res = 0.00014957821117494156
+No convergence after 15 iterations.Res = 0.00016522040417148265
+1/10	 (5/5)	 res: 0.011572080063917222
+2/10	 (5/5)	 res: 0.0097044764514593717
+3/10	 (5/5)	 res: 0.0090491254587595979
+4/10	 (5/5)	 res: 0.0085163658935328689
+5/10	 (5/5)	 res: 0.00829706859734251
+6/10	 (5/5)	 res: 0.0079184664795829227
+7/10	 (5/5)	 res: 0.0075577083551360922
+8/10	 (5/5)	 res: 0.0073319681029634445
+9/10	 (5/5)	 res: 0.0070571712501843412
+10/10	 (5/5)	 res: 0.0066028380458025586
   
 Creating this->p_tot for 1/ 15freq
   
@@ -2551,17 +2545,17 @@ Convergence after 14iterations
   
 Creating this->p_tot for 13/ 15freq
   
-No convergence after 15 iterations.Res = 0.00012968792430301433
-No convergence after 15 iterations.Res = 0.00012738436906386906
-No convergence after 15 iterations.Res = 0.00010580002248130909
-No convergence after 15 iterations.Res = 6.7110041695712664e-05
+No convergence after 15 iterations.Res = 0.00012968792430818329
+No convergence after 15 iterations.Res = 0.00012738436906843778
+No convergence after 15 iterations.Res = 0.00010580002248474228
+No convergence after 15 iterations.Res = 6.7110041698066684e-05
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.784025387669144e-05
-No convergence after 15 iterations.Res = 6.7061570305607915e-05
-No convergence after 15 iterations.Res = 7.594000826239204e-05
-No convergence after 15 iterations.Res = 5.8366151428920621e-05
-No convergence after 15 iterations.Res = 5.3323691160511457e-05
-No convergence after 15 iterations.Res = 5.1328944120591901e-05
+No convergence after 15 iterations.Res = 6.7840253878574956e-05
+No convergence after 15 iterations.Res = 6.7061570307763363e-05
+No convergence after 15 iterations.Res = 7.5940008264605073e-05
+No convergence after 15 iterations.Res = 5.8366151430931464e-05
+No convergence after 15 iterations.Res = 5.3323691162339551e-05
+No convergence after 15 iterations.Res = 5.1328944122304547e-05
 Convergence after 13iterations
 Convergence after 13iterations
 Convergence after 13iterations
@@ -2571,84 +2565,86 @@ Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 5.8215903661330732e-05
-No convergence after 15 iterations.Res = 6.4496228786149274e-05
-No convergence after 15 iterations.Res = 7.9252863503779906e-05
-No convergence after 15 iterations.Res = 7.7640506240016536e-05
-No convergence after 15 iterations.Res = 8.4351764100890598e-05
-No convergence after 15 iterations.Res = 7.1369477197653775e-05
-No convergence after 15 iterations.Res = 8.8208135810291188e-05
-No convergence after 15 iterations.Res = 0.00011113931002960693
-No convergence after 15 iterations.Res = 0.00011049320621683839
-No convergence after 15 iterations.Res = 9.1011836064747951e-05
+No convergence after 15 iterations.Res = 5.821590366287528e-05
+No convergence after 15 iterations.Res = 6.4496228787986834e-05
+No convergence after 15 iterations.Res = 7.9252863505943134e-05
+No convergence after 15 iterations.Res = 7.7640506242209538e-05
+No convergence after 15 iterations.Res = 8.4351764103518962e-05
+No convergence after 15 iterations.Res = 7.1369477200137276e-05
+No convergence after 15 iterations.Res = 8.8208135812984821e-05
+No convergence after 15 iterations.Res = 0.00011113931003308817
+No convergence after 15 iterations.Res = 0.00011049320622056847
+No convergence after 15 iterations.Res = 9.1011836068149743e-05
   
 Creating this->p_tot for 14/ 15freq
   
-No convergence after 15 iterations.Res = 0.00016792914658316576
-No convergence after 15 iterations.Res = 0.00015125276956960568
-No convergence after 15 iterations.Res = 0.00011425453380126095
-No convergence after 15 iterations.Res = 7.9689868348942016e-05
-No convergence after 15 iterations.Res = 9.5087343220400186e-05
-No convergence after 15 iterations.Res = 8.6418569987829937e-05
-No convergence after 15 iterations.Res = 7.180144929987023e-05
-No convergence after 15 iterations.Res = 6.4453254622732134e-05
-No convergence after 15 iterations.Res = 9.1204189191516663e-05
-No convergence after 15 iterations.Res = 8.6885881584265637e-05
-No convergence after 15 iterations.Res = 5.6214222466431257e-05
+No convergence after 15 iterations.Res = 0.00016792914658930356
+No convergence after 15 iterations.Res = 0.00015125276957471081
+No convergence after 15 iterations.Res = 0.00011425453380503131
+No convergence after 15 iterations.Res = 7.9689868352134612e-05
+No convergence after 15 iterations.Res = 9.5087343224545918e-05
+No convergence after 15 iterations.Res = 8.6418569991506981e-05
+No convergence after 15 iterations.Res = 7.1801449303236488e-05
+No convergence after 15 iterations.Res = 6.4453254626035196e-05
+No convergence after 15 iterations.Res = 9.1204189196282423e-05
+No convergence after 15 iterations.Res = 8.6885881589062039e-05
+No convergence after 15 iterations.Res = 5.6214222469192334e-05
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
 Convergence after 14iterations
-No convergence after 15 iterations.Res = 6.2383573120635574e-05
-No convergence after 15 iterations.Res = 5.9525241257805966e-05
-No convergence after 15 iterations.Res = 5.8514448389194354e-05
-No convergence after 15 iterations.Res = 0.00011625520321361858
-No convergence after 15 iterations.Res = 0.00012148883420310888
-No convergence after 15 iterations.Res = 9.2364798846942303e-05
-No convergence after 15 iterations.Res = 0.00010221369490006512
-No convergence after 15 iterations.Res = 0.000123501710749046
-No convergence after 15 iterations.Res = 9.9829316998365595e-05
-No convergence after 15 iterations.Res = 7.5947071541950759e-05
-No convergence after 15 iterations.Res = 0.00010774684697704836
-No convergence after 15 iterations.Res = 0.00012067718798489417
-No convergence after 15 iterations.Res = 0.00011287885499476584
+No convergence after 15 iterations.Res = 6.2383573123338151e-05
+No convergence after 15 iterations.Res = 5.9525241259880018e-05
+No convergence after 15 iterations.Res = 5.8514448391770304e-05
+No convergence after 15 iterations.Res = 0.00011625520321837502
+No convergence after 15 iterations.Res = 0.00012148883420783657
+No convergence after 15 iterations.Res = 9.23647988507467e-05
+No convergence after 15 iterations.Res = 0.00010221369490427736
+No convergence after 15 iterations.Res = 0.00012350171075414354
+No convergence after 15 iterations.Res = 9.9829317002423629e-05
+No convergence after 15 iterations.Res = 7.5947071545700201e-05
+No convergence after 15 iterations.Res = 0.00010774684698241353
+No convergence after 15 iterations.Res = 0.00012067718799101813
+No convergence after 15 iterations.Res = 0.00011287885500082625
   
 Creating this->p_tot for 15/ 15freq
   
-No convergence after 15 iterations.Res = 0.00035834278780725394
-No convergence after 15 iterations.Res = 0.00030001532354074101
-No convergence after 15 iterations.Res = 0.00019610585119953804
-No convergence after 15 iterations.Res = 0.00014022008495947347
-No convergence after 15 iterations.Res = 0.00016851188244215246
-No convergence after 15 iterations.Res = 0.00010182888595530028
-No convergence after 15 iterations.Res = 0.00012047316988814748
-No convergence after 15 iterations.Res = 0.00010275069828880768
-No convergence after 15 iterations.Res = 8.6534476552602293e-05
-No convergence after 15 iterations.Res = 9.8359454719920136e-05
-No convergence after 15 iterations.Res = 8.7604662221838519e-05
+No convergence after 15 iterations.Res = 0.0003583427878206073
+No convergence after 15 iterations.Res = 0.0003000153235514023
+No convergence after 15 iterations.Res = 0.00019610585120683513
+No convergence after 15 iterations.Res = 0.00014022008496531916
+No convergence after 15 iterations.Res = 0.00016851188244770889
+No convergence after 15 iterations.Res = 0.00010182888595890699
+No convergence after 15 iterations.Res = 0.00012047316989105563
+No convergence after 15 iterations.Res = 0.00010275069829138358
+No convergence after 15 iterations.Res = 8.6534476555802763e-05
+No convergence after 15 iterations.Res = 9.8359454723791375e-05
+No convergence after 15 iterations.Res = 8.7604662225430386e-05
 Convergence after 14iterations
 Convergence after 13iterations
-No convergence after 15 iterations.Res = 7.9353874503795751e-05
-No convergence after 15 iterations.Res = 7.1726377356654656e-05
-No convergence after 15 iterations.Res = 8.2192267448322415e-05
-No convergence after 15 iterations.Res = 6.7097671214544854e-05
-No convergence after 15 iterations.Res = 8.906580604267598e-05
-No convergence after 15 iterations.Res = 0.00012604704520292762
-No convergence after 15 iterations.Res = 0.00011999134029696834
-No convergence after 15 iterations.Res = 0.0001491614846601102
-No convergence after 15 iterations.Res = 0.00022366367398196144
-No convergence after 15 iterations.Res = 0.00022515756875709117
-No convergence after 15 iterations.Res = 0.00022786135860766203
-No convergence after 15 iterations.Res = 0.00023856912616863573
-No convergence after 15 iterations.Res = 0.00026844655746759643
-No convergence after 15 iterations.Res = 0.00021765771664359086
-No convergence after 15 iterations.Res = 0.00022190627664222149
-No convergence after 15 iterations.Res = 0.00025528439767778647
-No convergence after 15 iterations.Res = 0.00026958179561160201
-Computation time for createTotalFieldCurrentProcessor was 43.175234201999999 seconds
+No convergence after 15 iterations.Res = 7.9353874507714477e-05
+No convergence after 15 iterations.Res = 7.1726377359822952e-05
+No convergence after 15 iterations.Res = 8.2192267451109858e-05
+No convergence after 15 iterations.Res = 6.7097671217045403e-05
+No convergence after 15 iterations.Res = 8.9065806045894746e-05
+No convergence after 15 iterations.Res = 0.00012604704520671062
+No convergence after 15 iterations.Res = 0.00011999134030084662
+No convergence after 15 iterations.Res = 0.0001491614846640339
+No convergence after 15 iterations.Res = 0.00022366367398756953
+No convergence after 15 iterations.Res = 0.00022515756876267075
+No convergence after 15 iterations.Res = 0.00022786135861381623
+No convergence after 15 iterations.Res = 0.00023856912617529371
+No convergence after 15 iterations.Res = 0.00026844655747531302
+No convergence after 15 iterations.Res = 0.00021765771665049064
+No convergence after 15 iterations.Res = 0.00022190627665002698
+No convergence after 15 iterations.Res = 0.00025528439768709538
+No convergence after 15 iterations.Res = 0.00026958179562216247
 Done, writing to file
+Finished at Thu Jan  3 16:26:18 2019
+
+CPU time: 211.33680725097656 seconds
 Visualisation of the estimated temple using FWI
 2222222222222223223212321221222222122222222222222222222222223222
 2222222222222222322232223222222222222122222222222222222222222222
@@ -2682,5 +2678,3 @@ Visualisation of the estimated temple using FWI
 2222221112111111111222211111111111221111122221121122222222222222
 2221122112221221222222222222222222222222222222222222222222222222
 3222222222222122222222222222112222221112222222222222222222222233
-Finished at Wed Dec 12 11:15:59 2018
-

@@ -305,7 +305,7 @@ print "************************************************************\n"
 
 def find(substr,whichin):
     from datetime import datetime
-    lines           = filter(lambda x: substr in x, open(whichin+".out"))
+    lines           = filter(lambda x: substr in x, open(whichin+"Process.out"))
     line            = lines[0]
     manip           = line.replace(substr,'').replace("\n",'')
     start_or_finish = (datetime.strptime(manip,'%c'))
