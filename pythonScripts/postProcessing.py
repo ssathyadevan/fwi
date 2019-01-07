@@ -85,6 +85,6 @@ plt.grid(True)
 plt.savefig(outputPath+"/"+runName+"Residual.png", dpi=400)
 
 
-print "The pictures have been generated with Python" 
+print"The pictures have been generated with Python"
 
 sys.exit()
