@@ -19,7 +19,6 @@ endif()
 enable_testing()
 
 find_package( GTest REQUIRED )
-#set (GTEST_OUTPUT "xml:report.xml")
 
 # display all compiler warnings if compiler is gnu
 if ( CMAKE_COMPILER_IS_GNUCC )

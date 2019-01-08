@@ -32,12 +32,8 @@ def buildAll() {
 def testAll() {
     echo 'testing all'
     sh '''
-    cd FWIInstall/bin
-    ./unittest --gtest_output="xml:FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.xml"
-    cd ../../
-    cp jenkinsFunctions/*.sh .
-    chmod +x *.sh
-    ./GtestXMLtoJunitXML.sh
+    ctest -D ExperimentalTest --no-compress-output
+    cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
 
@@ -63,3 +59,10 @@ def sendEmail() {
         }
 }
 return this
+
+/*cd FWIInstall/bin
+./unittest --gtest_output="xml:FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.xml"
+cd ../../
+cp jenkinsFunctions/*.sh .
+chmod +x *.sh
+./GtestXMLtoJunitXML.sh*/
