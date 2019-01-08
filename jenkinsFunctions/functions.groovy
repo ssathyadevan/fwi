@@ -27,14 +27,13 @@ def buildAll() {
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
         make install
         make test
+        ctest -T test --no-compress-output
         '''
 }
 
 def testAll() {
     echo 'testing all'
     sh '''
-    cd /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/
-    ctest -D ExperimentalTest --no-compress-output
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
