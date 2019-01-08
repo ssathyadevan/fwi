@@ -33,7 +33,7 @@ def buildAll() {
 def testAll() {
     echo 'testing all'
     sh '''
-    ctest -D ExperimentalTest --no-compress-output
+    ctest -T test
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
