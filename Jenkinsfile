@@ -56,7 +56,7 @@ pipeline{
                         //junit 'FWIInstall/bin/*.xml'
                         //junit 'Test.xml'
                         xunit (
-                                        thresholds: [ skipped(failureThreshold: '0'), failed(failureThreshold: '0'), skipped(failureThreshold: '0') ],
+                                        //thresholds: [ skipped(failureThreshold: '0'), failed(failureThreshold: '0'), skipped(failureThreshold: '0') ],
                                         tools: [ CTest (pattern: '*.xml') ])
                         echo 'Cleaning the workspace'
                         deleteDir()
