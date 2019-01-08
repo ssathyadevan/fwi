@@ -60,9 +60,9 @@ pipeline{
                                         tools: [ CTest (pattern: '*.xml') ])
                         echo 'Cleaning the workspace'
                         deleteDir()
-                        script {
-                                functions.sendEmail()
-                        }
+                        //script {
+                        //        functions.sendEmail()
+                        //}
                 }
         }
 }
