@@ -14,7 +14,7 @@ TEST (HelperFunctionTest, doubles){
 
 }
 
-TEST (HelperFunctionTest, DISABLED_doubles2){
+TEST (HelperFunctionTest, doubles2){
 
     EXPECT_EQ(5., dist(3.,4.));
 }
