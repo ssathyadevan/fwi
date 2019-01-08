@@ -31,8 +31,10 @@ The prerequisite development tools needed can be installed using the following c
     \item \texttt{sudo apt-get install python-tk}
     \item \texttt{sudo apt-get install python-numpy}
     \item \texttt{sudo apt-get install python-matplotlib}
+  	\item \texttt{sudo apt-get install eog}
 
 \end{enumerate}
+\subsection{Install Google Test}
 
 \section{Cloning the Repository}
 \noindent To clone the FWI repository using git,
@@ -46,7 +48,41 @@ Any branch as needed can then be checked out from inside the \texttt{parallelize
 \texttt{git checkout develop}
 
 \section{Build/Run}
-To build the project, first create a folder titled \textbf{build} outside the \textbf{parallelized-fwi} folder.
+In this section the process to build the code is explained in two steps, namely downloading and installing Google Test and therefafter building the code and finally running it.  
+
+
+\subsection{Install Google Test}
+First go back to your home directory, then make the googletest directory. Then download Google test from Github. Then,m execute  cmake, make and make install commands. Finally set the gtest root to the path of the working directory \texttt{\$/googletest/install}.
+\newline
+\texttt{cd ..}
+\newline
+\texttt{mkdir googletest}
+\newline
+\texttt{cd googletest}
+\newline
+\texttt{git clone https://github.com/google/googletest source}
+\newline
+\texttt{mkdir build}
+\newline
+\texttt{cd build}
+\newline
+\texttt{cmake = -DCMAKE\_BUILD\_TYPE=Release -DCMAKE\_INSTALL\_PREFIX=\textasciitilde/googletest/install/ ../source}
+\newline
+\texttt{make}
+\newline
+\texttt{make install}
+\newline
+\texttt{cd ..}
+\newline
+\texttt{cd install/}
+\newline
+\texttt{export GTEST\_ROOT=\$PWD}
+\newline
+Finally, go back to the working directory for the next step:
+\newline
+\texttt{cd}
+\subsection{Build}
+To build the project, first create a folder titled \textbf{build} outside the \textbf{parallelized-fwi} folder. Afterwards the code is built and ran. 
 \newline
 \texttt{NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.}
 \newline
@@ -54,21 +90,33 @@ To build the project, first create a folder titled \textbf{build} outside the \t
 \newline
 \texttt{cd Build}
 \newline
-\texttt{cmake -DCMAKE\_BUILD\_TYPE=Release ../parallelized-fwi/}
+\texttt{cmake -DCMAKE\_BUILD\_TYPE=Release -DCMAKE\_INSTALL\_PREFIX= \textasciitilde/FWIInstall ..parallelized-fwi/}
 \newline
-\texttt{make -j4} (the flag -j is used to build in parallel)
+\texttt{make install} 
+\newline
+Then go back back to the home directory by entering:
+\newline
+\texttt{cd}
+\subsection{Run}
+First enter the inputFiles folder parallelized-fwi folder and copy its contents to the FWIInstall folder. Then, create a output folder  
+\newline
+\texttt{cd parallelized-fwi/inputFiles/} 
+\newline
+\texttt{cp * ../../FWIInstall}
+\newline
+\texttt{cd}
+\newline
+\texttt{cd FWIInstall/bin}
+\newline
+\texttt{mkdir output}
 \newline
 Now, the individual scripts for the preProcessing and the processing part can be run as shown below:
 \newline
-\texttt{cd applications}
+\texttt{cd bin}
 \newline
-\texttt{cd preProcessing}
+\texttt{./FWI\_PreProcess ../ ../output/ default}
 \newline
-\texttt{./FWIPreProcess}
-\newline
-\texttt{cd ../processing}
-\newline
-\texttt{./FWIProcess}
+\texttt{./FWI\_Process ../ ../output/ default}
 \newline
 The input parameters for the code are provided in the input card i.e. default.in. User can create his/her own input card with a new name e.g. \texttt{newCard.in}. To use this input card use the card name as an argument when running the executables, \texttt{./FWIPreProcess newCard} and \texttt{./FWIProcess newCard}.
 
@@ -80,6 +128,41 @@ The input parameters for the code are provided in the input card i.e. default.in
 The pre-processing, processing and the image creation step can all be grouped together using the python wrapper \texttt{wrap\_FWI\_CMake.py} located inside the \textbf{parallelized-fwi} folder.
 \newline
 \texttt{python wrap\_FWI\_CMake.py}
+\newline
+The data can then be visualized using EOG from the output folder:
+\newline
+\texttt{eog defaultResult.png}
+\newline
+ \section{Unit Test}
 
+
+\section{Regression Test}
+In order to run a regression test the following steps need to be taken. First, the contents of a regression data test folder (in this example the fast example is shown) needs to be copied to the output folder. |Then the contents of the output folder are copied to the newly made test folder, as well as the regression data and the test scripts. Finally, the default input file is copied into test file. Then finally the python scripts can be ran in succession.  
+\newline
+\texttt{cd parallelzed-fwi/tests/regression\_data/fast}
+\newline
+\texttt{cp * ../../../../FWIInstall/output/}
+ \newline
+\texttt{cd}
+\newline
+\texttt{cd FWIInstall}
+\newline
+\texttt{mkdir test}
+ \newline
+\texttt{cd test}
+\newline
+\texttt{cp ../output/* .}
+\newline
+\texttt{cp ../../parallelized-fwi/tests/regression\_data/fast/* .}
+\newline
+\texttt{cp ../../parallelized-fwi/tests/testScripts/regressionTestPreProcessing.py .}
+\newline
+\texttt{cp ../../parallelized-fwi/tests/testScripts/regressionTestProcessing.py .}
+\newline
+\texttt{cp ../default.in .}
+\newline	
+\texttt{python regressionTestPreProcessing.py fast default}
+\newline
+\texttt{python regressionTestProcessing.py fast default}
 
 \end{document}
