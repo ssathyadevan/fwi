@@ -34,7 +34,7 @@ def buildAll() {
 def testAll() {
     echo 'testing all'
     sh '''
-    cp build/Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+    cp build/Testing/`head -n 1 build/Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
 
