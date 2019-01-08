@@ -53,7 +53,8 @@ pipeline{
         post {
                 always {
                         echo 'Creating unit-test Result Summary (junit)'
-                        junit 'FWIInstall/bin/*.xml'
+                        //junit 'FWIInstall/bin/*.xml'
+                        junit 'parallelized-fwi/*.xml'
                         echo 'Cleaning the workspace'
                         deleteDir()
                         script {

@@ -16,9 +16,10 @@ if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
    set( CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install )
 endif()
 
-#enable_testing()
+enable_testing()
 
 find_package( GTest REQUIRED )
+#set (GTEST_OUTPUT "xml:report.xml")
 
 # display all compiler warnings if compiler is gnu
 if ( CMAKE_COMPILER_IS_GNUCC )

@@ -62,6 +62,7 @@ void generateReferencePressureFieldFromChi (const Input& input)
     forwardModel->calculateData(referencePressureData, chi, input.iter2);
 
     // writing the referencePressureData to a text file in complex form
+    std::cout << "calclateData done" << std::endl;
 
     std::string invertedChiToPressureFileName = input.outputLocation + input.cardName + "InvertedChiToPressure.txt";
     std::ofstream file;
