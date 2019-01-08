@@ -53,9 +53,8 @@ pipeline{
         post {
                 always {
                         echo 'Creating unit-test Result Summary (junit)'
-                        //junit 'FWIInstall/bin/*.xml'
                         xunit (
-                                        tools: [ CTest (pattern: '*.xml') ])
+                                        tools: [ CTest (pattern: 'build/*.xml') ])
                         echo 'Cleaning the workspace'
                         deleteDir()
                         script {
