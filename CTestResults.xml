@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20190108-1058-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.10.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="20100825-asosaurabh"
+	OSRelease="4.15.0-42-generic"
+	OSVersion="#45-Ubuntu SMP Thu Nov 15 19:32:57 UTC 2018"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="42"
+	ProcessorCacheSize="6144"
+	NumberOfLogicalCPU="1"
+	NumberOfPhysicalCPU="1"
+	TotalVirtualMemory="947"
+	TotalPhysicalMemory="985"
+	LogicalProcessorsPerPhysical="1"
+	ProcessorClockFrequency="3092.99"
+	>
+	<Testing>
+		<StartDateTime>Jan 08 11:58 CET</StartDateTime>
+		<StartTestTime>1546945087</StartTestTime>
+		<TestList>
+			<Test>./tests/unittesting/HelperFunctionTest.ints</Test>
+			<Test>./tests/unittesting/HelperFunctionTest.doubles</Test>
+			<Test>./tests/unittesting/HelperFunctionTest.doubles2</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>HelperFunctionTest.ints</Name>
+			<Path>./tests/unittesting</Path>
+			<FullName>./tests/unittesting/HelperFunctionTest.ints</FullName>
+			<FullCommandLine>/home/s240194/Documents/build/runtime/bin/unittest "--gtest_filter=HelperFunctionTest.ints" "--gtest_also_run_disabled_tests"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00298595</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/s240194/Documents/build/runtime/bin/unittest "--gtest_filter=HelperFunctionTest.ints" "--gtest_also_run_disabled_tests"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = HelperFunctionTest.ints
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from HelperFunctionTest
+[ RUN      ] HelperFunctionTest.ints
+[       OK ] HelperFunctionTest.ints (0 ms)
+[----------] 1 test from HelperFunctionTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (0 ms total)
+[  PASSED  ] 1 test.
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>HelperFunctionTest.doubles</Name>
+			<Path>./tests/unittesting</Path>
+			<FullName>./tests/unittesting/HelperFunctionTest.doubles</FullName>
+			<FullCommandLine>/home/s240194/Documents/build/runtime/bin/unittest "--gtest_filter=HelperFunctionTest.doubles" "--gtest_also_run_disabled_tests"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00534296</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/s240194/Documents/build/runtime/bin/unittest "--gtest_filter=HelperFunctionTest.doubles" "--gtest_also_run_disabled_tests"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Note: Google Test filter = HelperFunctionTest.doubles
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from HelperFunctionTest
+[ RUN      ] HelperFunctionTest.doubles
+[       OK ] HelperFunctionTest.doubles (0 ms)
+[----------] 1 test from HelperFunctionTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test case ran. (0 ms total)
+[  PASSED  ] 1 test.
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="notrun">
+			<Name>HelperFunctionTest.doubles2</Name>
+			<Path>./tests/unittesting</Path>
+			<FullName>./tests/unittesting/HelperFunctionTest.doubles2</FullName>
+			<FullCommandLine></FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Disabled</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value></Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Disabled</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Jan 08 11:58 CET</EndDateTime>
+		<EndTestTime>1546945087</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
