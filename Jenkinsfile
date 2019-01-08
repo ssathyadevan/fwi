@@ -54,7 +54,7 @@ pipeline{
                 always {
                         echo 'Creating unit-test Result Summary (junit)'
                         //junit 'FWIInstall/bin/*.xml'
-                        junit 'parallelized-fwi/Test.xml'
+                        junit 'Test.xml'
                         echo 'Cleaning the workspace'
                         deleteDir()
                         script {
