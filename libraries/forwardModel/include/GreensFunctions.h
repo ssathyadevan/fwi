@@ -8,6 +8,7 @@
 #ifndef GREENSFUNCTIONS_H
 #define GREENSFUNCTIONS_H
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <complex>
 
