@@ -37,6 +37,8 @@ public:
     virtual void Square() = 0;
     virtual void Sqrt() = 0;
     virtual void Random() = 0;
+    virtual void RandomSaurabh() = 0;
+
 
     virtual void toBuffer(double *buffer) const = 0;
     virtual void fromBuffer(const double *buffer) = 0;

@@ -30,6 +30,8 @@ public:
     virtual void Zero();
 
     virtual void Random();
+    virtual void RandomSaurabh();
+
 
     virtual void toBuffer(double *buffer) const;
 

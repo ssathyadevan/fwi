@@ -33,6 +33,16 @@ void volField_rect_2D_cpu::Random()
     }
 }
 
+void volField_rect_2D_cpu::RandomSaurabh()
+{
+    for(int i=0; i<this->GetGrid().GetNumberOfGridPoints(); i++)
+    {
+        int temp = rand() % 1800;
+        data[i] = (double)temp/10000;
+    }
+}
+
+
 void volField_rect_2D_cpu::toBuffer(double *buffer) const
 {
     memcpy(buffer, data, sizeof(double) * this->GetNumberOfGridPoints());
