@@ -6,7 +6,7 @@ volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *co
                            forwardModel_->getInput().nSourcesReceivers.rec*
                            forwardModel_->getInput().nSourcesReceivers.src); // used for eta
     double eta = 1.0/const1;
-    double res, previousRes;
+    double chiEstRes, randomRes;
 
     volField_rect_2D_cpu chiEst(forwardModel_->getGrid() ),
             g(forwardModel_->getGrid() ), gOld(forwardModel_->getGrid() ),
@@ -28,12 +28,10 @@ volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *co
     //main loop//
     for(int it=0; it < input.n_max; it++)
     {
-        std::vector<std::complex<double>> vecResFirstIter;
 
             //forwardModel_->intermediateForwardModelStep1();
             forwardModel_->calculateResidual(chiEst, pData);
-            res = forwardModel_->calculateResidualNormSq(eta);
-            vecResFirstIter.push_back(res);
+            chiEstRes = forwardModel_->calculateResidualNormSq(eta);
 
             //start the inner loop
             for (int it1=0; it1 < input.iter1.n; it1++)
@@ -42,26 +40,27 @@ volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *co
                     volField_rect_2D_cpu tempRandomChi(forwardModel_->getGrid());
                     tempRandomChi.RandomSaurabh();
                     forwardModel_->calculateResidual(tempRandomChi, pData);
-                    res = forwardModel_->calculateResidualNormSq(eta);
+                    randomRes = forwardModel_->calculateResidualNormSq(eta);
 
                     if (it1 == 0)
                     {
-                    tempRandomChi.CopyTo(chiEst);
+                        tempRandomChi.CopyTo(chiEst);
                     }
-                    else if (std::abs(res) > std::abs(previousRes))
+                    else if (std::abs(randomRes) < std::abs(chiEstRes))
                     {
-                    std::cout << "Randomizing the temple again" << std::endl;
-                    tempRandomChi.CopyTo(chiEst);
+                        std::cout << "Randomizing the temple again" << std::endl;
+                        tempRandomChi.CopyTo(chiEst);
+                        forwardModel_->calculateResidual(chiEst, pData);
+                        chiEstRes = forwardModel_->calculateResidualNormSq(eta);
                     }
 
-                    previousRes = res;
 
-                    std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
-                    file << std::setprecision(17) << res << "," << counter << std::endl;
+                    std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
+
+                    file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
                     counter++;// store the residual value in the residual log
 
-                    vecResFirstIter.push_back(res);
 
             }
 
