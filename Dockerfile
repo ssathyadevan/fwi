@@ -19,6 +19,7 @@ RUN         apt-get update \
                     vim \
                     git \
                     cmake \
+                    qt5-default \
                     libeigen3-dev \
                     python2.7-dev \
                     python2.7 \
