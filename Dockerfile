@@ -7,6 +7,8 @@ RUN groupadd -g 10000 jenkins && \
 RUN usermod -aG sudo jenkins
 RUN su jenkins
 WORKDIR /home/jenkins
+ENV TZ=Europe/Amsterdam
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # update and install dependencies
 RUN         apt-get update \
                 && apt-get install -y \
