@@ -36,8 +36,14 @@ pipeline{
                         }
                 }
 
+                stage('RegressionTesting'){
+                        steps{
+                                script{
+                                        functions.regressiontest()
+                                }
+                        }
+                }
                
-
                 stage('Deploy') {
                 /* when {
                         beforeAgent true
@@ -51,13 +57,7 @@ pipeline{
                                 }
                         }
                 }
-                 stage('RegressionTesting'){
-                        steps{
-                                script{
-                                        functions.regressiontest()
-                                }
-                        }
-                }
+                 
         }
         post {
                 always {
