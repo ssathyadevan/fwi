@@ -41,7 +41,7 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-        sh ''''
+        sh '''
         mkdir input output
         cp parallelized-fwi/inputFile/* /input
         cd FWIInstall/bin
