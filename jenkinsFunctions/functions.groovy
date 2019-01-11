@@ -49,6 +49,7 @@ def regressiontest() {
         ./FWI_Process ../../input/ ../../output/ default
         cd ../../pythonScripts
         cp postProcessing.py ../FWIInstall/
+        cd ../FWIInstall
         python postProcessing.py output/
         mkdir test
         cp parallelized-fwi/tests/regression_data/fast/* test/
