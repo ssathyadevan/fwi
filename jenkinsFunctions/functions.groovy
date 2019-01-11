@@ -55,6 +55,7 @@ def regressiontest() {
         cp tests/regression_data/fast/* test/
         cp tests/testScripts/* test/
         cp input/default.in test/
+        cp output/* test/
         cd test
         python regressionTestPreProcessing.py fast default
         python regressionTestProcessing.py fast default
