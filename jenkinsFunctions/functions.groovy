@@ -39,6 +39,26 @@ def testAll() {
     '''
 }
 
+def regressiontest() {
+        echo 'Running regression tests'
+        sh ''''
+        mkdir input output
+        cp parallelized-fwi/inputFile/* /input
+        cd FWIInstall/bin
+        ./FWI_PreProcess ../input ../output default
+        ./FWI_Process ../input ../output default
+        cp parallelized-fwi/pythonScripts/postProcessing.py FWIInstall/
+        python postProcessing.py output/
+        mkdir test
+        cp parallelized-fwi/tests/regression_data/fast/* test/
+        cp parallelzed-fwi/tests/pythonScripts/* test/
+        cp input/default.in test/
+        cd test
+        python regressionTestPreProcessing.py fast default
+        python regressionTestProcessing.py fast default
+        '''
+}
+
 def deploy(){
                 echo 'Deploying'
                 sh '''
