@@ -65,7 +65,7 @@ pipeline{
                         xunit (
                                         tools: [ CTest (pattern: 'build/*.xml') ])
                         echo 'Cleaning the workspace'
-                        //deleteDir()
+                        deleteDir()
                         script {
                                 functions.sendEmail()
                         }
