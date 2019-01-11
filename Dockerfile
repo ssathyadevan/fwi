@@ -22,7 +22,7 @@ RUN         apt-get update \
                     python2.7 \
                     python-tk \
                     python-numpy \
-                    python-matplotlib \
+                    python-matplotlib
 
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git
