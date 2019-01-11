@@ -45,8 +45,8 @@ def regressiontest() {
         mkdir input output
         cp inputFiles/* input/
         cd FWIInstall/bin
-        ./FWI_PreProcess ../input/ ../output default
-        ./FWI_Process ../input/ ../output default
+        ./FWI_PreProcess ../../input/ ../../output/ default
+        ./FWI_Process ../input/ ../output/ default
         cp pythonScripts/postProcessing.py FWIInstall/
         python postProcessing.py output/
         mkdir test
