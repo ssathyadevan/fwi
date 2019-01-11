@@ -52,8 +52,8 @@ def regressiontest() {
         cd ..
         python postProcessing.py output/
         mkdir test
-        cp parallelized-fwi/tests/regression_data/fast/* test/
-        cp parallelzed-fwi/tests/pythonScripts/* test/
+        cp tests/regression_data/fast/* test/
+        cp tests/testScripts/* test/
         cp input/default.in test/
         cd test
         python regressionTestPreProcessing.py fast default
