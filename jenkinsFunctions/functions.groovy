@@ -50,7 +50,7 @@ def regressiontest() {
         cd ../../pythonScripts
         cp postProcessing.py ../output/
         cd ../output
-        python postProcessing.py output
+        python postProcessing.py 
         mkdir test
         cp parallelized-fwi/tests/regression_data/fast/* test/
         cp parallelzed-fwi/tests/pythonScripts/* test/
