@@ -43,7 +43,7 @@ def regressiontest() {
         echo 'Running regression tests'
         sh '''
         mkdir input output
-        cp parallelized-fwi/inputFile/* /input
+        cp /inputFiles/* /input
         cd FWIInstall/bin
         ./FWI_PreProcess ../input ../output default
         ./FWI_Process ../input ../output default
