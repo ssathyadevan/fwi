@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Script to run regresson tests" #print to screen
+echo "Script to run regresson tests"#print to screen
 cd ../../../../FWIInstall
 mkdir test
 echo "Specify which regression test you want to run: fast, hiquality, varyingSrcRecvData"
