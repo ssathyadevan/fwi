@@ -2,10 +2,9 @@
 
 volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *const pData, Input input)
 {
-    double const1 = normSq(pData,forwardModel_->getInput().freq.nTotal*
-                           forwardModel_->getInput().nSourcesReceivers.rec*
-                           forwardModel_->getInput().nSourcesReceivers.src); // used for eta
-    double eta = 1.0/const1;
+    double eta = 1.0/(normSq(pData,forwardModel_->getInput().freq.nTotal*
+                             forwardModel_->getInput().nSourcesReceivers.rec*
+                             forwardModel_->getInput().nSourcesReceivers.src));//scaling factor eq 2.10 in thesis
     double chiEstRes, randomRes;
 
     volField_rect_2D_cpu chiEst(forwardModel_->getGrid() ),
