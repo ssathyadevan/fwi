@@ -19,7 +19,13 @@ RUN         apt-get update \
                     vim \
                     git \
                     cmake \
-                    libeigen3-dev
+                    qt5-default \
+                    libeigen3-dev \
+                    python2.7-dev \
+                    python2.7 \
+                    python-tk \
+                    python-numpy \
+                    python-matplotlib
 
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git

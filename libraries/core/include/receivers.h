@@ -5,19 +5,19 @@
 #include <vector>
 #include <array>
 
-#include "sources_rect_2D.h"
+#include "sources.h"
 
-class Receivers_rect_2D
+class receivers
 {
 
-    Receivers_rect_2D& operator=(const Receivers_rect_2D&);
+    receivers& operator=(const receivers&);
 
 public:
 
   const int nRecv;
   const std::vector< std::array<double, 2> > xRecv;
 
-  Receivers_rect_2D(const Sources_rect_2D &src);
+  receivers(const sources &src);
 
   void Print();
 

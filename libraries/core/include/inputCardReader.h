@@ -1,7 +1,7 @@
 #ifndef READERVAR
 #define READERVAR
 
-#include "variable_structure.h"
+#include "variableStructure.h"
 
 using namespace std;
   

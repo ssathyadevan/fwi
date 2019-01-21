@@ -5,25 +5,25 @@
 #include <string>
 #include <functional>
 #include <complex>
-#include <grid_rect_2D.h>
-#include <volField_rect_2D.h>
+#include <grid2D.h>
+#include <pressureField.h>
 
-class volComplexField_rect_2D
+class pressureFieldComplex
 {
 
-  const grid_rect_2D &grid;
+  const grid2D &grid;
   const int nGridPoints;
   const double cellVolume;
-  volComplexField_rect_2D(const volComplexField_rect_2D&) = delete;
-  volComplexField_rect_2D& operator=(const volComplexField_rect_2D&) = delete;
+  pressureFieldComplex(const pressureFieldComplex&) = delete;
+  pressureFieldComplex& operator=(const pressureFieldComplex&) = delete;
 
 public:
 
-  volComplexField_rect_2D(const grid_rect_2D &grid_);
+  pressureFieldComplex(const grid2D &grid_);
 
-  virtual ~volComplexField_rect_2D() {}
+  virtual ~pressureFieldComplex() {}
 
-  const grid_rect_2D &GetGrid() const { return grid; }
+  const grid2D &GetGrid() const { return grid; }
 
   int GetNumberOfGridPoints() const { return nGridPoints; }
   double getCellVolume() const { return cellVolume; }

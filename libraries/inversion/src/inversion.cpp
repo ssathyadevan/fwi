@@ -1,6 +1,6 @@
-#include "Inversion.h"
+#include "inversion.h"
 
-double Inversion::findRealRootFromCubic(double a, double b, double c, double d)
+double inversion::findRealRootFromCubic(double a, double b, double c, double d)
 {
     // assuming ax^3 + bx^2 +cx + d and assuming only one real root, which is expected in this algorithm
     // uses Cardano's formula
@@ -19,7 +19,7 @@ double Inversion::findRealRootFromCubic(double a, double b, double c, double d)
 }
 
 
-volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pData, Input input)
+pressureFieldSerial inversion::Reconstruct(const std::complex<double> *const pData, Input input)
 {
     double eta = 1.0/(normSq(pData,forwardModel_->getInput().freq.nTotal*
                              forwardModel_->getInput().nSourcesReceivers.rec*
@@ -32,22 +32,22 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
             forwardModel_->getInput().nSourcesReceivers.rec*
             forwardModel_->getInput().nSourcesReceivers.src;
 
-    volField_rect_2D_cpu chiEst(forwardModel_->getGrid() ),
+    pressureFieldSerial chiEst(forwardModel_->getGrid() ),
             g(forwardModel_->getGrid() ), gOld(forwardModel_->getGrid() ),
             zeta(forwardModel_->getGrid() ); // stays here
-    volComplexField_rect_2D_cpu tmp(forwardModel_->getGrid() ); // eq: integrandForDiscreteK, tmp is the argument of Re()
+    pressureFieldComplexSerial tmp(forwardModel_->getGrid() ); // eq: integrandForDiscreteK, tmp is the argument of Re()
     chiEst.Zero();
 
 
-    volField_rect_2D_cpu **gradientChiOld = new volField_rect_2D_cpu*[2];
-    volField_rect_2D_cpu **gradientGregTmp = new volField_rect_2D_cpu*[2];
-    volField_rect_2D_cpu **gradientZetaTmp = new volField_rect_2D_cpu*[2];
+    pressureFieldSerial **gradientChiOld = new pressureFieldSerial*[2];
+    pressureFieldSerial **gradientGregTmp = new pressureFieldSerial*[2];
+    pressureFieldSerial **gradientZetaTmp = new pressureFieldSerial*[2];
 
     for (int i = 0; i < 2; i++)
     {
-        gradientChiOld[i] = new volField_rect_2D_cpu(forwardModel_->getGrid() );
-        gradientGregTmp[i] = new volField_rect_2D_cpu(forwardModel_->getGrid() );
-        gradientZetaTmp[i] = new volField_rect_2D_cpu(forwardModel_->getGrid() );
+        gradientChiOld[i] = new pressureFieldSerial(forwardModel_->getGrid() );
+        gradientGregTmp[i] = new pressureFieldSerial(forwardModel_->getGrid() );
+        gradientZetaTmp[i] = new pressureFieldSerial(forwardModel_->getGrid() );
     }
 
     // open the file to store the residual log
@@ -119,7 +119,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
         else if (input.doReg == 1)
         {
             double deltasquaredOld = double(0.0);
-            volField_rect_2D_cpu bsquaredOld(forwardModel_->getGrid());
+            pressureFieldSerial bsquaredOld(forwardModel_->getGrid());
             bsquaredOld.Zero();
             double fRegOld = double(1.0);
             double fDataOld = double(0.0);
@@ -162,18 +162,18 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
                 else
                 {
                     chiEst.Gradient(gradientChiOld);
-                    volField_rect_2D_cpu gradientChiOldNormsquared(forwardModel_->getGrid());
+                    pressureFieldSerial gradientChiOldNormsquared(forwardModel_->getGrid());
                     gradientChiOldNormsquared = (*gradientChiOld[0] * *gradientChiOld[0]) + (*gradientChiOld[1] * *gradientChiOld[1]);
 
-                    volField_rect_2D_cpu bsquared = ( gradientChiOldNormsquared + deltasquaredOld );// eq: errorFuncRegulWeighting
+                    pressureFieldSerial bsquared = ( gradientChiOldNormsquared + deltasquaredOld );// eq: errorFuncRegulWeighting
                     bsquared.Reciprocal();
                     bsquared *= (double(1.0) / (forwardModel_->getGrid().GetDomainArea()) );// # eq. 2.22
-                    volField_rect_2D_cpu b = bsquared;
+                    pressureFieldSerial b = bsquared;
                     b.Sqrt();
 
-                    volField_rect_2D_cpu tmpVolField = b * *gradientChiOld[0];
+                    pressureFieldSerial tmpVolField = b * *gradientChiOld[0];
                     tmpVolField.Square();
-                    volField_rect_2D_cpu tmpVolField2 = b * *gradientChiOld[1];
+                    pressureFieldSerial tmpVolField2 = b * *gradientChiOld[1];
                     tmpVolField2.Square();
                     tmpVolField += tmpVolField2;
                     double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared.Summation(); // # eq. 2.23
@@ -185,7 +185,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
                     tmpVolField2.Gradient(gradientGregTmp);
                     tmpVolField2 = *gradientGregTmp[1];
 
-                    volField_rect_2D_cpu gReg = tmpVolField + tmpVolField2;//# eq. 2.24
+                    pressureFieldSerial gReg = tmpVolField + tmpVolField2;//# eq. 2.24
                     tmp.Zero();
                     forwardModel_->calculateKRes(tmp);
                     g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
@@ -248,7 +248,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
 //                        break;
 
                     chiEst.Gradient(gradientChiOld);
-                    volField_rect_2D_cpu gradientChiNormsquared(forwardModel_->getGrid());
+                    pressureFieldSerial gradientChiNormsquared(forwardModel_->getGrid());
                     gradientChiNormsquared = (*gradientChiOld[0] * *gradientChiOld[0]) +
                             (*gradientChiOld[1] * *gradientChiOld[1]);
 
@@ -277,7 +277,7 @@ volField_rect_2D_cpu Inversion::Reconstruct(const std::complex<double> *const pD
     delete[] gradientGregTmp;
     delete[] gradientZetaTmp;
 
-    volField_rect_2D_cpu result(forwardModel_->getGrid());
+    pressureFieldSerial result(forwardModel_->getGrid());
     chiEst.CopyTo(result);
     return result;
 }

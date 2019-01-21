@@ -1,7 +1,7 @@
-#include "grid_rect_2D.h"
+#include "grid2D.h"
 
 
-grid_rect_2D::grid_rect_2D(const std::array<double, 2> &x_min_,
+grid2D::grid2D(const std::array<double, 2> &x_min_,
              const std::array<double, 2> &x_max_,
              const std::array<int, 2> &nx_) :
     x_min(x_min_),

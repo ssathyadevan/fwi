@@ -1,9 +1,9 @@
-#include "receivers_rect_2D.h"
+#include "receivers.h"
 
-Receivers_rect_2D::Receivers_rect_2D(const Sources_rect_2D &src) :
+receivers::receivers(const sources &src) :
     nRecv(src.nSrc), xRecv(src.xSrc) {}
 
-void Receivers_rect_2D::Print()
+void receivers::Print()
 {
     std::cout << "Total number is receivers is " << nRecv << ". Positions:" << std::endl;
     for(int i=0; i<nRecv; i++)

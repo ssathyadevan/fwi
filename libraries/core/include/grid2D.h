@@ -3,7 +3,7 @@
 
 #include <array>
 
-class grid_rect_2D
+class grid2D
 {
 
     const std::array<double, 2> x_min;
@@ -14,11 +14,11 @@ class grid_rect_2D
     int nGridPoints;
     double cellVolume;
 
-    grid_rect_2D &operator=(const grid_rect_2D &);
+    grid2D &operator=(const grid2D &);
 
 public:
 
-    grid_rect_2D(const std::array<double, 2> &x_min_,
+    grid2D(const std::array<double, 2> &x_min_,
                  const std::array<double, 2> &x_max_,
                  const std::array<int, 2> &nx_);
 

@@ -1,4 +1,4 @@
-#include "CsvReader.h"
+#include "csvReader.h"
 
 std::string const& CSVReader::operator[](std::size_t index) const
 {

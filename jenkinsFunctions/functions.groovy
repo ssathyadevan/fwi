@@ -39,6 +39,29 @@ def testAll() {
     '''
 }
 
+def regressiontest() {
+        echo 'Running regression tests'
+        sh '''
+        mkdir input output
+        cp inputFiles/* input/
+        cd FWIInstall/bin
+        ./FWI_PreProcess ../../input/ ../../output/ default
+        ./FWI_Process ../../input/ ../../output/ default
+        cd ../../pythonScripts
+        cp postProcessing.py ../
+        cd ..
+        python postProcessing.py output/
+        mkdir test
+        cp tests/regression_data/fast/* test/
+        cp tests/testScripts/* test/
+        cp input/default.in test/
+        cp output/* test/
+        cd test
+        python regressionTestPreProcessing.py fast default
+        python regressionTestProcessing.py fast default
+        '''
+}
+
 def deploy(){
                 echo 'Deploying'
                 sh '''

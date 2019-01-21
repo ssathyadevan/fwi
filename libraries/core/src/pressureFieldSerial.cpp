@@ -1,31 +1,30 @@
-#include "volField_rect_2D_cpu.h"
+#include "pressureFieldSerial.h"
 
 
-
-volField_rect_2D_cpu::volField_rect_2D_cpu(const grid_rect_2D &grid) :
-    volField_rect_2D(grid),
+pressureFieldSerial::pressureFieldSerial(const grid2D &grid) :
+    pressureField(grid),
     data(new double[this->GetNumberOfGridPoints()]) {}
 
-volField_rect_2D_cpu::volField_rect_2D_cpu(const volField_rect_2D_cpu &rhs) :
-    volField_rect_2D_cpu(rhs.grid)
+pressureFieldSerial::pressureFieldSerial(const pressureFieldSerial &rhs) :
+    pressureFieldSerial(rhs.grid)
 {
 
     memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
 
 }
 
-volField_rect_2D_cpu::~volField_rect_2D_cpu()
+pressureFieldSerial::~pressureFieldSerial()
 {
     delete[] data;
 }
 
 // Virtual overrides
-void volField_rect_2D_cpu::Zero()
+void pressureFieldSerial::Zero()
 {
     memset(data, 0, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void volField_rect_2D_cpu::Random()
+void pressureFieldSerial::Random()
 {
     for(int i=0; i<this->GetGrid().GetNumberOfGridPoints(); i++)
     {
@@ -33,7 +32,7 @@ void volField_rect_2D_cpu::Random()
     }
 }
 
-void volField_rect_2D_cpu::RandomSaurabh()
+void pressureFieldSerial::RandomSaurabh()
 {
     for(int i=0; i<this->GetGrid().GetNumberOfGridPoints(); i++)
     {
@@ -43,17 +42,17 @@ void volField_rect_2D_cpu::RandomSaurabh()
 }
 
 
-void volField_rect_2D_cpu::toBuffer(double *buffer) const
+void pressureFieldSerial::toBuffer(double *buffer) const
 {
     memcpy(buffer, data, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void volField_rect_2D_cpu::fromBuffer(const double *buffer)
+void pressureFieldSerial::fromBuffer(const double *buffer)
 {
     memcpy(data, buffer, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void volField_rect_2D_cpu::toFile(const std::string &fileName) const
+void pressureFieldSerial::toFile(const std::string &fileName) const
 {
     std::ofstream file;
     file.open (fileName, std::ios::out | std::ios::trunc);
@@ -70,7 +69,7 @@ void volField_rect_2D_cpu::toFile(const std::string &fileName) const
     file.close();
 }
 
-void volField_rect_2D_cpu::fromFile(const Input& input)
+void pressureFieldSerial::fromFile(const Input& input)
 {
     std::ifstream file(input.inputCardPath+input.fileName+".txt", std::ios::in);
     if (!file)
@@ -86,7 +85,7 @@ void volField_rect_2D_cpu::fromFile(const Input& input)
     file.close();
 }
 
-void volField_rect_2D_cpu::SetField(const std::function< double(double,double) > func)
+void pressureFieldSerial::SetField(const std::function< double(double,double) > func)
 {
     const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
     const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions();
@@ -103,10 +102,10 @@ void volField_rect_2D_cpu::SetField(const std::function< double(double,double) >
     }
 }
 
-double volField_rect_2D_cpu::Norm() const { return std::sqrt(InnerProduct(*this)); }
-double volField_rect_2D_cpu::RelNorm() const { return std::sqrt(InnerProduct(*this) / this->GetNumberOfGridPoints()); }
+double pressureFieldSerial::Norm() const { return std::sqrt(InnerProduct(*this)); }
+double pressureFieldSerial::RelNorm() const { return std::sqrt(InnerProduct(*this) / this->GetNumberOfGridPoints()); }
 
-void volField_rect_2D_cpu::Square()
+void pressureFieldSerial::Square()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -114,7 +113,7 @@ void volField_rect_2D_cpu::Square()
     }
 }
 
-void volField_rect_2D_cpu::Sqrt()
+void pressureFieldSerial::Sqrt()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -122,14 +121,14 @@ void volField_rect_2D_cpu::Sqrt()
     }
 }
 
-void volField_rect_2D_cpu::Reciprocal() {
+void pressureFieldSerial::Reciprocal() {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] = double(1.0) / data[i];
     }
 }
 
-double volField_rect_2D_cpu::Summation() const
+double pressureFieldSerial::Summation() const
 {
     double result = double(0.0);
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -140,7 +139,7 @@ double volField_rect_2D_cpu::Summation() const
 }
 
 // Non virtual members
-double volField_rect_2D_cpu::InnerProduct(const volField_rect_2D_cpu &y) const
+double pressureFieldSerial::InnerProduct(const pressureFieldSerial &y) const
 {
     assert(&this->GetGrid() == &y.GetGrid());
     double result = double(0.0);
@@ -151,7 +150,7 @@ double volField_rect_2D_cpu::InnerProduct(const volField_rect_2D_cpu &y) const
     return result;
 }
 
-double volField_rect_2D_cpu::Summation(const volField_rect_2D_cpu &rhs) const
+double pressureFieldSerial::Summation(const pressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -164,7 +163,7 @@ double volField_rect_2D_cpu::Summation(const volField_rect_2D_cpu &rhs) const
     return sum;
 }
 
-void volField_rect_2D_cpu::Gradient(volField_rect_2D_cpu **output)
+void pressureFieldSerial::Gradient(pressureFieldSerial **output)
 {
     //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
 
@@ -206,7 +205,7 @@ void volField_rect_2D_cpu::Gradient(volField_rect_2D_cpu **output)
     }
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator=(const volField_rect_2D_cpu& rhs)
+pressureFieldSerial& pressureFieldSerial::operator=(const pressureFieldSerial& rhs)
 {
     if (this != &rhs)
     {
@@ -217,7 +216,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator=(const volField_rect_2D_cpu
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator=(const double rhs)
+pressureFieldSerial& pressureFieldSerial::operator=(const double rhs)
 {
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -227,7 +226,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator=(const double rhs)
 }
 
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator-=(const volField_rect_2D_cpu &rhs)
+pressureFieldSerial& pressureFieldSerial::operator-=(const pressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
@@ -237,7 +236,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator-=(const volField_rect_2D_cp
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator*=(const volField_rect_2D_cpu &rhs)
+pressureFieldSerial& pressureFieldSerial::operator*=(const pressureFieldSerial &rhs)
 {
 
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -248,7 +247,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator*=(const volField_rect_2D_cp
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator/=(const volField_rect_2D_cpu &rhs)
+pressureFieldSerial& pressureFieldSerial::operator/=(const pressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
@@ -261,7 +260,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator/=(const volField_rect_2D_cp
 
 
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator-=(const double rhs)
+pressureFieldSerial& pressureFieldSerial::operator-=(const double rhs)
 {
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -270,7 +269,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator-=(const double rhs)
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator*=(const double rhs)
+pressureFieldSerial& pressureFieldSerial::operator*=(const double rhs)
 {
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -279,7 +278,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator*=(const double rhs)
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator/=(const double rhs)
+pressureFieldSerial& pressureFieldSerial::operator/=(const double rhs)
 {
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -288,12 +287,12 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator/=(const double rhs)
     return *this;
 }
 
-void volField_rect_2D_cpu::CopyTo(volField_rect_2D_cpu &dest)
+void pressureFieldSerial::CopyTo(pressureFieldSerial &dest)
 {
     dest = *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator+=(const volField_rect_2D_cpu &rhs)
+pressureFieldSerial& pressureFieldSerial::operator+=(const pressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
 
@@ -304,7 +303,7 @@ volField_rect_2D_cpu& volField_rect_2D_cpu::operator+=(const volField_rect_2D_cp
     return *this;
 }
 
-volField_rect_2D_cpu& volField_rect_2D_cpu::operator+=(const double rhs)
+pressureFieldSerial& pressureFieldSerial::operator+=(const double rhs)
 {
 
     for (int i = 0; i<this->GetNumberOfGridPoints(); i++)

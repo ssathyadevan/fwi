@@ -1,8 +1,8 @@
 #ifndef FORWARDMODELINTERFACE_H
 #define FORWARDMODELINTERFACE_H
 
-#include "frequencies_group.h"
-#include "GreensFunctions.h"
+#include "frequenciesGroup.h"
+#include "greensFunctions.h"
 #include "calcField.h"
 
 #include <complex>
@@ -31,8 +31,8 @@ class ForwardModelInterface
 {
 
 public:
-    ForwardModelInterface(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
-                          const Frequencies_group &freq, Input input)
+    ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
+                          const frequenciesGroup &freq, Input input)
         : grid(grid), src(src), recv(recv), freq(freq), input(input)
     {
 
@@ -42,37 +42,37 @@ public:
     {
     }
 
-    virtual void calculateData(std::complex<double> *p_data, volField_rect_2D_cpu chi, Iter2 conjGrad) = 0;
+    virtual void calculateData(std::complex<double> *p_data, pressureFieldSerial chi, Iter2 conjGrad) = 0;
 
-    virtual void createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chi_est) = 0;
+    virtual void createTotalField1D(Iter2 conjGrad, pressureFieldSerial chi_est) = 0;
 
-    const grid_rect_2D& getGrid();
+    const grid2D& getGrid();
 
-    const Sources_rect_2D& getSrc();
+    const sources& getSrc();
 
-    const Receivers_rect_2D& getRecv();
+    const receivers& getRecv();
 
-    const Frequencies_group& getFreq();
+    const frequenciesGroup& getFreq();
 
-    virtual void calculateKRes(volComplexField_rect_2D_cpu &kRes) = 0;
+    virtual void calculateKRes(pressureFieldComplexSerial &kRes) = 0;
 
     virtual Input getInput() = 0;
 
     virtual void intermediateForwardModelStep1() = 0;
 
-    virtual void calculateResidual(volField_rect_2D_cpu chi_est, const std::complex<double> *const p_data) = 0;
+    virtual void calculateResidual(pressureFieldSerial chi_est, const std::complex<double> *const p_data) = 0;
 
     virtual std::complex<double>* getResidual() = 0;
 
     virtual double calculateResidualNormSq(double eta) = 0;
 
-    virtual std::complex<double>* intermediateForwardModelStep2(volField_rect_2D_cpu zeta) = 0;
+    virtual std::complex<double>* intermediateForwardModelStep2(pressureFieldSerial zeta) = 0;
 
 protected:
-    const grid_rect_2D& grid;
-    const Sources_rect_2D& src;
-    const Receivers_rect_2D& recv;
-    const Frequencies_group& freq;
+    const grid2D& grid;
+    const sources& src;
+    const receivers& recv;
+    const frequenciesGroup& freq;
 
     const Input input;
 };

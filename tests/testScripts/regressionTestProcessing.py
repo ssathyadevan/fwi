@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
-import sys, os, difflib, filecmp, csv, numpy, matplotlib, shutil, matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+import sys, os, difflib, filecmp, csv, numpy, shutil, matplotlib.pyplot as plt
 from datetime import datetime
 
 tolerance = 0.01

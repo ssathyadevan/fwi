@@ -1,17 +1,17 @@
-#include "volComplexField_rect_2D_cpu.h"
+#include "pressureFieldComplexSerial.h"
 
-volComplexField_rect_2D_cpu::volComplexField_rect_2D_cpu(const volComplexField_rect_2D_cpu &rhs)
-    : volComplexField_rect_2D_cpu(rhs.GetGrid())
+pressureFieldComplexSerial::pressureFieldComplexSerial(const pressureFieldComplexSerial &rhs)
+    : pressureFieldComplexSerial(rhs.GetGrid())
 {
     memcpy(data, rhs.data, this->GetNumberOfGridPoints() * sizeof(std::complex<double>));
 }
 
-volComplexField_rect_2D_cpu::~volComplexField_rect_2D_cpu()
+pressureFieldComplexSerial::~pressureFieldComplexSerial()
 {
     delete[] data;
 }
 
-void volComplexField_rect_2D_cpu::SetField(const std::function< std::complex<double>(double,double) > func)
+void pressureFieldComplexSerial::SetField(const std::function< std::complex<double>(double,double) > func)
 {
     const std::array<int,2> &nx = this->GetGrid().GetGridDimensions();
     //const std::array<T,2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
@@ -32,17 +32,17 @@ void volComplexField_rect_2D_cpu::SetField(const std::function< std::complex<dou
     }
 }
 
-void volComplexField_rect_2D_cpu::toBuffer(std::complex<double> *buffer) const
+void pressureFieldComplexSerial::toBuffer(std::complex<double> *buffer) const
 {
     memcpy(buffer, data, sizeof(std::complex<double>)*this->GetNumberOfGridPoints());
 }
 
-void volComplexField_rect_2D_cpu::fromBuffer(const std::complex<double> *buffer)
+void pressureFieldComplexSerial::fromBuffer(const std::complex<double> *buffer)
 {
     memcpy(data, buffer, sizeof(std::complex<double>)*this->GetNumberOfGridPoints());
 }
 
-void volComplexField_rect_2D_cpu::toFile(const std::string &fileName) const
+void pressureFieldComplexSerial::toFile(const std::string &fileName) const
 {
     std::ofstream file;
     file.open(fileName, std::ios::out | std::ios::trunc);
@@ -59,7 +59,7 @@ void volComplexField_rect_2D_cpu::toFile(const std::string &fileName) const
     file.close();
 }
 
-void volComplexField_rect_2D_cpu::fromFile(const std::string &fileName)
+void pressureFieldComplexSerial::fromFile(const std::string &fileName)
 {
 
     std::ifstream file(fileName, std::ios::in);
@@ -76,28 +76,28 @@ void volComplexField_rect_2D_cpu::fromFile(const std::string &fileName)
 
 }
 
-void volComplexField_rect_2D_cpu::Zero()
+void pressureFieldComplexSerial::Zero()
 {
     memset( data, 0, sizeof(std::complex<double>)*this->GetNumberOfGridPoints() );
 }
 
-void volComplexField_rect_2D_cpu::Square()
+void pressureFieldComplexSerial::Square()
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] *= data[i];}
 }
 
 
-void volComplexField_rect_2D_cpu::Reciprocal()
+void pressureFieldComplexSerial::Reciprocal()
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] = double(1.0)/data[i];}
 }
 
-void volComplexField_rect_2D_cpu::Conjugate()
+void pressureFieldComplexSerial::Conjugate()
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++) {data[i] = std::conj(data[i]);}
 }
 
-void volComplexField_rect_2D_cpu::Random()
+void pressureFieldComplexSerial::Random()
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)
     {
@@ -105,27 +105,27 @@ void volComplexField_rect_2D_cpu::Random()
     }
 }
 
-double volComplexField_rect_2D_cpu::Norm() const
+double pressureFieldComplexSerial::Norm() const
 {
     return std::sqrt( std::real(InnerProduct(*this)) );
 }
 
-double volComplexField_rect_2D_cpu::RelNorm() const
+double pressureFieldComplexSerial::RelNorm() const
 {
     return std::sqrt( std::real(InnerProduct(*this)) ) / this->GetNumberOfGridPoints();
 }
 
-const std::complex<double>* volComplexField_rect_2D_cpu::GetDataPtr() const
+const std::complex<double>* pressureFieldComplexSerial::GetDataPtr() const
 {
     return data;
 }
 
-std::complex<double>* volComplexField_rect_2D_cpu::GetDataPtr()
+std::complex<double>* pressureFieldComplexSerial::GetDataPtr()
 {
     return data;
 }
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const volComplexField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator=(const pressureFieldComplexSerial& rhs)
 {
     if (this != &rhs)
     {
@@ -136,7 +136,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const volCom
     return *this;
 }
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const volField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator=(const pressureFieldSerial& rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     const double *rhs_data = rhs.GetDataPtr();
@@ -144,7 +144,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const volFie
     return *this;
 }
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const double& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator=(const double& rhs)
 {
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] = std::complex<double>(rhs, 0.0);
@@ -152,7 +152,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator=(const double
     return *this;
 }
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator+=(const volComplexField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator+=(const pressureFieldComplexSerial& rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
 
@@ -163,7 +163,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator+=(const volCo
 }
 
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator-=(const volComplexField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator-=(const pressureFieldComplexSerial& rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
@@ -173,7 +173,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator-=(const volCo
 }
 
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const volComplexField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator*=(const pressureFieldComplexSerial& rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
@@ -183,7 +183,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const volCo
 }
 
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const volField_rect_2D_cpu& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator*=(const pressureFieldSerial& rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
 
@@ -195,7 +195,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const volFi
 }
 
 
-volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator+=(const double& rhs)
+pressureFieldComplexSerial & pressureFieldComplexSerial::operator+=(const double& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] += rhs;
@@ -204,7 +204,7 @@ volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator+=(const doub
 }
 
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator-=(const double& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator-=(const double& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] -= rhs;
@@ -212,7 +212,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator-=(const doubl
     return *this;
 }
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const double& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator*=(const double& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] *= rhs;
@@ -221,7 +221,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator*=(const doubl
 }
 
 
-volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator/=(const double& rhs)
+pressureFieldComplexSerial& pressureFieldComplexSerial::operator/=(const double& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] /= rhs;
@@ -230,7 +230,7 @@ volComplexField_rect_2D_cpu& volComplexField_rect_2D_cpu::operator/=(const doubl
 }
 
 
-volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator+=(const std::complex<double>& rhs)
+pressureFieldComplexSerial & pressureFieldComplexSerial::operator+=(const std::complex<double>& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] += rhs;
@@ -239,7 +239,7 @@ volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator+=(const std:
 }
 
 
-volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator-=(const std::complex<double>& rhs)
+pressureFieldComplexSerial & pressureFieldComplexSerial::operator-=(const std::complex<double>& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] -= rhs;
@@ -247,7 +247,7 @@ volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator-=(const std:
     return *this;
 }
 
-volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator*=(const std::complex<double>& rhs)
+pressureFieldComplexSerial & pressureFieldComplexSerial::operator*=(const std::complex<double>& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] *= rhs;
@@ -256,7 +256,7 @@ volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator*=(const std:
 }
 
 
-volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator/=(const std::complex<double>& rhs)
+pressureFieldComplexSerial & pressureFieldComplexSerial::operator/=(const std::complex<double>& rhs)
 {
     for (int i=0; i<this->GetNumberOfGridPoints(); i++)
         data[i] /= rhs;
@@ -265,7 +265,7 @@ volComplexField_rect_2D_cpu & volComplexField_rect_2D_cpu::operator/=(const std:
 }
 
 
-std::complex<double> volComplexField_rect_2D_cpu::InnerProduct(const volComplexField_rect_2D_cpu& rhs) const
+std::complex<double> pressureFieldComplexSerial::InnerProduct(const pressureFieldComplexSerial& rhs) const
 {
     std::complex<double> prod(0.0,0.0);
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -274,7 +274,7 @@ std::complex<double> volComplexField_rect_2D_cpu::InnerProduct(const volComplexF
     return prod;
 }
 
-std::complex<double> volComplexField_rect_2D_cpu::Summation(const volComplexField_rect_2D_cpu& rhs) const
+std::complex<double> pressureFieldComplexSerial::Summation(const pressureFieldComplexSerial& rhs) const
 {
     std::complex<double> sum(0.0,0.0);
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -285,7 +285,7 @@ std::complex<double> volComplexField_rect_2D_cpu::Summation(const volComplexFiel
 }
 
 
-std::complex<double> volComplexField_rect_2D_cpu::Summation(const volField_rect_2D_cpu& rhs) const
+std::complex<double> pressureFieldComplexSerial::Summation(const pressureFieldSerial& rhs) const
 {
     std::complex<double> sum(0.0,0.0);
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -296,10 +296,9 @@ std::complex<double> volComplexField_rect_2D_cpu::Summation(const volField_rect_
     return sum;
 }
 
-
-volField_rect_2D_cpu volComplexField_rect_2D_cpu::GetRealPart() const
+pressureFieldSerial pressureFieldComplexSerial::GetRealPart() const
 {
-    volField_rect_2D_cpu result(this->GetGrid());
+    pressureFieldSerial result(this->GetGrid());
     double *data_ptr = result.GetDataPtr();
 
     for(int i=0; i<this->GetNumberOfGridPoints(); i++)

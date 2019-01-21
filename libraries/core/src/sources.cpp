@@ -1,6 +1,6 @@
-#include "sources_rect_2D.h"
+#include "sources.h"
 // Place the sources on a linear line from xMin to xMax, including the end points
-Sources_rect_2D::Sources_rect_2D(const std::array<double, 2> xMin,
+sources::sources(const std::array<double, 2> xMin,
                                  const std::array<double, 2> xMax, int nSrc_):
     nSrc(nSrc_), xSrc()
 {
@@ -24,7 +24,7 @@ Sources_rect_2D::Sources_rect_2D(const std::array<double, 2> xMin,
     }
 }
 
-void Sources_rect_2D::Print()
+void sources::Print()
 {
     std::cout << "Total number is sources is " << nSrc << ". Positions:" << std::endl;
     for(int i=0; i<nSrc; i++)

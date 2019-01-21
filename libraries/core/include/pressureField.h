@@ -4,31 +4,30 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <grid2D.h>
 
-#include <grid_rect_2D.h>
-
-class volField_rect_2D
+class pressureField
 {
 
 protected:
 
-    const grid_rect_2D &grid;
+    const grid2D &grid;
     const int nGridPoints;
     const double cellVolume;
 
-    volField_rect_2D(const volField_rect_2D&) = delete;
-    volField_rect_2D& operator=(const volField_rect_2D&) = delete;
+    pressureField(const pressureField&) = delete;
+    pressureField& operator=(const pressureField&) = delete;
 
 public:
 
-    volField_rect_2D(const grid_rect_2D &grid_) :
+    pressureField(const grid2D &grid_) :
         grid(grid_),
         nGridPoints(grid.GetNumberOfGridPoints()),
         cellVolume(grid.GetCellVolume()) {}
 
-    virtual ~volField_rect_2D() {}
+    virtual ~pressureField() {}
 
-    const grid_rect_2D &GetGrid() const { return grid; }
+    const grid2D &GetGrid() const { return grid; }
 
     int GetNumberOfGridPoints() const { return nGridPoints; }
     double getCellVolume() const { return cellVolume; }

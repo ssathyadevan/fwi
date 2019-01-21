@@ -1,8 +1,8 @@
 #include "forwardModel.h"
 
 
-ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src, const Receivers_rect_2D &recv,
-                           const Frequencies_group &freq, Input input)
+forwardModel::forwardModel(const grid2D &grid, const sources &src, const receivers &recv,
+                           const frequenciesGroup &freq, Input input)
     : ForwardModelInterface (grid, src, recv, freq, input),
       greens(), p0(), pTot()
 {
@@ -15,24 +15,24 @@ ForwardModel::ForwardModel(const grid_rect_2D &grid, const Sources_rect_2D &src,
     this->createP0();
 
     // initialize kappa
-    Kappa = new volComplexField_rect_2D_cpu*[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
+    Kappa = new pressureFieldComplexSerial*[input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src];
     for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
     {
-        Kappa[i] = new volComplexField_rect_2D_cpu(grid);
+        Kappa[i] = new pressureFieldComplexSerial(grid);
     }
 
     // initialize p_tot1D
-    pTot1D = new volComplexField_rect_2D_cpu*[input.freq.nTotal*input.nSourcesReceivers.src];
+    pTot1D = new pressureFieldComplexSerial*[input.freq.nTotal*input.nSourcesReceivers.src];
     int li;
     for (int i=0; i<input.freq.nTotal; i++)
     {
         li = i*input.nSourcesReceivers.src;
         for (int j=0; j<input.nSourcesReceivers.src;j++)
-            pTot1D[li + j] = new volComplexField_rect_2D_cpu(*p0[i][j]); // p_tot1D is initialized to p_0 (section 3.3.3 of the report)
+            pTot1D[li + j] = new pressureFieldComplexSerial(*p0[i][j]); // p_tot1D is initialized to p_0 (section 3.3.3 of the report)
     }
 }
 
-ForwardModel::~ForwardModel()
+forwardModel::~forwardModel()
 {
     if (this->greens!=nullptr)
         this->deleteGreens();
@@ -54,7 +54,7 @@ ForwardModel::~ForwardModel()
     pTot1D = nullptr;
 }
 
-void ForwardModel::createGreens()
+void forwardModel::createGreens()
 {
     greens = new Greens_rect_2D_cpu*[input.freq.nTotal];
 
@@ -64,7 +64,7 @@ void ForwardModel::createGreens()
     }
 }
 
-void ForwardModel::deleteGreens()
+void forwardModel::deleteGreens()
 {
     for (int i=0; i<input.freq.nTotal; i++)
         delete greens[i];
@@ -72,26 +72,26 @@ void ForwardModel::deleteGreens()
     greens = nullptr;
 }
 
-void ForwardModel::createP0()
+void forwardModel::createP0()
 {
     assert(greens != nullptr);
     assert(p0 == nullptr);
 
-    p0 = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
+    p0 = new pressureFieldComplexSerial**[input.freq.nTotal];
 
     for (int i=0; i<input.freq.nTotal; i++)
     {
-        p0[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
+        p0[i] = new pressureFieldComplexSerial*[input.nSourcesReceivers.src];
 
         for (int j=0; j<input.nSourcesReceivers.src; j++)
         {
-            p0[i][j] = new volComplexField_rect_2D_cpu(grid);
+            p0[i][j] = new pressureFieldComplexSerial(grid);
             *p0[i][j] = *( greens[i]->GetReceiverCont(j) ) / (freq.k[i] * freq.k[i] * grid.GetCellVolume());
         }
     }
 }
 
-void ForwardModel::deleteP0()
+void forwardModel::deleteP0()
 {
     for (int i=0; i<input.freq.nTotal; i++)
     {
@@ -104,7 +104,7 @@ void ForwardModel::deleteP0()
     p0 = nullptr;
 }
 
-void ForwardModel::deleteTotalField()
+void forwardModel::deleteTotalField()
 {
     for (int i=0; i<input.freq.nTotal; i++)
     {
@@ -117,7 +117,7 @@ void ForwardModel::deleteTotalField()
     pTot = nullptr;
 }
 
-void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_cpu chi, Iter2 conjGrad )
+void forwardModel::calculateData(std::complex<double> *pData, pressureFieldSerial chi, Iter2 conjGrad )
 {
     this->createTotalField(conjGrad, chi);
     int li, lj;
@@ -135,16 +135,16 @@ void ForwardModel::calculateData(std::complex<double> *pData, volField_rect_2D_c
     }
 }
 
-void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
+void forwardModel::createTotalField(Iter2 conjGrad, pressureFieldSerial chi)
 {
     assert(this->greens != nullptr);
     assert(this->p0 != nullptr);
     assert(this->pTot == nullptr);
 
-    this->pTot = new volComplexField_rect_2D_cpu**[input.freq.nTotal];
+    this->pTot = new pressureFieldComplexSerial**[input.freq.nTotal];
         for (int i=0; i<this->input.freq.nTotal; i++)
     {
-        this->pTot[i] = new volComplexField_rect_2D_cpu*[input.nSourcesReceivers.src];
+        this->pTot[i] = new pressureFieldComplexSerial*[input.nSourcesReceivers.src];
 
         std::cout << "  " << std::endl;
         std::cout << "Creating this->p_tot for " << i+1 << "/ " << input.freq.nTotal << "freq" << std::endl;
@@ -152,7 +152,7 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
 
         for (int j=0; j<this->input.nSourcesReceivers.src; j++)
         {
-            this->pTot[i][j] = new volComplexField_rect_2D_cpu(this->grid);
+            this->pTot[i][j] = new pressureFieldComplexSerial(this->grid);
             *this->pTot[i][j] = calcField(*this->greens[i], chi, *this->p0[i][j], conjGrad);
         }
 
@@ -162,7 +162,7 @@ void ForwardModel::createTotalField(Iter2 conjGrad, volField_rect_2D_cpu chi)
 
 }
 
-void ForwardModel::createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chiEst)
+void forwardModel::createTotalField1D(Iter2 conjGrad, pressureFieldSerial chiEst)
 {
     int l_i;
     for (int i=0; i<input.freq.nTotal; i++)
@@ -178,13 +178,13 @@ void ForwardModel::createTotalField1D(Iter2 conjGrad, volField_rect_2D_cpu chiEs
     }
 }
 
-Input ForwardModel::getInput()
+Input forwardModel::getInput()
 {
     return input;
 }
 
 
-void ForwardModel::calculateKappa()
+void forwardModel::calculateKappa()
 {
     int li, lj;
 
@@ -202,13 +202,13 @@ void ForwardModel::calculateKappa()
     }
 }
 
-void ForwardModel::intermediateForwardModelStep1()
+void forwardModel::intermediateForwardModelStep1()
 {
     this->calculateKappa();
 }
 
 
-void ForwardModel::calculateResidual(volField_rect_2D_cpu chiEst, const std::complex<double> *const pData)
+void forwardModel::calculateResidual(pressureFieldSerial chiEst, const std::complex<double> *const pData)
 {
     for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
     {
@@ -216,17 +216,17 @@ void ForwardModel::calculateResidual(volField_rect_2D_cpu chiEst, const std::com
     }
 }
 
-std::complex<double>* ForwardModel::getResidual()
+std::complex<double>* forwardModel::getResidual()
 {
     return residual;
 }
 
-double ForwardModel::calculateResidualNormSq(double eta)
+double forwardModel::calculateResidualNormSq(double eta)
 {
     return eta*normSq(residual,input.nSourcesReceivers.rec*input.nSourcesReceivers.src*input.freq.nTotal);
 }
 
-void ForwardModel::calculateKZeta(volField_rect_2D_cpu zeta)
+void forwardModel::calculateKZeta(pressureFieldSerial zeta)
 {
     for (int i = 0; i < input.freq.nTotal*input.nSourcesReceivers.rec*input.nSourcesReceivers.src; i++)
     {
@@ -234,17 +234,17 @@ void ForwardModel::calculateKZeta(volField_rect_2D_cpu zeta)
     }
 }
 
-std::complex<double>* ForwardModel::intermediateForwardModelStep2(volField_rect_2D_cpu zeta)
+std::complex<double>* forwardModel::intermediateForwardModelStep2(pressureFieldSerial zeta)
 {
     calculateKZeta(zeta);
     return kZeta;
 }
 
-void ForwardModel::calculateKRes(volComplexField_rect_2D_cpu &kRes)
+void forwardModel::calculateKRes(pressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
     kRes.Zero();
-    volComplexField_rect_2D_cpu kDummy(this->getGrid());
+    pressureFieldComplexSerial kDummy(this->getGrid());
 
     for (int i = 0; i < this->getInput().freq.nTotal; i++)
     {
