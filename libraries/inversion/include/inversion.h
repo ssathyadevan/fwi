@@ -9,26 +9,26 @@ using std::cout;
 using std::endl;
 
 
-class Inversion : public InversionInterface
+class inversion : public inversionInterface
 {
 private:
     ForwardModelInterface *forwardModel_;
 
 public:
-    Inversion(const Inversion&) = delete;
-    Inversion& operator=(const Inversion&) = delete;
+    inversion(const inversion&) = delete;
+    inversion& operator=(const inversion&) = delete;
 
-    Inversion(ForwardModelInterface *forwardModel)
+    inversion(ForwardModelInterface *forwardModel)
     {
         forwardModel_ = forwardModel;
     }
 
-    ~Inversion()
+    ~inversion()
     {
     }
 
     double findRealRootFromCubic(double a, double b, double c, double d);
-    volField_rect_2D_cpu Reconstruct(const std::complex<double> *const pData, Input input);
+    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, Input input);
 };
 
 #endif // INVERSION_CPU

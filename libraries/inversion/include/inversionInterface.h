@@ -3,16 +3,16 @@
 
 #include "calcField.h"
 
-class InversionInterface
+class inversionInterface
 {
 
 public:
-    InversionInterface() {}
-    virtual ~InversionInterface()
+    inversionInterface() {}
+    virtual ~inversionInterface()
     {
     }
 
-    virtual volField_rect_2D_cpu Reconstruct(const std::complex<double> *const p_data, Input input) = 0;
+    virtual pressureFieldSerial Reconstruct(const std::complex<double> *const p_data, Input input) = 0;
 };
 
 #endif

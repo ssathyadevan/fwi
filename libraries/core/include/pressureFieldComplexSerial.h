@@ -2,9 +2,9 @@
 #define COLCOMPLEXFIELD_RECT_2D_CPU_H
 
 
-#include "volComplexField_rect_2D.h"
-#include "grid_rect_2D.h"
-#include "volField_rect_2D_cpu.h"
+#include "pressureFieldComplex.h"
+#include "grid2D.h"
+#include "pressureFieldSerial.h"
 
 #include <iostream>
 #include <complex>
@@ -15,19 +15,19 @@
 #include <string>
 
 
-class volComplexField_rect_2D_cpu : public volComplexField_rect_2D
+class pressureFieldComplexSerial : public pressureFieldComplex
 {
 private:
     std::complex<double> * const data;
 
 public:
-    volComplexField_rect_2D_cpu(const grid_rect_2D &grid)
-        : volComplexField_rect_2D(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
+    pressureFieldComplexSerial(const grid2D &grid)
+        : pressureFieldComplex(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
     {}
 
-    volComplexField_rect_2D_cpu(const volComplexField_rect_2D_cpu &rhs);
+    pressureFieldComplexSerial(const pressureFieldComplexSerial &rhs);
 
-    virtual ~volComplexField_rect_2D_cpu();
+    virtual ~pressureFieldComplexSerial();
 
     virtual void SetField(const std::function< std::complex<double>(double,double) > func);
 
@@ -57,102 +57,102 @@ public:
 
     std::complex<double>* GetDataPtr();
 
-    volComplexField_rect_2D_cpu& operator=(const volComplexField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator=(const pressureFieldComplexSerial& rhs);
 
-    volComplexField_rect_2D_cpu& operator=(const volField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator=(const pressureFieldSerial& rhs);
 
-    volComplexField_rect_2D_cpu& operator=(const double& rhs);
+    pressureFieldComplexSerial& operator=(const double& rhs);
 
-    volComplexField_rect_2D_cpu& operator+=(const volComplexField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator+=(const pressureFieldComplexSerial& rhs);
 
-    volComplexField_rect_2D_cpu& operator-=(const volComplexField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator-=(const pressureFieldComplexSerial& rhs);
 
-    volComplexField_rect_2D_cpu& operator*=(const volComplexField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator*=(const pressureFieldComplexSerial& rhs);
 
-    volComplexField_rect_2D_cpu& operator*=(const volField_rect_2D_cpu& rhs);
+    pressureFieldComplexSerial& operator*=(const pressureFieldSerial& rhs);
 
-    volComplexField_rect_2D_cpu & operator+=(const double& rhs);
+    pressureFieldComplexSerial & operator+=(const double& rhs);
 
-    volComplexField_rect_2D_cpu& operator-=(const double& rhs);
+    pressureFieldComplexSerial& operator-=(const double& rhs);
 
-    volComplexField_rect_2D_cpu& operator*=(const double& rhs);
+    pressureFieldComplexSerial& operator*=(const double& rhs);
 
-    volComplexField_rect_2D_cpu& operator/=(const double& rhs);
+    pressureFieldComplexSerial& operator/=(const double& rhs);
 
-    volComplexField_rect_2D_cpu & operator+=(const std::complex<double>& rhs);
+    pressureFieldComplexSerial & operator+=(const std::complex<double>& rhs);
 
-    volComplexField_rect_2D_cpu & operator-=(const std::complex<double>& rhs);
+    pressureFieldComplexSerial & operator-=(const std::complex<double>& rhs);
 
-    volComplexField_rect_2D_cpu & operator*=(const std::complex<double>& rhs);
+    pressureFieldComplexSerial & operator*=(const std::complex<double>& rhs);
 
-    volComplexField_rect_2D_cpu & operator/=(const std::complex<double>& rhs);
+    pressureFieldComplexSerial & operator/=(const std::complex<double>& rhs);
 
-    std::complex<double> InnerProduct(const volComplexField_rect_2D_cpu& rhs) const;
+    std::complex<double> InnerProduct(const pressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const volComplexField_rect_2D_cpu& rhs) const;
+    std::complex<double> Summation(const pressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const volField_rect_2D_cpu& rhs) const;
+    std::complex<double> Summation(const pressureFieldSerial& rhs) const;
 
-    volField_rect_2D_cpu GetRealPart() const;
+    pressureFieldSerial GetRealPart() const;
 };
 
 
-inline std::complex<double> InnerProduct(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
+inline std::complex<double> InnerProduct(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
 {
     return t1.InnerProduct(t2);
 }
 
-inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
+inline std::complex<double> Summation(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
 {
     return t1.Summation(t2);
 }
 
-inline std::complex<double> Summation(const volComplexField_rect_2D_cpu &t1, const volField_rect_2D_cpu &t2)
+inline std::complex<double> Summation(const pressureFieldComplexSerial &t1, const pressureFieldSerial &t2)
 {
     return t1.Summation(t2);
 }
 
-inline volComplexField_rect_2D_cpu operator-(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
+inline pressureFieldComplexSerial operator-(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
 {
-    volComplexField_rect_2D_cpu t3(t1);
+    pressureFieldComplexSerial t3(t1);
     t3 -= t2;
     return t3;
 }
 
-inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const volField_rect_2D_cpu &t2)
+inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const pressureFieldSerial &t2)
 {
-    volComplexField_rect_2D_cpu t3(t1);
+    pressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
+inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
 {
-    volComplexField_rect_2D_cpu t3(t1);
+    pressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline volComplexField_rect_2D_cpu operator*(const volField_rect_2D_cpu &t1, const volComplexField_rect_2D_cpu &t2)
+inline pressureFieldComplexSerial operator*(const pressureFieldSerial &t1, const pressureFieldComplexSerial &t2)
 {
     return t2*t1;
 }
 
-inline volComplexField_rect_2D_cpu operator*(const volComplexField_rect_2D_cpu &t1, const std::complex<double> &t2)
+inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const std::complex<double> &t2)
 {
-    volComplexField_rect_2D_cpu t3(t1);
+    pressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline volComplexField_rect_2D_cpu operator*(const std::complex<double> &t1, const volComplexField_rect_2D_cpu &t2)
+inline pressureFieldComplexSerial operator*(const std::complex<double> &t1, const pressureFieldComplexSerial &t2)
 {
     return t2*t1;
 }
 
-inline volComplexField_rect_2D_cpu operator/(const volComplexField_rect_2D_cpu &t1, const double &t2)
+inline pressureFieldComplexSerial operator/(const pressureFieldComplexSerial &t1, const double &t2)
 {
-    volComplexField_rect_2D_cpu t3(t1);
+    pressureFieldComplexSerial t3(t1);
     t3 /= t2;
     return t3;
 }

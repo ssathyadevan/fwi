@@ -1,4 +1,4 @@
-#include "GreensFunctions.h"
+#include "greensFunctions.h"
 
 float Helmholtz2D_real(float k, float r)
 {

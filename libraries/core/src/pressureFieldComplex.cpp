@@ -1,6 +1,6 @@
-#include "volComplexField_rect_2D.h"
+#include "pressureFieldComplex.h"
 
-volComplexField_rect_2D::volComplexField_rect_2D(const grid_rect_2D &grid_) :
+pressureFieldComplex::pressureFieldComplex(const grid2D &grid_) :
   grid(grid_),
   nGridPoints(grid.GetNumberOfGridPoints()),
   cellVolume(grid.GetCellVolume()) {}

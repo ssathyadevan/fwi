@@ -1,8 +1,8 @@
 #ifndef VOLFIELD_RECT_2D_CPU_H
 #define VOLFIELD_RECT_2D_CPU_H
-#include "volField_rect_2D.h"
-#include "variable_structure.h"
-
+#include "pressureField.h"
+#include "variableStructure.h"
+#include "grid2D.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -13,18 +13,18 @@
 #include <string.h>
 
 
-class volField_rect_2D_cpu : public volField_rect_2D
+class pressureFieldSerial : public pressureField
 {
 
     double * const data;
 
 public:
 
-    volField_rect_2D_cpu(const grid_rect_2D &grid);
+    pressureFieldSerial(const grid2D &grid);
 
-    volField_rect_2D_cpu(const volField_rect_2D_cpu &rhs);
+    pressureFieldSerial(const pressureFieldSerial &rhs);
 
-    virtual ~volField_rect_2D_cpu();
+    virtual ~pressureFieldSerial();
 
     // Virtual overrides
     virtual void Zero();
@@ -49,74 +49,74 @@ public:
     virtual double Summation() const;
 
     // Non virtual members
-    double InnerProduct(const volField_rect_2D_cpu &y) const;
-    double Summation(const volField_rect_2D_cpu &rhs) const;
-    void Gradient(volField_rect_2D_cpu **output);
+    double InnerProduct(const pressureFieldSerial &y) const;
+    double Summation(const pressureFieldSerial &rhs) const;
+    void Gradient(pressureFieldSerial **output);
 
-    volField_rect_2D_cpu& operator=(const volField_rect_2D_cpu& rhs);
-    volField_rect_2D_cpu& operator=(const double rhs);
-    volField_rect_2D_cpu& operator-=(const volField_rect_2D_cpu &rhs);
-    volField_rect_2D_cpu& operator*=(const volField_rect_2D_cpu &rhs);
-    volField_rect_2D_cpu& operator/=(const volField_rect_2D_cpu &rhs);
-    volField_rect_2D_cpu& operator-=(const double rhs);
-    volField_rect_2D_cpu& operator*=(const double rhs);
-    volField_rect_2D_cpu& operator/=(const double rhs);
+    pressureFieldSerial& operator=(const pressureFieldSerial& rhs);
+    pressureFieldSerial& operator=(const double rhs);
+    pressureFieldSerial& operator-=(const pressureFieldSerial &rhs);
+    pressureFieldSerial& operator*=(const pressureFieldSerial &rhs);
+    pressureFieldSerial& operator/=(const pressureFieldSerial &rhs);
+    pressureFieldSerial& operator-=(const double rhs);
+    pressureFieldSerial& operator*=(const double rhs);
+    pressureFieldSerial& operator/=(const double rhs);
 
     const double *GetDataPtr() const { return data; }
     double *GetDataPtr() { return data; }
 
-    void CopyTo(volField_rect_2D_cpu &dest);
+    void CopyTo(pressureFieldSerial &dest);
 
 
-    volField_rect_2D_cpu& operator+=(const volField_rect_2D_cpu &rhs);
+    pressureFieldSerial& operator+=(const pressureFieldSerial &rhs);
 
-    volField_rect_2D_cpu& operator+=(const double rhs);
+    pressureFieldSerial& operator+=(const double rhs);
 
 };
 
-inline double InnerProduct(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+inline double InnerProduct(const pressureFieldSerial &x, const pressureFieldSerial &y)
 {
     return x.InnerProduct(y);
 }
 
-inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+inline pressureFieldSerial operator+(const pressureFieldSerial &x, const pressureFieldSerial &y)
 {
-    volField_rect_2D_cpu result(x);
+    pressureFieldSerial result(x);
     result += y;
     return result;
 }
 
-inline volField_rect_2D_cpu operator+(const volField_rect_2D_cpu& x, const double y)
+inline pressureFieldSerial operator+(const pressureFieldSerial& x, const double y)
 {
-    volField_rect_2D_cpu result(x);
+    pressureFieldSerial result(x);
     result += y;
     return result;
 }
 
-inline volField_rect_2D_cpu operator-(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+inline pressureFieldSerial operator-(const pressureFieldSerial &x, const pressureFieldSerial &y)
 {
-    volField_rect_2D_cpu result(x);
+    pressureFieldSerial result(x);
     result -= y;
     return result;
 }
 
-inline volField_rect_2D_cpu operator*(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+inline pressureFieldSerial operator*(const pressureFieldSerial &x, const pressureFieldSerial &y)
 {
-    volField_rect_2D_cpu result(x);
+    pressureFieldSerial result(x);
     result *= y;
     return result;
 }
 
-inline volField_rect_2D_cpu operator*(const double x, const volField_rect_2D_cpu &y)
+inline pressureFieldSerial operator*(const double x, const pressureFieldSerial &y)
 {
-    volField_rect_2D_cpu result(y);
+    pressureFieldSerial result(y);
     result *= x;
     return result;
 }
 
-inline volField_rect_2D_cpu operator/(const volField_rect_2D_cpu &x, const volField_rect_2D_cpu &y)
+inline pressureFieldSerial operator/(const pressureFieldSerial &x, const pressureFieldSerial &y)
 {
-    volField_rect_2D_cpu result(x);
+    pressureFieldSerial result(x);
     result /= y;
     return result;
 }

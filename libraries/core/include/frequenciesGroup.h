@@ -1,7 +1,7 @@
 #ifndef FREQUENCIES_GROUP_H
 #define FREQUENCIES_GROUP_H
 
-#include "variable_structure.h"
+#include "variableStructure.h"
 
 #include <cassert>
 #include <iostream>
@@ -9,10 +9,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-class Frequencies_group
+class frequenciesGroup
 {
 
-    Frequencies_group operator=(const Frequencies_group&);
+    frequenciesGroup operator=(const frequenciesGroup&);
 
 public:
 
@@ -21,7 +21,7 @@ public:
   std::vector<double> freq;
   std::vector<double> k;
 
-  Frequencies_group(Freq freqStruct, double c_0_);
+  frequenciesGroup(Freq freqStruct, double c_0_);
 
   void Print(int nFreqTotal);
 };
