@@ -21,16 +21,15 @@ double inversion::findRealRootFromCubic(double a, double b, double c, double d)
 
 pressureFieldSerial inversion::Reconstruct(const std::complex<double> *const pData, Input input)
 {
-    double eta = 1.0/(normSq(pData,forwardModel_->getInput().freq.nTotal*
-                             forwardModel_->getInput().nSourcesReceivers.rec*
-                             forwardModel_->getInput().nSourcesReceivers.src));//scaling factor eq 2.10 in thesis
-    double gamma, alpha, res;
-
-    std::array<double,2> alphaDiv;
 
     const int nTotal = forwardModel_->getInput().freq.nTotal*
             forwardModel_->getInput().nSourcesReceivers.rec*
             forwardModel_->getInput().nSourcesReceivers.src;
+    double eta = 1.0/(normSq(pData, nTotal));//scaling factor eq 2.10 in thesis
+    double gamma, alpha, res;
+
+    std::array<double,2> alphaDiv;
+
 
     pressureFieldSerial chiEst(forwardModel_->getGrid() ),
             g(forwardModel_->getGrid() ), gOld(forwardModel_->getGrid() ),
@@ -155,7 +154,6 @@ pressureFieldSerial inversion::Reconstruct(const std::complex<double> *const pDa
 
                     file << std::setprecision(17) << res << "," << counter << std::endl;
                     counter++;// store the residual value in the residual log
-
                     fDataOld = res;
                     vecResFirstIter.push_back(res);
                 }

@@ -1,13 +1,14 @@
-#include "InversionRandom.h"
+#include "inversionRandom.h"
 
-volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *const pData, Input input)
+pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *const pData, Input input)
 {
-    double eta = 1.0/(normSq(pData,forwardModel_->getInput().freq.nTotal*
-                             forwardModel_->getInput().nSourcesReceivers.rec*
-                             forwardModel_->getInput().nSourcesReceivers.src));//scaling factor eq 2.10 in thesis
+    const int nTotal = forwardModel_->getInput().freq.nTotal*
+            forwardModel_->getInput().nSourcesReceivers.rec*
+            forwardModel_->getInput().nSourcesReceivers.src;
+    double eta = 1.0/(normSq(pData,nTotal));//scaling factor eq 2.10 in thesis
     double chiEstRes, randomRes;
 
-    volField_rect_2D_cpu chiEst(forwardModel_->getGrid() ),
+    pressureFieldSerial chiEst(forwardModel_->getGrid() ),
             g(forwardModel_->getGrid() ), gOld(forwardModel_->getGrid() ),
             zeta(forwardModel_->getGrid() ); // stays here
 
@@ -36,7 +37,7 @@ volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *co
             for (int it1=0; it1 < input.iter1.n; it1++)
             {
 
-                    volField_rect_2D_cpu tempRandomChi(forwardModel_->getGrid());
+                    pressureFieldSerial tempRandomChi(forwardModel_->getGrid());
                     tempRandomChi.RandomSaurabh();
                     forwardModel_->calculateResidual(tempRandomChi, pData);
                     randomRes = forwardModel_->calculateResidualNormSq(eta);
@@ -68,7 +69,7 @@ volField_rect_2D_cpu InversionRandom::Reconstruct(const std::complex<double> *co
     }
     file.close(); // close the residual.log file
 
-    volField_rect_2D_cpu result(forwardModel_->getGrid());
+    pressureFieldSerial result(forwardModel_->getGrid());
     chiEst.CopyTo(result);
     return result;
 }

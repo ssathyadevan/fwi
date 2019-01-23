@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-#include "Inversion.h"
-#include "InversionRandom.h"
-=======
+
+
+#include "inversionRandom.h"
 #include "inversion.h"
->>>>>>> RefactorCodeClarification
+
 #include "inputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
@@ -78,13 +77,13 @@ void performInversion(const Input& input)
     ForwardModelInterface *model;
     model = new forwardModel(grid, src, recv, freqg, input);
 
-<<<<<<< HEAD
-    InversionInterface *inverse;
-    inverse = new InversionRandom(forwardModel);
-=======
+
     inversionInterface *inverse;
-    inverse = new inversion(model);
->>>>>>> RefactorCodeClarification
+    inverse = new inversionRandom(model);
+
+//    inversionInterface *inverse;
+//    inverse = new inversion(model);
+
 
     std::cout << "Estimating Chi..." << std::endl;
 
