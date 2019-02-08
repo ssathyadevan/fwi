@@ -26,7 +26,7 @@ preProcess_run_csv_exists = os.path.isfile(preProcess_run_csv)
 if preProcess_ref_csv_exists:
     print("Your benchmark file exists")
 else:
-    print("Your benchmark does not exist")
+    print("Your benchmark does not exist. Please run the FWI scripts and refer the benchmark argument to the output")
     sys.exit()
 
 if preProcess_run_csv_exists:

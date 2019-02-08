@@ -1,6 +1,6 @@
 
 
-
+#include "inversionRandom.h"
 #include "inversion.h"
 #include "inputCardReader.h"
 #include "utilityFunctions.h"
@@ -77,9 +77,11 @@ void performInversion(const Input& input)
     model = new forwardModel(grid, src, recv, freqg, input);
 
 
-
     inversionInterface *inverse;
-    inverse = new inversion(model);
+    inverse = new inversionRandom(model);
+
+//    inversionInterface *inverse;
+//    inverse = new inversion(model);
 
 
     std::cout << "Estimating Chi..." << std::endl;
