@@ -6,3 +6,7 @@ src/chi\.txt
 src/temple_result\.png
 
 *.user
+googletest-master/
+doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.synctex.gz
+doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.aux
+doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.log
