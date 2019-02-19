@@ -1,4 +1,5 @@
-#ifndef DELTAAMPLIFICATION_H
-#define DELTAAMPLIFICATION_H
-
-#endif // DELTAAMPLIFICATION_H
+#pragma once
+struct DeltaAmplification
+{
+    double start; double slope;
+};

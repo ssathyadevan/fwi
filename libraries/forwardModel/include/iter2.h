@@ -1,4 +1,8 @@
-#ifndef ITER2_H
-#define ITER2_H
+#pragma once
 
-#endif // ITER2_H
+struct Iter2
+{
+    int n;
+    double tolerance;
+    bool calcAlpha;
+};

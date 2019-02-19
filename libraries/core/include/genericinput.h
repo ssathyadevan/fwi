@@ -1,4 +1,0 @@
-#ifndef GENERICINPUT_H
-#define GENERICINPUT_H
-
-#endif // GENERICINPUT_H

@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 #include "greensSerial.h"
 #include "pressureFieldComplexSerial.h"
-#include "variableStructure.h"
+#include "iter2.h"
 
 #include <complex>
 #include <vector>

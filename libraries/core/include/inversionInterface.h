@@ -8,9 +8,7 @@ class inversionInterface
 
 public:
     inversionInterface() {}
-    virtual ~inversionInterface()
-    {
-    }
+    virtual ~inversionInterface() = default;
 
     virtual pressureFieldSerial Reconstruct(const std::complex<double> *const p_data, Input input) = 0;
 };

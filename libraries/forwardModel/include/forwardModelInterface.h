@@ -4,7 +4,7 @@
 #include "frequenciesGroup.h"
 #include "greensFunctions.h"
 #include "calcField.h"
-
+#include "forwardModelInput.h"
 #include <complex>
 
 inline double normSq(const std::complex<double> *data, int n)
@@ -32,8 +32,8 @@ class ForwardModelInterface
 
 public:
     ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq, Input input)
-        : grid(grid), src(src), recv(recv), freq(freq), input(input)
+                          const frequenciesGroup &freq, genericInput gInput, forwardModelInput fmInput)
+        : grid(grid), src(src), recv(recv), freq(freq), gInput(gInput),fmInput(fmInput)
     {
 
     }
@@ -56,7 +56,7 @@ public:
 
     virtual void calculateKRes(pressureFieldComplexSerial &kRes) = 0;
 
-    virtual Input getInput() = 0;
+    virtual forwardModelInput getInput() = 0;
 
     virtual void intermediateForwardModelStep1() = 0;
 
@@ -73,8 +73,8 @@ protected:
     const sources& src;
     const receivers& recv;
     const frequenciesGroup& freq;
-
-    const Input input;
+    const genericInput gInput;
+    const forwardModelInput fmInput;
 };
 
 #endif
