@@ -79,10 +79,10 @@ void performInversion(const Input& input)
 
 
     inversionInterface *inverse;
-    inverse = new inversionRandom(model);
+//    inverse = new inversionRandom(model);
 
 //    inversionInterface *inverse;
-//    inverse = new inversion(model);
+      inverse = new inversion(model);
 
 
     std::cout << "Estimating Chi..." << std::endl;
