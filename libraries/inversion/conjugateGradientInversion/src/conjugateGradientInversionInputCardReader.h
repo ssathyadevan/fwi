@@ -1,0 +1,11 @@
+#ifndef CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
+#define CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
+
+
+class conjugateGradientInversionInputCardReader
+{
+public:
+    conjugateGradientInversionInputCardReader();
+};
+
+#endif // CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
