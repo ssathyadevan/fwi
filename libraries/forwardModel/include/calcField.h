@@ -1,11 +1,11 @@
 #ifndef CALCFIELD_H
 #define CALCFIELD_H
 
-#include "grid_rect_2D.h"
+#include "grid2D.h"
 #include <Eigen/Dense>
-#include "greens_rect_2D_cpu.h"
-#include "volComplexField_rect_2D_cpu.h"
-#include "variable_structure.h"
+#include "greensSerial.h"
+#include "pressureFieldComplexSerial.h"
+#include "variableStructure.h"
 
 #include <complex>
 #include <vector>
@@ -22,7 +22,7 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi,
-                                      const volComplexField_rect_2D_cpu &p_init, Iter2 iter2);
+pressureFieldComplexSerial calcField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi,
+                                      const pressureFieldComplexSerial &p_init, Iter2 iter2);
 
 #endif /* CALCFIELD_H */

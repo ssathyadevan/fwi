@@ -39,14 +39,14 @@ int main(int argc, char** argv)
 void generateReferencePressureFieldFromChi (const Input& input)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
-    volField_rect_2D_cpu chi(grid);
+    grid2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
+    pressureFieldSerial chi(grid);
     chi.fromFile(input);
-    Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
+    sources src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
     src.Print();
-    Receivers_rect_2D recv(src);
+    receivers recv(src);
     recv.Print();
-    Frequencies_group freqg(input.freq, input.c_0);
+    frequenciesGroup freqg(input.freq, input.c_0);
     freqg.Print(input.freq.nTotal);
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
@@ -55,11 +55,11 @@ void generateReferencePressureFieldFromChi (const Input& input)
 
     chi.toFile(input.outputLocation + "chi_ref_"+ input.cardName+ ".txt");
 
-    ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, input);
+    ForwardModelInterface *model;
+    model = new forwardModel(grid, src, recv, freqg, input);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    forwardModel->calculateData(referencePressureData, chi, input.iter2);
+    model->calculateData(referencePressureData, chi, input.iter2);
 
     // writing the referencePressureData to a text file in complex form
     std::cout << "calclateData done" << std::endl;
@@ -79,7 +79,7 @@ void generateReferencePressureFieldFromChi (const Input& input)
     }
     file.close();
 
-    delete forwardModel;
+    delete model;
 
 }
 

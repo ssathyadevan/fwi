@@ -18,7 +18,7 @@ endif()
 
 enable_testing()
 
-find_package( GTest REQUIRED )
+find_package(GTest REQUIRED)
 
 # display all compiler warnings if compiler is gnu
 if ( CMAKE_COMPILER_IS_GNUCC )
