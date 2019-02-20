@@ -8,6 +8,7 @@ cp ../../../parallelized-fwi/tests/regression_data/$varname/* test/
 cp ../../../parallelized-fwi/pythonScripts/* test/
 cp ../../../parallelized-fwi/tests/testScripts/* test/
 cp ../../../parallelized-fwi/inputFiles/* test/
+cp output/* test/
 cd test
-python3 regressionTestPreProcessing-python3.py $varname default
-python3 regressionTestProcessing-python3.py $varname default
+python3 regressionTestPreProcessing_python3.py $varname default
+python3 regressionTestProcessing_python3.py $varname default

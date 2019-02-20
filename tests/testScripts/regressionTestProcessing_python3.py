@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+import matplotlib
+matplotlib.use('Agg')
 import sys, os, difflib, filecmp, csv, numpy, matplotlib, shutil, matplotlib.pyplot as plt
 from datetime import datetime
 
@@ -332,7 +333,18 @@ print("************************************************************\n")
 print("Increased overall precision:  " + str(increased_precision_test_passed))
 print("Increased performance:        " + str(increased_performance_test_passed))
 
+if regression_test_passed is True:
+    s = 'True'
+else:
+    s = 'False'
+
+f= open("RegressionTest_Passed.txt","w+")
+f.write(str(s))
+f.close()
+
 print_regression_test_passed_message(regression_test_passed)
+
 if (len(sys.argv) == 2):
     os.system("rm hiquality.*")
     os.system("rm chi*hiquality*")
+

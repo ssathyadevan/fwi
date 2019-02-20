@@ -5,6 +5,8 @@
 # import (in Cpp this is hashtag include)...
 # ...the numpy and matplotlib libraries for the math and imagery
 # ...and sys library to quit
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
 import sys, csv
