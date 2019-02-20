@@ -1,9 +1,13 @@
-#include "Inversion.h"
+
+
+#include "inversionRandom.h"
+#include "inversion.h"
+
 #include "inputCardReader.h"
 #include "utilityFunctions.h"
-#include "chi_visualisation_in_integer_form.h"
-#include "create_csv_files_for_chi.h"
-#include "CsvReader.h"
+#include "chiIntegerVisualisation.h"
+#include "createChiCSV.h"
+#include "csvReader.h"
 #include "cpuClock.h"
 
 
@@ -47,12 +51,12 @@ int main(int argc, char** argv)
 void performInversion(const Input& input)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    grid_rect_2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
-    Sources_rect_2D src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
+    grid2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
+    sources src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
     src.Print();
-    Receivers_rect_2D recv(src);
+    receivers recv(src);
     recv.Print();
-    Frequencies_group freqg(input.freq, input.c_0);
+    frequenciesGroup freqg(input.freq, input.c_0);
     freqg.Print(input.freq.nTotal);
 
     int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
@@ -70,21 +74,26 @@ void performInversion(const Input& input)
         i++;
     }
 
-    ForwardModelInterface *forwardModel;
-    forwardModel = new ForwardModel(grid, src, recv, freqg, input);
+    ForwardModelInterface *model;
+    model = new forwardModel(grid, src, recv, freqg, input);
 
-    InversionInterface *inverse;
-    inverse = new Inversion(forwardModel);
+
+    inversionInterface *inverse;
+    inverse = new inversionRandom(model);
+
+//    inversionInterface *inverse;
+//    inverse = new inversion(model);
+
 
     std::cout << "Estimating Chi..." << std::endl;
 
-    volField_rect_2D_cpu chi_est = inverse->Reconstruct(referencePressureData, input);
+    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, input);
 
     std::cout << "Done, writing to file" << std::endl;
 
     chi_est.toFile(input.outputLocation + "chi_est_"+ input.cardName+ ".txt");
 
-    delete forwardModel;
+    delete model;
     delete inverse;
 
 }

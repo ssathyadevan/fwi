@@ -1,11 +1,11 @@
 #ifndef CALCFIELD_H
 #define CALCFIELD_H
 
-#include "grid_rect_2D.h"
+#include "grid2D.h"
 #include <Eigen/Dense>
-#include "greens_rect_2D_cpu.h"
-#include "volComplexField_rect_2D_cpu.h"
-#include "variable_structure.h"
+#include "greensSerial.h"
+#include "pressureFieldComplexSerial.h"
+#include "variableStructure.h"
 
 #include <complex>
 #include <vector>
@@ -22,18 +22,18 @@ using namespace Eigen;
     "incrementalContrastSrcs"
     "weightingFactorsField"
 */
-volComplexField_rect_2D_cpu calcField(const Greens_rect_2D_cpu &G, const volField_rect_2D_cpu &chi, const volComplexField_rect_2D_cpu &p_init, Iter2 iter2)
+pressureFieldComplexSerial calcField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init, Iter2 iter2)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
-    const grid_rect_2D &m_grid = G.GetGrid();
+    const grid2D &m_grid = G.GetGrid();
 
-    volComplexField_rect_2D_cpu chi_p(m_grid), chi_p_old(m_grid);
-    volComplexField_rect_2D_cpu dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
+    pressureFieldComplexSerial chi_p(m_grid), chi_p_old(m_grid);
+    pressureFieldComplexSerial dW(m_grid), p_tot(m_grid), f_rhs(m_grid), matA_j(m_grid);
 
     int n_cell = m_grid.GetNumberOfGridPoints();
 
-    std::vector< volComplexField_rect_2D_cpu > phi;
+    std::vector< pressureFieldComplexSerial > phi;
     Matrix< std::complex<double> , Dynamic, Dynamic, ColMajor > matA;
     Matrix< std::complex<double> , Dynamic, 1, ColMajor > b_f_rhs;
     Matrix< std::complex<double> , Dynamic, 1, ColMajor > alpha;

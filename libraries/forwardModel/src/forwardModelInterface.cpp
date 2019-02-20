@@ -1,22 +1,22 @@
 #include "forwardModelInterface.h"
 
 
-const grid_rect_2D& ForwardModelInterface::getGrid()
+const grid2D& ForwardModelInterface::getGrid()
 {
     return grid;
 }
 
-const Sources_rect_2D& ForwardModelInterface::getSrc()
+const sources& ForwardModelInterface::getSrc()
 {
     return src;
 }
 
-const Receivers_rect_2D& ForwardModelInterface::getRecv()
+const receivers& ForwardModelInterface::getRecv()
 {
     return recv;
 }
 
-const Frequencies_group& ForwardModelInterface::getFreq()
+const frequenciesGroup& ForwardModelInterface::getFreq()
 {
     return freq;
 }
