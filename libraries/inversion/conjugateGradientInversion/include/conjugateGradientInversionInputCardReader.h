@@ -2,14 +2,18 @@
 #define CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
 #include "inputCardReader.h"
 #include "conjugateGradientInput.h"
-
+#include <string>
+#include <fstream>
+#include <sstream>
 class conjugateGradientInversionInputCardReader:public inputCardReader
 {
 public:
     conjugateGradientInversionInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName);
     std::vector<std::string> Reader(const std::string &runName) const;
+    conjugateGradientInput getInput();
 private:
     conjugateGradientInput readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
+    conjugateGradientInput mInput;
 };
 
 #endif // CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H

@@ -1,16 +1,20 @@
 
 
 
-#include "inversion.h"
+#include "conjugateGradientInversion.h"
 #include "inputCardReader.h"
+#include "genericInputCardReader.h"
+#include "conjugateGradientInversionInputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
 
+#include <forwardModelInputCardReader.h>
 
-void performInversion(const Input& input);
+
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput);
 
 int main(int argc, char** argv)
 {
@@ -23,45 +27,67 @@ int main(int argc, char** argv)
     }
     std::vector<std::string> arguments(argv+1, argc+argv);
 
-    Input input = inputCardReader(arguments[0], arguments[1], arguments[2]);
+    genericInputCardReader genericReader= genericInputCardReader(arguments[0], arguments[1], arguments[2]);
+    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], arguments[2]);
+    conjugateGradientInversionInputCardReader conjugateGradientReader = conjugateGradientInversionInputCardReader(arguments[0], arguments[1], arguments[2]);
+    genericInput gInput = genericReader.getInput();
+    forwardModelInput fmInput = forwardModelReader.getInput();
+    conjugateGradientInput cgInput = conjugateGradientReader.getInput();
 
-    if (!input.verbose)
+    if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(input.outputLocation, input.cardName, "Process");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.cardName, "Process");
     }
 
-    chi_visualisation_in_integer_form(input.inputCardPath + input.fileName + ".txt", input.ngrid[0]);
-    create_csv_files_for_chi(input.inputCardPath + input.fileName + ".txt", input, "chi_reference_");
+    chi_visualisation_in_integer_form(gInput.inputCardPath + gInput.fileName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.inputCardPath + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
 
     clock.Start();
-    performInversion(input);
+    performInversion(gInput, fmInput, cgInput);
     clock.End();
     clock.PrintTimeElapsed();
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form(input.outputLocation + "chi_est_" + input.cardName + ".txt", input.ngrid[0]);
-    create_csv_files_for_chi(input.outputLocation + "chi_est_" + input.cardName + ".txt", input, "chi_est_");
+    chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput, "chi_est_");
 
     return 0;
 }
 
-void performInversion(const Input& input)
+void plotInput(genericInput gInput, forwardModelInput fmInput, conjugateGradientInput cgInput, std::string outputLocation, std::string cardName ){
+//        // This part is needed for plotting the chi values in imageCreator_CMake.py
+        std::ofstream outputfwi;
+        outputfwi.open(outputLocation + cardName + ".pythonIn");
+        outputfwi << "This run was parametrized as follows:" << std::endl;
+        outputfwi << "nxt   = " << gInput.ngrid[0] << std::endl;
+        outputfwi << "nzt   = " << gInput.ngrid[1] << std::endl;
+        outputfwi << "nMax = " << cgInput.n_max    << std::endl;
+        outputfwi << "iter1 = " << cgInput.iteration1.n  << std::endl;
+        outputfwi << "iter2 = " << fmInput.iter2.n  << std::endl;
+        outputfwi.close();
+        // This part is needed for plotting the chi values in imageCreator_CMake.py
+        std::ofstream lastrun;
+        lastrun.open(outputLocation + "lastRunName.txt");
+        lastrun << cardName;
+        lastrun.close();
+}
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(input.reservoirTopLeftCornerInM, input.reservoirBottomRightCornerInM, input.ngrid);
-    sources src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
+    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
     receivers recv(src);
     recv.Print();
-    frequenciesGroup freqg(input.freq, input.c_0);
-    freqg.Print(input.freq.nTotal);
+    frequenciesGroup freqg(gInput.freq, gInput.c_0);
+    freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = input.freq.nTotal * input.nSourcesReceivers.src * input.nSourcesReceivers.rec;
+    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file(input.outputLocation+input.cardName+"InvertedChiToPressure.txt");
+    std::ifstream       file(gInput.outputLocation+gInput.cardName+"InvertedChiToPressure.txt");
     CSVReader           row;
     int i = 0;
     while(file >> row)
@@ -74,21 +100,21 @@ void performInversion(const Input& input)
     }
 
     ForwardModelInterface *model;
-    model = new forwardModel(grid, src, recv, freqg, input);
+    model = new forwardModel(grid, src, recv, freqg, gInput, fmInput);
 
 
 
     inversionInterface *inverse;
-    inverse = new inversion(model);
+    inverse = new conjugateGradientInversion(model,cgInput);
 
 
     std::cout << "Estimating Chi..." << std::endl;
 
-    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, input);
+    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile(input.outputLocation + "chi_est_"+ input.cardName+ ".txt");
+    chi_est.toFile(gInput.outputLocation + "chi_est_"+ gInput.cardName+ ".txt");
 
     delete model;
     delete inverse;

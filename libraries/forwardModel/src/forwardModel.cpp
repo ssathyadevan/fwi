@@ -162,7 +162,7 @@ void forwardModel::createTotalField(Iter2 conjGrad, pressureFieldSerial chi)
 
 }
 
-void forwardModel::createTotalField1D(Iter2 conjGrad, pressureFieldSerial chiEst)
+void forwardModel::createTotalField1D(pressureFieldSerial chiEst)
 {
     int l_i;
     for (int i=0; i<gInput.freq.nTotal; i++)
@@ -174,7 +174,7 @@ void forwardModel::createTotalField1D(Iter2 conjGrad, pressureFieldSerial chiEst
         std::cout << "  " << std::endl;
 
         for (int j=0; j<gInput.nSourcesReceivers.src;j++)
-            *pTot1D[l_i + j] = calcField(*greens[i], chiEst, *p0[i][j], conjGrad);
+            *pTot1D[l_i + j] = calcField(*greens[i], chiEst, *p0[i][j], fmInput.iter2);
     }
 }
 

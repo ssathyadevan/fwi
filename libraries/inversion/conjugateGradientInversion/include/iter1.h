@@ -1,5 +1,5 @@
 #pragma once
-struct Iter1
+struct iter1
 {
     int n;
     double tolerance;

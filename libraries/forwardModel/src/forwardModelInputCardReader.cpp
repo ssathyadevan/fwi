@@ -2,7 +2,11 @@
 
 forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
 {
-    forwardModelInput  mInput = readCard(inputCardPath,outputLocation,cardName);
+    mInput = readCard(inputCardPath,outputLocation,cardName);
+}
+
+forwardModelInput forwardModelInputCardReader::getInput(){
+    return mInput;
 }
 
 std::vector<std::string> forwardModelInputCardReader::Reader(const std::string& runName) const

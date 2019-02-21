@@ -44,7 +44,7 @@ public:
 
     virtual void calculateData(std::complex<double> *p_data, pressureFieldSerial chi, Iter2 conjGrad) = 0;
 
-    virtual void createTotalField1D(Iter2 conjGrad, pressureFieldSerial chi_est) = 0;
+    virtual void createTotalField1D(pressureFieldSerial chi_est) = 0;
 
     const grid2D& getGrid();
 
@@ -56,7 +56,7 @@ public:
 
     virtual void calculateKRes(pressureFieldComplexSerial &kRes) = 0;
 
-    virtual forwardModelInput getInput() = 0;
+    virtual forwardModelInput getForwardModelInput() = 0;
 
     virtual void intermediateForwardModelStep1() = 0;
 

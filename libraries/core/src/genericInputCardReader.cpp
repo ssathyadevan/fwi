@@ -3,7 +3,11 @@
 
 genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
 {
-    genericInput mInput = readCard(inputCardPath,outputLocation,cardName);
+    mInput = readCard(inputCardPath,outputLocation,cardName);
+}
+
+genericInput genericInputCardReader::getInput(){
+    return mInput;
 }
 
 std::vector<std::string> genericInputCardReader::Reader(const std::string& runName) const

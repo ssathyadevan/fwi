@@ -14,9 +14,12 @@ class genericInputCardReader: public inputCardReader
 public:
     genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName);
     std::vector<std::string> Reader(const std::string& runName) const;
+    genericInput getInput();
 
 private:
     genericInput readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
+
+    genericInput mInput;
 };
 
 

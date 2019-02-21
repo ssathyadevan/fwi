@@ -27,7 +27,7 @@ public:
 
     void createTotalField(Iter2 conjGrad, pressureFieldSerial chi) ;
 
-    virtual void createTotalField1D(Iter2 conjGrad, pressureFieldSerial chi_est);
+    virtual void createTotalField1D(pressureFieldSerial chi_est);
 
     virtual forwardModelInput getForwardModelInput();
 
