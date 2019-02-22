@@ -1,6 +1,3 @@
-
-
-
 #include "conjugateGradientInversion.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
@@ -18,18 +15,20 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
 
 int main(int argc, char** argv)
 {
-    if (argc != 4)
+    if (argc != 3)
     {
-        std::cout<< "Please enter 3 arguments, 1st the input card path, 2nd the output folder location and 3rd the input card name" << std::endl;
-        std::cout<< "e.g. ./FWI_Process ~/Documents/FWIInstall/ ~/Documents/FWIInstall/Output/ cardName" << std::endl;
+        std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
+        std::cout << "Make sure the input folder contains the GenericInputCard.in, ForwardModelInputCard.in and ConjugateGradientInputCard.in" << std::endl;
+        std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
 
         exit(EXIT_FAILURE);
     }
+
     std::vector<std::string> arguments(argv+1, argc+argv);
 
-    genericInputCardReader genericReader= genericInputCardReader(arguments[0], arguments[1], arguments[2]);
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], arguments[2]);
-    conjugateGradientInversionInputCardReader conjugateGradientReader = conjugateGradientInversionInputCardReader(arguments[0], arguments[1], arguments[2]);
+    genericInputCardReader genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInputCard");
+    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInputCard");
+    conjugateGradientInversionInputCardReader conjugateGradientReader = conjugateGradientInversionInputCardReader(arguments[0], arguments[1], "ConjugateGradientInputCard");
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
     conjugateGradientInput cgInput = conjugateGradientReader.getInput();

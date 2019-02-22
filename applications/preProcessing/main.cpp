@@ -9,19 +9,20 @@ void generateReferencePressureFieldFromChi(const genericInput& gInput, const for
 
 int main(int argc, char** argv)
 {
-    if (argc != 4)
+    if (argc != 3)
     {
-        std::cout<< "Please enter 3 arguments, 1st the input card path, 2nd the output folder location and 3rd the input card name" << std::endl;
-        std::cout<< "e.g. ./FWI_Process ~/Documents/FWIInstall/ ~/Documents/FWIInstall/Output/ cardName" << std::endl;
+        std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
+        std::cout << "Make sure the input folder contains the GenericInputCard.in and ForwardModelInputCard.in files" << std::endl;
+        std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
     std::vector<std::string> arguments(argv+1, argc+argv);
 
-     genericInputCardReader  genericReader = genericInputCardReader(arguments[0], arguments[1], arguments[2]);
+    genericInputCardReader  genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInputCard");
 
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], arguments[2]);
+    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInputCard");
     const genericInput gInput = genericReader.getInput();
     const forwardModelInput fmInput = forwardModelReader.getInput();
 
@@ -29,6 +30,7 @@ int main(int argc, char** argv)
     {
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.cardName, "PreProcess");
     }
+
     std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
 
     cpuClock clock;

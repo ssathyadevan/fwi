@@ -46,19 +46,8 @@ genericInput genericInputCardReader::readCard(std::string inputCardPath, std::st
     const int    nSrct                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
     const int    nRecv                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
     const std::string  fileName                       =     (input_parameters[parameterCounter]);    ++parameterCounter; //Filename to be used for inversion
-//    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
-//    const bool   calc_alpha                           = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
-//    const double tol1_to_be_implemented               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-//    const double tol2_to_be_implemented               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-//    const double delta_amplification_start            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-//    const double delta_amplification_slope            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
-//    const int    n_max                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-//    const int    n_iter1                              = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-//    const int    n_iter2                              = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-//    if (!is_this_our_kind_of_bool(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
-//    const bool   do_reg                               = string_1_for_true_0_for_false(input_parameters[parameterCounter]); ++ parameterCounter;
-    if (!IsThisOurKindOfBool(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
-    const bool   verbose                              = String1ForTrue0ForFalse(input_parameters[parameterCounter]); ++ parameterCounter;
+    if (!CheckBoolString(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
+    const bool   verbose                              = InputStringToBool(input_parameters[parameterCounter]); ++ parameterCounter;
 
     const double spacing = ((Freq_max-Freq_min)/(nFreq_Total-1));
 

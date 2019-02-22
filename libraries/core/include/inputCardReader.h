@@ -14,9 +14,9 @@ public:
     virtual std::vector<std::string> Reader(const std::string& runName) const = 0;
     virtual ~inputCardReader() = default;
 protected:
-    bool IsThisOurKindOfBool(const std::string& string_for_bool) const;
+    bool CheckBoolString(const std::string& string_for_bool) const;
 
-    bool String1ForTrue0ForFalse(std::string const& string_for_bool) const;
+    bool InputStringToBool(std::string const& string_for_bool) const;
 
 };
 

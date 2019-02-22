@@ -33,8 +33,8 @@ conjugateGradientInput conjugateGradientInversionInputCardReader::readCard(std::
     const double delta_amplification_slope            = stod(input_parameters[parameterCounter]);    ++parameterCounter; //
     const int    n_max                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
     const int    n_iter1                              = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-    if (!IsThisOurKindOfBool(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
-    const bool   do_reg                               = String1ForTrue0ForFalse(input_parameters[parameterCounter]); ++ parameterCounter;
+    if (!CheckBoolString(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
+    const bool   do_reg                               = InputStringToBool(input_parameters[parameterCounter]); ++ parameterCounter;
     conjugateGradientInput input
     {
         {n_iter1,                   tol1_to_be_implemented},

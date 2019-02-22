@@ -28,7 +28,8 @@ forwardModelInput forwardModelInputCardReader::readCard(std::string inputCardPat
     std::string filePath = inputCardPath+cardName+".in";
     std::vector<std::string> input_parameters = Reader(filePath);
     int parameterCounter=0;
-    const bool   calc_alpha                           = String1ForTrue0ForFalse(input_parameters[parameterCounter]); ++ parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
+    if (!CheckBoolString(input_parameters[parameterCounter])){exit(EXIT_FAILURE);}
+    const bool   calc_alpha                           = InputStringToBool(input_parameters[parameterCounter]); ++ parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
     const double tol2_to_be_implemented               = stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const int    n_iter2                              = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
     forwardModelInput input

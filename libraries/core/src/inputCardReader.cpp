@@ -4,15 +4,16 @@
 //and then set the Boolean from the input string (string_1_for_true_0_for_false)
 
 
-bool inputCardReader::IsThisOurKindOfBool(const std::string& string_for_bool) const
+bool inputCardReader::CheckBoolString(const std::string& string_for_bool) const
 {
     return (string_for_bool.size() == 1 && (string_for_bool[0] == '0' || string_for_bool[0] == '1'));
 }
 
-bool inputCardReader::String1ForTrue0ForFalse(std::string const& string_for_bool) const
+bool inputCardReader::InputStringToBool(std::string const& string_for_bool) const
 {
     return string_for_bool[0] == '1';
 }
+
 
 //std::vector<std::string> inputCardReader::Reader(std::string runName)
 //{
