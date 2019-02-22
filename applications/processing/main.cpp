@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     if (argc != 3)
     {
         std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the GenericInputCard.in, ForwardModelInputCard.in and ConjugateGradientInputCard.in" << std::endl;
+        std::cout << "Make sure the input folder contains the GenericInput.in, ForwardModelInput.in and ConjugateGradientInversionInput" << std::endl;
         std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
 
         exit(EXIT_FAILURE);
@@ -26,9 +26,9 @@ int main(int argc, char** argv)
 
     std::vector<std::string> arguments(argv+1, argc+argv);
 
-    genericInputCardReader genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInputCard");
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInputCard");
-    conjugateGradientInversionInputCardReader conjugateGradientReader = conjugateGradientInversionInputCardReader(arguments[0], arguments[1], "ConjugateGradientInputCard");
+    genericInputCardReader genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInput");
+    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInput");
+    conjugateGradientInversionInputCardReader conjugateGradientReader = conjugateGradientInversionInputCardReader(arguments[0], arguments[1], "ConjugateGradientInversionInput");
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
     conjugateGradientInput cgInput = conjugateGradientReader.getInput();

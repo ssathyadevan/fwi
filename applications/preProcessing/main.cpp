@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     if (argc != 3)
     {
         std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the GenericInputCard.in and ForwardModelInputCard.in files" << std::endl;
+        std::cout << "Make sure the input folder contains the GenericInput.in and ForwardModelInput.in files" << std::endl;
         std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
 
         exit(EXIT_FAILURE);
@@ -20,9 +20,9 @@ int main(int argc, char** argv)
 
     std::vector<std::string> arguments(argv+1, argc+argv);
 
-    genericInputCardReader  genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInputCard");
+    genericInputCardReader  genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInput");
 
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInputCard");
+    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInput");
     const genericInput gInput = genericReader.getInput();
     const forwardModelInput fmInput = forwardModelReader.getInput();
 
