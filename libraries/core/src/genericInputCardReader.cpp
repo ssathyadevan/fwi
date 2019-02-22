@@ -15,6 +15,7 @@ std::vector<std::string> genericInputCardReader::Reader(const std::string& runNa
     std::vector<std::string> thevec;
     std::fstream f1(runName);
     std::string line,w1;
+    std::cout << f1.rdbuf();
     while ( getline(f1,line) )
     {
         if (( std::istringstream(line) >> w1)  && ( w1[0] != '#' ))
@@ -27,7 +28,7 @@ std::vector<std::string> genericInputCardReader::Reader(const std::string& runNa
 
 genericInput genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
     std::string filePath = inputCardPath+cardName+".in";
-  //  std::cout<< "Generic input card read at " + filePath;
+    std::cout<< "Generic input card read at " + filePath;
     std::vector<std::string> input_parameters = Reader(filePath);
     int parameterCounter=0;
     const double c_0                                  = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
