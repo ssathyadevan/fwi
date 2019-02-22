@@ -1,5 +1,5 @@
 #include "genericInputCardReader.h"
-
+#include <iostream>
 
 genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
 {
@@ -27,6 +27,7 @@ std::vector<std::string> genericInputCardReader::Reader(const std::string& runNa
 
 genericInput genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
     std::string filePath = inputCardPath+cardName+".in";
+  //  std::cout<< "Generic input card read at " + filePath;
     std::vector<std::string> input_parameters = Reader(filePath);
     int parameterCounter=0;
     const double c_0                                  = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
@@ -65,6 +66,8 @@ genericInput genericInputCardReader::readCard(std::string inputCardPath, std::st
                 fileName,
                 verbose
      };
+
+     std::cout << "Generic input card read at " + filePath << std::endl;
 
 //    // This part is needed for plotting the chi values in imageCreator_CMake.py
 //    std::ofstream outputfwi;
