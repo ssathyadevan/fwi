@@ -21,11 +21,12 @@ RUN         apt-get update \
                     cmake \
                     qt5-default \
                     libeigen3-dev \
-                    python2.7-dev \
-                    python2.7 \
-                    python-tk \
-                    python-numpy \
-                    python-matplotlib
+                    python3-dev \
+                    python3 \
+                    python3-tk \
+                    python3-numpy \
+                    python3-matplotlib \
+                    python3-pytest
 
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git
