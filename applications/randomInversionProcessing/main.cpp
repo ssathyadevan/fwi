@@ -32,8 +32,6 @@ int main(int argc, char** argv)
     forwardModelInput fmInput = forwardModelReader.getInput();
     randomInversionInput riInput = randomInversionReader.getInput();
 
-
-
     if (!gInput.verbose)
     {
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.cardName, "Process");
