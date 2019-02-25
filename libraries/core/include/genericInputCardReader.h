@@ -14,6 +14,7 @@ class genericInputCardReader: public inputCardReader
 public:
     genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName);
     genericInput getInput();
+    void printCard();
 
 private:
     void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
