@@ -2,7 +2,9 @@
 #define READERVAR
 #include <vector>
 #include <string>
-
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 
   
@@ -11,12 +13,12 @@
 class inputCardReader
 {
 public:
-    virtual std::vector<std::string> Reader(const std::string& runName) const = 0;
     virtual ~inputCardReader() = default;
 protected:
     bool CheckBoolString(const std::string& string_for_bool) const;
-
+    std::vector<std::string> Reader(const std::string& runName) const;
     bool InputStringToBool(std::string const& string_for_bool) const;
+    virtual void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)=0;
 
 };
 

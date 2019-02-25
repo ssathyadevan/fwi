@@ -2,28 +2,15 @@
 
 forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
 {
-    mInput = readCard(inputCardPath,outputLocation,cardName);
+   readCard(inputCardPath,outputLocation,cardName);
 }
 
 forwardModelInput forwardModelInputCardReader::getInput(){
-    return mInput;
+    return _input;
 }
 
-std::vector<std::string> forwardModelInputCardReader::Reader(const std::string& runName) const
-{
-    std::vector<std::string> thevec;
-    std::fstream f1(runName);
-    std::string line,w1;
-    while ( getline(f1,line) )
-    {
-        if (( std::istringstream(line) >> w1)  && ( w1[0] != '#' ))
-        {
-            thevec.push_back(w1);
-        }
-    }
-    return thevec;
-}
-forwardModelInput forwardModelInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
+
+void forwardModelInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
 {
     std::string filePath = inputCardPath+cardName+".in";
     std::vector<std::string> input_parameters = Reader(filePath);
@@ -36,6 +23,6 @@ forwardModelInput forwardModelInputCardReader::readCard(std::string inputCardPat
     {
        n_iter2,                   tol2_to_be_implemented,       calc_alpha
     };
-    return input;
+    _input = input;
 
 }

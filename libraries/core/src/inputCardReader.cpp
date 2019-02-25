@@ -13,7 +13,22 @@ bool inputCardReader::InputStringToBool(std::string const& string_for_bool) cons
 {
     return string_for_bool[0] == '1';
 }
-
+std::vector<std::string> inputCardReader::Reader(const std::string& runName) const
+{
+    std::vector<std::string> thevec;
+    std::fstream f1(runName);
+    std::string line,w1;
+    //std::cout << f1.rdbuf();
+    while ( std::getline(f1,line) )
+    {
+        std::cout << line;
+        if (( std::istringstream(line) >> w1)  && ( w1[0] != '#' ))
+        {
+            thevec.push_back(w1);
+        }
+    }
+    return thevec;
+}
 
 //std::vector<std::string> inputCardReader::Reader(std::string runName)
 //{

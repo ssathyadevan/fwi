@@ -1,34 +1,19 @@
 #include "genericInputCardReader.h"
-#include <iostream>
+
 
 genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
 {
-    mInput = readCard(inputCardPath,outputLocation,cardName);
+    readCard(inputCardPath,outputLocation,cardName);
 }
 
 genericInput genericInputCardReader::getInput(){
-    return mInput;
+    return _input;
 }
 
-std::vector<std::string> genericInputCardReader::Reader(const std::string& runName) const
-{
-    std::vector<std::string> thevec;
-    std::fstream f1(runName);
-    std::string line,w1;
-    std::cout << f1.rdbuf();
-    while ( getline(f1,line) )
-    {
-        if (( std::istringstream(line) >> w1)  && ( w1[0] != '#' ))
-        {
-            thevec.push_back(w1);
-        }
-    }
-    return thevec;
-}
 
-genericInput genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
+void genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
     std::string filePath = inputCardPath+cardName+".in";
-    std::cout<< "Generic input card read at " + filePath;
+   // std::cout<< "Generic input card read at " + filePath;
     std::vector<std::string> input_parameters = Reader(filePath);
     int parameterCounter=0;
     const double c_0                                  = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
@@ -86,5 +71,5 @@ genericInput genericInputCardReader::readCard(std::string inputCardPath, std::st
 //    lastrun << cardName;
 //    lastrun.close();
 
-    return input;
+    _input = input;
 }
