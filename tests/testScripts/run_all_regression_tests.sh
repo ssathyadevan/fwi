@@ -1,19 +1,14 @@
 #!/bin/bash
-cd ../../..
-pwd
-ls
 
-#FWI_INSTALL_PATH=~/FWIInstall/
-#FWI_SOURCE_PATH=~/parallelized-fwi/
-FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
-FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
+FWI_INSTALL_PATH=~/FWIInstall
+FWI_SOURCE_PATH=~/parallelized-fwi
+#FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
+#FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 
 # Run all regression tests
 cd $FWI_SOURCE_PATH/tests/regression_data
 TESTS=$(find . -maxdepth 1 -type d ! -path . -printf '%P\n')
-echo $TESTS
 cd $FWI_INSTALL_PATH/
-ls
 mkdir -p input output test
 cp $FWI_SOURCE_PATH/inputFiles/* input/
 cp $FWI_SOURCE_PATH/pythonScripts/postProcessing-python3.py .
@@ -22,7 +17,7 @@ for TEST in $TESTS
 do
 	echo "Running test:" $TEST
 
-	cp $FWI_SOURCE_PATH/tests/testScripts/* test/ 2>/dev/null
+	cp -r $FWI_SOURCE_PATH/tests/testScripts/* test/
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/$TEST.in input/"$TEST$NEW.in"
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/* test/
 	cp input/"$TEST$NEW.in" test/
@@ -39,9 +34,11 @@ do
 	python3 regressionTestProcessing_python3.py $TEST $TEST$NEW
 	python3 -m pytest python_unittest.py --junitxml results.xml
 	cp results.xml $FWI_SOURCE_PATH/build/
-	cd ..
-	
-	rm output/* test/* 2>/dev/null
+	cd ..	
+
+	rm -r output/* test/*
+
+	exit
 done	
 
 exit
