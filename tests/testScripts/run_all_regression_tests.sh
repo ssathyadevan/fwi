@@ -32,8 +32,8 @@ do
 	cd test/
 	python3 regressionTestPreProcessing_python3.py $TEST $TEST$NEW
 	python3 regressionTestProcessing_python3.py $TEST $TEST$NEW
-	python3 -m pytest python_unittest.py --junitxml results.xml
-	cp results.xml $FWI_SOURCE_PATH/build/
+	python3 -m pytest python_unittest.py --junitxml "${TEST}results.xml"
+	cp "${TEST}results.xml" $FWI_SOURCE_PATH/build/
 	cd ..	
 
 	rm -r output/* test/*
