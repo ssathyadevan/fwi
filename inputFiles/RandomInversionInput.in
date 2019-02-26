@@ -17,7 +17,7 @@
 # RI3.    randomInversionIteration.n_max_inner                  int           50
 50
 
-# RI1.     Convergence criteria for the Conjugate Gradient i.e. chi_estimation loop
-# RI2.     maximum number of iterations outer loop 
+# RI1.    Convergence criteria for the Conjugate Gradient i.e. chi_estimation loop
+# RI2.    Maximum number of iterations outer loop 
 # RI3.    Conjugate gradient maximum iterations
 

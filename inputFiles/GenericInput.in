@@ -43,7 +43,7 @@
 17
 # I5.    NSourcesReceivers.rcv              int           17          -
 17
-# I6.    fileName                           string        temple.txt  -
+# I6.    fileName                           string        temple      -
 temple
 # I7.    verbosity                          bool          0 (false)
 0

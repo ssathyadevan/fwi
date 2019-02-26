@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 {
     if (argc != 3)
     {
-        std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
+        std::cout << "Please enter 2 arguments. 1st the location of the input folder, 2nd the output folder location," << std::endl;
         std::cout << "Make sure the input folder contains the GenericInput.in and ForwardModelInput.in files" << std::endl;
         std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
 
@@ -19,11 +19,12 @@ int main(int argc, char** argv)
     }
 
     std::vector<std::string> arguments(argv+1, argc+argv);
+    std::string inputFolder  = arguments[0];
+    std::string outputFolder = arguments[1];
 
-    genericInputCardReader  genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInput");
-
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInput");
-    const genericInput gInput = genericReader.getInput();
+    genericInputCardReader genericReader(inputFolder, outputFolder, "GenericInput");
+    forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
+    const genericInput      gInput  = genericReader.getInput();
     const forwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)
@@ -69,7 +70,7 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     model->calculateData(referencePressureData, chi, fmInput.iter2);
 
     // writing the referencePressureData to a text file in complex form
-    std::cout << "calclateData done" << std::endl;
+    std::cout << "calculateData done" << std::endl;
 
     std::string invertedChiToPressureFileName = gInput.outputLocation + gInput.cardName + "InvertedChiToPressure.txt";
     std::ofstream file;

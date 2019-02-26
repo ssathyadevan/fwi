@@ -12,6 +12,7 @@
 
 
 void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput);
+void writePlotInput(genericInput gInput, std::string outputLocation);
 
 int main(int argc, char** argv)
 {
@@ -24,10 +25,13 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
     std::vector<std::string> arguments(argv+1, argc+argv);
+    std::string inputFolder = arguments[0];
+    std::string outputFolder = arguments[1];
 
-    genericInputCardReader genericReader = genericInputCardReader(arguments[0], arguments[1], "GenericInput");
-    forwardModelInputCardReader forwardModelReader = forwardModelInputCardReader(arguments[0], arguments[1], "ForwardModelInput");
-    randomInversionInputCardReader randomInversionReader = randomInversionInputCardReader(arguments[0], arguments[1], "RandomInversionInput");
+    genericInputCardReader genericReader(inputFolder, outputFolder, "GenericInput");
+    forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
+    randomInversionInputCardReader randomInversionReader(inputFolder, outputFolder, "RandomInversionInput");
+
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
     randomInversionInput riInput = randomInversionReader.getInput();
@@ -51,7 +55,26 @@ int main(int argc, char** argv)
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput, "chi_est_");
 
+    writePlotInput(gInput,outputLocation);
+
     return 0;
+}
+
+void writePlotInput(genericInput gInput, std::string outputLocation){
+        // This part is needed for plotting the chi values in postProcessing.py
+        std::ofstream outputfwi;
+        std::string cardName = gInput.cardName;
+        outputfwi.open(outputLocation + cardName + ".pythonIn");
+        outputfwi << "This run was parametrized as follows:" << std::endl;
+        outputfwi << "nxt   = " << gInput.ngrid[0]      << std::endl;
+        outputfwi << "nzt   = " << gInput.ngrid[1]      << std::endl;
+        outputfwi.close();
+
+        // This part is needed for plotting the chi values in postProcessing.py
+        std::ofstream lastrun;
+        lastrun.open(outputLocation + "lastRunName.txt");
+        lastrun << cardName;
+        lastrun.close();
 }
 
 void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput)
@@ -66,6 +89,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
     std::ifstream       file(gInput.outputLocation+gInput.cardName+"InvertedChiToPressure.txt");
@@ -83,13 +107,8 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     ForwardModelInterface *model;
     model = new forwardModel(grid, src, recv, freqg, gInput, fmInput);
 
-
     inversionInterface *inverse;
     inverse = new inversionRandom(model, riInput);
-
-//    inversionInterface *inverse;
-//    inverse = new inversion(model);
-
 
     std::cout << "Estimating Chi..." << std::endl;
 
@@ -101,5 +120,4 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
 
     delete model;
     delete inverse;
-
 }
