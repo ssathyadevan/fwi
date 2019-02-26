@@ -1,7 +1,5 @@
 #!/bin/bash
 
-exit
-
 #FWI_INSTALL_PATH=~/FWIInstall
 #FWI_SOURCE_PATH=~/parallelized-fwi
 FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
