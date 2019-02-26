@@ -41,7 +41,6 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-	sh tests/testScripts/run_all_regression_tests.sh	
 }
 
 def deploy(){
