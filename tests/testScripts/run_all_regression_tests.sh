@@ -37,10 +37,7 @@ do
 	cd ..	
 
 	rm -r output/* test/*
-
-	exit
 done	
 
-exit
 # Clean up
 rm -r input/ output/ test/
