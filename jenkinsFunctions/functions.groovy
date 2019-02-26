@@ -43,6 +43,7 @@ def regressiontest() {
         echo 'Running regression tests'
 	#sh tests/testScripts/run_all_regression_tests.sh	
 	
+	sh '''
 	FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
 	FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 
@@ -83,8 +84,7 @@ def regressiontest() {
 	
 		rm output/* test/* 2>/dev/null
 	done	
-
-	exit
+	'''	
 }
 
 def deploy(){
