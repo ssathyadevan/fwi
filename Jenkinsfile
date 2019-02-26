@@ -65,9 +65,6 @@ pipeline{
                         xunit (
                                         tools: [ CTest (pattern: 'build/*.xml') ])
                         junit ('build/fastresults.xml')
-                        junit ('build/highqualityresults.xml')
-                        junit ('build/layersresults.xml')
-                        junit ('build/src30rec25results.xml')
                         echo 'Cleaning the workspace'
                         //deleteDir()
                         script {
