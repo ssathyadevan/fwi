@@ -23,8 +23,8 @@ do
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/* test/
 	cp input/"$TEST$NEW.in" test/
 
-	./bin/FWI_PreProcess input/ output/ $TEST$NEW
-	./bin/FWI_Process input/ output/ $TEST$NEW
+	$FWI_INSTALL_PATH/bin/FWI_PreProcess input/ output/ $TEST$NEW
+	$FWI_INSTALL_PATH/bin/FWI_Process input/ output/ $TEST$NEW
 
 	cp output/* test/
 
@@ -34,6 +34,7 @@ do
 	python3 regressionTestPreProcessing_python3.py $TEST $TEST$NEW
 	python3 regressionTestProcessing_python3.py $TEST $TEST$NEW
 	python3 -m pytest python_unittest.py --junitxml results.xml
+	cp results.xml $FWI_SOURCE_PATH/build/
 	cd ..
 
 	break
