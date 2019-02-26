@@ -1,10 +1,10 @@
 #!/bin/bash
 cd ../../..
 
-#FWI_INSTALL_PATH=~/FWIInstall
-#FWI_SOURCE_PATH=~/parallelized-fwi
+#FWI_INSTALL_PATH=~/FWIInstall/
+#FWI_SOURCE_PATH=~/parallelized-fwi/
 FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
-FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/
+FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 
 # Run all regression tests
 cd $FWI_SOURCE_PATH/tests/regression_data
@@ -36,8 +36,7 @@ do
 	python3 -m pytest python_unittest.py --junitxml results.xml
 	cp results.xml $FWI_SOURCE_PATH/build/
 	cd ..
-
-	break
+	
 	rm output/* test/* 2>/dev/null
 done	
 

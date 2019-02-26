@@ -41,7 +41,8 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-	sh tests/testScripts/run_all_regression_tests.sh	
+	sh /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/tests/testScripts/run_all_regression_tests.sh	
+	echo $?
 }
 
 def deploy(){
