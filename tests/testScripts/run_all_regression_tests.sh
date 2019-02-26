@@ -36,8 +36,10 @@ do
 	python3 -m pytest python_unittest.py --junitxml results.xml
 	cd ..
 
+	break
 	rm output/* test/* 2>/dev/null
 done	
 
+exit
 # Clean up
 rm -r input/ output/ test/

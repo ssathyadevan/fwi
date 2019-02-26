@@ -135,6 +135,12 @@ if (filecmp.cmp(chi_est_bench_txt, chi_est_new_txt)):
 so I exit, although this part of the code is extended later \n\
 on formal grounds I will report that:")
     print_regression_test_passed_message(regression_test_passed)
+
+    s = 'True'
+    f= open("RegressionTest_Passed.txt","w+")
+    f.write(str(s))
+    f.close()
+
     sys.exit()
 else:
     print("You have different output in terms of chi,\n\
