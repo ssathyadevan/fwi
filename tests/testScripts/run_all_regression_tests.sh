@@ -1,5 +1,7 @@
 #!/bin/bash
 cd ../../..
+pwd
+ls
 
 #FWI_INSTALL_PATH=~/FWIInstall/
 #FWI_SOURCE_PATH=~/parallelized-fwi/
@@ -9,7 +11,9 @@ FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 # Run all regression tests
 cd $FWI_SOURCE_PATH/tests/regression_data
 TESTS=$(find . -maxdepth 1 -type d ! -path . -printf '%P\n')
+echo $TESTS
 cd $FWI_INSTALL_PATH/
+ls
 mkdir -p input output test
 cp $FWI_SOURCE_PATH/inputFiles/* input/
 cp $FWI_SOURCE_PATH/pythonScripts/postProcessing-python3.py .
