@@ -10,7 +10,6 @@
 #include "csvReader.h"
 #include "cpuClock.h"
 
-
 void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput);
 void writePlotInput(genericInput gInput, std::string outputLocation);
 
@@ -24,6 +23,7 @@ int main(int argc, char** argv)
 
         exit(EXIT_FAILURE);
     }
+
     std::vector<std::string> arguments(argv+1, argc+argv);
     std::string inputFolder = arguments[0];
     std::string outputFolder = arguments[1];
@@ -31,6 +31,8 @@ int main(int argc, char** argv)
     genericInputCardReader genericReader(inputFolder, outputFolder, "GenericInput");
     forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
     randomInversionInputCardReader randomInversionReader(inputFolder, outputFolder, "RandomInversionInput");
+
+    genericInput gInput = genericInputCardReader::getInput("GenericInput");
 
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
@@ -55,7 +57,7 @@ int main(int argc, char** argv)
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput, "chi_est_");
 
-    writePlotInput(gInput,outputLocation);
+    writePlotInput(gInput,outputFolder);
 
     return 0;
 }

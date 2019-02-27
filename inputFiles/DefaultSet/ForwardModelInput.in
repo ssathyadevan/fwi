@@ -1,0 +1,23 @@
+# This is an input file for the FWI program
+# It was first devised on October 8th 2018 by S Melissen on the libraire line
+# With the hashtag you can add comments, like here, but take a whole line!!!
+# The order of the variables and their number is fixed
+# At the bottom every variable is explained
+
+###############################################################################
+#                                                                             #
+#                                SCIENTIFIC PARAMETERS                        #
+#                                                                             #
+###############################################################################
+
+#        VARIABLE (input.):                 TYPE (const):  DEFAULT:   UNIT:
+# FM1.    Iter2.calcAlpha                    bool          0 (false)   -
+0
+# FM2.    Iter2.tolerance                    dbl           5.e-5
+5.e-5
+# FM3.    Iter2.n                            int           100
+100
+
+# FM1.     Decision true/false whether to calculate "alpha" 
+# FM2.     Convergence criteria for the calculation of p_tot in ForwardModel
+# FM3.     Maximum iterations for p_tot calculation in forwardModel 

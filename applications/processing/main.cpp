@@ -7,8 +7,7 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-
-#include <forwardModelInputCardReader.h>
+#include "forwardModelInputCardReader.h"
 
 void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput);
 void writePlotInput(genericInput gInput, std::string outputLocation);
@@ -55,7 +54,7 @@ int main(int argc, char** argv)
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput, "chi_est_");
 
-    writePlotInput(gInput,outputLocation);
+    writePlotInput(gInput, outputFolder);
 
     return 0;
 }

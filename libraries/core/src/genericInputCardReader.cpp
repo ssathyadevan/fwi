@@ -11,11 +11,6 @@ genericInput genericInputCardReader::getInput()
     return _input;
 }
 
-void genericInputCardReader::printCard()
-{
-
-}
-
 void genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
     std::string filePath = inputCardPath+cardName+".in";
     std::vector<std::string> input_parameters = readFile(filePath);
