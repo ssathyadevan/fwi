@@ -38,7 +38,7 @@
 # D13.   receiversTopLeftCornerInM[1]       dbl            -5.0       m
 -5.0
 # D14.   receiversBottomRightCornerInM[0]   dbl            480.0      m
-480
+480.0
 # D15.   receiversBottomRightCornerInM[1]   dbl           -5.0        m
 -5.0
 # I1.    ngrid[0]                           int           64          -

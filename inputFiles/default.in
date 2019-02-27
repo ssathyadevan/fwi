@@ -26,21 +26,21 @@
 # D7.    reservoirBottomRightCornerInM[1]   dbl            300.0      m
 300.0
 # D8.    sourcesTopLeftCornerInM[0]         dbl            -480.0     m
--350.0 
+-480.0 
 # D9.    sourcesTopLeftCornerInM[1]         dbl            -5.0       m
--50.0
+-5.0
 # D10.   sourcesBottomRightCornerInM[0]     dbl            480.0      m
--350.0
+480.0
 # D11.   sourcesBottomRightCornerInM[1]     dbl           -5.0        m
-350.0
+-5.0
 # D12.   receiversTopLeftCornerInM[0]       dbl            -480.0     m
-350.0 
+-480.0 
 # D13.   receiversTopLeftCornerInM[1]       dbl            -5.0       m
--50.0
+-5.0
 # D14.   receiversBottomRightCornerInM[0]   dbl            480.0      m
-350.0
+480.0
 # D15.   receiversBottomRightCornerInM[1]   dbl           -5.0        m
-350.0
+-5.0
 # I1.    ngrid[0]                           int           64          -
 64
 # I2.    ngrid[1]                           int           32          -

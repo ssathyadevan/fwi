@@ -4,11 +4,11 @@
 # The order of the variables and their number is fixed
 # At the bottom every variable is explained
 
-##########################################################################################
-#                                                                                        #
-#                                  SCIENTIFIC PARAMETERS                                 #
-#                                                                                        #
-##########################################################################################
+###############################################################################
+#                                                                             #
+#                                SCIENTIFIC PARAMETERS                        #
+#                                                                             #
+###############################################################################
 
 #        VARIABLE (input.):                 TYPE (const):  DEFAULT:   UNIT:
 # D1.    c_0                                dbl            2000.0     m per s
@@ -26,21 +26,21 @@
 # D7.    reservoirBottomRightCornerInM[1]   dbl            300.0      m
 300.0
 # D8.    sourcesTopLeftCornerInM[0]         dbl            -480.0     m
--480.0 
+-350.0 
 # D9.    sourcesTopLeftCornerInM[1]         dbl            -5.0       m
--5.0
+-50.0
 # D10.   sourcesBottomRightCornerInM[0]     dbl            480.0      m
-480.0
+-350.0
 # D11.   sourcesBottomRightCornerInM[1]     dbl           -5.0        m
--5.0
+350.0
 # D12.   receiversTopLeftCornerInM[0]       dbl            -480.0     m
--480.0 
+350.0 
 # D13.   receiversTopLeftCornerInM[1]       dbl            -5.0       m
--5.0
+-50.0
 # D14.   receiversBottomRightCornerInM[0]   dbl            480.0      m
-480.0
+350.0
 # D15.   receiversBottomRightCornerInM[1]   dbl           -5.0        m
--5.0
+350.0
 # I1.    ngrid[0]                           int           64          -
 64
 # I2.    ngrid[1]                           int           32          -
@@ -56,11 +56,11 @@ temple
 # B1.    Iter2.calcAlpha                    bool          0 (false)   -
 0
 
-##########################################################################################
-#                                                                                        #
-#                                COMPUTATIONAL PARAMETERS                                #
-#                                                                                        #
-##########################################################################################
+###############################################################################
+#                                                                             #
+#                                COMPUTATIONAL PARAMETERS                     #
+#                                                                             #
+###############################################################################
 
 # d1.    Iter1.tolerance                    dbl           1.e-8
 1.e-8
@@ -73,9 +73,9 @@ temple
 # i1.    n_max                              int           5
 5
 # i2.    Iter1.n                            int           50
-50
+10
 # i3.    Iter2.n                            int           100
-100
+15
 # b1.    do_reg                             bool          1 (true)
 1
 # b2.    verbosity                          bool          0 (false)
