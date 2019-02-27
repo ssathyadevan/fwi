@@ -32,8 +32,6 @@ int main(int argc, char** argv)
     forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
     randomInversionInputCardReader randomInversionReader(inputFolder, outputFolder, "RandomInversionInput");
 
-    genericInput gInput = genericInputCardReader::getInput("GenericInput");
-
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
     randomInversionInput riInput = randomInversionReader.getInput();
