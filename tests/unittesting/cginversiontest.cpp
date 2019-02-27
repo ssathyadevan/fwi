@@ -20,3 +20,10 @@ TEST(CGInversionInputTest, testCardToInputFunctionality){
     EXPECT_EQ(input.doReg, true);
 
 }
+
+//TEST(CGInversionInputTest, testCardToInputFunctionality){
+
+//    std::string temp = "../input/TestSet/";
+//    conjugateGradientInversionInputCardReader cardReader = conjugateGradientInversionInputCardReader(temp, "../output/", "testConjugateGradientInversionInput");
+//    conjugateGradientInput input = cardReader.getInput();
+//}
