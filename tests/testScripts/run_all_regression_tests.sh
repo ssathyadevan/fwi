@@ -12,26 +12,26 @@ cd $FWI_INSTALL_PATH/
 mkdir -p input output test
 cp $FWI_SOURCE_PATH/inputFiles/* input/
 cp $FWI_SOURCE_PATH/pythonScripts/postProcessing-python3.py .
-NEW="NEW"
+RUN="RUN"
 for TEST in $TESTS
 do
 	echo "Running test:" $TEST
 
 	cp -r $FWI_SOURCE_PATH/tests/testScripts/* test/
-	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/$TEST.in input/"$TEST$NEW.in"
+	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/$TEST.in input/"$TEST$RUN.in"
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/* test/
-	cp input/"$TEST$NEW.in" test/
+	cp input/"$TEST$RUN.in" test/
 
-	$FWI_INSTALL_PATH/bin/FWI_PreProcess input/ output/ $TEST$NEW
-	$FWI_INSTALL_PATH/bin/FWI_Process input/ output/ $TEST$NEW
+	$FWI_INSTALL_PATH/bin/FWI_PreProcess input/ output/ $TEST$RUN
+	$FWI_INSTALL_PATH/bin/FWI_Process input/ output/ $TEST$RUN
 
 	cp output/* test/
 
 	python3 postProcessing-python3.py output/
 
 	cd test/
-	python3 regressionTestPreProcessing_python3.py $TEST $TEST$NEW
-	python3 regressionTestProcessing_python3.py $TEST $TEST$NEW
+	python3 regressionTestPreProcessing_python3.py $TEST $TEST$RUN
+	python3 regressionTestProcessing_python3.py $TEST $TEST$RUN
 	python3 -m pytest python_unittest.py --junitxml "${TEST}results.xml"
 	cp "${TEST}results.xml" $FWI_SOURCE_PATH/build/
 	cd ..	

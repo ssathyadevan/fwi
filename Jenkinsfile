@@ -64,7 +64,7 @@ pipeline{
                         echo 'Creating unit-test Result Summary (junit)'
                         xunit (
                                         tools: [ CTest (pattern: 'build/*.xml') ])
-                        junit ('build/fastresults.xml')
+                        junit ('build/*.xml')
                         echo 'Cleaning the workspace'
                         //deleteDir()
                         script {
