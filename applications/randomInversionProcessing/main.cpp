@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
     randomInversionInputCardReader randomInversionReader(inputFolder, outputFolder, "RandomInversionInput");
 
-    genericInput gInput = genericInputCardReader::getInput("GenericInput");
+    //genericInput gInput = genericInputCardReader::getInput("GenericInput");
 
     genericInput gInput = genericReader.getInput();
     forwardModelInput fmInput = forwardModelReader.getInput();
@@ -107,7 +107,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     }
 
     ForwardModelInterface *model;
-    model = new forwardModel(grid, src, recv, freqg, gInput, fmInput);
+    model = new forwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
     inverse = new inversionRandom(model, riInput);

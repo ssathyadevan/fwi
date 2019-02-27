@@ -32,19 +32,16 @@ class ForwardModelInterface
 
 public:
     ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq, genericInput gInput, forwardModelInput fmInput)
-        : grid(grid), src(src), recv(recv), freq(freq), gInput(gInput),fmInput(fmInput)
+                          const frequenciesGroup &freq, const forwardModelInput &fmInput)
+        : grid(grid), src(src), recv(recv), freq(freq), fmInput(fmInput)
     {
 
     }
 
     virtual ~ForwardModelInterface()
     {
+
     }
-
-    virtual void calculateData(std::complex<double> *p_data, pressureFieldSerial chi, Iter2 conjGrad) = 0;
-
-    virtual void createTotalField1D(pressureFieldSerial chi_est) = 0;
 
     const grid2D& getGrid();
 
@@ -54,9 +51,13 @@ public:
 
     const frequenciesGroup& getFreq();
 
-    virtual void calculateKRes(pressureFieldComplexSerial &kRes) = 0;
+    const forwardModelInput& getForwardModelInput();
 
-    virtual forwardModelInput getForwardModelInput() = 0;
+    virtual void calculateData(std::complex<double> *p_data, pressureFieldSerial chi, Iter2 conjGrad) = 0;
+
+    virtual void createTotalField1D(pressureFieldSerial chi_est) = 0;
+
+    virtual void calculateKRes(pressureFieldComplexSerial& kRes) = 0;
 
     virtual void intermediateForwardModelStep1() = 0;
 
@@ -73,8 +74,7 @@ protected:
     const sources& src;
     const receivers& recv;
     const frequenciesGroup& freq;
-    const genericInput gInput;
-    const forwardModelInput fmInput;
+    const forwardModelInput& fmInput;
 };
 
 #endif

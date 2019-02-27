@@ -80,6 +80,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
     receivers recv(src);
@@ -87,16 +88,21 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     frequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+//    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+
+    int totalGridCells = freqg.nFreq * src.nSrc * recv.nRecv;
+
+
     //read referencePressureData from a CSV file format
-    std::complex<double> referencePressureData[magnitude];
+    std::complex<double> referencePressureData[totalGridCells];
+
     std::ifstream       file(gInput.outputLocation+gInput.cardName+"InvertedChiToPressure.txt");
     CSVReader           row;
 
     int i = 0;
     while(file >> row)
     {
-        if (i<magnitude)
+        if (i < totalGridCells)
         {
             referencePressureData[i]= { atof(row[0].c_str() ), atof(row[1].c_str()) };
         }
@@ -104,7 +110,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     }
 
     ForwardModelInterface *model;
-    model = new forwardModel(grid, src, recv, freqg, gInput, fmInput);
+    model = new forwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
     inverse = new conjugateGradientInversion(model,cgInput);

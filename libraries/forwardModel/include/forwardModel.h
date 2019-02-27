@@ -8,8 +8,7 @@ class forwardModel : public ForwardModelInterface
 public:
 
     forwardModel(const grid2D &grid, const sources &src,
-                 const receivers &recv, const frequenciesGroup &freq,
-                 genericInput gInput, forwardModelInput fmInput);
+                 const receivers &recv, const frequenciesGroup &freq, const forwardModelInput &fmInput);
 
     ~forwardModel();
 
@@ -28,10 +27,6 @@ public:
     void createTotalField(Iter2 conjGrad, pressureFieldSerial chi) ;
 
     virtual void createTotalField1D(pressureFieldSerial chi_est);
-
-    virtual forwardModelInput getForwardModelInput();
-
-    virtual genericInput getGenericInput();
 
     void calculateKappa();
 

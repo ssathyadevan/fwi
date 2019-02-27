@@ -64,7 +64,7 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     chi.toFile(gInput.outputLocation + "chi_ref_"+ gInput.cardName+ ".txt");
 
     ForwardModelInterface *model;
-    model = new forwardModel(grid, src, recv, freqg, gInput,fmInput);
+    model = new forwardModel(grid, src, recv, freqg, fmInput);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     model->calculateData(referencePressureData, chi, fmInput.iter2);

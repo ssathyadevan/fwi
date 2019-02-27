@@ -20,3 +20,8 @@ const frequenciesGroup& ForwardModelInterface::getFreq()
 {
     return freq;
 }
+
+const forwardModelInput& ForwardModelInterface::getForwardModelInput()
+{
+    return fmInput;
+}
