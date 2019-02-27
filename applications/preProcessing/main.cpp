@@ -44,7 +44,7 @@ void generateReferencePressureFieldFromChi (const Input& input)
     chi.fromFile(input);
     sources src(input.sourcesTopLeftCornerInM, input.sourcesBottomRightCornerInM, input.nSourcesReceivers.src);
     src.Print();
-    receivers recv(src);
+    receivers recv(input.receiversTopLeftCornerInM, input.receiversBottomRightCornerInM, input.nSourcesReceivers.rec);
     recv.Print();
     frequenciesGroup freqg(input.freq, input.c_0);
     freqg.Print(input.freq.nTotal);

@@ -33,6 +33,14 @@
 480.0
 # D11.   sourcesBottomRightCornerInM[1]     dbl           -5.0        m
 -5.0
+# D12.   receiversTopLeftCornerInM[0]       dbl            -480.0     m
+-480.0 
+# D13.   receiversTopLeftCornerInM[1]       dbl            -5.0       m
+-5.0
+# D14.   receiversBottomRightCornerInM[0]   dbl            480.0      m
+480
+# D15.   receiversBottomRightCornerInM[1]   dbl           -5.0        m
+-5.0
 # I1.    ngrid[0]                           int           64          -
 64
 # I2.    ngrid[1]                           int           32          -
@@ -77,6 +85,7 @@ layers
 # D2-D3.  Minimum and maximum requency of emitted sound 
 # D4-D7.  Reservoir corner points in m, notice that going down means z INcreases
 # D8-D11. Source corner point in m, notice that going down means z INcreases
+# D12-D14.Receiver corner point in m, notice that going down means z INcreases
 # I1-I2.  number of horizontal (x) and vertical (z) grid points
 # I3.     What is the number of frequencies you emit?
 # I4-I5.  number of sources and receivers

@@ -51,5 +51,7 @@ struct Input
     std::array<double,2> reservoirBottomRightCornerInM;
     std::array<double,2> sourcesTopLeftCornerInM;
     std::array<double,2> sourcesBottomRightCornerInM;
+    std::array<double,2> receiversTopLeftCornerInM;
+    std::array<double,2> receiversBottomRightCornerInM;
 };
 #endif

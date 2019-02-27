@@ -40,6 +40,10 @@ struct Input inputCardReader(std::string inputCardPath, std::string outputLocati
     const double srcs_top_left_corner_coord_z_in_m    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const double srcs_bottom_right_corner_coord_x_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const double srcs_bottom_right_corner_coord_z_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double recvs_top_left_corner_coord_x_in_m    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double recvs_top_left_corner_coord_z_in_m    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double recvs_bottom_right_corner_coord_x_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
+    const double recvs_bottom_right_corner_coord_z_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
     const int    nxt                                  = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points horizontal
     const int    nzt                                  = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points vertical
     const int    nFreq_Total                          = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Total number of frequencies used
@@ -76,7 +80,9 @@ struct Input inputCardReader(std::string inputCardPath, std::string outputLocati
                 {top_left_corner_coord_x_in_m,top_left_corner_coord_z_in_m},
                 {bottom_right_corner_coord_x_in_m,bottom_right_corner_coord_z_in_m},
                 {srcs_top_left_corner_coord_x_in_m,srcs_top_left_corner_coord_z_in_m},
-                {srcs_bottom_right_corner_coord_x_in_m,srcs_bottom_right_corner_coord_z_in_m}
+                {srcs_bottom_right_corner_coord_x_in_m,srcs_bottom_right_corner_coord_z_in_m},
+                {recvs_top_left_corner_coord_x_in_m,recvs_top_left_corner_coord_z_in_m},
+                {recvs_bottom_right_corner_coord_x_in_m,recvs_bottom_right_corner_coord_z_in_m}
     };
 
     // This part is needed for plotting the chi values in imageCreator_CMake.py
