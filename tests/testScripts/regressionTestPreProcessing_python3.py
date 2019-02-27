@@ -1,8 +1,8 @@
-
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
-import sys, os, difflib, filecmp, csv, numpy, matplotlib, shutil, matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+import sys, os, difflib, filecmp, csv, numpy, matplotlib, shutil, unittest, matplotlib.pyplot as plt
 from datetime import datetime
 
 
@@ -75,4 +75,11 @@ for i in range (0,reader_reference_preProcess_array.shape[0]):
 
 
 print("The mean value of the differences between run and benchmark:             " + str(diff_run_and_reference.mean()))
+result1 = str(diff_run_and_reference.mean())
+
+f= open("RegressionTest_Tolerance.txt","w+")
+f.write(result1)
+f.close()
+
 print("The element wise summation the absolute differences between run and benchmark:             " + str(sum))
+

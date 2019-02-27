@@ -9,5 +9,5 @@ cp ../FWI/parallelized-fwi/pythonScripts/* test/
 cp ../FWI/parallelized-fwi/tests/testScripts/* test/
 cp ../FWI/parallelized-fwi/inputFiles/* test/
 cd test
-python regressionTestPreProcessing.py $varname default
-python regressionTestProcessing.py $varname default
+python regressionTestPreProcessing_python3.py $varname default
+python regressionTestProcessing_python3.py $varname default
