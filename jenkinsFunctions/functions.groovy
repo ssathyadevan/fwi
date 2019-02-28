@@ -33,9 +33,9 @@ def testAll() {
     echo 'testing all'
     sh '''
     cd build
+    cp -r ../parallelized-fwi/inputFiles ../FWIInstall/input
     make test
     ctest -T test --no-compress-output
-    cp -r /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/parallelized-fwi/inputFiles /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall/input
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
