@@ -19,7 +19,7 @@ std::vector<std::string> inputCardReader::readFile(const std::string& runName) c
     if ( !f1.is_open() )
     {
         std::cout << "file not found" << std:: endl;
-        exit{EXIT_FAILURE};
+        exit(EXIT_FAILURE);
     }
 
     std::string line,w1;
