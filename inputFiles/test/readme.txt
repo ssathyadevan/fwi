@@ -1,0 +1,1 @@
+This folder contains input cards that are used by unit tests. This folder has to be added to the folder FWIInstall/input. Changing these files will break the test
