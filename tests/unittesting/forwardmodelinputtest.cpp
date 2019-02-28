@@ -5,9 +5,9 @@
 //Generic Input Card test:
 TEST(ForwardModelInputTest, ints){
 
-    std::string temp = "../input/TestSet/";
-    forwardModelInputCardReader cardReader = forwardModelInputCardReader(temp, "../output/","testForwardModelInput");
-    forwardModelInput input = cardReader.getInput();
+//    std::string temp = "../input/TestSet/";
+//    forwardModelInputCardReader cardReader = forwardModelInputCardReader(temp, "../output/","testForwardModelInput");
+//    forwardModelInput input = cardReader.getInput();
 
     ASSERT_TRUE(true);
 
