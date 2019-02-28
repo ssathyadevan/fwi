@@ -5,7 +5,7 @@
 //Generic Input Card test:
 TEST(ForwardModelInputTest, ints){
 
-    std::string temp = "../build/";
+    std::string temp = "../../inputFiles/test/";
     forwardModelInputCardReader cardReader = forwardModelInputCardReader(temp);
     forwardModelInput input = cardReader.getInput();
 
