@@ -1,8 +1,5 @@
 #include "receivers.h"
 
-receivers::receivers(const sources &src) :
-    nRecv(src.nSrc), xRecv(src.xSrc) {}
-
 // Place the receivers on a linear line from xMin to xMax, including the end points
 receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_)
     : nRecv(nRecv_), xRecv()

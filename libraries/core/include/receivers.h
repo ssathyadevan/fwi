@@ -17,7 +17,6 @@ public:
   const int nRecv;
   std::vector< std::array<double, 2> > xRecv;
 
-  receivers(const sources &src);
   receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
             int nSrc_);
 
