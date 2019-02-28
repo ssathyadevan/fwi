@@ -34,7 +34,7 @@ def testAll() {
     sh '''
     cd build
     cp -r ../inputFiles ../FWIInstall/input
-    cp ../inputFiles/test/ForwardModelsInput.in ../build/
+    cp ../inputFiles/test/ForwardModelInput.in ../build/
     make test
     ctest -T test --no-compress-output
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
