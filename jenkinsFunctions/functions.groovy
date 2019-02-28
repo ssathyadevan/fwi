@@ -22,8 +22,7 @@ def setEnvironment() {
 def buildAll() {
         echo 'Building..'
         sh '''
-        mkdir build
-	ll
+        mkdir build	
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
         make install
@@ -34,7 +33,7 @@ def testAll() {
     echo 'testing all'
     sh '''
     cd build
-    cp -r ../parallelized-fwi/inputFiles ../FWIInstall/input
+    cp -r ../inputFiles ../FWIInstall/input
     make test
     ctest -T test --no-compress-output
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
