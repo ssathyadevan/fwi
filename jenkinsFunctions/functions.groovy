@@ -35,6 +35,7 @@ def testAll() {
     cd build
     make test
     ctest -T test --no-compress-output
+    cp ../parallelized-fwi/inputFile/test/GenericInput.in ../build
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }
