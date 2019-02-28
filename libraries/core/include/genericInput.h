@@ -7,7 +7,7 @@ struct genericInput
 {
      std::string inputCardPath;
      std::string outputLocation;
-     std::string cardName;
+     std::string runName;
      double c_0;
      Freq freq;
      std::array<double,2> reservoirTopLeftCornerInM;

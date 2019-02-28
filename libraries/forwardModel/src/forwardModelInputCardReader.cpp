@@ -1,8 +1,9 @@
 #include "forwardModelInputCardReader.h"
 
-forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
+forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath)
+    : inputCardReader()
 {
-   readCard(inputCardPath,outputLocation,cardName);
+   readCard(inputCardPath);
 }
 
 forwardModelInput forwardModelInputCardReader::getInput()
@@ -10,9 +11,9 @@ forwardModelInput forwardModelInputCardReader::getInput()
     return _input;
 }
 
-void forwardModelInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
+void forwardModelInputCardReader::readCard(std::string inputCardPath)
 {
-    std::string filePath = inputCardPath+cardName + ".in";
+    std::string filePath = inputCardPath + "ForwardModelInput.in";
     std::vector<std::string> input_parameters = readFile(filePath);
 
     int parameterCounter = 0;

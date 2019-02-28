@@ -31,5 +31,5 @@ build_test( TARGET CGInversionInputTest SOURCE cginversiontest.cpp LIBRARIES cor
 #target_link_libraries( genericinputtest ${GTEST_BOTH_LIBRARIES} core_library pthread)
 #gtest_discover_tests( genericinputtest )
 
-install( TARGETS unittest genericinputtest forwardmodelinputtest CGInversionInputTest DESTINATION bin)
+install( TARGETS DESTINATION bin) #genericinputtest forwardmodelinputtest CGInversionInputTest unittest
 

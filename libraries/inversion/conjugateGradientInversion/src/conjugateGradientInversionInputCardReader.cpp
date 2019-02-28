@@ -1,17 +1,18 @@
 #include "conjugateGradientInversionInputCardReader.h"
 
-conjugateGradientInversionInputCardReader::conjugateGradientInversionInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
+conjugateGradientInversionInputCardReader::conjugateGradientInversionInputCardReader(std::string inputCardPath)
+    : inputCardReader()
 {
-    readCard(inputCardPath,outputLocation,cardName);
+    readCard(inputCardPath);
 }
 
 conjugateGradientInput  conjugateGradientInversionInputCardReader::getInput(){
     return _input;
 }
 
-void conjugateGradientInversionInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
+void conjugateGradientInversionInputCardReader::readCard(std::string inputCardPath)
 {
-    std::vector<std::string> input_parameters = readFile(inputCardPath+cardName+".in");
+    std::vector<std::string> input_parameters = readFile(inputCardPath + "ConjugateGradientInversionInput.in");
     int parameterCounter = 0;
 
     const double tol1_to_be_implemented               = stod(input_parameters[parameterCounter]);    ++parameterCounter; //

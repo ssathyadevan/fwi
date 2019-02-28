@@ -1,9 +1,11 @@
 #include "genericInputCardReader.h"
 #include <iostream>
 
-genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
+genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string runName): inputCardReader()
 {
-    readCard(inputCardPath,outputLocation,cardName);
+    readCard(inputCardPath);
+    _input.outputLocation = outputLocation;
+    _input.runName = runName;
 }
 
 genericInput genericInputCardReader::getInput()
@@ -11,8 +13,8 @@ genericInput genericInputCardReader::getInput()
     return _input;
 }
 
-void genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
-    std::string filePath = inputCardPath+cardName+".in";
+void genericInputCardReader::readCard(std::string inputCardPath){
+    std::string filePath = inputCardPath + "GenericInput.in";
     std::vector<std::string> input_parameters = readFile(filePath);
 
     int parameterCounter = 0;
@@ -39,7 +41,7 @@ void genericInputCardReader::readCard(std::string inputCardPath, std::string out
 
     genericInput input
     {
-                inputCardPath, outputLocation, cardName,
+                inputCardPath, "", "",
                 c_0,
                 {Freq_min,                  Freq_max,                     nFreq_Total,     spacing},
                 {top_left_corner_coord_x_in_m, top_left_corner_coord_z_in_m},
