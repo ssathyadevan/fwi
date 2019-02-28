@@ -35,7 +35,7 @@ def testAll() {
     cd build
     make test
     ctest -T test --no-compress-output
-    cp ../parallelized-fwi/inputFiles/test/GenericInput.in ../build
+    cp -r /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/parallelized-fwi/inputFiles /var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall/input
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     '''
 }

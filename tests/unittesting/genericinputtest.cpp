@@ -5,9 +5,9 @@
 //Generic Input Card test:
 TEST(GenericInputTest, ints){
 
-    std::string temp = "./";
+    std::string temp = "../FWIInstall/input/test/";
 
-    genericInputCardReader cardReader = genericInputCardReader(temp, "../../../FWIInstall/output/", "test");
+    genericInputCardReader cardReader = genericInputCardReader(temp, "../FWIInstall/output/", "test");
     genericInput input = cardReader.getInput();
 
     ASSERT_TRUE(true);
