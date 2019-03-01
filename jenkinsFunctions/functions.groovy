@@ -22,7 +22,7 @@ def setEnvironment() {
 def buildAll() {
         echo 'Building..'
         sh '''
-        mkdir build	
+        mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
         make install
@@ -33,8 +33,6 @@ def testAll() {
     echo 'testing all'
     sh '''
     cd build
-    cp -r ../inputFiles ../FWIInstall/input
-    cp ../inputFiles/test/ForwardModelInput.in ../build/
     make test
     ctest -T test --no-compress-output
     cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
@@ -43,27 +41,27 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-#        sh '''
-#        mkdir input output
-#        cp inputFiles/* input/
-#        cd FWIInstall/bin
-#        ./FWI_PreProcess ../../input/ ../../output/ default
-#        ./FWI_Process ../../input/ ../../output/ default
-#        cd ../../pythonScripts
-#        cp postProcessing-python3.py ../
-#        cd ..
-#        python3 postProcessing-python3.py output/
-#        mkdir test
-#        cp tests/regression_data/fast/* test/
-#        cp tests/testScripts/* test/
-#        cp input/default.in test/
-#        cp output/* test/
-#        cd test
-#        python3 regressionTestPreProcessing_python3.py fast default
-#        python3 regressionTestProcessing_python3.py fast default
-#        python3 -m pytest python_unittest.py --junitxml results.xml 
-#        cp results.xml ../build/
-#        '''
+        sh '''
+        mkdir input output
+        cp inputFiles/* input/
+        cd FWIInstall/bin
+        ./FWI_PreProcess ../../input/ ../../output/ default
+        ./FWI_Process ../../input/ ../../output/ default
+        cd ../../pythonScripts
+        cp postProcessing-python3.py ../
+        cd ..
+        python3 postProcessing-python3.py output/
+        mkdir test
+        cp tests/regression_data/fast/* test/
+        cp tests/testScripts/* test/
+        cp input/default.in test/
+        cp output/* test/
+        cd test
+        python3 regressionTestPreProcessing_python3.py fast default
+        python3 regressionTestProcessing_python3.py fast default
+        python3 -m pytest python_unittest.py --junitxml results.xml 
+        cp results.xml ../build/
+        '''
 }
 
 def deploy(){

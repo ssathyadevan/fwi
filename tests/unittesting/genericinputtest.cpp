@@ -15,5 +15,4 @@ TEST(GenericInputTest, ints){
     EXPECT_EQ(input.freq.nTotal, 15);
     EXPECT_EQ(input.nSourcesReceivers.rec, 17);
     EXPECT_EQ(input.nSourcesReceivers.src, 17);
-
 }
