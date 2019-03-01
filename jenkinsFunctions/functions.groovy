@@ -30,13 +30,13 @@ def buildAll() {
 }
 
 def testAll() {
-    echo 'testing all'
-    sh '''
-    cd build
-    make test
-    ctest -T test --no-compress-output
-    cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
-    '''
+	echo 'testing all'
+    	sh '''
+    	cd build
+    	make test
+    	ctest -T test --no-compress-output
+    	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+    	'''
 }
 
 def regressiontest() {
@@ -47,14 +47,14 @@ def regressiontest() {
 }
 
 def deploy(){
-                echo 'Deploying'
-                sh '''
-                cp -r inputFiles FWIInstall/
-                cp -r tests FWIInstall/
-                cp pythonScripts/* FWIInstall/
-                tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
-                '''
-                archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+        echo 'Deploying'
+        sh '''
+        cp -r inputFiles FWIInstall/
+        cp -r tests FWIInstall/
+        cp pythonScripts/* FWIInstall/
+        tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+        '''
+        archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
 
