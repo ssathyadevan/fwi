@@ -43,6 +43,9 @@ void conjugateGradientInversionInputCardReader::readCard(std::string inputCardPa
         n_max
     };
 
+    if(jsonInput.doReg != input.doReg)
+        std::cout << "input not the same" << std::endl;
+
     //_input = input;
     _input = jsonInput;
 }
