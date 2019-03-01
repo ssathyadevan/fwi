@@ -6,11 +6,12 @@
 import numpy as np
 
 # Output Properties
-x = 64                                                  # Number of horizontal grid points
-z = 32                                                  # Number of vertical grid points
-nlayer = 6                                              # Number of subsurface layers
+x = 50                                                  # Number of horizontal grid points
+z = 25                                                  # Number of vertical grid points
+nlayer = 4                                              # Number of subsurface layers
 background_layer_height = 4                             # Height of background layer in grid points
-filename = "layers.txt"
+layer_spacing = 3                                       # Spacing between layers
+filename = "smallgrid.txt"
 
 # Random layer height
 np.random.seed(4)
@@ -24,7 +25,7 @@ layer_c = np.linspace(2100., 2218., nlayer)             # Vector of evenly space
 np.random.shuffle(layer_c)                              # Shuffle vector
 
 # Calculate Chi
-layer_chi = 1 - np.square(background_c / layer_c)
+layer_chi = 1. - np.square(background_c / layer_c)
 
 # Create output
 output = np.zeros((z, x))
@@ -34,8 +35,8 @@ end = background_layer_height
 
 # Put background layer of size 2 in between each layer
 for layer in range(1,nlayer+1):
-    start += (layer > 1) * (layer_height[layer-2] + 2)
-    end += layer_height[layer-1] + (layer > 1) * 2
+    start += (layer > 1) * (layer_height[layer-2] + layer_spacing)
+    end += layer_height[layer-1] + (layer > 1) * layer_spacing
     output[start:end, :] = layer_chi[layer-1]
     
     print(output[start,1])
