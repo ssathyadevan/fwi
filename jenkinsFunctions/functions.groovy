@@ -43,7 +43,7 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-        sh '''
+#        sh '''
 #        mkdir input output
 #        cp inputFiles/* input/
 #        cd FWIInstall/bin
@@ -63,7 +63,7 @@ def regressiontest() {
 #        python3 regressionTestProcessing_python3.py fast default
 #        python3 -m pytest python_unittest.py --junitxml results.xml 
 #        cp results.xml ../build/
-        '''
+#        '''
 }
 
 def deploy(){

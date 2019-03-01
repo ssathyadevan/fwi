@@ -4,7 +4,8 @@
 
 //Generic Input Card test:
 TEST(GenericInputTest, ints){
-    std::string temp = "../../../inputFiles/test/";
+    std::string temp = "../../../inputFiles/test/";//jenkins path
+    //std::string temp = "../../../parallelized-fwi/inputFiles/test/";//qt path
 
     genericInputCardReader cardReader = genericInputCardReader(temp, "../FWIInstall/output/", "test");
     genericInput input = cardReader.getInput();
