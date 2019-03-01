@@ -13,7 +13,7 @@ conjugateGradientInput  conjugateGradientInversionInputCardReader::getInput(){
 
 void conjugateGradientInversionInputCardReader::readCard(std::string inputCardPath)
 {
-	std::ifstream in(intputCardPath + "CGInput.json");
+    std::ifstream in(inputCardPath + "CGInput.json");
 	nlohmann::json j;
 	in >> j;
 	
