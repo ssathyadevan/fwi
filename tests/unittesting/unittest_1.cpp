@@ -23,7 +23,6 @@ TEST (HelperFunctionTest, doubles2){
 
 
 
-
 //int main(int argc, char **argv)
 //{
 //    ::testing::InitGoogleTest(&argc, argv);

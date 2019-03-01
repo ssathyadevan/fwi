@@ -16,7 +16,7 @@ protected:
 
     std::vector<std::string> readFile(const std::string& runName) const;
 
-    virtual void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName) = 0;
+    virtual void readCard(std::string inputCardPath) = 0;
 };
 
 

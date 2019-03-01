@@ -15,7 +15,7 @@ function( build_test )
     gtest_discover_tests( ${TEST_TARGET} )
 endfunction( build_test )
 
- #core_library forwardModel_library conjugate_gradient_inversion_library
+#core_library forwardModel_library conjugate_gradient_inversion_library
 
 build_test( TARGET unittest SOURCE unittest_1.cpp LIBRARIES core_library)
 build_test( TARGET genericinputtest SOURCE genericinputtest.cpp LIBRARIES core_library)
@@ -31,5 +31,5 @@ build_test( TARGET CGInversionInputTest SOURCE cginversiontest.cpp LIBRARIES cor
 #target_link_libraries( genericinputtest ${GTEST_BOTH_LIBRARIES} core_library pthread)
 #gtest_discover_tests( genericinputtest )
 
-install( TARGETS unittest DESTINATION bin)
+install( TARGETS unittest DESTINATION bin) #genericinputtest forwardmodelinputtest CGInversionInputTest unittest
 

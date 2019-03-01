@@ -59,7 +59,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
     // open the file to store the residual log
     std::ofstream file;
-    file.open (gInput.outputLocation+gInput.cardName+"Residual.log", std::ios::out | std::ios::trunc);
+    file.open (gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
     if (!file)
     {
         std::cout<< "Failed to open the file to store residuals" << std::endl;

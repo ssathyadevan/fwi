@@ -16,7 +16,7 @@ public:
     genericInput getInput();
 
 private:
-    void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
+    void readCard(std::string inputCardPath);
 
     genericInput _input;
 };
