@@ -6,7 +6,7 @@
         "nTotal": 15
     },
     "reservoirTopLeft": {
-        "x": -300.0, 
+        "x": -300.0,
         "z": 0.0
     },
     "reservoirBottomRight": {
@@ -18,7 +18,15 @@
         "z": -5.0
     },
     "sourcesBottomRight": {
-        "x": 480.0, 
+        "x": 480.0,
+        "z": -5.0
+    },
+    "receiversTopLeft": {
+        "x": -480.0,
+        "z": -5.0
+    },
+    "receiversBottomRight": {
+        "x": 480.0,
         "z": -5.0
     },
     "nSources": 17,

@@ -22,7 +22,6 @@ int main(int argc, char** argv)
 
         exit(EXIT_FAILURE);
     }
-    std::vector<std::string> arguments(argv+1, argc+argv);
 
     std::vector<std::string> arguments(argv+1, argc+argv);    
     std::string inputFolder  = arguments[0];
@@ -85,7 +84,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(input.receiversTopLeftCornerInM, input.receiversBottomRightCornerInM, input.nSourcesReceivers.rec);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
     frequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);

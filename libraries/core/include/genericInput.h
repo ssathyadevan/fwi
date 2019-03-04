@@ -14,6 +14,8 @@ struct genericInput
      std::array<double,2> reservoirBottomRightCornerInM;
      std::array<double,2> sourcesTopLeftCornerInM;
      std::array<double,2> sourcesBottomRightCornerInM;
+     std::array<double,2> receiversTopLeftCornerInM;
+     std::array<double,2> receiversBottomRightCornerInM;
      std::array<int,2> ngrid;
      NSourcesReceivers nSourcesReceivers;
      std::string fileName;

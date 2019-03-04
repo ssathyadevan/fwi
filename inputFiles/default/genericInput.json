@@ -5,13 +5,36 @@
         "max": 40.0,
         "nTotal": 15
     },
-    "reservoirTopLeft": {-300.0, 0.0},
-    "reservoirBottomRight": {300.0, 300.0},
-    "sourcesTopLeft": {-480.0, -5.0},
-    "sourcesBottomRight": {480.0, -5.0},
+    "reservoirTopLeft": {
+        "x": -300.0,
+        "z": 0.0
+    },
+    "reservoirBottomRight": {
+        "x": 300.0, 
+        "z": 300.0
+    },
+    "sourcesTopLeft": {
+        "x": -480.0,
+        "z": -5.0
+    },
+    "sourcesBottomRight": {
+        "x": 480.0,
+        "z": -5.0
+    },
+    "receiversTopLeft": {
+        "x": -480.0,
+        "z": -5.0
+    },
+    "receiversBottomRight": {
+        "x": 480.0,
+        "z": -5.0
+    },
     "nSources": 17,
     "nReceivers": 17,
-    "ngrid": {64, 32},
+    "ngrid": {
+        "x": 64,
+        "z": 32
+    },
     "verbosity": false,
-    "fileName": "temple",
+    "fileName": "temple"
 }

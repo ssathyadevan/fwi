@@ -33,14 +33,6 @@
 480.0
 # D11.   sourcesBottomRightCornerInM[1]     dbl           -5.0        m
 -5.0
-# D12.   receiversTopLeftCornerInM[0]       dbl            -480.0     m
--480.0 
-# D13.   receiversTopLeftCornerInM[1]       dbl            -5.0       m
--5.0
-# D14.   receiversBottomRightCornerInM[0]   dbl            480.0      m
-480.0
-# D15.   receiversBottomRightCornerInM[1]   dbl           -5.0        m
--5.0
 # I1.    ngrid[0]                           int           64          -
 64
 # I2.    ngrid[1]                           int           32          -
@@ -51,24 +43,51 @@
 17
 # I5.    NSourcesReceivers.rcv              int           17          -
 17
-# I6.    fileName                           string        temple      -
+# S1.    fileName                           string        temple.txt  -
 temple
-# I7.    verbosity                          bool          0 (false)
+# B1.    Iter2.calcAlpha                    bool          0 (false)   -
+0
+
+###############################################################################
+#                                                                             #
+#                                COMPUTATIONAL PARAMETERS                     #
+#                                                                             #
+###############################################################################
+
+# d1.    Iter1.tolerance                    dbl           1.e-8
+1.e-8
+# d2.    Iter2.tolerance                    dbl           5.e-5
+5.e-5
+# d3.    DeltaAmplification.start           dbl           100.
+100.0
+# d4.    DeltaAmplification.slope           dbl           10.
+10.0
+# i1.    n_max                              int           5
+5
+# i2.    Iter1.n                            int           50
+10
+# i3.    Iter2.n                            int           100
+15
+# b1.    do_reg                             bool          1 (true)
+1
+# b2.    verbosity                          bool          0 (false)
 0
 
 # D1.     Speed of sound through the reservoir
-<<<<<<< HEAD:inputFiles/default.in
 # D2-D3.  Minimum and maximum requency of emitted sound 
 # D4-D7.  Reservoir corner points in m, notice that going down means z INcreases
 # D8-D11. Source corner point in m, notice that going down means z INcreases
-# D12-D14.Receiver corner point in m, notice that going down means z INcreases
-=======
-# D2-D3.  Minimum and maximum frequency of emitted sound 
-# D4-D7.  Reservoir corner points in m, notice that going down means z increases
-# D8-D11. Source corner point in m, notice that going down means z increases
->>>>>>> develop:inputFiles/default/GenericInput.in
 # I1-I2.  number of horizontal (x) and vertical (z) grid points
-# I3.     Number of emitted frequencies
+# I3.     What is the number of frequencies you emit?
 # I4-I5.  number of sources and receivers
-# I6.     reservoir file name 
-# I7.     regulates if printing to cout or to diagnostic file
+# S1.     reservoir file name 
+# B1.     Decision true/false whether to calculate "alpha" 
+# d1.     Convergence criteria for the Conjugate Gradient i.e. chi_estimation loop
+# d2.     Convergence criteria for the calculation of p_tot in ForwardModel
+# d3.     the variable name is "delta_amplification_start"
+# d4.     the variable name is "delta_amplification_slope"
+# i1.     maximum number of iterations outer loop 
+# i2.     Conjugate gradient maximum iterations
+# i3.     Maximum iterations for p_tot calculation in forwardModel 
+# b1.     applying multiplicative regularisation when do_reg = 1 
+# b2.     regulates if printing to cout or to diagnostic file

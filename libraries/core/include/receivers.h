@@ -17,8 +17,7 @@ public:
   const int nRecv;
   std::vector< std::array<double, 2> > xRecv;
 
-  receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
-            int nSrc_);
+  receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
 
   void Print();
 
