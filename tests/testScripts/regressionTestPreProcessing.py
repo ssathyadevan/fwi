@@ -17,8 +17,8 @@ else:
 if (len(sys.argv) == 3):
     reference   = sys.argv[2]
 
-preProcess_ref_csv = reference + "InvertedChiToPressure.txt" 
-preProcess_run_csv = run + "InvertedChiToPressure.txt"
+preProcess_ref_csv = reference + "/" + reference + "InvertedChiToPressure.txt" 
+preProcess_run_csv = run + "/" + run + "InvertedChiToPressure.txt"
 
 
 preProcess_ref_csv_exists = os.path.isfile(preProcess_ref_csv)

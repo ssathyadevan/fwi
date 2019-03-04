@@ -1,6 +1,6 @@
 {
     "Iter1": {
-        "n": 10,
+        "n": 50,
         "tolerance": 1.0e-8
     },
     "DeltaAmplification": {

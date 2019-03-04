@@ -77,7 +77,7 @@ void pressureFieldSerial::fromFile(const genericInput& input)
 
     if (idx != std::string::npos)
     {
-        inputFilePath = inputFilePath.substr(idx+1);
+        inputFilePath = inputFilePath.substr(0,idx+1);
     }
 
     std::ifstream file(inputFilePath + input.fileName + ".txt", std::ios::in);
