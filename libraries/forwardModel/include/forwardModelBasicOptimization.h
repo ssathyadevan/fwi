@@ -17,8 +17,8 @@ public:
 
     virtual std::complex<double>* createPdataEst( const pressureFieldSerial &chiEst );
 
-    std::complex<double>* calculateKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial);
-    std::complex<double>* calculateKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial);
+    std::complex<double>* createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial);
+    std::complex<double>* createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial);
 
 private:
 

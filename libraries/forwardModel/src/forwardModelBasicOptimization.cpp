@@ -250,8 +250,7 @@ std::complex<double>* forwardModelBasicOptimization::createPdataEst(const pressu
     return PdataEst;
 }
 
-
-std::complex<double>* forwardModelBasicOptimization::calculateKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial)
+std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial)
 {
     std::complex<double>* kOperator = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
 
@@ -263,7 +262,7 @@ std::complex<double>* forwardModelBasicOptimization::calculateKappaOperator(cons
     return kOperator;
 }
 
-std::complex<double>* forwardModelBasicOptimization::calculateKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial)
+std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial)
 {
     auto kOperator = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
 
@@ -274,4 +273,9 @@ std::complex<double>* forwardModelBasicOptimization::calculateKappaOperator(cons
 
     return kOperator;
 }
+
+//void forwardModelBacisOptimization::deleteKappaOperator()
+//{
+
+//}
 

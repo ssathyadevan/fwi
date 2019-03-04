@@ -57,16 +57,11 @@ public:
 
     virtual std::complex<double>* createPdataEst(const pressureFieldSerial &chiEst) = 0;
 
-    std::complex<double>* getResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
-    double getResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
+    double calculateResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
 
 private:
 
-    std::complex<double> *m_residual;
-    std::complex<double> *m_residualSq;
-
-    void calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
-    void calculateResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
+    std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
 
 protected:
 
