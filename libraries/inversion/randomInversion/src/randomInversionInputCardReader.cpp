@@ -1,4 +1,5 @@
 #include "randomInversionInputCardReader.h"
+#include "json.h"
 
 randomInversionInputCardReader::randomInversionInputCardReader(std::string inputCardPath)
     :inputCardReader()
@@ -14,18 +15,13 @@ randomInversionInput randomInversionInputCardReader::getInput()
 
 void randomInversionInputCardReader::readCard(std::string inputCardPath)
 {
-    std::string filePath = inputCardPath + "RandomInversionInput.in";
-    std::vector<std::string> input_parameters = readFile(filePath);
-
-    int parameterCounter = 0;
-
-    const double toleranceOuter                       = stod(input_parameters[parameterCounter]);    ++parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
-    const int    nMaxOuter                            = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-    const int    nMaxInner                            = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    std::ifstream in(inputCardPath + "RandomInversionInput.json");
+    nlohmann::json j;
+    in >> j;
 
     randomInversionInput input
     {
-       toleranceOuter,         nMaxOuter,       nMaxInner
+        j["toleranceOuter"], j["nMaxOuter"], j["nMaxInner"]
     };
 
     _input = input;

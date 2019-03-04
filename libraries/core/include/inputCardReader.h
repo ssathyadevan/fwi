@@ -15,7 +15,4 @@ protected:
     virtual void readCard(std::string inputCardPath) = 0;
 };
 
-
-
-
 #endif

@@ -15,7 +15,7 @@ genericInput genericInputCardReader::getInput()
 }
 
 void genericInputCardReader::readCard(std::string inputCardPath){
-    std::ifstream in(inputCardPath + "genericInput.json");
+    std::ifstream in(inputCardPath + "GenericInput.json");
     nlohmann::json j;
     in >> j;
 

@@ -10,7 +10,7 @@ class randomInversionInputCardReader: public inputCardReader
 {
 public:
     randomInversionInputCardReader(std::string inputCardPath);
-   randomInversionInput getInput();
+    randomInversionInput getInput();
 private:
     randomInversionInput _input;
     void readCard(std::string inputCardPath);
