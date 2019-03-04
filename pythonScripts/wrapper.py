@@ -11,10 +11,10 @@
 
 import subprocess, os, sys
 os.chdir('bin')                    									# Go here and you find the preProcessing executable
-run_fwi_cpp = subprocess.Popen('./FWI_PreProcess ../input/ ../output/ default', shell = True)              	# Run the preProcessing executable
+run_fwi_cpp = subprocess.Popen('./FWI_PreProcess ../input/ ../output/', shell = True)              	# Run the preProcessing executable
 run_fwi_cpp.wait()                                              					# Wait for that process to finish
 
-run_fwi_cpp = subprocess.Popen('./FWI_Process ../input/ ../output/ default', shell = True)                       # Run the Processing executable
+run_fwi_cpp = subprocess.Popen('./FWI_Process ../input/ ../output/', shell = True)                       # Run the Processing executable
 run_fwi_cpp.wait()                                                     					# Wait for that process to finish
 
 os.chdir('../')												# Go to the home directory

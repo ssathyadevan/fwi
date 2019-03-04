@@ -1,7 +1,6 @@
 #ifndef VOLFIELD_RECT_2D_CPU_H
 #define VOLFIELD_RECT_2D_CPU_H
 #include "pressureField.h"
-#include "variableStructure.h"
 #include "grid2D.h"
 #include <iostream>
 #include <iomanip>
@@ -11,7 +10,7 @@
 #include <functional>
 #include <cassert>
 #include <string.h>
-
+#include "genericInput.h"
 
 class pressureFieldSerial : public pressureField
 {
@@ -30,7 +29,7 @@ public:
     virtual void Zero();
 
     virtual void Random();
-    virtual void RandomSaurabh();
+    virtual void RandomSaurabh(); //Generates random approximations of Saurabh
 
     virtual void toBuffer(double *buffer) const;
 
@@ -38,7 +37,7 @@ public:
 
     virtual void toFile(const std::string &fileName) const;
 
-    virtual void fromFile(const Input &input);
+    virtual void fromFile(const genericInput &input);
 
     virtual void SetField(const std::function< double(double,double) > func);
 

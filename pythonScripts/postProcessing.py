@@ -23,25 +23,15 @@ contents=f.readlines()               			# Just dump the contents of this file in
 x= contents[1]                       			# Take the first line entirely...
 y,u,v= x.split()                     			# Split it into its constituent words
 nxt = int(v)                         			# Cast the third word to an integer, we know this is nxt, we built the .txt after all
+
 x= contents[2]                       			# The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 y,u,v= x.split()
 nzt = int(v)
-x= contents[3]
-y,u,v= x.split()
-nMax = int(v)
-x= contents[4]
-y,u,v= x.split()
-nIter1 = int(v)
-x= contents[5]
-y,u,v= x.split()
-nIter2 = int(v)
-
-
 
 #zerothfile="src/ShowChi.py"
-filename1=outputPath+"/chi_ref_"+runName+".txt"              # variable name for the original temple
-filename2=outputPath+"/chi_est_"+runName+".txt"   # variable name for the calculated temple
-filenameout=outputPath+"/"+runName+"Result.png"  # how we store the image
+filename1 = outputPath + "/chi_ref_" + runName + ".txt"   # variable name for the original temple
+filename2 = outputPath + "/chi_est_" + runName + ".txt"   # variable name for the calculated temple
+filenameout = outputPath + "/" + runName + "Result.png"   # how we store the image
 
 chi1 = np.genfromtxt(filename1)      # start image set up for original temple
 chi1 = chi1.reshape((nzt, nxt))
@@ -52,7 +42,7 @@ chi2 = chi2.reshape((nzt, nxt))
 v_min = chi1.min()                   # set the minimum and maximum values to chi...
 v_max = chi1.max()                   # ...(just copy-pasted this)
 
-# From here we make the actual plots, with relatively self-explanatory commands
+# Here we make and save the actual plots
 
 plt.clf
 
@@ -63,10 +53,6 @@ plt.colorbar()
 plt.subplot(2,2,2)
 plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
-
-# After that, we save the plot,...
-# ...show it automatically if interactive is on,...
-# ...print ("cout")  that we're done and quit.
 
 plt.savefig(filenameout, dpi=400)
 
@@ -83,7 +69,7 @@ plt.clf()
 plt.plot(reader_residual_array[:,0])
 plt.ylabel("Residual")
 plt.grid(True)
-plt.savefig(outputPath+"/"+runName+"Residual.png", dpi=400)
+plt.savefig(outputPath + "/" + runName + "Residual.png", dpi=400)
 
 
 print"The pictures have been generated with Python"

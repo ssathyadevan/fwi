@@ -9,7 +9,7 @@ public:
 
     forwardModel(const grid2D &grid, const sources &src,
                  const receivers &recv, const frequenciesGroup &freq,
-                 Input input);
+                 genericInput gInput, forwardModelInput fmInput);
 
     ~forwardModel();
 
@@ -27,9 +27,11 @@ public:
 
     void createTotalField(Iter2 conjGrad, pressureFieldSerial chi) ;
 
-    virtual void createTotalField1D(Iter2 conjGrad, pressureFieldSerial chi_est);
+    virtual void createTotalField1D(pressureFieldSerial chi_est);
 
-    virtual Input getInput() ;
+    virtual forwardModelInput getForwardModelInput();
+
+    virtual genericInput getGenericInput();
 
     void calculateKappa();
 
@@ -46,6 +48,8 @@ public:
     virtual void calculateKRes(pressureFieldComplexSerial &kRes) ;
 
     virtual std::complex<double>* intermediateForwardModelStep2(pressureFieldSerial zeta);
+
+
 
 
 

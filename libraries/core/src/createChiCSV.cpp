@@ -1,8 +1,10 @@
+#include <fstream>
+
 #include "createChiCSV.h"
 
 // creates a csv file with the chi values from the file input_filename and save them onto a file called output_filename
 // these csv files could be later used to post-process the chi data as required
-void create_csv_files_for_chi(std::string inputFilePath, Input input, std::string postfix)
+void create_csv_files_for_chi(std::string inputFilePath, genericInput input, std::string postfix)
 {
 
     std::string line;
@@ -11,7 +13,7 @@ void create_csv_files_for_chi(std::string inputFilePath, Input input, std::strin
     int z = 0; //counts over the vertical input
     double value; //double to read the chi value
     std::ofstream output;
-    output.open(input.outputLocation + postfix + input.cardName + ".csv");// open the file to write the chi values into
+    output.open(input.outputLocation + postfix + input.runName + ".csv");// open the file to write the chi values into
     while (getline(myfile, line))
     {
         value = stod(line);

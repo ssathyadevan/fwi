@@ -69,7 +69,7 @@ void pressureFieldSerial::toFile(const std::string &fileName) const
     file.close();
 }
 
-void pressureFieldSerial::fromFile(const Input& input)
+void pressureFieldSerial::fromFile(const genericInput& input)
 {
     std::ifstream file(input.inputCardPath+input.fileName+".txt", std::ios::in);
     if (!file)

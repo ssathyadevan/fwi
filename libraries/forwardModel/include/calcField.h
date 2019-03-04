@@ -5,14 +5,15 @@
 #include <Eigen/Dense>
 #include "greensSerial.h"
 #include "pressureFieldComplexSerial.h"
-#include "variableStructure.h"
+#include "forwardModelInput.h"
+
 
 #include <complex>
 #include <vector>
 #include <cassert>
 #include <string>
 
-extern const int g_verbosity;
+extern int const g_verbosity;
 
 using namespace Eigen;
 
