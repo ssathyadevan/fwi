@@ -25,6 +25,7 @@ do
 	cp $FWI_SOURCE_PATH/tests/testScripts/*.py test/
 	mkdir -p input/$TEST$RUN test/$TEST test/$TEST$RUN
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/*.json input/$TEST$RUN
+	cp input/$TEST$RUN/*.json test/$TEST$RUN/
 	cp $FWI_SOURCE_PATH/tests/regression_data/$TEST/* test/$TEST
 
 	$FWI_INSTALL_PATH/bin/FWI_PreProcess input/$TEST$RUN/ output/
