@@ -22,10 +22,10 @@ if ((len(sys.argv) > 3) or (len(sys.argv) < 2)):
 the first argument the benchmark, the second argument the new test\n")
     sys.exit()
 else: #if (sys.argv==3):
-    new     = sys.argv[1]
+    new     = sys.argv[2]
 
 if (len(sys.argv) == 3):
-    bench   = sys.argv[2]
+    bench   = sys.argv[1]
 else:
     src_files = os.listdir("regression_data/")
     for file_name in src_files:
