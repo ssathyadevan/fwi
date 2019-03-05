@@ -16,11 +16,12 @@ TESTS=$(find . -maxdepth 1 -type d ! -path . -printf '%P\n')
 cd $FWI_INSTALL_PATH/
 mkdir -p input output test
 cp $FWI_SOURCE_PATH/inputFiles/*.txt input/			# Copy case files
-cp $FWI_SOURCE_PATH/pythonScripts/postProcessing-python3.py .	# Copy postproc script
 RUN="RUN"
 for TEST in $TESTS
 do
-	echo "Running test:" $TEST
+	echo "###############################################################"
+	echo "              Regression test:" $TEST
+	echo "###############################################################"
 
 	cp $FWI_SOURCE_PATH/tests/testScripts/*.py test/
 	mkdir -p input/$TEST$RUN test/$TEST test/$TEST$RUN
