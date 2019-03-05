@@ -3,8 +3,8 @@
 # 	This script automatically runs all regression tests and writes the results to
 # 	an XML file which can be used in Jenkins using Junit
 #
-# Note: This script finds regression tests based on folder name, hence the folder
-#	name should match the file names
+#   Note: This script finds regression tests based on folder name
+#	      
 
 FWI_INSTALL_PATH=~/FWIInstall
 FWI_SOURCE_PATH=~/parallelized-fwi
@@ -39,8 +39,6 @@ do
 	python3 -m pytest python_unittest.py --junitxml "${TEST}results.xml"
 	cp "${TEST}results.xml" $FWI_SOURCE_PATH/build/
 	cd ..	
-
-	exit
 
 	rm -r output/* test/* input/$TEST$RUN/
 done	
