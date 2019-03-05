@@ -37,42 +37,42 @@ else:
 inputfiles = ["CGInput.json", "FMInput.json", "GenericInput.json"]
 
 for i in range(0,len(inputfiles)):
-    	tempbench = bench + "/" + inputfiles[i]
-    	tempnew = new + "/" + inputfiles[i]
-	bench_dot_in_input_exists = os.path.isfile(tempbench)
-	new_dot_in_input_exists = os.path.isfile(tempnew)
+    tempbench = bench + "/" + inputfiles[i]
+    tempnew = new + "/" + inputfiles[i]
+    bench_dot_in_input_exists = os.path.isfile(tempbench)
+    new_dot_in_input_exists = os.path.isfile(tempnew)
 
-	if bench_dot_in_input_exists:
-	    print("Your benchmark file exists")
-	else:
-	    print("Your benchmark does not exist")
-	    sys.exit()
-	
-	if new_dot_in_input_exists:
-	    print("Your new test also exists")
-	else:
-	    print("")
-	    print("You lack a new test to compare")
-	    sys.exit()
-	print("")
-	
-	if (filecmp.cmp(tempbench,tempnew)):
-	    print("Your benchmark and test parametrization are identical,\n\
-	but your reservoirs could be different\n")
-	    inputfilediff = False
-	else:
-	    print("There is a difference between how you parametrized the input,\n\
-	but your reservoirs could be identical. First we see how they differ:\n")
-	    inputfilediff = True
-	    text1=open(tempbench).readlines()
-	    text2=open(tempnew).readlines()
-	    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-	- - - - - - - - - - - -")
-	    for line in difflib.unified_diff(text1,text2,fromfile=tempbench,tofile=tempnew):
-	        if (line != "\r"):
-	            sys.stdout.write(line)
-	    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-	- - - - - - - - - - - -")
+    if bench_dot_in_input_exists:
+        print("Your benchmark file " + inputfiles[i] + " exists")
+    else:
+        print("Your benchmark " + inputfiles[i] + " does not exist")
+        sys.exit()
+    
+    if new_dot_in_input_exists:
+        print("Your new " + inputfiles[i] + " test also exists")
+    else:
+        print("")
+        print("You lack a new " + inputfiles[i] + " test to compare")
+        sys.exit()
+    print("")
+    
+    if (filecmp.cmp(tempbench,tempnew)):
+        print("Your benchmark and test " + inputfiles[i] + " are identical,\n\
+        but your reservoirs could be different\n")
+        inputfilediff = False
+    else:
+        print("There is a difference between how you parametrized" + inputfiles[i] + ",\n\
+                 but your reservoirs could be identical. First we see how they differ:\n")
+        inputfilediff = True
+        text1=open(tempbench).readlines()
+        text2=open(tempnew).readlines()
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
+        for line in difflib.unified_diff(text1,text2,fromfile=tempbench,tofile=tempnew):
+            if (line != "\r"):
+                sys.stdout.write(line)
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
 	
 # IMPORTANT COMMENT MELISSEN 2018 11 21
 # basically I add the following lines because the .pythonIn is by its nature...
@@ -85,8 +85,8 @@ for i in range(0,len(inputfiles)):
 # into the .pythonIn files, the .in being user friendly and the .pythonIn...
 # being parser friendly (...and used in such places as this...)
 
-benchPyFile = open(bench+".pythonIn","r") 
-newPyFile = open(new+".pythonIn","r")
+benchPyFile = open(bench + "/" + bench+".pythonIn","r") 
+newPyFile = open(new + "/" + new+".pythonIn","r")
 benchPyContent=benchPyFile.readlines()
 newPyContent=newPyFile.readlines()
 
