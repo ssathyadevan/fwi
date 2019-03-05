@@ -19,7 +19,9 @@ cp $FWI_SOURCE_PATH/inputFiles/*.txt input/			# Copy case files
 RUN="RUN"
 for TEST in $TESTS
 do
-	echo "Running test:" $TEST
+	echo "###############################################################"
+	echo "              Regression test:" $TEST
+	echo "###############################################################"
 
 	cp $FWI_SOURCE_PATH/tests/testScripts/*.py test/
 	mkdir -p input/$TEST$RUN test/$TEST test/$TEST$RUN
