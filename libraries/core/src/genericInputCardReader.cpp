@@ -2,11 +2,42 @@
 #include <iostream>
 #include "json.h"
 
-genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string runName): inputCardReader()
+genericInputCardReader::genericInputCardReader(const std::string &pathToCardSet, const std::string &outputLocation) : inputCardReader()
 {
-    readCard(inputCardPath);
-    _input.outputLocation = outputLocation;
+    // pathToCardSet will generally look something like this: ../input/default/
+    // we split this into inputfolder = "../input/" and runName = "default"
+    std::string temp;
+
+    //remove trailing slash
+    unsigned int lastCharIndex = pathToCardSet.size()-1;
+    if(pathToCardSet[lastCharIndex] == '/')
+    {
+        temp = pathToCardSet.substr(0,lastCharIndex);
+    } else {
+        temp = pathToCardSet;
+    }
+
+    unsigned int idx = temp.find_last_of('/');
+    std::string inputFolder, runName;
+
+    if (idx != std::string::npos)
+    {
+        inputFolder = temp.substr(0, idx+1);
+        runName = temp.substr(idx+1);
+    }
+
+    _input.inputFolder = inputFolder;
     _input.runName = runName;
+
+    readCard(pathToCardSet);
+
+    //add slash to outputLocation if it didn't end with one
+    if(outputLocation[outputLocation.size()-1] != '/')
+    {
+        _input.outputLocation = outputLocation + '/';
+    } else {
+        _input.outputLocation = outputLocation;
+    }
 }
 
 genericInput genericInputCardReader::getInput()
@@ -14,8 +45,17 @@ genericInput genericInputCardReader::getInput()
     return _input;
 }
 
-void genericInputCardReader::readCard(std::string inputCardPath){
-    std::ifstream in(inputCardPath + "GenericInput.json");
+void genericInputCardReader::readCard(std::string inputCardPath)
+{
+    std::string filePath = _input.inputFolder + _input.runName + "/GenericInput.json";
+    std::ifstream in(filePath);
+
+    if(!in.is_open())
+    {
+        std::cout << "Could not open file at " << filePath << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
     nlohmann::json j;
     in >> j;
 
@@ -26,7 +66,7 @@ void genericInputCardReader::readCard(std::string inputCardPath){
 
     genericInput jsonInput
     {
-        inputCardPath, "", "",
+        _input.inputFolder, "", _input.runName,
         j["c_0"],
         {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"], spacing},
         {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]},

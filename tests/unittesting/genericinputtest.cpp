@@ -7,7 +7,7 @@ TEST(GenericInputTest, ints){
     std::string temp = "../../../inputFiles/test/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/inputFiles/test/"; //qt path
 
-    genericInputCardReader cardReader = genericInputCardReader(temp, "../FWIInstall/output/", "test");
+    genericInputCardReader cardReader = genericInputCardReader(temp, "../FWIInstall/output/");
     genericInput input = cardReader.getInput();
 
     EXPECT_EQ(input.ngrid[0], 64);

@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include "forwardModelInputCardReader.h"
 #include "json.h"
+
 
 forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath)
     : inputCardReader()
@@ -14,7 +17,15 @@ forwardModelInput forwardModelInputCardReader::getInput()
 
 void forwardModelInputCardReader::readCard(std::string inputCardPath)
 {
-    std::ifstream in(inputCardPath + "FMInput.json");
+    std::string fileLocation = inputCardPath + "FMInput.json";
+    std::ifstream in(fileLocation);
+
+    if(!in.is_open())
+    {
+        std::cout << "Can't open file at " << fileLocation;
+        exit(EXIT_FAILURE);
+    }
+
     nlohmann::json j;
     in >> j;
 

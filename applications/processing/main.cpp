@@ -10,62 +10,58 @@
 #include "forwardModelInputCardReader.h"
 
 void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput, const std::string &runName);
-void writePlotInput(const genericInput &gInput, const std::string &outputLocation);
+void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
     if (argc != 3)
     {
         std::cout << "Please enter 2 arguments, 1st the location of the input card set, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the files GenericInput.in, ForwardModelInput.in and ConjugateGradientInversionInput" << std::endl;
+        std::cout << "Make sure the input folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
         std::cout << "e.g. ../input/default/ ../output/" << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
-    std::vector<std::string> arguments(argv+1, argc+argv);    
-    std::string inputFolder  = arguments[0];
-    std::string outputFolder = arguments[1];
+    std::vector<std::string> arguments(argv+1, argc+argv);
+    genericInputCardReader genericReader(arguments[0], arguments[1]);
+    genericInput gInput = genericReader.getInput();
 
-    std::string runName = determineRunName(inputFolder);
+    forwardModelInputCardReader forwardModelReader(gInput.inputFolder + gInput.runName + '/');
+    conjugateGradientInversionInputCardReader randomInversionReader(gInput.inputFolder + gInput.runName + '/');
 
-    genericInputCardReader genericReader(inputFolder, outputFolder, runName);
-    forwardModelInputCardReader forwardModelReader(inputFolder);
-    conjugateGradientInversionInputCardReader conjugateGradientReader(inputFolder);
-
-    genericInput           gInput  = genericReader.getInput();
-    forwardModelInput      fmInput = forwardModelReader.getInput();
-    conjugateGradientInput cgInput = conjugateGradientReader.getInput();
+    forwardModelInput fmInput = forwardModelReader.getInput();
+    conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, runName, "Process");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
     }
 
-    chi_visualisation_in_integer_form(gInput.inputCardPath + gInput.fileName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.inputCardPath + gInput.fileName + ".txt", gInput, "chi_reference_");
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, cgInput, runName);
+    performInversion(gInput, fmInput, cgInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + runName + ".txt", gInput, "chi_est_");
+    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
-    writePlotInput(gInput, outputFolder);
+    writePlotInput(gInput);
 
     return 0;
 }
 
-void writePlotInput(const genericInput &gInput, const std::string &outputLocation){
+void writePlotInput(const genericInput &gInput){
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream outputfwi;
         std::string runName = gInput.runName;
-        outputfwi.open(outputLocation + runName + ".pythonIn");
+        outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
         outputfwi << "This run was parametrized as follows:" << std::endl;
         outputfwi << "nxt   = " << gInput.ngrid[0]      << std::endl;
         outputfwi << "nzt   = " << gInput.ngrid[1]      << std::endl;
@@ -73,7 +69,7 @@ void writePlotInput(const genericInput &gInput, const std::string &outputLocatio
 
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream lastrun;
-        lastrun.open(outputLocation + "/lastRunName.txt");
+        lastrun.open(gInput.outputLocation + "/lastRunName.txt");
         lastrun << runName;
         lastrun.close();
 }

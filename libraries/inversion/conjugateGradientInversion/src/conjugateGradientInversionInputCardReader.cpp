@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "conjugateGradientInversionInputCardReader.h"
 #include "json.h"
 
@@ -13,10 +15,18 @@ conjugateGradientInput  conjugateGradientInversionInputCardReader::getInput(){
 
 void conjugateGradientInversionInputCardReader::readCard(std::string inputCardPath)
 {
-    std::ifstream in(inputCardPath + "CGInput.json");
-	nlohmann::json j;
+    std::string fileLocation = inputCardPath + "CGInput.json";
+    std::ifstream in(fileLocation);
+
+    if(!in.is_open())
+    {
+        std::cout << "Can't open file at " << fileLocation;
+        exit(EXIT_FAILURE);
+    }
+
+    nlohmann::json j;
 	in >> j;
-	
+
     conjugateGradientInput input
 	{
 		{j["Iter1"]["n"], j["Iter1"]["tolerance"]},

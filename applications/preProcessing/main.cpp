@@ -22,16 +22,14 @@ int main(int argc, char** argv)
     std::string inputFolder  = arguments[0];
     std::string outputFolder = arguments[1];
 
-    std::string runName = determineRunName(inputFolder);
-
-    genericInputCardReader genericReader(inputFolder, outputFolder, runName);
+    genericInputCardReader genericReader(inputFolder, outputFolder);
     forwardModelInputCardReader forwardModelReader(inputFolder);
     const genericInput      gInput  = genericReader.getInput();
     const forwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, runName, "PreProcess");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "PreProcess");
     }
 
     std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
@@ -39,7 +37,7 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    generateReferencePressureFieldFromChi(gInput, fmInput, runName);
+    generateReferencePressureFieldFromChi(gInput, fmInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 

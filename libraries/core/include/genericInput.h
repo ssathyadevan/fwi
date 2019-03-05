@@ -5,7 +5,7 @@
 
 struct genericInput
 {
-     std::string inputCardPath;
+     std::string inputFolder;
      std::string outputLocation;
      std::string runName;
      double c_0;
