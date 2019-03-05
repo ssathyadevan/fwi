@@ -28,16 +28,18 @@ const forwardModelInput& ForwardModelInterface::getForwardModelInput()
 
 std::complex<double>* ForwardModelInterface::calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata)
 {
-    std::complex<double>* pDataEst = createPdataEst(chiEst);
+    std::complex<double>* PdataEst = new std::complex<double>[m_freq.nFreq* m_recv.nRecv*m_src.nSrc];
+
+    createPdataEst(PdataEst, chiEst);
 
     std::complex<double>* residual = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
 
     for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
     {
-        residual[i] = Pdata[i] - pDataEst[i];
+        residual[i] = Pdata[i] - PdataEst[i];
     }
 
-    delete[] pDataEst;
+    delete[] PdataEst;
 
     return residual;
 }

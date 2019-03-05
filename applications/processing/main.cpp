@@ -109,12 +109,12 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
         i++;
     }
 
-    ForwardModelInterface *model;
+    forwardModelBasicOptimization *model;
     //model = new forwardModel(grid, src, recv, freqg, fmInput);
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
-    inverse = new conjugateGradientInversion(model,cgInput);
+    inverse = new conjugateGradientInversion(model, cgInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 

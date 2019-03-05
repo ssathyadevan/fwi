@@ -174,7 +174,7 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
 
     p_tot = p_init;
 
-    double res = 0.0;
+    double res =  double(0.0);
 
     for(int it = 0; it < iter2.n; it++)
     {
@@ -224,11 +224,11 @@ void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &ch
     }
 }
 
-std::complex<double>* forwardModelBasicOptimization::createPdataEst(const pressureFieldSerial &chiEst)
+void forwardModelBasicOptimization::createPdataEst(std::complex<double> *Pdata, const pressureFieldSerial &chiEst)
 {
     this->createPtot(chiEst);
 
-    std::complex<double>* PdataEst = new std::complex<double>[m_freq.nFreq* m_recv.nRecv*m_src.nSrc];
+    //std::complex<double>* PdataEst = new std::complex<double>[m_freq.nFreq* m_recv.nRecv*m_src.nSrc];
 
     int li, lj;
 
@@ -242,12 +242,11 @@ std::complex<double>* forwardModelBasicOptimization::createPdataEst(const pressu
 
             for (int k = 0; k < m_src.nSrc; k++)
             {
-                PdataEst[li + lj + k] = Summation( ( *m_greens[i]->GetReceiverCont(j) ) , *m_Ptot[i][k] * chiEst );
+                Pdata[li + lj + k] = Summation( ( *m_greens[i]->GetReceiverCont(j) ) , *m_Ptot[i][k] * chiEst );
             }
         }
     }
 
-    return PdataEst;
 }
 
 std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial)
@@ -274,8 +273,30 @@ std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const p
     return kOperator;
 }
 
-//void forwardModelBacisOptimization::deleteKappaOperator()
-//{
+void forwardModelBasicOptimization::calculateOperatorMapStoD(pressureFieldComplexSerial &kRes, std::complex<double>* res)
+{
+    int l_i, l_j;
 
-//}
+    kRes.Zero();
+
+    pressureFieldComplexSerial kDummy(m_grid);
+
+    for (int i = 0; i < m_freq.nFreq; i++)
+    {
+        l_i = i * m_recv.nRecv * m_src.nSrc;
+
+        for (int j = 0; j < m_recv.nRecv; j++)
+        {
+            l_j = j * m_src.nSrc;
+
+            for(int k = 0; k < m_src.nSrc; k++)
+            {
+                kDummy = *m_Kappa[l_i + l_j + k];
+                kDummy.Conjugate();
+
+                kRes += kDummy * res[l_i + l_j + k];
+            }
+        }
+    }
+}
 

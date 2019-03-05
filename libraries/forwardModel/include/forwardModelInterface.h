@@ -1,10 +1,14 @@
 #ifndef FORWARDMODELINTERFACE_H
 #define FORWARDMODELINTERFACE_H
 
-#include "frequenciesGroup.h"
-#include "greensFunctions.h"
-#include "calcField.h"
 #include "forwardModelInput.h"
+#include "pressureFieldSerial.h"
+#include "pressureFieldComplexSerial.h"
+#include "grid2D.h"
+#include "frequenciesGroup.h"
+#include "sources.h"
+#include "receivers.h"
+
 #include <complex>
 
 inline double normSq(const std::complex<double> *data, int n)
@@ -53,13 +57,11 @@ public:
 
     const forwardModelInput& getForwardModelInput();
 
-    virtual void initializeForwardModel() = 0;
+    virtual void initializeForwardModel(const pressureFieldSerial &chiEst) = 0;
 
-    virtual std::complex<double>* createPdataEst(const pressureFieldSerial &chiEst) = 0;
+    virtual void createPdataEst(std::complex<double> *pData, const pressureFieldSerial &chiEst) = 0;
 
     double calculateResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
-
-private:
 
     std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
 

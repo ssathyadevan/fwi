@@ -68,8 +68,9 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     //model = new forwardModel(grid, src, recv, freqg, fmInput);
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
+
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    model->calculateData(referencePressureData, chi, fmInput.iter2);
+    model->createPdataEst(referencePressureData, chi);
 
     // writing the referencePressureData to a text file in complex form
     std::cout << "calculateData done" << std::endl;
@@ -77,16 +78,19 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     std::string invertedChiToPressureFileName = gInput.outputLocation + gInput.cardName + "InvertedChiToPressure.txt";
     std::ofstream file;
     file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
+
     if (!file)
     {
         std::cout<< "Failed to open the file to store inverted chi to pressure field" << std::endl;
         std::exit(EXIT_FAILURE);
     }
+
     for(int i=0; i < magnitude; i++)
     {
         file << std::setprecision(17) << referencePressureData[i].real()
              <<"," << referencePressureData[i].imag() << std::endl;
     }
+
     file.close();
 
     delete model;

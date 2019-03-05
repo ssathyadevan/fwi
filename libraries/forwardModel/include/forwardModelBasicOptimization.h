@@ -2,6 +2,8 @@
 #define FORWARDMODELBASICOPTIMIZATION_H
 
 #include "forwardModelInterface.h"
+#include "greensFunctions.h"
+#include "greensSerial.h"
 
 class forwardModelBasicOptimization : public ForwardModelInterface
 {
@@ -15,10 +17,12 @@ public:
 
     virtual void initializeForwardModel(const pressureFieldSerial &chiEst);
 
-    virtual std::complex<double>* createPdataEst( const pressureFieldSerial &chiEst );
+    virtual void createPdataEst(std::complex<double> *pData, const pressureFieldSerial &chiEst );
 
     std::complex<double>* createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial);
     std::complex<double>* createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial);
+
+    void calculateOperatorMapStoD(pressureFieldComplexSerial &kRes, std::complex<double>* res);
 
 private:
 

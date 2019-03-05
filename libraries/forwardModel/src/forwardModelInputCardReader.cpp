@@ -26,5 +26,5 @@ void forwardModelInputCardReader::readCard(std::string inputCardPath, std::strin
        n_iter2,                   tol2_to_be_implemented,       calc_alpha
     };
 
-    _input = input;
+    _input = input;    
 }
