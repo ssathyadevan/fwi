@@ -10,38 +10,36 @@
 #include "forwardModelInputCardReader.h"
 
 void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput);
-void writePlotInput(genericInput gInput, std::string outputLocation);
+void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
     if (argc != 3)
     {
-        std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the files GenericInput.in, ForwardModelInput.in and ConjugateGradientInversionInput" << std::endl;
-        std::cout << "e.g. ~/Documents/FWIInstall/Input/ ~/Documents/FWIInstall/Output/" << std::endl;
+        std::cout << "Please enter 2 arguments, 1st the location of the input card set, 2nd the output folder location," << std::endl;
+        std::cout << "Make sure the input folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
+        std::cout << "e.g. ../input/default/ ../output/" << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
-    std::vector<std::string> arguments(argv+1, argc+argv);    
-    std::string inputFolder  = arguments[0];
-    std::string outputFolder = arguments[1];
+    std::vector<std::string> arguments(argv+1, argc+argv);
+    genericInputCardReader genericReader(arguments[0], arguments[1]);
+    genericInput gInput = genericReader.getInput();
 
-    genericInputCardReader genericReader(inputFolder, outputFolder, "GenericInput");
-    forwardModelInputCardReader forwardModelReader(inputFolder, outputFolder, "ForwardModelInput");
-    conjugateGradientInversionInputCardReader conjugateGradientReader(inputFolder, outputFolder, "ConjugateGradientInversionInput");
+    forwardModelInputCardReader forwardModelReader(gInput.inputFolder + gInput.runName + '/');
+    conjugateGradientInversionInputCardReader randomInversionReader(gInput.inputFolder + gInput.runName + '/');
 
-    genericInput           gInput  = genericReader.getInput();
-    forwardModelInput      fmInput = forwardModelReader.getInput();
-    conjugateGradientInput cgInput = conjugateGradientReader.getInput();
+    forwardModelInput fmInput = forwardModelReader.getInput();
+    conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.cardName, "Process");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
     }
 
-    chi_visualisation_in_integer_form(gInput.inputCardPath + gInput.fileName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.inputCardPath + gInput.fileName + ".txt", gInput, "chi_reference_");
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
 
@@ -51,19 +49,19 @@ int main(int argc, char** argv)
     clock.PrintTimeElapsed();
 
     cout << "Visualisation of the estimated temple using FWI" << endl;
-    chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.cardName + ".txt", gInput, "chi_est_");
+    chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
-    writePlotInput(gInput, outputFolder);
+    writePlotInput(gInput);
 
     return 0;
 }
 
-void writePlotInput(genericInput gInput, std::string outputLocation){
+void writePlotInput(const genericInput &gInput){
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream outputfwi;
-        std::string cardName = gInput.cardName;
-        outputfwi.open(outputLocation + cardName + ".pythonIn");
+        std::string runName = gInput.runName;
+        outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
         outputfwi << "This run was parametrized as follows:" << std::endl;
         outputfwi << "nxt   = " << gInput.ngrid[0]      << std::endl;
         outputfwi << "nzt   = " << gInput.ngrid[1]      << std::endl;
@@ -71,8 +69,8 @@ void writePlotInput(genericInput gInput, std::string outputLocation){
 
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream lastrun;
-        lastrun.open(outputLocation + "lastRunName.txt");
-        lastrun << cardName;
+        lastrun.open(gInput.outputLocation + "/lastRunName.txt");
+        lastrun << runName;
         lastrun.close();
 }
 
@@ -80,23 +78,19 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(src);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
     frequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
-//    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
 
     int totalGridCells = freqg.nFreq * src.nSrc * recv.nRecv;
 
-
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[totalGridCells];
-
-    std::ifstream       file(gInput.outputLocation+gInput.cardName+"InvertedChiToPressure.txt");
+    std::ifstream       file( gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt");
     CSVReader           row;
 
     int i = 0;
@@ -122,7 +116,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
 
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile(gInput.outputLocation + "chi_est_"+ gInput.cardName+ ".txt");
+    chi_est.toFile(gInput.outputLocation + "chi_est_"+ gInput.runName+ ".txt");
 
     delete model;
     delete inverse;

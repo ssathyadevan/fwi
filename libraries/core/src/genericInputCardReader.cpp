@@ -1,9 +1,43 @@
 #include "genericInputCardReader.h"
 #include <iostream>
+#include "json.h"
 
-genericInputCardReader::genericInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
+genericInputCardReader::genericInputCardReader(const std::string &pathToCardSet, const std::string &outputLocation) : inputCardReader()
 {
-    readCard(inputCardPath,outputLocation,cardName);
+    // pathToCardSet will generally look something like this: ../input/default/
+    // we split this into inputfolder = "../input/" and runName = "default"
+    std::string temp;
+
+    //remove trailing slash
+    unsigned int lastCharIndex = pathToCardSet.size()-1;
+    if(pathToCardSet[lastCharIndex] == '/')
+    {
+        temp = pathToCardSet.substr(0,lastCharIndex);
+    } else {
+        temp = pathToCardSet;
+    }
+
+    unsigned int idx = temp.find_last_of('/');
+    std::string inputFolder, runName;
+
+    if (idx != std::string::npos)
+    {
+        inputFolder = temp.substr(0, idx+1);
+        runName = temp.substr(idx+1);
+    }
+
+    _input.inputFolder = inputFolder;
+    _input.runName = runName;
+
+    readCard(pathToCardSet);
+
+    //add slash to outputLocation if it didn't end with one
+    if(outputLocation[outputLocation.size()-1] != '/')
+    {
+        _input.outputLocation = outputLocation + '/';
+    } else {
+        _input.outputLocation = outputLocation;
+    }
 }
 
 genericInput genericInputCardReader::getInput()
@@ -11,46 +45,41 @@ genericInput genericInputCardReader::getInput()
     return _input;
 }
 
-void genericInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName){
-    std::string filePath = inputCardPath+cardName+".in";
-    std::vector<std::string> input_parameters = readFile(filePath);
+void genericInputCardReader::readCard(std::string inputCardPath)
+{
+    std::string filePath = _input.inputFolder + _input.runName + "/GenericInput.json";
+    std::ifstream in(filePath);
 
-    int parameterCounter = 0;
-
-    const double c_0                                  = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Speed of sound in background
-    const double Freq_min                             = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Minimum frequency
-    const double Freq_max                             = stod(input_parameters[parameterCounter]);    ++parameterCounter; //Maximum frequency
-    const double top_left_corner_coord_x_in_m         = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double top_left_corner_coord_z_in_m         = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double bottom_right_corner_coord_x_in_m     = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double bottom_right_corner_coord_z_in_m     = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double srcs_top_left_corner_coord_x_in_m    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double srcs_top_left_corner_coord_z_in_m    = stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double srcs_bottom_right_corner_coord_x_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const double srcs_bottom_right_corner_coord_z_in_m= stod(input_parameters[parameterCounter]);    ++parameterCounter;
-    const int    nxt                                  = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points horizontal
-    const int    nzt                                  = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of grid points vertical
-    const int    nFreq_Total                          = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Total number of frequencies used
-    const int    nSrct                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
-    const int    nRecv                                = stoi(input_parameters[parameterCounter]);    ++parameterCounter; //Number of sources
-    const std::string  fileName                       =     (input_parameters[parameterCounter]);    ++parameterCounter; //Filename to be used for inversion
-    const bool   verbose                              = InputStringToBool(input_parameters[parameterCounter]); ++ parameterCounter;
-    const double spacing = ((Freq_max-Freq_min)/(nFreq_Total-1));
-
-    genericInput input
+    if(!in.is_open())
     {
-                inputCardPath, outputLocation, cardName,
-                c_0,
-                {Freq_min,                  Freq_max,                     nFreq_Total,     spacing},
-                {top_left_corner_coord_x_in_m, top_left_corner_coord_z_in_m},
-                {bottom_right_corner_coord_x_in_m, bottom_right_corner_coord_z_in_m},
-                {srcs_top_left_corner_coord_x_in_m, srcs_top_left_corner_coord_z_in_m},
-                {srcs_bottom_right_corner_coord_x_in_m, srcs_bottom_right_corner_coord_z_in_m},
-                {nxt, nzt},
-                {nSrct, nRecv},
-                fileName,
-                verbose
-     };
+        std::cout << "Could not open file at " << filePath << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
-    _input = input;
+    nlohmann::json j;
+    in >> j;
+
+    double fMax = j["Freq"]["max"];
+    double fMin = j["Freq"]["min"];
+    int nFreq = j["Freq"]["nTotal"];
+    const double spacing = (fMax - fMin)/(nFreq-1);
+
+    genericInput jsonInput
+    {
+        _input.inputFolder, "", _input.runName,
+        j["c_0"],
+        {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"], spacing},
+        {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]},
+        {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]},
+        {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]},
+        {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]},
+        {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]},
+        {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]},
+        {j["ngrid"]["x"], j["ngrid"]["z"]},
+        {j["nSources"], j["nReceivers"]},
+        j["fileName"],
+        j["verbosity"]
+    };
+
+    _input = jsonInput;
 }

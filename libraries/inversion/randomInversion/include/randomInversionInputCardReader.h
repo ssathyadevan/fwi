@@ -9,11 +9,11 @@
 class randomInversionInputCardReader: public inputCardReader
 {
 public:
-    randomInversionInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName);
-   randomInversionInput getInput();
+    randomInversionInputCardReader(std::string inputCardPath);
+    randomInversionInput getInput();
 private:
     randomInversionInput _input;
-    void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
+    void readCard(std::string inputCardPath);
 };
 
 #endif // RANDOMINVERSIONINPUTCARDREADER_H

@@ -71,9 +71,12 @@ void pressureFieldSerial::toFile(const std::string &fileName) const
 
 void pressureFieldSerial::fromFile(const genericInput& input)
 {
-    std::ifstream file(input.inputCardPath+input.fileName+".txt", std::ios::in);
+    std::string inputFolder = input.inputFolder;
+
+    std::ifstream file(inputFolder + input.fileName + ".txt", std::ios::in);
     if (!file)
     {
+        std::cout << "Looking for file " << inputFolder + input.fileName + ".txt" << std::endl;
         std::cout<< "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " << std::endl;
         std::exit(EXIT_FAILURE);
     }

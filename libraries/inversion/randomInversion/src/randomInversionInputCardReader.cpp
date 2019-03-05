@@ -1,8 +1,11 @@
+#include <iostream>
 #include "randomInversionInputCardReader.h"
+#include "json.h"
 
-randomInversionInputCardReader::randomInversionInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName):inputCardReader()
+randomInversionInputCardReader::randomInversionInputCardReader(std::string inputCardPath)
+    :inputCardReader()
 {
-    readCard(inputCardPath,outputLocation,cardName);
+    readCard(inputCardPath);
 }
 
 randomInversionInput randomInversionInputCardReader::getInput()
@@ -11,20 +14,23 @@ randomInversionInput randomInversionInputCardReader::getInput()
 }
 
 
-void randomInversionInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
+void randomInversionInputCardReader::readCard(std::string inputCardPath)
 {
-    std::string filePath = inputCardPath+cardName+".in";
-    std::vector<std::string> input_parameters = readFile(filePath);
+    std::string fileLocation = inputCardPath + "RandomInversionInput.json";
+    std::ifstream in(fileLocation);
 
-    int parameterCounter = 0;
+    if(!in.is_open())
+    {
+        std::cout << "Can't open file at " << fileLocation << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
-    const double toleranceOuter                       = stod(input_parameters[parameterCounter]);    ++parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
-    const double nMaxOuter                            = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
-    const int    nMaxInner                            = stoi(input_parameters[parameterCounter]);    ++parameterCounter;
+    nlohmann::json j;
+    in >> j;
 
     randomInversionInput input
     {
-       toleranceOuter,                   nMaxOuter,       nMaxInner
+        j["toleranceOuter"], j["nMaxOuter"], j["nMaxInner"]
     };
 
     _input = input;

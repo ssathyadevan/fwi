@@ -23,7 +23,6 @@ the first argument the benchmark, the second argument the new test\n")
     sys.exit()
 else: #if (sys.argv==3):
     new     = sys.argv[1]
-    newin   = new+".in"
 
 if (len(sys.argv) == 3):
     bench   = sys.argv[2]
@@ -34,43 +33,47 @@ else:
         if (os.path.isfile(full_file_name)):
             shutil.copy(full_file_name, '.')
     bench     = "hiquality"
-benchin = bench+".in"
 
-bench_dot_in_input_exists = os.path.isfile(benchin)
-new_dot_in_input_exists = os.path.isfile(newin)
+inputfiles = ["CGInput.json", "FMInput.json", "GenericInput.json"]
 
-if bench_dot_in_input_exists:
-    print("Your benchmark file exists")
-else:
-    print("Your benchmark does not exist")
-    sys.exit()
+for i in range(0,len(inputfiles)):
+    tempbench = bench + "/" + inputfiles[i]
+    tempnew = new + "/" + inputfiles[i]
+    bench_dot_in_input_exists = os.path.isfile(tempbench)
+    new_dot_in_input_exists = os.path.isfile(tempnew)
 
-if new_dot_in_input_exists:
-    print("Your new test also exists")
-else:
+    if bench_dot_in_input_exists:
+        print("Your benchmark file " + inputfiles[i] + " exists")
+    else:
+        print("Your benchmark " + inputfiles[i] + " does not exist")
+        sys.exit()
+    
+    if new_dot_in_input_exists:
+        print("Your new " + inputfiles[i] + " test also exists")
+    else:
+        print("")
+        print("You lack a new " + inputfiles[i] + " test to compare")
+        sys.exit()
     print("")
-    print("You lack a new test to compare")
-    sys.exit()
-print("")
-
-if (filecmp.cmp(benchin,newin)):
-    print("Your benchmark and test parametrization are identical,\n\
-but your reservoirs could be different\n")
-    inputfilediff = False
-else:
-    print("There is a difference between how you parametrized the input,\n\
-but your reservoirs could be identical. First we see how they differ:\n")
-    inputfilediff = True
-    text1=open(benchin).readlines()
-    text2=open(newin).readlines()
-    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-- - - - - - - - - - - -")
-    for line in difflib.unified_diff(text1,text2,fromfile=benchin,tofile=newin):
-        if (line != "\r"):
-            sys.stdout.write(line)
-    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-- - - - - - - - - - - -")
-
+    
+    if (filecmp.cmp(tempbench,tempnew)):
+        print("Your benchmark and test " + inputfiles[i] + " are identical,\n\
+        but your reservoirs could be different\n")
+        inputfilediff = False
+    else:
+        print("There is a difference between how you parametrized" + inputfiles[i] + ",\n\
+                 but your reservoirs could be identical. First we see how they differ:\n")
+        inputfilediff = True
+        text1=open(tempbench).readlines()
+        text2=open(tempnew).readlines()
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
+        for line in difflib.unified_diff(text1,text2,fromfile=tempbench,tofile=tempnew):
+            if (line != "\r"):
+                sys.stdout.write(line)
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
+	
 # IMPORTANT COMMENT MELISSEN 2018 11 21
 # basically I add the following lines because the .pythonIn is by its nature...
 # more readable than the more flexible, more "user-piloted" input card.
@@ -82,8 +85,8 @@ but your reservoirs could be identical. First we see how they differ:\n")
 # into the .pythonIn files, the .in being user friendly and the .pythonIn...
 # being parser friendly (...and used in such places as this...)
 
-benchPyFile = open(bench+".pythonIn","r") 
-newPyFile = open(new+".pythonIn","r")
+benchPyFile = open(bench + "/" + bench+".pythonIn","r") 
+newPyFile = open(new + "/" + new+".pythonIn","r")
 benchPyContent=benchPyFile.readlines()
 newPyContent=newPyFile.readlines()
 
@@ -110,10 +113,10 @@ if(nztbench != nztnew):
 
 
 
-chi_ref_bench_txt = "chi_ref_"       + bench + ".txt"
-chi_ref_new_txt   = "chi_ref_"       + new   + ".txt"
-chi_ref_bench_csv = "chi_reference_" + bench + ".csv"
-chi_ref_new_csv   = "chi_ref_bench_" + new   + ".csv"
+chi_ref_bench_txt = bench + "/" + "chi_ref_"       + bench + ".txt"
+chi_ref_new_txt   = new + "/" + "chi_ref_"       + new   + ".txt"
+chi_ref_bench_csv = bench + "/" + "chi_reference_" + bench + ".csv"
+chi_ref_new_csv   = new + "/" + "chi_ref_bench_" + new   + ".csv"
 
 if (filecmp.cmp(chi_ref_bench_txt, chi_ref_new_txt)):
     print("You used the same reservoir in both instances !")
@@ -125,16 +128,22 @@ else:
     sys.exit()
 print("")
 
-chi_est_bench_txt = "chi_est_" + bench + ".txt"
-chi_est_new_txt =   "chi_est_" + new   + ".txt"
-chi_est_bench_csv = "chi_est_" + bench + ".csv"
-chi_est_new_csv =   "chi_est_" + new   + ".csv"
+chi_est_bench_txt = bench + "/" + "chi_est_" + bench + ".txt"
+chi_est_new_txt =   new + "/" + "chi_est_" + new   + ".txt"
+chi_est_bench_csv = bench + "/" + "chi_est_" + bench + ".csv"
+chi_est_new_csv =   new + "/" + "chi_est_" + new   + ".csv"
 
 if (filecmp.cmp(chi_est_bench_txt, chi_est_new_txt)):
     print("It appears that you have the same output in terms of chi,\n\
 so I exit, although this part of the code is extended later \n\
 on formal grounds I will report that:")
     print_regression_test_passed_message(regression_test_passed)
+
+    s = 'True'
+    f= open("RegressionTest_Passed.txt","w+")
+    f.write(str(s))
+    f.close()
+
     sys.exit()
 else:
     print("You have different output in terms of chi,\n\
@@ -312,11 +321,11 @@ def find(substr,whichin):
     start_or_finish = (datetime.strptime(manip,'%c'))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench)
-datetime_bench_finish = find("Finished at ", bench)
+datetime_bench_start  = find("Starting at ", bench + "/" +bench)
+datetime_bench_finish = find("Finished at ", bench + "/" +bench)
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find("Starting at ", new)
-datetime_new_finish   = find("Finished at ", new)
+datetime_new_start    = find("Starting at ", new + "/"+ new)
+datetime_new_finish   = find("Finished at ", new + "/" +new)
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):

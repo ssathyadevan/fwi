@@ -1,8 +1,13 @@
-#include "forwardModelInputCardReader.h"
+#include <iostream>
 
-forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName): inputCardReader()
+#include "forwardModelInputCardReader.h"
+#include "json.h"
+
+
+forwardModelInputCardReader::forwardModelInputCardReader(std::string inputCardPath)
+    : inputCardReader()
 {
-   readCard(inputCardPath,outputLocation,cardName);
+   readCard(inputCardPath);
 }
 
 forwardModelInput forwardModelInputCardReader::getInput()
@@ -10,21 +15,24 @@ forwardModelInput forwardModelInputCardReader::getInput()
     return _input;
 }
 
-void forwardModelInputCardReader::readCard(std::string inputCardPath, std::string outputLocation, std::string cardName)
+void forwardModelInputCardReader::readCard(std::string inputCardPath)
 {
-    std::string filePath = inputCardPath+cardName + ".in";
-    std::vector<std::string> input_parameters = readFile(filePath);
+    std::string fileLocation = inputCardPath + "FMInput.json";
+    std::ifstream in(fileLocation);
 
-    int parameterCounter = 0;
-
-    const bool   calc_alpha                 = InputStringToBool(input_parameters[parameterCounter]); ++parameterCounter; // alpha in Equation ID: "contrastUpdate" of pdf
-    const double tol2_to_be_implemented     = stod(input_parameters[parameterCounter]);              ++parameterCounter;
-    const int    n_iter2                    = stoi(input_parameters[parameterCounter]);              ++parameterCounter;
-
-    forwardModelInput input
+    if(!in.is_open())
     {
-       n_iter2,                   tol2_to_be_implemented,       calc_alpha
+        std::cout << "Can't open file at " << fileLocation;
+        exit(EXIT_FAILURE);
+    }
+
+    nlohmann::json j;
+    in >> j;
+
+    forwardModelInput jsonInput
+    {
+        j["Iter2"]["n"], j["Iter2"]["tolerance"], j["Iter2"]["calcAlpha"]
     };
 
-    _input = input;    
+    _input = jsonInput;
 }

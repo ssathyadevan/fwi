@@ -7,7 +7,6 @@ conjugateGradientInversion::conjugateGradientInversion(forwardModelBasicOptimiza
     m_cgInput = cgInput;
 }
 
-
 double conjugateGradientInversion::findRealRootFromCubic(double a, double b, double c, double d)
 {
     // assuming ax^3 + bx^2 +cx + d and assuming only one real root, which is expected in this algorithm
@@ -55,7 +54,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
     // open the file to store the residual log
     std::ofstream file;
-    file.open (gInput.outputLocation+gInput.cardName+"Residual.log", std::ios::out | std::ios::trunc);
+    file.open (gInput.outputLocation+gInput.runName+"Residual.log", std::ios::out | std::ios::trunc);
 
     if (!file)
     {
@@ -183,7 +182,6 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                 }
                 else
                 {
-
                     chiEst.Gradient(gradientChiOld);
                     pressureFieldSerial gradientChiOldNormsquared(m_grid);
 
@@ -244,7 +242,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     tmpVolField = (b * *gradientChiOld[0]) * (b * *gradientChiOld[0]);
                     tmpVolField2 = (b * *gradientChiOld[1]) * (b * *gradientChiOld[1]);
                     double B0 = ((tmpVolField.Summation() + tmpVolField2.Summation()) + deltasquaredOld *
-                                 bsquared.Summation()) * m_grid.GetCellVolume();
+                                 bsquared.Summation()) * m_forwardModel->getGrid().GetCellVolume();
 
                     double derA = double(4.0) * A[1] * B2;
                     double derB = double(3.0) * (A[1] * B1 + A[0] * B2);

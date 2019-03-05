@@ -9,10 +9,10 @@
 class forwardModelInputCardReader: public inputCardReader
 {
 public:
-    forwardModelInputCardReader(std::string inputCardPath, std::string outputLocation, std::string cardName);
+    forwardModelInputCardReader(std::string inputCardPath);
     forwardModelInput getInput();
 
 private:
-    virtual void readCard(std::string inputCardPath, std::string outputLocation, std::string cardName);
+    virtual void readCard(std::string inputCardPath);
     forwardModelInput _input;
 };

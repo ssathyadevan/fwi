@@ -23,7 +23,7 @@ class TestRegression(unittest.TestCase):
 	def test_regression_preprocessing(self):
 		self.assertTrue(b <= 10e-5 and b>=-10e-5)
 	def test_regression_processing(self):
-		self.assertEqual(0, a)
+		self.assertEqual(1, a)
 
 if __name__ == '__main__':
     unittest.main()

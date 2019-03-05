@@ -30,49 +30,31 @@ def buildAll() {
 }
 
 def testAll() {
-    echo 'testing all'
-    sh '''
-    cd build
-    make test
-    ctest -T test --no-compress-output
-    cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
-    '''
+	echo 'testing all'
+    	sh '''
+    	cd build
+    	make test
+    	ctest -T test --no-compress-output
+    	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+    	'''
 }
 
 def regressiontest() {
         echo 'Running regression tests'
-        sh '''
-        mkdir input output
-        cp inputFiles/* input/
-        cd FWIInstall/bin
-        ./FWI_PreProcess ../../input/ ../../output/ default
-        ./FWI_Process ../../input/ ../../output/ default
-        cd ../../pythonScripts
-        cp postProcessing-python3.py ../
-        cd ..
-        python3 postProcessing-python3.py output/
-        mkdir test
-        cp tests/regression_data/fast/* test/
-        cp tests/testScripts/* test/
-        cp input/default.in test/
-        cp output/* test/
-        cd test
-        python3 regressionTestPreProcessing_python3.py fast default
-        python3 regressionTestProcessing_python3.py fast default
-        python3 -m pytest python_unittest.py --junitxml results.xml 
-        cp results.xml ../build/
-        '''
+	sh '''
+	sh tests/testScripts/run_all_regression_tests.sh	
+	'''
 }
 
 def deploy(){
-                echo 'Deploying'
-                sh '''
-                cp -r inputFiles FWIInstall/
-                cp -r tests FWIInstall/
-                cp pythonScripts/* FWIInstall/
-                tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
-                '''
-                archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+        echo 'Deploying'
+        sh '''
+        cp -r inputFiles FWIInstall/
+        cp -r tests FWIInstall/
+        cp pythonScripts/* FWIInstall/
+        tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+        '''
+        archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
 
