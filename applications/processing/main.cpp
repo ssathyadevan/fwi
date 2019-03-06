@@ -14,21 +14,20 @@ void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc != 2)
     {
-        std::cout << "Please enter 2 arguments, 1st the location of the input card set, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
-        std::cout << "e.g. ../input/default/ ../output/" << std::endl;
+        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
     std::vector<std::string> arguments(argv+1, argc+argv);
-    genericInputCardReader genericReader(arguments[0], arguments[1]);
+    genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    forwardModelInputCardReader forwardModelReader(gInput.inputFolder + gInput.runName + '/');
-    conjugateGradientInversionInputCardReader randomInversionReader(gInput.inputFolder + gInput.runName + '/');
+    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
     conjugateGradientInput cgInput = randomInversionReader.getInput();
@@ -88,8 +87,16 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file( gInput.outputLocation + runName + "InvertedChiToPressure.txt");
+
+    std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
+    std::ifstream       file(fileLocation);
     CSVReader           row;
+
+    if(!file.is_open())
+    {
+        std::cout << "Could not open file at " << fileLocation;
+        exit(EXIT_FAILURE);
+    }
 
     int i = 0;
     while(file >> row)

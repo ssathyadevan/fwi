@@ -2,10 +2,10 @@
 #include "randomInversionInputCardReader.h"
 #include "json.h"
 
-randomInversionInputCardReader::randomInversionInputCardReader(std::string inputCardPath)
+randomInversionInputCardReader::randomInversionInputCardReader(const std::string &caseFolder)
     :inputCardReader()
 {
-    readCard(inputCardPath);
+    readCard(caseFolder);
 }
 
 randomInversionInput randomInversionInputCardReader::getInput()
@@ -14,19 +14,9 @@ randomInversionInput randomInversionInputCardReader::getInput()
 }
 
 
-void randomInversionInputCardReader::readCard(std::string inputCardPath)
+void randomInversionInputCardReader::readCard(const std::string &caseFolder)
 {
-    std::string fileLocation = inputCardPath + "RandomInversionInput.json";
-    std::ifstream in(fileLocation);
-
-    if(!in.is_open())
-    {
-        std::cout << "Can't open file at " << fileLocation << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    nlohmann::json j;
-    in >> j;
+    nlohmann::json j = readFile(caseFolder + "/input/RandomInversionInput.json");
 
     randomInversionInput input
     {

@@ -17,21 +17,4 @@ inline double dist(double x, double z)
   return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5);
 }
 
-inline std::string determineRunName(std::string inputFolder)
-{
-    std::string runName = inputFolder.substr(0,  inputFolder.size()-1);
-    const unsigned int idx = runName.find_last_of('/');
-
-    if (std::string::npos != idx)
-    {
-        runName = runName.substr(idx + 1);
-    }
-    else
-    {
-        std::cout << "Could not determine runName";
-        exit(EXIT_FAILURE);
-    }
-    return runName;
-}
-
 #endif

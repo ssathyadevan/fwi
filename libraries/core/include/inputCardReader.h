@@ -6,13 +6,16 @@
 #include <fstream>
 #include <sstream>
 
+#include "json.h"
 
 class inputCardReader
 {
 public:
     virtual ~inputCardReader() = default;
 protected:
-    virtual void readCard(std::string inputCardPath) = 0;
+    virtual void readCard(const std::string &caseFolder) = 0;
+
+    nlohmann::json readFile(const std::string &fileName);
 };
 
 #endif
