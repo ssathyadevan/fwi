@@ -47,7 +47,7 @@ private:
     pressureFieldComplexSerial calcTotalField( const Greens_rect_2D_cpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit );
 
     void calculateKappa( const pressureFieldSerial &chiEst );
-
+    void deleteKappa();
 };
 
 #endif

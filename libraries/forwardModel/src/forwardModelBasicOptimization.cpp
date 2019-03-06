@@ -5,39 +5,73 @@ forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid,
     : ForwardModelInterface (grid, src, recv, freq, fmInput),
       m_greens(), m_P0(), m_Ptot(), m_Ptot1D(), m_Kappa()
 {
-    this->createP0();
     this->createGreensSerial();
+    this->createP0();
+
+    // Initialize Ptot and Ptot1D
+
+    m_Ptot = new pressureFieldComplexSerial**[m_freq.nFreq];
+
+    for (int i = 0; i < m_freq.nFreq; i++)
+    {
+        m_Ptot[i] = new pressureFieldComplexSerial*[m_src.nSrc];
+
+        for (int j = 0; j < m_src.nSrc; j++)
+        {
+            m_Ptot[i][j] = new pressureFieldComplexSerial(m_grid);
+        }
+    }
+
+    m_Ptot1D = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
+
+    int li;
+
+    for (int i = 0; i < freq.nFreq ; i++)
+    {
+        li = i * src.nSrc;
+
+        for (int j = 0; j < src.nSrc; j++)
+        {
+            m_Ptot1D[li + j] = new pressureFieldComplexSerial(m_grid);
+        }
+    }
+
+    // initialize kappa
+    m_Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
+    for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
+    {
+        m_Kappa[i] = new pressureFieldComplexSerial(m_grid);
+    }
+
 }
 
 forwardModelBasicOptimization::~forwardModelBasicOptimization()
 {
-    if (m_P0!=nullptr)
-    {
-        this->deleteP0();
-    }
-
-    if (m_greens!=nullptr)
+    if (m_greens != nullptr)
     {
         this->deleteGreensSerial();
     }
 
-    if (m_Ptot!=nullptr)
+    if (m_P0 != nullptr)
+    {
+        this->deleteP0();
+    }
+
+    if (m_Ptot != nullptr)
     {
         this->deletePtot();
     }
 
-    if (m_Ptot1D!=nullptr)
+    if (m_Ptot1D != nullptr)
     {
         this->deletePtot1D();
     }
 
-    for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
+    if (m_Kappa != nullptr)
     {
-        delete m_Kappa[i];
+        this->deleteKappa();
     }
 
-    delete[] m_Kappa;
-    m_Kappa = nullptr;
 }
 
 void forwardModelBasicOptimization::createP0()
@@ -100,17 +134,12 @@ void forwardModelBasicOptimization::createPtot(const pressureFieldSerial &chiEst
 {
     assert(m_greens != nullptr);
     assert(m_P0 != nullptr);
-    assert(m_Ptot == nullptr);
-
-    m_Ptot = new pressureFieldComplexSerial**[m_freq.nFreq];
+    assert(m_Ptot1D != nullptr);
 
     for (int i = 0; i < m_freq.nFreq; i++)
     {
-        m_Ptot[i] = new pressureFieldComplexSerial*[m_src.nSrc];
-
         for (int j = 0; j < m_src.nSrc; j++)
         {
-            m_Ptot[i][j] = new pressureFieldComplexSerial(m_grid);
             *m_Ptot[i][j] = calcTotalField(*m_greens[i], chiEst, *m_P0[i][j]);
         }
     }
@@ -120,17 +149,17 @@ void forwardModelBasicOptimization::createPtot1D(const pressureFieldSerial &chiE
 {
     assert(m_greens != nullptr);
     assert(m_P0 != nullptr);
-    assert(m_Ptot1D == nullptr);
+    assert(m_Ptot1D != nullptr);
 
-    int l_i;
+    int li;
 
     for (int i = 0; i < m_freq.nFreq; i++)
     {
-        l_i = i * m_src.nSrc;
+        li = i * m_src.nSrc;
 
         for (int j = 0; j < m_src.nSrc; j++)
         {
-            *m_Ptot1D[l_i + j] = calcTotalField(*m_greens[i], chiEst, *m_P0[i][j]);
+            *m_Ptot1D[li + j] = calcTotalField(*m_greens[i], chiEst, *m_P0[i][j]);
         }
     }
 }
@@ -199,13 +228,12 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
 
 void forwardModelBasicOptimization::initializeForwardModel(const pressureFieldSerial &chiEst)
 {
+    this ->createPtot1D(chiEst);
     this ->calculateKappa(chiEst);
 }
 
 void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &chiEst)
 {
-   this->createPtot1D(chiEst);
-
     int li, lj;
 
     for (int i = 0; i < m_freq.nFreq; i++)
@@ -222,6 +250,17 @@ void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &ch
             }
         }
     }
+}
+
+void forwardModelBasicOptimization::deleteKappa()
+{
+    for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
+    {
+        delete m_Kappa[i];
+    }
+
+    delete[] m_Kappa;
+    m_Kappa = nullptr;
 }
 
 void forwardModelBasicOptimization::createPdataEst(std::complex<double> *Pdata, const pressureFieldSerial &chiEst)
