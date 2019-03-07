@@ -3,15 +3,15 @@
 #
 # Script to compare different implementations of the forward and inversion model by 
 # running different PreProcess and Process applications on a given test case
-#
-#
+# This script should be called in the ~/FWIInstall folder
+# 
 
 import matplotlib
 matplotlib.use('Agg')
 import difflib, filecmp, matplotlib, shutil, matplotlib.pyplot as plt
 from datetime import datetime
 
-import argparse, subprocess, os, sys, csv, numpy
+import argparse, subprocess, os, sys, csv, numpy, shutil
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(description="Script to compare different implementations of the \
@@ -20,8 +20,8 @@ formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("newpreprocess",help="Path of new PreProcess application")
 parser.add_argument("newprocess",help="Path of new Process application")
 parser.add_argument("testcase",help="Path of test case")
-parser.add_argument("-rpp","--refpreprocess",help="Path of reference PreProcess application", default="FWI_PreProcess")
-parser.add_argument("-rp","--refprocess",help="Path of reference Process application", default="FWI_Process")
+parser.add_argument("-rpp","--refpreprocess",help="Path of reference PreProcess application", default="bin/FWI_PreProcess")
+parser.add_argument("-rp","--refprocess",help="Path of reference Process application", default="bin/FWI_Process")
 args=parser.parse_args()
 
 newpreprocess = args.newpreprocess
@@ -30,23 +30,86 @@ testcase 	  = args.testcase
 refpreprocess = args.refpreprocess
 refprocess	  = args.refprocess
 
-# RUN BOTH APPLICATIONS ON THE SAME TESTCASE
-os.chdir('/home/leonard/FWIInstall/bin/')
-print(refpreprocess + " " + testcase + " ../output/")
-#run_ref_preprocess = subprocess.Popen(refpreprocess + " " + testcase + "/ ../output/", shell = True)
-#run_ref_preprocess.wait()
+if (testcase.endswith("/")):
+	testcase = testcase[:-1]
 
-os.rename('../input/fast/','../input/fastNEW')
+testcase_exists	 		= os.path.exists(testcase+"/")
+newpreprocess_exists 	= os.path.isfile(newpreprocess)
+newprocess_exists 		= os.path.isfile(newprocess)
+refpreprocess_exists 	= os.path.isfile(refpreprocess)
+refprocess_exists 		= os.path.isfile(refprocess)
 
-print(refpreprocess + " " + testcase + "NEW/ ../output/")
-run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcase + "NEW/ ..output/", shell = True)
+if testcase_exists:
+	print("Testcase exists")
+else:
+	print("Testcase does not exist!")
+	sys.exit()
+if newpreprocess_exists:
+	print("New PreProcess application exists")
+else:
+	print("New PreProcess application does not exist!")
+	sys.exit()
+if newprocess_exists:
+	print("New Process application exists")
+else:
+	print("New Process application does not exist!")
+	sys.exit()
+if refpreprocess_exists:
+	print("Reference PreProcess application exists")
+else:
+	print("Reference PreProcess application does not exist!")
+	sys.exit()
+if refprocess_exists:
+	print("Reference Process application exists")
+else:
+	print("Reference Process application does not exist!")
+	sys.exit()
+
+try:
+	shuignore = shutil.ignore_patterns('*fast*')
+	shutil.copytree(testcase +"/", testcase + "NEW/",ignore = shuignore)
+except: 
+	pass
+
+
+##################################################################################
+		# RUN BOTH PREPROCESS APPLICATIONS ON THE SAME TESTCASE
+##################################################################################
+
+print("Running: " + refpreprocess + " " + testcase)
+run_ref_preprocess = subprocess.Popen(refpreprocess + " " + testcase, shell = True)
+run_ref_preprocess.wait()
+
+print("Running: " + newpreprocess + " " + testcase)
+run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcase + "NEW/", shell = True)
 run_new_preprocess.wait()
 
-os.rename('../input/fastNEW', '../input/fast/')
+
+##################################################################################
+					# COMPARE PREPROCESS APPLICATIONS
+##################################################################################
+
+
 
 
 sys.exit(0)
 
+
+##################################################################################
+			# RUN BOTH PROCESS APPLICATIONS ON THE SAME TESTCASE
+##################################################################################
+
+print("Running: " + refprocess + " " + testcase)
+run_ref_process = subprocess.Popen(refprocess + " " + testcase, shell = True)
+run_ref_process.wait()
+
+print("Running: " + newprocess + " " + testcase)
+run_new_process = subprocess.Popen(newprocess + " " + testcase + "NEW/", shell = True)
+run_new_process.wait()
+
+##################################################################################
+						# COMPARE PROCESS APPLICATIONS
+##################################################################################
 
 tolerance = 0.01
 increased_performance_test_passed = False
