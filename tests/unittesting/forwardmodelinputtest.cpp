@@ -5,8 +5,8 @@
 //Generic Input Card test:
 TEST(ForwardModelInputTest, ints){
 
-    std::string temp = "../../../inputFiles/test/"; //jenkinspath
-    //std::string temp = "../../../parallelized-fwi/inputFiles/test/"; //qtpath
+    std::string temp = "../../../tests/testCase/"; //jenkins path
+    //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
     forwardModelInputCardReader cardReader = forwardModelInputCardReader(temp);
     forwardModelInput input = cardReader.getInput();
 

@@ -15,21 +15,20 @@ void writePlotInput(genericInput gInput);
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc != 2)
     {
-        std::cout << "Please enter 2 arguments, 1st the input card path, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure the input folder contains the GenericInput.json, FMInput.json and RandomInversionInput.json" << std::endl;
-        std::cout << "e.g. ../input/default/ ../output/" << std::endl;
+        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and RandomInversionInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
     std::vector<std::string> arguments(argv+1, argc+argv);
-    genericInputCardReader genericReader(arguments[0], arguments[1]);
+    genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    forwardModelInputCardReader forwardModelReader(gInput.inputFolder + gInput.runName + '/');
-    randomInversionInputCardReader randomInversionReader(gInput.inputFolder + gInput.runName + '/');
+    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
     randomInversionInput riInput = randomInversionReader.getInput();

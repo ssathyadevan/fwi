@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 
 #include "createChiCSV.h"
 
@@ -6,14 +7,29 @@
 // these csv files could be later used to post-process the chi data as required
 void create_csv_files_for_chi(std::string inputFilePath, genericInput input, std::string postfix)
 {
-
     std::string line;
     std::ifstream myfile (inputFilePath);
+
+    if(!myfile.is_open())
+    {
+        std::cout << "Could not open file at " << inputFilePath << std:: endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::ofstream output;
+    std::string outputFilePath = input.outputLocation + postfix + input.runName + ".csv";
+    output.open(outputFilePath);// open the file to write the chi values into
+
+    if(!output.is_open())
+    {
+        std::cout << "Could not create file at " << outputFilePath << std:: endl;
+        exit(EXIT_FAILURE);
+    }
+
     int x = 0; //counts over the horizontal input
     int z = 0; //counts over the vertical input
     double value; //double to read the chi value
-    std::ofstream output;
-    output.open(input.outputLocation + postfix + input.runName + ".csv");// open the file to write the chi values into
+
     while (std::getline(myfile, line))
     {
         value = stod(line);
