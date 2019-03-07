@@ -17,6 +17,12 @@ else:
 if (len(sys.argv) == 3):
     reference   = sys.argv[1]
 
+if (run.endswith("/")):
+	run = run[:-1]
+
+if (reference.endswith("/")):
+	reference = reference[:-1]
+
 preProcess_ref_csv = reference + "/output/" + reference + "InvertedChiToPressure.txt" 
 preProcess_run_csv = run + "/output/" + run + "InvertedChiToPressure.txt"
 

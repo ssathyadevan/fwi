@@ -122,38 +122,45 @@ To build the project, first create a folder titled \textit{build} outside the \t
 \noindent The first flag in the cmake command above enforces that the release version of the code be built and the 2nd flag implies that all the executables of the program will be placed in a folder \textit{FWIInstall} (executables are in \textit{FWIInstall/bin})
 
 \subsection{Run}
-First enter the \textit{inputFiles} folder parallelized-fwi folder and copy its contents to a folder named \textit{input} inside \textit{FWIInstall} folder. Also, a folder named \textit{output} is created to store all the output files of the program.
+First check out the \textit{inputFiles} folder in the parallelized-fwi folder and copy the \textit{default} folder to the \textit{FWIInstall} folder. 
 \newline
-\texttt{cd FWIInstall}
+\texttt{cd $\sim$/FWIInstall}
 \newline
-\texttt{mkdir input output}
-\newline
-\texttt{cp ../parallelized-fwi/inputFiles/* input/} 
+\texttt{cp -r ../parallelized-fwi/inputFiles/default/ .} 
 \newline
 Now, the individual scripts for the preProcessing and the processing part can be run as shown below:
 \newline
-\texttt{cd FWIInstall/bin}
+\texttt{cd bin/}
 \newline
-\texttt{./FWI\_PreProcess ../input/ ../output/}
+\texttt{./FWI\_PreProcess ../default/}
 \newline
-\texttt{./FWI\_Process ../input/ ../output/}
+\texttt{./FWI\_Process ../default/}
 \newline
-\noindent In the both the above executables the 1st argument (i.e. ../input) provides the directory where the input card set and the temple/skull chi values are located , the 2nd argument (i.e. ../output) provides the directory where all the output files from each application will be stored. Note that the arguments are the locations relative to the executable position. The default input parameters for the program are stored in de folder defaultSet. User can create his/her own set of input cards by copying the default set into a new folder, and give the new folder's location as first argument to both PreProcess and Process.
+\noindent For both executables we have to pass one argument which is the path to the case to be run (in this case \textit{../default/}. Note that the arguments are the locations relative to the executable position. The default input parameters are stored in the \textit{default/} which is located in \textit{\~/parallelized-fwi/inputFiles/}. Users can create their own set of input cards by copying the default folder into a new folder, modifying the input cards and giving the new folder's location argument to both PreProcess and Process.\\
+\\
+Note: It is very useful to add the \textit{$\sim$/FWIInstall/bin/} folder to the PATH environment variable. This means that both the \texttt{FWI\_PreProcess} and \texttt{FW\_Process} commands can be run from any folder without having to give the path to where they can be found. This can be achieved by issuing the following commands. \\
+\texttt{vim $\sim$/.bashrc}\\
+Add the following line at the end of this file (don't forget the colon!).\\
+\texttt{export PATH=\$PATH:$\sim$/FWIInstall/bin/}\\
+Now execute the following command in your terminal.\\
+\texttt{source $\sim$/.bashrc}\\
+Now you can run \texttt{FWI\_PreProcess} and \texttt{FW\_Process} commands from anywhere in your terminal!
+
 
 \newpage
 \noindent For post-processing (i.e. generation of image using the estimated chi values and the residual plot), the python script \texttt{postProcessing.py} can be used. This script is located inside the \textit{parallelized-fwi/pythonScripts} folder. This can be copied to the FWIInstall folder and then used as,
 \newline
-\texttt{cp parallelized-fwi/pythonScipts/postProcessing.py FWIInstall/}
+\texttt{cp $\sim$/parallelized-fwi/pythonScipts/postProcessing-python3.py FWIInstall/}
 \newline
-\texttt{cd FWIInstall}
+\texttt{cd $\sim$/FWIInstall}
 \newline
-\texttt{python3 postProcessing-python3.py output/}
+\texttt{python3 postProcessing-python3.py default/}
 \newline
 The folder where all the output files are located is provided as the argument for the python script. The pre-processing, processing and the post-processing can all be grouped together using the python wrapper \texttt{wrapper.py} located inside the \textit{parallelized-fwi/pythonScripts} folder.
 
 \noindent The postprocessed data can then be visualized using EOG from the output folder:
 \newline
-\texttt{cd output}
+\texttt{cd $\sim$/FWIInstall/default/output/}
 \newline
 \texttt{eog defaultResult.png}
 \newline
@@ -162,7 +169,7 @@ The folder where all the output files are located is provided as the argument fo
 
 The unit test executable is stored in the \textit{FWIInstall/bin} folder after the make install command. The following command can be used to run the test.
 \newline
-\texttt{cd FWIInstall/bin}
+\texttt{cd $\sim$/FWIInstall/bin}
 \newline
 \texttt{./unittest}
 
@@ -171,21 +178,21 @@ The unit test executable is stored in the \textit{FWIInstall/bin} folder after t
 
 This section details the comparison of a \textit{default} run with the \textit{fast} regression data. In order to run a regression test the following steps need to be taken. First, a \textit{test} folder is created, then the contents of a regression data folder, the output folder, the input card (default.in) and the regression test python scripts are copied to this \textit{test} folder. Then finally the python scripts can be run in succession.  
 \newline
+\texttt{cd $\sim$/FWIInstall/}
+\newline
 \texttt{mkdir test}
+\\
+\texttt{cp -r $\sim$/parallelized-fwi/tests/regression\_data/fast/ test/}
 \newline
-\texttt{cp parallelized-fwi/tests/regression\_data/fast/* test/}
+\texttt{cp $\sim$/parallelized-fwi/tests/testScripts/*.py test/}
 \newline
-\texttt{cp parallelized-fwi/tests/testScripts/* test/}
+\texttt{cp -r default/ test/}
+\\
+\texttt{cd test/}
+\\
+\texttt{python3 regressionTestPreProcessing\_python3.py fast default}
 \newline
-\texttt{cp input/default.in test/}
-\newline
-\texttt{cp output/* test/}
-\newline
-\texttt{cd test}
-\newline
-\texttt{python3 regressionTestPreProcessing.py fast default}
-\newline
-\texttt{python3 regressionTestProcessing.py fast default}
+\texttt{python3 regressionTestProcessing\_python3.py fast default}
 
 \end{document}
 

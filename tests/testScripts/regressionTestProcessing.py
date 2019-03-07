@@ -34,6 +34,12 @@ else:
             shutil.copy(full_file_name, '.')
     bench     = "hiquality"
 
+if (new.endswith("/")):
+	new = new[:-1]
+
+if (bench.endswith("/")):
+	bench = bench[:-1]
+
 inputfiles = ["CGInput.json", "FMInput.json", "GenericInput.json"]
 
 for i in range(0,len(inputfiles)):

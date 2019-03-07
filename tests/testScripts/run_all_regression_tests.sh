@@ -14,7 +14,9 @@ FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 cd $FWI_SOURCE_PATH/tests/regression_data
 TESTS=$(find . -maxdepth 1 -type d ! -path . -printf '%P\n')
 cd $FWI_INSTALL_PATH/
-cp $FWI_SOURCE_PATH/tests/testScripts/*.py .
+mkdir -p test
+cp $FWI_SOURCE_PATH/tests/testScripts/*.py test/
+cd test/
 RUN="RUN"
 for TEST in $TESTS
 do
@@ -34,8 +36,7 @@ do
 	python3 -m pytest python_unittest.py --junitxml "${TEST}results.xml"
 	
 	cp "${TEST}results.xml" $FWI_SOURCE_PATH/build/
-
-	rm -rf $TEST$RUN/ $TEST/ "${TEST}results.xml" diff_*.csv $TEST*.png RegressionTest*.txt
 done	
 
-rm -r __pycache__/ python_unittest.py regressionTestPr*.py
+cd ..
+rm -r test/

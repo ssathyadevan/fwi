@@ -11,13 +11,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys, csv
 
-outputPath = sys.argv[1]
+outputPath = sys.argv[1] # Enter here the name of the case folder you want to post process
 
-g = open(outputPath + "/lastRunName.txt","r")
+g = open(outputPath + "/output/lastRunName.txt","r")
 contents = g.readlines()
 runName = contents[0].rstrip()
 
-f = open(outputPath + "/" + runName + ".pythonIn","r")        # Open the file where we printed the settings used in Cpp, we'll reuse them
+f = open(outputPath + "/output/" + runName + ".pythonIn","r")        # Open the file where we printed the settings used in Cpp, we'll reuse them
 contents = f.readlines()                                      # Just dump the contents of this file into a big variable
 
 x = contents[1]                                               # Take the first line entirely...
@@ -29,9 +29,9 @@ y,u,v = x.split()
 nzt = int(v)
 
 #zerothfile="src/ShowChi.py"
-filename1 = outputPath + "/chi_ref_" + runName + ".txt"   # variable name for the original temple
-filename2 = outputPath + "/chi_est_" + runName + ".txt"   # variable name for the calculated temple
-filenameout = outputPath + "/" + runName + "Result.png"   # how we store the image
+filename1 = outputPath + "/output/chi_ref_" + runName + ".txt"   # variable name for the original temple
+filename2 = outputPath + "/output/chi_est_" + runName + ".txt"   # variable name for the calculated temple
+filenameout = outputPath + "/output/" + runName + "Result.png"   # how we store the image
 
 chi1 = np.genfromtxt(filename1)      # start image set up for original image
 chi1 = chi1.reshape((nzt, nxt))
@@ -58,7 +58,7 @@ plt.savefig(filenameout, dpi=400)
 ####################################
 ####  Create the residual plots ####
 ####################################
-residualLogFileName = outputPath+"/"+runName + "Residual.log"
+residualLogFileName = outputPath+"/output/"+runName + "Residual.log"
 reader_residual = csv.reader(open(residualLogFileName),delimiter=',')
 dummy_variable_reader_pr = list(reader_residual)
 reader_residual_array = np.array(dummy_variable_reader_pr).astype("float")
@@ -67,7 +67,7 @@ plt.clf()
 plt.plot(reader_residual_array[:,0])
 plt.ylabel("Residual")
 plt.grid(True)
-plt.savefig(outputPath+"/"+runName+"Residual.png", dpi=400)
+plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
 
 print("The pictures have been generated with Python")
