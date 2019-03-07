@@ -33,6 +33,8 @@ refprocess	  = args.refprocess
 if (testcase.endswith("/")):
 	testcase = testcase[:-1]
 
+testcasenew   = testcase + "NEW"
+
 testcase_exists	 		= os.path.exists(testcase+"/")
 newpreprocess_exists 	= os.path.isfile(newpreprocess)
 newprocess_exists 		= os.path.isfile(newprocess)
@@ -65,6 +67,8 @@ else:
 	print("Reference Process application does not exist!")
 	sys.exit()
 
+print("")
+
 try:
 	shuignore = shutil.ignore_patterns('*fast*')
 	shutil.copytree(testcase +"/", testcase + "NEW/",ignore = shuignore)
@@ -81,16 +85,61 @@ run_ref_preprocess = subprocess.Popen(refpreprocess + " " + testcase, shell = Tr
 run_ref_preprocess.wait()
 
 print("Running: " + newpreprocess + " " + testcase)
-run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcase + "NEW/", shell = True)
+run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcasenew + "/", shell = True)
 run_new_preprocess.wait()
 
 
 ##################################################################################
-					# COMPARE PREPROCESS APPLICATIONS
+#							PreProcess Analysis									 #
 ##################################################################################
 
+########################## OUTPUT COMPARISON ##############################
+ref_preprocess_csv = testcase + "/output/" + testcase + "InvertedChiToPressure.txt"
+new_preprocess_csv = testcasenew + "/output/" + testcasenew + "InvertedChiToPressure.txt"
 
+ref_preprocess_ictp = csv.reader(open(ref_preprocess_csv), delimiter=',')
+new_preprocess_ictp = csv.reader(open(new_preprocess_csv), delimiter=',')
 
+ref_preprocess_array = numpy.array(list(ref_preprocess_ictp)).astype("float")
+new_preprocess_array = numpy.array(list(new_preprocess_ictp)).astype("float")
+	
+ref_preprocess_array = ref_preprocess_array[...,0] + 1j * ref_preprocess_array[...,1]
+new_preprocess_array = new_preprocess_array[...,0] + 1j * new_preprocess_array[...,1]
+
+# CALCULATE MEAN ABSOLUTE DEVIATION AND ROOT MEAN SQUARED ERROR
+preprocess_mad  = numpy.absolute(ref_preprocess_array - new_preprocess_array).mean()
+preprocess_rmse = numpy.sqrt(numpy.absolute(numpy.square(ref_preprocess_array-new_preprocess_array)).mean())
+
+print("The MAD between reference and new:       " + str(preprocess_mad))
+print("The RMSE between reference and new:      " + str(preprocess_rmse))
+
+preprocess_outputfile = open("RegressionTest_Tolerance.txt","w+")
+preprocess_outputfile.write(str(preprocess_mad))
+preprocess_outputfile.close()
+
+######################## PERFORMANCE COMPARISON ###########################
+def find(substr,whichin):
+    from datetime import datetime
+    lines           = [x for x in open(whichin) if substr in x]
+    line            = lines[0]
+    manip           = line.replace(substr,'').replace("\n",'')
+    start_or_finish = (datetime.strptime(manip,'%c'))
+    return start_or_finish 
+
+datetime_bench_start  = find("Starting at ", testcase + "/output/" + testcase + "PreProcess.out")
+datetime_bench_finish = find("Finished at ", testcase + "/output/" + testcase + "PreProcess.out")
+bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
+datetime_new_start    = find("Starting at ", testcasenew + "/output/"+ testcasenew + "PreProcess.out")
+datetime_new_finish   = find("Finished at ", testcasenew + "/output/" +testcasenew + "PreProcess.out")
+new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
+
+if (bench_total_seconds > new_total_seconds):
+    increased_performance_test_passed = True
+
+print("Time in seconds it took to do reference run: 	"+str(bench_total_seconds))
+print("Time in seconds it took to do new run:       	"+str(new_total_seconds))
+print("Ratio of bench reference time to new run time:   "+ \
+    str(float(bench_total_seconds)/float(new_total_seconds)))
 
 sys.exit(0)
 
@@ -104,7 +153,7 @@ run_ref_process = subprocess.Popen(refprocess + " " + testcase, shell = True)
 run_ref_process.wait()
 
 print("Running: " + newprocess + " " + testcase)
-run_new_process = subprocess.Popen(newprocess + " " + testcase + "NEW/", shell = True)
+run_new_process = subprocess.Popen(newprocess + " " + testcasenew + "/", shell = True)
 run_new_process.wait()
 
 ##################################################################################
