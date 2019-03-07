@@ -34,6 +34,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             gInput.nSourcesReceivers.rec*
             gInput.nSourcesReceivers.src;
     double eta = 1.0/(normSq(pData, nTotal));//scaling factor eq 2.10 in thesis
+    std::cout << "eta = " << eta << std::endl;
     double gamma, alpha, res;
 
     std::array<double,2> alphaDiv;

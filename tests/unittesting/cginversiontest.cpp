@@ -5,8 +5,8 @@
 //Generic Input Card test:
 TEST(CGInversionInputTest, testCardToInputFunctionality){
 
-    std::string temp = "../../../inputFiles/test/"; // this is a path specific for jenkins
-    //std::string temp = "../../../parallelized-fwi/inputFiles/test/"; // this is a path when running tests in qt
+    std::string temp = "../../../tests/testCase/"; //jenkins path
+    //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
     conjugateGradientInversionInputCardReader cardReader = conjugateGradientInversionInputCardReader(temp);
     conjugateGradientInput input = cardReader.getInput();
 

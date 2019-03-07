@@ -8,10 +8,10 @@
 class conjugateGradientInversionInputCardReader:public inputCardReader
 {
 public:
-    conjugateGradientInversionInputCardReader(std::string inputCardPath);
+    conjugateGradientInversionInputCardReader(const std::string &caseFolder);
     conjugateGradientInput getInput();
 private:
-    void readCard(std::string inputCardPath);
+    void readCard(const std::string &caseFolder);
     conjugateGradientInput _input;
 };
 

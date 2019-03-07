@@ -8,11 +8,11 @@
 class genericInputCardReader: public inputCardReader
 {   
 public:
-    genericInputCardReader(const std::string &pathToCardSet, const std::string &outputLocation);
+    genericInputCardReader(const std::string &runName);
     genericInput getInput();
 
 private:
-    void readCard(std::string inputCardPath);
+    void readCard(const std::string &caseFolder);
 
     genericInput _input;
 };

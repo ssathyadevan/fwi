@@ -17,8 +17,14 @@ else:
 if (len(sys.argv) == 3):
     reference   = sys.argv[1]
 
-preProcess_ref_csv = reference + "/" + reference + "InvertedChiToPressure.txt" 
-preProcess_run_csv = run + "/" + run + "InvertedChiToPressure.txt"
+if (run.endswith("/")):
+	run = run[:-1]
+
+if (reference.endswith("/")):
+	reference = reference[:-1]
+
+preProcess_ref_csv = reference + "/output/" + reference + "InvertedChiToPressure.txt" 
+preProcess_run_csv = run + "/output/" + run + "InvertedChiToPressure.txt"
 
 
 preProcess_ref_csv_exists = os.path.isfile(preProcess_ref_csv)
