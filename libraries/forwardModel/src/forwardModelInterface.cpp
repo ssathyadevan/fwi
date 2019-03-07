@@ -32,25 +32,19 @@ std::complex<double>* ForwardModelInterface::calculateResidual(const pressureFie
 
     createPdataEst(PdataEst, chiEst);
 
-    std::complex<double>* residual = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
-
     for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
     {
-        residual[i] = Pdata[i] - PdataEst[i];
+        m_residual[i] = Pdata[i] - PdataEst[i];
     }
 
     delete[] PdataEst;
 
-    return residual;
+    return m_residual;
 }
 
-double ForwardModelInterface::calculateResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata)
+double ForwardModelInterface::calculateResidualNormSq(std::complex<double> *residual)
 {
-    std::complex<double>* residual = calculateResidual(chiEst, Pdata);
-
     double residualSq = normSq(residual, m_freq.nFreq * m_src.nSrc * m_recv.nRecv);
-
-    delete[] residual;
 
     return residualSq;
 }

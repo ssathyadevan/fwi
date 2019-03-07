@@ -85,13 +85,12 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     frequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
-
     int totalGridCells = freqg.nFreq * src.nSrc * recv.nRecv;
 
     //read referencePressureData from a CSV file format
-    std::complex<double> referencePressureData[totalGridCells];
-    std::ifstream       file( gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt");
-    CSVReader           row;
+    std::complex<double>    referencePressureData[totalGridCells];
+    std::ifstream           file( gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt");
+    CSVReader               row;
 
     int i = 0;
     while(file >> row)
@@ -104,7 +103,6 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     }
 
     forwardModelBasicOptimization *model;
-    //model = new forwardModel(grid, src, recv, freqg, fmInput);
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;

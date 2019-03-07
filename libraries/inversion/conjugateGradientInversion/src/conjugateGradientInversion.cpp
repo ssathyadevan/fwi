@@ -40,7 +40,6 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
     chiEst.Zero();
 
-
     pressureFieldSerial **gradientChiOld  = new pressureFieldSerial*[2];
     pressureFieldSerial **gradientGregTmp = new pressureFieldSerial*[2];
     pressureFieldSerial **gradientZetaTmp = new pressureFieldSerial*[2];
@@ -71,14 +70,13 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
         if (m_cgInput.doReg == 0)
         {
-
             m_forwardModel->initializeForwardModel(chiEst);
+
+            std::complex<double>* resArray = m_forwardModel->calculateResidual(chiEst, pData);
 
             for (int it1 = 0; it1 < m_cgInput.iteration1.n; it1++)
             {  
-                std::complex<double>* resArray = m_forwardModel->calculateResidual(chiEst, pData);
-
-                resSq = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+                resSq = m_forwardModel->calculateResidualNormSq(resArray);
                 resErrFunc = eta * resSq;
 
                 {
@@ -157,7 +155,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     alphaDiv[0] = double(0.0);
                     alphaDiv[1] = double(0.0);
 
-                    auto zetaTemp = m_forwardModel->createKappaOperator(zeta);
+                    auto *zetaTemp = m_forwardModel->createKappaOperator(zeta);
 
                     for (int i = 0; i < nTotal; i++)
                     {
@@ -166,10 +164,12 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     }
 
                     alpha   = alphaDiv[0] / alphaDiv[1]; //eq:optimalStepSizeCG in the readme pdf
-                    chiEst += alpha*zeta;
+                    chiEst += alpha * zeta;
                     gOld    = g;
 
-                    resSq = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+                    resArray = m_forwardModel->calculateResidual(chiEst, pData);
+                    resSq = m_forwardModel->calculateResidualNormSq(resArray);
+
                     resErrFunc = eta * resSq;
 
                     std::cout << it1+1 << "/" << m_cgInput.iteration1.n << "\t (" << it+1 << "/" <<m_cgInput.n_max << ")\t res: " << std::setprecision(17) << resErrFunc << std::endl;
@@ -179,9 +179,11 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                     fDataOld = resErrFunc;
                     vecResFirstIter.push_back(resErrFunc);
-                }
-                else
-                {
+
+                    }
+                    else
+                    {
+
                     chiEst.Gradient(gradientChiOld);
                     pressureFieldSerial gradientChiOldNormsquared(m_grid);
 
@@ -212,6 +214,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     tmp.Zero();
 
                     m_forwardModel->calculateOperatorMapStoD(tmp, resArray);
+
                     g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
 
                     gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld);// # eq: PolakRibiereDirection
@@ -251,9 +254,9 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                     alpha = this->findRealRootFromCubic(derA, derB, derC, derD);
 
-                    chiEst += alpha*zeta;
+                    chiEst += alpha * zeta;
 
-                    resSq = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+                    resSq = m_forwardModel->calculateResidualNormSq(resArray);
                     resErrFunc = eta * resSq;
 
                     std::cout << it1+1 << "/" << m_cgInput.iteration1.n << "\t (" << it+1 << "/" <<m_cgInput.n_max << ")\t res: "
@@ -289,6 +292,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
         }
 
         //_forwardModel->createTotalField1D(chiEst); // estimate p_tot from the newly estimated chi (chi_est)
+        m_forwardModel->postInitializeForwardModel(chiEst);
     }
     file.close(); // close the residual.log file
 

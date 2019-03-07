@@ -58,16 +58,16 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     frequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+    int totalGridCells = freqg.nFreq * src.nSrc * recv.nRecv;
 
-    std::complex<double> referencePressureData[magnitude];
+    std::complex<double> referencePressureData[totalGridCells];
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
     ForwardModelInterface *model;
-    //model = new forwardModel(grid, src, recv, freqg, fmInput);
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
+    model->initializeForwardModel(chi);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     model->createPdataEst(referencePressureData, chi);
@@ -85,7 +85,7 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
         std::exit(EXIT_FAILURE);
     }
 
-    for(int i=0; i < magnitude; i++)
+    for(int i=0; i < totalGridCells; i++)
     {
         file << std::setprecision(17) << referencePressureData[i].real()
              <<"," << referencePressureData[i].imag() << std::endl;

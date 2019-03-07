@@ -32,12 +32,13 @@ forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid,
 
         for (int j = 0; j < src.nSrc; j++)
         {
-            m_Ptot1D[li + j] = new pressureFieldComplexSerial(m_grid);
+            m_Ptot1D[li + j] = new pressureFieldComplexSerial(*m_P0[i][j]);
         }
     }
 
     // initialize kappa
     m_Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
+
     for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
         m_Kappa[i] = new pressureFieldComplexSerial(m_grid);
@@ -194,6 +195,8 @@ void forwardModelBasicOptimization::deletePtot1D()
 
 pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init)
 {
+    assert(&G.GetGrid() == &p_init.GetGrid());
+
     Iter2 iter2 = m_fmInput.iter2;
 
     pressureFieldComplexSerial chi_p(m_grid), chi_p_old(m_grid);
@@ -203,7 +206,7 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
 
     p_tot = p_init;
 
-    double res =  double(0.0);
+    double res = 0.0;
 
     for(int it = 0; it < iter2.n; it++)
     {
@@ -215,6 +218,18 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
         double chi_pNorm = chi_p.Norm();
 
         res = dWNorm / chi_pNorm;
+
+        if(res < iter2.tolerance && it != 0)
+        {
+            if(true)
+            {
+                std::string itstring = std::to_string(it);
+                std::string line_to_print = "Convergence after " + itstring + "iterations";
+                std::cout << line_to_print << std::endl;
+            }
+
+            break;
+        }
 
         p_tot += G.dot1(dW);
 
@@ -228,8 +243,12 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
 
 void forwardModelBasicOptimization::initializeForwardModel(const pressureFieldSerial &chiEst)
 {
+    this ->calculateKappa(chiEst);    
+}
+
+void forwardModelBasicOptimization::postInitializeForwardModel(const pressureFieldSerial &chiEst)
+{
     this ->createPtot1D(chiEst);
-    this ->calculateKappa(chiEst);
 }
 
 void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &chiEst)
@@ -285,6 +304,11 @@ void forwardModelBasicOptimization::createPdataEst(std::complex<double> *Pdata, 
             }
         }
     }
+
+//    for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
+//    {
+//        Pdata[i] = Summation(*m_Kappa[i], chiEst);
+//    }
 
 }
 

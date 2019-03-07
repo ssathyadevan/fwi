@@ -16,6 +16,7 @@ public:
     ~forwardModelBasicOptimization();
 
     virtual void initializeForwardModel(const pressureFieldSerial &chiEst);
+    void postInitializeForwardModel(const pressureFieldSerial &chiEst);
 
     virtual void createPdataEst(std::complex<double> *pData, const pressureFieldSerial &chiEst );
 

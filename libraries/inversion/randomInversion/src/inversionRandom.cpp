@@ -22,6 +22,7 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
     // open the file to store the residual log
     std::ofstream file;
     file.open (gInput.outputLocation+gInput.runName+"Residual.log", std::ios::out | std::ios::trunc);
+
     if (!file)
     {
         std::cout<< "Failed to open the file to store residuals" << std::endl;
@@ -29,10 +30,13 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
     }
 
     int counter = 1;
+
     //main loop//
     for(int it=0; it < m_riInput.nMaxOuter; it++)
-    {          
-            resSq       = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+    {
+            std::complex<double>* resArray = m_forwardModel->calculateResidual(chiEst, pData);
+
+            resSq       = m_forwardModel->calculateResidualNormSq(resArray);
             chiEstRes   = eta * resSq;
 
             //start the inner loop
@@ -42,7 +46,7 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
                     pressureFieldSerial tempRandomChi(m_grid);
                     tempRandomChi.RandomSaurabh();
 
-                    resSq       = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+                    resSq       = m_forwardModel->calculateResidualNormSq(resArray);
                     chiEstRes   = eta * resSq;
 
                     if (it1 == 0)
@@ -54,7 +58,7 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
                         std::cout << "Randomizing the temple again" << std::endl;
                         tempRandomChi.CopyTo(chiEst);
 
-                        resSq       = m_forwardModel->calculateResidualNormSq(chiEst, pData);
+                        resSq       = m_forwardModel->calculateResidualNormSq(resArray);
                         chiEstRes   = eta * resSq;
                     }
 

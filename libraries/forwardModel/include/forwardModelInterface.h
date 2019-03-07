@@ -37,9 +37,9 @@ class ForwardModelInterface
 public:
     ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
                           const frequenciesGroup &freq, const forwardModelInput &fmInput)
-        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_fmInput(fmInput)
+        : m_grid(grid), m_src(src), m_recv(recv), m_freq(freq), m_fmInput(fmInput), m_residual()
     {
-
+        m_residual = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
     }
 
     virtual ~ForwardModelInterface()
@@ -61,17 +61,20 @@ public:
 
     virtual void createPdataEst(std::complex<double> *pData, const pressureFieldSerial &chiEst) = 0;
 
-    double calculateResidualNormSq(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
+    double calculateResidualNormSq(std::complex<double> *residual);
 
     std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);
 
+private:
+    std::complex<double> *m_residual;
 protected:
 
-    const grid2D& m_grid;
-    const sources& m_src;
-    const receivers& m_recv;
-    const frequenciesGroup& m_freq;
-    const forwardModelInput& m_fmInput;
+    const grid2D &m_grid;
+    const sources &m_src;
+    const receivers &m_recv;
+    const frequenciesGroup &m_freq;
+    const forwardModelInput &m_fmInput;
+
 };
 
 #endif
