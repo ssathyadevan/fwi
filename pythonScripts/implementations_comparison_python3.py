@@ -88,12 +88,12 @@ print("Running: " + newpreprocess + " " + testcase)
 run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcasenew + "/", shell = True)
 run_new_preprocess.wait()
 
-
-##################################################################################
-#							PreProcess Analysis									 #
-##################################################################################
-
-########################## OUTPUT COMPARISON ##############################
+print("")
+print("##################################################################################")
+print("#                         PreProcess Analysis                                    #")
+print("##################################################################################")
+print("")
+print("############################# OUTPUT COMPARISON #################################")
 ref_preprocess_csv = testcase + "/output/" + testcase + "InvertedChiToPressure.txt"
 new_preprocess_csv = testcasenew + "/output/" + testcasenew + "InvertedChiToPressure.txt"
 
@@ -109,17 +109,26 @@ new_preprocess_array = new_preprocess_array[...,0] + 1j * new_preprocess_array[.
 # CALCULATE MEAN ABSOLUTE DEVIATION AND ROOT MEAN SQUARED ERROR
 preprocess_mad  = numpy.absolute(ref_preprocess_array - new_preprocess_array).mean()
 preprocess_rmse = numpy.sqrt(numpy.absolute(numpy.square(ref_preprocess_array-new_preprocess_array)).mean())
+preprocess_infnorm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, numpy.inf) \
+					/ numpy.linalg.norm(ref_preprocess_array, numpy.inf)
+preprocess_2norm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, 2) \
+					/ numpy.linalg.norm(ref_preprocess_array, 2)
+preprocess_1norm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, 1) \
+					/ numpy.linalg.norm(ref_preprocess_array, 1)
 
-print("The MAD between reference and new:       " + str(preprocess_mad))
-print("The RMSE between reference and new:      " + str(preprocess_rmse))
+print("The MAD between reference and new :          " + str(preprocess_mad))
+print("The RMSE between reference and new:          " + str(preprocess_rmse))
+print("Maximum relative deviation compared to ref:  " + str(preprocess_infnorm))
+print("Relative 2-norm deviation compared to ref:   " + str(preprocess_2norm))
+print("Relative 1-norm deviation compared to ref:   " + str(preprocess_1norm))
 
 preprocess_outputfile = open("RegressionTest_Tolerance.txt","w+")
 preprocess_outputfile.write(str(preprocess_mad))
 preprocess_outputfile.close()
 
-######################## PERFORMANCE COMPARISON ###########################
+print("")
+print("########################### PERFORMANCE COMPARISON ##############################")
 def find(substr,whichin):
-    from datetime import datetime
     lines           = [x for x in open(whichin) if substr in x]
     line            = lines[0]
     manip           = line.replace(substr,'').replace("\n",'')
@@ -136,18 +145,18 @@ new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds
 if (bench_total_seconds > new_total_seconds):
     increased_performance_test_passed = True
 
-print("Time in seconds it took to do reference run: 	"+str(bench_total_seconds))
-print("Time in seconds it took to do new run:       	"+str(new_total_seconds))
-print("Ratio of bench reference time to new run time:   "+ \
+print("Time in seconds it took to do reference run:     "+str(bench_total_seconds))
+print("Time in seconds it took to do new run:           "+str(new_total_seconds))
+print("Speedup of new run compared to reference run :   "+ \
     str(float(bench_total_seconds)/float(new_total_seconds)))
-
-sys.exit(0)
-
 
 ##################################################################################
 			# RUN BOTH PROCESS APPLICATIONS ON THE SAME TESTCASE
 ##################################################################################
 
+sys.exit(0)
+
+print("")
 print("Running: " + refprocess + " " + testcase)
 run_ref_process = subprocess.Popen(refprocess + " " + testcase, shell = True)
 run_ref_process.wait()
@@ -156,9 +165,16 @@ print("Running: " + newprocess + " " + testcase)
 run_new_process = subprocess.Popen(newprocess + " " + testcasenew + "/", shell = True)
 run_new_process.wait()
 
-##################################################################################
-						# COMPARE PROCESS APPLICATIONS
-##################################################################################
+print("")
+print("##################################################################################")
+print("#                            Process Analysis                                    #")
+print("##################################################################################")
+print("")
+print("############################# OUTPUT COMPARISON #################################")
+print("")
+print("########################### PERFORMANCE COMPARISON ##############################")
+
+sys.exit(0)
 
 tolerance = 0.01
 increased_performance_test_passed = False
