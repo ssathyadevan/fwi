@@ -41,7 +41,7 @@ refpreprocess_exists 	= os.path.isfile(refpreprocess)
 refprocess_exists 		= os.path.isfile(refprocess)
 
 if testcase_exists:
-	print("Testcase                                          OK")
+	print("Testcase                                          " + testcase)
 else:
 	print("Testcase                                          ERROR: NOT FOUND")
 	sys.exit()
@@ -269,9 +269,9 @@ per_ref_1norm = numpy.linalg.norm(diff_per_ref, 1) \
 					/ numpy.linalg.norm(perfect_reservoir, 1)
 
 print("--------------------------- Perfect vs. Reference --------------------------------")
-print("The MAD between perfect and reference             %0.2f" % per_ref_mad)
-print("The RMSE between perfect and reference            %0.2f" % per_ref_rmse)
-print("Relative Inf-norm w.r.t. perfect                  %0.2f" % per_ref_infnorm)
+print("The MAD between perfect and reference:            %0.2f" % per_ref_mad)
+print("The RMSE between perfect and reference:           %0.2f" % per_ref_rmse)
+print("Relative Inf-norm w.r.t. perfect:                 %0.2f" % per_ref_infnorm)
 print("Relative 2-norm w.r.t. perfect:                   %0.2f" % per_ref_2norm)
 print("Relative 1-norm w.r.t. perfect:                   %0.2f" % per_ref_1norm)
 
@@ -285,11 +285,11 @@ per_new_1norm = numpy.linalg.norm(diff_per_new, 1) \
 					/ numpy.linalg.norm(perfect_reservoir, 1)
 
 print("------------------------------ Perfect vs. New -----------------------------------")
-print("The MAD between perfect and new                   %0.2f" % per_new_mad)
-print("The RMSE between perfect and new                  %0.2f" % per_new_rmse)
-print("Relative Inf-norm w.r.t. new                      %0.2f" % per_new_infnorm)
-print("Relative 2-norm w.r.t. new:                       %0.2f" % per_new_2norm)
-print("Relative 1-norm w.r.t. new:                       %0.2f" % per_new_1norm)
+print("The MAD between perfect and new:                  %0.2f" % per_new_mad)
+print("The RMSE between perfect and new:                 %0.2f" % per_new_rmse)
+print("Relative Inf-norm w.r.t. perfect:                 %0.2f" % per_new_infnorm)
+print("Relative 2-norm w.r.t. perfect:                   %0.2f" % per_new_2norm)
+print("Relative 1-norm w.r.t. perfect:                   %0.2f" % per_new_1norm)
 
 # RESHAPE BACK
 perfect_reservoir = perfect_reservoir.reshape((nrow,ncol))
