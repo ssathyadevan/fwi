@@ -243,7 +243,8 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
 
 void forwardModelBasicOptimization::initializeForwardModel(const pressureFieldSerial &chiEst)
 {
-    this ->calculateKappa(chiEst);    
+    this ->calculateKappa(chiEst);
+    this ->createPtot(chiEst);
 }
 
 void forwardModelBasicOptimization::postInitializeForwardModel(const pressureFieldSerial &chiEst)
@@ -284,7 +285,7 @@ void forwardModelBasicOptimization::deleteKappa()
 
 void forwardModelBasicOptimization::createPdataEst(std::complex<double> *Pdata, const pressureFieldSerial &chiEst)
 {
-    this->createPtot(chiEst);
+    //this->createPtot(chiEst);
 
     //std::complex<double>* PdataEst = new std::complex<double>[m_freq.nFreq* m_recv.nRecv*m_src.nSrc];
 

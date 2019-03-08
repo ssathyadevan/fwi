@@ -256,6 +256,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                     chiEst += alpha * zeta;
 
+                    resArray = m_forwardModel->calculateResidual(chiEst, pData);
                     resSq = m_forwardModel->calculateResidualNormSq(resArray);
                     resErrFunc = eta * resSq;
 
