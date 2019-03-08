@@ -43,27 +43,27 @@ refprocess_exists 		= os.path.isfile(refprocess)
 if testcase_exists:
 	print("Testcase                                          OK")
 else:
-	print("Testcase                                          ERROR")
+	print("Testcase                                          ERROR: NOT FOUND")
 	sys.exit()
 if newpreprocess_exists:
 	print("New PreProcess application                        OK")
 else:
-	print("New PreProcess application                        ERROR")
+	print("New PreProcess application                        ERROR: NOT FOUND")
 	sys.exit()
 if newprocess_exists:
 	print("New Process application                           OK")
 else:
-	print("New Process application                           ERROR")
+	print("New Process application                           ERROR: NOT FOUND")
 	sys.exit()
 if refpreprocess_exists:
 	print("Reference PreProcess application                  OK")
 else:
-	print("Reference PreProcess application                  ERROR")
+	print("Reference PreProcess application                  ERROR: NOT FOUND")
 	sys.exit()
 if refprocess_exists:
 	print("Reference Process application                     OK")
 else:
-	print("Reference Process application                     ERROR")
+	print("Reference Process application                     ERROR: NOT FOUND")
 	sys.exit()
 
 print("")
@@ -232,6 +232,13 @@ chi_new = testcasenew + "/output/chi_est_" + testcasenew + ".csv"
 new_reservoir = csv.reader(open(chi_new),delimiter=',')
 new_reservoir = numpy.array(list(new_reservoir)).astype("float")
 
+# TEMPORARY RESHAPE SO THAT VECTOR NORM IS USED INSTEAD OF MATRIX NORM
+nrow = perfect_reservoir.shape[0]
+ncol = perfect_reservoir.shape[1]
+perfect_reservoir = perfect_reservoir.flatten()
+ref_reservoir = ref_reservoir.flatten()
+new_reservoir = new_reservoir.flatten()
+
 diff_ref_new = ref_reservoir - new_reservoir
 diff_per_ref = perfect_reservoir - ref_reservoir
 diff_per_new = perfect_reservoir - new_reservoir
@@ -284,6 +291,15 @@ print("Relative Inf-norm w.r.t. new                      %0.2f" % per_new_infnor
 print("Relative 2-norm w.r.t. new:                       %0.2f" % per_new_2norm)
 print("Relative 1-norm w.r.t. new:                       %0.2f" % per_new_1norm)
 
+# RESHAPE BACK
+perfect_reservoir = perfect_reservoir.reshape((nrow,ncol))
+ref_reservoir     = ref_reservoir.reshape((nrow,ncol))
+new_reservoir     = new_reservoir.reshape((nrow,ncol))
+diff_ref_new      = diff_ref_new.reshape((nrow,ncol))
+diff_per_ref      = diff_per_ref.reshape((nrow,ncol))
+diff_per_new      = diff_per_new.reshape((nrow,ncol))
+
+# WRITE DIFFERENCES TO CSV FILES
 numerics_filename_per_ref = "diff_chi_perfect_and_ref_"+testcase+".csv"
 numerics_filename_per_new = "diff_chi_perfect_and_new_"+testcase+".csv"
 numerics_filename_ref_new = "diff_chi_ref_and_new_"+testcase+".csv"
