@@ -75,23 +75,31 @@ try:
 except: 
 	pass
 
-
-##################################################################################
-		# RUN BOTH PREPROCESS APPLICATIONS ON THE SAME TESTCASE
-##################################################################################
-
-print("Running: " + refpreprocess + " " + testcase)
-run_ref_preprocess = subprocess.Popen(refpreprocess + " " + testcase, shell = True)
-run_ref_preprocess.wait()
-
-print("Running: " + newpreprocess + " " + testcase)
-run_new_preprocess = subprocess.Popen(newpreprocess + " " + testcasenew + "/", shell = True)
-run_new_preprocess.wait()
-
-print("")
 print("##################################################################################")
 print("#                         PreProcess Analysis                                    #")
 print("##################################################################################")
+print("")
+
+print("Running: " + refpreprocess + " " + testcase)
+run_ref_preprocess = subprocess.Popen("/usr/bin/time -o timeoutput.txt -f '%M' " + refpreprocess + \
+	                                  " " + testcase, shell = True, stdout=subprocess.PIPE)
+run_ref_preprocess.wait()
+
+# OBTAIN RAM USAGE
+time_output_file = open("timeoutput.txt")
+ref_preprocess_ram = float(time_output_file.readline())
+time_output_file.close()
+
+print("Running: " + newpreprocess + " " + testcasenew)
+run_new_preprocess = subprocess.Popen("/usr/bin/time -o timeoutput.txt -f '%M' " + newpreprocess + \
+	                                  " " + testcasenew, shell = True, stdout=subprocess.PIPE)
+run_new_preprocess.wait()
+
+# OBTAIN RAM USAGE
+time_output_file = open("timeoutput.txt")
+new_preprocess_ram = float(time_output_file.readline())
+time_output_file.close()
+
 print("")
 print("############################# OUTPUT COMPARISON #################################")
 ref_preprocess_csv = testcase + "/output/" + testcase + "InvertedChiToPressure.txt"
@@ -108,7 +116,7 @@ new_preprocess_array = new_preprocess_array[...,0] + 1j * new_preprocess_array[.
 
 # CALCULATE MEAN ABSOLUTE DEVIATION AND ROOT MEAN SQUARED ERROR
 preprocess_mad  = numpy.absolute(ref_preprocess_array - new_preprocess_array).mean()
-preprocess_rmse = numpy.sqrt(numpy.absolute(numpy.square(ref_preprocess_array-new_preprocess_array)).mean())
+preprocess_rmse = numpy.sqrt(numpy.square(numpy.absolute(ref_preprocess_array-new_preprocess_array)).mean())
 preprocess_infnorm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, numpy.inf) \
 					/ numpy.linalg.norm(ref_preprocess_array, numpy.inf)
 preprocess_2norm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, 2) \
@@ -116,11 +124,11 @@ preprocess_2norm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array
 preprocess_1norm = numpy.linalg.norm(ref_preprocess_array - new_preprocess_array, 1) \
 					/ numpy.linalg.norm(ref_preprocess_array, 1)
 
-print("The MAD between reference and new :          " + str(preprocess_mad))
-print("The RMSE between reference and new:          " + str(preprocess_rmse))
-print("Maximum relative deviation compared to ref:  " + str(preprocess_infnorm))
-print("Relative 2-norm deviation compared to ref:   " + str(preprocess_2norm))
-print("Relative 1-norm deviation compared to ref:   " + str(preprocess_1norm))
+print("The MAD between reference and new:            %0.2f" % preprocess_mad)
+print("The RMSE between reference and new:           %0.2f" % preprocess_rmse)
+print("Relative Inf-norm w.r.t. ref:                 %0.2f" % preprocess_infnorm)
+print("Relative 2-norm w.r.t. ref:                   %0.2f" % preprocess_2norm)
+print("Relative 1-norm w.r.t. ref:                   %0.2f" % preprocess_1norm)
 
 preprocess_outputfile = open("RegressionTest_Tolerance.txt","w+")
 preprocess_outputfile.write(str(preprocess_mad))
@@ -145,30 +153,30 @@ new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds
 if (bench_total_seconds > new_total_seconds):
     increased_performance_test_passed = True
 
-print("Time in seconds it took to do reference run:     "+str(bench_total_seconds))
-print("Time in seconds it took to do new run:           "+str(new_total_seconds))
-print("Speedup of new run compared to reference run :   "+ \
-    str(float(bench_total_seconds)/float(new_total_seconds)))
-
-##################################################################################
-			# RUN BOTH PROCESS APPLICATIONS ON THE SAME TESTCASE
-##################################################################################
-
-sys.exit(0)
-
-print("")
-print("Running: " + refprocess + " " + testcase)
-run_ref_process = subprocess.Popen(refprocess + " " + testcase, shell = True)
-run_ref_process.wait()
-
-print("Running: " + newprocess + " " + testcase)
-run_new_process = subprocess.Popen(newprocess + " " + testcasenew + "/", shell = True)
-run_new_process.wait()
+print("Wall clock time it took to do reference run:      %0.0i seconds" % bench_total_seconds)
+print("Wall clock time it took to do new run:            %0.0i seconds" % new_total_seconds)
+print("Speedup of new run compared to reference run:     %0.2f" % \
+       (float(bench_total_seconds)/float(new_total_seconds)))
+print("RAM usage for reference run:                      %0.1f Mb" % (ref_preprocess_ram/1000))
+print("RAM usage for new run:                            %0.1f Mb" % (new_preprocess_ram/1000))
 
 print("")
 print("##################################################################################")
 print("#                            Process Analysis                                    #")
 print("##################################################################################")
+print("")
+
+sys.exit(0)
+
+print("")
+print("Running: " + refprocess + " " + testcase)
+run_ref_process = subprocess.Popen("/usr/bin/time -f '%M' " + refprocess + " " + testcase + " 1>/dev/null", shell = True)
+run_ref_process.wait()
+
+print("Running: " + newprocess + " " + testcase)
+run_new_process = subprocess.Popen("/usr/bin/time -f '%M' " + newprocess + " " + testcasenew + "/" + " 1>/dev/null", shell = True)
+run_new_process.wait()
+
 print("")
 print("############################# OUTPUT COMPARISON #################################")
 print("")
