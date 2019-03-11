@@ -18,9 +18,10 @@ public:
     virtual void calculatePdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData);
     virtual void getPdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData);
 
+    virtual void updateForwardModel(const pressureFieldSerial &chiEst);
+
     // Ideally these should be private
     void initializeForwardModel(const pressureFieldSerial &chiEst);
-    void postProcessForwardModel(const pressureFieldSerial &chiEst);
 
     std::complex<double>* createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial);
     std::complex<double>* createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial);

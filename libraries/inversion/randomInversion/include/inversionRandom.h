@@ -12,14 +12,6 @@ using std::endl;
 
 class inversionRandom : public inversionInterface
 {
-private:
-    forwardModelBasicOptimization *m_forwardModel;
-    randomInversionInput m_riInput;
-
-    const grid2D& m_grid;
-    const sources& m_src;
-    const receivers& m_recv;
-    const frequenciesGroup& m_freq;
 
 public:
 
@@ -29,6 +21,15 @@ public:
     inversionRandom& operator=(const inversionRandom&) = delete;
 
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
+
+private:
+    forwardModelBasicOptimization   *_forwardModel;
+    randomInversionInput             _riInput;
+
+    const grid2D&                    _grid;
+    const sources&                   _src;
+    const receivers&                 _recv;
+    const frequenciesGroup&          _freq;
 };
 
 #endif // INVERSIONRANDOM

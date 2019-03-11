@@ -298,7 +298,7 @@ void forwardModelBasicOptimization::initializeForwardModel(const pressureFieldSe
     this ->calculateKappa(chiEst);
 }
 
-void forwardModelBasicOptimization::postProcessForwardModel(const pressureFieldSerial &chiEst)
+void forwardModelBasicOptimization::updateForwardModel(const pressureFieldSerial &chiEst)
 {
     this ->createPtot1D(chiEst);
 }
