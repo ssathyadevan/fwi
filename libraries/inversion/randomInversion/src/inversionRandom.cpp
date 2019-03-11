@@ -1,5 +1,5 @@
 #include "inversionRandom.h"
-inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput)
+inversionRandom::inversionRandom(forwardModelBasicOptimization *forwardModel, randomInversionInput riInput)
     :m_forwardModel(), m_riInput(), m_grid(forwardModel->getGrid()), m_src(forwardModel->getSrc()), m_recv(forwardModel->getRecv()), m_freq(forwardModel->getFreq())
 {
     m_forwardModel = forwardModel;
@@ -12,9 +12,9 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
     const int nTotal = m_freq.nFreq * m_src.nSrc * m_recv.nRecv;
 
     double eta = 1.0/(normSq(pData,nTotal));//scaling factor eq 2.10 in thesis
-    double resSq, chiEstRes, randomRes;
+    double resSq, chiEstRes;
 
-    pressureFieldSerial chiEst(m_grid), g(m_grid), gOld(m_grid), zeta(m_grid); // stays here
+    pressureFieldSerial chiEst(m_grid); // stays here
 
     chiEst.Zero();
 
@@ -53,7 +53,7 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
                     {
                         tempRandomChi.CopyTo(chiEst);
                     }
-                    else if (std::abs(randomRes) < std::abs(chiEstRes))
+                    else if (std::abs(resSq) < std::abs(chiEstRes))
                     {
                         std::cout << "Randomizing the temple again" << std::endl;
                         tempRandomChi.CopyTo(chiEst);
@@ -72,9 +72,9 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
 
             }
 
-
-        //_forwardModel->createTotalField1D(chiEst); // estimate p_tot from the newly estimated chi (chi_est)
+        m_forwardModel->postProcessForwardModel(chiEst);
     }
+
     file.close(); // close the residual.log file
 
     pressureFieldSerial result(m_grid);

@@ -102,7 +102,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
         i++;
     }
 
-    ForwardModelInterface *model;
+    forwardModelBasicOptimization *model;
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;

@@ -13,7 +13,7 @@ using std::endl;
 class inversionRandom : public inversionInterface
 {
 private:
-    ForwardModelInterface *m_forwardModel;
+    forwardModelBasicOptimization *m_forwardModel;
     randomInversionInput m_riInput;
 
     const grid2D& m_grid;
@@ -23,7 +23,7 @@ private:
 
 public:
 
-    inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput);
+    inversionRandom(forwardModelBasicOptimization *forwardModel, randomInversionInput riInput);
 
     inversionRandom(const inversionRandom&) = delete;
     inversionRandom& operator=(const inversionRandom&) = delete;

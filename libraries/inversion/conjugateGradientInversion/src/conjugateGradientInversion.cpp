@@ -99,7 +99,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     break;
                 }
 
-                m_forwardModel->calculateOperatorMapStoD(tmp, resArray);
+                m_forwardModel->calculateOperatorKres(tmp, resArray);
 
                 g = (2*eta) * tmp.GetRealPart();
 
@@ -147,7 +147,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             {
                 if (it1 == 0)
                 {
-                    m_forwardModel->calculateOperatorMapStoD(tmp, resArray);
+                    m_forwardModel->calculateOperatorKres(tmp, resArray);
 
                     g = eta * tmp.GetRealPart(); //eq: gradientRunc
                     zeta = g;
@@ -213,7 +213,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     pressureFieldSerial gReg = tmpVolField + tmpVolField2;//# eq. 2.24
                     tmp.Zero();
 
-                    m_forwardModel->calculateOperatorMapStoD(tmp, resArray);
+                    m_forwardModel->calculateOperatorKres(tmp, resArray);
 
                     g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
 
@@ -292,8 +292,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             } // end regularisation loop
         }
 
-        //_forwardModel->createTotalField1D(chiEst); // estimate p_tot from the newly estimated chi (chi_est)
-        m_forwardModel->postInitializeForwardModel(chiEst);
+        m_forwardModel->postProcessForwardModel(chiEst);
     }
     file.close(); // close the residual.log file
 

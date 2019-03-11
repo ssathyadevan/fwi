@@ -67,10 +67,8 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     ForwardModelInterface *model;
     model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
 
-    model->initializeForwardModel(chi);
-
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    model->createPdataEst(referencePressureData, chi);
+    model->calculatePdataEst(chi, referencePressureData);
 
     // writing the referencePressureData to a text file in complex form
     std::cout << "calculateData done" << std::endl;

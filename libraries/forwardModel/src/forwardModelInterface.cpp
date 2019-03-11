@@ -3,51 +3,52 @@
 
 const grid2D& ForwardModelInterface::getGrid()
 {
-    return m_grid;
+    return _grid;
 }
 
 const sources& ForwardModelInterface::getSrc()
 {
-    return m_src;
+    return _src;
 }
 
 const receivers& ForwardModelInterface::getRecv()
 {
-    return m_recv;
+    return _recv;
 }
 
 const frequenciesGroup& ForwardModelInterface::getFreq()
 {
-    return m_freq;
+    return _freq;
 }
 
 const forwardModelInput& ForwardModelInterface::getForwardModelInput()
 {
-    return m_fmInput;
+    return _fmInput;
 }
 
 std::complex<double>* ForwardModelInterface::calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata)
 {
-    std::complex<double>* PdataEst = new std::complex<double>[m_freq.nFreq* m_recv.nRecv*m_src.nSrc];
+    std::complex<double>* PdataEst = new std::complex<double>[_freq.nFreq * _recv.nRecv * _src.nSrc];
 
-    createPdataEst(PdataEst, chiEst);
+    getPdataEst(chiEst, PdataEst);
 
-    for (int i = 0; i < m_freq.nFreq * m_src.nSrc * m_recv.nRecv; i++)
+    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        m_residual[i] = Pdata[i] - PdataEst[i];
+        _residual[i] = Pdata[i] - PdataEst[i];
     }
 
     delete[] PdataEst;
 
-    return m_residual;
+    return _residual;
 }
 
 double ForwardModelInterface::calculateResidualNormSq(std::complex<double> *residual)
 {
-    double residualSq = normSq(residual, m_freq.nFreq * m_src.nSrc * m_recv.nRecv);
+    double residualSq = normSq(residual, _freq.nFreq * _src.nSrc * _recv.nRecv);
 
     return residualSq;
 }
+
 
 
 
