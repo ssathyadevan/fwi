@@ -18,13 +18,17 @@ forward and inversion model by running different PreProcess and Process applicat
 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("newpreprocess",help="Path of new PreProcess application")
 parser.add_argument("newprocess",help="Path of new Process application")
-parser.add_argument("testcase",help="Path of test case")
-parser.add_argument("-rpp","--refpreprocess",help="Path of reference PreProcess application", default="bin/FWI_PreProcess")
-parser.add_argument("-rp","--refprocess",help="Path of reference Process application", default="bin/FWI_Process")
+parser.add_argument("testcase",help="Test case to be run")
+defaultpreprocesspath = os.path.expanduser('~/FWIInstall/bin/FWI_PreProcess')
+defaultprocesspath = os.path.expanduser('~/FWIInstall/bin/FWI_Process')
+parser.add_argument("-rpp","--refpreprocess",help="Path of reference PreProcess application", default=defaultpreprocesspath)
+parser.add_argument("-rp","--refprocess",help="Path of reference Process application", default=defaultprocesspath)
 args=parser.parse_args()
 
 newpreprocess = args.newpreprocess
 newprocess    = args.newprocess
+newpreprocess = os.path.expanduser(newpreprocess)
+newprocess = os.path.expanduser(newprocess)
 testcase 	  = args.testcase
 refpreprocess = args.refpreprocess
 refprocess	  = args.refprocess
@@ -145,7 +149,8 @@ new_preprocess_ictp = csv.reader(open(new_preprocess_csv), delimiter=',')
 
 ref_preprocess_array = numpy.array(list(ref_preprocess_ictp)).astype("float")
 new_preprocess_array = numpy.array(list(new_preprocess_ictp)).astype("float")
-	
+
+# CONVERT FROM 2 COLUMN TO COMPLEX	
 ref_preprocess_array = ref_preprocess_array[...,0] + 1j * ref_preprocess_array[...,1]
 new_preprocess_array = new_preprocess_array[...,0] + 1j * new_preprocess_array[...,1]
 
