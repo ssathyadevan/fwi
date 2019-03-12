@@ -19,11 +19,11 @@ if (len(sys.argv)!= 2):
 else:
     caseFolder = sys.argv[1]
 
-#run_fwi_cpp = subprocess.Popen('bin/FWI_PreProcess ' + caseFolder, shell = True)             	# Run the preProcessing executable
-#run_fwi_cpp.wait()                                              				               	# Wait for that process to finish
+run_fwi_cpp = subprocess.Popen('bin/FWI_PreProcess ' + caseFolder, shell = True)             	# Run the preProcessing executable
+run_fwi_cpp.wait()                                              				               	# Wait for that process to finish
 
-#run_fwi_cpp = subprocess.Popen('bin/FWI_Process ' + caseFolder, shell = True)                # Run the Processing executable
-#run_fwi_cpp.wait()                                                     					      # Wait for that process to finish
+run_fwi_cpp = subprocess.Popen('bin/FWI_Process ' + caseFolder, shell = True)                # Run the Processing executable
+run_fwi_cpp.wait()                                                     					      # Wait for that process to finish
 
 run_visualizer = subprocess.check_call(['python', 'postProcessing.py', caseFolder]) 				# Run the image visualizer from here. It can run independently
 sys.exit()                           
