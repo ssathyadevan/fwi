@@ -7,7 +7,7 @@ ForwardModelInterface::ForwardModelInterface(const grid2D &grid, const sources &
     _residual = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
 }
 
-virtual ForwardModelInterface::~ForwardModelInterface()
+ForwardModelInterface::~ForwardModelInterface()
 {
     delete[] _residual;
     _residual = 0;
