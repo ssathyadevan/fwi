@@ -43,7 +43,7 @@ std::complex<double>* ForwardModelInterface::calculateResidual(const pressureFie
 {
     std::complex<double>* PdataEst = new std::complex<double>[_freq.nFreq * _recv.nRecv * _src.nSrc];
 
-    getPdataEst(chiEst, PdataEst);
+    calculatePdataEst(chiEst, PdataEst);
 
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {

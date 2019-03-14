@@ -70,7 +70,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
         if (m_cgInput.doReg == 0)
         {
-            m_forwardModel->initializeForwardModel(chiEst);
+            m_forwardModel->initializeForwardModel();
 
             std::complex<double>* resArray = m_forwardModel->calculateResidual(chiEst, pData);
 
@@ -116,7 +116,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                 alphaDiv[0] = 0.0;
                 alphaDiv[1] = 0.0;
 
-                auto zetaTemp = m_forwardModel->createKappaOperator(zeta);
+                std::complex<double>* zetaTemp = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
+                m_forwardModel->createKappaOperator(zeta, zetaTemp);
 
                 for (int i = 0; i < nTotal; i++)
                 {
@@ -126,6 +127,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                 alpha = alphaDiv[0] / alphaDiv[1];
                 chiEst += alpha*zeta; // the step size of the parameter in Eq: ContrastUpdate in the user manual.
                 gOld = g;
+
+                delete[] zetaTemp;
             }
         }
         else if (m_cgInput.doReg == 1)
@@ -138,7 +141,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             pressureFieldSerial bsquaredOld(m_grid);
             bsquaredOld.Zero();
 
-            m_forwardModel->initializeForwardModel(chiEst);
+            m_forwardModel->initializeForwardModel();
 
             std::complex<double>* resArray = m_forwardModel->calculateResidual(chiEst, pData);
 
@@ -155,7 +158,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     alphaDiv[0] = double(0.0);
                     alphaDiv[1] = double(0.0);
 
-                    auto *zetaTemp = m_forwardModel->createKappaOperator(zeta);
+                    std::complex<double>* zetaTemp = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
+                    m_forwardModel->createKappaOperator(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
                     {
@@ -166,6 +170,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     alpha   = alphaDiv[0] / alphaDiv[1]; //eq:optimalStepSizeCG in the readme pdf
                     chiEst += alpha * zeta;
                     gOld    = g;
+
+                    delete[] zetaTemp;
 
                     resArray = m_forwardModel->calculateResidual(chiEst, pData);
                     resSq = m_forwardModel->calculateResidualNormSq(resArray);
@@ -221,13 +227,17 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     zeta = g + gamma*zeta;
 
                     std::array<double,2> A = {0.0, 0.0};
-                    auto zetaTemp = m_forwardModel->createKappaOperator(zeta);
+
+                    std::complex<double>* zetaTemp = new std::complex<double>[m_freq.nFreq * m_src.nSrc * m_recv.nRecv];
+                    m_forwardModel->createKappaOperator(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
                     {
                         A[1] += eta * std::real( conj(zetaTemp[i]) * zetaTemp[i]);
                         A[0] += double(-2.0) * eta * std::real( conj(resArray[i]) * zetaTemp[i]);
                     }
+
+                    delete[] zetaTemp;
 
                     double A0 = fDataOld;
                     zeta.Gradient(gradientZetaTmp);

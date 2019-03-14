@@ -53,8 +53,6 @@ public:
     const forwardModelInput& getForwardModelInput();
 
     virtual void calculatePdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
-    virtual void getPdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
-
     virtual void updateForwardModel(const pressureFieldSerial &chiEst) = 0;
 
     std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *Pdata);

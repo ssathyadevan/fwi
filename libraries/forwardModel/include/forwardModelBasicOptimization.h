@@ -16,15 +16,13 @@ public:
     ~forwardModelBasicOptimization();
 
     virtual void calculatePdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData);
-    virtual void getPdataEst(const pressureFieldSerial &chiEst, std::complex<double> *pData);
-
-    virtual void updateForwardModel(const pressureFieldSerial &chiEst);
 
     // Ideally these should be private
-    void initializeForwardModel(const pressureFieldSerial &chiEst);
+    void initializeForwardModel();
+    virtual void updateForwardModel(const pressureFieldSerial &chiEst);
 
-    std::complex<double>* createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial);
-    std::complex<double>* createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial);
+    void createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>*);
+    void createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>*);
 
     void calculateOperatorKres(pressureFieldComplexSerial &kRes, std::complex<double>* res);
 
@@ -33,8 +31,7 @@ private:
     Greens_rect_2D_cpu          **_Greens;
 
     pressureFieldComplexSerial  ***_P0;
-    pressureFieldComplexSerial  ***_Ptot;
-    pressureFieldComplexSerial  **_Ptot1D;
+    pressureFieldComplexSerial  **_Ptot;
     pressureFieldComplexSerial  **_Kappa;
 
     void createP0();
@@ -44,13 +41,11 @@ private:
     void deleteGreensSerial();
 
     void createPtot(const pressureFieldSerial &chiEst);
-    void createPtot1D(const pressureFieldSerial &chiEst);
     void deletePtot();
-    void deletePtot1D();
 
     pressureFieldComplexSerial calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit);
 
-    void calculateKappa(const pressureFieldSerial &chiEst);
+    void calculateKappa();
     void deleteKappa();
 };
 

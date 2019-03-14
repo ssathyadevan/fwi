@@ -3,26 +3,14 @@
 forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid, const sources &src, const receivers &recv,
                            const frequenciesGroup &freq, const forwardModelInput &fmInput)
     : ForwardModelInterface (grid, src, recv, freq, fmInput),
-      _Greens(), _P0(), _Ptot(), _Ptot1D(), _Kappa()
+      _Greens(), _P0(), _Ptot(), _Kappa()
 {
     this->createGreensSerial();
     this->createP0();
 
-    // Initialize Ptot and Ptot1D
+    // Initialize Ptot
 
-    _Ptot = new pressureFieldComplexSerial**[freq.nFreq];
-
-    for (int i = 0; i < freq.nFreq; i++)
-    {
-        _Ptot[i] = new pressureFieldComplexSerial*[src.nSrc];
-
-        for (int j = 0; j < src.nSrc; j++)
-        {
-            _Ptot[i][j] = new pressureFieldComplexSerial(grid);
-        }
-    }
-
-    _Ptot1D = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
+    _Ptot = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
 
     int li;
 
@@ -32,7 +20,7 @@ forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid,
 
         for (int j = 0; j < src.nSrc; j++)
         {
-            _Ptot1D[li + j] = new pressureFieldComplexSerial(*_P0[i][j]);
+            _Ptot[li + j] = new pressureFieldComplexSerial(*_P0[i][j]);
         }
     }
 
@@ -61,11 +49,6 @@ forwardModelBasicOptimization::~forwardModelBasicOptimization()
     if (_Ptot != nullptr)
     {
         this->deletePtot();
-    }
-
-    if (_Ptot1D != nullptr)
-    {
-        this->deletePtot1D();
     }
 
     if (_Kappa != nullptr)
@@ -135,26 +118,6 @@ void forwardModelBasicOptimization::createPtot(const pressureFieldSerial &chiEst
 {
     assert(_Greens  != nullptr);
     assert(_P0      != nullptr);
-    assert(_Ptot1D  != nullptr);
-
-    for (int i = 0; i < _freq.nFreq; i++)
-    {      
-        std::cout << "  " << std::endl;
-        std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;
-        std::cout << "  " << std::endl;
-
-        for (int j = 0; j < _src.nSrc; j++)
-        {
-            *_Ptot[i][j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
-        }
-    }
-}
-
-void forwardModelBasicOptimization::createPtot1D(const pressureFieldSerial &chiEst)
-{
-    assert(_Greens  != nullptr);
-    assert(_P0      != nullptr);
-    assert(_Ptot1D  != nullptr);
 
     int li;
 
@@ -164,37 +127,20 @@ void forwardModelBasicOptimization::createPtot1D(const pressureFieldSerial &chiE
 
         for (int j = 0; j < _src.nSrc; j++)
         {
-            *_Ptot1D[li + j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
+            *_Ptot[li + j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
         }
     }
 }
 
-
 void forwardModelBasicOptimization::deletePtot()
 {
-    for (int i = 0; i < _freq.nFreq; i++)
+    for (int i = 0; i < _freq.nFreq * _src.nSrc; i++)
     {
-        for (int j = 0; j < _src.nSrc; j++)
-        {
-            delete _Ptot[i][j];
-        }
-
-        delete[] _Ptot[i];
+        delete _Ptot[i];
     }
 
     delete[] _Ptot;
     _Ptot = nullptr;
-}
-
-void forwardModelBasicOptimization::deletePtot1D()
-{
-    for (int i = 0; i < _freq.nFreq * _src.nSrc; i++)
-    {
-        delete _Ptot1D[i];
-    }
-
-    delete[] _Ptot1D;
-    _Ptot1D = nullptr;
 }
 
 pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init)
@@ -293,17 +239,17 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
     return p_tot;
 }
 
-void forwardModelBasicOptimization::initializeForwardModel(const pressureFieldSerial &chiEst)
+void forwardModelBasicOptimization::initializeForwardModel()
 {
-    this ->calculateKappa(chiEst);
+    this ->calculateKappa();
 }
 
 void forwardModelBasicOptimization::updateForwardModel(const pressureFieldSerial &chiEst)
 {
-    this ->createPtot1D(chiEst);
+    this ->createPtot(chiEst);
 }
 
-void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &chiEst)
+void forwardModelBasicOptimization::calculateKappa()
 {
     int li, lj;
 
@@ -317,7 +263,7 @@ void forwardModelBasicOptimization::calculateKappa(const pressureFieldSerial &ch
 
             for(int k = 0; k < _src.nSrc; k++)
             {
-                *_Kappa[li + lj + k] = ( *_Greens[i]->GetReceiverCont(j) ) * (*_Ptot1D[i * _src.nSrc + k]);
+                *_Kappa[li + lj + k] = ( *_Greens[i]->GetReceiverCont(j) ) * (*_Ptot[i * _src.nSrc + k]);
             }
         }
     }
@@ -336,56 +282,23 @@ void forwardModelBasicOptimization::deleteKappa()
 
 void forwardModelBasicOptimization::calculatePdataEst(const pressureFieldSerial &chiEst, std::complex<double> *Pdata)
 {
-    this -> createPtot(chiEst);
-
-    int li, lj;
-
-    for (int i = 0; i < _freq.nFreq; i++)
-    {
-        li = i * _src.nSrc * _recv.nRecv;
-
-        for (int j = 0; j < _recv.nRecv; j++)
-        {
-            lj = j * _src.nSrc;
-
-            for (int k = 0; k < _src.nSrc; k++)
-            {
-                Pdata[li + lj + k] = Summation( ( *_Greens[i]->GetReceiverCont(j) ) , *_Ptot[i][k] * chiEst );
-            }
-        }
-    }
+    this ->createKappaOperator(chiEst, Pdata);
 }
 
-void forwardModelBasicOptimization::getPdataEst(const pressureFieldSerial &chiEst, std::complex<double> *Pdata)
+void forwardModelBasicOptimization::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>* kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
-    {
-        Pdata[i] = Summation(*_Kappa[i], chiEst);
+    {       
+        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);        
     }
 }
 
-std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial)
+void forwardModelBasicOptimization::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
 {
-    std::complex<double>* kOperator = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-
-    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
-    {
-        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);
-    }
-
-    return kOperator;
-}
-
-std::complex<double>* forwardModelBasicOptimization::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial)
-{
-    auto kOperator = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
         kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldComplexSerial);
     }
-
-    return kOperator;
 }
 
 void forwardModelBasicOptimization::calculateOperatorKres(pressureFieldComplexSerial &kRes, std::complex<double>* res)
