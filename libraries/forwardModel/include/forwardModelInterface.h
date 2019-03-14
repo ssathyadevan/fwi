@@ -41,17 +41,9 @@ class ForwardModelInterface
 public:
 
     ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq, const forwardModelInput &fmInput)
-        :_residual(), _grid(grid), _src(src), _recv(recv), _freq(freq), _fmInput(fmInput)
-    {
-        _residual = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-    }
+                          const frequenciesGroup &freq, const forwardModelInput &fmInput);
 
-    virtual ~ForwardModelInterface()
-    {
-        delete[] _residual;
-        _residual = 0;
-    }
+    virtual ~ForwardModelInterface();
 
     const grid2D& getGrid();
     const sources& getSrc();

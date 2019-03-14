@@ -292,7 +292,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             } // end regularisation loop
         }
 
-        m_forwardModel->postProcessForwardModel(chiEst);
+        m_forwardModel->updateForwardModel(chiEst);
     }
     file.close(); // close the residual.log file
 

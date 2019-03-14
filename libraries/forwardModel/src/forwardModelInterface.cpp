@@ -1,5 +1,18 @@
 #include "forwardModelInterface.h"
 
+ForwardModelInterface::ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
+                      const frequenciesGroup &freq, const forwardModelInput &fmInput)
+    :_residual(), _grid(grid), _src(src), _recv(recv), _freq(freq), _fmInput(fmInput)
+{
+    _residual = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
+}
+
+virtual ForwardModelInterface::~ForwardModelInterface()
+{
+    delete[] _residual;
+    _residual = 0;
+}
+
 
 const grid2D& ForwardModelInterface::getGrid()
 {
