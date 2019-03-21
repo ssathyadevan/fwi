@@ -8,7 +8,7 @@
 
 import matplotlib
 matplotlib.use('Agg')
-import argparse, subprocess, os, sys, csv, numpy, shutil, matplotlib.pyplot as plt, filecmp
+import time, argparse, subprocess, os, sys, csv, numpy, shutil, matplotlib.pyplot as plt, filecmp
 from datetime import datetime
 
 
@@ -19,8 +19,9 @@ formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("newpreprocess",help="Path of new PreProcess application")
 parser.add_argument("newprocess",help="Path of new Process application")
 parser.add_argument("testcase",help="Test case to be run")
-defaultpreprocesspath = os.path.expanduser(cd + '\bin\FWI_PreProcess')
-defaultprocesspath = os.path.expanduser(cd + '\bin\FWI_Process')
+defaultpreprocesspath = (os.getcwd() + "\\bin\FWI_PreProcess.exe")
+defaultprocesspath = (os.getcwd() + "\\bin\FWI_Process.exe") 
+#print(os.getcwd()+"\\bin\FWI_Process")
 parser.add_argument("-rpp","--refpreprocess",help="Path of reference PreProcess application", default=defaultpreprocesspath)
 parser.add_argument("-rp","--refprocess",help="Path of reference Process application", default=defaultprocesspath)
 args=parser.parse_args()
@@ -94,7 +95,6 @@ run_new_preprocess = subprocess.Popen(newpreprocess + \
 run_new_preprocess.wait()
 
 
-
 print("")
 print("########################### PERFORMANCE COMPARISON ##############################")
 def findWallClocktime(substr,whichin):
@@ -128,8 +128,7 @@ print("Speedup of new run compared to reference run:     %0.2f" % \
        (float(bench_total_seconds)/float(new_total_seconds)))
 print("CPU time it took to do reference run:             %0.1f seconds" % ref_CPU_time)
 print("CPU time it took to do new run:                   %0.1f seconds" % new_CPU_time)
-print("RAM usage for reference run:                      %0.1f Mb" % (ref_preprocess_ram/1000))
-print("RAM usage for new run:                            %0.1f Mb" % (new_preprocess_ram/1000))
+
 
 print("")
 print("############################# OUTPUT COMPARISON #################################")
@@ -203,8 +202,7 @@ print("Speedup of new run compared to reference run:     %0.2f" % \
        (float(bench_total_seconds)/float(new_total_seconds)))
 print("CPU time it took to do reference run:             %0.1f seconds" % ref_CPU_time)
 print("CPU time it took to do new run:                   %0.1f seconds" % new_CPU_time)
-print("RAM usage for reference run:                      %0.1f Mb" % (ref_preprocess_ram/1000))
-print("RAM usage for new run:                            %0.1f Mb" % (new_preprocess_ram/1000))
+
 
 print("")
 print("############################# OUTPUT COMPARISON #################################")
@@ -289,9 +287,9 @@ diff_per_ref      = diff_per_ref.reshape((nrow,ncol))
 diff_per_new      = diff_per_new.reshape((nrow,ncol))
 
 # WRITE DIFFERENCES TO CSV FILES
-numerics_filename_per_ref = "diff_chi_perfect_and_ref_"+testcase+".csv"
-numerics_filename_per_new = "diff_chi_perfect_and_new_"+testcase+".csv"
-numerics_filename_ref_new = "diff_chi_ref_and_new_"+testcase+".csv"
+numerics_filename_per_ref = testcasenew+"/diff_chi_perfect_and_ref_"+testcase+".csv"
+numerics_filename_per_new = testcasenew+"/diff_chi_perfect_and_new_"+testcase+".csv"
+numerics_filename_ref_new = testcasenew+"/diff_chi_ref_and_new_"+testcase+".csv"
 numpy.savetxt(
 numerics_filename_per_ref,diff_per_ref,fmt='%.8f',delimiter=', '
 )
@@ -304,7 +302,7 @@ numerics_filename_ref_new, diff_ref_new,fmt='%.8f',delimiter=', '
 
 print("------------------------------- Visualisation ------------------------------------")
 
-imagefilename="ref_new_"+testcase+"_compare.png"
+imagefilename=testcasenew+"/ref_new_"+testcase+"_compare.png" #try to save in NEW folder
 
 print("Generating plot...                                " + imagefilename)
 
