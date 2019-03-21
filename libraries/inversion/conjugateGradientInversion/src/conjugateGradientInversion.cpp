@@ -1,7 +1,8 @@
 #include "conjugateGradientInversion.h"
-conjugateGradientInversion::conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput)
-{
 
+conjugateGradientInversion::conjugateGradientInversion(forwardModelBasicOptimization *forwardModel, const conjugateGradientInput &cgInput)
+    :_forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+{
    _forwardModel = forwardModel;
    _cgInput = cgInput;
 }
@@ -34,8 +35,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
     std::array<double,2> alphaDiv;
 
-    pressureFieldSerial chiEst(m_grid), g(m_grid), gOld(m_grid), zeta(m_grid);
-    pressureFieldComplexSerial tmp(m_grid); // eq: integrandForDiscreteK, tmp is the argument of Re()
+    pressureFieldSerial chiEst(_grid), g(_grid), gOld(_grid), zeta(_grid);
+    pressureFieldComplexSerial tmp(_grid); // eq: integrandForDiscreteK, tmp is the argument of Re()
 
     chiEst.Zero();
 
@@ -82,13 +83,13 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     }
                     else
                     {
-                        std::cout << "inner loop residual = " << std::setprecision(17) << res << std::endl;
+                        std::cout << "inner loop residual = " << std::setprecision(17) << resErrFunc << std::endl;
                     }
                 }
 
                 vecResFirstIter.push_back(resErrFunc);
 
-                if ( (it1 > 0) && ( (resErrFunc < double(m_cgInput.iteration1.tolerance)) ||
+                if ( (it1 > 0) && ( (resErrFunc < double(_cgInput.iteration1.tolerance)) ||
                                     ( std::abs(vecResFirstIter[it1-1] - resErrFunc) < double(_cgInput.iteration1.tolerance) ) ) )
                 {
                     break;
@@ -136,7 +137,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             pressureFieldSerial bsquaredOld(_grid);
             bsquaredOld.Zero();
 
-            m_forwardModel->initializeForwardModel();
+            _forwardModel->initializeForwardModel();
 
             std::complex<double>* resArray = _forwardModel->calculateResidual(chiEst, pData);
 
@@ -220,7 +221,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     std::array<double,2> A = {0.0, 0.0};
 
                     std::complex<double>* zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-                    m_forwardModel->createKappaOperator(zeta, zetaTemp);
+                    _forwardModel->createKappaOperator(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
                     {
@@ -270,7 +271,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     vecResFirstIter.push_back(resErrFunc);
 
                     //breakout check
-                    if ( (it1 > 0) && ( (resErrFunc < double(m_cgInput.iteration1.tolerance)) ||
+                    if ( (it1 > 0) && ( (resErrFunc < double(_cgInput.iteration1.tolerance)) ||
                                         ( std::abs(vecResFirstIter[it1-1] - resErrFunc) < double(_cgInput.iteration1.tolerance) ) ) )
                         break;
 //                    std::cout << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
@@ -293,7 +294,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             } // end regularisation loop
         }
 
-        m_forwardModel->updateForwardModel(chiEst);
+        _forwardModel->updateForwardModel(chiEst);
     }
     file.close(); // close the residual.log file
 

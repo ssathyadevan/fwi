@@ -13,13 +13,13 @@ using std::endl;
 class conjugateGradientInversion : public inversionInterface
 {
 private:
-    forwardModelBasicOptimization* m_forwardModel;
-    conjugateGradientInput m_cgInput;
+    forwardModelBasicOptimization* _forwardModel;
+    conjugateGradientInput _cgInput;
 
-    const grid2D& m_grid;
-    const sources& m_src;
-    const receivers& m_recv;
-    const frequenciesGroup& m_freq;
+    const grid2D& _grid;
+    const sources& _src;
+    const receivers& _recv;
+    const frequenciesGroup& _freq;
 
 
 public:
