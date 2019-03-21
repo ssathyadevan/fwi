@@ -5,6 +5,7 @@
 
 struct genericInput
 {
+     std::string caseFolder;
      std::string inputFolder;
      std::string outputLocation;
      std::string runName;
@@ -20,6 +21,5 @@ struct genericInput
      NSourcesReceivers nSourcesReceivers;
      std::string fileName;
      bool verbose;
-
 };
 

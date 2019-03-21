@@ -10,22 +10,19 @@ void generateReferencePressureFieldFromChi(const genericInput& gInput, const for
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc != 2)
     {
-        std::cout << "Please enter 2 arguments. 1st the location of the input card set, 2nd the output folder location," << std::endl;
-        std::cout << "Make sure your card set contains the GenericInput.in and ForwardModelInput.in files" << std::endl;
-        std::cout << "e.g. ../input/default/ ../output/" << std::endl;
+        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json and FMInput.json." << std::endl;
 
         exit(EXIT_FAILURE);
     }
 
     std::vector<std::string> arguments(argv+1, argc+argv);
-    std::string inputFolder  = arguments[0];
-    std::string outputFolder = arguments[1];
-
-    genericInputCardReader genericReader(inputFolder, outputFolder);
-    forwardModelInputCardReader forwardModelReader(inputFolder);
+    genericInputCardReader genericReader(arguments[0]);
     const genericInput      gInput  = genericReader.getInput();
+
+    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     const forwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)

@@ -34,11 +34,17 @@ else:
             shutil.copy(full_file_name, '.')
     bench     = "hiquality"
 
+if (new.endswith("/")):
+	new = new[:-1]
+
+if (bench.endswith("/")):
+	bench = bench[:-1]
+
 inputfiles = ["CGInput.json", "FMInput.json", "GenericInput.json"]
 
 for i in range(0,len(inputfiles)):
-    tempbench = bench + "/" + inputfiles[i]
-    tempnew = new + "/" + inputfiles[i]
+    tempbench = bench + "/input/" + inputfiles[i]
+    tempnew = new + "/input/" + inputfiles[i]
     bench_dot_in_input_exists = os.path.isfile(tempbench)
     new_dot_in_input_exists = os.path.isfile(tempnew)
  
@@ -61,8 +67,8 @@ for i in range(0,len(inputfiles)):
         but your reservoirs could be different\n"
         inputfilediff = False
     else:
-        print "There is a difference between how you parametrized" + inputfiles[i] + ,\n\
-                " but your reservoirs could be identical. First we see how they differ:\n"
+        print "There is a difference between how you parametrized" + inputfiles[i] + "\n\
+                 but your reservoirs could be identical. First we see how they differ:\n"
         inputfilediff = True
         text1=open(tempbench).readlines()
         text2=open(tempnew).readlines()
@@ -85,8 +91,8 @@ for i in range(0,len(inputfiles)):
 # into the .pythonIn files, the .in being user friendly and the .pythonIn...
 # being parser friendly (...and used in such places as this...)
 
-benchPyFile = open(bench + "/" + bench+".pythonIn","r") 
-newPyFile = open(new + "/" + new+".pythonIn","r")
+benchPyFile = open(bench + "/output/" + bench+".pythonIn","r") 
+newPyFile = open(new + "/output/" + new+".pythonIn","r")
 benchPyContent=benchPyFile.readlines()
 newPyContent=newPyFile.readlines()
 
@@ -113,10 +119,10 @@ if(nztbench != nztnew):
 
 
 
-chi_ref_bench_txt = bench + "/" + "chi_ref_"       + bench + ".txt"
-chi_ref_new_txt   = new + "/" + "chi_ref_"       + new   + ".txt"
-chi_ref_bench_csv = bench + "/" + "chi_reference_" + bench + ".csv"
-chi_ref_new_csv   = new + "/" + "chi_ref_bench_" + new   + ".csv"
+chi_ref_bench_txt = bench + "/output/" + "chi_ref_"       + bench + ".txt"
+chi_ref_new_txt   = new + "/output/" + "chi_ref_"       + new   + ".txt"
+chi_ref_bench_csv = bench + "/output/" + "chi_reference_" + bench + ".csv"
+chi_ref_new_csv   = new + "/output/" + "chi_ref_bench_" + new   + ".csv"
 
 if (filecmp.cmp(chi_ref_bench_txt, chi_ref_new_txt)):
     print "You used the same reservoir in both instances !"
@@ -128,10 +134,10 @@ else:
     sys.exit()
 print ""
 
-chi_est_bench_txt = bench + "/" + "chi_est_" + bench + ".txt"
-chi_est_new_txt =   new + "/" + "chi_est_" + new   + ".txt"
-chi_est_bench_csv = bench + "/" + "chi_est_" + bench + ".csv"
-chi_est_new_csv =   new + "/" + "chi_est_" + new   + ".csv"
+chi_est_bench_txt = bench + "/output/" + "chi_est_" + bench + ".txt"
+chi_est_new_txt =   new + "/output/" + "chi_est_" + new   + ".txt"
+chi_est_bench_csv = bench + "/output/" + "chi_est_" + bench + ".csv"
+chi_est_new_csv =   new + "/output/" + "chi_est_" + new   + ".csv"
 
 if (filecmp.cmp(chi_est_bench_txt, chi_est_new_txt)):
     print "It appears that you have the same output in terms of chi,\n\
@@ -315,11 +321,11 @@ def find(substr,whichin):
     start_or_finish = (datetime.strptime(manip,'%c'))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/" +bench)
-datetime_bench_finish = find("Finished at ", bench + "/" +bench)
+datetime_bench_start  = find("Starting at ", bench + "/output/" +bench)
+datetime_bench_finish = find("Finished at ", bench + "/output/" +bench)
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find("Starting at ", new + "/"+ new)
-datetime_new_finish   = find("Finished at ", new + "/" +new)
+datetime_new_start    = find("Starting at ", new  + "/output/"+ new)
+datetime_new_finish   = find("Finished at ", new + "/output/" +new)
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):

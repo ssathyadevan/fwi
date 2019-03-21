@@ -51,7 +51,7 @@ def deploy(){
         sh '''
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
-        cp pythonScripts/* FWIInstall/
+        cp -r pythonScripts/* FWIInstall/
         tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
         '''
         archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
