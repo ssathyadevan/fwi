@@ -101,8 +101,8 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
         i++;
     }
 
-    forwardModelBasicOptimization *model;
-    model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
+    IntegralForwardModel *model;
+    model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
     inverse = new inversionRandom(model, riInput);

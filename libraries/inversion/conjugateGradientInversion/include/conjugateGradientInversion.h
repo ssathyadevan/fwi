@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "inversionInterface.h"
-#include "forwardModelBasicOptimization.h"
+#include "IntegralForwardModel.h"
 #include "conjugateGradientInput.h"
 
 using std::cout;
@@ -13,7 +13,7 @@ using std::endl;
 class conjugateGradientInversion : public inversionInterface
 {
 private:
-    forwardModelBasicOptimization* _forwardModel;
+    IntegralForwardModel* _forwardModel;
     conjugateGradientInput _cgInput;
 
     const grid2D& _grid;
@@ -24,7 +24,7 @@ private:
 
 public:
 
-    conjugateGradientInversion(forwardModelBasicOptimization *forwardModel, const conjugateGradientInput &cgInput);
+    conjugateGradientInversion(IntegralForwardModel *forwardModel, const conjugateGradientInput &cgInput);
 
     conjugateGradientInversion(const conjugateGradientInversion&) = delete;
     conjugateGradientInversion& operator=(const conjugateGradientInversion&) = delete;

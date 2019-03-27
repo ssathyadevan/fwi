@@ -1,5 +1,5 @@
 #include "inversionRandom.h"
-inversionRandom::inversionRandom(forwardModelBasicOptimization *forwardModel, randomInversionInput riInput)
+inversionRandom::inversionRandom(IntegralForwardModel *forwardModel, randomInversionInput riInput)
     :_forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;
@@ -67,7 +67,7 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
                     
             }
 
-        _forwardModel->updateForwardModel(chiEst);
+        _forwardModel->calculatePTot(chiEst);
     }
 
     file.close(); // close the residual.log file

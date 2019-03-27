@@ -2,7 +2,7 @@
 #define INVERSIONRANDOM
 
 #include "inversionInterface.h"
-#include "forwardModelBasicOptimization.h"
+#include "IntegralForwardModel.h"
 #include "randomInversionInput.h"
 
 
@@ -15,7 +15,7 @@ class inversionRandom : public inversionInterface
 
 public:
 
-    inversionRandom(forwardModelBasicOptimization *forwardModel, randomInversionInput riInput);
+    inversionRandom(IntegralForwardModel *forwardModel, randomInversionInput riInput);
 
     inversionRandom(const inversionRandom&) = delete;
     inversionRandom& operator=(const inversionRandom&) = delete;
@@ -23,7 +23,7 @@ public:
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
 
 private:
-    forwardModelBasicOptimization   *_forwardModel;
+    IntegralForwardModel   *_forwardModel;
     randomInversionInput             _riInput;
 
     const grid2D&                    _grid;

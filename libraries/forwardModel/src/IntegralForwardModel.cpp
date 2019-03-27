@@ -1,6 +1,6 @@
-#include "forwardModelBasicOptimization.h"
+#include "IntegralForwardModel.h"
 
-forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid, const sources &src, const receivers &recv,
+IntegralForwardModel::IntegralForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
                            const frequenciesGroup &freq, const forwardModelInput &fmInput)
     : ForwardModelInterface (grid, src, recv, freq, fmInput),
       _Greens(), _P0(), _Ptot(), _Kappa()
@@ -34,7 +34,7 @@ forwardModelBasicOptimization::forwardModelBasicOptimization(const grid2D &grid,
 
 }
 
-forwardModelBasicOptimization::~forwardModelBasicOptimization()
+IntegralForwardModel::~IntegralForwardModel()
 {
     if (_Greens != nullptr)
     {
@@ -58,7 +58,7 @@ forwardModelBasicOptimization::~forwardModelBasicOptimization()
 
 }
 
-void forwardModelBasicOptimization::createP0()
+void IntegralForwardModel::createP0()
 {
     assert(_Greens != nullptr);
     assert(_P0 == nullptr);
@@ -77,7 +77,7 @@ void forwardModelBasicOptimization::createP0()
     }
 }
 
-void forwardModelBasicOptimization::deleteP0()
+void IntegralForwardModel::deleteP0()
 {
     for (int i = 0; i < _freq.nFreq; i++)
     {
@@ -93,7 +93,7 @@ void forwardModelBasicOptimization::deleteP0()
     _P0 = nullptr;
 }
 
-void forwardModelBasicOptimization::createGreensSerial()
+void IntegralForwardModel::createGreensSerial()
 {
     _Greens = new Greens_rect_2D_cpu*[_freq.nFreq];
 
@@ -103,7 +103,7 @@ void forwardModelBasicOptimization::createGreensSerial()
     }
 }
 
-void forwardModelBasicOptimization::deleteGreensSerial()
+void IntegralForwardModel::deleteGreensSerial()
 {
     for (int i=0; i < _freq.nFreq; i++)
     {
@@ -114,25 +114,7 @@ void forwardModelBasicOptimization::deleteGreensSerial()
     _Greens = nullptr;
 }
 
-void forwardModelBasicOptimization::createPtot(const pressureFieldSerial &chiEst)
-{
-    assert(_Greens  != nullptr);
-    assert(_P0      != nullptr);
-
-    int li;
-
-    for (int i = 0; i < _freq.nFreq; i++)
-    {
-        li = i * _src.nSrc;
-
-        for (int j = 0; j < _src.nSrc; j++)
-        {
-            *_Ptot[li + j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
-        }
-    }
-}
-
-void forwardModelBasicOptimization::deletePtot()
+void IntegralForwardModel::deletePtot()
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc; i++)
     {
@@ -143,7 +125,7 @@ void forwardModelBasicOptimization::deletePtot()
     _Ptot = nullptr;
 }
 
-pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init)
+pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init)
 {
     assert(&G.GetGrid() == &p_init.GetGrid());
 
@@ -239,17 +221,25 @@ pressureFieldComplexSerial forwardModelBasicOptimization::calcTotalField(const G
     return p_tot;
 }
 
-void forwardModelBasicOptimization::initializeForwardModel()
+void IntegralForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
 {
-    this ->calculateKappa();
+    assert(_Greens  != nullptr);
+    assert(_P0      != nullptr);
+
+    int li;
+
+    for (int i = 0; i < _freq.nFreq; i++)
+    {
+        li = i * _src.nSrc;
+
+        for (int j = 0; j < _src.nSrc; j++)
+        {
+            *_Ptot[li + j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
+        }
+    }
 }
 
-void forwardModelBasicOptimization::updateForwardModel(const pressureFieldSerial &chiEst)
-{
-    this ->createPtot(chiEst);
-}
-
-void forwardModelBasicOptimization::calculateKappa()
+void IntegralForwardModel::calculateKappa()
 {
     int li, lj;
 
@@ -269,7 +259,7 @@ void forwardModelBasicOptimization::calculateKappa()
     }
 }
 
-void forwardModelBasicOptimization::deleteKappa()
+void IntegralForwardModel::deleteKappa()
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -280,20 +270,20 @@ void forwardModelBasicOptimization::deleteKappa()
     _Kappa = nullptr;
 }
 
-void forwardModelBasicOptimization::calculatePdataEst(const pressureFieldSerial &chiEst, std::complex<double> *Pdata)
+void IntegralForwardModel::calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *kOperator)
 {
-    this ->createKappaOperator(chiEst, Pdata);
+    this->createKappaOperator(chiEst, kOperator);
 }
 
-void forwardModelBasicOptimization::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>* kOperator)
+void IntegralForwardModel::createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {       
-        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);        
+        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 
-void forwardModelBasicOptimization::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
+void IntegralForwardModel::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -301,7 +291,7 @@ void forwardModelBasicOptimization::createKappaOperator(const pressureFieldCompl
     }
 }
 
-void forwardModelBasicOptimization::calculateOperatorKres(pressureFieldComplexSerial &kRes, std::complex<double>* res)
+void IntegralForwardModel::calculateOperatorKres(pressureFieldComplexSerial &kRes, std::complex<double>* res)
 {
     int l_i, l_j;
 

@@ -1,6 +1,6 @@
 #include "conjugateGradientInversion.h"
 
-conjugateGradientInversion::conjugateGradientInversion(forwardModelBasicOptimization *forwardModel, const conjugateGradientInput &cgInput)
+conjugateGradientInversion::conjugateGradientInversion(IntegralForwardModel *forwardModel, const conjugateGradientInput &cgInput)
     :_forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
    _forwardModel = forwardModel;
@@ -66,7 +66,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
         std::vector<std::complex<double>> vecResFirstIter;
         if (_cgInput.doReg == 0)
         {
-            _forwardModel->initializeForwardModel();
+            _forwardModel->calculateKappa();
 
             std::complex<double>* resArray = _forwardModel->calculateResidual(chiEst, pData);
 
@@ -137,7 +137,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             pressureFieldSerial bsquaredOld(_grid);
             bsquaredOld.Zero();
 
-            _forwardModel->initializeForwardModel();
+            _forwardModel->calculateKappa();
 
             std::complex<double>* resArray = _forwardModel->calculateResidual(chiEst, pData);
 
@@ -294,7 +294,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             } // end regularisation loop
         }
 
-        _forwardModel->updateForwardModel(chiEst);
+        _forwardModel->calculatePTot(chiEst);
     }
     file.close(); // close the residual.log file
 

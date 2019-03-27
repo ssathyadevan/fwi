@@ -2,7 +2,7 @@
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
-#include "forwardModelBasicOptimization.h"
+#include "IntegralForwardModel.h"
 #include "cpuClock.h"
 
 
@@ -57,17 +57,18 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
 
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
 
-    std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
+    //std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
+    std::complex<double> referencePressureData[magnitude];
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    forwardModelBasicOptimization *model;
-    model = new forwardModelBasicOptimization(grid, src, recv, freqg, fmInput);
+    IntegralForwardModel *model;
+    model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
-    model->updateForwardModel(chi);
-    model->initializeForwardModel();
-    model->calculatePdataEst(chi, referencePressureData);
+    model->calculatePTot(chi);
+    model->calculateKappa();
+    model->calculatePData(chi, referencePressureData);
 
     // writing the referencePressureData to a text file in complex form
     std::cout << "calculateData done" << std::endl;
@@ -91,7 +92,7 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     file.close();
 
     delete model;
-    delete[] referencePressureData;
+    //delete[] referencePressureData;
 
 }
 

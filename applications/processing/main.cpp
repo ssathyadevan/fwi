@@ -109,8 +109,8 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
         i++;
     }
 
-    forwardModelBasicOptimization *model;
-    model = new forwardModelBasicOptimization(grid, src, recv, freq, fmInput);
+    IntegralForwardModel *model;
+    model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
     inverse = new conjugateGradientInversion(model, cgInput);
