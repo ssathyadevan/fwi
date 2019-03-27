@@ -36,14 +36,16 @@ private:
     void createP0();
     void deleteP0();
 
-    void createGreensSerial();
-    void deleteGreensSerial();
+    void createPTot(const frequenciesGroup &freq, const sources &src);
+
+    void createGreens();
+    void deleteGreens();
 
     void deletePtot();
 
     pressureFieldComplexSerial calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit);
 
-
+    void createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv);
     void deleteKappa();
 };
 

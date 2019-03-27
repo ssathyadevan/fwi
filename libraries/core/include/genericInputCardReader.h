@@ -16,7 +16,3 @@ private:
 
     genericInput _input;
 };
-
-
-
-

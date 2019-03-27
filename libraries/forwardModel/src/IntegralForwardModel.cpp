@@ -5,40 +5,19 @@ IntegralForwardModel::IntegralForwardModel(const grid2D &grid, const sources &sr
     : ForwardModelInterface (grid, src, recv, freq, fmInput),
       _Greens(), _P0(), _Ptot(), _Kappa()
 {
-    this->createGreensSerial();
-    this->createP0();
-
-    // Initialize Ptot
-
-    _Ptot = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
-
-    int li;
-
-    for (int i = 0; i < freq.nFreq ; i++)
-    {
-        li = i * src.nSrc;
-
-        for (int j = 0; j < src.nSrc; j++)
-        {
-            _Ptot[li + j] = new pressureFieldComplexSerial(*_P0[i][j]);
-        }
-    }
-
-    // initialize kappa
-    _Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
-
-    for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
-    {
-        _Kappa[i] = new pressureFieldComplexSerial(_grid);
-    }
-
+    std::cout << "Creating Greens function field..." << std::endl;
+    createGreens();
+    std::cout << "Creating P0..." << std::endl;
+    createP0();
+    createPTot(freq, src);
+    createKappa(freq, src, recv);
 }
 
 IntegralForwardModel::~IntegralForwardModel()
 {
     if (_Greens != nullptr)
     {
-        this->deleteGreensSerial();
+        this->deleteGreens();
     }
 
     if (_P0 != nullptr)
@@ -55,7 +34,6 @@ IntegralForwardModel::~IntegralForwardModel()
     {
         this->deleteKappa();
     }
-
 }
 
 void IntegralForwardModel::createP0()
@@ -93,7 +71,7 @@ void IntegralForwardModel::deleteP0()
     _P0 = nullptr;
 }
 
-void IntegralForwardModel::createGreensSerial()
+void IntegralForwardModel::createGreens()
 {
     _Greens = new Greens_rect_2D_cpu*[_freq.nFreq];
 
@@ -103,7 +81,7 @@ void IntegralForwardModel::createGreensSerial()
     }
 }
 
-void IntegralForwardModel::deleteGreensSerial()
+void IntegralForwardModel::deleteGreens()
 {
     for (int i=0; i < _freq.nFreq; i++)
     {
@@ -112,6 +90,23 @@ void IntegralForwardModel::deleteGreensSerial()
 
     delete[] _Greens;
     _Greens = nullptr;
+}
+
+void IntegralForwardModel::createPTot(const frequenciesGroup &freq, const sources &src)
+{
+    _Ptot = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
+
+    int li;
+
+    for (int i = 0; i < freq.nFreq ; i++)
+    {
+        li = i * src.nSrc;
+
+        for (int j = 0; j < src.nSrc; j++)
+        {
+            _Ptot[li + j] = new pressureFieldComplexSerial(*_P0[i][j]);
+        }
+    }
 }
 
 void IntegralForwardModel::deletePtot()
@@ -232,6 +227,10 @@ void IntegralForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
     {
         li = i * _src.nSrc;
 
+        std::cout << "  " << std::endl;
+        std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nTotal << "freq" << std::endl;
+        std::cout << "  " << std::endl;
+
         for (int j = 0; j < _src.nSrc; j++)
         {
             *_Ptot[li + j] = calcTotalField(*_Greens[i], chiEst, *_P0[i][j]);
@@ -256,6 +255,16 @@ void IntegralForwardModel::calculateKappa()
                 *_Kappa[li + lj + k] = ( *_Greens[i]->GetReceiverCont(j) ) * (*_Ptot[i * _src.nSrc + k]);
             }
         }
+    }
+}
+
+void IntegralForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
+{
+    _Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
+
+    for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
+    {
+        _Kappa[i] = new pressureFieldComplexSerial(_grid);
     }
 }
 
