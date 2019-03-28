@@ -25,7 +25,7 @@ run_fwi_cpp.wait()                                              				            
 run_fwi_cpp = subprocess.Popen('bin/FWI_Process ' + caseFolder, shell = True)                # Run the Processing executable
 run_fwi_cpp.wait()                                                     					      # Wait for that process to finish
 
-run_visualizer = subprocess.check_call(['python', 'postProcessing.py', caseFolder + '/output']) 				# Run the image visualizer from here. It can run independently
+run_visualizer = subprocess.check_call(['python', 'postProcessing.py', caseFolder]) 				# Run the image visualizer from here. It can run independently
 sys.exit()                           
 
 
