@@ -15,7 +15,7 @@ class inversionRandom : public inversionInterface
 
 public:
 
-    inversionRandom(IntegralForwardModel *forwardModel, randomInversionInput riInput);
+    inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput);
 
     inversionRandom(const inversionRandom&) = delete;
     inversionRandom& operator=(const inversionRandom&) = delete;
@@ -23,7 +23,7 @@ public:
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
 
 private:
-    IntegralForwardModel   *_forwardModel;
+    ForwardModelInterface   *_forwardModel;
     randomInversionInput             _riInput;
 
     const grid2D&                    _grid;

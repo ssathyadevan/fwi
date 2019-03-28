@@ -1,5 +1,5 @@
 #include "inversionRandom.h"
-inversionRandom::inversionRandom(IntegralForwardModel *forwardModel, randomInversionInput riInput)
+inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput)
     :_forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;

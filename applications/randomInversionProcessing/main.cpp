@@ -101,7 +101,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
         i++;
     }
 
-    IntegralForwardModel *model;
+    ForwardModelInterface *model;
     model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;

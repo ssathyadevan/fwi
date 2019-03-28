@@ -1,6 +1,6 @@
 #include "conjugateGradientInversion.h"
 
-conjugateGradientInversion::conjugateGradientInversion(IntegralForwardModel *forwardModel, const conjugateGradientInput &cgInput)
+conjugateGradientInversion::conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput)
     :_forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
    _forwardModel = forwardModel;
@@ -31,7 +31,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
-    double gamma, alpha, resErrFunc, resSq;
+    double gamma, alpha, res, resSq;
 
     std::array<double,2> alphaDiv;
 
@@ -73,24 +73,22 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
             {  
                 resSq = _forwardModel->calculateResidualNormSq(resArray);
-                resErrFunc = eta * resSq;
+                res = eta * resSq;
 
+                if (it1 > 0)
                 {
-                    if (it1 > 0)
-                    {
-                        std::cout << "inner loop residual = " << std::setprecision(17) << resErrFunc << "     " <<
-                                     std::abs(vecResFirstIter[it1-1] - resErrFunc) << "    " << it1+1 << '/' << _cgInput.iteration1.n << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "inner loop residual = " << std::setprecision(17) << resErrFunc << std::endl;
-                    }
+                    std::cout << "inner loop residual = " << std::setprecision(17) << res << "     " <<
+                                 std::abs(vecResFirstIter[it1-1] - res) << "    " << it1+1 << '/' << _cgInput.iteration1.n << std::endl;
+                }
+                else
+                {
+                    std::cout << "inner loop residual = " << std::setprecision(17) << res << std::endl;
                 }
 
-                vecResFirstIter.push_back(resErrFunc);
+                vecResFirstIter.push_back(res);
 
-                if ( (it1 > 0) && ( (resErrFunc < double(_cgInput.iteration1.tolerance)) ||
-                                    ( std::abs(vecResFirstIter[it1-1] - resErrFunc) < double(_cgInput.iteration1.tolerance) ) ) )
+                if ( (it1 > 0) && ( (res < double(_cgInput.iteration1.tolerance)) ||
+                                    ( std::abs(vecResFirstIter[it1-1] - res) < double(_cgInput.iteration1.tolerance) ) ) )
                 {
                     break;
                 }
@@ -171,15 +169,15 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     resArray = _forwardModel->calculateResidual(chiEst, pData);
                     resSq = _forwardModel->calculateResidualNormSq(resArray);
 
-                    resErrFunc = eta * resSq;
+                    res = eta * resSq;
 
-                    std::cout << it1+1 << "/" << _cgInput.iteration1.n << "\t (" << it+1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << resErrFunc << std::endl;
+                    std::cout << it1+1 << "/" << _cgInput.iteration1.n << "\t (" << it+1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
-                    file << std::setprecision(17) << resErrFunc << "," << counter << std::endl;
+                    file << std::setprecision(17) << res << "," << counter << std::endl;
                     counter++;// store the residual value in the residual log
 
-                    fDataOld = resErrFunc;
-                    vecResFirstIter.push_back(resErrFunc);
+                    fDataOld = res;
+                    vecResFirstIter.push_back(res);
                 }
                 else
                 {
@@ -260,19 +258,19 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                     resArray = _forwardModel->calculateResidual(chiEst, pData);
                     resSq = _forwardModel->calculateResidualNormSq(resArray);
-                    resErrFunc = eta * resSq;
+                    res = eta * resSq;
 
                     std::cout << it1+1 << "/" << _cgInput.iteration1.n << "\t (" << it+1 << "/" << _cgInput.n_max << ")\t res: "
-                              << std::setprecision(17) << resErrFunc << std::endl;
+                              << std::setprecision(17) << res << std::endl;
 
-                    file << std::setprecision(17) << resErrFunc << "," << counter << std::endl; // store the residual value in the residual log
+                    file << std::setprecision(17) << res << "," << counter << std::endl; // store the residual value in the residual log
                     counter++;
-                    fDataOld = resErrFunc;
-                    vecResFirstIter.push_back(resErrFunc);
+                    fDataOld = res;
+                    vecResFirstIter.push_back(res);
 
                     //breakout check
-                    if ( (it1 > 0) && ( (resErrFunc < double(_cgInput.iteration1.tolerance)) ||
-                                        ( std::abs(vecResFirstIter[it1-1] - resErrFunc) < double(_cgInput.iteration1.tolerance) ) ) )
+                    if ( (it1 > 0) && ( (res < double(_cgInput.iteration1.tolerance)) ||
+                                        ( std::abs(vecResFirstIter[it1-1] - res) < double(_cgInput.iteration1.tolerance) ) ) )
                         break;
 //                    std::cout << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
 //                    if ( (it1 > 0) && ( res/std::abs(vecResFirstIter[0]) < 0.15 )  )

@@ -92,8 +92,6 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
     file.close();
 
     delete model;
-    //delete[] referencePressureData;
-
 }
 
 

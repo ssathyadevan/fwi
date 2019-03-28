@@ -24,7 +24,7 @@ private:
 
 public:
 
-    conjugateGradientInversion(IntegralForwardModel *forwardModel, const conjugateGradientInput &cgInput);
+    conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput);
 
     conjugateGradientInversion(const conjugateGradientInversion&) = delete;
     conjugateGradientInversion& operator=(const conjugateGradientInversion&) = delete;
