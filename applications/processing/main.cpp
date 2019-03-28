@@ -81,10 +81,11 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     src.Print();
     receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freqg(gInput.freq, gInput.c_0);
-    freqg.Print(gInput.freq.nTotal);
+    frequenciesGroup freq(gInput.freq, gInput.c_0);
+    freq.Print(gInput.freq.nTotal);
 
-    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+    int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
+
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
 
@@ -101,7 +102,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     int i = 0;
     while(file >> row)
     {
-        if (i<magnitude)
+        if (i < magnitude)
         {
             referencePressureData[i]= { atof(row[0].c_str() ), atof(row[1].c_str()) };
         }
@@ -109,10 +110,10 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     }
 
     ForwardModelInterface *model;
-    model = new forwardModel(grid, src, recv, freqg, gInput, fmInput);
+    model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
-    inverse = new conjugateGradientInversion(model,cgInput);
+    inverse = new conjugateGradientInversion(model, cgInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
@@ -124,5 +125,4 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
 
     delete model;
     delete inverse;
-
 }

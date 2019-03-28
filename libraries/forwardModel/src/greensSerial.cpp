@@ -1,4 +1,5 @@
 #include "greensSerial.h"
+
 using namespace Eigen;
 
 Greens_rect_2D_cpu::Greens_rect_2D_cpu(const grid2D &grid_, const std::function< std::complex<double>(double,double) > G_func_, const sources &src_, const receivers &recv_, double k_)
