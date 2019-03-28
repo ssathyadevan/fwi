@@ -8,8 +8,10 @@
 
 #FWI_INSTALL_PATH=~/FWIInstall
 #FWI_SOURCE_PATH=~/parallelized-fwi
-FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
-FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
+FWI_SOURCE_PATH=${WORKSPACE}
+FWI_INSTALL_PATH=${WORKSPACE}/FWIInstall
+#FWI_INSTALL_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall
+#FWI_SOURCE_PATH=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}
 
 cd $FWI_SOURCE_PATH/tests/regression_data
 TESTS=$(find . -maxdepth 1 -type d ! -path . -printf '%P\n')
