@@ -13,7 +13,7 @@ using std::endl;
 class conjugateGradientInversion : public inversionInterface
 {
 private:
-    IntegralForwardModel* _forwardModel;
+    ForwardModelInterface* _forwardModel;
     conjugateGradientInput _cgInput;
 
     const grid2D& _grid;

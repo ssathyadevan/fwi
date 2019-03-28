@@ -62,7 +62,7 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fo
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    IntegralForwardModel *model;
+    ForwardModelInterface *model;
     model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;

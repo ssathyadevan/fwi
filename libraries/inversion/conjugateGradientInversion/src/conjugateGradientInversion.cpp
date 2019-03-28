@@ -95,7 +95,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     break;
                 }
 
-                _forwardModel->calculateOperatorKres(tmp, resArray);
+                _forwardModel->getUpdateDirectionInformation(resArray, tmp);
 
                 g = (2*eta) * tmp.GetRealPart();
 
@@ -113,7 +113,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                 alphaDiv[1] = 0.0;
 
                 std::complex<double>* zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-                _forwardModel->createKappaOperator(zeta, zetaTemp);
+                _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                 for (int i = 0; i < nTotal; i++)
                 {
@@ -146,7 +146,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
             {
                 if (it1 == 0)
                 {
-                    _forwardModel->calculateOperatorKres(tmp, resArray);
+                    _forwardModel->getUpdateDirectionInformation(resArray, tmp);
 
                     g = eta * tmp.GetRealPart(); //eq: gradientRunc
                     zeta = g;
@@ -155,7 +155,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     alphaDiv[1] = double(0.0);
 
                     std::complex<double>* zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-                    _forwardModel->createKappaOperator(zeta, zetaTemp);
+                    _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
                     {
@@ -211,7 +211,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     pressureFieldSerial gReg = tmpVolField + tmpVolField2;//# eq. 2.24
                     tmp.Zero();
 
-                    _forwardModel->calculateOperatorKres(tmp, resArray);
+                    _forwardModel->getUpdateDirectionInformation(resArray, tmp);
 
                     g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
 
@@ -221,7 +221,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
                     std::array<double,2> A = {0.0, 0.0};
 
                     std::complex<double>* zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
-                    _forwardModel->createKappaOperator(zeta, zetaTemp);
+                    _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
                     {

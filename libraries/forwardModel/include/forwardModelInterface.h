@@ -55,6 +55,10 @@ public:
     std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *pDataRef);
     double calculateResidualNormSq(std::complex<double> *residual);
 
+    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes) = 0;
+    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
+    virtual void calculateKappa() = 0;
+
 private:
 
     std::complex<double> *_residual;

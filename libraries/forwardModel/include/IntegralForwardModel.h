@@ -19,11 +19,11 @@ public:
 
     void calculateKappa();
     virtual void calculatePTot(const pressureFieldSerial &chiEst);
+    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes);
+    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator);
 
-    void createKappaOperator(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>* pData);
-    void createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
 
-    void calculateOperatorKres(pressureFieldComplexSerial &kRes, std::complex<double>* res);
+    //void createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
 
 private:
 
@@ -45,6 +45,7 @@ private:
 
     pressureFieldComplexSerial calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit);
 
+    void applyKappa(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>* pData);
     void createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv);
     void deleteKappa();
 };
