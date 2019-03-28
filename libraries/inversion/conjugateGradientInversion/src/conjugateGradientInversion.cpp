@@ -1,3 +1,4 @@
+#include <memory>
 #include "conjugateGradientInversion.h"
 
 conjugateGradientInversion::conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput)
@@ -109,6 +110,8 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                 alphaDiv[0] = 0.0;
                 alphaDiv[1] = 0.0;
+
+                //std::unique_ptr<std::complex<double>> zetaTemp(new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv]);
 
                 std::complex<double>* zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);

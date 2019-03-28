@@ -51,13 +51,13 @@ public:
 
     virtual void calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
     virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
+    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
+
+    virtual void calculateKappa() {std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE);}
+    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
 
     std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *pDataRef);
     double calculateResidualNormSq(std::complex<double> *residual);
-
-    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes) = 0;
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
-    virtual void calculateKappa() = 0;
 
 private:
 
