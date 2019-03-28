@@ -12,3 +12,12 @@ doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.aux
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.log
 
 *.autosave
+
+doc/**/*.aux
+doc/**/*.bbl
+doc/**/*.blg
+doc/**/*.log
+doc/**/*.nlo
+doc/**/*.out
+doc/**/*.synctex.gz
+doc/**/*.toc
