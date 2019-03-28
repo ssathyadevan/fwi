@@ -29,8 +29,8 @@ private:
 
     Greens_rect_2D_cpu          **_Greens;
 
-    pressureFieldComplexSerial  ***_P0;
-    pressureFieldComplexSerial  **_Ptot;
+    pressureFieldComplexSerial  ***_p0;
+    pressureFieldComplexSerial  **_pTot;
     pressureFieldComplexSerial  **_Kappa;
 
     void createP0();
