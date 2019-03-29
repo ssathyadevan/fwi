@@ -16,7 +16,8 @@ FWI_INSTALL_PATH =pd+"\\FWIInstall\\"
 #FWI_SOURCE_PATH =pd+"\\parallelized-fwi\\" #for running locally
 FWI_SOURCE_PATH =pd #for running on Jenkins
 
-os.chdir(FWI_SOURCE_PATH+ "\\tests\\regression_data")
+#os.chdir(FWI_SOURCE_PATH+ "\\tests\\regression_data") #for running locally
+os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
 tests=list()
 for name in os.listdir("."):
     if os.path.isdir(name):
