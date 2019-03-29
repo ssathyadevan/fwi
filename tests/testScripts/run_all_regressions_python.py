@@ -51,9 +51,9 @@ for test in tests:
     os.mkdir("{}RUN".format(test))
 #    print(FWI_SOURCE_PATH+ "tests/regression_data/{}".format(test))
 
-    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}".format(test), cwd+"/{}".format(test))
-    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}/input".format(test), cwd+"/{}RUN/input".format(test))
-    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}/output".format(test), cwd+"/{}RUN/output".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "/tests/regression_data/{}".format(test), cwd+"/{}".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "/tests/regression_data/{}/input".format(test), cwd+"/{}RUN/input".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "/tests/regression_data/{}/output".format(test), cwd+"/{}RUN/output".format(test))
 
     os.system(FWI_INSTALL_PATH+"/bin/FWI_PreProcess.exe {}RUN".format(test))
     os.system(FWI_INSTALL_PATH+"/bin/FWI_Process.exe {}RUN".format(test))
