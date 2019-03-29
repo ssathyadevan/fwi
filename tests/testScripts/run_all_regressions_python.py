@@ -55,8 +55,8 @@ for test in tests:
     shutil.copytree(FWI_SOURCE_PATH+ "/tests/regression_data/{}/input".format(test), cwd+"/{}RUN/input".format(test))
     shutil.copytree(FWI_SOURCE_PATH+ "/tests/regression_data/{}/output".format(test), cwd+"/{}RUN/output".format(test))
 
-    os.system(FWI_INSTALL_PATH+"bin/FWI_PreProcess.exe {}RUN".format(test))
-    os.system(FWI_INSTALL_PATH+"bin/FWI_Process.exe {}RUN".format(test))
+    os.system(FWI_INSTALL_PATH+"bin/FWI_PreProcess {}RUN".format(test))
+    os.system(FWI_INSTALL_PATH+"bin/FWI_Process {}RUN".format(test))
     os.system("python3 regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
 
     destdir = "Regression_results.txt"
