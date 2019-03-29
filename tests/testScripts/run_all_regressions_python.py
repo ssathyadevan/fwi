@@ -25,7 +25,7 @@ for name in os.listdir("."):
     if os.path.isdir(name):
         tests.append(name)
 
-os.chdir(FWI_INSTALL_PATH)
+os.chdir(FWI_INSTALL_PATH+"bin")
 cwd = os.getcwd()
 
 os.makedirs("test", exist_ok=True)   #os.mkdir("test")
