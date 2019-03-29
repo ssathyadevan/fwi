@@ -79,9 +79,9 @@ for test in tests:
     os.system("py read_pytest.py")
     os.remove(destdir2)
 
-    shutil.copy("Regression_results.txt", FWI_INSTALL_PATH)
+    shutil.copy("Regression_results.txt", ft+"/Regression_results.txt")
 
-f=open("Regression_results.txt",'r')
+f=open(ft+"Regression_results.txt",'r')
 print(f.read())
 f.close()
 #not sure why 
