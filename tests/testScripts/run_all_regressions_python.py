@@ -17,7 +17,7 @@ pd=os.path.abspath(os.path.join(cwd, os.pardir))
 print(pd)     #/var/jenkins_home/workspace/FWI
 FWI_INSTALL_PATH =pd+"/FWIInstall/"
 #FWI_SOURCE_PATH =pd+"/parallelized-fwi/" #for running locally
-FWI_SOURCE_PATH =pd #for running on Jenkins
+FWI_SOURCE_PATH =ft #for running on Jenkins
 
 
 os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
