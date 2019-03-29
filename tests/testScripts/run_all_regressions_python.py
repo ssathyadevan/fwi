@@ -12,12 +12,14 @@ import os, shutil
 
 cwd = os.getcwd()
 pd=os.path.abspath(os.path.join(cwd, os.pardir))
-FWI_INSTALL_PATH =pd+"\\FWIInstall\\"
-#FWI_SOURCE_PATH =pd+"\\parallelized-fwi\\" #for running locally
+FWI_INSTALL_PATH =pd+"/FWIInstall/"
+#FWI_SOURCE_PATH =pd+"/parallelized-fwi/" #for running locally
 FWI_SOURCE_PATH =pd #for running on Jenkins
 
-#os.chdir(FWI_SOURCE_PATH+ "\\tests\\regression_data") #for running locally
+
 os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
+cwd = os.getcwd()
+print(cwd)
 tests=list()
 for name in os.listdir("."):
     if os.path.isdir(name):
@@ -27,15 +29,15 @@ os.chdir(FWI_INSTALL_PATH)
 cwd = os.getcwd()
 
 os.makedirs("test", exist_ok=True)   #os.mkdir("test")
-dir_from_which=FWI_SOURCE_PATH+ "tests\\testScripts\\" 
+dir_from_which=FWI_SOURCE_PATH+ "tests/testScripts/" 
 
 
 for basename in os.listdir(dir_from_which):
     if basename.endswith('.py'):
         pathname = os.path.join(dir_from_which, basename)
         if os.path.isfile(pathname):
-            shutil.copy(pathname, cwd+"\\test\\")
-os.chdir(cwd+"\\test\\")
+            shutil.copy(pathname, cwd+"/test/")
+os.chdir(cwd+"/test/")
 cwd = os.getcwd()
 #print(cwd)
 for test in tests:
@@ -44,14 +46,14 @@ for test in tests:
     print("###############################################################")
 
     os.mkdir("{}RUN".format(test))
-#    print(FWI_SOURCE_PATH+ "tests\\regression_data\\{}".format(test))
+#    print(FWI_SOURCE_PATH+ "tests/regression_data/{}".format(test))
 
-    shutil.copytree(FWI_SOURCE_PATH+ "tests\\regression_data\\{}".format(test), cwd+"\\{}".format(test))
-    shutil.copytree(FWI_SOURCE_PATH+ "tests\\regression_data\\{}\\input".format(test), cwd+"\\{}RUN\\input".format(test))
-    shutil.copytree(FWI_SOURCE_PATH+ "tests\\regression_data\\{}\\output".format(test), cwd+"\\{}RUN\\output".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}".format(test), cwd+"/{}".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}/input".format(test), cwd+"/{}RUN/input".format(test))
+    shutil.copytree(FWI_SOURCE_PATH+ "tests/regression_data/{}/output".format(test), cwd+"/{}RUN/output".format(test))
 
-    os.system(FWI_INSTALL_PATH+"\\bin\\FWI_PreProcess.exe {}RUN".format(test))
-    os.system(FWI_INSTALL_PATH+"\\bin\\FWI_Process.exe {}RUN".format(test))
+    os.system(FWI_INSTALL_PATH+"/bin/FWI_PreProcess.exe {}RUN".format(test))
+    os.system(FWI_INSTALL_PATH+"/bin/FWI_Process.exe {}RUN".format(test))
     os.system("py regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
 
     destdir = "Regression_results.txt"
