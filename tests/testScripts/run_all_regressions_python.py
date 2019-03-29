@@ -32,7 +32,7 @@ os.chdir(ft+ "/FWIInstall/bin")               #(FWI_INSTALL_PATH+"bin/")
 cwd = os.getcwd()
 
 os.makedirs("test", exist_ok=True)   #os.mkdir("test")
-dir_from_which=FWI_SOURCE_PATH+ "tests/testScripts/" 
+dir_from_which=FWI_SOURCE_PATH+ "/tests/testScripts/" 
 
 
 for basename in os.listdir(dir_from_which):
