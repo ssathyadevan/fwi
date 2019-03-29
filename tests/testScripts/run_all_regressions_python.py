@@ -84,7 +84,7 @@ for test in tests:
 f=open("Regression_results.txt",'r')
 print(f.read())
 f.close()
-
+#not sure why 
 os.chdir(FWI_INSTALL_PATH)
 shutil.rmtree("test")
 
