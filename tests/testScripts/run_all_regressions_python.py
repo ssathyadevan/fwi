@@ -19,7 +19,7 @@ FWI_SOURCE_PATH =pd #for running on Jenkins
 
 os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
 cwd = os.getcwd()
-print(cwd)
+
 tests=list()
 for name in os.listdir("."):
     if os.path.isdir(name):
