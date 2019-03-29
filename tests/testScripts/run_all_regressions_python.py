@@ -4,7 +4,8 @@ import os, shutil
 #
 # 	This script automatically runs all regression tests and writes the results to
 # 	a file in directory $HOMEPATH/Documents/FWI/build/Regression_results.txt.
-#	This script should be in the directory $HOMEPATH/Documents/FWI/FWIInstall, together with
+#	This script should be in the directory $HOMEPATH/Documents/FWI/FWIInstall (to run it locally), 
+#       together with
 #	the scripts read_pytest.py, read_results.py, regressionTestPreProcessing_python3.py 
 #       and regressionTestProcessing_python3.py.
 #
@@ -12,7 +13,8 @@ import os, shutil
 cwd = os.getcwd()
 pd=os.path.abspath(os.path.join(cwd, os.pardir))
 FWI_INSTALL_PATH =pd+"\\FWIInstall\\"
-FWI_SOURCE_PATH =pd+"\\parallelized-fwi\\"
+#FWI_SOURCE_PATH =pd+"\\parallelized-fwi\\" #for running locally
+FWI_SOURCE_PATH =pd #for running on Jenkins
 
 os.chdir(FWI_SOURCE_PATH+ "\\tests\\regression_data")
 tests=list()
