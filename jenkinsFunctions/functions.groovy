@@ -43,7 +43,7 @@ def regressiontest() {
         echo 'Running regression tests'
 	sh '''
 	cp tests/testScripts/run_all_regressions_python.py .
-	py -m run_all_regressions_python.py	
+	python -m run_all_regressions_python.py	
 	'''
 }
 
