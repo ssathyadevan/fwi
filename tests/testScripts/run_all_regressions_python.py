@@ -11,9 +11,10 @@ import os, shutil
 #
 
 cwd = os.getcwd()
-print(cwd)
+ft=cwd
+print(cwd)   #/var/jenkins_home/workspace/FWI/FunctionalTests
 pd=os.path.abspath(os.path.join(cwd, os.pardir))
-print(pd)
+print(pd)     #/var/jenkins_home/workspace/FWI
 FWI_INSTALL_PATH =pd+"/FWIInstall/"
 #FWI_SOURCE_PATH =pd+"/parallelized-fwi/" #for running locally
 FWI_SOURCE_PATH =pd #for running on Jenkins
@@ -27,7 +28,7 @@ for name in os.listdir("."):
     if os.path.isdir(name):
         tests.append(name)
 
-os.chdir(FWI_INSTALL_PATH+"bin/")
+os.chdir(ft+ "/FWIInstall/bin")               #(FWI_INSTALL_PATH+"bin/")
 cwd = os.getcwd()
 
 os.makedirs("test", exist_ok=True)   #os.mkdir("test")
