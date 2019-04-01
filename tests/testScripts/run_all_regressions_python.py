@@ -80,6 +80,7 @@ for test in tests:
     os.remove(destdir2)
 
     shutil.copy("Regression_results.txt", ft+"/Regression_results.txt")
+    shutil.copy("{}results.xml".format(test), ft+"/build/{}results.xml".format(test))
 
 f=open(ft+"/Regression_results.txt",'r')
 print(f.read())
