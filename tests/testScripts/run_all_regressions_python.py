@@ -86,6 +86,6 @@ print(f.read())
 f.close()
 #not sure why 
 os.chdir(FWI_INSTALL_PATH)
-shutil.rmtree("test")
+shutil.rmtree(FWI_INSTALL_PATH+"bin/test")
 
 
