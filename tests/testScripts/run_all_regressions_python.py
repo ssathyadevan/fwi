@@ -4,14 +4,15 @@ import os, shutil
 #
 # 	This script automatically runs all regression tests and writes the results to
 # 	a file in directory $HOMEPATH/Documents/FWI/build/Regression_results.txt.
-#	This script should be in the directory $HOMEPATH/Documents/FWI/FWIInstall (to run it locally), 
-#       together with
+#	This script should be in the directory $HOMEPATH/Documents/FWI/ (to run it locally), 
+#       together with folders parallelized-fwi and FWIInstall,
 #	the scripts read_pytest.py, read_results.py, regressionTestPreProcessing_python3.py 
 #       and regressionTestProcessing_python3.py.
 #
 
 cwd = os.getcwd()
 ft=cwd
+
 print(cwd)   #/var/jenkins_home/workspace/FWI/FunctionalTests
 pd=os.path.abspath(os.path.join(cwd, os.pardir))
 print(pd)     #/var/jenkins_home/workspace/FWI
@@ -19,10 +20,16 @@ FWI_INSTALL_PATH =ft+"/FWIInstall/"
 #FWI_SOURCE_PATH =pd+"/parallelized-fwi/" #for running locally
 FWI_SOURCE_PATH =ft #for running on Jenkins
 
+#FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
+#FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
+FWI_INSTALL_PATH=os.path.join("var","jenkins_home","workspace","FWI","${GIT_BRANCH}","FWIInstall")   #for Jenkins
+FWI_SOURCE_PATH=os.path.join("var","jenkins_home","workspace","FWI","${GIT_BRANCH}","FWIInstall")    #for Jenkins
 
-os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
-cwd = os.getcwd()
+os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data")) #os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
 
+okur = os.getcwd()
+print(okur)
+'''
 tests=list()
 for name in os.listdir("."):
     if os.path.isdir(name):
@@ -88,5 +95,5 @@ f.close()
 #not sure why 
 os.chdir(FWI_INSTALL_PATH)
 shutil.rmtree(FWI_INSTALL_PATH+"bin/test")
-
+'''
 
