@@ -2,7 +2,7 @@
 #define INVERSIONRANDOM
 
 #include "inversionInterface.h"
-#include "IntegralForwardModel.h"
+#include "integralForwardModel.h"
 #include "randomInversionInput.h"
 
 
