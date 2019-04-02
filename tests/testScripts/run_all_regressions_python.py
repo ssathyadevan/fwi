@@ -22,8 +22,8 @@ FWI_SOURCE_PATH =ft #for running on Jenkins
 
 #FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
 #FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
-FWI_INSTALL_PATH=os.path.join("var","jenkins_home","workspace","FWI","${GIT_BRANCH}","FWIInstall")   #for Jenkins
-FWI_SOURCE_PATH=os.path.join("var","jenkins_home","workspace","FWI","${GIT_BRANCH}","FWIInstall")    #for Jenkins
+FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
+FWI_SOURCE_PATH= os.path.join(ft)                               #for Jenkins
 
 os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data")) #os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
 
