@@ -249,7 +249,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
 
         for (int j = 0; j < _src.nSrc; j++)
         {
-            //*_pTot[li + j] = calcTotalField(*_Greens[i], chiEst, *_p0[i][j]);
+            std::cout << "Solving p_tot for source: (" << _src.xSrc[j][0] << "," << _src.xSrc[j][1] << ")" << std::endl;
             *_pTot[li + j] = helmholtzFreq.Solve(_src.xSrc[j], *_pTot[li + j]);
         }
     }

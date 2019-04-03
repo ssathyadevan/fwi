@@ -16,7 +16,6 @@ public:
     explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi);
     ~Helmholtz2D();
     pressureFieldComplexSerial Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
-
 private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
@@ -27,7 +26,9 @@ private:
     const double _freq;
     double _c0;
     std::vector<double> _waveVelocity;
+    Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
 
     void BuildMatrix();
     void updateChi(const pressureFieldSerial &chi);
+
 };

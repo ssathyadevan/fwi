@@ -3,7 +3,7 @@
 using namespace Eigen;
 
 Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi)
-    : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity()
+    : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver()
 {    
     double waveLength = _c0/freq;
 
@@ -38,8 +38,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
 
     int extraGridPointsLeft   = std::ceil( extraWidthLeft   / cellDimensions[0] );
     int extraGridPointsRight  = std::ceil( extraWidthRight  / cellDimensions[0] );
-    int extraGridPointsBottom = std::ceil( extraWidthBottom / cellDimensions[0] );
-    int extraGridPointsTop    = std::ceil( extraWidthTop    / cellDimensions[0] );
+    int extraGridPointsBottom = std::ceil( extraWidthBottom / cellDimensions[1] );
+    int extraGridPointsTop    = std::ceil( extraWidthTop    / cellDimensions[1] );
 
     _idxUpperLeftDomain[0]  = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1]  = _PMLwidth[1] + extraGridPointsTop;
@@ -56,7 +56,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
 
     // Initialize matrix and rhs vector
     _A.conservativeResize(nx[0]*nx[1], nx[0]*nx[1]);
-    _b.resize(nx[0]*nx[1], NoChange);
+    _b.resize(nx[0]*nx[1]);
+
     _waveVelocity.resize(nx[0]*nx[1]);
     _newgrid = new grid2D(xMin, xMax, nx);
 
@@ -86,7 +87,7 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
         for (int j = 0; j<_oldgrid.GetGridDimensions()[1]; ++j)
         {
             idx2 = j + _idxUpperLeftDomain[1];
-            indexChiVal = j*nx[0] + i;
+            indexChiVal = j*_oldgrid.GetGridDimensions()[0] + i;
             indexWaveVelo = idx2*nx[0] + idx1;
             _waveVelocity[indexWaveVelo] = _c0 / sqrt(1. - chiVal[indexChiVal]);
         }
@@ -99,21 +100,16 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
     std::array<double, 2> dx = _oldgrid.GetCellDimensions();
     std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
 
-    int xi = _idxUpperLeftDomain[0] + std::round(source[0] - originalxMin[0])/dx[0];
-    int zj = _idxUpperLeftDomain[1] + std::round(source[1] - originalxMin[1])/dx[1];
+    int xi = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
+    int zj = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
 
     // Construct vector for this source
     _b[zj*nx[0]+xi] = 1. / (dx[0]*dx[1]);
 
-    SparseLU<SparseMatrix<std::complex<double>, ColMajor>,NaturalOrdering<int>> solver;
-    solver.analyzePattern(_A);
-    solver.factorize(_A);
-    if (solver.info() != Success) {
-        // do something
-    }
-    VectorXcd result = solver.solve(_b);
-    if (solver.info() != Success) {
-        // do something
+    VectorXcd result = _solver.solve(_b);
+    if (_solver.info() != Success) {
+        std::cout << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
+        exit(EXIT_FAILURE);
     }
 
     int indexpTot, indexResult;
@@ -143,9 +139,6 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
 
 void Helmholtz2D::BuildMatrix()
 {
-    // Remove current non-zero elements
-    _A.setZero();
-
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetCellDimensions();
     double omega = _freq * 2.0 * M_PI;
@@ -244,4 +237,11 @@ void Helmholtz2D::BuildMatrix()
 
     _A.setFromTriplets(triplets.begin(), triplets.end());
     _A.makeCompressed();
+
+    _solver.analyzePattern(_A);
+    _solver.factorize(_A);
+    if (_solver.info() != Success) {
+        std::cout << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
