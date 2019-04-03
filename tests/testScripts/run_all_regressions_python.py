@@ -14,10 +14,10 @@ cwd = os.getcwd()
 ft=cwd
 
 
-FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
-FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
-#FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
-#FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
+#FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
+#FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
+FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
+FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
 
 os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data")) #os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
 
