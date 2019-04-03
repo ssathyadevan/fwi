@@ -329,10 +329,10 @@ source is considered constant and known so we basically solve the same
 equation as (\ref{eq:GeneralGreensSol}) each step.
 
 \subsection{Finite Difference Approach}
-Instead of solving the Helhmoltz equation using Green's functions, it is also possible to solve the equation using a finite difference approach. In 2D the grid is discretized as follows:
+Instead of solving the Helhmoltz equation using Green's functions, it is also possible to solve the equation using a finite difference approach. In 2D the domain $\Omega=[x_{\min},x_{\max}]\times [z_{\min},z_{\max}]$ is discretized as follows:
 
 \begin{equation}
-G_{h_x,h_z} = \{(x_i,z_j): x_i = ih_x, z_j=jh_z; 1\leq i,j\leq n\},
+G_{h_x,h_z} = \{(x_i,z_j): x_i = x_{\min}+ ih_x, z_j=z_{\min}+jh_z; 1\leq i,j\leq n\},
 \end{equation} 
 
 where $h_x$ and $h_z$ denote the cell size in their respective directions. Note that the positive direction for $x$ is from left to right ($x\rightarrow$), and for $z$ downwards ($z\downarrow$). For internal grid points, i.e. points not on the boundary, the discretized Helmholtz equation is given as 
