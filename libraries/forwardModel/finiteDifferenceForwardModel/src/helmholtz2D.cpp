@@ -142,23 +142,18 @@ void Helmholtz2D::BuildMatrix()
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetCellDimensions();
     double omega = _freq * 2.0 * M_PI;
-    std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
-    std::array<double, 2> originalxMax = _oldgrid.GetGridEnd();
-    std::array<double, 2> xMin = _newgrid->GetGridStart();
 
     // Build matrix from new elements
     std::vector<Triplet<std::complex<double>>> triplets;
     triplets.reserve(5*nx[0]*nx[1]); // Naive upper bound for nnz's
 
     std::complex<double> val, Sx, Sz, dSx, dSz;
-    double sigmax, sigmaz, nxz, xi, zj;
+    double sigmax, sigmaz, nxz;
     int index;
     for (int i = 0; i < nx[0]; ++i) // x index
     {
-        xi = xMin[0] + static_cast<double>(i) * dx[0];
         for (int j = 0; j < nx[1]; ++j) // z index
         {
-            zj = xMin[1] + static_cast<double>(j) * dx[1];
             index = j * nx[0] + i;
             nxz = 1.0/_waveVelocity[index];
 
@@ -166,17 +161,17 @@ void Helmholtz2D::BuildMatrix()
             if (i < _PMLwidth[0] || i >= nx[0]-_PMLwidth[0] || j < _PMLwidth[1] || j >= nx[1]-_PMLwidth[1])
             {
                 if (i < _PMLwidth[0]) {
-                    sigmax = xi - originalxMin[0];
+                    sigmax = -(_PMLwidth[0] - i) * (dx[0]);
                 } else if (i >= nx[0] - _PMLwidth[0]) {
-                    sigmax = xi - originalxMax[0];
+                    sigmax = ( i+1 - (nx[0] - _PMLwidth[0]) ) * (dx[0]);
                 } else {
                     sigmax = 0.0;
                 }
 
                 if (j < _PMLwidth[1]) {
-                    sigmaz = zj - originalxMin[1];
+                    sigmaz = -(_PMLwidth[1] - j)*(dx[1]);
                 } else if (j >= nx[1] - _PMLwidth[1]) {
-                    sigmaz = zj - originalxMax[1];
+                    sigmaz = ( j+1 - (nx[1] - _PMLwidth[1]) ) * (dx[1]);
                 } else {
                     sigmaz = 0.0;
                 }

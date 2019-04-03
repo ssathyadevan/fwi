@@ -1,11 +1,4 @@
 TODO:
 -Create class separate from Grid2D for Finite Difference grid (dx's are different)
 -Always include receivers in the domain
--
-
-$ ~/Debug/bin$ ./FWI_PreProcess_Finite_Difference ../default/
-Printing the program output onto a file named: defaultPreProcess.out in the output folder
-FWI_PreProcess_Finite_Difference: /usr/include/eigen3/Eigen/src/SparseLU/SparseLU.h:220: bool Eigen::SparseLU<_MatrixType, _OrderingType>::_solve_impl(const Eigen::MatrixBase<OtherDerived>&, Eigen::MatrixBase<OtherDerived>&) const [with Rhs = Eigen::Matrix<std::complex<double>, -1, 1>; Dest = Eigen::Matrix<std::complex<double>, -1, 1>; _MatrixType = Eigen::SparseMatrix<std::complex<double> >; _OrderingType = Eigen::NaturalOrdering<int>]: Assertion `m_factorizationIsOk && "The matrix should be factorized first"' failed.
-Aborted (core dumped)
-
-FWI_PreProcess_Finite_Difference: /usr/include/eigen3/Eigen/src/Core/DenseCoeffsBase.h:425: Eigen::DenseCoeffsBase<Derived, 1>::Scalar& Eigen::DenseCoeffsBase<Derived, 1>::operator()(Eigen::Index) [with Derived = Eigen::Matrix<int, -1, 1>; Eigen::DenseCoeffsBase<Derived, 1>::Scalar = int; Eigen::Index = long int]: Assertion `index >= 0 && index < size()' failed.
+-Better source placement (cf. par 3.4 in FWIBook)

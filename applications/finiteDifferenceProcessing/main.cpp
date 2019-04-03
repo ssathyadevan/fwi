@@ -1,25 +1,24 @@
-
-#include "genericInputCardReader.h"
-#include "randomInversionInputCardReader.h"
-#include "forwardModelInputCardReader.h"
-#include "inversionRandom.h"
+#include "conjugateGradientInversion.h"
 #include "inputCardReader.h"
+#include "genericInputCardReader.h"
+#include "conjugateGradientInversionInputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "integralForwardModel.h"
+#include "forwardModelInputCardReader.h"
+#include "finiteDifferenceForwardModel.h"
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput);
-void writePlotInput(genericInput gInput);
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput, const std::string &runName);
+void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
     if (argc != 2)
     {
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and RandomInversionInput.json" << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
@@ -29,23 +28,23 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
 
     forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
-    randomInversionInput riInput = randomInversionReader.getInput();
+    conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
     }
 
-    chi_visualisation_in_integer_form(gInput.inputFolder+ gInput.fileName + ".txt", gInput.ngrid[0]);
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, riInput);
+    performInversion(gInput, fmInput, cgInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -58,7 +57,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void writePlotInput(genericInput gInput){
+void writePlotInput(const genericInput &gInput){
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream outputfwi;
         std::string runName = gInput.runName;
@@ -70,12 +69,12 @@ void writePlotInput(genericInput gInput){
 
         // This part is needed for plotting the chi values in postProcessing.py
         std::ofstream lastrun;
-        lastrun.open(gInput.outputLocation + "lastRunName.txt");
+        lastrun.open(gInput.outputLocation + "/lastRunName.txt");
         lastrun << runName;
         lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput)
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const conjugateGradientInput& cgInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -83,19 +82,28 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     src.Print();
     receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freqg(gInput.freq, gInput.c_0);
-    freqg.Print(gInput.freq.nTotal);
+    frequenciesGroup freq(gInput.freq, gInput.c_0);
+    freq.Print(gInput.freq.nTotal);
 
-    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+    int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
 
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file(gInput.outputLocation+gInput.runName+"InvertedChiToPressure.txt");
+
+    std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
+    std::ifstream       file(fileLocation);
     CSVReader           row;
+
+    if(!file.is_open())
+    {
+        std::cout << "Could not open file at " << fileLocation;
+        exit(EXIT_FAILURE);
+    }
+
     int i = 0;
     while(file >> row)
     {
-        if (i<magnitude)
+        if (i < magnitude)
         {
             referencePressureData[i]= { atof(row[0].c_str() ), atof(row[1].c_str()) };
         }
@@ -103,10 +111,10 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
+    model = new FiniteDifferenceForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
-    inverse = new inversionRandom(model, riInput);
+    inverse = new conjugateGradientInversion(model, cgInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
@@ -114,7 +122,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
 
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile(gInput.outputLocation + "chi_est_"+ gInput.runName+ ".txt");
+    chi_est.toFile(gInput.outputLocation + "chi_est_"+ runName + ".txt");
 
     delete model;
     delete inverse;
