@@ -73,6 +73,7 @@ Helmholtz2D::~Helmholtz2D()
 void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
+    std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
     int indexChiVal, indexWaveVelo, idx1, idx2;
 
     for(int i = 0; i < nx[0]*nx[1]; ++i)
@@ -81,13 +82,13 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
     }
 
     const double* chiVal = chi.GetDataPtr();
-    for (int i = 0; i < _oldgrid.GetGridDimensions()[0]; ++i)
+    for (int i = 0; i < oldnx[0]; ++i)
     {
         idx1 = i + _idxUpperLeftDomain[0];
-        for (int j = 0; j<_oldgrid.GetGridDimensions()[1]; ++j)
+        for (int j = 0; j < oldnx[1]; ++j)
         {
             idx2 = j + _idxUpperLeftDomain[1];
-            indexChiVal = j*_oldgrid.GetGridDimensions()[0] + i;
+            indexChiVal = j*oldnx[0] + i;
             indexWaveVelo = idx2*nx[0] + idx1;
             _waveVelocity[indexWaveVelo] = _c0 / sqrt(1. - chiVal[indexChiVal]);
         }

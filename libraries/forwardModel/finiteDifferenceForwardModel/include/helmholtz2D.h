@@ -30,5 +30,4 @@ private:
 
     void BuildMatrix();
     void updateChi(const pressureFieldSerial &chi);
-
 };
