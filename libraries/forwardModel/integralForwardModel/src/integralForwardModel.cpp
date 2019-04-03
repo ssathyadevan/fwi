@@ -69,7 +69,7 @@ void IntegralForwardModel::createGreens()
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
-        _Greens[i] = new Greens_rect_2D_cpu(_grid, Helmholtz2D, _src, _recv, _freq.k[i]);
+        _Greens[i] = new Greens_rect_2D_cpu(_grid, GreensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
     }
 }
 

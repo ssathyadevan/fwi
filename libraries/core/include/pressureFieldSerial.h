@@ -19,7 +19,7 @@ class pressureFieldSerial : public pressureField
 
 public:
 
-    pressureFieldSerial(const grid2D &grid);
+    explicit pressureFieldSerial(const grid2D &grid);
 
     pressureFieldSerial(const pressureFieldSerial &rhs);
 

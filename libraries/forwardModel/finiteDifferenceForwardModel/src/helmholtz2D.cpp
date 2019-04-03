@@ -80,7 +80,7 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
     }
 
     const double* chiVal = chi.GetDataPtr();
-    for (int i = 0; i < _oldgrid.GetGridDimensions()[0]; i++)
+    for (int i = 0; i < _oldgrid.GetGridDimensions()[0]; ++i)
     {
         idx1 = i + _idxUpperLeftDomain[0];
         for (int j = 0; j<_oldgrid.GetGridDimensions()[1]; ++j)

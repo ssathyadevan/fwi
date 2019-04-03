@@ -1,4 +1,5 @@
 #include "finiteDifferenceForwardModel.h"
+#include "helmholtz2D.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
                            const frequenciesGroup &freq, const forwardModelInput &fmInput)
@@ -69,7 +70,7 @@ void FiniteDifferenceForwardModel::createGreens()
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
-        _Greens[i] = new Greens_rect_2D_cpu(_grid, Helmholtz2D, _src, _recv, _freq.k[i]);
+        _Greens[i] = new Greens_rect_2D_cpu(_grid, GreensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
     }
 }
 
@@ -240,13 +241,16 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
     {
         li = i * _src.nSrc;
 
+        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst);
+
         std::cout << "  " << std::endl;
         std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;
         std::cout << "  " << std::endl;
 
         for (int j = 0; j < _src.nSrc; j++)
         {
-            *_pTot[li + j] = calcTotalField(*_Greens[i], chiEst, *_p0[i][j]);
+            //*_pTot[li + j] = calcTotalField(*_Greens[i], chiEst, *_p0[i][j]);
+            *_pTot[li + j] = helmholtzFreq.Solve(_src.xSrc[j], *_pTot[li + j]);
         }
     }
 }

@@ -12,6 +12,8 @@
 #include <cmath>
 #include <complex>
 
+namespace GreensFunctions {
+
 float Helmholtz2D_real(float k, float r);
 
 float Helmholtz2D_imag(float k, float r);
@@ -27,5 +29,6 @@ double Helmholtz3D_real(double k, double r);
 double Helmholtz3D_imag(double k, double r);
 
 std::complex<double>  Helmholtz3D(double k, double r);
+} //namespace
 
 #endif /* GREENSFUNCTIONS_H */

@@ -1,5 +1,7 @@
 #include "greensFunctions.h"
 
+namespace GreensFunctions {
+
 float Helmholtz2D_real(float k, float r)
 {
     return (r == 0.0f ? 0.0f : 0.25f * static_cast<float>(std::cyl_neumann(0,k * r)) * k * k);// Babak 2018 10 25: GreensFunc2d (first part of rhs). y0 indicates the Bessel function of the first kind.
@@ -43,4 +45,4 @@ std::complex<double>  Helmholtz3D(double k, double r)
     return std::complex<double> (Helmholtz3D_real(k, r), Helmholtz3D_imag(k, r));// Babak 2018 10 25: Equation ID "GreensFunc2d": Creating complex Greens fucntion
 }
 
-
+} //namespace
