@@ -59,15 +59,15 @@ for test in tests:
 
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_Process {}RUN".format(test)))
-    os.system("python regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
+    os.system("python3 regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
 
     destdir = "Regression_results.txt"
     f=open(destdir,'a')
     f.write("Passed {} regression test: ".format(test))
     f.close()
 
-    os.system("python regressionTestProcessing_python3.py {} {}RUN".format(test,test))
-    os.system("python read_results.py")
+    os.system("python3 regressionTestProcessing_python3.py {} {}RUN".format(test,test))
+    os.system("python3 read_results.py")
 
     destdir2 = "testname.txt"
     f=open(destdir2,'a')
@@ -77,8 +77,8 @@ for test in tests:
     f.write("Passed {} unit test: ".format(test))
     f.close()
 
-    os.system("python -m pytest python_unittest.py --junitxml={}results.xml".format(test))
-    os.system("python read_pytest.py")
+    os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
+    os.system("python3 read_pytest.py")
     os.remove(destdir2)
 
     shutil.copy("Regression_results.txt", os.path.join(ft,"Regression_results.txt"))
