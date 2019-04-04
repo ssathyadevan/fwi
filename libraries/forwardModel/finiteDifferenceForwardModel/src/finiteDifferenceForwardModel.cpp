@@ -253,6 +253,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
             *_pTot[li + j] = helmholtzFreq.Solve(_src.xSrc[j], *_pTot[li + j]);
         }
     }
+    std::cout << " " << std::endl;
 }
 
 void FiniteDifferenceForwardModel::calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *kOperator)
@@ -292,14 +293,6 @@ void FiniteDifferenceForwardModel::applyKappa(const pressureFieldSerial &Current
         kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);
     }
 }
-
-//void FiniteDifferenceForwardModel::createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
-//{
-//    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
-//    {
-//        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldComplexSerial);
-//    }
-//}
 
 void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes)
 {

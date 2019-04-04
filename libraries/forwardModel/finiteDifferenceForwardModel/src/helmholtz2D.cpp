@@ -55,8 +55,10 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
                               grid.GetGridDimensions()[1] + 2*_PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom };
 
     // Initialize matrix and rhs vector
-    _A.conservativeResize(nx[0]*nx[1], nx[0]*nx[1]);
-    _b.resize(nx[0]*nx[1]);
+    _A.resize(nx[0]*nx[1], nx[0]*nx[1]);
+    _A.reserve(5*nx[0]*nx[1]);
+    //_b.resize(nx[0]*nx[1]);
+    _b.setZero(nx[0]*nx[1]);
 
     _waveVelocity.resize(nx[0]*nx[1]);
     _newgrid = new grid2D(xMin, xMax, nx);
@@ -98,6 +100,7 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
 pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
+    std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
     std::array<double, 2> dx = _oldgrid.GetCellDimensions();
     std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
 
@@ -119,14 +122,14 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
     std::complex<double>* pTot = pInit.GetDataPtr();
 
     int idx1, idx2;
-    for (int i = 0; i < _oldgrid.GetGridDimensions()[0]; ++i)
+    for (int i = 0; i < oldnx[0]; ++i)
     {
         idx1 = i + _idxUpperLeftDomain[0];
-        for (int j = 0; j < _oldgrid.GetGridDimensions()[1]; ++j)
+        for (int j = 0; j < oldnx[1]; ++j)
         {
             idx2 = j + _idxUpperLeftDomain[1];
 
-            indexpTot = j*_oldgrid.GetGridDimensions()[0] + i;
+            indexpTot = j*oldnx[0] + i;
             indexResult = idx2*nx[0] + idx1;
 
             pTot[indexpTot] = result[indexResult];
