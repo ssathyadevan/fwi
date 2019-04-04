@@ -4,6 +4,7 @@
 #include "forwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
+#include "forwardModelInput.h"
 
 class FiniteDifferenceForwardModel : public ForwardModelInterface
 {
@@ -32,6 +33,7 @@ private:
     pressureFieldComplexSerial  ***_p0;
     pressureFieldComplexSerial  **_pTot;
     pressureFieldComplexSerial  **_Kappa;
+    const forwardModelInput _fmInput;
 
     void createP0();
     void deleteP0();

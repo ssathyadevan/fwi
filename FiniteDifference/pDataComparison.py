@@ -9,7 +9,7 @@ Created on Thu Apr  4 10:08:35 2019
 import numpy as np
 import matplotlib.pyplot as plt
 
-fd = np.loadtxt('defaultInvertedChiToPressureFINITEDIFFERENCE.txt', delimiter=',')
+fd = np.loadtxt('defaultInvertedChiToPressureFD.txt', delimiter=',')
 fd = fd[:,0] + 1.0j*fd[:,1]
 
 normal = np.genfromtxt('defaultInvertedChiToPressure.txt', delimiter=',')
