@@ -2,15 +2,16 @@
 
 using namespace Eigen;
 
-Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi)
+Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const PMLWidthFactor &pmlFactor)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver()
 {    
     double waveLength = _c0/freq;
 
     //calculating the width of the perfectly matching layer. (rounded up)
     std::array<double, 2> cellDimensions = grid.GetCellDimensions();
-    _PMLwidth[0] = std::round(0.5*waveLength/cellDimensions[0] + 0.5);
-    _PMLwidth[1] = std::round(0.5*waveLength/cellDimensions[1] + 0.5);
+
+    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/cellDimensions[0] + 0.5);
+    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/cellDimensions[1] + 0.5);
 
     std::array<double, 2> xMin = grid.GetGridStart();
     std::array<double, 2> xMax = grid.GetGridEnd();

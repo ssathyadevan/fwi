@@ -4,6 +4,7 @@
 #include "pressureFieldComplexSerial.h"
 #include "grid2D.h"
 #include "sources.h"
+#include "pmlWidthFactor.h"
 
 
 //Generic Input Card test:
@@ -22,7 +23,10 @@ TEST(helmholtz2DTest, testClass)
     pressureFieldSerial chi(testGrid);
     chi.Zero();
 
-    Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi);
+    PMLWidthFactor pmlWidth;
+    pmlWidth.x = 0.5;
+    pmlWidth.z = 0.5;
+    Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi, pmlWidth);
     //Helmholtz10Hz.BuildMatrix(chi);
 
     pressureFieldComplexSerial pTot(testGrid);

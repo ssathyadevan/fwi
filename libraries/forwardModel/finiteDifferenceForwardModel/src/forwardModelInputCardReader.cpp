@@ -17,11 +17,11 @@ forwardModelInput forwardModelInputCardReader::getInput()
 
 void forwardModelInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/FMInput.json");
+    nlohmann::json j = readFile(caseFolder + "/input/FiniteDifferenceFMInput.json");
 
     forwardModelInput input
     {
-        j["Iter2"]["n"], j["Iter2"]["tolerance"], j["Iter2"]["calcAlpha"]
+        j["PMLWidthFactor"]["x"], j["PMLWidthFactor"]["x"]
     };
 
     _input = input;

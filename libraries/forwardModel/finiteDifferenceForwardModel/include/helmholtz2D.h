@@ -10,11 +10,11 @@
 #include "frequenciesGroup.h"
 #include "pressureFieldComplexSerial.h"
 #include "sources.h"
-
+#include "pmlWidthFactor.h"
 
 class Helmholtz2D {
 public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi);
+    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const PMLWidthFactor &pmlFactor);
     ~Helmholtz2D();
     pressureFieldComplexSerial Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
 private:

@@ -134,102 +134,6 @@ void FiniteDifferenceForwardModel::deleteKappa()
     _Kappa = nullptr;
 }
 
-pressureFieldComplexSerial FiniteDifferenceForwardModel::calcTotalField(const Greens_rect_2D_cpu &G, const pressureFieldSerial &chi, const pressureFieldComplexSerial &p_init)
-{
-    assert(&G.GetGrid() == &p_init.GetGrid());
-
-    Iter2 iter2 = _fmInput.iter2;
-
-    pressureFieldComplexSerial chi_p(_grid), chi_p_old(_grid);
-    pressureFieldComplexSerial dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
-
-    int n_cell = _grid.GetNumberOfGridPoints();
-
-    std::vector< pressureFieldComplexSerial >                       phi;
-    Matrix< std::complex<double> , Dynamic, Dynamic, ColMajor >     matA;
-    Matrix< std::complex<double> , Dynamic, 1, ColMajor >           b_f_rhs;
-    Matrix< std::complex<double> , Dynamic, 1, ColMajor >           alpha;
-
-    std::complex<double>  *rhs_data, *matA_j_data;
-
-    matA.conservativeResize(n_cell, 1);
-    b_f_rhs.conservativeResize(n_cell, 1);
-
-    double res = 0.0;
-
-    chi_p_old.Zero();
-
-    p_tot = p_init;
-
-    for(int it = 0; it < iter2.n; it++)
-    {
-        chi_p = p_tot * chi;
-
-        dW = chi_p - chi_p_old;
-
-        double dWNorm = dW.Norm();
-        double chi_pNorm = chi_p.Norm();
-
-        res = dWNorm / chi_pNorm;
-
-        if(res < iter2.tolerance && it != 0)
-        {
-            if(true)
-            {
-                std::string itstring = std::to_string(it);
-                std::string line_to_print = "Convergence after " + itstring + "iterations";
-                std::cout << line_to_print << std::endl;
-            }
-
-            break;
-        }
-
-        if (iter2.calcAlpha)
-        {
-            phi.push_back(G.ContractWithField(dW));
-            f_rhs = G.ContractWithField(chi*p_init);
-
-            rhs_data = f_rhs.GetDataPtr();
-
-            matA_j = phi[it] - G.ContractWithField(chi*phi[it]);
-            matA_j_data = matA_j.GetDataPtr();
-
-            matA.conservativeResize(NoChange,it+1);
-            alpha.conservativeResize(it+1);
-
-            for(int i=0; i<n_cell; i++)
-            {
-                matA(i,it) = matA_j_data[i];
-                b_f_rhs(i) = rhs_data[i];
-            }
-
-            alpha = matA.jacobiSvd(ComputeThinU | ComputeThinV).solve(b_f_rhs);
-
-            p_tot = p_init;
-
-            for(int j=0; j<it+1; j++)
-            {
-                p_tot += alpha[j]*phi[j];
-            }
-
-        } else {
-
-            p_tot += G.dot1(dW);
-        }
-
-        chi_p_old = chi_p;
-        chi_p.Zero();
-
-    }
-
-    if(res >= iter2.tolerance)
-    {
-        std::cout << "No convergence after " <<  iter2.n << " iterations." << "Res = " << res << std::endl;
-    }
-
-    return p_tot;
-}
-
 void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
 {
     assert(_Greens  != nullptr);
@@ -241,7 +145,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
     {
         li = i * _src.nSrc;
 
-        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst);
+        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst, _fmInput.pmlInput);
 
         std::cout << "  " << std::endl;
         std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;

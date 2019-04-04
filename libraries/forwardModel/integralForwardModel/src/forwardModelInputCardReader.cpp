@@ -17,7 +17,7 @@ forwardModelInput forwardModelInputCardReader::getInput()
 
 void forwardModelInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/FMInput.json");
+    nlohmann::json j = readFile(caseFolder + "/input/IntegralFMInput.json");
 
     forwardModelInput input
     {
