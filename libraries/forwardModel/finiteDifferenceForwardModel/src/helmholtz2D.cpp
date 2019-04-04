@@ -9,8 +9,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
 
     //calculating the width of the perfectly matching layer. (rounded up)
     std::array<double, 2> cellDimensions = grid.GetCellDimensions();
-    _PMLwidth[0] = std::round(0.5*waveLength/cellDimensions[0] + 0.5);
-    _PMLwidth[1] = std::round(0.5*waveLength/cellDimensions[1] + 0.5);
+    _PMLwidth[0] = std::round(0.8*waveLength/cellDimensions[0] + 0.5);
+    _PMLwidth[1] = std::round(0.8*waveLength/cellDimensions[1] + 0.5);
 
     std::array<double, 2> xMin = grid.GetGridStart();
     std::array<double, 2> xMax = grid.GetGridEnd();
@@ -51,12 +51,18 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     xMax[0] += (_PMLwidth[0] + extraGridPointsRight ) * cellDimensions[0];
     xMax[1] += (_PMLwidth[1] + extraGridPointsBottom) * cellDimensions[1];
 
+    _coordPMLLeft  = xMin[0] + _PMLwidth[0]*cellDimensions[0];
+    _coordPMLRight = xMax[0] - _PMLwidth[0]*cellDimensions[0];
+    _coordPMLUp    = xMin[1] + _PMLwidth[1]*cellDimensions[1];
+    _coordPMLDown  = xMax[1] - _PMLwidth[1]*cellDimensions[1];
+
     std::array<int, 2> nx = { grid.GetGridDimensions()[0] + 2*_PMLwidth[0] + extraGridPointsLeft + extraGridPointsRight,
                               grid.GetGridDimensions()[1] + 2*_PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom };
 
     // Initialize matrix and rhs vector
-    _A.conservativeResize(nx[0]*nx[1], nx[0]*nx[1]);
-    _b.resize(nx[0]*nx[1]);
+    _A.resize(nx[0]*nx[1], nx[0]*nx[1]);
+    _A.reserve(5*nx[0]*nx[1]);
+    _b.setZero(nx[0]*nx[1]);
 
     _waveVelocity.resize(nx[0]*nx[1]);
     _newgrid = new grid2D(xMin, xMax, nx);
@@ -142,6 +148,7 @@ void Helmholtz2D::BuildMatrix()
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetCellDimensions();
+    std::array<double, 2> xMin = _newgrid->GetGridStart();
     double omega = _freq * 2.0 * M_PI;
 
     // Build matrix from new elements
@@ -149,30 +156,32 @@ void Helmholtz2D::BuildMatrix()
     triplets.reserve(5*nx[0]*nx[1]); // Naive upper bound for nnz's
 
     std::complex<double> val, Sx, Sz, dSx, dSz;
-    double sigmax, sigmaz, nxz;
+    double sigmax, sigmaz, nxz, xi, zj;
     int index;
     for (int i = 0; i < nx[0]; ++i) // x index
     {
+        xi = xMin[0] + i*dx[0];
         for (int j = 0; j < nx[1]; ++j) // z index
         {
+            zj = xMin[1] + j*dx[1];
+
             index = j * nx[0] + i;
             nxz = 1.0/_waveVelocity[index];
 
-            // Figure out if in PML or not
-            if (i < _PMLwidth[0] || i >= nx[0]-_PMLwidth[0] || j < _PMLwidth[1] || j >= nx[1]-_PMLwidth[1])
+            if (xi < _coordPMLLeft || xi > _coordPMLRight || zj < _coordPMLUp || zj > _coordPMLDown)
             {
-                if (i < _PMLwidth[0]) {
-                    sigmax = -(_PMLwidth[0] - i) * (dx[0]);
-                } else if (i >= nx[0] - _PMLwidth[0]) {
-                    sigmax = ( i+1 - (nx[0] - _PMLwidth[0]) ) * (dx[0]);
+                if (xi < _coordPMLLeft) {
+                    sigmax = xi - _coordPMLLeft;
+                } else if (xi > _coordPMLRight) {
+                    sigmax = xi - _coordPMLRight;
                 } else {
                     sigmax = 0.0;
                 }
 
-                if (j < _PMLwidth[1]) {
-                    sigmaz = -(_PMLwidth[1] - j)*(dx[1]);
-                } else if (j >= nx[1] - _PMLwidth[1]) {
-                    sigmaz = ( j+1 - (nx[1] - _PMLwidth[1]) ) * (dx[1]);
+                if (zj < _coordPMLUp) {
+                    sigmaz = zj - _coordPMLUp;
+                } else if (zj > _coordPMLDown) {
+                    sigmaz = zj - _coordPMLDown;
                 } else {
                     sigmaz = 0.0;
                 }

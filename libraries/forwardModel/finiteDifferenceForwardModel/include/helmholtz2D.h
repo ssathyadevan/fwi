@@ -23,6 +23,7 @@ private:
     grid2D *_newgrid;
     std::array<int, 2> _PMLwidth;
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
+    double _coordPMLLeft, _coordPMLRight, _coordPMLUp, _coordPMLDown;
     const double _freq;
     double _c0;
     std::vector<double> _waveVelocity;

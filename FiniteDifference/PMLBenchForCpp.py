@@ -17,7 +17,7 @@ ySource = -5.
 hx = Lx/(nxDomain-1)
 hy = Ly/(nyDomain-1)
 
-widthPML = round( (.5*c0/frequency)/hx +0.5)
+widthPML = round( (.8*c0/frequency)/hx +0.5)
 
 omega = 2*np.pi*frequency
 
@@ -135,6 +135,9 @@ for i in np.arange(0,nx):
             A[idx1,idx2] = (s1/s2)/(hy*hy) - (s1*dSy_dy(y))/(2*hy*s2*s2)
                
         b[idx1] = f(i,j)
+        
+        if(i==100 and j==0):
+            print(x, y, s1, s2)
 
 sA = sparse.csr_matrix(A)
 uFlat = spsolve(sA,b)
