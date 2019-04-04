@@ -10,7 +10,6 @@
 //Generic Input Card test:
 TEST(helmholtz2DTest, testClass)
 {
-    //Helmholtz2D(grid2D *grid, const double freq, const sources &src, const double c0);
     std::array<int, 2> nx = {64,32};
     std::array<double, 2> upperLeft = {-300.0, 0.0};
     std::array<double, 2> lowerRight = {300.0, 300.0};
