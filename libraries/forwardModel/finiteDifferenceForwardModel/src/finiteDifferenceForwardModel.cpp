@@ -3,8 +3,8 @@
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
                            const frequenciesGroup &freq, const forwardModelInput &fmInput)
-    : ForwardModelInterface (grid, src, recv, freq, fmInput),
-      _Greens(), _p0(), _pTot(), _Kappa()
+    : ForwardModelInterface (grid, src, recv, freq),
+      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {
     std::cout << "Creating Greens function field..." << std::endl;
     createGreens();
@@ -259,6 +259,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
                 (*_pTot[0]).toFile("FDfield.csv");
         }
     }
+    std::cout << " " << std::endl;
 }
 
 void FiniteDifferenceForwardModel::calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *kOperator)

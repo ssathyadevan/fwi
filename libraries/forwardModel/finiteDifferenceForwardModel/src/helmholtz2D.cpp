@@ -9,8 +9,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
 
     //calculating the width of the perfectly matching layer. (rounded up)
     std::array<double, 2> cellDimensions = grid.GetCellDimensions();
-    _PMLwidth[0] = std::round(0.8*waveLength/cellDimensions[0] + 0.5);
-    _PMLwidth[1] = std::round(0.8*waveLength/cellDimensions[1] + 0.5);
+    _PMLwidth[0] = std::round(0.5*waveLength/cellDimensions[0] + 0.5);
+    _PMLwidth[1] = std::round(0.5*waveLength/cellDimensions[1] + 0.5);
 
     std::array<double, 2> xMin = grid.GetGridStart();
     std::array<double, 2> xMax = grid.GetGridEnd();
@@ -65,7 +65,7 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     _b.setZero(nx[0]*nx[1]);
 
     _waveVelocity.resize(nx[0]*nx[1]);
-    _newgrid = new grid2D(xMin, xMax, nx);
+    _newgrid = new FiniteDifferenceGrid2D(xMin, xMax, nx);
 
     updateChi(chi);
     BuildMatrix();
@@ -104,7 +104,8 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
 pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
-    std::array<double, 2> dx = _oldgrid.GetCellDimensions();
+    std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
+    std::array<double, 2> dx = _newgrid->GetMeshSize();
     std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
 
     int xi = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
@@ -120,19 +121,17 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
     }
 
     int indexpTot, indexResult;
-    // Convert to pressureFieldComplexSerial
-    //pressureFieldComplexSerial field(_oldgrid);
     std::complex<double>* pTot = pInit.GetDataPtr();
 
     int idx1, idx2;
-    for (int i = 0; i < _oldgrid.GetGridDimensions()[0]; ++i)
+    for (int i = 0; i < oldnx[0]; ++i)
     {
         idx1 = i + _idxUpperLeftDomain[0];
-        for (int j = 0; j < _oldgrid.GetGridDimensions()[1]; ++j)
+        for (int j = 0; j < oldnx[1]; ++j)
         {
             idx2 = j + _idxUpperLeftDomain[1];
 
-            indexpTot = j*_oldgrid.GetGridDimensions()[0] + i;
+            indexpTot = j*oldnx[0] + i;
             indexResult = idx2*nx[0] + idx1;
 
             pTot[indexpTot] = result[indexResult];
@@ -147,7 +146,7 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
 void Helmholtz2D::BuildMatrix()
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
-    std::array<double, 2> dx = _newgrid->GetCellDimensions();
+    std::array<double, 2> dx = _newgrid->GetMeshSize();
     std::array<double, 2> xMin = _newgrid->GetGridStart();
     double omega = _freq * 2.0 * M_PI;
 

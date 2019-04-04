@@ -1,4 +1,5 @@
 TODO:
 -Create class separate from Grid2D for Finite Difference grid (dx's are different)
--Always include receivers in the domain
+-Always include receivers in the domain (for calculating pData)
 -Better source placement (cf. par 3.4 in FWIBook)
+-Remove/adjust input file for forwardmodel

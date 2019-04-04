@@ -4,6 +4,7 @@
 #include "forwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
+#include "forwardModelInput.h"
 
 class IntegralForwardModel : public ForwardModelInterface
 {
@@ -22,9 +23,6 @@ public:
     virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes);
     virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator);
 
-
-    //void createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
-
 private:
 
     Greens_rect_2D_cpu          **_Greens;
@@ -32,6 +30,7 @@ private:
     pressureFieldComplexSerial  ***_p0;
     pressureFieldComplexSerial  **_pTot;
     pressureFieldComplexSerial  **_Kappa;
+    const forwardModelInput _fmInput;
 
     void createP0();
     void deleteP0();

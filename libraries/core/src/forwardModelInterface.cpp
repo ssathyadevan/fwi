@@ -1,8 +1,8 @@
 #include "forwardModelInterface.h"
 
 ForwardModelInterface::ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                      const frequenciesGroup &freq, const forwardModelInput &fmInput)
-    :_residual(), _grid(grid), _src(src), _recv(recv), _freq(freq), _fmInput(fmInput)
+                      const frequenciesGroup &freq)
+    :_residual(), _grid(grid), _src(src), _recv(recv), _freq(freq)
 {
     _residual = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
 }
@@ -32,11 +32,6 @@ const receivers& ForwardModelInterface::getRecv()
 const frequenciesGroup& ForwardModelInterface::getFreq()
 {
     return _freq;
-}
-
-const forwardModelInput& ForwardModelInterface::getForwardModelInput()
-{
-    return _fmInput;
 }
 
 std::complex<double>* ForwardModelInterface::calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *pDataRef)

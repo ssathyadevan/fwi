@@ -6,6 +6,7 @@
 
 #include "Eigen/Sparse"
 #include "grid2D.h"
+#include "finiteDifferenceGrid2D.h"
 #include "frequenciesGroup.h"
 #include "pressureFieldComplexSerial.h"
 #include "sources.h"
@@ -20,7 +21,7 @@ private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
     const grid2D _oldgrid;
-    grid2D *_newgrid;
+    FiniteDifferenceGrid2D *_newgrid;
     std::array<int, 2> _PMLwidth;
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
     double _coordPMLLeft, _coordPMLRight, _coordPMLUp, _coordPMLDown;
