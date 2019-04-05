@@ -7,7 +7,9 @@
 #include "pmlWidthFactor.h"
 
 
-//Generic Input Card test:
+/* Test Finite Difference implementation of calculating pTot by comparing it to
+ * a reference Python run */
+
 TEST(helmholtz2DTest, testClass)
 {
     std::array<int, 2> nx = {64,32};
@@ -36,11 +38,12 @@ TEST(helmholtz2DTest, testClass)
 
     std::string path = "../../../tests/testCase/";
     pythonBenchpTot.fromFile(path+"PythonBenchpTot.csv");
+    //pythonBenchpTot.fromFile("PythonBenchpTot.csv");
 
-    pythonBenchpTot -= pTot;
-    double res = pythonBenchpTot.RelNorm();
-
-    double tol = 1e-3;
+    pressureFieldComplexSerial diff(pythonBenchpTot);
+    diff = diff - pTot;
+    double res = diff.Norm();
+    double tol = 1e-10;
 
     EXPECT_LT(res, tol);
 }

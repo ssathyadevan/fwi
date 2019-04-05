@@ -8,13 +8,17 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     double waveLength = _c0/freq;
 
     //calculating the width of the perfectly matching layer. (rounded up)
-    std::array<double, 2> cellDimensions = grid.GetCellDimensions();
-
-    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/cellDimensions[0] + 0.5);
-    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/cellDimensions[1] + 0.5);
-
+    std::array<double, 2> olddx;
+    std::array<int, 2> oldnx = grid.GetGridDimensions();
     std::array<double, 2> xMin = grid.GetGridStart();
     std::array<double, 2> xMax = grid.GetGridEnd();
+
+    // Adjust the dx, because they are different in Finite Difference context
+    olddx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0]-1);
+    olddx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1]-1);
+
+    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/olddx[0] + 0.5);
+    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/olddx[1] + 0.5);
 
     //sources can be outside imaging domain. Area that we solve for needs to include all sources
     double extraWidthLeft = 0.0;
@@ -37,25 +41,25 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
             extraWidthBottom = z - xMax[1];
     }
 
-    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / cellDimensions[0] );
-    int extraGridPointsRight  = std::ceil( extraWidthRight  / cellDimensions[0] );
-    int extraGridPointsBottom = std::ceil( extraWidthBottom / cellDimensions[1] );
-    int extraGridPointsTop    = std::ceil( extraWidthTop    / cellDimensions[1] );
+    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / olddx[0] );
+    int extraGridPointsRight  = std::ceil( extraWidthRight  / olddx[0] );
+    int extraGridPointsBottom = std::ceil( extraWidthBottom / olddx[1] );
+    int extraGridPointsTop    = std::ceil( extraWidthTop    / olddx[1] );
 
     _idxUpperLeftDomain[0]  = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1]  = _PMLwidth[1] + extraGridPointsTop;
     _idxLowerRightDomain[0] = _PMLwidth[0] + extraGridPointsLeft + grid.GetGridDimensions()[0];
     _idxLowerRightDomain[1] = _PMLwidth[1] + extraGridPointsTop  + grid.GetGridDimensions()[1];
 
-    xMin[0] -= (_PMLwidth[0] + extraGridPointsLeft  ) * cellDimensions[0];
-    xMin[1] -= (_PMLwidth[1] + extraGridPointsTop   ) * cellDimensions[1];
-    xMax[0] += (_PMLwidth[0] + extraGridPointsRight ) * cellDimensions[0];
-    xMax[1] += (_PMLwidth[1] + extraGridPointsBottom) * cellDimensions[1];
+    xMin[0] -= (_PMLwidth[0] + extraGridPointsLeft  ) * olddx[0];
+    xMin[1] -= (_PMLwidth[1] + extraGridPointsTop   ) * olddx[1];
+    xMax[0] += (_PMLwidth[0] + extraGridPointsRight ) * olddx[0];
+    xMax[1] += (_PMLwidth[1] + extraGridPointsBottom) * olddx[1];
 
-    _coordPMLLeft  = xMin[0] + _PMLwidth[0]*cellDimensions[0];
-    _coordPMLRight = xMax[0] - _PMLwidth[0]*cellDimensions[0];
-    _coordPMLUp    = xMin[1] + _PMLwidth[1]*cellDimensions[1];
-    _coordPMLDown  = xMax[1] - _PMLwidth[1]*cellDimensions[1];
+    _coordPMLLeft  = xMin[0] + _PMLwidth[0]*olddx[0];
+    _coordPMLRight = xMax[0] - _PMLwidth[0]*olddx[0];
+    _coordPMLUp    = xMin[1] + _PMLwidth[1]*olddx[1];
+    _coordPMLDown  = xMax[1] - _PMLwidth[1]*olddx[1];
 
     std::array<int, 2> nx = { grid.GetGridDimensions()[0] + 2*_PMLwidth[0] + extraGridPointsLeft + extraGridPointsRight,
                               grid.GetGridDimensions()[1] + 2*_PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom };

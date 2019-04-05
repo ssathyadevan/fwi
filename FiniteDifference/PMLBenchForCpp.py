@@ -17,7 +17,7 @@ ySource = -5.
 hx = Lx/(nxDomain-1)
 hy = Ly/(nyDomain-1)
 
-widthPML = round( (.8*c0/frequency)/hx +0.5)
+widthPML = round( (.5*c0/frequency)/hx +0.5)
 
 omega = 2*np.pi*frequency
 
@@ -30,8 +30,10 @@ extraWidthBelow = 0
 if (xSource < -Lx/2):
     extraWidthLeft = round((-xSource - Lx/2)/hx + 0.5)
 #if source right of domain
+xSource = 480. #TODO: temporary adjust for extra right width
 if (xSource > Lx/2):
     extraWidthRight = round((xSource - Lx/2)/hx + 0.5)
+xSource = -480. #TODO: revert
 #if source above domain
 if (ySource < 0):
     extraWidthUp = round(-ySource/hy + 0.5)
@@ -136,8 +138,8 @@ for i in np.arange(0,nx):
                
         b[idx1] = f(i,j)
         
-        if(i==100 and j==0):
-            print(x, y, s1, s2)
+        #if(i==100 and j==0):
+        #    print(x, y, s1, s2)
 
 sA = sparse.csr_matrix(A)
 uFlat = spsolve(sA,b)
