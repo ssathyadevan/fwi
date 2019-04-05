@@ -34,5 +34,30 @@ TEST(helmholtz2DTest, testClass)
 
     pTot.toFile("pTotTest.csv");
 
-    EXPECT_EQ(64, 64);
+    //std::string path = "../../../tests/testCase/";
+    //std::string path = "/home/leonard/parallelized-fwi/tests/testCase/";
+    pressureFieldComplexSerial pythonBenchpTot(testGrid);
+
+    pythonBenchpTot.fromFile("PythonBenchpTot.csv");
+
+    //const std::complex<double>* lhs = pTot.GetDataPtr();
+    //const std::complex<double>* rhs = pythonBenchpTot.GetDataPtr();
+
+    std::cout << pTot.Norm() << std::endl;
+    std::cout << pythonBenchpTot.Norm() << std::endl;
+
+    pythonBenchpTot -= pTot;
+    double res = pythonBenchpTot.RelNorm();
+
+//    double res = 0.;
+//    for (int i = 0; i < pTot.GetNumberOfGridPoints(); ++i) {
+//        res += (lhs[i].real() - rhs[i].real())*(lhs[i].real() - rhs[i].real());
+//    }
+//    res = sqrt(res);
+
+//    std::cout << res << std::endl;
+
+    double tol = 1e-10;
+
+    EXPECT_LT(res, tol);
 }
