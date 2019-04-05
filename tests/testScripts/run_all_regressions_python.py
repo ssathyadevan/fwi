@@ -1,4 +1,5 @@
-import os, shutil
+import sys, os, shutil
+
 #from shutil import copyfile
 
 #
@@ -11,18 +12,23 @@ import os, shutil
 #
 
 cwd = os.getcwd()
-ft=cwd
+ft=cwd 
 
-
-#FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
-#FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
-FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
-FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
-
-os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data")) #os.chdir(FWI_SOURCE_PATH+ "/tests/regression_data")
+if sys.argv[1]=='1':
+    print("You selected to run locally") 
+    FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
+    FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
+elif sys.argv[1]=='0':
+    print("You selected to run on Jenkins") 
+    FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
+    FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
+else:
+    print("Please input 1 for running locally or 0 for running on Jenkins")
+    
+os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data")) 
 
 okur = os.getcwd()
-print(okur)
+
 
 tests=list()
 for name in os.listdir("."):
@@ -32,7 +38,10 @@ for name in os.listdir("."):
 os.chdir(os.path.join(FWI_INSTALL_PATH))               #(FWI_INSTALL_PATH+"bin/")
 cwd = os.getcwd()
 
-os.makedirs("test", exist_ok=True)   
+if os.path.exists("test"):
+    shutil.rmtree("test")
+os.makedirs("test")
+
 dir_from_which=os.path.join(FWI_SOURCE_PATH,"tests","testScripts")           
 
 
@@ -82,7 +91,10 @@ for test in tests:
     os.remove(destdir2)
 
     shutil.copy("Regression_results.txt", os.path.join(ft,"Regression_results.txt"))
-    shutil.copy("{}results.xml".format(test), os.path.join(ft,"build","{}results.xml".format(test)))
+    if sys.argv[1]=='0':    
+        shutil.copy("{}results.xml".format(test), os.path.join(ft,"build","{}results.xml".format(test)))
+    else:
+        shutil.copy("{}results.xml".format(test), os.path.join(ft,"{}results.xml".format(test)))
 
 f=open(os.path.join(ft,"Regression_results.txt"),'r')
 print(f.read())
