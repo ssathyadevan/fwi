@@ -148,6 +148,6 @@ image = np.real(x)[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXR
 plt.imshow(image)
 plt.colorbar()
 
+# Save to csv
 y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
-
-np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%+.18f)")
+np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
