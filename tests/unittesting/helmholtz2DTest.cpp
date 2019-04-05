@@ -32,7 +32,7 @@ TEST(helmholtz2DTest, testClass)
 
     pressureFieldComplexSerial pTot(testGrid);
     pTot = Helmholtz10Hz.Solve(source1, pTot);
-    pTot.toFile("pTotTest.csv");
+    //pTot.toFile("pTotTest.csv");
 
     pressureFieldComplexSerial pythonBenchpTot(testGrid);
 

@@ -31,5 +31,6 @@ private:
     Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
 
     void BuildMatrix();
+    void BuildVector(const std::array<double, 2> &source);
     void updateChi(const pressureFieldSerial &chi);
 };

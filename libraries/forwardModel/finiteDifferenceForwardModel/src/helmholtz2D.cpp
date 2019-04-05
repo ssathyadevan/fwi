@@ -110,14 +110,9 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
-    std::array<double, 2> dx = _newgrid->GetMeshSize();
-    std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
-
-    int xi = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
-    int zj = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
 
     // Construct vector for this source
-    _b[zj*nx[0]+xi] = 1. / (dx[0]*dx[1]);
+    BuildVector(source);
 
     VectorXcd result = _solver.solve(_b);
     if (_solver.info() != Success) {
@@ -142,8 +137,6 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
             pTot[indexpTot] = result[indexResult];
         }
     }
-
-    _b[zj*nx[0]+xi] = 0.0;
 
     return pInit;
 }
@@ -253,4 +246,20 @@ void Helmholtz2D::BuildMatrix()
         std::cout << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
         exit(EXIT_FAILURE);
     }
+}
+
+void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
+    std::array<int, 2> nx = _newgrid->GetGridDimensions();
+    std::array<double, 2> dx = _newgrid->GetMeshSize();
+    std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
+
+    // Reset vector to zero
+    _b.setZero(nx[0]*nx[1]);
+
+    // Add point source to the nearest grid point
+    int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
+    int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
+    _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
+
+    // Use Gaussian Window function
 }
