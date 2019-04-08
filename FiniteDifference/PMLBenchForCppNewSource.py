@@ -26,8 +26,8 @@ extraWidthRight = 0
 extraWidthUp = 0
 extraWidthBelow = 0
 
-r = 10
-beta = 14.18
+r = 1
+beta = 1.24
 
 #if source left of domain
 if (xSource < -Lx/2):
