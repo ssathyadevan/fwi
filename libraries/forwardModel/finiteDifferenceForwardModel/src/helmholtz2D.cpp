@@ -8,17 +8,17 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     double waveLength = _c0/freq;
 
     //calculating the width of the perfectly matching layer. (rounded up)
-    std::array<double, 2> olddx;
+    std::array<double, 2> dx;
     std::array<int, 2> oldnx = grid.GetGridDimensions();
     std::array<double, 2> xMin = grid.GetGridStart();
     std::array<double, 2> xMax = grid.GetGridEnd();
 
     // Adjust the dx, because they are different in Finite Difference context
-    olddx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0]-1);
-    olddx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1]-1);
+    dx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0]-1);
+    dx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1]-1);
 
-    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/olddx[0] + 0.5);
-    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/olddx[1] + 0.5);
+    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/dx[0] + 0.5);
+    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/dx[1] + 0.5);
 
     //sources can be outside imaging domain. Area that we solve for needs to include all sources
     double extraWidthLeft = 0.0;
@@ -41,25 +41,25 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
             extraWidthBottom = z - xMax[1];
     }
 
-    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / olddx[0] );
-    int extraGridPointsRight  = std::ceil( extraWidthRight  / olddx[0] );
-    int extraGridPointsBottom = std::ceil( extraWidthBottom / olddx[1] );
-    int extraGridPointsTop    = std::ceil( extraWidthTop    / olddx[1] );
+    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] ) + 4;
+    int extraGridPointsRight  = std::ceil( extraWidthRight  / dx[0] ) + 4;
+    int extraGridPointsBottom = std::ceil( extraWidthBottom / dx[1] ) + 0;
+    int extraGridPointsTop    = std::ceil( extraWidthTop    / dx[1] ) + 4;
 
     _idxUpperLeftDomain[0]  = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1]  = _PMLwidth[1] + extraGridPointsTop;
     _idxLowerRightDomain[0] = _PMLwidth[0] + extraGridPointsLeft + grid.GetGridDimensions()[0];
     _idxLowerRightDomain[1] = _PMLwidth[1] + extraGridPointsTop  + grid.GetGridDimensions()[1];
 
-    xMin[0] -= (_PMLwidth[0] + extraGridPointsLeft  ) * olddx[0];
-    xMin[1] -= (_PMLwidth[1] + extraGridPointsTop   ) * olddx[1];
-    xMax[0] += (_PMLwidth[0] + extraGridPointsRight ) * olddx[0];
-    xMax[1] += (_PMLwidth[1] + extraGridPointsBottom) * olddx[1];
+    xMin[0] -= (_PMLwidth[0] + extraGridPointsLeft  ) * dx[0];
+    xMin[1] -= (_PMLwidth[1] + extraGridPointsTop   ) * dx[1];
+    xMax[0] += (_PMLwidth[0] + extraGridPointsRight ) * dx[0];
+    xMax[1] += (_PMLwidth[1] + extraGridPointsBottom) * dx[1];
 
-    _coordPMLLeft  = xMin[0] + _PMLwidth[0]*olddx[0];
-    _coordPMLRight = xMax[0] - _PMLwidth[0]*olddx[0];
-    _coordPMLUp    = xMin[1] + _PMLwidth[1]*olddx[1];
-    _coordPMLDown  = xMax[1] - _PMLwidth[1]*olddx[1];
+    _coordPMLLeft  = xMin[0] + _PMLwidth[0]*dx[0];
+    _coordPMLRight = xMax[0] - _PMLwidth[0]*dx[0];
+    _coordPMLUp    = xMin[1] + _PMLwidth[1]*dx[1];
+    _coordPMLDown  = xMax[1] - _PMLwidth[1]*dx[1];
 
     std::array<int, 2> nx = { grid.GetGridDimensions()[0] + 2*_PMLwidth[0] + extraGridPointsLeft + extraGridPointsRight,
                               grid.GetGridDimensions()[1] + 2*_PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom };
@@ -251,15 +251,51 @@ void Helmholtz2D::BuildMatrix()
 void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
-    std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
+    //std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
+    std::array<double, 2> xMin = _newgrid->GetGridStart();
 
     // Reset vector to zero
     _b.setZero(nx[0]*nx[1]);
 
     // Add point source to the nearest grid point
-    int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
-    int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
-    _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
+    //int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
+    //int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
+    //_b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
 
-    // Use Gaussian Window function
+    /* Use Kaiser Window function
+     * NOTE: This requires r extra grid points added arround each source and hence a larger grid */
+    double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
+    int index;
+    // Kaiser Window function parameters:
+    double r = 4;
+    double b = 6.31;
+
+    for (int i = 0; i < nx[0]; ++i) {
+        xi = xMin[0] + i*dx[0];
+        nxdist = abs(source[0]-xi) / dx[0];
+        for (int j = 0; j < nx[1]; ++j) {
+            index = j*nx[0] + i;
+            zj = xMin[1] + j*dx[1];
+            nzdist = abs(source[1]-zj) / dx[1];
+
+            if (nxdist <= r && nzdist <= r) {
+                Wx = std::cyl_bessel_i(0., b*sqrt(1-(nxdist/r)*(nxdist/r))) / std::cyl_bessel_i(0., b);
+                Wz = std::cyl_bessel_i(0., b*sqrt(1-(nzdist/r)*(nzdist/r))) / std::cyl_bessel_i(0., b);
+
+                if (nxdist > 0.0) {
+                    fx = Wx * sin(nxdist) / (dx[0]*nxdist);
+                } else {
+                    fx  = Wx / dx[0];
+                }
+
+                if (nzdist > 0.0) {
+                    fz = Wz * sin(nzdist) / (dx[1]*nzdist);
+                } else {
+                    fz  = Wz / dx[1];
+                }
+
+                _b[index] = fx*fz;
+            }
+        }
+    }
 }

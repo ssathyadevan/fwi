@@ -26,17 +26,20 @@ extraWidthRight = 0
 extraWidthUp = 0
 extraWidthBelow = 0
 
+r = 10
+beta = 14.18
+
 #if source left of domain
 if (xSource < -Lx/2):
-    extraWidthLeft = round((-xSource - Lx/2)/hx + 0.5)+4
+    extraWidthLeft = round((-xSource - Lx/2)/hx + 0.5) + r
 #if source right of domain
 xSource = 480. #TODO: temporary adjust for extra right width
 if (xSource > Lx/2):
-    extraWidthRight = round((xSource - Lx/2)/hx + 0.5)+4
+    extraWidthRight = round((xSource - Lx/2)/hx + 0.5) + r
 xSource = -480. #TODO: revert
 #if source above domain
 if (ySource < 0):
-    extraWidthUp = round(-ySource/hy + 0.5)+4
+    extraWidthUp = round(-ySource/hy + 0.5) + r
 #if source below domain
 if (ySource > Ly):
     extraWidthBelow = round((ySource-Ly)/hy + 0.5)
@@ -58,14 +61,37 @@ A = sparse.dok_matrix(((dim, dim)), dtype=np.complex)
 
 def n(i, j):
     return 1.0/2000.0
-
-idxSourceX = upperLeftXReservoir + round((xSource+Lx/2)/hx)
-idxSourceY = upperLeftYReservoir + round((ySource)/hy)
+#idxSourceX = upperLeftXReservoir + round((xSource+Lx/2)/hx)
+#idxSourceY = upperLeftYReservoir + round((ySource)/hy)
 def f(i, j):
-    if (i == idxSourceX and j == idxSourceY):
-        return 1.0/ (hx*hy)
+    from scipy.special import iv
+    xi = hx*i - Lx/2.0 - upperLeftXReservoir*hx
+    yj = hy*j - upperLeftYReservoir*hy
+    
+    # half-width
+    # r = 4
+    # Parameter b
+    # b = 6.31
+    
+    #dist from source
+    xdist = (xSource-xi) / hx
+    ydist = (ySource-yj) / hy
+    
+    if abs(xdist) <= r:
+        Wx = iv(0, beta*np.sqrt(1-(xdist/r)**2)) / (iv(0,beta) * hx)
+        fx = Wx * np.sinc(xdist)
     else:
-        return 0.0
+        fx = 0.0
+        
+    if abs(ydist) <= r:        
+        Wy = iv(0, beta*np.sqrt(1-(ydist/r)**2)) / (iv(0,beta) * hy)
+        fy = Wy * np.sinc(ydist)
+    else:
+        fy = 0.0
+    
+    return fx*fy
+    
+    
 
 def sigmax(x):
     if(x > coordPMLRight ):
@@ -107,7 +133,7 @@ def dSy_dy(y):
         
 def getIndex(i,j):
     return i + j*nx
-   
+
 for i in np.arange(0,nx):
     for j in np.arange(0,ny):
         idx1 = getIndex(i,j)
