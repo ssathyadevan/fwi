@@ -283,14 +283,15 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
     for (int i = 0; i < nx[0]; ++i) {
         xi = xMin[0] + i*dx[0];
         nxdist = abs(source[0]-xi) / dx[0];
+
         for (int j = 0; j < nx[1]; ++j) {
             zj = xMin[1] + j*dx[1];
             nzdist = abs(source[1]-zj) / dx[1];
 
             if (nxdist < r && nzdist < r) {
-                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nxdist*nxdist)/(r*r))) \
+                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nxdist*nxdist)/(r*r))) \
                         / std::cyl_bessel_i(0., _srcInput.beta);
-                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nzdist*nzdist)/(r*r))) \
+                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nzdist*nzdist)/(r*r))) \
                         / std::cyl_bessel_i(0., _srcInput.beta);
 
                 // Sine source function
