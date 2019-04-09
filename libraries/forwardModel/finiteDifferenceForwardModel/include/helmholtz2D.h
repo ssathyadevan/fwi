@@ -26,7 +26,7 @@ private:
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
     double _coordPMLLeft, _coordPMLRight, _coordPMLUp, _coordPMLDown;
     const double _freq;
-    double _c0;
+    const double _c0;
     std::vector<double> _waveVelocity;
     Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
     const SourceParameter _srcInput;

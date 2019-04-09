@@ -33,6 +33,7 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
         double x = (src.xSrc[i])[0];
         double z = (src.xSrc[i])[1];
 
+        // Also take into account additional grid points for source function
         if ( xMin[0] - x + dx[0]*r > extraWidthLeft )
             extraWidthLeft = xMin[0] - x + dx[0]*r;
         else if (x - xMax[0] + dx[0]*r > extraWidthRight )
@@ -273,7 +274,7 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
 //    int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
 //    _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
 
-    /* Use Kaiser Window function
+    /* Use Sine source function with a Kaiser window function
      * NOTE: This requires r extra grid points added around each source and hence a larger grid */
     double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
     int index;
@@ -287,14 +288,14 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
             nzdist = abs(source[1]-zj) / dx[1];
 
             if (nxdist < r && nzdist < r) {
-                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nxdist/r)*(nxdist/r))) \
+                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nxdist*nxdist)/(r*r))) \
                         / std::cyl_bessel_i(0., _srcInput.beta);
-                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nzdist/r)*(nzdist/r))) \
+                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nzdist*nzdist)/(r*r))) \
                         / std::cyl_bessel_i(0., _srcInput.beta);
 
                 // Sine source function
                 if (nxdist > 0.0) {
-                    fx = Wx * sin(M_PI * nxdist) / (dx[0]*M_PI*nxdist);
+                    fx = Wx * sin(M_PI*nxdist) / (dx[0]*M_PI*nxdist);
                 } else {
                     fx  = Wx / dx[0];
                 }
@@ -304,23 +305,6 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
                 } else {
                     fz  = Wz / dx[1];
                 }
-
-                // Second order polynomial source function
-//                fx = Wx*(2. - nxdist) / (4*dx[0]);
-//                fz = Wz*(2. - nzdist) / (4*dx[1]);
-
-                // Fourth order polynomial source function
-//                if (nxdist < 2.) {
-//                    fx = Wx * (16-4*nxdist-4*nxdist*nxdist+nxdist*nxdist*nxdist) / (32*dx[0]);
-//                } else if (nxdist < 4.) {
-//                    fx = Wx * (48-44*nxdist+12*nxdist*nxdist-nxdist*nxdist*nxdist) / (96*dx[0]);
-//                }
-
-//                if (nzdist < 2.) {
-//                    fz = Wz * (16-4*nzdist-4*nzdist*nzdist+nzdist*nzdist*nzdist) / (32*dx[1]);
-//                } else if (nzdist < 4.) {
-//                    fz = Wz * (48-44*nzdist+12*nzdist*nzdist-nzdist*nzdist*nzdist) / (96*dx[1]);
-//                }
 
                 index = j*nx[0] + i;
                 _b[index] = fx*fz;
