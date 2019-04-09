@@ -1,4 +1,3 @@
 TODO:
--Check Anna's work
 -Improve performance by choosing different matrix solver
-(-Always include receivers in the domain (for calculating pData))
+-Always include receivers in the domain (for calculating pData) + calculate pData
