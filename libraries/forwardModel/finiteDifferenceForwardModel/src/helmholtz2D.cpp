@@ -26,19 +26,21 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     double extraWidthBottom = 0.0;
     double extraWidthTop = 0.0;
 
+    double r = static_cast<double>(fmInput.sourceParameter.r);
+
     for (int i = 0; i < src.nSrc; i++)
     {
         double x = (src.xSrc[i])[0];
         double z = (src.xSrc[i])[1];
 
-        if ( xMin[0] - x + dx[0]*fmInput.sourceParameter.r > extraWidthLeft )
-            extraWidthLeft = xMin[0] - x + dx[0]*fmInput.sourceParameter.r;
-        else if (x - xMax[0] + dx[0]*fmInput.sourceParameter.r > extraWidthRight )
-            extraWidthRight = x - xMax[0] + dx[0]*fmInput.sourceParameter.r;
-        if ( xMin[1] - z + dx[1]*fmInput.sourceParameter.r > extraWidthTop )
-            extraWidthTop = xMin[1] - z + dx[1]*fmInput.sourceParameter.r;
-        else if ( z - xMax[1] + dx[1]*fmInput.sourceParameter.r > extraWidthBottom )
-            extraWidthBottom = z - xMax[1] + dx[1]*fmInput.sourceParameter.r;
+        if ( xMin[0] - x + dx[0]*r > extraWidthLeft )
+            extraWidthLeft = xMin[0] - x + dx[0]*r;
+        else if (x - xMax[0] + dx[0]*r > extraWidthRight )
+            extraWidthRight = x - xMax[0] + dx[0]*r;
+        if ( xMin[1] - z + dx[1]*r > extraWidthTop )
+            extraWidthTop = xMin[1] - z + dx[1]*r;
+        else if ( z - xMax[1] + dx[1]*r > extraWidthBottom )
+            extraWidthBottom = z - xMax[1] + dx[1]*r;
 
 //        if ( xMin[0] - x > extraWidthLeft )
 //            extraWidthLeft = xMin[0] - x;

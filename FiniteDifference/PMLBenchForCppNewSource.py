@@ -77,20 +77,17 @@ def f(i, j):
     xdist = abs(xSource-xi) / hx
     ydist = abs(ySource-yj) / hy
     
-    if xdist <= r:
+    if xdist < r:
         Wx = iv(0, beta*np.sqrt(1-(xdist/r)**2)) / iv(0,beta)
         fx = Wx * np.sinc(xdist) / hx
     else:
         fx = 0.0
         
-    if ydist <= r:        
+    if ydist < r:        
         Wy = iv(0, beta*np.sqrt(1-(ydist/r)**2)) / iv(0,beta)
         fy = Wy * np.sinc(ydist) / hy
     else:
         fy = 0.0
-        
-    if(i==12 and j==12):
-        print(fx,fy)        
     
     return fx*fy
 
@@ -178,5 +175,5 @@ plt.imshow(image)
 plt.colorbar()
 
 # Save to csv
-y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
-np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
+#y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
+#np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")

@@ -21,7 +21,8 @@ void forwardModelInputCardReader::readCard(const std::string &caseFolder)
 
     forwardModelInput input
     {
-        j["PMLWidthFactor"]["x"], j["PMLWidthFactor"]["x"]
+        {j["PMLWidthFactor"]["x"], j["PMLWidthFactor"]["x"]},
+        {j["SourceParameter"]["r"], j["SourceParameter"]["beta"]}
     };
 
     _input = input;
