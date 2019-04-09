@@ -145,7 +145,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
     {
         li = i * _src.nSrc;
 
-        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst, _fmInput.pmlInput);
+        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst, _fmInput);
 
         std::cout << "  " << std::endl;
         std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;

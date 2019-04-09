@@ -1,10 +1,11 @@
 #ifndef FOWARDMODELINPUT_H
 #define FOWARDMODELINPUT_H
-#include "pmlWidthFactor.h"
+#include "inputStructs.h"
 
 struct forwardModelInput
 {
-       PMLWidthFactor pmlInput;
+       PMLWidthFactor pmlWidthFactor;
+       SourceParameter sourceParameter;
 };
 
 #endif // FOWARDMODELINPUT_H

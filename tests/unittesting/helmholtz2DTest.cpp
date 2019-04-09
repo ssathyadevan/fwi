@@ -4,7 +4,7 @@
 #include "pressureFieldComplexSerial.h"
 #include "grid2D.h"
 #include "sources.h"
-#include "pmlWidthFactor.h"
+#include "forwardModelInput.h"
 
 
 /* Test Finite Difference implementation of calculating pTot by comparing it to
@@ -28,7 +28,13 @@ TEST(helmholtz2DTest, testClass)
     PMLWidthFactor pmlWidth;
     pmlWidth.x = 0.5;
     pmlWidth.z = 0.5;
-    Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi, pmlWidth);
+    SourceParameter srcPar;
+    srcPar.r = 4;
+    srcPar.beta = 6.31;
+    forwardModelInput fmInput;
+    fmInput.pmlWidthFactor = pmlWidth;
+    fmInput.sourceParameter = srcPar;
+    Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi, fmInput);
 
     pressureFieldComplexSerial pTot(testGrid);
     pTot = Helmholtz10Hz.Solve(source1, pTot);
@@ -37,8 +43,8 @@ TEST(helmholtz2DTest, testClass)
     pressureFieldComplexSerial pythonBenchpTot(testGrid);
 
     std::string path = "../../../tests/testCase/";
-    pythonBenchpTot.fromFile(path+"PythonBenchpTot.csv");
-    //pythonBenchpTot.fromFile("PythonBenchpTot.csv");
+    pythonBenchpTot.fromFile(path+"PythonBenchpTotNewSource.csv");
+    //pythonBenchpTot.fromFile("PythonBenchpTotNewSource.csv");
 
     pressureFieldComplexSerial diff(pythonBenchpTot);
     diff = diff - pTot;

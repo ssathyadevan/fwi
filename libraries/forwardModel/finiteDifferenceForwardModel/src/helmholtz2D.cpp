@@ -2,8 +2,8 @@
 
 using namespace Eigen;
 
-Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const PMLWidthFactor &pmlFactor)
-    : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver()
+Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const forwardModelInput &fmInput)
+    : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {    
     double waveLength = _c0/freq;
 
@@ -17,8 +17,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     dx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0]-1);
     dx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1]-1);
 
-    _PMLwidth[0] = std::round(pmlFactor.x*waveLength/dx[0] + 0.5);
-    _PMLwidth[1] = std::round(pmlFactor.z*waveLength/dx[1] + 0.5);
+    _PMLwidth[0] = std::round(fmInput.pmlWidthFactor.x*waveLength/dx[0] + 0.5);
+    _PMLwidth[1] = std::round(fmInput.pmlWidthFactor.z*waveLength/dx[1] + 0.5);
 
     //sources can be outside imaging domain. Area that we solve for needs to include all sources
     double extraWidthLeft = 0.0;
@@ -31,21 +31,29 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
         double x = (src.xSrc[i])[0];
         double z = (src.xSrc[i])[1];
 
-        if ( xMin[0]-x > extraWidthLeft )
-            extraWidthLeft = xMin[0] - x;
-        else if ( x-xMax[0] > extraWidthRight )
-            extraWidthRight = x - xMax[0];
-        if ( xMin[1]-z > extraWidthTop )
-            extraWidthTop = xMin[1] - z;
-        else if ( z-xMax[1] > extraWidthBottom )
-            extraWidthBottom = z - xMax[1];
+        if ( xMin[0] - x + dx[0]*fmInput.sourceParameter.r > extraWidthLeft )
+            extraWidthLeft = xMin[0] - x + dx[0]*fmInput.sourceParameter.r;
+        else if (x - xMax[0] + dx[0]*fmInput.sourceParameter.r > extraWidthRight )
+            extraWidthRight = x - xMax[0] + dx[0]*fmInput.sourceParameter.r;
+        if ( xMin[1] - z + dx[1]*fmInput.sourceParameter.r > extraWidthTop )
+            extraWidthTop = xMin[1] - z + dx[1]*fmInput.sourceParameter.r;
+        else if ( z - xMax[1] + dx[1]*fmInput.sourceParameter.r > extraWidthBottom )
+            extraWidthBottom = z - xMax[1] + dx[1]*fmInput.sourceParameter.r;
+
+//        if ( xMin[0] - x > extraWidthLeft )
+//            extraWidthLeft = xMin[0] - x;
+//        else if (x - xMax[0] > extraWidthRight )
+//            extraWidthRight = x - xMax[0];
+//        if ( xMin[1] - z > extraWidthTop )
+//            extraWidthTop = xMin[1] - z;
+//        else if ( z - xMax[1] > extraWidthBottom )
+//            extraWidthBottom = z - xMax[1];
     }
 
-    int r = 1;
-    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] ) + r;
-    int extraGridPointsRight  = std::ceil( extraWidthRight  / dx[0] ) + r;
-    int extraGridPointsBottom = std::ceil( extraWidthBottom / dx[1] ) + 0;
-    int extraGridPointsTop    = std::ceil( extraWidthTop    / dx[1] ) + r;
+    int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] );
+    int extraGridPointsRight  = std::ceil( extraWidthRight  / dx[0] );
+    int extraGridPointsBottom = std::ceil( extraWidthBottom / dx[1] );
+    int extraGridPointsTop    = std::ceil( extraWidthTop    / dx[1] );
 
     _idxUpperLeftDomain[0]  = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1]  = _PMLwidth[1] + extraGridPointsTop;
@@ -267,9 +275,7 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
      * NOTE: This requires r extra grid points added around each source and hence a larger grid */
     double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
     int index;
-    // Kaiser Window function parameters:
-    double r = 1.;
-    double beta = 1.24;
+    double r = static_cast<double>(_srcInput.r);
 
     for (int i = 0; i < nx[0]; ++i) {
         xi = xMin[0] + i*dx[0];
@@ -279,18 +285,20 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
             nzdist = abs(source[1]-zj) / dx[1];
 
             if (nxdist <= r && nzdist <= r) {
-                Wx = std::cyl_bessel_i(0., beta*sqrt(1-(nxdist/r)*(nxdist/r))) / std::cyl_bessel_i(0., beta);
-                Wz = std::cyl_bessel_i(0., beta*sqrt(1-(nzdist/r)*(nzdist/r))) / std::cyl_bessel_i(0., beta);
+                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nxdist/r)*(nxdist/r))) \
+                        / std::cyl_bessel_i(0., _srcInput.beta);
+                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nzdist/r)*(nzdist/r))) \
+                        / std::cyl_bessel_i(0., _srcInput.beta);
 
                 // Sine source function
                 if (nxdist > 0.0) {
-                    fx = Wx * sin(nxdist) / (dx[0]*nxdist);
+                    fx = Wx * sin(M_PI * nxdist) / (dx[0]*M_PI*nxdist);
                 } else {
                     fx  = Wx / dx[0];
                 }
 
                 if (nzdist > 0.0) {
-                    fz = Wz * sin(nzdist) / (dx[1]*nzdist);
+                    fz = Wz * sin(M_PI*nzdist) / (dx[1]*M_PI*nzdist);
                 } else {
                     fz  = Wz / dx[1];
                 }

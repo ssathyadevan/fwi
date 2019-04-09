@@ -1,5 +1,4 @@
 TODO:
--Add source parameters in input card
 -Check Anna's work
 -Improve performance by choosing different matrix solver
 (-Always include receivers in the domain (for calculating pData))

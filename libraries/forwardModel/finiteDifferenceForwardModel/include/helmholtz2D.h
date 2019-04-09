@@ -10,11 +10,11 @@
 #include "frequenciesGroup.h"
 #include "pressureFieldComplexSerial.h"
 #include "sources.h"
-#include "pmlWidthFactor.h"
+#include "forwardModelInput.h"
 
 class Helmholtz2D {
 public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const PMLWidthFactor &pmlFactor);
+    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const forwardModelInput &fmInput);
     ~Helmholtz2D();
     pressureFieldComplexSerial Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
 private:
@@ -29,6 +29,7 @@ private:
     double _c0;
     std::vector<double> _waveVelocity;
     Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
+    const SourceParameter _srcInput;
 
     void BuildMatrix();
     void BuildVector(const std::array<double, 2> &source);

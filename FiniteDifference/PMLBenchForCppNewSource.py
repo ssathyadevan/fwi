@@ -26,8 +26,8 @@ extraWidthRight = 0
 extraWidthUp = 0
 extraWidthBelow = 0
 
-r = 1
-beta = 1.24
+r = 4
+beta = 6.31
 
 #if source left of domain
 if (xSource < -Lx/2):
@@ -74,24 +74,25 @@ def f(i, j):
     # b = 6.31
     
     #dist from source
-    xdist = (xSource-xi) / hx
-    ydist = (ySource-yj) / hy
+    xdist = abs(xSource-xi) / hx
+    ydist = abs(ySource-yj) / hy
     
-    if abs(xdist) <= r:
-        Wx = iv(0, beta*np.sqrt(1-(xdist/r)**2)) / (iv(0,beta) * hx)
-        fx = Wx * np.sinc(xdist)
+    if xdist <= r:
+        Wx = iv(0, beta*np.sqrt(1-(xdist/r)**2)) / iv(0,beta)
+        fx = Wx * np.sinc(xdist) / hx
     else:
         fx = 0.0
         
-    if abs(ydist) <= r:        
-        Wy = iv(0, beta*np.sqrt(1-(ydist/r)**2)) / (iv(0,beta) * hy)
-        fy = Wy * np.sinc(ydist)
+    if ydist <= r:        
+        Wy = iv(0, beta*np.sqrt(1-(ydist/r)**2)) / iv(0,beta)
+        fy = Wy * np.sinc(ydist) / hy
     else:
         fy = 0.0
+        
+    if(i==12 and j==12):
+        print(fx,fy)        
     
     return fx*fy
-    
-    
 
 def sigmax(x):
     if(x > coordPMLRight ):
@@ -164,8 +165,8 @@ for i in np.arange(0,nx):
                
         b[idx1] = f(i,j)
         
-        #if(i==100 and j==0):
-        #    print(x, y, s1, s2)
+        #if(i==12 and j==12):
+        #    print(x, y, b[idx1])
 
 sA = sparse.csr_matrix(A)
 uFlat = spsolve(sA,b)
@@ -177,5 +178,5 @@ plt.imshow(image)
 plt.colorbar()
 
 # Save to csv
-#y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
-#np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
+y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
+np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
