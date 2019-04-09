@@ -269,7 +269,7 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
     // Add point source to the nearest grid point
 //    int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
 //    int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
-    //_b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
+//    _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
 
     /* Use Kaiser Window function
      * NOTE: This requires r extra grid points added around each source and hence a larger grid */
@@ -284,7 +284,7 @@ void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
             zj = xMin[1] + j*dx[1];
             nzdist = abs(source[1]-zj) / dx[1];
 
-            if (nxdist <= r && nzdist <= r) {
+            if (nxdist < r && nzdist < r) {
                 Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nxdist/r)*(nxdist/r))) \
                         / std::cyl_bessel_i(0., _srcInput.beta);
                 Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1-(nzdist/r)*(nzdist/r))) \
