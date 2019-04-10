@@ -1,4 +1,5 @@
 TODO:
+-Investigate pTot and pData differences --> Why does PML not work?
 -Document the source implementation
 -Always include receivers in the domain (for calculating pData) + calculate pData
 (-Improve performance by choosing different matrix solver)

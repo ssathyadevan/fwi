@@ -17,8 +17,8 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     dx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0]-1);
     dx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1]-1);
 
-    _PMLwidth[0] = std::round(fmInput.pmlWidthFactor.x*waveLength/dx[0] + 0.5);
-    _PMLwidth[1] = std::round(fmInput.pmlWidthFactor.z*waveLength/dx[1] + 0.5);
+    _PMLwidth[0] = std::ceil(fmInput.pmlWidthFactor.x*waveLength/dx[0]);
+    _PMLwidth[1] = std::ceil(fmInput.pmlWidthFactor.z*waveLength/dx[1]);
 
     //sources can be outside imaging domain. Area that we solve for needs to include all sources
     double extraWidthLeft = 0.0;
@@ -26,6 +26,7 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     double extraWidthBottom = 0.0;
     double extraWidthTop = 0.0;
 
+    // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
 
     for (int i = 0; i < src.nSrc; i++)
@@ -33,7 +34,6 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
         double x = (src.xSrc[i])[0];
         double z = (src.xSrc[i])[1];
 
-        // Also take into account additional grid points for source function
         if ( xMin[0] - x + dx[0]*r > extraWidthLeft )
             extraWidthLeft = xMin[0] - x + dx[0]*r;
         else if (x - xMax[0] + dx[0]*r > extraWidthRight )
@@ -42,15 +42,6 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
             extraWidthTop = xMin[1] - z + dx[1]*r;
         else if ( z - xMax[1] + dx[1]*r > extraWidthBottom )
             extraWidthBottom = z - xMax[1] + dx[1]*r;
-
-//        if ( xMin[0] - x > extraWidthLeft )
-//            extraWidthLeft = xMin[0] - x;
-//        else if (x - xMax[0] > extraWidthRight )
-//            extraWidthRight = x - xMax[0];
-//        if ( xMin[1] - z > extraWidthTop )
-//            extraWidthTop = xMin[1] - z;
-//        else if ( z - xMax[1] > extraWidthBottom )
-//            extraWidthBottom = z - xMax[1];
     }
 
     int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] );
@@ -224,11 +215,33 @@ void Helmholtz2D::BuildMatrix()
             }
             else
             {
+//                // Diagonal
+//                val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega *nxz*nxz;
+//                triplets.push_back(Triplet(index,index,val));
+
+//                // Non-diagonal
+//                if (i != 0) {
+//                    val = 1. / (dx[0]*dx[0]);
+//                    triplets.push_back(Triplet(index,index-1,val));
+//                }
+//                if (i != nx[0]-1) {
+//                    val = 1. /(dx[0]*dx[0]);
+//                    triplets.push_back(Triplet(index,index+1,val));
+//                }
+//                if (j != 0) {
+//                    val = 1. / (dx[1]*dx[1]);
+//                    triplets.push_back(Triplet(index,index-nx[0],val));
+//                }
+//                if (j != nx[1]-1) {
+//                    val = 1. / (dx[1]*dx[1]);
+//                    triplets.push_back(Triplet(index,index+nx[0],val));
+//                }
+
+                // 1st Order ABC
                 // Diagonal
-                val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega *nxz*nxz;
+                val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega*nxz*nxz;
                 triplets.push_back(Triplet(index,index,val));
 
-                // Non-diagonal
                 if (i != 0) {
                     val = 1. / (dx[0]*dx[0]);
                     triplets.push_back(Triplet(index,index-1,val));
@@ -244,6 +257,35 @@ void Helmholtz2D::BuildMatrix()
                 if (j != nx[1]-1) {
                     val = 1. / (dx[1]*dx[1]);
                     triplets.push_back(Triplet(index,index+nx[0],val));
+                }
+
+                if (j == 0) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[0];
+                    triplets.push_back(Triplet(index,index,val));
+
+                    val = 1. / (dx[0]*dx[1]);
+                    triplets.push_back(Triplet(index,index+nx[0],val));
+                }
+                if (j == nx[1]-1) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[0];
+                    triplets.push_back(Triplet(index,index,val));
+
+                    val = 1. / (dx[0]*dx[1]);
+                    triplets.push_back(Triplet(index,index-nx[0],val));
+                }
+                if (i == 0 && j != 0 && j != nx[1]-1) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
+                    triplets.push_back(Triplet(index,index,val));
+
+                    val = 1. / (dx[0]*dx[1]);
+                    triplets.push_back(Triplet(index,index+1,val));
+                }
+                if (i == nx[0]-1 && j != 0 && j != nx[1]-1) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
+                    triplets.push_back(Triplet(index,index,val));
+
+                    val = 1. / (dx[0]*dx[1]);
+                    triplets.push_back(Triplet(index,index-1,val));
                 }
             }
         }
@@ -263,52 +305,56 @@ void Helmholtz2D::BuildMatrix()
 void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
-//    std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
     std::array<double, 2> xMin = _newgrid->GetGridStart();
 
     // Reset vector to zero
     _b.setZero(nx[0]*nx[1]);
 
-    // Add point source to the nearest grid point
-//    int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
-//    int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
-//    _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
+    if (_srcInput.r == 0) {
+        // Add point source to the nearest grid point
+        std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
+        int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0])/dx[0]);
+        int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1])/dx[1]);
+        _b[j*nx[0]+i] = 1. / (dx[0]*dx[1]);
+    }
+    else
+    {
+        /* Use Sine source function with a Kaiser window function
+         * NOTE: This requires r extra grid points added around each source and hence a larger grid */
+        double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
+        int index;
+        double r = static_cast<double>(_srcInput.r);
 
-    /* Use Sine source function with a Kaiser window function
-     * NOTE: This requires r extra grid points added around each source and hence a larger grid */
-    double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
-    int index;
-    double r = static_cast<double>(_srcInput.r);
+        for (int i = 0; i < nx[0]; ++i) {
+            xi = xMin[0] + i*dx[0];
+            nxdist = abs(source[0]-xi) / dx[0];
 
-    for (int i = 0; i < nx[0]; ++i) {
-        xi = xMin[0] + i*dx[0];
-        nxdist = abs(source[0]-xi) / dx[0];
+            for (int j = 0; j < nx[1]; ++j) {
+                zj = xMin[1] + j*dx[1];
+                nzdist = abs(source[1]-zj) / dx[1];
 
-        for (int j = 0; j < nx[1]; ++j) {
-            zj = xMin[1] + j*dx[1];
-            nzdist = abs(source[1]-zj) / dx[1];
+                if (nxdist < r && nzdist < r) {
+                    Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nxdist*nxdist)/(r*r))) \
+                            / std::cyl_bessel_i(0., _srcInput.beta);
+                    Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nzdist*nzdist)/(r*r))) \
+                            / std::cyl_bessel_i(0., _srcInput.beta);
 
-            if (nxdist < r && nzdist < r) {
-                Wx = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nxdist*nxdist)/(r*r))) \
-                        / std::cyl_bessel_i(0., _srcInput.beta);
-                Wz = std::cyl_bessel_i(0., _srcInput.beta*sqrt(1.-(nzdist*nzdist)/(r*r))) \
-                        / std::cyl_bessel_i(0., _srcInput.beta);
+                    // Sine source function
+                    if (nxdist > 0.0) {
+                        fx = Wx * sin(M_PI*nxdist) / (dx[0]*M_PI*nxdist);
+                    } else {
+                        fx  = Wx / dx[0];
+                    }
 
-                // Sine source function
-                if (nxdist > 0.0) {
-                    fx = Wx * sin(M_PI*nxdist) / (dx[0]*M_PI*nxdist);
-                } else {
-                    fx  = Wx / dx[0];
+                    if (nzdist > 0.0) {
+                        fz = Wz * sin(M_PI*nzdist) / (dx[1]*M_PI*nzdist);
+                    } else {
+                        fz  = Wz / dx[1];
+                    }
+
+                    index = j*nx[0] + i;
+                    _b[index] = fx*fz;
                 }
-
-                if (nzdist > 0.0) {
-                    fz = Wz * sin(M_PI*nzdist) / (dx[1]*M_PI*nzdist);
-                } else {
-                    fz  = Wz / dx[1];
-                }
-
-                index = j*nx[0] + i;
-                _b[index] = fx*fz;
             }
         }
     }

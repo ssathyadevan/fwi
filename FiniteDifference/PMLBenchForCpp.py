@@ -28,15 +28,15 @@ extraWidthBelow = 0
 
 #if source left of domain
 if (xSource < -Lx/2):
-    extraWidthLeft = round((-xSource - Lx/2)/hx + 0.5)+4
+    extraWidthLeft = round((-xSource - Lx/2)/hx + 0.5)
 #if source right of domain
 xSource = 480. #TODO: temporary adjust for extra right width
 if (xSource > Lx/2):
-    extraWidthRight = round((xSource - Lx/2)/hx + 0.5)+4
+    extraWidthRight = round((xSource - Lx/2)/hx + 0.5)
 xSource = -480. #TODO: revert
 #if source above domain
 if (ySource < 0):
-    extraWidthUp = round(-ySource/hy + 0.5)+4
+    extraWidthUp = round(-ySource/hy + 0.5)
 #if source below domain
 if (ySource > Ly):
     extraWidthBelow = round((ySource-Ly)/hy + 0.5)
