@@ -168,80 +168,13 @@ void Helmholtz2D::BuildMatrix()
             index = j * nx[0] + i;
             nxz = 1.0/_waveVelocity[index];
 
-            if (xi < _coordPMLLeft || xi > _coordPMLRight || zj < _coordPMLUp || zj > _coordPMLDown)
+            if (_PMLwidth[0] == 0 && _PMLwidth[1] == 0) // 1st Order ABC
             {
-                if (xi < _coordPMLLeft) {
-                    sigmax = xi - _coordPMLLeft;
-                } else if (xi > _coordPMLRight) {
-                    sigmax = xi - _coordPMLRight;
-                } else {
-                    sigmax = 0.0;
-                }
-
-                if (zj < _coordPMLUp) {
-                    sigmaz = zj - _coordPMLUp;
-                } else if (zj > _coordPMLDown) {
-                    sigmaz = zj - _coordPMLDown;
-                } else {
-                    sigmaz = 0.0;
-                }
-
-                Sx = 1. - std::complex<double>(0.,1.) * sigmax * sigmax / omega;
-                dSx = 2. * sigmax / (omega*std::complex<double>(0.,1.));
-                Sz = 1. - std::complex<double>(0.,1.) * sigmaz * sigmaz / omega;
-                dSz = 2. * sigmaz / (omega*std::complex<double>(0.,1.));
-
-                // Diagonal
-                val = -2. * Sz / (Sx*dx[0]*dx[0]) - 2. * Sx / (Sz*dx[1]*dx[1]) + Sx*Sz*nxz*nxz*omega*omega;
-                triplets.push_back(Triplet(index,index,val));
-
-                // Non-diagonal
-                if (i != 0) {
-                    val = Sz / (Sx*dx[0]*dx[0]) + Sz * dSx / (2.*dx[0]*Sx*Sx);
-                    triplets.push_back(Triplet(index,index-1,val));
-                }
-                if (i != nx[0]-1) {
-                    val = Sz / (Sx*dx[0]*dx[0]) - Sz * dSx / (2.*dx[0]*Sx*Sx);
-                    triplets.push_back(Triplet(index,index+1,val));
-                }
-                if (j != 0) {
-                    val = Sx / (Sz*dx[1]*dx[1]) + Sx * dSz / (2.*dx[1]*Sz*Sz);
-                    triplets.push_back(Triplet(index,index-nx[0],val));
-                }
-                if (j != nx[1]-1) {
-                    val = Sx / (Sz*dx[1]*dx[1]) - Sx * dSz / (2.*dx[1]*Sz*Sz);
-                    triplets.push_back(Triplet(index,index+nx[0],val));
-                }
-            }
-            else
-            {
-//                // Diagonal
-//                val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega *nxz*nxz;
-//                triplets.push_back(Triplet(index,index,val));
-
-//                // Non-diagonal
-//                if (i != 0) {
-//                    val = 1. / (dx[0]*dx[0]);
-//                    triplets.push_back(Triplet(index,index-1,val));
-//                }
-//                if (i != nx[0]-1) {
-//                    val = 1. /(dx[0]*dx[0]);
-//                    triplets.push_back(Triplet(index,index+1,val));
-//                }
-//                if (j != 0) {
-//                    val = 1. / (dx[1]*dx[1]);
-//                    triplets.push_back(Triplet(index,index-nx[0],val));
-//                }
-//                if (j != nx[1]-1) {
-//                    val = 1. / (dx[1]*dx[1]);
-//                    triplets.push_back(Triplet(index,index+nx[0],val));
-//                }
-
-                // 1st Order ABC
                 // Diagonal
                 val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega*nxz*nxz;
                 triplets.push_back(Triplet(index,index,val));
 
+                // Non-diagonal
                 if (i != 0) {
                     val = 1. / (dx[0]*dx[0]);
                     triplets.push_back(Triplet(index,index-1,val));
@@ -259,6 +192,7 @@ void Helmholtz2D::BuildMatrix()
                     triplets.push_back(Triplet(index,index+nx[0],val));
                 }
 
+                // ABC
                 if (j == 0) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[0];
                     triplets.push_back(Triplet(index,index,val));
@@ -286,6 +220,78 @@ void Helmholtz2D::BuildMatrix()
 
                     val = 1. / (dx[0]*dx[1]);
                     triplets.push_back(Triplet(index,index-1,val));
+                }
+            }
+            else // PML
+            {
+                if (xi < _coordPMLLeft || xi > _coordPMLRight || zj < _coordPMLUp || zj > _coordPMLDown)
+                {
+                    if (xi < _coordPMLLeft) {
+                        sigmax = xi - _coordPMLLeft;
+                    } else if (xi > _coordPMLRight) {
+                        sigmax = xi - _coordPMLRight;
+                    } else {
+                        sigmax = 0.0;
+                    }
+
+                    if (zj < _coordPMLUp) {
+                        sigmaz = zj - _coordPMLUp;
+                    } else if (zj > _coordPMLDown) {
+                        sigmaz = zj - _coordPMLDown;
+                    } else {
+                        sigmaz = 0.0;
+                    }
+
+                    Sx = 1. - std::complex<double>(0.,1.) * sigmax * sigmax / omega;
+                    dSx = 2. * sigmax / (omega*std::complex<double>(0.,1.));
+                    Sz = 1. - std::complex<double>(0.,1.) * sigmaz * sigmaz / omega;
+                    dSz = 2. * sigmaz / (omega*std::complex<double>(0.,1.));
+
+                    // Diagonal
+                    val = -2. * Sz / (Sx*dx[0]*dx[0]) - 2. * Sx / (Sz*dx[1]*dx[1]) + Sx*Sz*nxz*nxz*omega*omega;
+                    triplets.push_back(Triplet(index,index,val));
+
+                    // Non-diagonal
+                    if (i != 0) {
+                        val = Sz / (Sx*dx[0]*dx[0]) + Sz * dSx / (2.*dx[0]*Sx*Sx);
+                        triplets.push_back(Triplet(index,index-1,val));
+                    }
+                    if (i != nx[0]-1) {
+                        val = Sz / (Sx*dx[0]*dx[0]) - Sz * dSx / (2.*dx[0]*Sx*Sx);
+                        triplets.push_back(Triplet(index,index+1,val));
+                    }
+                    if (j != 0) {
+                        val = Sx / (Sz*dx[1]*dx[1]) + Sx * dSz / (2.*dx[1]*Sz*Sz);
+                        triplets.push_back(Triplet(index,index-nx[0],val));
+                    }
+                    if (j != nx[1]-1) {
+                        val = Sx / (Sz*dx[1]*dx[1]) - Sx * dSz / (2.*dx[1]*Sz*Sz);
+                        triplets.push_back(Triplet(index,index+nx[0],val));
+                    }
+                }
+                else
+                {
+                    // Diagonal
+                    val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega *nxz*nxz;
+                    triplets.push_back(Triplet(index,index,val));
+
+                    // Non-diagonal
+                    if (i != 0) {
+                        val = 1. / (dx[0]*dx[0]);
+                        triplets.push_back(Triplet(index,index-1,val));
+                    }
+                    if (i != nx[0]-1) {
+                        val = 1. /(dx[0]*dx[0]);
+                        triplets.push_back(Triplet(index,index+1,val));
+                    }
+                    if (j != 0) {
+                        val = 1. / (dx[1]*dx[1]);
+                        triplets.push_back(Triplet(index,index-nx[0],val));
+                    }
+                    if (j != nx[1]-1) {
+                        val = 1. / (dx[1]*dx[1]);
+                        triplets.push_back(Triplet(index,index+nx[0],val));
+                    }
                 }
             }
         }
