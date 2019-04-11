@@ -194,31 +194,31 @@ void Helmholtz2D::BuildMatrix()
 
                 // ABC
                 if (j == 0) {
-                    val = (std::complex(0.,2.)*nxz*omega) / dx[0];
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
                     triplets.push_back(Triplet(index,index,val));
 
-                    val = 1. / (dx[0]*dx[1]);
+                    val = 1. / (dx[1]*dx[1]);
                     triplets.push_back(Triplet(index,index+nx[0],val));
                 }
                 if (j == nx[1]-1) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
+                    triplets.push_back(Triplet(index,index,val));
+
+                    val = 1. / (dx[1]*dx[1]);
+                    triplets.push_back(Triplet(index,index-nx[0],val));
+                }
+                if (i == 0) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[0];
                     triplets.push_back(Triplet(index,index,val));
 
-                    val = 1. / (dx[0]*dx[1]);
-                    triplets.push_back(Triplet(index,index-nx[0],val));
-                }
-                if (i == 0 && j != 0 && j != nx[1]-1) {
-                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
-                    triplets.push_back(Triplet(index,index,val));
-
-                    val = 1. / (dx[0]*dx[1]);
+                    val = 1. / (dx[0]*dx[0]);
                     triplets.push_back(Triplet(index,index+1,val));
                 }
-                if (i == nx[0]-1 && j != 0 && j != nx[1]-1) {
-                    val = (std::complex(0.,2.)*nxz*omega) / dx[1];
+                if (i == nx[0]-1) {
+                    val = (std::complex(0.,2.)*nxz*omega) / dx[0];
                     triplets.push_back(Triplet(index,index,val));
 
-                    val = 1. / (dx[0]*dx[1]);
+                    val = 1. / (dx[0]*dx[0]);
                     triplets.push_back(Triplet(index,index-1,val));
                 }
             }

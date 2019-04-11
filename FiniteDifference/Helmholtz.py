@@ -11,7 +11,6 @@ from matplotlib import pyplot as plt
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
 import time
-import math
 
 xmax = 600.
 ymax = 300.
@@ -33,7 +32,7 @@ def n(x,y):
 
 # Sources
 def f(x,y):
-    if(x == round(nx/2)-1 and y == 16):
+    if(x == round(nx/2)-1 and y == ny/2):
         return 1. / (hx*hy)
     else:
         return 0.0
@@ -68,19 +67,19 @@ def solveHelmholtz(ABCorder):
                     
             if (ABCorder == 1): #First order ABC
                 if (y == 0):
-                    A[i,i] += (hy * 2.0j * n(x,y) * omega) / (hx * hy)
-                    A[i,i+nx] += 1.0 / (hx * hy)
+                    A[i,i] += (2.0j * n(x,y) * omega) / hy
+                    A[i,i+nx] += 1.0 / (hy * hy)
     #               if (x == nx / 2): # Incoming wave
     #                   rhs[i] = 2.0j * n(x,y) * omega * 10
                 if (y == ny-1):
-                    A[i,i] += (hy * 2.0j * n(x,y) * omega) / (hx * hy)
-                    A[i,i-nx] += 1.0 / (hx * hy)
-                if (x == 0 and y != 0 and y != ny - 1):
-                    A[i,i] += (hx * 2.0j * n(x,y) * omega) / (hx * hy)
-                    A[i,i+1] += 1.0 / (hx * hy)
-                if (x == nx-1 and y != 0 and y != ny - 1):
-                    A[i,i] += (hx * 2.0j * n(x,y) * omega) / (hx * hy)
-                    A[i,i-1] += 1.0 / (hx * hy)    
+                    A[i,i] += (2.0j * n(x,y) * omega) / hy
+                    A[i,i-nx] += 1.0 / (hy * hy)
+                if (x == 0):
+                    A[i,i] += (2.0j * n(x,y) * omega) / hx
+                    A[i,i+1] += 1.0 / (hx * hx)
+                if (x == nx-1):
+                    A[i,i] += (2.0j * n(x,y) * omega) / hx
+                    A[i,i-1] += 1.0 / (hx * hx)    
 
             elif (ABCorder == 2): # Second order ABC  (corner central difference in x
                 if (y == 0):
@@ -161,7 +160,7 @@ def solvePML():
     Lx = xmax
     Ly = ymax
     
-    widthPML = math.ceil(0.5 / (hx*n(1,1)))
+    widthPML = 5
     
     nxl = nx + 2*widthPML
     nyl = ny + 2*widthPML
@@ -171,6 +170,7 @@ def solvePML():
     A = sparse.dok_matrix(((dim, dim)), dtype=np.complex)
     
     def sigmax(x):
+        return 0.0
         if (x > Lx/2):
             return (x-Lx/2) 
         elif (x < -Lx/2):
@@ -190,6 +190,7 @@ def solvePML():
             return 0.0
         
     def sigmay(y):
+        return 0.0
         if (y > Ly/2):
             return (y-Ly/2)
         elif (y < -Ly/2):
@@ -235,6 +236,20 @@ def solvePML():
             if(j != 0):
                 idx2 = i + (j-1)*nxl
                 A[idx1,idx2] = (s1/s2)/(hy*hy) + (s1*dSy(y))/(2*hy*s2*s2)
+               
+            # 1st order ABC (TEST)    
+            if (j == 0):
+                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hy
+                A[idx1,idx1+nx] += 1.0 / (hy * hy)
+            if (j == nyl-1):
+                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hy
+                A[idx1,idx1-nx] += 1.0 / (hy * hy)
+            if (i == 0):
+                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hx
+                A[idx1,idx1+1] += 1.0 / (hx * hx)
+            if (i == nxl-1):
+                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hx
+                A[idx1,idx1-1] += 1.0 / (hx * hx)
             
             b[idx1] = f(i-widthPML,j-widthPML)
     
@@ -242,6 +257,7 @@ def solvePML():
     u = spsolve(A,b)
     
     u = u.reshape((nyl,nxl))
+    plt.imshow(np.real(u)); plt.colorbar()
     return u[widthPML:nyl-widthPML,widthPML:nxl-widthPML]
     
 exactsol = solveExact()
@@ -249,7 +265,7 @@ u = solveHelmholtz(1)
 v = solveHelmholtz(2)
 w = solvePML()
 
-#ax= plt.imshow(np.real(w)) 
+#ax = plt.imshow(np.real(w)) 
 #plt.colorbar()
 
 #nrowplot = 3
