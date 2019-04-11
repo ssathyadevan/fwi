@@ -6,10 +6,11 @@ import sys, os, shutil
 # 	This script automatically runs all regression tests and writes the results to
 # 	a file in directory $HOMEPATH/Documents/FWI/build/Regression_results.txt.
 #	This script should be in the directory $HOMEPATH/Documents/FWI/ (to run it locally), 
-#       together with folders parallelized-fwi and FWIInstall,
-#	the scripts read_pytest.py, read_results.py, regressionTestPreProcessing_python3.py 
-#       and regressionTestProcessing_python3.py.
-#
+#       together with folders parallelized-fwi and FWIInstall, 
+#       When running from terminal, type python3 run_all_regressions_python.py, followed by 1 to run it locally 
+#       or 0 to run on Jenkins. If you want to run one single regression test, add the name of the
+#       testcase you want. For example: "python3 run_all_regressions_python.py 1 fast" will run locally only the 
+#       regression for the testcase "fast"
 
 cwd = os.getcwd()
 ft=cwd 
@@ -29,11 +30,15 @@ os.chdir(os.path.join(FWI_SOURCE_PATH,"tests","regression_data"))
 
 okur = os.getcwd()
 
-
 tests=list()
-for name in os.listdir("."):
-    if os.path.isdir(name):
-        tests.append(name)
+
+if len(sys.argv)==3:
+    testcase=sys.argv[2]
+    tests.append(testcase)
+elif len(sys.argv)==2:
+    for name in os.listdir("."):
+        if os.path.isdir(name):
+            tests.append(name)
 
 os.chdir(os.path.join(FWI_INSTALL_PATH))               #(FWI_INSTALL_PATH+"bin/")
 cwd = os.getcwd()
