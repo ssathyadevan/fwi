@@ -242,10 +242,10 @@ void Helmholtz2D::BuildMatrix()
                         sigmaz = 0.0;
                     }
 
-                    Sx = 1. - std::complex<double>(0.,1.) * sigmax * sigmax / omega;
-                    dSx = 2. * sigmax / (omega*std::complex<double>(0.,1.));
-                    Sz = 1. - std::complex<double>(0.,1.) * sigmaz * sigmaz / omega;
-                    dSz = 2. * sigmaz / (omega*std::complex<double>(0.,1.));
+                    Sx = 1. + std::complex<double>(0.,1.) * sigmax * sigmax / (omega*dx[0]);
+                    dSx = -2. * sigmax / (omega*std::complex<double>(0.,1.)*dx[0]);
+                    Sz = 1. + std::complex<double>(0.,1.) * sigmaz * sigmaz / (omega*dx[1]);
+                    dSz = -2. * sigmaz / (omega*std::complex<double>(0.,1.)*dx[1]);
 
                     // Diagonal
                     val = -2. * Sz / (Sx*dx[0]*dx[0]) - 2. * Sx / (Sz*dx[1]*dx[1]) + Sx*Sz*nxz*nxz*omega*omega;

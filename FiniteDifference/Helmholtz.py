@@ -153,7 +153,7 @@ def solveExact(): # For constant wave velocity!
                 
                 z0 = omega * n(i,j) * np.sqrt(np.square(xgrid-x0)+np.square(ygrid-y0))
                 sol += -0.25j * hankel1(0,z0) * f(i,j) * hx * hy
-                #sol[j,i] = -0.25j * hankel1(0,1e-15) * f(i,j) * hx * hy
+                sol[j,i] = -0.25j * hankel1(0,1e-15) * f(i,j) * hx * hy
     return sol
 
 def solvePML():
@@ -170,7 +170,6 @@ def solvePML():
     A = sparse.dok_matrix(((dim, dim)), dtype=np.complex)
     
     def sigmax(x):
-        return 0.0
         if (x > Lx/2):
             return (x-Lx/2) 
         elif (x < -Lx/2):
@@ -179,18 +178,17 @@ def solvePML():
             return 0.0
     
     def Sx(x):
-        return 1 + sigmax(x)*sigmax(x)/(omega*1.0j)
+        return 1 + -sigmax(x)*sigmax(x)/(omega*1.0j*hx)
     
     def dSx(x):
         if (x > Lx/2):
-            return 2.0*sigmax(x)/(omega*1.0j)
+            return -2.0*sigmax(x)/(omega*1.0j*hx)
         elif (x < -Lx/2):
-            return 2.0*sigmax(x)/(omega*1.0j)
+            return -2.0*sigmax(x)/(omega*1.0j*hx)
         else:
             return 0.0
         
     def sigmay(y):
-        return 0.0
         if (y > Ly/2):
             return (y-Ly/2)
         elif (y < -Ly/2):
@@ -199,13 +197,13 @@ def solvePML():
             return 0.0
     
     def Sy(y):
-        return 1 + sigmay(y)*sigmay(y)/(omega*1.0j)
+        return 1 + -sigmay(y)*sigmay(y)/(omega*1.0j*hy)
     
     def dSy(y):
         if (y > Ly/2):
-            return 2.0*sigmay(y)/(omega*1.0j) 
+            return -2.0*sigmay(y)/(omega*1.0j*hy) 
         elif (y < -Ly/2):
-            return 2.0*sigmay(y)/(omega*1.0j)
+            return -2.0*sigmay(y)/(omega*1.0j*hy)
         else:
             return 0.0
 
@@ -219,37 +217,23 @@ def solvePML():
             
             s1 = Sx(x)
             s2 = Sy(y)
-            A[idx1,idx1] = -2*(s2/s1)/(hx*hx) -2*(s1/s2)/(hy*hy) + s1*s2*n(i,j)*n(i,j)*omega*omega
+            A[idx1,idx1] = -2.*(s2/s1)/(hx*hx) -2.*(s1/s2)/(hy*hy) + s1*s2*n(i,j)*n(i,j)*omega*omega
             
             if(i != nxl-1):
                 idx2 = i+1 + j*nxl
-                A[idx1,idx2] = (s2/s1)/(hx*hx) - (s2*dSx(x))/(2*hx*s1*s1)
+                A[idx1,idx2] += (s2/s1)/(hx*hx) - (s2*dSx(x))/(2*hx*s1*s1)
             
             if(i != 0):
                 idx2 = i-1 + j*nxl
-                A[idx1,idx2] = (s2/s1)/(hx*hx) + (s2*dSx(x))/(2*hx*s1*s1)
+                A[idx1,idx2] += (s2/s1)/(hx*hx) + (s2*dSx(x))/(2*hx*s1*s1)
             
             if(j != nyl-1):
                 idx2 = i + (j+1)*nxl
-                A[idx1,idx2] = (s1/s2)/(hy*hy) - (s1*dSy(y))/(2*hy*s2*s2)
+                A[idx1,idx2] += (s1/s2)/(hy*hy) - (s1*dSy(y))/(2*hy*s2*s2)
             
             if(j != 0):
                 idx2 = i + (j-1)*nxl
-                A[idx1,idx2] = (s1/s2)/(hy*hy) + (s1*dSy(y))/(2*hy*s2*s2)
-               
-            # 1st order ABC (TEST)    
-            if (j == 0):
-                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hy
-                A[idx1,idx1+nx] += 1.0 / (hy * hy)
-            if (j == nyl-1):
-                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hy
-                A[idx1,idx1-nx] += 1.0 / (hy * hy)
-            if (i == 0):
-                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hx
-                A[idx1,idx1+1] += 1.0 / (hx * hx)
-            if (i == nxl-1):
-                A[idx1,idx1] += (2.0j * n(i,j) * omega) / hx
-                A[idx1,idx1-1] += 1.0 / (hx * hx)
+                A[idx1,idx2] += (s1/s2)/(hy*hy) + (s1*dSy(y))/(2*hy*s2*s2)
             
             b[idx1] = f(i-widthPML,j-widthPML)
     
@@ -257,7 +241,6 @@ def solvePML():
     u = spsolve(A,b)
     
     u = u.reshape((nyl,nxl))
-    plt.imshow(np.real(u)); plt.colorbar()
     return u[widthPML:nyl-widthPML,widthPML:nxl-widthPML]
     
 exactsol = solveExact()
@@ -265,8 +248,12 @@ u = solveHelmholtz(1)
 v = solveHelmholtz(2)
 w = solvePML()
 
-#ax = plt.imshow(np.real(w)) 
-#plt.colorbar()
+print(exactsol[16,31])
+print(u[16,31])
+print(w[16,31])
+
+ax = plt.imshow(np.real(w)) 
+plt.colorbar()
 
 #nrowplot = 3
 #ncolplot = 2
@@ -305,18 +292,18 @@ w = solvePML()
 
 #plt.tight_layout()
 
-#diff_exact_u = np.real(exactsol-u).flatten()
-#diff_exact_v = np.real(exactsol-v).flatten()
-#diff_exact_w = np.real(exactsol-w).flatten()
-#
-#exactsoltemp = exactsol.flatten()
-#
-#print("")
-#print("2-Norm diff exact 1st:   %0.2f" %  (np.linalg.norm(diff_exact_u) / np.linalg.norm(exactsol)))
-#print("2-Norm diff exact 2nd:   %0.2f" %  (np.linalg.norm(diff_exact_v) / np.linalg.norm(exactsoltemp)))
-#print("2-Norm diff exact PML:   %0.2f" %  (np.linalg.norm(diff_exact_w) / np.linalg.norm(exactsoltemp)))
-#
-#print("")
-#print("1-Norm diff exact 1st:   %0.2f" %  (np.linalg.norm(diff_exact_u, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))
-#print("1-Norm diff exact 2nd:   %0.2f" %  (np.linalg.norm(diff_exact_v, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))
-#print("1-Norm diff exact PML:   %0.2f" %  (np.linalg.norm(diff_exact_w, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))
+diff_exact_u = np.real(exactsol-u).flatten()
+diff_exact_v = np.real(exactsol-v).flatten()
+diff_exact_w = np.real(exactsol-w).flatten()
+
+exactsoltemp = exactsol.flatten()
+
+print("")
+print("2-Norm diff exact 1st:   %0.2f" %  (np.linalg.norm(diff_exact_u) / np.linalg.norm(exactsol)))
+print("2-Norm diff exact 2nd:   %0.2f" %  (np.linalg.norm(diff_exact_v) / np.linalg.norm(exactsoltemp)))
+print("2-Norm diff exact PML:   %0.2f" %  (np.linalg.norm(diff_exact_w) / np.linalg.norm(exactsoltemp)))
+
+print("")
+print("1-Norm diff exact 1st:   %0.2f" %  (np.linalg.norm(diff_exact_u, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))
+print("1-Norm diff exact 2nd:   %0.2f" %  (np.linalg.norm(diff_exact_v, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))
+print("1-Norm diff exact PML:   %0.2f" %  (np.linalg.norm(diff_exact_w, ord=1) / np.linalg.norm(exactsoltemp, ord=1)))

@@ -1011,7 +1011,7 @@ Similar to the first order discretization, at the boundary we need to find an ex
 
 This can be implemented in a straightforward manner by substituting the relation above into \cref{eqn:discret}.\\
 
-For corner points, e.g., $(x,z)=(0,0)$ with $\hat{\s}=[-1,-1]^\top$ it is not possible to fully discretize the $\partial u/\partial\hat{\s}$ using the central difference formula. Then there would be two unknowns, in this case $u_{i-1,j}$ and $u_{i,j-1}$, and hence no straightforward expression for either of these unknowns to be substituted in \cref{eqn:discret}. For this reason, a central difference scheme is only used in the $x$ direction and a backward/forward scheme is used in the $z$ direction. This will affect the accuracy of discretization in corner points. This leads to the following discretization at $(0,0)$.
+For corner points, e.g., $(x,z)=(0,0)$ with $\hat{\s}=[-1,-1]^\top$ it is not possible to fully discretize the $\partial u/\partial\hat{\s}$ using the central difference formula. Then there would be two unknowns, in this case $u_{i-1,j}$ and $u_{i,j-1}$, and hence no straightforward expression for either of these unknowns to be substituted in \cref{eqn:discret}. For this reason, a central difference scheme is only used in the $x$ direction and a backward/forward scheme is used in the $z$ direction. This leads to the following discretization at $(0,0)$.
 
 \begin{eqnarray}
 && \frac{\partial u}{\partial \hat{\s}}-\frac{3}{2}i\omega nu= -\frac{\partial u}{\partial x}-\frac{\partial u}{\partial z}-\frac{3}{2}i\omega nu=0\\
