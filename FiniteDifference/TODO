@@ -1,4 +1,6 @@
 TODO:
--Document the source implementation
--Always include receivers in the domain (for calculating pData) + calculate pData
-(-Improve performance by choosing different matrix solver)
+-Bernhard: where to put documentation/papers?
+-Document the source implementation + future work:
+	o Always include receivers in the domain (for calculating pData) + calculate pData
+	o Look into setting the effect of the source outside the domain as BC instead of including whole domain
+	o (Improve performance by choosing different matrix solver)

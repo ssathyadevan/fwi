@@ -84,46 +84,46 @@ def solveHelmholtz(ABCorder):
             elif (ABCorder == 2): # Second order ABC  (corner central difference in x
                 if (y == 0):
                     if (x == 0):
-                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hy
-                        A[i,i+1] += 1.0 / (hx * hy) 
-                        A[i,i+nx] += 2.0 / (hy * hy)
+                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hx
+                        A[i,i+1] += 1.0 / (hx * hx) 
+                        A[i,i+nx] += 2.0 / (hx * hy)
                     elif (x == nx - 1):
-                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hy
-                        A[i,i-1] += 1.0 / (hx * hy) 
-                        A[i,i+nx] += 2.0 / (hy * hy)
+                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hx
+                        A[i,i-1] += 1.0 / (hx * hx) 
+                        A[i,i+nx] += 2.0 / (hx * hy)
                     else:
-                        A[i,i] += (hy * 2.0j * n(x,y) * omega) / (hx * hy) + \
-                                  -2.0j / (omega * n(x,y) * hx * hx * hx)
-                        A[i,i+nx] += 1.0 / (hx * hy)
-                        A[i,i-1] += 1.0j / (omega * n(x,y) * hx * hx * hx)
-                        A[i,i+1] += 1.0j / (omega * n(x,y) * hx * hx * hx)
+                        A[i,i] += (2.0j * n(x,y) * omega) / hy + \
+                                  -2.0j / (omega * n(x,y) * hy * hx * hx)
+                        A[i,i+nx] += 1.0 / (hy * hy)
+                        A[i,i-1] += 1.0j / (omega * n(x,y) * hy * hx * hx)
+                        A[i,i+1] += 1.0j / (omega * n(x,y) * hy * hx * hx)
                 if (y == ny-1):
                     if (x == 0):
-                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hy
-                        A[i,i+1] += 1.0 / (hx * hy)
-                        A[i,i-nx] += 2.0 / (hy * hy)
+                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hx
+                        A[i,i+1] += 1.0 / (hx * hx)
+                        A[i,i-nx] += 2.0 / (hx * hy)
                     elif (x == nx - 1):
-                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hy
-                        A[i,i-1] += 1.0 / (hx * hy)
-                        A[i,i-nx] += 2.0 / (hy * hy)
+                        A[i,i] += (3.0j * n(x,y) * omega - 2.0 / hy) / hx
+                        A[i,i-1] += 1.0 / (hx * hx)
+                        A[i,i-nx] += 2.0 / (hx * hy)
                     else:
-                        A[i,i] += (hy * 2.0j * n(x,y) * omega) / (hx * hy) + \
-                                  -2.0j / (omega * n(x,y) * hx * hx * hx)
-                        A[i,i-nx] += 1.0 / (hx * hy)
-                        A[i,i-1] += 1.0j / (omega * n(x,y) * hx * hx * hx)
-                        A[i,i+1] += 1.0j / (omega * n(x,y) * hx * hx * hx)
+                        A[i,i] += (2.0j * n(x,y) * omega) / hy + \
+                                  -2.0j / (omega * n(x,y) * hy * hx * hx)
+                        A[i,i-nx] += 1.0 / (hy * hy)
+                        A[i,i-1] += 1.0j / (omega * n(x,y) * hy * hx * hx)
+                        A[i,i+1] += 1.0j / (omega * n(x,y) * hy * hx * hx)
                 if (x == 0 and y != 0 and y != ny - 1):
-                    A[i,i] += (hx * 2.0j * n(x,y) * omega) / (hx * hy) + \
-                              -2.0j / (omega * n(x,y) * hy * hy * hy)
-                    A[i,i+1] += 1.0 / (hx * hy)
-                    A[i,i+nx] += 1.0j / (omega * n(x,y) * hy * hy * hy)
-                    A[i,i-nx] += 1.0j / (omega * n(x,y) * hy * hy * hy)
+                    A[i,i] += (2.0j * n(x,y) * omega) / hx + \
+                              -2.0j / (omega * n(x,y) * hx * hy * hy)
+                    A[i,i+1] += 1.0 / (hx * hx)
+                    A[i,i+nx] += 1.0j / (omega * n(x,y) * hx * hy * hy)
+                    A[i,i-nx] += 1.0j / (omega * n(x,y) * hx * hy * hy)
                 if (x == nx-1 and y != 0 and y != ny - 1):
-                    A[i,i] += (hx * 2.0j * n(x,y) * omega) / (hx * hy) + \
-                              -2.0j / (omega * n(x,y) * hy * hy * hy)
-                    A[i,i-1] += 1.0 / (hx * hy)
-                    A[i,i+nx] += 1.0j / (omega * n(x,y) * hy * hy * hy)
-                    A[i,i-nx] += 1.0j / (omega * n(x,y) * hy * hy * hy)                                
+                    A[i,i] += (2.0j * n(x,y) * omega) / hx + \
+                              -2.0j / (omega * n(x,y) * hx * hy * hy)
+                    A[i,i-1] += 1.0 / (hx * hx)
+                    A[i,i+nx] += 1.0j / (omega * n(x,y) * hx * hy * hy)
+                    A[i,i-nx] += 1.0j / (omega * n(x,y) * hx * hy * hy)                                
                     
     # Solve and plot    
     start = time.perf_counter() 
@@ -238,7 +238,11 @@ def solvePML():
             b[idx1] = f(i-widthPML,j-widthPML)
     
     A = sparse.csr_matrix(A)
+    
+    start = time.perf_counter() 
     u = spsolve(A,b)
+    end = time.perf_counter() 
+    print("Time elapsed: %0.4f seconds" % (end-start))
     
     u = u.reshape((nyl,nxl))
     return u[widthPML:nyl-widthPML,widthPML:nxl-widthPML]
@@ -248,49 +252,42 @@ u = solveHelmholtz(1)
 v = solveHelmholtz(2)
 w = solvePML()
 
-print(exactsol[16,31])
-print(u[16,31])
-print(w[16,31])
+nrowplot = 3
+ncolplot = 2
+shrinkage = 0.6
+fig = plt.figure(figsize=(12,12))
 
-ax = plt.imshow(np.real(w)) 
-plt.colorbar()
+ax = fig.add_subplot(nrowplot,ncolplot,1)
+plt.imshow(np.real(u), vmin=-0.2, vmax=0.15) 
+plt.colorbar(shrink=shrinkage)
+ax.set_title("1st order")
 
-#nrowplot = 3
-#ncolplot = 2
-#shrinkage = 0.6
-#fig = plt.figure(figsize=(12,12))
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,1)
-#plt.imshow(np.real(u), vmin=-0.2, vmax=0.15) 
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("1st order")
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,2)
-#plt.imshow(np.real(v), vmin=-0.2, vmax=0.15)
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("2nd order")
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,3)
-#plt.imshow(np.real(w), vmin=-0.2, vmax=0.15)
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("PML")
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,4)
-#plt.imshow(np.real(exactsol-u), vmin=-0.06, vmax=0.06)
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("diff exact-1st order")
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,5)
-#plt.imshow(np.real(exactsol-v), vmin=-0.06, vmax=0.06)
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("diff exact-2nd order")
-#
-#ax = fig.add_subplot(nrowplot,ncolplot,6)
-#plt.imshow(np.real(exactsol-w), vmin=-0.06, vmax=0.06)
-#plt.colorbar(shrink=shrinkage)
-#ax.set_title("diff exact-PML")
+ax = fig.add_subplot(nrowplot,ncolplot,2)
+plt.imshow(np.real(v), vmin=-0.2, vmax=0.15)
+plt.colorbar(shrink=shrinkage)
+ax.set_title("2nd order")
 
-#plt.tight_layout()
+ax = fig.add_subplot(nrowplot,ncolplot,3)
+plt.imshow(np.real(w), vmin=-0.2, vmax=0.15)
+plt.colorbar(shrink=shrinkage)
+ax.set_title("PML")
+
+ax = fig.add_subplot(nrowplot,ncolplot,4)
+plt.imshow(np.real(exactsol-u), vmin=-0.06, vmax=0.06)
+plt.colorbar(shrink=shrinkage)
+ax.set_title("diff exact-1st order")
+
+ax = fig.add_subplot(nrowplot,ncolplot,5)
+plt.imshow(np.real(exactsol-v), vmin=-0.06, vmax=0.06)
+plt.colorbar(shrink=shrinkage)
+ax.set_title("diff exact-2nd order")
+
+ax = fig.add_subplot(nrowplot,ncolplot,6)
+plt.imshow(np.real(exactsol-w), vmin=-0.06, vmax=0.06)
+plt.colorbar(shrink=shrinkage)
+ax.set_title("diff exact-PML")
+
+plt.tight_layout()
 
 diff_exact_u = np.real(exactsol-u).flatten()
 diff_exact_v = np.real(exactsol-v).flatten()

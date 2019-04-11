@@ -16,6 +16,9 @@ imageCpp3 = c.reshape(32,64)
 #ax=plt.imshow(np.real(imageCpp3))
 #plt.colorbar()
 
+d = np.genfromtxt('totalfieldNEWPML.csv', delimiter='/n', dtype=complex)
+imageCpp4 = d.reshape(32,64)
+
 #imageCpp1[16,31] = 0
 #imageCpp2[16,31] = 0
 #imageCpp3[16,31] = 0
