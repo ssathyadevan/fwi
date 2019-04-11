@@ -100,13 +100,13 @@ def sigmax(x):
         return 0.0
 
 def Sx(x):
-    return 1 + sigmax(x)/(omega*1.0j)
+    return 1 + -sigmax(x)/(omega*1.0j*hx)
 
 def dSx_dx(x):
     if (x > coordPMLRight):
-        return 2.0*(x-coordPMLRight)/(omega*1.0j) 
+        return -2.0*(x-coordPMLRight)/(omega*1.0j*hx) 
     elif (x < coordPMLLeft):
-        return 2.0*(x-coordPMLLeft)/(omega*1.0j)
+        return -2.0*(x-coordPMLLeft)/(omega*1.0j*hx)
     else:
         return 0.0
     
@@ -119,13 +119,13 @@ def sigmay(y):
         return 0.0
 
 def Sy(y):
-    return 1 + sigmay(y)/(omega*1.0j)
+    return 1 + -sigmay(y)/(omega*1.0j*hy)
 
 def dSy_dy(y):
     if (y > coordPMLDown):
-        return 2.0*(y-coordPMLDown)/(omega*1.0j) 
+        return -2.0*(y-coordPMLDown)/(omega*1.0j*hy) 
     elif (y < coordPMLUp):
-        return 2.0*(y-coordPMLUp)/(omega*1.0j)
+        return -2.0*(y-coordPMLUp)/(omega*1.0j*hy)
     else:
         return 0.0
         
@@ -176,4 +176,4 @@ plt.colorbar()
 
 # Save to csv
 #y = x[upperLeftYReservoir:upperLeftYReservoir+nyDomain, upperLeftXReservoir:upperLeftXReservoir+nxDomain]
-#np.savetxt("PythonBenchpTot.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
+#np.savetxt("PythonBenchpTotNewSource.csv", y.flatten(), delimiter=",", fmt="(%.18f,%.18f)")
