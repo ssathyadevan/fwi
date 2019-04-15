@@ -24,9 +24,9 @@ def sendEmailFailure() {
 
         body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE}\nBranch: ${env.JOB_NAME}\nRan with status: " \
 
-        + currentBuild.currentResult +  "\n\n" + \
+        + currentBuild.currentResult +  "\n\n Stage where error occurred: ${env.STAGE_NAME}\n " + \
 
-        "Please check the Jenkins server to diagnose the problem"
+        "Please check the Jenkins server console output to diagnose the problem"
 
         echo "Email sent"
 
