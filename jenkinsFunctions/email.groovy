@@ -26,7 +26,7 @@ def sendEmailFailure() {
 
         + currentBuild.currentResult +  "\n\n Stage where error occurred: ${env.STAGE_NAME}\n " + \
 
-        "Please check the Jenkins server console output to diagnose the problem"
+        "Please check the Jenkins server console output to diagnose the problem: ${BUILD_URL}"
 
         echo "Email sent"
 
