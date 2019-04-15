@@ -22,7 +22,7 @@ def setEnvironment() {
 
 def buildAll() {
         echo 'Building..'
-		MYSTAGE_NAME = 'Build'
+		env.MYSTAGE_NAME = 'Build'
         sh '''
         mkdir build
         cd build
@@ -32,8 +32,8 @@ def buildAll() {
 }
 
 def testAll() {
-	echo 'testing all'
-    	MYSTAGE_NAME = 'Test'
+	    echo 'testing all'
+    	env.MYSTAGE_NAME = 'Test'
     	sh '''
 		cd build
     	make test
@@ -44,16 +44,16 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-	MYSTAGE_NAME = 'Regression Testing'
-	sh '''
-	cp tests/testScripts/run_all_regressions_python.py .
-	python3 run_all_regressions_python4.py 0	#deleted the -m
-	'''
+		env.MYSTAGE_NAME = 'Regression Testing'
+		sh '''
+		cp tests/testScripts/run_all_regressions_python.py .
+		python3 run_all_regressions_python4.py 0	
+		'''
 }
 
 def deploy(){
         echo 'Deploying'
-		MYSTAGE_NAME = 'Deploy'
+		env.MYSTAGE_NAME = 'Deploy'
         sh '''
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
