@@ -4,8 +4,9 @@
 
 struct forwardModelInput
 {
-       PMLWidthFactor pmlWidthFactor;
-       SourceParameter sourceParameter;
+    // For more info on input parameters, see the doc/README file
+    PMLWidthFactor pmlWidthFactor;
+    SourceParameter sourceParameter;
 };
 
 #endif // FOWARDMODELINPUT_H
