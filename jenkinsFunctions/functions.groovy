@@ -22,8 +22,8 @@ def setEnvironment() {
 
 def buildAll() {
         echo 'Building..'
+		STAGE_NAME = 'Build'
         sh '''
-		env.STAGE_NAME = 'Build'
         #mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
@@ -33,8 +33,8 @@ def buildAll() {
 
 def testAll() {
 	echo 'testing all'
+    	STAGE_NAME = 'Test'
     	sh '''
-    	env.STAGE_NAME = 'Test'
 		cd build
     	make test
     	ctest -T test --no-compress-output
@@ -44,8 +44,8 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
+	STAGE_NAME = 'Regression Testing'
 	sh '''
-	env.STAGE_NAME = 'Regression Testing'
 	cp tests/testScripts/run_all_regressions_python.py .
 	python3 run_all_regressions_python.py 0	#deleted the -m
 	'''
@@ -53,8 +53,8 @@ def regressiontest() {
 
 def deploy(){
         echo 'Deploying'
+		STAGE_NAME = 'Deploy'
         sh '''
-		env.STAGE_NAME = 'Deploy'
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
         cp -r pythonScripts/* FWIInstall/
