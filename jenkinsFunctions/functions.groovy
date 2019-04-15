@@ -14,7 +14,7 @@ def setEnvironment() {
         env.COMMIT_MESSAGE = sh(returnStdout: true, script: "git log --format=%B -n 1 ${SHORT_COMMIT_CODE}").trim()
         env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
         env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
-        env.STAGE_NAME = 'Preparing'
+        env.MYSTAGE_NAME = 'Preparing'
 		// Set build name and description accordingly
         currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
         currentBuild.description = "${COMMIT_MESSAGE}"
@@ -22,7 +22,7 @@ def setEnvironment() {
 
 def buildAll() {
         echo 'Building..'
-		STAGE_NAME = 'Build'
+		MYSTAGE_NAME = 'Build'
         sh '''
         mkdir build
         cd build
@@ -33,7 +33,7 @@ def buildAll() {
 
 def testAll() {
 	echo 'testing all'
-    	STAGE_NAME = 'Test'
+    	MYSTAGE_NAME = 'Test'
     	sh '''
 		cd build
     	make test
@@ -44,7 +44,7 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-	STAGE_NAME = 'Regression Testing'
+	MYSTAGE_NAME = 'Regression Testing'
 	sh '''
 	cp tests/testScripts/run_all_regressions_python.py .
 	python3 run_all_regressions_python4.py 0	#deleted the -m
@@ -53,7 +53,7 @@ def regressiontest() {
 
 def deploy(){
         echo 'Deploying'
-		STAGE_NAME = 'Deploy'
+		MYSTAGE_NAME = 'Deploy'
         sh '''
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
