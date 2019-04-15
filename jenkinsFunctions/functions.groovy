@@ -69,7 +69,7 @@ def sendEmail() {
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
         }
-        else{           #if(currentBuild.currentResult == "FAILURE") {
+        else{          
                 email.sendEmailFailure()
         }
 }

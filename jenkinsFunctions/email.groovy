@@ -22,7 +22,7 @@ def sendEmailFailure() {
 
         subject: " ${env.JOB_NAME} returned status " + currentBuild.currentResult, \
 
-        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE}\nBranch: ${env.JOB_NAME}\nRan with status: FAILURE \   #" \ + currentBuild.currentResult +  "
+        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE}\nBranch: ${env.JOB_NAME}\nRan with status: FAILURE \   
 		
 		\n\n Stage where error occurred: ${env.STAGE_NAME}\n " + \
 
