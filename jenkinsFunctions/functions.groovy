@@ -24,7 +24,7 @@ def buildAll() {
         echo 'Building..'
 		STAGE_NAME = 'Build'
         sh '''
-        #mkdir build
+        mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
         make install
@@ -47,7 +47,7 @@ def regressiontest() {
 	STAGE_NAME = 'Regression Testing'
 	sh '''
 	cp tests/testScripts/run_all_regressions_python.py .
-	python3 run_all_regressions_python.py 0	#deleted the -m
+	python3 run_all_regressions_python4.py 0	#deleted the -m
 	'''
 }
 
