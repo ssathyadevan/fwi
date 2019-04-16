@@ -24,7 +24,7 @@ def buildAll() {
         echo 'Building..'
 		env.MYSTAGE_NAME = 'Build'
         sh '''
-        mkdir build
+        #mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
         make install
@@ -35,7 +35,7 @@ def testAll() {
 	    echo 'testing all'
     	env.MYSTAGE_NAME = 'Test'
     	sh '''
-		cd build1
+		cd build
     	make test
     	ctest -T test --no-compress-output
     	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
@@ -72,6 +72,10 @@ def sendEmail() {
         else{          
                 email.sendEmailFailure()
         }
+}
+def sendEmailFailures() {
+        email.sendEmailFailure()
+        
 }
 return this
 
