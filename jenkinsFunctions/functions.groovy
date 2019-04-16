@@ -35,8 +35,8 @@ def testAll() {
 	    echo 'testing all'
     	env.MYSTAGE_NAME = 'Test'
     	sh '''
-		cd build
-    	#make test
+		cd build1
+    	make test
     	ctest -T test --no-compress-output
     	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
     	'''
