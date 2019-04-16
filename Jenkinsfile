@@ -79,7 +79,7 @@ pipeline{
 						else
 						{
 						script {
-                                functions.sendEmailFailures()
+                                functions.sendEmailFailures() #1
                         }
 						}
                 }

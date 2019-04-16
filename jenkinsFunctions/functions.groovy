@@ -24,7 +24,7 @@ def buildAll() {
         echo 'Building..'
 		env.MYSTAGE_NAME = 'Build'
         sh '''
-        #mkdir build
+        #mkdir build 1
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
         make install
