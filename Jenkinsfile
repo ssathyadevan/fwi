@@ -61,7 +61,8 @@ pipeline{
         }
         post {
                 always {
-                        steps{echo 'Creating unit-test Result Summary (junit)'
+						steps{
+                        echo 'Creating unit-test Result Summary (junit)'
 						xmlFiles = FileNameFinder().getFileNames(build, '*.xml')
 						if (xmlFiles.size()>0)
 						{
