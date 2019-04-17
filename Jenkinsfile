@@ -63,9 +63,9 @@ pipeline{
                 always {
 						script{
                         echo 'Creating unit-test Result Summary (junit)'
-						def xmlFiles = new FileNameFinder().getFileNames(build, '*.xml')
+						xmlFiles = FileNameFinder().getFileNames(build, '*.xml')  //def,new
+						
 						if (xmlFiles.size()>0)
-						if (i>0)
 						{
 							xunit (
 											tools: [ CTest (pattern: 'build/*.xml') ])
