@@ -61,12 +61,7 @@ pipeline{
         }
         post {
                 always {
-						script{
                         echo 'Creating unit-test Result Summary (junit)'
-						xmlFiles = FileNameFinder().getFileNames(build, '*.xml')  //def,new
-						
-						if (xmlFiles.size()>0)
-						{
 							xunit (
 											tools: [ CTest (pattern: 'build/*.xml') ])
 							junit ('build/*.xml')
@@ -74,18 +69,12 @@ pipeline{
 						echo 'Cleaning the workspace'
                         //deleteDir()
 						
-
+                        script {
                                 functions.sendEmail()
-                        
-						}
-						else
-						{
+                        }
 
-                                functions.sendEmailFailures() 
-                        
 						}
-						}
-						
                 }
         }
 }
+

@@ -24,7 +24,7 @@ def buildAll() {
         echo 'Building..'
 		env.MYSTAGE_NAME = 'Build'
         sh '''
-        #mkdir build 1
+        mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
         make install
@@ -73,9 +73,6 @@ def sendEmail() {
                 email.sendEmailFailure()
         }
 }
-def sendEmailFailures() {
-        email.sendEmailFailure()
-        
-}
+
 return this
 
