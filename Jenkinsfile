@@ -63,7 +63,7 @@ pipeline{
                 always {
 						steps{
                         echo 'Creating unit-test Result Summary (junit)'
-						xmlFiles = FileNameFinder().getFileNames(build, '*.xml')
+						def xmlFiles = new FileNameFinder().getFileNames(build, '*.xml')
 						if (xmlFiles.size()>0)
 						{
 							xunit (
