@@ -61,10 +61,17 @@ pipeline{
         }
         post {
                 always {
-						steps{
+						
                         echo 'Creating unit-test Result Summary (junit)'
-						def xmlFiles = new FileNameFinder().getFileNames(build, '*.xml')
-						if (xmlFiles.size()>0)
+						new i=0
+						new File('.').eachFileRecurse(build) {
+						if(it.name.endsWith('.xml')) {
+							i=i+1
+						}
+}
+						/*def xmlFiles = new FileNameFinder().getFileNames(build, '*.xml')
+						if (xmlFiles.size()>0)*/
+						if (i>0)
 						{
 							xunit (
 											tools: [ CTest (pattern: 'build/*.xml') ])
@@ -83,7 +90,7 @@ pipeline{
                                 functions.sendEmailFailures() 
                         }
 						}
-						}
+						
                 }
         }
 }
