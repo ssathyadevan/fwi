@@ -64,7 +64,7 @@ pipeline{
 						script{
                         echo 'Creating unit-test Result Summary (junit)'
 						def xmlFiles = new FileNameFinder().getFileNames(build, '*.xml')
-						if (xmlFiles.size()>0)*/
+						if (xmlFiles.size()>0)
 						if (i>0)
 						{
 							xunit (
