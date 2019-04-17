@@ -63,7 +63,7 @@ pipeline{
                 always {
 						
                         echo 'Creating unit-test Result Summary (junit)'
-						new i=0
+						def i=0
 						new File('.').eachFileRecurse(build) {
 						if(it.name.endsWith('.xml')) {
 							i=i+1
