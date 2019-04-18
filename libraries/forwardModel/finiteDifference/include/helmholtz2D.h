@@ -1,9 +1,5 @@
 #pragma once
 
-#include <complex>
-#include <vector>
-#include <string>
-
 #include "Eigen/Sparse"
 #include "grid2D.h"
 #include "finiteDifferenceGrid2D.h"
@@ -12,11 +8,15 @@
 #include "sources.h"
 #include "forwardModelInput.h"
 
+#include <complex>
+#include <vector>
+#include <string>
+
 class Helmholtz2D {
 public:
     explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const forwardModelInput &fmInput);
     ~Helmholtz2D();
-    pressureFieldComplexSerial Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
+    pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
 private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
@@ -31,7 +31,7 @@ private:
     Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
     const SourceParameter _srcInput;
 
-    void BuildMatrix();
-    void BuildVector(const std::array<double, 2> &source);
+    void buildMatrix();
+    void buildVector(const std::array<double, 2> &source);
     void updateChi(const pressureFieldSerial &chi);
 };

@@ -15,22 +15,6 @@ using namespace Eigen;
 
 class Greens_rect_2D_cpu
 {
-
-  std::function< std::complex<double>(double,double) > G_func;
-
-  const grid2D &grid;
-  const sources &src;
-  const receivers &recv;
-  const double k;
-
-  std::complex<double> *G_vol;
-  std::vector< pressureFieldComplexSerial *> G_recv;
-
-  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-
-  Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
-  Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
-
 public:
 
   Greens_rect_2D_cpu(const grid2D &grid_,
@@ -62,6 +46,21 @@ private:
   void create_Greens_recv();
 
   void delete_Greens_recv();
+
+  std::function< std::complex<double>(double,double) > G_func;
+
+  const grid2D &grid;
+  const sources &src;
+  const receivers &recv;
+  const double k;
+
+  std::complex<double> *G_vol;
+  std::vector< pressureFieldComplexSerial *> G_recv;
+
+  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
+
+  Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
+  Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
 
 };
 

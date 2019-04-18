@@ -1,2 +1,2 @@
-add_subdirectory(finiteDifferenceForwardModel)
-add_subdirectory(integralForwardModel)
+add_subdirectory(finiteDifference)
+add_subdirectory(integral)

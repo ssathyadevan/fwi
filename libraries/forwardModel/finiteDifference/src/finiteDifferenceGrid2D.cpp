@@ -13,3 +13,11 @@ FiniteDifferenceGrid2D::FiniteDifferenceGrid2D(const std::array<double, 2> &x_mi
     dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(nx[1]-1);
 }
 
+const std::array<double, 2> &FiniteDifferenceGrid2D::GetGridEnd() const { return x_max; }
+
+const std::array<double, 2> &FiniteDifferenceGrid2D::GetGridStart() const { return x_min; }
+
+const std::array<double, 2> &FiniteDifferenceGrid2D::GetMeshSize() const { return dx; }
+
+const std::array<int, 2> &FiniteDifferenceGrid2D::GetGridDimensions() const { return nx; }
+

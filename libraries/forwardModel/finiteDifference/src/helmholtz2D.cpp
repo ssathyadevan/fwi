@@ -1,7 +1,5 @@
 #include "helmholtz2D.h"
 
-using namespace Eigen;
-
 Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const forwardModelInput &fmInput)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {    
@@ -35,13 +33,22 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
         double z = (src.xSrc[i])[1];
 
         if ( xMin[0] - x + dx[0]*r > extraWidthLeft )
+        {
             extraWidthLeft = xMin[0] - x + dx[0]*r;
+        }
         else if (x - xMax[0] + dx[0]*r > extraWidthRight )
+        {
             extraWidthRight = x - xMax[0] + dx[0]*r;
+        }
+
         if ( xMin[1] - z + dx[1]*r > extraWidthTop )
+        {
             extraWidthTop = xMin[1] - z + dx[1]*r;
+        }
         else if ( z - xMax[1] + dx[1]*r > extraWidthBottom )
+        {
             extraWidthBottom = z - xMax[1] + dx[1]*r;
+        }
     }
 
     int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] );
@@ -76,7 +83,7 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     _newgrid = new FiniteDifferenceGrid2D(xMin, xMax, nx);
 
     updateChi(chi);
-    BuildMatrix();
+    buildMatrix();
 }
 
 Helmholtz2D::~Helmholtz2D()
@@ -109,16 +116,16 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
     }
 }
 
-pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
+pressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
 
     // Construct vector for this source
-    BuildVector(source);
+    buildVector(source);
 
-    VectorXcd result = _solver.solve(_b);
-    if (_solver.info() != Success) {
+    Eigen::VectorXcd result = _solver.solve(_b);
+    if (_solver.info() != Eigen::Success) {
         std::cout << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -144,7 +151,7 @@ pressureFieldComplexSerial Helmholtz2D::Solve(const std::array<double, 2> &sourc
     return pInit;
 }
 
-void Helmholtz2D::BuildMatrix()
+void Helmholtz2D::buildMatrix()
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
@@ -152,7 +159,7 @@ void Helmholtz2D::BuildMatrix()
     double omega = _freq * 2.0 * M_PI;
 
     // Build matrix from new elements
-    std::vector<Triplet<std::complex<double>>> triplets;
+    std::vector<Eigen::Triplet<std::complex<double>>> triplets;
     triplets.reserve(5*nx[0]*nx[1]); // Naive upper bound for nnz's
 
     std::complex<double> val, Sx, Sz, dSx, dSz;
@@ -172,54 +179,54 @@ void Helmholtz2D::BuildMatrix()
             {
                 // Diagonal
                 val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega*nxz*nxz;
-                triplets.push_back(Triplet(index,index,val));
+                triplets.push_back(Eigen::Triplet(index,index,val));
 
                 // Non-diagonal
                 if (i != 0) {
                     val = 1. / (dx[0]*dx[0]);
-                    triplets.push_back(Triplet(index,index-1,val));
+                    triplets.push_back(Eigen::Triplet(index,index-1,val));
                 }
                 if (i != nx[0]-1) {
                     val = 1. /(dx[0]*dx[0]);
-                    triplets.push_back(Triplet(index,index+1,val));
+                    triplets.push_back(Eigen::Triplet(index,index+1,val));
                 }
                 if (j != 0) {
                     val = 1. / (dx[1]*dx[1]);
-                    triplets.push_back(Triplet(index,index-nx[0],val));
+                    triplets.push_back(Eigen::Triplet(index,index-nx[0],val));
                 }
                 if (j != nx[1]-1) {
                     val = 1. / (dx[1]*dx[1]);
-                    triplets.push_back(Triplet(index,index+nx[0],val));
+                    triplets.push_back(Eigen::Triplet(index,index+nx[0],val));
                 }
 
                 // ABC
                 if (j == 0) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[1];
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     val = 1. / (dx[1]*dx[1]);
-                    triplets.push_back(Triplet(index,index+nx[0],val));
+                    triplets.push_back(Eigen::Triplet(index,index+nx[0],val));
                 }
                 if (j == nx[1]-1) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[1];
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     val = 1. / (dx[1]*dx[1]);
-                    triplets.push_back(Triplet(index,index-nx[0],val));
+                    triplets.push_back(Eigen::Triplet(index,index-nx[0],val));
                 }
                 if (i == 0) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[0];
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     val = 1. / (dx[0]*dx[0]);
-                    triplets.push_back(Triplet(index,index+1,val));
+                    triplets.push_back(Eigen::Triplet(index,index+1,val));
                 }
                 if (i == nx[0]-1) {
                     val = (std::complex(0.,2.)*nxz*omega) / dx[0];
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     val = 1. / (dx[0]*dx[0]);
-                    triplets.push_back(Triplet(index,index-1,val));
+                    triplets.push_back(Eigen::Triplet(index,index-1,val));
                 }
             }
             else // PML
@@ -249,48 +256,48 @@ void Helmholtz2D::BuildMatrix()
 
                     // Diagonal
                     val = -2. * Sz / (Sx*dx[0]*dx[0]) - 2. * Sx / (Sz*dx[1]*dx[1]) + Sx*Sz*nxz*nxz*omega*omega;
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     // Non-diagonal
                     if (i != 0) {
                         val = Sz / (Sx*dx[0]*dx[0]) + Sz * dSx / (2.*dx[0]*Sx*Sx);
-                        triplets.push_back(Triplet(index,index-1,val));
+                        triplets.push_back(Eigen::Triplet(index,index-1,val));
                     }
                     if (i != nx[0]-1) {
                         val = Sz / (Sx*dx[0]*dx[0]) - Sz * dSx / (2.*dx[0]*Sx*Sx);
-                        triplets.push_back(Triplet(index,index+1,val));
+                        triplets.push_back(Eigen::Triplet(index,index+1,val));
                     }
                     if (j != 0) {
                         val = Sx / (Sz*dx[1]*dx[1]) + Sx * dSz / (2.*dx[1]*Sz*Sz);
-                        triplets.push_back(Triplet(index,index-nx[0],val));
+                        triplets.push_back(Eigen::Triplet(index,index-nx[0],val));
                     }
                     if (j != nx[1]-1) {
                         val = Sx / (Sz*dx[1]*dx[1]) - Sx * dSz / (2.*dx[1]*Sz*Sz);
-                        triplets.push_back(Triplet(index,index+nx[0],val));
+                        triplets.push_back(Eigen::Triplet(index,index+nx[0],val));
                     }
                 }
                 else
                 {
                     // Diagonal
                     val = -2. / (dx[0]*dx[0]) - 2. / (dx[1]*dx[1]) + omega*omega *nxz*nxz;
-                    triplets.push_back(Triplet(index,index,val));
+                    triplets.push_back(Eigen::Triplet(index,index,val));
 
                     // Non-diagonal
                     if (i != 0) {
                         val = 1. / (dx[0]*dx[0]);
-                        triplets.push_back(Triplet(index,index-1,val));
+                        triplets.push_back(Eigen::Triplet(index,index-1,val));
                     }
                     if (i != nx[0]-1) {
                         val = 1. /(dx[0]*dx[0]);
-                        triplets.push_back(Triplet(index,index+1,val));
+                        triplets.push_back(Eigen::Triplet(index,index+1,val));
                     }
                     if (j != 0) {
                         val = 1. / (dx[1]*dx[1]);
-                        triplets.push_back(Triplet(index,index-nx[0],val));
+                        triplets.push_back(Eigen::Triplet(index,index-nx[0],val));
                     }
                     if (j != nx[1]-1) {
                         val = 1. / (dx[1]*dx[1]);
-                        triplets.push_back(Triplet(index,index+nx[0],val));
+                        triplets.push_back(Eigen::Triplet(index,index+nx[0],val));
                     }
                 }
             }
@@ -302,13 +309,13 @@ void Helmholtz2D::BuildMatrix()
 
     _solver.analyzePattern(_A);
     _solver.factorize(_A);
-    if (_solver.info() != Success) {
+    if (_solver.info() != Eigen::Success) {
         std::cout << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void Helmholtz2D::BuildVector(const std::array<double, 2> &source) {
+void Helmholtz2D::buildVector(const std::array<double, 2> &source) {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
     std::array<double, 2> xMin = _newgrid->GetGridStart();
