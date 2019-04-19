@@ -18,43 +18,43 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     _PMLwidth[0] = std::ceil(fmInput.pmlWidthFactor.x*waveLength/dx[0]);
     _PMLwidth[1] = std::ceil(fmInput.pmlWidthFactor.z*waveLength/dx[1]);
 
-    //sources can be outside imaging domain. Area that we solve for needs to include all sources
-    double extraWidthLeft = 0.0;
-    double extraWidthRight = 0.0;
-    double extraWidthBottom = 0.0;
-    double extraWidthTop = 0.0;
-
     // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
 
-    for (int i = 0; i < src.nSrc; i++)
+    //sources can be outside imaging domain. Area that we solve for needs to include all sources
+    double extraWidthLeft = 0.0;
+    double extraWidthRight = 0.0;
+    double extraHeightBottom = 0.0;
+    double extraHeightTop = 0.0;
+
+    const std::array<double,2> srcXmax = *max_element(src.xSrc.begin(), src.xSrc.end(), [](const std::array<double,2> &lhs, const std::array<double,2> &rhs){return lhs[0] < rhs[0];});
+    const std::array<double,2> srcXmin = *min_element(src.xSrc.begin(), src.xSrc.end(), [](const std::array<double,2> &lhs, const std::array<double,2> &rhs){return lhs[0] < rhs[0];});
+
+    const std::array<double,2> srcZmax = *max_element(src.xSrc.begin(), src.xSrc.end(), [](const std::array<double,2> &lhs, const std::array<double,2> &rhs){return lhs[1] < rhs[1];});
+    const std::array<double,2> srcZmin = *min_element(src.xSrc.begin(), src.xSrc.end(), [](const std::array<double,2> &lhs, const std::array<double,2> &rhs){return lhs[1] < rhs[1];});
+
+    if ( xMin[0] - srcXmin[0] + dx[0]*r > extraWidthLeft )
     {
-        double x = (src.xSrc[i])[0];
-        double z = (src.xSrc[i])[1];
+        extraWidthLeft = xMin[0] - srcXmin[0] + dx[0]*r;
+    }
+    if (srcXmax[0] - xMax[0] + dx[0]*r > extraWidthRight )
+    {
+        extraWidthRight = srcXmax[0] - xMax[0] + dx[0]*r;
+    }
 
-        if ( xMin[0] - x + dx[0]*r > extraWidthLeft )
-        {
-            extraWidthLeft = xMin[0] - x + dx[0]*r;
-        }
-        else if (x - xMax[0] + dx[0]*r > extraWidthRight )
-        {
-            extraWidthRight = x - xMax[0] + dx[0]*r;
-        }
-
-        if ( xMin[1] - z + dx[1]*r > extraWidthTop )
-        {
-            extraWidthTop = xMin[1] - z + dx[1]*r;
-        }
-        else if ( z - xMax[1] + dx[1]*r > extraWidthBottom )
-        {
-            extraWidthBottom = z - xMax[1] + dx[1]*r;
-        }
+    if ( xMin[1] - srcZmax[1] + dx[1]*r > extraHeightTop )
+    {
+        extraHeightTop = xMin[1] - srcZmax[1] + dx[1]*r;
+    }
+    if ( srcZmin[1] - xMax[1] + dx[1]*r > extraHeightBottom )
+    {
+        extraHeightBottom = srcZmin[1] - xMax[1] + dx[1]*r;
     }
 
     int extraGridPointsLeft   = std::ceil( extraWidthLeft   / dx[0] );
     int extraGridPointsRight  = std::ceil( extraWidthRight  / dx[0] );
-    int extraGridPointsBottom = std::ceil( extraWidthBottom / dx[1] );
-    int extraGridPointsTop    = std::ceil( extraWidthTop    / dx[1] );
+    int extraGridPointsBottom = std::ceil( extraHeightBottom / dx[1] );
+    int extraGridPointsTop    = std::ceil( extraHeightTop    / dx[1] );
 
     _idxUpperLeftDomain[0]  = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1]  = _PMLwidth[1] + extraGridPointsTop;
