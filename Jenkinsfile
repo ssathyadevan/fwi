@@ -62,14 +62,19 @@ pipeline{
         post {
                 always {
                         echo 'Creating unit-test Result Summary (junit)'
-                        xunit (
-                                        tools: [ CTest (pattern: 'build/*.xml') ])
-                        junit ('build/*.xml')
-                        echo 'Cleaning the workspace'
+							xunit (
+											tools: [ CTest (pattern: 'build/*.xml') ])
+							junit ('build/*.xml')
+                        
+						echo 'Cleaning the workspace'
                         //deleteDir()
+						
                         script {
                                 functions.sendEmail()
                         }
+
+						}
                 }
         }
-}
+
+

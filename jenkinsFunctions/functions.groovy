@@ -14,13 +14,15 @@ def setEnvironment() {
         env.COMMIT_MESSAGE = sh(returnStdout: true, script: "git log --format=%B -n 1 ${SHORT_COMMIT_CODE}").trim()
         env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
         env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
-        // Set build name and description accordingly
+        env.MYSTAGE_NAME = 'Preparing'
+		// Set build name and description accordingly
         currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
         currentBuild.description = "${COMMIT_MESSAGE}"
 }
 
 def buildAll() {
         echo 'Building..'
+		env.MYSTAGE_NAME = 'Build'
         sh '''
         mkdir build
         cd build
@@ -31,9 +33,10 @@ def buildAll() {
 }
 
 def testAll() {
-	echo 'testing all'
+	    echo 'testing all'
+    	env.MYSTAGE_NAME = 'Test'
     	sh '''
-    	cd build
+		cd build
     	make test
     	ctest -T test --no-compress-output
     	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
@@ -42,13 +45,16 @@ def testAll() {
 
 def regressiontest() {
         echo 'Running regression tests'
-	sh '''
-	sh tests/testScripts/run_all_regression_tests.sh	
-	'''
+		env.MYSTAGE_NAME = 'Regression Testing'
+		sh '''
+		cp tests/testScripts/run_all_regressions_python.py .
+		python3 run_all_regressions_python.py 0	
+		'''
 }
 
 def deploy(){
         echo 'Deploying'
+		env.MYSTAGE_NAME = 'Deploy'
         sh '''
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
@@ -64,9 +70,10 @@ def sendEmail() {
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
         }
-        if(currentBuild.currentResult == "FAILURE") {
+        else{          
                 email.sendEmailFailure()
         }
 }
+
 return this
 
