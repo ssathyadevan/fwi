@@ -2,7 +2,7 @@
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
-#include "IntegralForwardModel.h"
+#include "integralForwardModel.h"
 #include "cpuClock.h"
 
 

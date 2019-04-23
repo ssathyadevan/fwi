@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "inversionInterface.h"
-#include "IntegralForwardModel.h"
+#include "forwardModelInterface.h"
 #include "conjugateGradientInput.h"
 
 using std::cout;

@@ -1,7 +1,6 @@
 #ifndef FORWARDMODELINTERFACE_H
 #define FORWARDMODELINTERFACE_H
 
-#include "forwardModelInput.h"
 #include "pressureFieldSerial.h"
 #include "pressureFieldComplexSerial.h"
 #include "grid2D.h"
@@ -38,7 +37,7 @@ class ForwardModelInterface
 
 public:
     ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq, const forwardModelInput &fmInput);
+                          const frequenciesGroup &freq);
 
     virtual ~ForwardModelInterface();
 
@@ -46,8 +45,6 @@ public:
     const sources& getSrc();
     const receivers& getRecv();
     const frequenciesGroup& getFreq();
-
-    const forwardModelInput& getForwardModelInput();
 
     virtual void calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
     virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
@@ -68,7 +65,6 @@ protected:
     const sources           &_src;
     const receivers         &_recv;
     const frequenciesGroup  &_freq;
-    const forwardModelInput &_fmInput;
 
 };
 

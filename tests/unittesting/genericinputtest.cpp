@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include "genericInputCardReader.h"
+
+#include <gtest/gtest.h>
 #include <iostream>
 
 //Generic Input Card test:

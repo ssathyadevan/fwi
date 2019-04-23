@@ -1,9 +1,9 @@
-#include "IntegralForwardModel.h"
+#include "integralForwardModel.h"
 
 IntegralForwardModel::IntegralForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
                            const frequenciesGroup &freq, const forwardModelInput &fmInput)
-    : ForwardModelInterface (grid, src, recv, freq, fmInput),
-      _Greens(), _p0(), _pTot(), _Kappa()
+    : ForwardModelInterface (grid, src, recv, freq),
+      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {
     std::cout << "Creating Greens function field..." << std::endl;
     createGreens();
@@ -69,7 +69,7 @@ void IntegralForwardModel::createGreens()
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
-        _Greens[i] = new Greens_rect_2D_cpu(_grid, Helmholtz2D, _src, _recv, _freq.k[i]);
+        _Greens[i] = new Greens_rect_2D_cpu(_grid, GreensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
     }
 }
 

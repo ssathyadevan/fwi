@@ -9,6 +9,7 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
+#include "integralForwardModel.h"
 
 void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput);
 void writePlotInput(genericInput gInput);

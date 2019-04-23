@@ -25,6 +25,7 @@ public:
     const std::array<int, 2> &GetGridDimensions() const { return nx; }
     const std::array<double, 2> &GetCellDimensions() const { return dx; }
     const std::array<double, 2> &GetGridStart() const { return x_min; }
+    const std::array<double, 2> &GetGridEnd() const { return x_max; }
 
     int GetNumberOfGridPoints() const { return nGridPoints; }
     double GetCellVolume() const { return cellVolume; }
