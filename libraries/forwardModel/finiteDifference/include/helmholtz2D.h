@@ -6,7 +6,7 @@
 #include "frequenciesGroup.h"
 #include "pressureFieldComplexSerial.h"
 #include "sources.h"
-#include "forwardModelInput.h"
+#include "finiteDifferenceInput.h"
 
 #include <complex>
 #include <vector>
@@ -14,7 +14,7 @@
 
 class Helmholtz2D {
 public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const forwardModelInput &fmInput);
+    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceInput &fmInput);
     ~Helmholtz2D();
     pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
 private:

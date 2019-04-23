@@ -2,7 +2,7 @@
 #include "helmholtz2D.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
-                           const frequenciesGroup &freq, const forwardModelInput &fmInput)
+                           const frequenciesGroup &freq, const finiteDifferenceInput &fmInput)
     : ForwardModelInterface (grid, src, recv, freq),
       _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {

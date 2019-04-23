@@ -4,7 +4,7 @@
 #include "pressureFieldComplexSerial.h"
 #include "grid2D.h"
 #include "sources.h"
-#include "forwardModelInput.h"
+#include "finiteDifferenceInput.h"
 
 
 /* Test Finite Difference implementation of calculating pTot by comparing it to
@@ -31,7 +31,7 @@ TEST(helmholtz2DTest, testClass)
     SourceParameter srcPar;
     srcPar.r = 4;
     srcPar.beta = 6.31;
-    forwardModelInput fmInput;
+    finiteDifferenceInput fmInput;
     fmInput.pmlWidthFactor = pmlWidth;
     fmInput.sourceParameter = srcPar;
     Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi, fmInput);
