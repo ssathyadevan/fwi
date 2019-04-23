@@ -11,7 +11,7 @@
 \usepackage{relsize}
 \usepackage{latexsym}
 \usepackage{subfigure}
-\usepackage{hyperref}
+\usepackage{hyperref,cleveref}
 \usepackage{nomencl}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[normalem]{ulem}
@@ -70,6 +70,8 @@
 \newcommand{\xs}{\mathbf{x}_\text{s}}
 \newcommand{\xr}{\mathbf{x}_\text{r}}
 \newcommand{\x}{\mathbf{x}}
+\newcommand{\n}{\mathbf{n}}
+\newcommand{\s}{\mathbf{s}}
 
 \newtheorem{thm}{Theorem}[section]
 \makenomenclature
@@ -305,7 +307,6 @@ Substituting in (\ref{eq:splitHelmholtzU0}) results in
 with $f_\text{ind}(\mathbf{x}) = k_0^2 \chi(\mathbf{x}) u(\mathbf{x})$
 the induced source term.
 
-
 \subsubsection{The Contrast function}
 The contrast function is defined as:
 
@@ -325,7 +326,155 @@ and the measured seismic data.
 Notice that the contrast is generally unknown, and will be
 approximated using an iterative scheme. During each step the induced
 source is considered constant and known so we basically solve the same
-equation as (\ref{eq:generalGreensSol}) each step.
+equation as (\ref{eq:GeneralGreensSol}) each step.
+
+\subsection{Finite Difference Approach}
+Instead of solving the Helhmoltz equation using Green's functions, it is also possible to solve the equation using a finite difference approach. In 2D the domain $\Omega=[x_{\min},x_{\max}]\times [z_{\min},z_{\max}]$ is discretized as follows:
+
+\begin{equation}
+G_{h_x,h_z} = \{(x_i,z_j): x_i = x_{\min}+ ih_x, z_j=z_{\min}+jh_z; 1\leq i,j\leq n\},
+\end{equation} 
+
+where $h_x$ and $h_z$ denote the cell size in their respective directions. Note that the positive direction for $x$ is from left to right ($x\rightarrow$), and for $z$ downwards ($z\downarrow$). For internal grid points, i.e. points not on the boundary, the discretized Helmholtz equation is given as 
+
+\begin{equation} \label{eqn:discret}
+\frac{u_{i+1,j}-2u_{i,j}+u_{i-1,j}}{h_x^2} + \frac{u_{i,j+1}-2u_{i,j}+u_{i,j-1}}{h_z^2} + k_{ij}^2u_{ij}= f_{ij},
+\end{equation}
+
+where $u_{i,j}=u(x_i,z_j)$. Boundary conditions are required to minimize reflections. There are three basic approaches.
+\begin{enumerate}
+	\item Add a damping term $i\omega\alpha u$ to the Helmholtz equation, add an extra layer to the domain and set $\alpha$ increasing towards the boundary.
+	\item Use Absorbing Boundary Conditions (ABC), which are boundary conditions that filter out waves.
+	\item Use Perfectly Matching Layers (PML), which is basically a more sophisticated version of the first option.
+\end{enumerate}
+
+The problem with the first option is that $\alpha$ needs tweaking based on $\omega$. ABC can only prevent some reflections since they are bad at preventing reflections from waves traveling almost tangential to the boundary. Therefore, PML seems to be the best option \cite{Comparison}. Both the first order ABC and PML are implemented. Second order ABC are not implemented.\footnote{For the theory, see \cref{sec:ABC}.} The user can choose which approach to use by adjusting input card parameters (see \cref{sec:FDimplementation} for more information). In practice, ABC perform better than PML. Implementing second order ABC may perform even better.
+
+\subsubsection{First Order ABC}
+ABC can be used to (partially) prevent reflections. First we assume that the index of refraction $n(\x)\equiv C_1$ close to the boundary for some $C_1\in \mathbb{R}$. The main idea of ABC is that close to the boundary the solution to the full problem can be approximated by a plane wave that propagates in a direction normal to the boundary \cite{LectNotes}, i.e.
+
+\begin{equation}
+u(\x) \approx Ce^{i\omega C_1 \hat{\n}\cdot \x},
+\end{equation}
+
+where $\hat{\n}$ denotes the outward pointing normal of the boundary. Now consider, for example, the upper boundary $\Gamma_0$. We want the ABC to block all outgoing waves, so that they cannot cause reflections. Since we assumed that waves close to the boundary can be approximated by a wave traveling in a direction normal to the boundary, we want the waves with direction $[0,-1]^\top$ to be blocked. Now
+
+\begin{equation}
+\frac{\partial u}{\partial \hat{\n}} -i\omega C_1 u = i\omega CC_1e^{-i\omega C_1z} - i\omega CC_1e^{-i \omega C_1 z} = 0
+\end{equation}
+
+for $\hat{\n}=[0,-1]^\top$ and for all $C\in\mathbb{R}$\footnote{Since, for $\hat{\n} = [\hat{n}_1,\hat{n}_2]^\top$, we have 
+	\begin{equation*}
+	\frac{\partial u}{\partial \hat{\n}} -i\omega nu= \nabla u\cdot \hat{\n} -i\omega nu= i\omega nC (\hat{n}_1^2 e^{i\omega n(\hat{n}_1x+\hat{n}_2z)} + \hat{n}_2^2e^{i\omega n(\hat{n}_1x+\hat{n}_2z)})-i\omega nCe^{i\omega n(\hat{n}_1x+\hat{n}_2z)}
+	\end{equation*}}. Hence the ABC can be formulated as
+
+\begin{equation}
+\frac{\partial u}{\partial \hat{\n}} - i\omega nu=0,
+\end{equation}
+
+The ABC formulated above are first order accurate in the angle at which the wave strikes the boundary \cite{AbsorpationRates}.
+
+\subsubsection{Discretization}
+For points on the boundary not all neighbours exist. Consider, for example, the top left boundary point. There $u_{i-1,j}$ and $u_{i,j+1}$ do not exist. From the boundary conditions it follows that
+
+\begin{eqnarray}
+&& \frac{\partial u}{\partial \hat{\n}} - i\omega nu = -\frac{\partial u}{\partial x} - i\omega nu =0\\
+&\leadsto& -\frac{u_{i+1,j}-u_{i-1,j}}{2h_x}-i\omega n_{ij} u_{ij}=0\\
+&\implies& u_{i-1,j} = 2h_xi\omega n_{ij}u_{ij}+u_{i+1,j}
+\end{eqnarray}
+
+where $\hat{\n}=[-1,0]^\top$ is the outward pointing normal and 
+
+\begin{eqnarray}
+&& \frac{\partial u}{\partial \hat{\n}} - i\omega nu = -\frac{\partial u}{\partial z} - i\omega nu =0\\
+&\leadsto& -\frac{u_{i,j+1}-u_{i,j-1}}{2h_z}-i\omega n_{ij} u_{ij}=0\\
+&\implies& u_{i,j-1} = 2h_zi\omega n_{ij}u_{ij}+u_{i,j+1}
+\end{eqnarray}
+
+where $\hat{\n}=[0,-1]^\top$ is the outward pointing normal (since the positive $z$ direction is downwards). Here we used a central difference discretization. By substituting these relations into \cref{eqn:discret} the final discretization for the boundary point is obtained. 
+
+\subsubsection{Perfectly Matched Layers}
+The basic idea of Perfectly Matched Layers is that an artificial boundary layer is introduced in which the waves decay exponentially. This is done via a coordinate transformation of the Helmholtz equation such that in the original domain the solutions correspond to the solutions of the original equation and in the newly introduced artificial boundary layer the to exponentially decaying ones \cite{Erlangga2008}. The following coordinate transformation is used for both $x$ and $z$.
+
+\begin{equation}
+\frac{\partial }{\partial y} \mapsto \frac{1}{S(y)}\frac{\partial}{\partial y},
+\end{equation}
+
+where 
+
+\begin{equation}
+S(y)=1+\frac{\sigma(y)}{i\omega n}
+\end{equation}
+
+By choosing $\sigma_y(y)$ equal to the square of the distance into the PML, the desired properties are obtained. As a consequence of the coordinate transformation we have to solve the adjusted Helmholtz equation
+
+\begin{equation} \label{eqn:PMLHelmholtz}
+\frac{\partial }{\partial x}\frac{S(z)}{S(x)}\frac{\partial }{\partial x}u + \frac{\partial }{\partial z}\frac{S(x)}{S(z)}\frac{\partial }{\partial z}u + n^2\omega^2 S(x)S(z)u=f(x,z),
+\end{equation}
+
+where we assume $u\equiv 0$ (Dirichlet) on the outer boundary. In the original domain the equation above is simply reduced to the original Helmholtz discretization.
+
+\subsubsection{Discretization}
+Within the original domain, the discretization in \cref{eqn:discret} can be used. In order to obtain the discretization of \cref{eqn:PMLHelmholtz} within the PML, we first have to expand it. 
+
+\begin{eqnarray}
+&& \frac{\partial }{\partial x}\frac{S(z)}{S(x)}\frac{\partial }{\partial x}u + \frac{\partial }{\partial z}\frac{S(x)}{S(z)}\frac{\partial }{\partial z}u + n^2\omega^2 S(x)S(z)u\\
+&=& \frac{S(z)}{S(x)}\frac{\partial^2 u}{\partial x^2}-\frac{S(z)}{S^2(x)}S'(x)\frac{\partial u}{\partial x} + \frac{S(x)}{S(z)}\frac{\partial^2 u}{\partial z^2}-\frac{S(x)}{S^2(z)}S'(z)\frac{\partial u}{\partial z}+ n^2\omega^2 S(x)S(z)u
+\end{eqnarray}
+
+By using central difference discretizations for the first and second derivatives of $u$ we obtain the following discretization.
+
+\begin{eqnarray}
+&&\frac{S(z_j)}{S(x_i)}\frac{u_{i+1,j}-2u_{ij}+u_{i-1,j}}{h_x^2}-\frac{S(z_j)}{S^2(x_i)}S'(x_i)\frac{u_{i+1,j}-u_{i-1,j}}{2h_x}\\
+&+& \frac{S(x_i)}{S(z_j)}\frac{u_{i,j+1}-2u_{ij}+u_{i,j-1}}{h_z^2}-\frac{S(x_i)}{S^2(z_j)}S'(z_j)\frac{u_{i,j+1}-u_{i,j-1}}{2h_z}\\
+&+& n_{ij}^2\omega^2 S(x_i)S(z_j)u_{ij}=f_{ij}
+\end{eqnarray}
+
+\subsubsection{Source Implementation}
+The easiest method to implement the source is by just using a point source, that is, a source located at one precise grid point. In order to achieve this the source coordinates are rounded to the nearest grid point. For a point source, the integral over the cell size should equal $1$, hence the point source value equals $1/h_xh_z$. This is necessary to calculate the pressure field using the finite difference model. The problem with this source implementation is that errors are introduced do due rounding the source positions to the nearest grid point. Especially when combing different forward and inversion models, one would want to avoid this.\\
+
+For this reason another source implementation is added which should more accurately reflect the actual position of the source. This implementation is described in \cite{Hicks}. Basically, the source function used is given by
+
+\begin{equation}
+	\frac{\sin(\pi d(x))}{\pi d(x)}\frac{\sin(\pi d(z))}{\pi d(z)}
+\end{equation}
+
+where $d(y)$ denotes the distance in grid points from the source position. This source function is then multiplied by a so-called window function which basically determines over how many grid points the source is spread out. The final implementation then becomes
+
+\begin{equation}
+	\frac{I_0(\beta \sqrt{1-(d(x)/r)^2})}{I_0(\beta)}\frac{\sin(\pi d(x))}{\pi d(x)}\frac{I_0(\beta \sqrt{1-(d(z)/r)^2})}{I_0(\beta)}\frac{\sin(\pi d(z))}{\pi d(z)},
+\end{equation}
+
+where $I_0(y)$ denotes the Bessel function of the first kind. The parameters $\beta$ and $r$ denote the shape and half-width, respectively. The half-width gives the range in grid points from the actual source position in which the source term will be non-zero. The parameters $r=4$ and $\beta=6.31$ are a good choice under most circumstances \cite{Hicks}.\\
+
+For both source implementations the original domain is enlarged so that it includes all the sources. Note that for $r>0$ addition grid points are required to ensure the whole source is included in the domain.
+
+\subsubsection{Input Card Parameters} \label{sec:FDimplementation}
+Finite difference forward model has its own input card containing four parameters. First the PMLWidthFactor, which determines the width of the PML by multiplying this factor in the $x$ and $z$ direction by the wavelength of the background subsurface. Setting this parameter equal to $0.0$ in both directions entails that ABC are used instead of PML, which is the default setting because in practice ABC performs better than PML.\\
+
+The SourceParameter determines the half-width $r$ (which is a natural number) and shape $\beta$ for the sine source implementation as given in the section above and \cite{Hicks}. By default the parameters are set to $r=4$ and $\beta=6.31$ for the reason given in previous section. When setting $r=0$, the point source implementation will be used.
+
+\subsubsection{Python Scripts}
+Python scripts were written for prototyping purposes. The \texttt{Helmholtz.py} script is a script in which one can compare the exact solution to the (first and second order) ABC and PML on a homogeneous background. The \texttt{HelmholtzPMLWholeGrid.py} contains a PML implementation that also enlarges the grid to include sources outside the grid. Note that both scripts use coordinate systems different from the C++ implementation. These scripts can be extended to test out, for example, a method for extracting $p_{\text{data}}$ (see next section). 
+
+\subsubsection{Notes and Future Work}
+Some notes:
+
+\begin{itemize}
+	\item For the best accuracy, one would need at least $5$ and ideally around $10$ grid points per wavelength. For this reason, higher frequencies tend to lead to worse results (given a fixed grid size).
+\end{itemize}
+
+There is still work that can be done to improve or expand the finite difference forward model. 
+
+\begin{enumerate}
+	\item Second order ABC can be implemented, which are expected to improve the results (see Python script and \cref{sec:ABC}).
+	\item Currently the domain is always enlarged so it includes all the source. In a finite difference context this is necessary for computing the pressure field. Perhaps it is possible to find a method to project the effect of the source on the boundary of the subsurface domain, and use that as a boundary condition to solve the pressure field.
+	\item Extraction of $p_{\text{data}}$ can be implemented by implementing the receivers via the method given in \cite{Hicks}. This would also require the receivers to always be included in the domain, just as the sources are now always included.
+	\item Currently, methods which are required by the Conjugate Gradient inversion model are implemented in the forward model. If an inversion model which does not directly require these methods is implemented, the forward model can be simplified even further (although it then would no longer work with the CG inversion model). After all, the forward model is only there to provide $p_{\text{tot}}$ and $p_{\text{data}}$.
+	\item A different method to solve the system of linear equations can be implemented decrease the execution time. Currently, the $LU$-decomposition is used to solve the system. Faster methods could be explored. One possibility would be to use the same $LU$-decomposition, but permute the matrix before factorization to reduce its bandwidth.
+\end{enumerate}
+
+
 \subsection{\textcolor{orange}{Solver and Noise}}
 \subsubsection{The Conjugate Gradient \textcolor{orange}{(CG)} Scheme}
 \label{conjgrad}
@@ -360,7 +509,7 @@ The error functional is equal to
 \tag*{\texttt{errorFunc}}
 \end{align}
 
-with
+withp	
 
 \begin{align} \label{eq:errorFuncSubEtaInv} \eta^{-1} = \int | p_\text{data}(\xr,
 \xs, \omega) |^2 \df{\xs} \df{\xr} \df{\omega}, \\
@@ -609,7 +758,7 @@ or\\ alternate}};
 The inputs for the program are as follows.
 
 \subsection{Subroutines}
-\subsubsection{\texttt{main.cpp}}
+\subsubsection{main.cpp}
 
 A high level representation of the \texttt{main.cpp} can be viewed in
 the \texttt{FWI.vpp} as a UML diagram.
@@ -621,24 +770,24 @@ determined here and depending on the user input, the objects are
 created. Further, the main function creates the objects for the temple
 inversion and calls the appropriate functions as seen in FWI\_temple.
 
-\subsubsection{\texttt{temple\_inversion}}
+\subsubsection{temple\_inversion}
 
 The main part of the code can be seen in the
 \texttt{temple\_inversion}. Over here, the Green's functions and
 created and the mathematical model detailed in section 2 is executed.
 A brief explanation of the functions can be seen as follows:
 
-\paragraph{\texttt{createGreens()}}
+\paragraph{createGreens()}
 
 This function creates an array of Green's functions of the Helmholtz
 equations. It is called from the Inversion class and refers to the
 equation \ref{eq:GreensFunc2d}.
 
-\paragraph{\texttt{CreateP0()}}
+\paragraph{CreateP0()}
 $p_0$ is the field calculated with the known contrast and follows the
 explanation given in section \ref{nonlinfupdate}.
 
-\paragraph{\texttt{createTotalField()}}
+\paragraph{createTotalField()}
 
 After the initial approximation, first iterative $p_{tot}$ is
 calculated here. This is done by calling the function calcfield(). In
@@ -652,11 +801,11 @@ Based on the input parameters, $\alpha$ is used
 if $\alpha$ is 1 and is not used if it is set
 to 0.
 
-\paragraph{\texttt{eq:calculateData()}}
+\paragraph{eq:calculateData()}
 Once the total field $p_{tot}$ is obtained, the $p_{data}$ is
 calculated according to \ref{eq:calculateData}.
 
-\paragraph{\texttt{Reconstruct()}}
+\paragraph{Reconstruct()}
 The reconstruct function might be the most important function of the
 code. The code runs in an iterative loop to minimise the residuals.
 According to tolerance values determined by the user and the max
@@ -666,7 +815,7 @@ level, the final model is obtained.\\
 
 The Conjugate Gradient scheme detailed in section \ref{conjgrad} is coded here.
 
-\paragraph{\texttt{MakeFigure()}}
+\paragraph{MakeFigure()}
 
 Finally, the \texttt{MakeFigure()} function is called which calls a
 python script to generate the figures.
@@ -745,9 +894,8 @@ Now, the individual scripts for the preProcessing and the processing part can be
 \newline
 \texttt{./FWIProcess}
 \newline
-The input parameters for the code are provided in the input card i.e. default.in. User can create his/her own input card with a new name e.g. \texttt{newCard.in}. To use this input card use the card name as an argument when running the executables, \texttt{./FWIPreProcess newCard} and \texttt{./FWIProcess newCard}.
+The input parameters for the code are provided in the input card i.e. default.in. User can create his/her own input card with a new name e.g. \texttt{newCard.in}. To use this input card use the card name as an argument when running the executables, \texttt{./FWIPreProcess newCard} and \texttt{./FWIProcess newCard}.\newline
 
-\newline
 \noindent For post-processing (i.e. generation of image using the estimated chi values), the python script \texttt{imageCreator\_CMake.py} can be used. This script is located inside the \textbf{parallelized-fwi} folder and can used as,
 \newline
 \texttt{python imageCreator\_CMake.py}
@@ -801,8 +949,14 @@ following figures:
   \label{fig:fig8}
 \end{figure}
 
+\newpage
+\nocite{*}
+\bibliographystyle{abbrv}
+\bibliography{bibliography}
+
 \clearpage
 
+\appendix
 \section{Appendices}
 \subsection{Derivation of the functional derivative of the error functional}
 \label{deriveerrorfunctional}
@@ -871,5 +1025,48 @@ d\vec{x_s}d\vec{x_r}d\omega} , \hat{E}\\
 \mid^{2}_D\\
 \tag*{\texttt{totalCostB0}}
 \end{align}
+
+\section{Absorbing Boundary Conditions}\label{sec:ABC}
+\subsection{Second Order ABC}
+To improve the absorption rate of the ABC, we will consider ABC which are second order accurate in the angle at which the wave strikes the boundary \cite{AbsorpationRates}. They can be formulated as follows.
+
+\begin{equation} \label{eqn:SecondOrderABC}
+\frac{\partial u}{\partial \hat{\n}} - in\omega u - \frac{i}{2\omega n}\frac{\partial^2 u}{\partial \s^2}=0,
+\end{equation}
+
+where $\s$ denotes the vector tangential to the boundary (positive or negative direction does not matter). In the corner specials ABC apply \cite{SecondOrderCorner}
+
+\begin{equation}
+\frac{\partial u}{\partial \hat{\s}}-\frac{3}{2}i\omega nu=0,
+\end{equation}
+
+where $\hat{\s}$ denotes the vector which is the sum of the tangential outward pointing vectors in the $x$ and $z$ directions.
+
+\subsubsection{Discretization}
+Similar to the first order discretization, at the boundary we need to find an expression for the ghost points. Consider, for example, the top boundary ($z=0$). Here $\hat{\n}=[0,-1]^\top$ and $\s=[\pm 1,0]$. Now \cref{eqn:SecondOrderABC} can be discretized as follows.
+
+\begin{eqnarray}
+&&\frac{\partial u}{\partial \hat{\n}} - in\omega u - \frac{i}{2\omega n}\frac{\partial^2 u}{\partial \s^2}= -\frac{\partial u}{\partial z} - in\omega u - \frac{i}{2\omega n}\frac{\partial^2 u}{\partial x^2}=0\\
+&\leadsto& -\frac{u_{i,j+1}-u_{i,j-1}}{2h_z} - i\omega n_{ij}u_{ij}-\frac{i}{2\omega n_{ij}}\frac{u_{i+1,j}-2u_{ij}+u_{i-1,j}}{h_x^2}=0\\
+&\implies& u_{i,j-1} = 2h_z i\omega n_{ij}u_{ij}+u_{i,j+1}+\frac{h_z i}{\omega n_{ij}h_x^2}(u_{i+1,j}-2u_{ij}+u_{i-1,j})=0
+\end{eqnarray}
+
+This can be implemented in a straightforward manner by substituting the relation above into \cref{eqn:discret}.\\
+
+For corner points, e.g., $(x,z)=(0,0)$ with $\hat{\s}=[-1,-1]^\top$ it is not possible to fully discretize the $\partial u/\partial\hat{\s}$ using the central difference formula. Then there would be two unknowns, in this case $u_{i-1,j}$ and $u_{i,j-1}$, and hence no straightforward expression for either of these unknowns to be substituted in \cref{eqn:discret}. For this reason, a central difference scheme is only used in the $x$ direction and a backward/forward scheme is used in the $z$ direction. This leads to the following discretization at $(0,0)$.
+
+\begin{eqnarray}
+&& \frac{\partial u}{\partial \hat{\s}}-\frac{3}{2}i\omega nu= -\frac{\partial u}{\partial x}-\frac{\partial u}{\partial z}-\frac{3}{2}i\omega nu=0\\
+&\leadsto& -\frac{u_{i+1,j}-u_{i-1,j}}{2h_x}-\frac{u_{i,j+1}-u_{i,j}}{h_z}-\frac{3}{2}i\omega n_{ij}u_{ij}=0\\
+&\implies& u_{i-1,j} = (3h_xi\omega n_{i,j}-2\frac{h_x}{h_z})u_{i,j}+u_{i+1,j}+2\frac{h_x}{h_z}u_{i,j+1}=0
+\end{eqnarray}
+
+At the top right corner, with $\hat{\s}=[1,-1]^\top$, the following discretization is used.
+
+\begin{eqnarray}
+&& \frac{\partial u}{\partial \hat{\s}}-\frac{3}{2}i\omega nu= \frac{\partial u}{\partial x}-\frac{\partial u}{\partial z}-\frac{3}{2}i\omega nu=0\\
+&\leadsto& \frac{u_{i+1,j}-u_{i-1,j}}{2h_x}-\frac{u_{i,j+1}-u_{i,j}}{h_z}-\frac{3}{2}i\omega n_{ij}u_{ij}=0\\
+&\implies& u_{i,j+1} = (3h_xi\omega n_{i,j}-2\frac{h_x}{h_z})u_{i,j}+u_{i-1,j}+2\frac{h_x}{h_z}u_{i,j+1}=0
+\end{eqnarray}
 
 \end{document}

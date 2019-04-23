@@ -9,17 +9,24 @@
 
 # We import (in Cpp we would say hashtag include) the libraries allowing access to "the computer"
 
-import subprocess, os, sys
-os.chdir('bin')                    									# Go here and you find the preProcessing executable
-run_fwi_cpp = subprocess.Popen('./FWI_PreProcess ../input/ ../output/ default', shell = True)              	# Run the preProcessing executable
-run_fwi_cpp.wait()                                              					# Wait for that process to finish
+import subprocess, sys
 
-run_fwi_cpp = subprocess.Popen('./FWI_Process ../input/ ../output/ default', shell = True)                       # Run the Processing executable
-run_fwi_cpp.wait()                                                     					# Wait for that process to finish
+caseFolder = ''
 
-os.chdir('../')												# Go to the home directory
-run_visualizer = subprocess.check_call(['python', 'postProcessing.py', 'output']) 				# Run the image visualizer from here. It can run independently
-sys.exit()                                                      					# Back to the terminal, we are done
+if (len(sys.argv)!= 2):
+    print("please supply the directory of a case folder")
+    sys.exit()
+else:
+    caseFolder = sys.argv[1]
+
+run_fwi_cpp = subprocess.Popen('bin/FWI_PreProcess ' + caseFolder, shell = True)             	# Run the preProcessing executable
+run_fwi_cpp.wait()                                              				               	# Wait for that process to finish
+
+run_fwi_cpp = subprocess.Popen('bin/FWI_Process ' + caseFolder, shell = True)                # Run the Processing executable
+run_fwi_cpp.wait()                                                     					      # Wait for that process to finish
+
+run_visualizer = subprocess.check_call(['python', 'postProcessing-python3.py', caseFolder]) 				# Run the image visualizer from here. It can run independently
+sys.exit()                           
 
 
 

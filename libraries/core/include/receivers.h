@@ -15,9 +15,9 @@ class receivers
 public:
 
   const int nRecv;
-  const std::vector< std::array<double, 2> > xRecv;
+  std::vector< std::array<double, 2> > xRecv;
 
-  receivers(const sources &src);
+  receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
 
   void Print();
 

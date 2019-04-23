@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 
-inline void WriteToFileNotToTerminal(std::string outputLocation, std::string cardName, std::string postfix)
+inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix)
 {
-    std::cout << "Printing the program output onto a file named: "+cardName+postfix+".out in the inputOutput folder" << std::endl;
-    std::string tempString = outputLocation + cardName + postfix + ".out";
+    std::cout << "Printing the program output onto a file named: " + runName + postfix + ".out in the output folder" << std::endl;
+    std::string tempString = outputLocation + runName + postfix + ".out";
     if (freopen(tempString.c_str(),"w", stdout)) {}
 }
 

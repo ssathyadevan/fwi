@@ -1,23 +1,26 @@
 #include "inversionRandom.h"
-
-pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *const pData, Input input)
+inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput)
+    :_forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    const int nTotal = forwardModel_->getInput().freq.nTotal*
-            forwardModel_->getInput().nSourcesReceivers.rec*
-            forwardModel_->getInput().nSourcesReceivers.src;
-    double eta = 1.0/(normSq(pData,nTotal));//scaling factor eq 2.10 in thesis
-    double chiEstRes, randomRes;
+    _forwardModel = forwardModel;
+    _riInput = riInput;
+}
 
-    pressureFieldSerial chiEst(forwardModel_->getGrid() ),
-            g(forwardModel_->getGrid() ), gOld(forwardModel_->getGrid() ),
-            zeta(forwardModel_->getGrid() ); // stays here
+pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+{
+    const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
+
+    double eta = 1.0/(normSq(pData,nTotal));
+    double resSq, chiEstRes;
+
+    pressureFieldSerial chiEst(_grid);
 
     chiEst.Zero();
 
-
     // open the file to store the residual log
     std::ofstream file;
-    file.open (input.outputLocation+input.cardName+"Residual.log", std::ios::out | std::ios::trunc);
+    file.open (gInput.outputLocation+gInput.runName+"Residual.log", std::ios::out | std::ios::trunc);
+
     if (!file)
     {
         std::cout<< "Failed to open the file to store residuals" << std::endl;
@@ -25,51 +28,51 @@ pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *con
     }
 
     int counter = 1;
-    //main loop//
-    for(int it=0; it < input.n_max; it++)
-    {
 
-            //forwardModel_->intermediateForwardModelStep1();
-            forwardModel_->calculateResidual(chiEst, pData);
-            chiEstRes = forwardModel_->calculateResidualNormSq(eta);
+    //main loop//
+    for(int it=0; it < _riInput.nMaxOuter; it++)
+    {
+            std::complex<double>* resArray = _forwardModel->calculateResidual(chiEst, pData);
+
+            resSq       = _forwardModel->calculateResidualNormSq(resArray);
+            chiEstRes   = eta * resSq;
 
             //start the inner loop
-            for (int it1=0; it1 < input.iter1.n; it1++)
+            for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
             {
 
-                    pressureFieldSerial tempRandomChi(forwardModel_->getGrid());
+                    pressureFieldSerial tempRandomChi(_grid);
                     tempRandomChi.RandomSaurabh();
-                    forwardModel_->calculateResidual(tempRandomChi, pData);
-                    randomRes = forwardModel_->calculateResidualNormSq(eta);
+
+                    resSq       = _forwardModel->calculateResidualNormSq(resArray);
+                    chiEstRes   = eta * resSq;
 
                     if (it1 == 0)
                     {
                         tempRandomChi.CopyTo(chiEst);
                     }
-                    else if (std::abs(randomRes) < std::abs(chiEstRes))
+                    else if (std::abs(resSq) < std::abs(chiEstRes))
                     {
                         std::cout << "Randomizing the temple again" << std::endl;
                         tempRandomChi.CopyTo(chiEst);
-                        forwardModel_->calculateResidual(chiEst, pData);
-                        chiEstRes = forwardModel_->calculateResidualNormSq(eta);
+
+                        resSq       = _forwardModel->calculateResidualNormSq(resArray);
+                        chiEstRes   = eta * resSq;
                     }
 
-
-
-                    std::cout << it1+1 << "/" << input.iter1.n << "\t (" << it+1 << "/" << input.n_max << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
+                    std::cout << it1+1 << "/" << _riInput.nMaxInner << "\t (" << it+1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
 
                     file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
                     counter++;// store the residual value in the residual log
-
-
+                    
             }
 
-
-        forwardModel_->createTotalField1D(input.iter2, chiEst); // estimate p_tot from the newly estimated chi (chi_est)
+        _forwardModel->calculatePTot(chiEst);
     }
+
     file.close(); // close the residual.log file
 
-    pressureFieldSerial result(forwardModel_->getGrid());
+    pressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
 }

@@ -2,7 +2,8 @@
 #define INVERSIONRANDOM
 
 #include "inversionInterface.h"
-#include "forwardModel.h"
+#include "forwardModelInterface.h"
+#include "randomInversionInput.h"
 
 
 using std::cout;
@@ -11,23 +12,24 @@ using std::endl;
 
 class inversionRandom : public inversionInterface
 {
-private:
-    ForwardModelInterface *forwardModel_;
 
 public:
+
+    inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput);
+
     inversionRandom(const inversionRandom&) = delete;
     inversionRandom& operator=(const inversionRandom&) = delete;
 
-    inversionRandom(ForwardModelInterface *forwardModel)
-    {
-        forwardModel_ = forwardModel;
-    }
+    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
 
-    ~inversionRandom()
-    {
-    }
+private:
+    ForwardModelInterface   *_forwardModel;
+    randomInversionInput             _riInput;
 
-    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, Input input);
+    const grid2D&                    _grid;
+    const sources&                   _src;
+    const receivers&                 _recv;
+    const frequenciesGroup&          _freq;
 };
 
 #endif // INVERSIONRANDOM

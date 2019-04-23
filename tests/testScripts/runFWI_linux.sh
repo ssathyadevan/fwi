@@ -8,6 +8,6 @@ cd bin
 ./FWI_PreProcess ../input/ ../output/ default
 ./FWI_Process ../input/ ../output/ default
 cd ../..
-cp FWI/parallelized-fwi/pythonScripts/postProcessing.py  FWIInstall/
+cp FWI/parallelized-fwi/pythonScripts/postProcessing-python3.py  FWIInstall/
 cd FWIInstall
-python postProcessing.py output
+python postProcessing-python3.py output

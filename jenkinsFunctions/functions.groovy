@@ -14,63 +14,54 @@ def setEnvironment() {
         env.COMMIT_MESSAGE = sh(returnStdout: true, script: "git log --format=%B -n 1 ${SHORT_COMMIT_CODE}").trim()
         env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
         env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
-        // Set build name and description accordingly
+        env.MYSTAGE_NAME = 'Preparing'
+		// Set build name and description accordingly
         currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
         currentBuild.description = "${COMMIT_MESSAGE}"
 }
 
 def buildAll() {
         echo 'Building..'
+		env.MYSTAGE_NAME = 'Build'
         sh '''
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
         make install
         '''
+        //cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
 }
 
 def testAll() {
-    echo 'testing all'
-    sh '''
-    cd build
-    make test
-    ctest -T test --no-compress-output
-    cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
-    '''
+	    echo 'testing all'
+    	env.MYSTAGE_NAME = 'Test'
+    	sh '''
+		cd build
+    	make test
+    	ctest -T test --no-compress-output
+    	cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+    	'''
 }
 
 def regressiontest() {
         echo 'Running regression tests'
-        sh '''
-        mkdir input output
-        cp inputFiles/* input/
-        cd FWIInstall/bin
-        ./FWI_PreProcess ../../input/ ../../output/ default
-        ./FWI_Process ../../input/ ../../output/ default
-        cd ../../pythonScripts
-        cp postProcessing.py ../
-        cd ..
-        python postProcessing.py output/
-        mkdir test
-        cp tests/regression_data/fast/* test/
-        cp tests/testScripts/* test/
-        cp input/default.in test/
-        cp output/* test/
-        cd test
-        python regressionTestPreProcessing.py fast default
-        python regressionTestProcessing.py fast default
-        '''
+		env.MYSTAGE_NAME = 'Regression Testing'
+		sh '''
+		cp tests/testScripts/run_all_regressions_python.py .
+		python3 run_all_regressions_python.py 0	
+		'''
 }
 
 def deploy(){
-                echo 'Deploying'
-                sh '''
-                cp -r inputFiles FWIInstall/
-                cp -r tests FWIInstall/
-                cp pythonScripts/* FWIInstall/
-                tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
-                '''
-                archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+        echo 'Deploying'
+		env.MYSTAGE_NAME = 'Deploy'
+        sh '''
+        cp -r inputFiles FWIInstall/
+        cp -r tests FWIInstall/
+        cp -r pythonScripts/* FWIInstall/
+        tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+        '''
+        archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
 
@@ -79,9 +70,10 @@ def sendEmail() {
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
         }
-        if(currentBuild.currentResult == "FAILURE") {
+        else{          
                 email.sendEmailFailure()
         }
 }
+
 return this
 

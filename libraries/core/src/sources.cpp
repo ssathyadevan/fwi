@@ -26,7 +26,7 @@ sources::sources(const std::array<double, 2> xMin,
 
 void sources::Print()
 {
-    std::cout << "Total number is sources is " << nSrc << ". Positions:" << std::endl;
+    std::cout << "Total number of sources is " << nSrc << ". Positions:" << std::endl;
     for(int i=0; i<nSrc; i++)
     {
         std::cout << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")" << std::endl;
