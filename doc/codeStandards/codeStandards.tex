@@ -1,0 +1,64 @@
+\documentclass{article} 
+\title{Code Standards}
+\input{preamble}
+
+\begin{document}
+\maketitle
+
+\section{Code style}
+For code style, we use the standard QT style from QtCreator (see Code Style settings in Project Settings in QTCreator). Within namespaces, no additional indentation is used.
+
+\section{Code standards}
+
+\subsection{Naming conventions}
+\begin{itemize}
+ \item Filenames, variable names, class names, etc  are \textit{camelCase}. Each word except the first is capitalized. Except for classes and structs, where also the first character is capitalized.
+ \item Abbreviations in variable names should be avoided. Exception, common abbreviations like \textit{json}.
+ \item Header files have extension \verb|.h|, source files have extension \verb|.cpp|.
+ \item Member variables are preceded with an underscore: \verb|_variableName|.
+ \item Avoid protected member variables, use private members and create getter and setter.
+ \item Getter name is member variable name prefixed by \verb|get|: \verb|getVariableName()|.
+ \item Setter name is member variable name prefixed by \verb|set|: \verb|setVariableName()|.
+\end{itemize}
+
+\subsection{Headers}
+\begin{itemize}
+ \item Header safeguarding is achieved using \verb|#pragma once|.
+ \item Includes of system headers with \verb|#include <file.h>|, includes of non-system headers with \verb|#include "file.h"|.
+ \item Headers are order from specific to general. First our own includes, then includes from Eigen, Google Test or other libraries and concluded by the most generic includes from the standard library.
+\end{itemize}
+
+\subsection{Classes}
+\begin{itemize}
+ \item Each class has a header file (\verb|.h|) and a definition file (\verb|.cpp|).
+ \item In definition files variables have names. These names match the names in the definition file.
+ \item Constructors use the initialization list, and the constructor of parent classes as much as possible.
+ \item Implementations of virtual functions in derived classes get the \verb|override| identifier. \verb|virtual| is therefore not repeated.
+ \item The \verb|final| specifier is used on classes \verb|derived final:base|, if it does not make sense to derive classes from given class.
+ \item Move and copy constructors are only explicitly added if they do not have default behavior.
+ \item Be \verb|const| correct; getters are const methods, arguments in setters are const, etc.
+\end{itemize}
+
+\subsection{Arguments}
+\begin{itemize}
+ \item Pass scalar types by value in arguments. 
+ \item Const argument only when possible, so make sure to never copy a variable that was send by value in the arguments.
+ \item Use constant references when passing object argument, as \verb|const type&|
+\end{itemize}
+
+\subsection{Miscellaneous}
+
+\begin{itemize}
+ \item All classes are defined within the appropriate library namespace.
+ \item Namespace name is added as a comment to the closing brace.
+ \item The only thing to be thrown is exceptions derived from \verb|std::exception|.
+ \item Do not throw exceptions from constructors or destructors.
+ \item For initializing variables we use the braced initializer list.
+ \item Use \verb|nullptr| for null pointers, do not just write \verb|0|.
+\end{itemize}
+
+\subsubsection{Example of a class definition}
+
+\verbatiminput{exampleClass.h}
+
+\end{document} 

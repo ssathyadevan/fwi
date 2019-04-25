@@ -13,11 +13,11 @@
 #include <string>
 
 class Helmholtz2D {
-public:
+  public:
     explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceInput &fmInput);
     ~Helmholtz2D();
     pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
-private:
+  private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
     const grid2D _oldgrid;
