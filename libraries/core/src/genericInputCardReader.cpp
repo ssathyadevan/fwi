@@ -11,11 +11,14 @@ genericInputCardReader::genericInputCardReader(const std::string &caseFolder_) :
     }
 
     std::string runName = caseFolder;
+
     const unsigned int idx = runName.find_last_of('/');
     if (std::string::npos != idx)
     {
         runName = runName.substr(idx + 1);
     }
+    if (runName == ".")
+        runName = "default";
 
     _input.caseFolder = caseFolder;
     _input.inputFolder = caseFolder + "/input/";

@@ -1,5 +1,6 @@
 #pragma once
 struct deltaAmplification
 {
-    double start; double slope;
+    double start;
+    double slope;
 };

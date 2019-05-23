@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <vector>
 
 inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix)
 {
@@ -16,5 +17,19 @@ inline double dist(double x, double z)
 {
   return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5);
 }
+
+inline std::vector<std::string> returnInputDirectory(int c, char** v = NULL)
+{
+        if(c < 2) {
+                std::vector<std::string> arguments;
+                arguments.push_back("./");
+                return arguments;
+        } else {
+                std::vector<std::string> arguments(v+1, c+v);
+                return arguments;
+        }
+}
+
+
 
 #endif

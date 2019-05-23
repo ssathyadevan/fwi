@@ -15,15 +15,7 @@ void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
-    {
-        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
-
-        exit(EXIT_FAILURE);
-    }
-
-    std::vector<std::string> arguments(argv+1, argc+argv);
+    std::vector<std::string> arguments = returnInputDirectory(argc, argv);
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
