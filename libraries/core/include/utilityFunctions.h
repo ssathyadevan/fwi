@@ -21,13 +21,11 @@ inline double dist(double x, double z)
 inline std::vector<std::string> returnInputDirectory(int c, char** v = NULL)
 {
         if(c < 2) {
-                std::vector<std::string> arguments;
-                arguments.push_back("./");
-                return arguments;
-        } else {
-                std::vector<std::string> arguments(v+1, c+v);
+                std::vector<std::string> arguments = {"./"};
                 return arguments;
         }
+        std::vector<std::string> arguments(v+1, c+v);
+        return arguments;
 }
 
 
