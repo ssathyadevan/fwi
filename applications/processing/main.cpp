@@ -28,10 +28,10 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
 
     forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    conjugateGradientInversionInputCardReader conjugateGradientInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
-    conjugateGradientInput cgInput = randomInversionReader.getInput();
+    conjugateGradientInput cgInput = conjugateGradientInversionReader.getInput();
 
     if (!gInput.verbose)
     {
