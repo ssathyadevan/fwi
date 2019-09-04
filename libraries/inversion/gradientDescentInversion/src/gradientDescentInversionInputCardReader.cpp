@@ -15,7 +15,7 @@ gradientDescentInversionInput  gradientDescentInversionInputCardReader::getInput
 
 void gradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/CGInput.json");
+    nlohmann::json j = readFile(caseFolder + "/input/GradientDescentInput.json");
 
     gradientDescentInversionInput input
     {

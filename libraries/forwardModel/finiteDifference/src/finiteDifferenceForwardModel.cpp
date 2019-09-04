@@ -225,3 +225,29 @@ void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<do
     }
 }
 
+void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double>* res, pressureFieldComplexSerial &kRes)
+{
+    int l_i, l_j;
+
+    kRes.Zero();
+
+    pressureFieldComplexSerial kDummy(_grid);
+
+    for (int i = 0; i < _freq.nFreq; i++)
+    {
+        l_i = i * _recv.nRecv * _src.nSrc;
+
+        for (int j = 0; j < _recv.nRecv; j++)
+        {
+            l_j = j * _src.nSrc;
+
+            for(int k = 0; k < _src.nSrc; k++)
+            {
+                kDummy = *_Kappa[l_i + l_j + k];
+
+                kRes += kDummy * res[l_i + l_j + k];
+            }
+        }
+    }
+}
+

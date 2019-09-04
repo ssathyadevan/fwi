@@ -22,9 +22,10 @@ private:
     gradientDescentInversion & operator = (const gradientDescentInversion&) = delete;
 
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
-    std::vector<double> differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi);
-    pressureFieldSerial gradientDescent(const std::complex<double> *const pData, pressureFieldSerial xi);
-    double functionF(pressureFieldSerial xi, const std::complex<double> *const pData);
+    std::vector<double> differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi, double eta);
+    pressureFieldSerial gradientDescent(const std::complex<double> *const pData, pressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
+    double functionF(pressureFieldSerial xi, const std::complex<double> *const pData, double eta);
+    double getGamma(std::vector<double> dFdxiOld, std::vector<double> dFdxi, pressureFieldSerial xiOld, pressureFieldSerial xi);
 };
 
 #endif // INVERSION_CPU
