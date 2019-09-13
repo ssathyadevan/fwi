@@ -62,6 +62,10 @@ private:
   Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
   Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
 
+  void product(Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dummy,
+               const Matrix<std::complex<double>, 1, Dynamic, RowMajor>& G_line,
+               const Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dW_vec,
+               int nx, int l1, int l2) const;
 };
 
 #endif /* GREENS_RECT_2D_CPU_H */

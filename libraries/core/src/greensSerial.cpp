@@ -1,4 +1,5 @@
 #include "greensSerial.h"
+#include <chrono>
 
 using namespace Eigen;
 
@@ -54,7 +55,9 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
 
     for(int i=0; i < nx*nz; i++) { dW_vec(i) = p_dW[i]; }
 
-    for(int i=0; i < nx*nz; i++) { eigprod(i) = double(0.0); }
+    eigprod.setZero();
+
+    /***************************************************************************************************/
 
     for(int i=0; i < nz; i++)
     {
@@ -64,7 +67,7 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
             l2 = j*nx;
             l3 = l1 + l2;
 
-            dummy = ( G_vol2.block(0,l1,nx,nx) ) * dW_vec.block(l1+l2,0,nx,1);
+            product(dummy, G_vol2, dW_vec, nx, l1, l3);
             eigprod.block(l2,0,nx,1) += dummy;
 
             if ( (2*i + j < nz) && (i>0) )
@@ -84,7 +87,9 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
             {
                 l2 = j*nx;
                 l3 = l1 + l2;
-                eigprod.block(l3,0,nx,1) += ( G_vol2.block(0,l1,nx,nx) ) * dW_vec.block(l2,0,nx,1);
+
+                product(dummy, G_vol2, dW_vec, nx, l1, l2);
+                eigprod.block(l3,0,nx,1) += dummy;
             }
         }
         else
@@ -95,10 +100,14 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
             {
                 l2 = j*nx;
                 l3 = l1 + l2;
-                eigprod.block(l3,0,nx,1) += ( G_vol2.block(0,l1,nx,nx) ) * dW_vec.block(l2,0,nx,1);
+
+                product(dummy, G_vol2, dW_vec, nx, l1, l2);
+                eigprod.block(l3,0,nx,1) += dummy;
             }
         }
     }
+
+    /***************************************************************************************************/
 
     for(int i=0; i < nx*nz; i++)
     {
@@ -106,6 +115,45 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
     }
     return prod1;
 
+}
+
+void Greens_rect_2D_cpu::product(Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dummyVector,
+                                 const Matrix<std::complex<double>, 1, Dynamic, RowMajor>& G_vol2,
+                                 const Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dW_vec,
+                                 int nx, int l1, int l2) const
+{
+    dummyVector.setZero();
+    std::complex<double> dummy = .0;
+    for (int i = 0; i < nx; i++)
+    {
+        for (int j = 0; j < nx - i; j++)
+        {
+            dummy = G_vol2[ l1 + i ] * dW_vec[ l2 + i + j];
+            dummyVector[ j ] += dummy;
+            if ( (2*i + j < nx) && i != 0 )
+            {
+                dummyVector[ 2*i + j ] += dummy;
+            }
+        }
+    }
+
+    for (int i = 1; i < nx; i++)
+    {
+        if (i <= nx-i)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                dummyVector[ i + j ] += G_vol2[ l1 + i ] * dW_vec[ l2 + j];
+            }
+        }
+        else
+        {
+            for (int j = 0; j < nx - i; j++)
+            {
+                dummyVector[ i + j ] += G_vol2[ l1 + i ] * dW_vec[ l2 + j];
+            }
+        }
+    }
 }
 
 void Greens_rect_2D_cpu::create_Greens_volume()
@@ -136,20 +184,18 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
     const std::array<double, 2> &x_min = grid.GetGridStart();
     const int &nx = nx1[0];
     const int &nz = nx1[1];
-    G_vol2.resize(nx,nx*nz);
+
+    G_vol2.resize(1,nx*nz);
 
     double p2_z = x_min[1] + dx[1]/double(2.0);
-    for(int i=0; i < nx; i++)
-    {
-        double p2_x = x_min[0] + (i + double(0.5) )*dx[0];
-        pressureFieldComplexSerial G_x(grid);
+    double p2_x = x_min[0] + ( double(0.5) )*dx[0];
+    pressureFieldComplexSerial G_x(grid);
 
-        G_x.SetField( [this,vol,p2_x,p2_z] (const double &x, const double &y)
-        {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
+    G_x.SetField( [this,vol,p2_x,p2_z] (const double &x, const double &y)
+    {return vol*G_func( k, dist(x-p2_x, y-p2_z) ); } );
 
-        for (int j=0; j<nx*nz; j++)
-            G_vol2(i,j) = *(G_x.GetDataPtr() + j);
-    }
+    for (int j=0; j<nx*nz; j++)
+        G_vol2(0,j) = *(G_x.GetDataPtr() + j);
 }
 
 void Greens_rect_2D_cpu::create_Greens_recv()
