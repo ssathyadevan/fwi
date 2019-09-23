@@ -6,4 +6,6 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
 add_library( core_library ${CPP_SOURCES_CORE} ${H_HEADERS_CORE} )
 target_link_libraries (core_library Eigen3::Eigen)
+target_link_libraries (core_library -L/usr/lib/x86_64-linux-gnu -lOpenCL)
+
 

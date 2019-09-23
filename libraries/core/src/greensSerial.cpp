@@ -1,5 +1,7 @@
 #include "greensSerial.h"
+#include "CL/cl2.hpp"
 #include <chrono>
+#include <exception>
 
 using namespace Eigen;
 
@@ -46,75 +48,190 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
 
     assert(&grid == &dW.GetGrid());
 
-    Matrix< std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
-    Matrix< std::complex<double>, Dynamic, 1, ColMajor> dummy;
+    bool success = acceleratedDot(G_vol2, p_dW, p_prod);
 
-    dW_vec.resize(nx*nz,NoChange);
-    eigprod.resize(nx*nz,NoChange);
-    dummy.resize(nx,NoChange);
-
-    for(int i=0; i < nx*nz; i++) { dW_vec(i) = p_dW[i]; }
-
-    eigprod.setZero();
-
-    /***************************************************************************************************/
-
-    for(int i=0; i < nz; i++)
+    if (!success) //do CPU multiplication
     {
-        l1 = i*nx;
-        for (int j=0; j < nz-i; j++)
-        {
-            l2 = j*nx;
-            l3 = l1 + l2;
+        Matrix< std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
+        Matrix< std::complex<double>, Dynamic, 1, ColMajor> dummy;
 
-            product(dummy, G_vol2, dW_vec, nx, l1, l3);
-            eigprod.block(l2,0,nx,1) += dummy;
+        dW_vec.resize(nx*nz,NoChange);
+        eigprod.resize(nx*nz,NoChange);
+        dummy.resize(nx,NoChange);
 
-            if ( (2*i + j < nz) && (i>0) )
-            {
-                l4 = 2*l1 + l2;
-                eigprod.block(l4,0,nx,1) += dummy;
-            }
-        }
-    }
+        for(int i=0; i < nx*nz; i++) { dW_vec(i) = p_dW[i]; }
+        eigprod.setZero();
 
-    for(int i=1; i < nz; i++)
-    {
-        if (i <= nz-i)
+        for(int i=0; i < nz; i++)
         {
             l1 = i*nx;
-            for (int j=0; j < i; j++)
+            for (int j=0; j < nz-i; j++)
             {
                 l2 = j*nx;
                 l3 = l1 + l2;
 
-                product(dummy, G_vol2, dW_vec, nx, l1, l2);
-                eigprod.block(l3,0,nx,1) += dummy;
+                product(dummy, G_vol2, dW_vec, nx, l1, l3);
+                eigprod.block(l2,0,nx,1) += dummy;
+
+                if ( (2*i + j < nz) && (i>0) )
+                {
+                    l4 = 2*l1 + l2;
+                    eigprod.block(l4,0,nx,1) += dummy;
+                }
             }
         }
-        else
+
+        for(int i=1; i < nz; i++)
         {
-            l1 = i*nx;
-            int lnz_i = nz-i;
-            for (int j=0; j < lnz_i; j++)
+            if (i <= nz-i)
             {
-                l2 = j*nx;
-                l3 = l1 + l2;
+                l1 = i*nx;
+                for (int j=0; j < i; j++)
+                {
+                    l2 = j*nx;
+                    l3 = l1 + l2;
 
-                product(dummy, G_vol2, dW_vec, nx, l1, l2);
-                eigprod.block(l3,0,nx,1) += dummy;
+                    product(dummy, G_vol2, dW_vec, nx, l1, l2);
+                    eigprod.block(l3,0,nx,1) += dummy;
+                }
+            }
+            else
+            {
+                l1 = i*nx;
+                int lnz_i = nz-i;
+                for (int j=0; j < lnz_i; j++)
+                {
+                    l2 = j*nx;
+                    l3 = l1 + l2;
+
+                    product(dummy, G_vol2, dW_vec, nx, l1, l2);
+                    eigprod.block(l3,0,nx,1) += dummy;
+                }
             }
         }
-    }
 
-    /***************************************************************************************************/
-
-    for(int i=0; i < nx*nz; i++)
-    {
-        p_prod[i] = eigprod(i);
+        for(int i=0; i < nx*nz; i++)
+        {
+            p_prod[i] = eigprod(i);
+        }
     }
     return prod1;
+}
 
+void Greens_rect_2D_cpu::checkSuccess(int success, std::string error) const
+{
+   if (success != CL_SUCCESS)
+   {
+     std::cout << error << ":  " << success << std::endl;
+     throw std::exception();
+   }
+}
+
+bool Greens_rect_2D_cpu::acceleratedDot( const Matrix<std::complex<double>, 1, Dynamic, RowMajor>& G_vol2, const std::complex<double> *dW, std::complex<double> *p_prod ) const
+{
+    try
+    {
+        int nx = GetGrid().GetGridDimensions()[0];
+        int nz = GetGrid().GetGridDimensions()[1];
+        int n = nx*nz;
+
+        std::complex<double>* Gxx = new std::complex<double>[2*nx*nz - nz];
+        for (int i = 0; i < nz; i++ )
+        {
+            int d1 = ( 2*nx - 1 ) * i + nx - 1;
+            Gxx[ d1 ] = G_vol2[ i * nx ];
+            for (int j = 1; j < nx; j++ )
+            {
+                Gxx[ d1 + j] = G_vol2[ i * nx + j];
+                Gxx[ d1 - j] = G_vol2[ i * nx + j];
+            }
+        }
+
+        std::vector<cl::Platform> platformList;
+        cl_int success = cl::Platform::get(&platformList);
+        checkSuccess(success, "no platform found");
+
+        std::string platformName;
+        success = platformList[0].getInfo( CL_PLATFORM_NAME, &platformName);
+        checkSuccess(success, "no platform found");
+
+        std::vector<cl::Device> deviceList;
+        success = platformList[0].getDevices(CL_DEVICE_TYPE_ALL, &deviceList);
+        checkSuccess(success, "no device found");
+
+        cl::Context context( deviceList, nullptr, nullptr, nullptr, &success );
+        checkSuccess(success, "no contex created");
+
+        std::clock_t c_start = std::clock();
+        auto t_start = std::chrono::high_resolution_clock::now();
+
+        cl::Buffer bufGreens( context, CL_MEM_READ_ONLY, (2*n - nz) * sizeof(cl_double2), nullptr, &success );
+        checkSuccess(success, "error allocating matrix A");
+
+        cl::Buffer bufVecB( context, CL_MEM_READ_ONLY, n * sizeof(cl_double2), nullptr, &success );
+        checkSuccess(success, "error allocating vector B");
+
+        cl::Buffer bufVecC( context, CL_MEM_WRITE_ONLY, n * sizeof(cl_double2), nullptr, &success );
+        checkSuccess(success, "error allocating vector C");
+
+        std::ifstream inputFile( "../parallelized-fwi/inputFiles/matVecKernel2.cl" );
+        std::string content( ( std::istreambuf_iterator<char>(inputFile) ), ( std::istreambuf_iterator<char>() ) );
+        cl::Program::Sources source{ { content.c_str(), content.size() } };
+
+        cl::Program program( context, source, &success );
+        checkSuccess(success, "error could not create program");
+
+        success = program.build( deviceList, nullptr, nullptr, nullptr );
+        checkSuccess(success, "error could not build program");
+
+        cl::Kernel kernel(program, "matVecKernel2", &success);
+        checkSuccess(success, "error could not create kernel");
+
+        success = kernel.setArg( 0, bufGreens );
+        checkSuccess(success, "error could not set matA");
+        success = kernel.setArg( 1, bufVecB );
+        checkSuccess(success, "error could not set vectB");
+        success = kernel.setArg( 2, bufVecC );
+        checkSuccess(success, "error could not set vectC");
+        success = kernel.setArg( 3, cl::Local(nx*sizeof(cl_double2)) );
+        checkSuccess(success, "error could not set 4th argument (local memory)");
+        success = kernel.setArg( 4, nx );
+        checkSuccess(success, "error could not set nx");
+        success = kernel.setArg( 5, nz );
+        checkSuccess(success, "error could not set nz");
+
+        int blockSize = 32;
+        cl::NDRange range(n * blockSize);
+
+
+        cl::CommandQueue queue(context, deviceList[0], CL_QUEUE_PROFILING_ENABLE, &success);
+
+        std::vector<cl::Event> events;
+        cl::Event event;
+        success = queue.enqueueWriteBuffer( bufGreens, CL_FALSE, 0, (2*n - nz) * sizeof(cl_double2), Gxx, nullptr, &event );
+        checkSuccess(success, "error could not enque write buffer matA");
+        events.push_back(event);
+
+        success = queue.enqueueWriteBuffer( bufVecB, CL_FALSE, 0, n * sizeof(cl_double2), dW, nullptr, &event );
+        checkSuccess(success, "error could not enque write buffer vecB");
+        events.push_back(event);
+
+        success = queue.enqueueNDRangeKernel( kernel, cl::NullRange, range, cl::NDRange(blockSize), &events, &event );
+        checkSuccess(success, "error could not execute kernel");
+        events.clear();
+        events.push_back(event);
+
+        success = queue.enqueueReadBuffer( bufVecC, CL_TRUE, 0, n * sizeof(cl_double2), p_prod, &events, nullptr );
+        //checkSuccess(success, "error could not copy vectC");
+
+        auto t_end = std::chrono::high_resolution_clock::now();
+        delete[] Gxx;
+    }
+    catch(std::exception )
+    {
+        return false;
+    }
+    return true;
 }
 
 void Greens_rect_2D_cpu::product(Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dummyVector,
