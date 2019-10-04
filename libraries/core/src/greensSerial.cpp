@@ -48,7 +48,7 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSe
 
     assert(&grid == &dW.GetGrid());
 
-    bool success = acceleratedDot(G_vol2, p_dW, p_prod);
+    bool success = false;//acceleratedDot(G_vol2, p_dW, p_prod); turn on when FPGA/GPU is available
 
     if (!success) //do CPU multiplication
     {
