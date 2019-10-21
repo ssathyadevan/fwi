@@ -1,12 +1,12 @@
-#include "inversionRandom.h"
-inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput)
+#include "randomInversion.h"
+randomInversion::randomInversion(ForwardModelInterface *forwardModel, randomInversionInput riInput)
     :_forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;
     _riInput = riInput;
 }
 
-pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 

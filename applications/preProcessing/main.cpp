@@ -1,4 +1,4 @@
-#include "forwardModelInputCardReader.h"
+#include "integralForwardModelInputCardReader.h"
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
@@ -6,7 +6,7 @@
 #include "cpuClock.h"
 
 
-void generateReferencePressureFieldFromChi(const genericInput& gInput, const forwardModelInput& fmInput, const std::string& runName);
+void generateReferencePressureFieldFromChi(const genericInput& gInput, const integralForwardModelInput& fmInput, const std::string& runName);
 
 int main(int argc, char** argv)
 {
@@ -22,8 +22,8 @@ int main(int argc, char** argv)
     genericInputCardReader genericReader(arguments[0]);
     const genericInput      gInput  = genericReader.getInput();
 
-    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    const forwardModelInput fmInput = forwardModelReader.getInput();
+    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    const integralForwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void generateReferencePressureFieldFromChi (const genericInput& gInput, const forwardModelInput& fmInput, const std::string& runName)
+void generateReferencePressureFieldFromChi (const genericInput& gInput, const integralForwardModelInput& fmInput, const std::string& runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
