@@ -1,7 +1,7 @@
 #ifndef CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
 #define CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
 #include "inputCardReader.h"
-#include "conjugateGradientInput.h"
+#include "conjugateGradientInversionInput.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -9,10 +9,10 @@ class conjugateGradientInversionInputCardReader:public inputCardReader
 {
 public:
     conjugateGradientInversionInputCardReader(const std::string &caseFolder);
-    conjugateGradientInput getInput();
+    conjugateGradientInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
-    conjugateGradientInput _input;
+    conjugateGradientInversionInput _input;
 };
 
 #endif // CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H

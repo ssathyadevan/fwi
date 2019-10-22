@@ -1,7 +1,7 @@
 
 #include "genericInputCardReader.h"
 #include "forwardModelInputCardReader.h"
-#include "inversionRandom.h"
+#include "randomInversion.h"
 #include "inputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
@@ -105,7 +105,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
-    inverse = new inversionRandom(model, gInput);
+    inverse = new randomInversion(model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 

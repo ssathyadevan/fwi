@@ -1,5 +1,5 @@
-#include "inversionRandom.h"
-inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, genericInput gInput)
+#include "randomInversion.h"
+randomInversion::randomInversion(ForwardModelInterface *forwardModel, genericInput gInput)
     :_forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     randomInversionInputCardReader randomInversionInputCardReader(gInput.caseFolder);
@@ -7,7 +7,7 @@ inversionRandom::inversionRandom(ForwardModelInterface *forwardModel, genericInp
     _riInput = randomInversionInputCardReader.getInput();
 }
 
-pressureFieldSerial inversionRandom::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 

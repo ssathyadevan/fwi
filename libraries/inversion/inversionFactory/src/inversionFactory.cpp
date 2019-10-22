@@ -1,17 +1,17 @@
 #include "inversionFactory.h"
 #include "conjugateGradientInversion.h"
-#include "inversionRandom.h"
+#include "randomInversion.h"
 
 
 inversionInterface* inversionFactory::createInversion(std::string desired_inversion, ForwardModelInterface *forwardModel, const genericInput gInput){
     inversionInterface* inversion;
-    if (desired_inversion == "conjugateGradient"){
+    if (desired_inversion == "conjugateGradientInversion"){
             inversion = new conjugateGradientInversion(forwardModel, gInput);
             return inversion;
     }
     
-    if (desired_inversion == "random"){
-            inversion = new inversionRandom(forwardModel, gInput);
+    if (desired_inversion == "randomInversion"){
+            inversion = new randomInversion(forwardModel, gInput);
             return inversion;
     }
     

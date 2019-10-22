@@ -8,7 +8,7 @@ TEST(CGInversionInputTest, testCardToInputFunctionality){
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
     conjugateGradientInversionInputCardReader cardReader = conjugateGradientInversionInputCardReader(temp);
-    conjugateGradientInput input = cardReader.getInput();
+    conjugateGradientInversionInput input = cardReader.getInput();
 
     //ASSERT_TRUE(true);
 

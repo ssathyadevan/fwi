@@ -1,5 +1,5 @@
-#ifndef INVERSIONRANDOM
-#define INVERSIONRANDOM
+#ifndef RANDOMINVERSION_H
+#define RANDOMINVERSION_H
 
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
@@ -12,15 +12,15 @@ using std::cout;
 using std::endl;
 
 
-class inversionRandom : public inversionInterface
+class randomInversion : public inversionInterface
 {
 
 public:
 
-    inversionRandom(ForwardModelInterface *forwardModel, genericInput gInput);
+    randomInversion(ForwardModelInterface *forwardModel, genericInput gInput);
 
-    inversionRandom(const inversionRandom&) = delete;
-    inversionRandom& operator=(const inversionRandom&) = delete;
+    randomInversion(const randomInversion&) = delete;
+    randomInversion& operator=(const randomInversion&) = delete;
 
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
 
@@ -34,4 +34,4 @@ private:
     const frequenciesGroup&          _freq;
 };
 
-#endif // INVERSIONRANDOM
+#endif // RANDOMINVERSION_H
