@@ -47,6 +47,10 @@ private:
 
   void delete_Greens_recv();
 
+  void checkSuccess(int success, std::string error) const;
+
+  bool acceleratedDot( const Matrix<std::complex<double>, 1, Dynamic, RowMajor>& G_vol2, const std::complex<double> *dW, std::complex<double> *p_prod ) const;
+
   std::function< std::complex<double>(double,double) > G_func;
 
   const grid2D &grid;
@@ -57,11 +61,15 @@ private:
   std::complex<double> *G_vol;
   std::vector< pressureFieldComplexSerial *> G_recv;
 
-  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
+  Matrix<std::complex<double>, 1, Dynamic, RowMajor> G_vol2;
 
   Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
   Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
 
+  void product(Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dummy,
+               const Matrix<std::complex<double>, 1, Dynamic, RowMajor>& G_line,
+               const Matrix< std::complex<double>, Dynamic, 1, ColMajor>& dW_vec,
+               int nx, int l1, int l2) const;
 };
 
 #endif /* GREENS_RECT_2D_CPU_H */
