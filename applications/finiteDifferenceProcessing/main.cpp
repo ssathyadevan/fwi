@@ -1,7 +1,6 @@
 #include "conjugateGradientInversion.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
-#include "conjugateGradientInversionInputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
@@ -10,7 +9,7 @@
 #include "finiteDifferenceInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
 
-void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const conjugateGradientInput& cgInput, const std::string &runName);
+void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
@@ -20,10 +19,10 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
 
     finiteDifferenceInputCardReader forwardModelReader(gInput.caseFolder);
-    conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    //conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
     finiteDifferenceInput fmInput = forwardModelReader.getInput();
-    conjugateGradientInput cgInput = randomInversionReader.getInput();
+    //conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -36,7 +35,7 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, cgInput, gInput.runName);
+    performInversion(gInput, fmInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -66,7 +65,7 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const conjugateGradientInput& cgInput, const std::string &runName)
+void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -106,7 +105,7 @@ void performInversion(const genericInput& gInput, const finiteDifferenceInput& f
     model = new FiniteDifferenceForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
-    inverse = new conjugateGradientInversion(model, cgInput);
+    inverse = new conjugateGradientInversion(model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 

@@ -1,4 +1,5 @@
-#include "conjugateGradientInversion.h"
+#include "inversionFactory.h"
+#include "inversionInterface.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
@@ -8,21 +9,34 @@
 #include "cpuClock.h"
 #include "forwardModelInputCardReader.h"
 #include "integralForwardModel.h"
+#include <string>
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput,  const std::string &runName);
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
 {
-    std::vector<std::string> arguments = returnInputDirectory(argc, argv);
+    if (argc != 3)
+    {
+        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
+        
+        std::cout << std::endl << "Please specify the desired inversion method" << std::endl;
+        std::cout << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
+
+        exit(EXIT_FAILURE);
+    }
+
+    std::vector<std::string> arguments(argv+1, argc+argv);
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
+    std::string desired_inversion = arguments[1];
 
     forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    //conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    //conjugateGradientInversionInputCardReader conjugateGradientInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
-    //conjugateGradientInput cgInput = randomInversionReader.getInput();
+    //conjugateGradientInput cgInput = conjugateGradientInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -35,11 +49,11 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gInput.runName);
+    performInversion(gInput, fmInput, gInput.runName, desired_inversion);
     clock.End();
     clock.PrintTimeElapsed();
 
-    cout << "Visualisation of the estimated temple using FWI" << endl;
+    std::cout << "Visualisation of the estimated temple using FWI" << std::endl;
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
@@ -65,8 +79,9 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput,  const std::string &runName)
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion)
 {
+    
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
@@ -105,7 +120,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
-    inverse = new conjugateGradientInversion(model, gInput);
+    inverse = inversionFactory::createInversion(desired_inversion, model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 

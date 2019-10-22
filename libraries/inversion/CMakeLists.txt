@@ -1,3 +1,4 @@
 
 add_subdirectory(conjugateGradientInversion)
 add_subdirectory(randomInversion)
+add_subdirectory(inversionFactory)

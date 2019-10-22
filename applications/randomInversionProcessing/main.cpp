@@ -1,6 +1,5 @@
 
 #include "genericInputCardReader.h"
-#include "randomInversionInputCardReader.h"
 #include "forwardModelInputCardReader.h"
 #include "inversionRandom.h"
 #include "inputCardReader.h"
@@ -11,7 +10,7 @@
 #include "cpuClock.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput);
+void performInversion(const genericInput &gInput, const forwardModelInput &fmInput);
 void writePlotInput(genericInput gInput);
 
 int main(int argc, char** argv)
@@ -29,10 +28,10 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
 
     forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    //randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
-    randomInversionInput riInput = randomInversionReader.getInput();
+    //randomInversionInput riInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -45,7 +44,7 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, riInput);
+    performInversion(gInput, fmInput);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -75,7 +74,7 @@ void writePlotInput(genericInput gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput, const randomInversionInput &riInput)
+void performInversion(const genericInput &gInput, const forwardModelInput &fmInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -106,7 +105,7 @@ void performInversion(const genericInput &gInput, const forwardModelInput &fmInp
     model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
 
     inversionInterface *inverse;
-    inverse = new inversionRandom(model, riInput);
+    inverse = new inversionRandom(model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 

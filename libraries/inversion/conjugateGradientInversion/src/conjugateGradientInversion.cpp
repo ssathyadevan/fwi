@@ -1,11 +1,12 @@
 #include <memory>
 #include "conjugateGradientInversion.h"
 
-conjugateGradientInversion::conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput)
+conjugateGradientInversion::conjugateGradientInversion(ForwardModelInterface *forwardModel, const genericInput& gInput)
     :_forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
+	conjugateGradientInversionInputCardReader conjugateGradientInversionReader(gInput.caseFolder);
    _forwardModel = forwardModel;
-   _cgInput = cgInput;
+   _cgInput = conjugateGradientInversionReader.getInput();
 }
 
 double conjugateGradientInversion::findRealRootFromCubic(double a, double b, double c, double d)

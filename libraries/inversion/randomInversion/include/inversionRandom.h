@@ -4,6 +4,8 @@
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
 #include "randomInversionInput.h"
+#include "randomInversionInputCardReader.h"
+#include "genericInput.h"
 
 
 using std::cout;
@@ -15,7 +17,7 @@ class inversionRandom : public inversionInterface
 
 public:
 
-    inversionRandom(ForwardModelInterface *forwardModel, randomInversionInput riInput);
+    inversionRandom(ForwardModelInterface *forwardModel, genericInput gInput);
 
     inversionRandom(const inversionRandom&) = delete;
     inversionRandom& operator=(const inversionRandom&) = delete;
