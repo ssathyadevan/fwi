@@ -43,7 +43,7 @@ int main(int argc, char** argv)
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
     }
 
-    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
