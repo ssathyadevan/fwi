@@ -28,13 +28,21 @@ x = contents[2]                                               # The rest of this
 y,u,v = x.split()
 nzt = int(v)
 
+x = contents[2]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
+y,u,v = x.split()
+nzt_original = int(v)
+
+x = contents[2]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
+y,u,v = x.split()
+nxt_original = int(v)
+
 #zerothfile="src/ShowChi.py"
 filename1 = outputPath + "/output/chi_ref_" + runName + ".txt"   # variable name for the original temple
 filename2 = outputPath + "/output/chi_est_" + runName + ".txt"   # variable name for the calculated temple
 filenameout = outputPath + "/output/" + runName + "Result.png"   # how we store the image
 
 chi1 = np.genfromtxt(filename1)      # start image set up for original image
-chi1 = chi1.reshape((nzt, nxt))
+chi1 = chi1.reshape((nzt_original, nxt_original))
 
 chi2 = np.genfromtxt(filename2)      # start image set up for reconstructed image
 chi2 = chi2.reshape((nzt, nxt))

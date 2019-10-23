@@ -53,6 +53,7 @@ void genericInputCardReader::readCard(const std::string &caseFolder)
         {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]},
         {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]},
         {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]},
+        {j["ngrid_original"]["x"], j["ngrid_original"]["z"]},
         {j["ngrid"]["x"], j["ngrid"]["z"]},
         {j["nSources"], j["nReceivers"]},
         j["fileName"],
