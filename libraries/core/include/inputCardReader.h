@@ -1,5 +1,5 @@
-#ifndef READERVAR
-#define READERVAR
+#pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -18,4 +18,3 @@ protected:
     nlohmann::json readFile(const std::string &fileName);
 };
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef FORWARDMODELINTERFACE_H
-#define FORWARDMODELINTERFACE_H
+#pragma once
 
 #include "pressureFieldSerial.h"
 #include "pressureFieldComplexSerial.h"
@@ -67,6 +66,4 @@ protected:
     const frequenciesGroup  &_freq;
 
 };
-
-#endif
 

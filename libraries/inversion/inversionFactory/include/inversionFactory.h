@@ -1,6 +1,4 @@
-#ifndef INVERSIONFACTORY_H
-#define INVERSIONFACTORY_H
-
+#pragma once
 
 #include "genericInput.h"
 #include "inversionInterface.h"
@@ -16,5 +14,3 @@ public:
 
     static inversionInterface* createInversion(std::string desired_inversion, ForwardModelInterface *forwardModel, const genericInput gInput);
 };
-
-#endif

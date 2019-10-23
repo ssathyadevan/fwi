@@ -1,5 +1,4 @@
-#ifndef SOURCES_RECT_2D_H
-#define SOURCES_RECT_2D_H
+#pragma once
 
 #include <cassert>
 #include <iostream>
@@ -23,4 +22,3 @@ public:
 
 };
 
-#endif

@@ -1,5 +1,5 @@
-#ifndef CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
-#define CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
+#pragma once
+
 #include "inputCardReader.h"
 #include "conjugateGradientInversionInput.h"
 #include <string>
@@ -15,4 +15,3 @@ private:
     conjugateGradientInversionInput _input;
 };
 
-#endif // CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H

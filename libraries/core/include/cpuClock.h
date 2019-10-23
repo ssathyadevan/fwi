@@ -1,5 +1,4 @@
-#ifndef CPUCLOCK_H
-#define CPUCLOCK_H
+#pragma once
 
 #include <ctime>
 
@@ -17,5 +16,3 @@ public:
     void End();
     void PrintTimeElapsed();
 };
-
-#endif /* CPUCLOCK_H */

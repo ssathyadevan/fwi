@@ -1,5 +1,4 @@
-#ifndef VOLFIELD_RECT_2D_H
-#define VOLFIELD_RECT_2D_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -53,4 +52,3 @@ public:
 
 };
 
-#endif /* VOLFIELD_RECT_2D_H */
