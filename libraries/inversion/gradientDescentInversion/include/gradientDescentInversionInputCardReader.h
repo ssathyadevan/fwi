@@ -1,6 +1,5 @@
-#include "gradientDescentInversionInput.h"
-#ifndef GRADIENTDESCENTINVERSIONINPUTCARDREADER_H
-#define GRADIENTDESCENTINVERSIONINPUTCARDREADER_H
+#pragma once
+
 #include "inputCardReader.h"
 #include "gradientDescentInversionInput.h"
 #include <string>
@@ -16,4 +15,3 @@ private:
     gradientDescentInversionInput _input;
 };
 
-#endif // GRADIENTDESCENTINVERSIONINPUTCARDREADER_H

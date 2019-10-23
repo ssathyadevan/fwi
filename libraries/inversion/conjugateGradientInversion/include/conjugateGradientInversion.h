@@ -1,6 +1,4 @@
-#ifndef CONJUGATEGRADIENTINVERSION_H
-#define CONJUGATEGRADIENTINVERSION_H
-
+#pragma once
 
 #include <fstream>
 #include <sstream>
@@ -36,6 +34,3 @@ public:
 
     pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
 };
-
-
-#endif //CONJUGATEGRADIENTINVERSION_H

@@ -1,5 +1,4 @@
-#ifndef INVERSIONINTERFACE_H
-#define INVERSIONINTERFACE_H
+#pragma once
 
 #include "pressureFieldSerial.h"
 #include <complex>
@@ -13,5 +12,3 @@ public:
 
     virtual pressureFieldSerial Reconstruct(const std::complex<double> *const p_data, genericInput input) = 0;
 };
-
-#endif

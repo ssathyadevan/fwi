@@ -1,5 +1,4 @@
-#ifndef GRID_RECT_2D_H
-#define GRID_RECT_2D_H
+#pragma once
 
 #include <array>
 
@@ -32,5 +31,3 @@ public:
     double GetDomainArea() const { return (x_max[0] - x_min[0]) * (x_max[1] - x_min[1]); }
 
 };
-
-#endif

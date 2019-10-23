@@ -1,6 +1,4 @@
-#ifndef FREQUENCIES_GROUP_H
-#define FREQUENCIES_GROUP_H
-
+#pragma once
 
 #include <cassert>
 #include <iostream>
@@ -26,4 +24,3 @@ public:
 
   void Print(int nFreqTotal);
 };
-#endif /* FREQUENCIES_GROUP_H */

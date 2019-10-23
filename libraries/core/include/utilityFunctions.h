@@ -1,5 +1,4 @@
-#ifndef UTILITYFUNCTIONS_H
-#define UTILITYFUNCTIONS_H
+#pragma once
 
 #include <iostream>
 #include <cmath>
@@ -28,6 +27,3 @@ inline std::vector<std::string> returnInputDirectory(int c, char** v = NULL)
         return arguments;
 }
 
-
-
-#endif

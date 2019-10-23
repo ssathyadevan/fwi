@@ -1,5 +1,4 @@
-#ifndef INTEGRALFORWARDMODEL_H
-#define INTEGRALFORWARDMODEL_H
+#pragma once
 
 #include "forwardModelInterface.h"
 #include "greensFunctions.h"
@@ -48,5 +47,3 @@ private:
     void createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv);
     void deleteKappa();
 };
-
-#endif

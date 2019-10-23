@@ -1,5 +1,4 @@
-#ifndef VOLCOMPLEXFIELD_RECT_2D_H
-#define VOLCOMPLEXFIELD_RECT_2D_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -40,4 +39,3 @@ public:
 
 };
 
-#endif /* VOLCOMPLEXFIELD_RECT_2D_H */

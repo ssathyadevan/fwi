@@ -1,5 +1,4 @@
-#ifndef GREENS_RECT_2D_CPU_H
-#define GREENS_RECT_2D_CPU_H
+#pragma once
 
 #include <cassert>
 
@@ -64,4 +63,3 @@ private:
 
 };
 
-#endif /* GREENS_RECT_2D_CPU_H */

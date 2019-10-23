@@ -1,5 +1,5 @@
-#ifndef VOLFIELD_RECT_2D_CPU_H
-#define VOLFIELD_RECT_2D_CPU_H
+#pragma once
+
 #include "pressureField.h"
 #include "grid2D.h"
 #include <iostream>
@@ -120,7 +120,5 @@ inline pressureFieldSerial operator/(const pressureFieldSerial &x, const pressur
     result /= y;
     return result;
 }
-
-#endif /* VOLFIELD_RECT_2D_CPU_H */
 
 

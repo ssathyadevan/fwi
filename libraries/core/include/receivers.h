@@ -1,5 +1,4 @@
-#ifndef RECEIVERS_RECT_2D_H
-#define RECEIVERS_RECT_2D_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -23,4 +22,3 @@ public:
 
 };
 
-#endif

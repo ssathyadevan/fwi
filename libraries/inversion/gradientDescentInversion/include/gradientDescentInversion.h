@@ -1,5 +1,5 @@
-#ifndef INVERSION_CPU
-#define INVERSION_CPU
+#pragma once
+
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
 #include "gradientDescentInversionInput.h"
@@ -28,5 +28,3 @@ private:
     double functionF(pressureFieldSerial xi, const std::complex<double> *const pData, double eta);
     double getGamma(std::vector<double> dFdxiOld, std::vector<double> dFdxi, pressureFieldSerial xiOld, pressureFieldSerial xi);
 };
-
-#endif // INVERSION_CPU

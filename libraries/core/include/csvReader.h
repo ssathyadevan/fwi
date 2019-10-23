@@ -1,5 +1,4 @@
-#ifndef CSVREADER_H
-#define CSVREADER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -21,7 +20,3 @@ inline std::istream& operator>>(std::istream& str, CSVReader& data)
     data.readNextRow(str);
     return str;
 }
-
-
-
-#endif // CSVREADER_H

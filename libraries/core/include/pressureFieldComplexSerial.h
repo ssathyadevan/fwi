@@ -1,6 +1,4 @@
-#ifndef COLCOMPLEXFIELD_RECT_2D_CPU_H
-#define COLCOMPLEXFIELD_RECT_2D_CPU_H
-
+#pragma once
 
 #include "pressureFieldComplex.h"
 #include "grid2D.h"
@@ -156,7 +154,6 @@ inline pressureFieldComplexSerial operator/(const pressureFieldComplexSerial &t1
     t3 /= t2;
     return t3;
 }
-#endif // COLCOMPLEXFIELD_RECT_2D_CPU_H
 
 
 

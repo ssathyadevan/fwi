@@ -1,5 +1,5 @@
-#ifndef RANDOMINVERSIONINPUTCARDREADER_H
-#define RANDOMINVERSIONINPUTCARDREADER_H
+#pragma once
+
 #include "inputCardReader.h"
 #include "randomInversionInput.h"
 #include <string>
@@ -15,5 +15,3 @@ private:
     randomInversionInput _input;
     void readCard(const std::string &caseFolder);
 };
-
-#endif // RANDOMINVERSIONINPUTCARDREADER_H

@@ -1,5 +1,4 @@
-#ifndef RANDOMINVERSION_H
-#define RANDOMINVERSION_H
+#pragma once
 
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
@@ -33,5 +32,3 @@ private:
     const receivers&                 _recv;
     const frequenciesGroup&          _freq;
 };
-
-#endif // RANDOMINVERSION_H
