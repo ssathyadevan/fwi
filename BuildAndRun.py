@@ -1,17 +1,27 @@
 import os
 import sys
 
+def checking_for_errors(err):
+    if err != 0:
+        print ('An error was found, we will not continue with the Build and Run script')
+        sys.exit()
+
 if sys.platform.startswith('linux'):
     current_directory = os.getcwd()
+
     os.chdir('libraries/inversion/')
     available_methods = os.popen('ls -d */').read().split('\n')
+    valid_numbers = []
+
     print("Which method do you want to try?")
-    i = 0
-    for method in available_methods[:-1]:
+    for i, method in enumerate(available_methods[:-1]):
         if method != 'inversionFactory/':
-            print(str(i) + '. ' +  method[:-1])
-        i += 1
+            print(i, method[:-1])
+            valid_numbers.append(i)
     answer = input('Your method: ')
+    while int(answer) not in valid_numbers:
+        print('You introduced an invalid command, maybe try again.')
+        answer = input('Your method: ')
     method = available_methods[int(answer)][:-1]
 
     if os.path.isdir('/usr/src/gtest'):
@@ -32,19 +42,24 @@ if sys.platform.startswith('linux'):
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
         os.system('mkdir Build')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
-    os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
-    os.system('sudo make install')
+    check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
+    checking_for_errors(check)
+    check = os.system('sudo make install')
+    checking_for_errors(check)
 
     print('Now the running time:')
     os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
     os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
-    os.system('./FWI_PreProcess ../default/')
-    os.system('./FWI_UnifiedProcess ../default/ ' + method)
+    check = os.system('./FWI_PreProcess ../default/')
+    checking_for_errors(check)
+    check = os.system('./FWI_UnifiedProcess ../default/ ' + method)
+    checking_for_errors(check)
 
     print('Now post processing')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')
     os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
-    os.system('python3 postProcessing-python3.py default/')
+    check = os.system('python3 postProcessing-python3.py default/')
+    checking_for_errors(check)
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default/output')
     os.system('eog defaultResult.png')
