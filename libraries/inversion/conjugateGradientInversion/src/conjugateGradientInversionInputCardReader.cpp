@@ -15,7 +15,7 @@ conjugateGradientInversionInput  conjugateGradientInversionInputCardReader::getI
 
 void conjugateGradientInversionInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/CGInput.json");
+    nlohmann::json j = readFile(caseFolder + "/input/ConjugateGradientInversionInput.json");
 
     conjugateGradientInversionInput input
 	{
