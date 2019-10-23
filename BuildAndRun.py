@@ -44,7 +44,6 @@ if sys.platform.startswith('linux'):
     os.chdir(current_directory[:current_directory.rfind('/')])
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
         print('we create build folder')
-        os.mkdir('Build')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
     check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
     checking_for_errors(check)
@@ -53,11 +52,8 @@ if sys.platform.startswith('linux'):
 
     print('Now the running time:')
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
-        print('we create FWIInstall folder')
         os.mkdir('../FWIInstall')
-    smt = input('pause')
     os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
-    smt = input('pause')
     os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
     check = os.system('./FWI_PreProcess ../default/')
