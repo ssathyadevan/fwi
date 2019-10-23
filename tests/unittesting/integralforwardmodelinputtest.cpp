@@ -3,7 +3,7 @@
 
 
 //Generic Input Card test:
-TEST(ForwardModelInputTest, ints){
+TEST(integralForwardModelInputTest, ints){
 
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
