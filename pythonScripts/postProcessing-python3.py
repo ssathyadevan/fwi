@@ -64,7 +64,7 @@ dummy_variable_reader_pr = list(reader_residual)
 reader_residual_array = np.array(dummy_variable_reader_pr).astype("float")
 
 plt.clf()
-plt.plot(reader_residual_array[:,0])
+plt.plot(reader_residual_array[:])
 plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)

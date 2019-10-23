@@ -36,8 +36,7 @@ if sys.platform.startswith('linux'):
     os.system('sudo make install')
 
     print('Now the running time:')
-    if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default'):
-        os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
+    os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
     os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
     os.system('./FWI_PreProcess ../default/')

@@ -6,10 +6,12 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "forwardModelInputCardReader.h"
+#include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
+#include "inversionInterface.h"
+#include "gradientDescentInversion.h"
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName);
+void performInversion(const genericInput& gInput, const integralForwardModelInput& ifmInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
@@ -17,7 +19,7 @@ int main(int argc, char** argv)
     if (argc != 2)
     {
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and GradientDescentInput.json" << std::endl;
+        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
@@ -26,10 +28,10 @@ int main(int argc, char** argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
 
-    forwardModelInput fmInput = forwardModelReader.getInput();
+    integralForwardModelInput ifmInput = forwardModelReader.getInput();
     //gradientDescentInversionInput gdInput = gradientDescentInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gInput.runName);
+    performInversion(gInput, ifmInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -72,7 +74,7 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName)
+void performInversion(const genericInput& gInput, const integralForwardModelInput& ifmInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -109,11 +111,12 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
+    model = new IntegralForwardModel(grid, src, recv, freq, ifmInput);
 
     inversionInterface *inverse;
     inverse = new gradientDescentInversion(model, gInput);
 
+//    gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
     std::cout << "Estimating Chi..." << std::endl;
 
     pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);

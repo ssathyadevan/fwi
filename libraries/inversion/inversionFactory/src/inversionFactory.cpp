@@ -1,6 +1,7 @@
 #include "inversionFactory.h"
 #include "conjugateGradientInversion.h"
 #include "randomInversion.h"
+#include "gradientDescentInversion.h"
 
 #include <iostream>
 
@@ -13,6 +14,11 @@ inversionInterface* inversionFactory::createInversion(std::string desired_invers
     
     if (desired_inversion == "randomInversion"){
             inversion = new randomInversion(forwardModel, gInput);
+            return inversion;
+    }
+    
+    if (desired_inversion == "gradientDescentInversion"){
+            inversion = new gradientDescentInversion(forwardModel, gInput);
             return inversion;
     }
     std::cout << "The method was not found. you PUNK!" << std::endl;

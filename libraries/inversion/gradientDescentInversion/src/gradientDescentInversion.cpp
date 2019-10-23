@@ -1,5 +1,6 @@
 #include "gradientDescentInversion.h"
-gradientDescentInversion::gradientDescentInversion(ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
+#include "gradientDescentInversionInputCardReader.h"
+gradientDescentInversion::gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gInput)
     :_forwardModel(),_gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()),_recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
