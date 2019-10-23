@@ -65,6 +65,8 @@ void writePlotInput(const genericInput &gInput){
         outputfwi << "This run was parametrized as follows:" << std::endl;
         outputfwi << "nxt   = " << gInput.ngrid[0]      << std::endl;
         outputfwi << "nzt   = " << gInput.ngrid[1]      << std::endl;
+        outputfwi << "nxt_original   = " << gInput.ngrid_original[0]      << std::endl;
+        outputfwi << "nzt_original   = " << gInput.ngrid_original[1]      << std::endl;
         outputfwi.close();
 
         // This part is needed for plotting the chi values in postProcessing.py

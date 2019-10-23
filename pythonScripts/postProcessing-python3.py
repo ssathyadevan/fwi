@@ -28,13 +28,13 @@ x = contents[2]                                               # The rest of this
 y,u,v = x.split()
 nzt = int(v)
 
-x = contents[2]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
-y,u,v = x.split()
-nzt_original = int(v)
-
-x = contents[2]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
+x = contents[3]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 y,u,v = x.split()
 nxt_original = int(v)
+
+x = contents[4]                                               # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
+y,u,v = x.split()
+nzt_original = int(v)
 
 #zerothfile="src/ShowChi.py"
 filename1 = outputPath + "/output/chi_ref_" + runName + ".txt"   # variable name for the original temple
