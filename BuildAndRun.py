@@ -6,6 +6,16 @@ def checking_for_errors(err):
         print ('An error was found, we will not continue with the Build and Run script')
         sys.exit()
 
+def intall_gtest():
+    os.chdir('/home')
+
+    os.system('sudo apt-get install libgtest-dev')
+    os.chdir('/usr/src/gtest')
+
+    os.system('sudo cmake CMakeLists.txt')
+    os.system('sudo make install')
+    os.system('cp *.a /usr/lib')
+
 if sys.platform.startswith('linux'):
     current_directory = os.getcwd()
 
@@ -28,19 +38,13 @@ if sys.platform.startswith('linux'):
         print('Google tests is already installed')
     else:
         print('First we install Google Test:')
-        os.chdir('/home')
-
-        os.system('sudo apt-get install libgtest-dev')
-        os.chdir('/usr/src/gtest')
-
-        os.system('sudo cmake CMakeLists.txt')
-        os.system('sudo make install')
-        os.system('cp *.a /usr/lib')
+        install_gtest()
 
     print('Now we start the building process:')
     os.chdir(current_directory[:current_directory.rfind('/')])
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
-        os.system('mkdir Build')
+        print('we create build folder')
+        os.mkdir('Build')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
     check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
     checking_for_errors(check)
@@ -49,8 +53,11 @@ if sys.platform.startswith('linux'):
 
     print('Now the running time:')
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
-        os.system('mkdir FWIInstall')
+        print('we create FWIInstall folder')
+        os.mkdir('../FWIInstall')
+    smt = input('pause')
     os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
+    smt = input('pause')
     os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
     check = os.system('./FWI_PreProcess ../default/')
