@@ -10,7 +10,7 @@
 #include "finiteDifferenceInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
 
-void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const conjugateGradientInversionInput& cgInput, const std::string &runName);
+void performInversion(const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const conjugateGradientInversionInput& cgInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     finiteDifferenceInputCardReader forwardModelReader(gInput.caseFolder);
     conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
-    finiteDifferenceInput fmInput = forwardModelReader.getInput();
+    finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
     conjugateGradientInversionInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -74,7 +74,7 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const finiteDifferenceInput& fmInput, const conjugateGradientInversionInput& cgInput, const std::string &runName)
+void performInversion(const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const conjugateGradientInversionInput& cgInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);

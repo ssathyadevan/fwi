@@ -3,7 +3,7 @@
 #include "forwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
-#include "finiteDifferenceInput.h"
+#include "finiteDifferenceForwardModelInput.h"
 
 class FiniteDifferenceForwardModel : public ForwardModelInterface
 {
@@ -11,7 +11,7 @@ class FiniteDifferenceForwardModel : public ForwardModelInterface
 public:
 
     FiniteDifferenceForwardModel( const grid2D &grid, const sources &src, const receivers &recv,
-                    const frequenciesGroup &freq, const finiteDifferenceInput &fmInput );
+                    const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput );
 
     ~FiniteDifferenceForwardModel();
 
@@ -32,7 +32,7 @@ private:
     pressureFieldComplexSerial  ***_p0;
     pressureFieldComplexSerial  **_pTot;
     pressureFieldComplexSerial  **_Kappa;
-    const finiteDifferenceInput _fmInput;
+    const finiteDifferenceForwardModelInput _fmInput;
 
     void createP0();
     void deleteP0();

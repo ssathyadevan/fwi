@@ -1,7 +1,7 @@
 #pragma once
 
 #include "inputCardReader.h"
-#include "finiteDifferenceInput.h"
+#include "finiteDifferenceForwardModelInput.h"
 
 #include <string>
 #include <vector>
@@ -12,9 +12,9 @@ class finiteDifferenceInputCardReader: public inputCardReader
 {
 public:
     finiteDifferenceInputCardReader(const std::string &caseFolder);
-    finiteDifferenceInput getInput();
+    finiteDifferenceForwardModelInput getInput();
 
 private:
     virtual void readCard(const std::string &caseFolder);
-    finiteDifferenceInput _input;
+    finiteDifferenceForwardModelInput _input;
 };
