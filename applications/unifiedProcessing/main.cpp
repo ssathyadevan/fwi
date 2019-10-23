@@ -7,11 +7,11 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "forwardModelInputCardReader.h"
+#include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
 #include <string>
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion);
+void performInversion(const genericInput& gInput, const integralForwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
@@ -32,10 +32,10 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
     std::string desired_inversion = arguments[1];
 
-    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //conjugateGradientInversionInputCardReader conjugateGradientInversionReader(gInput.caseFolder);
 
-    forwardModelInput fmInput = forwardModelReader.getInput();
+    integralForwardModelInput fmInput = forwardModelReader.getInput();
     //conjugateGradientInput cgInput = conjugateGradientInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -79,7 +79,7 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion)
+void performInversion(const genericInput& gInput, const integralForwardModelInput& fmInput, const std::string &runName, const std::string desired_inversion)
 {
     
     // initialize the grid, sources, receivers, grouped frequencies

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "forwardModelInputCardReader.h"
+#include "integralForwardModelInputCardReader.h"
 
 
 //Generic Input Card test:
@@ -7,8 +7,8 @@ TEST(ForwardModelInputTest, ints){
 
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
-    forwardModelInputCardReader cardReader = forwardModelInputCardReader(temp);
-    forwardModelInput input = cardReader.getInput();
+    integralForwardModelInputCardReader cardReader = integralForwardModelInputCardReader(temp);
+    integralForwardModelInput input = cardReader.getInput();
 
     EXPECT_EQ(input.iter2.calcAlpha, 0);
     EXPECT_EQ(input.iter2.tolerance, 0.00005);

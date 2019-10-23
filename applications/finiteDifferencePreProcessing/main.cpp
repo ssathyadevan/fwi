@@ -1,4 +1,4 @@
-#include "finiteDifferenceInputCardReader.h"
+#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
@@ -6,7 +6,7 @@
 #include "cpuClock.h"
 
 
-void generateReferencePressureFieldFromChi(const genericInput& gInput, const finiteDifferenceInput& fmInput, const std::string& runName);
+void generateReferencePressureFieldFromChi(const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const std::string& runName);
 
 int main(int argc, char** argv)
 {
@@ -14,8 +14,8 @@ int main(int argc, char** argv)
     genericInputCardReader genericReader(arguments[0]);
     const genericInput      gInput  = genericReader.getInput();
 
-    finiteDifferenceInputCardReader forwardModelReader(gInput.caseFolder);
-    const finiteDifferenceInput fmInput = forwardModelReader.getInput();
+    finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    const finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void generateReferencePressureFieldFromChi (const genericInput& gInput, const finiteDifferenceInput& fmInput, const std::string& runName)
+void generateReferencePressureFieldFromChi (const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const std::string& runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);

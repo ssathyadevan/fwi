@@ -1,6 +1,6 @@
 
 #include "genericInputCardReader.h"
-#include "forwardModelInputCardReader.h"
+#include "integralForwardModelInputCardReader.h"
 #include "randomInversion.h"
 #include "inputCardReader.h"
 #include "utilityFunctions.h"
@@ -10,7 +10,7 @@
 #include "cpuClock.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput);
+void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput);
 void writePlotInput(genericInput gInput);
 
 int main(int argc, char** argv)
@@ -27,10 +27,10 @@ int main(int argc, char** argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
-    forwardModelInput fmInput = forwardModelReader.getInput();
+    integralForwardModelInput fmInput = forwardModelReader.getInput();
     //randomInversionInput riInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -74,7 +74,7 @@ void writePlotInput(genericInput gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const forwardModelInput &fmInput)
+void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
