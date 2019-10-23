@@ -32,7 +32,7 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
      std::vector<std::complex<double>> vecResFirstIter;
     _forwardModel->calculateKappa();
 
-
+    int counter = 1;
 
     std::complex<double>* resArray = _forwardModel->calculateResidual(chiEst, pData);// Fx to minimize;
     for (int it1 = 0; it1 < _gdInput.iter; it1++)
@@ -51,8 +51,12 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
         std::cout << "Gamma:" << gamma << std::endl;
         chiOld = chiEst;
         chiEst = gradientDescent(pData, chiEst, dfdxi, gamma, eta);
+        double Fx = functionF(chiEst, pData, eta);
+        file << std::setprecision(17) << Fx << "," << counter << std::endl;
+        ++counter;
 
     }
+
     return chiEst;
 }
 std::vector<double> gradientDescentInversion::differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi,double eta){
