@@ -3,6 +3,16 @@ import sys
 
 if sys.platform.startswith('linux'):
     current_directory = os.getcwd()
+    os.chdir('libraries/inversion/')
+    available_methods = os.popen('ls -d */').read().split('\n')
+    print("Which method do you want to try?")
+    i = 0
+    for method in available_methods[:-1]:
+        if method != 'inversionFactory/':
+            print(str(i) + '. ' +  method[:-1])
+        i += 1
+    answer = input('Your method: ')
+    method = available_methods[int(answer)][:-1]
 
     if os.path.isdir('/usr/src/gtest'):
         print('Google tests is already installed')
@@ -28,10 +38,10 @@ if sys.platform.startswith('linux'):
     print('Now the running time:')
     if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default'):
         os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
-    os.system('cp -r runtime/bin/ ../FWIInstall')
+    os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
     os.system('./FWI_PreProcess ../default/')
-    os.system('./FWI_Process ../default/')
+    os.system('./FWI_UnifiedProcess ../default/ ' + method)
 
     print('Now post processing')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')

@@ -2,6 +2,7 @@
 #include "conjugateGradientInversion.h"
 #include "randomInversion.h"
 
+#include <iostream>
 
 inversionInterface* inversionFactory::createInversion(std::string desired_inversion, ForwardModelInterface *forwardModel, const genericInput gInput){
     inversionInterface* inversion;
@@ -14,6 +15,6 @@ inversionInterface* inversionFactory::createInversion(std::string desired_invers
             inversion = new randomInversion(forwardModel, gInput);
             return inversion;
     }
-    
+    std::cout << "The method was not found. you PUNK!" << std::endl;
     exit(EXIT_FAILURE);
 }
