@@ -3,6 +3,7 @@
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
 #include "gradientDescentInversionInput.h"
+#include "genericInput.h"
 class gradientDescentInversion : public inversionInterface{
 
 private:
@@ -16,7 +17,7 @@ private:
     const frequenciesGroup _freq;
 
  public:
-    gradientDescentInversion(ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
+    gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
 
     gradientDescentInversion(const gradientDescentInversion&) = delete;
     gradientDescentInversion & operator = (const gradientDescentInversion&) = delete;

@@ -2,8 +2,9 @@
 gradientDescentInversion::gradientDescentInversion(ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
     :_forwardModel(),_gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()),_recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    _forwardModel = forwardModel;
-    _gdInput = gdInput;
+    gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
+   _forwardModel = forwardModel;
+   _gdInput = gradientDescentInversionReader.getInput();
 }
 
 pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)

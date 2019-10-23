@@ -1,8 +1,6 @@
-#include "gradientDescentInversion.h"
-#include "gradientDescentInversionInput.h"
+
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
-#include "gradientDescentInversionInputCardReader.h"
 #include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
@@ -11,7 +9,7 @@
 #include "forwardModelInputCardReader.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const gradientDescentInversionInput& gdInput, const std::string &runName);
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char** argv)
@@ -29,10 +27,10 @@ int main(int argc, char** argv)
     genericInput gInput = genericReader.getInput();
 
     forwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
+    //gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
 
     forwardModelInput fmInput = forwardModelReader.getInput();
-    gradientDescentInversionInput gdInput = gradientDescentInversionReader.getInput();
+    //gradientDescentInversionInput gdInput = gradientDescentInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -45,7 +43,7 @@ int main(int argc, char** argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gdInput, gInput.runName);
+    performInversion(gInput, fmInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -74,7 +72,7 @@ void writePlotInput(const genericInput &gInput){
         lastrun.close();
 }
 
-void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const gradientDescentInversionInput& gdInput, const std::string &runName)
+void performInversion(const genericInput& gInput, const forwardModelInput& fmInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -114,7 +112,7 @@ void performInversion(const genericInput& gInput, const forwardModelInput& fmInp
     model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
 
     inversionInterface *inverse;
-    inverse = new gradientDescentInversion(model, gdInput);
+    inverse = new gradientDescentInversion(model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
