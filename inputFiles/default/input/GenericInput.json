@@ -10,7 +10,7 @@
         "z": 0.0
     },
     "reservoirBottomRight": {
-        "x": 300.0, 
+        "x": 300.0,
         "z": 300.0
     },
     "sourcesTopLeft": {
@@ -31,14 +31,14 @@
     },
     "nSources": 17,
     "nReceivers": 17,
-	"ngrid_original": {
+    "ngrid_original": {
+        "x": 128,
+        "z": 64
+    },
+    "ngrid": {
         "x": 64,
         "z": 32
     },
-    "ngrid": {
-        "x": 50,
-        "z": 25
-    },
     "verbosity": false,
-    "fileName": "temple"
+    "fileName": "largetemple"
 }
