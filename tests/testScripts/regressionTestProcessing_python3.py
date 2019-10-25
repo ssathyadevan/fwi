@@ -40,7 +40,7 @@ if (new.endswith("/")):
 if (bench.endswith("/")):
 	bench = bench[:-1]
 
-inputfiles = ["CGInput.json", "IntegralFMInput.json", "GenericInput.json"]
+inputfiles = ["ConjugateGradientInput.json", "IntegralFMInput.json", "GenericInput.json"]
 
 for i in range(0,len(inputfiles)):
     tempbench = bench +  "/input/" + inputfiles[i]
