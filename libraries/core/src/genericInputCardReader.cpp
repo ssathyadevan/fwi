@@ -5,9 +5,9 @@
 genericInputCardReader::genericInputCardReader(const std::string &caseFolder_) : inputCardReader()
 {
     std::string caseFolder = caseFolder_;
-    if (caseFolder[caseFolder.size()-1] == '/')
+    if (caseFolder[caseFolder.size() - 1] == '/')
     {
-       caseFolder = caseFolder.substr(0, caseFolder.size()-1);
+        caseFolder = caseFolder.substr(0, caseFolder.size() - 1);
     }
 
     std::string runName = caseFolder;
@@ -40,25 +40,10 @@ void genericInputCardReader::readCard(const std::string &caseFolder)
     double fMax = j["Freq"]["max"];
     double fMin = j["Freq"]["min"];
     int nFreq = j["Freq"]["nTotal"];
-    const double spacing = (fMax - fMin)/(nFreq-1);
+    const double spacing = (fMax - fMin) / (nFreq - 1);
 
-    genericInput jsonInput
-    {
-        _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName,
-        j["c_0"],
-        {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"], spacing},
-        {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]},
-        {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]},
-        {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]},
-        {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]},
-        {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]},
-        {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]},
-        {j["ngrid_original"]["x"], j["ngrid_original"]["z"]},
-        {j["ngrid"]["x"], j["ngrid"]["z"]},
-        {j["nSources"], j["nReceivers"]},
-        j["fileName"],
-        j["verbosity"]
-    };
+    genericInput jsonInput{
+        _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName, j["c_0"], {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"], spacing}, {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]}, {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]}, {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]}, {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]}, {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]}, {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]}, {j["ngrid_original"]["x"], j["ngrid_original"]["z"]}, {j["ngrid"]["x"], j["ngrid"]["z"]}, {j["nSources"], j["nReceivers"]}, j["fileName"], j["verbosity"]};
 
     _input = jsonInput;
 }

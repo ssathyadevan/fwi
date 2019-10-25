@@ -2,8 +2,8 @@
 #include "helmholtz2D.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
-                           const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
-    : ForwardModelInterface (grid, src, recv, freq),
+                                                           const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
+    : ForwardModelInterface(grid, src, recv, freq),
       _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {
     std::cout << "Creating Greens function field..." << std::endl;
@@ -34,16 +34,16 @@ void FiniteDifferenceForwardModel::createP0()
     assert(_Greens != nullptr);
     assert(_p0 == nullptr);
 
-    _p0 = new pressureFieldComplexSerial**[_freq.nFreq];
+    _p0 = new pressureFieldComplexSerial **[_freq.nFreq];
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
-        _p0[i] = new pressureFieldComplexSerial*[_src.nSrc];
+        _p0[i] = new pressureFieldComplexSerial *[_src.nSrc];
 
         for (int j = 0; j < _src.nSrc; j++)
         {
             _p0[i][j] = new pressureFieldComplexSerial(_grid);
-            *_p0[i][j] = *( _Greens[i]->GetReceiverCont(j) ) / (_freq.k[i] * _freq.k[i] * _grid.GetCellVolume());
+            *_p0[i][j] = *(_Greens[i]->GetReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.GetCellVolume());
         }
     }
 }
@@ -66,7 +66,7 @@ void FiniteDifferenceForwardModel::deleteP0()
 
 void FiniteDifferenceForwardModel::createGreens()
 {
-    _Greens = new Greens_rect_2D_cpu*[_freq.nFreq];
+    _Greens = new Greens_rect_2D_cpu *[_freq.nFreq];
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
@@ -76,7 +76,7 @@ void FiniteDifferenceForwardModel::createGreens()
 
 void FiniteDifferenceForwardModel::deleteGreens()
 {
-    for (int i=0; i < _freq.nFreq; i++)
+    for (int i = 0; i < _freq.nFreq; i++)
     {
         delete _Greens[i];
     }
@@ -87,11 +87,11 @@ void FiniteDifferenceForwardModel::deleteGreens()
 
 void FiniteDifferenceForwardModel::createPTot(const frequenciesGroup &freq, const sources &src)
 {
-    _pTot = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
+    _pTot = new pressureFieldComplexSerial *[freq.nFreq * src.nSrc];
 
     int li;
 
-    for (int i = 0; i < freq.nFreq ; i++)
+    for (int i = 0; i < freq.nFreq; i++)
     {
         li = i * src.nSrc;
 
@@ -115,7 +115,7 @@ void FiniteDifferenceForwardModel::deletePtot()
 
 void FiniteDifferenceForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
 {
-    _Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
+    _Kappa = new pressureFieldComplexSerial *[freq.nFreq * src.nSrc * recv.nRecv];
 
     for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
@@ -136,8 +136,8 @@ void FiniteDifferenceForwardModel::deleteKappa()
 
 void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
 {
-    assert(_Greens  != nullptr);
-    assert(_p0      != nullptr);
+    assert(_Greens != nullptr);
+    assert(_p0 != nullptr);
 
     int li;
 
@@ -148,7 +148,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const pressureFieldSerial &chiE
         Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst, _fmInput);
 
         std::cout << "  " << std::endl;
-        std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;
+        std::cout << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" << std::endl;
         std::cout << "  " << std::endl;
 
         for (int j = 0; j < _src.nSrc; j++)
@@ -177,9 +177,9 @@ void FiniteDifferenceForwardModel::calculateKappa()
         {
             lj = j * _src.nSrc;
 
-            for(int k = 0; k < _src.nSrc; k++)
+            for (int k = 0; k < _src.nSrc; k++)
             {
-                *_Kappa[li + lj + k] = ( *_Greens[i]->GetReceiverCont(j) ) * (*_pTot[i * _src.nSrc + k]);
+                *_Kappa[li + lj + k] = (*_Greens[i]->GetReceiverCont(j)) * (*_pTot[i * _src.nSrc + k]);
             }
         }
     }
@@ -193,12 +193,12 @@ void FiniteDifferenceForwardModel::mapDomainToSignal(const pressureFieldSerial &
 void FiniteDifferenceForwardModel::applyKappa(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
-    {       
-        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);
+    {
+        kOperator[i] = Summation(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 
-void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes)
+void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<double> *res, pressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 
@@ -214,7 +214,7 @@ void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<do
         {
             l_j = j * _src.nSrc;
 
-            for(int k = 0; k < _src.nSrc; k++)
+            for (int k = 0; k < _src.nSrc; k++)
             {
                 kDummy = *_Kappa[l_i + l_j + k];
                 kDummy.Conjugate();
@@ -225,7 +225,7 @@ void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<do
     }
 }
 
-void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double>* res, pressureFieldComplexSerial &kRes)
+void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double> *res, pressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 
@@ -241,7 +241,7 @@ void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double>* res
         {
             l_j = j * _src.nSrc;
 
-            for(int k = 0; k < _src.nSrc; k++)
+            for (int k = 0; k < _src.nSrc; k++)
             {
                 kDummy = *_Kappa[l_i + l_j + k];
 
@@ -250,4 +250,3 @@ void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double>* res
         }
     }
 }
-

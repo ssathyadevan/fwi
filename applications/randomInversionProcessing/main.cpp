@@ -13,7 +13,7 @@
 void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput);
 void writePlotInput(genericInput gInput);
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     if (argc != 2)
     {
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    std::vector<std::string> arguments(argv+1, argc+argv);
+    std::vector<std::string> arguments(argv + 1, argc + argv);
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
     }
 
-    chi_visualisation_in_integer_form(gInput.inputFolder+ gInput.fileName + ".txt", gInput.ngrid[0]);
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
     cpuClock clock;
@@ -57,23 +57,24 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void writePlotInput(genericInput gInput){
-        // This part is needed for plotting the chi values in postProcessing.py
-        std::ofstream outputfwi;
-        std::string runName = gInput.runName;
-        outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
-        outputfwi << "This run was parametrized as follows:" << std::endl;
-        outputfwi << "nxt   = " << gInput.ngrid[0]      << std::endl;
-        outputfwi << "nzt   = " << gInput.ngrid[1]      << std::endl;
-        outputfwi << "nxt_original   = " << gInput.ngrid_original[0]      << std::endl;
-        outputfwi << "nzt_original   = " << gInput.ngrid_original[1]      << std::endl;
-        outputfwi.close();
+void writePlotInput(genericInput gInput)
+{
+    // This part is needed for plotting the chi values in postProcessing.py
+    std::ofstream outputfwi;
+    std::string runName = gInput.runName;
+    outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
+    outputfwi << "This run was parametrized as follows:" << std::endl;
+    outputfwi << "nxt   = " << gInput.ngrid[0] << std::endl;
+    outputfwi << "nzt   = " << gInput.ngrid[1] << std::endl;
+    outputfwi << "nxt_original   = " << gInput.ngrid_original[0] << std::endl;
+    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl;
+    outputfwi.close();
 
-        // This part is needed for plotting the chi values in postProcessing.py
-        std::ofstream lastrun;
-        lastrun.open(gInput.outputLocation + "lastRunName.txt");
-        lastrun << runName;
-        lastrun.close();
+    // This part is needed for plotting the chi values in postProcessing.py
+    std::ofstream lastrun;
+    lastrun.open(gInput.outputLocation + "lastRunName.txt");
+    lastrun << runName;
+    lastrun.close();
 }
 
 void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput)
@@ -91,14 +92,14 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
 
     //read referencePressureData from a CSV file format
     std::complex<double> referencePressureData[magnitude];
-    std::ifstream       file(gInput.outputLocation+gInput.runName+"InvertedChiToPressure.txt");
-    CSVReader           row;
+    std::ifstream file(gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt");
+    CSVReader row;
     int i = 0;
-    while(file >> row)
+    while (file >> row)
     {
-        if (i<magnitude)
+        if (i < magnitude)
         {
-            referencePressureData[i]= { atof(row[0].c_str() ), atof(row[1].c_str()) };
+            referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
         }
         i++;
     }
@@ -115,7 +116,7 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
 
     std::cout << "Done, writing to file" << std::endl;
 
-    chi_est.toFile(gInput.outputLocation + "chi_est_"+ gInput.runName+ ".txt");
+    chi_est.toFile(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt");
 
     delete model;
     delete inverse;

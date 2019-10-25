@@ -4,7 +4,8 @@
 #include <iostream>
 
 //Generic Input Card test:
-TEST(GenericInputTest, ints){
+TEST(GenericInputTest, ints)
+{
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
 

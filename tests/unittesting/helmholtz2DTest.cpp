@@ -6,13 +6,12 @@
 #include "sources.h"
 #include "finiteDifferenceForwardModelInput.h"
 
-
 /* Test Finite Difference implementation of calculating pTot by comparing it to
  * a reference Python run */
 
 TEST(helmholtz2DTest, testClass)
 {
-    std::array<int, 2> nx = {64,32};
+    std::array<int, 2> nx = {64, 32};
     std::array<double, 2> upperLeft = {-300.0, 0.0};
     std::array<double, 2> lowerRight = {300.0, 300.0};
 
@@ -20,7 +19,7 @@ TEST(helmholtz2DTest, testClass)
     std::array<double, 2> source2 = {480.0, -5.0};
 
     grid2D testGrid(upperLeft, lowerRight, nx);
-    sources src( source1, source2, 2);
+    sources src(source1, source2, 2);
 
     pressureFieldSerial chi(testGrid);
     chi.Zero();
@@ -43,7 +42,7 @@ TEST(helmholtz2DTest, testClass)
     pressureFieldComplexSerial pythonBenchpTot(testGrid);
 
     std::string path = "../../../tests/testCase/";
-    pythonBenchpTot.fromFile(path+"PythonBenchpTotNewSource.csv");
+    pythonBenchpTot.fromFile(path + "PythonBenchpTotNewSource.csv");
     //pythonBenchpTot.fromFile("PythonBenchpTotNewSource.csv");
 
     pressureFieldComplexSerial diff(pythonBenchpTot);

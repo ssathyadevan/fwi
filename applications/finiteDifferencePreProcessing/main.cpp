@@ -5,14 +5,13 @@
 #include "finiteDifferenceForwardModel.h"
 #include "cpuClock.h"
 
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName);
 
-void generateReferencePressureFieldFromChi(const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const std::string& runName);
-
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     std::vector<std::string> arguments = returnInputDirectory(argc, argv);
     genericInputCardReader genericReader(arguments[0]);
-    const genericInput      gInput  = genericReader.getInput();
+    const genericInput gInput = genericReader.getInput();
 
     finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     const finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
@@ -34,7 +33,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void generateReferencePressureFieldFromChi (const genericInput& gInput, const finiteDifferenceForwardModelInput& fmInput, const std::string& runName)
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -67,23 +66,21 @@ void generateReferencePressureFieldFromChi (const genericInput& gInput, const fi
 
     std::string invertedChiToPressureFileName = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ofstream file;
-    file.open (invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
+    file.open(invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
 
     if (!file)
     {
-        std::cout<< "Failed to open the file to store inverted chi to pressure field" << std::endl;
+        std::cout << "Failed to open the file to store inverted chi to pressure field" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    for(int i=0; i < magnitude; i++)
+    for (int i = 0; i < magnitude; i++)
     {
         file << std::setprecision(17) << referencePressureData[i].real()
-             <<"," << referencePressureData[i].imag() << std::endl;
+             << "," << referencePressureData[i].imag() << std::endl;
     }
 
     file.close();
 
     delete model;
 }
-
-

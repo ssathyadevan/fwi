@@ -1,8 +1,8 @@
 #include "integralForwardModel.h"
 
 IntegralForwardModel::IntegralForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
-                           const frequenciesGroup &freq, const integralForwardModelInput &fmInput)
-    : ForwardModelInterface (grid, src, recv, freq),
+                                           const frequenciesGroup &freq, const integralForwardModelInput &fmInput)
+    : ForwardModelInterface(grid, src, recv, freq),
       _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {
     std::cout << "Creating Greens function field..." << std::endl;
@@ -33,16 +33,16 @@ void IntegralForwardModel::createP0()
     assert(_Greens != nullptr);
     assert(_p0 == nullptr);
 
-    _p0 = new pressureFieldComplexSerial**[_freq.nFreq];
+    _p0 = new pressureFieldComplexSerial **[_freq.nFreq];
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
-        _p0[i] = new pressureFieldComplexSerial*[_src.nSrc];
+        _p0[i] = new pressureFieldComplexSerial *[_src.nSrc];
 
         for (int j = 0; j < _src.nSrc; j++)
         {
             _p0[i][j] = new pressureFieldComplexSerial(_grid);
-            *_p0[i][j] = *( _Greens[i]->GetReceiverCont(j) ) / (_freq.k[i] * _freq.k[i] * _grid.GetCellVolume());
+            *_p0[i][j] = *(_Greens[i]->GetReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.GetCellVolume());
         }
     }
 }
@@ -65,7 +65,7 @@ void IntegralForwardModel::deleteP0()
 
 void IntegralForwardModel::createGreens()
 {
-    _Greens = new Greens_rect_2D_cpu*[_freq.nFreq];
+    _Greens = new Greens_rect_2D_cpu *[_freq.nFreq];
 
     for (int i = 0; i < _freq.nFreq; i++)
     {
@@ -75,7 +75,7 @@ void IntegralForwardModel::createGreens()
 
 void IntegralForwardModel::deleteGreens()
 {
-    for (int i=0; i < _freq.nFreq; i++)
+    for (int i = 0; i < _freq.nFreq; i++)
     {
         delete _Greens[i];
     }
@@ -86,11 +86,11 @@ void IntegralForwardModel::deleteGreens()
 
 void IntegralForwardModel::createPTot(const frequenciesGroup &freq, const sources &src)
 {
-    _pTot = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc];
+    _pTot = new pressureFieldComplexSerial *[freq.nFreq * src.nSrc];
 
     int li;
 
-    for (int i = 0; i < freq.nFreq ; i++)
+    for (int i = 0; i < freq.nFreq; i++)
     {
         li = i * src.nSrc;
 
@@ -114,7 +114,7 @@ void IntegralForwardModel::deletePtot()
 
 void IntegralForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
 {
-    _Kappa = new pressureFieldComplexSerial*[freq.nFreq * src.nSrc * recv.nRecv];
+    _Kappa = new pressureFieldComplexSerial *[freq.nFreq * src.nSrc * recv.nRecv];
 
     for (int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
@@ -144,12 +144,12 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
     int n_cell = _grid.GetNumberOfGridPoints();
 
-    std::vector< pressureFieldComplexSerial >                       phi;
-    Matrix< std::complex<double> , Dynamic, Dynamic, ColMajor >     matA;
-    Matrix< std::complex<double> , Dynamic, 1, ColMajor >           b_f_rhs;
-    Matrix< std::complex<double> , Dynamic, 1, ColMajor >           alpha;
+    std::vector<pressureFieldComplexSerial> phi;
+    Matrix<std::complex<double>, Dynamic, Dynamic, ColMajor> matA;
+    Matrix<std::complex<double>, Dynamic, 1, ColMajor> b_f_rhs;
+    Matrix<std::complex<double>, Dynamic, 1, ColMajor> alpha;
 
-    std::complex<double>  *rhs_data, *matA_j_data;
+    std::complex<double> *rhs_data, *matA_j_data;
 
     matA.conservativeResize(n_cell, 1);
     b_f_rhs.conservativeResize(n_cell, 1);
@@ -160,7 +160,7 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
     p_tot = p_init;
 
-    for(int it = 0; it < iter2.n; it++)
+    for (int it = 0; it < iter2.n; it++)
     {
         chi_p = p_tot * chi;
 
@@ -171,9 +171,9 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
         res = dWNorm / chi_pNorm;
 
-        if(res < iter2.tolerance && it != 0)
+        if (res < iter2.tolerance && it != 0)
         {
-            if(true)
+            if (true)
             {
                 std::string itstring = std::to_string(it);
                 std::string line_to_print = "Convergence after " + itstring + "iterations";
@@ -186,19 +186,19 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
         if (iter2.calcAlpha)
         {
             phi.push_back(G.ContractWithField(dW));
-            f_rhs = G.ContractWithField(chi*p_init);
+            f_rhs = G.ContractWithField(chi * p_init);
 
             rhs_data = f_rhs.GetDataPtr();
 
-            matA_j = phi[it] - G.ContractWithField(chi*phi[it]);
+            matA_j = phi[it] - G.ContractWithField(chi * phi[it]);
             matA_j_data = matA_j.GetDataPtr();
 
-            matA.conservativeResize(NoChange,it+1);
-            alpha.conservativeResize(it+1);
+            matA.conservativeResize(NoChange, it + 1);
+            alpha.conservativeResize(it + 1);
 
-            for(int i=0; i<n_cell; i++)
+            for (int i = 0; i < n_cell; i++)
             {
-                matA(i,it) = matA_j_data[i];
+                matA(i, it) = matA_j_data[i];
                 b_f_rhs(i) = rhs_data[i];
             }
 
@@ -206,24 +206,25 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
             p_tot = p_init;
 
-            for(int j=0; j<it+1; j++)
+            for (int j = 0; j < it + 1; j++)
             {
-                p_tot += alpha[j]*phi[j];
+                p_tot += alpha[j] * phi[j];
             }
-
-        } else {
+        }
+        else
+        {
 
             p_tot += G.dot1(dW);
         }
 
         chi_p_old = chi_p;
         chi_p.Zero();
-
     }
 
-    if(res >= iter2.tolerance)
+    if (res >= iter2.tolerance)
     {
-        std::cout << "No convergence after " <<  iter2.n << " iterations." << "Res = " << res << std::endl;
+        std::cout << "No convergence after " << iter2.n << " iterations."
+                  << "Res = " << res << std::endl;
     }
 
     return p_tot;
@@ -231,8 +232,8 @@ pressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
 void IntegralForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
 {
-    assert(_Greens  != nullptr);
-    assert(_p0      != nullptr);
+    assert(_Greens != nullptr);
+    assert(_p0 != nullptr);
 
     int li;
 
@@ -241,7 +242,7 @@ void IntegralForwardModel::calculatePTot(const pressureFieldSerial &chiEst)
         li = i * _src.nSrc;
 
         std::cout << "  " << std::endl;
-        std::cout << "Creating this->p_tot for " << i+1 << "/ " << _freq.nFreq << "freq" << std::endl;
+        std::cout << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" << std::endl;
         std::cout << "  " << std::endl;
 
         for (int j = 0; j < _src.nSrc; j++)
@@ -268,9 +269,9 @@ void IntegralForwardModel::calculateKappa()
         {
             lj = j * _src.nSrc;
 
-            for(int k = 0; k < _src.nSrc; k++)
+            for (int k = 0; k < _src.nSrc; k++)
             {
-                *_Kappa[li + lj + k] = ( *_Greens[i]->GetReceiverCont(j) ) * (*_pTot[i * _src.nSrc + k]);
+                *_Kappa[li + lj + k] = (*_Greens[i]->GetReceiverCont(j)) * (*_pTot[i * _src.nSrc + k]);
             }
         }
     }
@@ -284,8 +285,8 @@ void IntegralForwardModel::mapDomainToSignal(const pressureFieldSerial &CurrentP
 void IntegralForwardModel::applyKappa(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
-    {       
-        kOperator[i] = Summation( *_Kappa[i], CurrentPressureFieldSerial);
+    {
+        kOperator[i] = Summation(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 
@@ -297,7 +298,7 @@ void IntegralForwardModel::applyKappa(const pressureFieldSerial &CurrentPressure
 //    }
 //}
 
-void IntegralForwardModel::getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes)
+void IntegralForwardModel::getUpdateDirectionInformation(std::complex<double> *res, pressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 
@@ -313,7 +314,7 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::complex<double>* r
         {
             l_j = j * _src.nSrc;
 
-            for(int k = 0; k < _src.nSrc; k++)
+            for (int k = 0; k < _src.nSrc; k++)
             {
                 kDummy = *_Kappa[l_i + l_j + k];
                 kDummy.Conjugate();
@@ -323,4 +324,3 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::complex<double>* r
         }
     }
 }
-

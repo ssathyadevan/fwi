@@ -2,26 +2,22 @@
 #include <utilityFunctions.h>
 #include "genericInputCardReader.h"
 
-
-
-
-TEST (HelperFunctionTest, ints){
-    ASSERT_EQ(5, dist(3,4));
-
+TEST(HelperFunctionTest, ints)
+{
+    ASSERT_EQ(5, dist(3, 4));
 }
 
-TEST (HelperFunctionTest, doubles){
+TEST(HelperFunctionTest, doubles)
+{
 
-    EXPECT_EQ(5., dist(3.,4.));
-
+    EXPECT_EQ(5., dist(3., 4.));
 }
 
-TEST (HelperFunctionTest, doubles2){
+TEST(HelperFunctionTest, doubles2)
+{
 
-    EXPECT_EQ(5., dist(3.,4.));
+    EXPECT_EQ(5., dist(3., 4.));
 }
-
-
 
 //int main(int argc, char **argv)
 //{
@@ -29,4 +25,3 @@ TEST (HelperFunctionTest, doubles2){
 //    int ret = RUN_ALL_TESTS();
 //    return ret;
 //}
-

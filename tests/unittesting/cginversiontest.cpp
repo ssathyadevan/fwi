@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include "conjugateGradientInversionInputCardReader.h"
 
-
 //Generic Input Card test:
-TEST(CGInversionInputTest, testCardToInputFunctionality){
+TEST(CGInversionInputTest, testCardToInputFunctionality)
+{
 
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path
@@ -19,4 +19,3 @@ TEST(CGInversionInputTest, testCardToInputFunctionality){
     EXPECT_EQ(input.iteration1.n, 10);
     EXPECT_EQ(input.doReg, true);
 }
-

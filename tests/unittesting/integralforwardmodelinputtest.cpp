@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include "integralForwardModelInputCardReader.h"
 
-
 //Generic Input Card test:
-TEST(integralForwardModelInputTest, ints){
+TEST(integralForwardModelInputTest, ints)
+{
 
     std::string temp = "../../../tests/testCase/"; //jenkins path
     //std::string temp = "../../../parallelized-fwi/tests/testCase/"; //qt path

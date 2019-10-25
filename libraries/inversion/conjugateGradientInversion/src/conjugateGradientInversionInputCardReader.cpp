@@ -9,7 +9,8 @@ conjugateGradientInversionInputCardReader::conjugateGradientInversionInputCardRe
     readCard(caseFolder);
 }
 
-conjugateGradientInversionInput  conjugateGradientInversionInputCardReader::getInput(){
+conjugateGradientInversionInput conjugateGradientInversionInputCardReader::getInput()
+{
     return _input;
 }
 
@@ -17,14 +18,11 @@ void conjugateGradientInversionInputCardReader::readCard(const std::string &case
 {
     nlohmann::json j = readFile(caseFolder + "/input/ConjugateGradientInversionInput.json");
 
-    conjugateGradientInversionInput input
-	{
-		{j["Iter1"]["n"], j["Iter1"]["tolerance"]},
+    conjugateGradientInversionInput input{
+        {j["Iter1"]["n"], j["Iter1"]["tolerance"]},
         {j["DeltaAmplification"]["start"], j["DeltaAmplification"]["slope"]},
         j["do_reg"],
-        j["n_max"]
-	};
+        j["n_max"]};
 
     _input = input;
 }
-
