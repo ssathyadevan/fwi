@@ -1,0 +1,11 @@
+{
+    "PMLWidthFactor": {
+        "x": 10.0,
+        "z": 10.0
+    },
+    
+    "SourceParameter":{
+        "r": 4.0,
+	"beta": 15.0
+    }
+}
