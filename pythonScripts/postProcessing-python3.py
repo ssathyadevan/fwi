@@ -83,7 +83,7 @@ if (nxt_original > nxt):
     nxt = nxt_original
     nzt = nzt_original
 elif (nxt > nxt_original):
-    chi1 = resize(chi2, (nzt, nxt), mode='reflect')
+    chi1 = resize(chi1, (nzt, nxt), mode='reflect')
     nxt_original = nxt
     nzt_original = nzt
 

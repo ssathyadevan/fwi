@@ -36,9 +36,9 @@
         "z": 32
     },
     "ngrid": {
-        "x": 50,
-        "z": 25
+        "x": 32,
+        "z": 16
     },
     "verbosity": false,
-    "fileName": "temple"
+    "fileName": "highvelocitytemple"
 }
