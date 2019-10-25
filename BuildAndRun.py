@@ -96,7 +96,12 @@ def add_to(table):
         print('You introduced an invalid command, maybe try again.')
         answer = input('~: ')
     out_resolution = answer
-    table.append([method, conditions, image, out_resolution, table[-1][4] + 1])
+
+    print('Give a name for the output to be store:')
+    answer = input('~: ')
+    folder = answer
+
+    table.append([method, conditions, image, out_resolution, table[-1][4] + 1, folder])
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('cp -r ' + method[:1].upper() + method[1:] +
               'Input.json temp/temp' + str(running_table[-1][4]) + '.json')
@@ -159,6 +164,10 @@ def edit(table):
         answer = input('~: ')
     table[index][3] = answer
 
+    print('Give a name for the output to be store:')
+    answer = input('~: ')
+    table[index][5] = answer
+
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('cp -r ' + table[index][0][:1].upper() + table[index][0][1:] +
               'Input.json temp/temp' + str(running_table[index][4]) + '.json')
@@ -208,7 +217,7 @@ if sys.platform.startswith('linux'):
     os.chdir('libraries/inversion/')
     available_methods = os.popen('ls -d */').read().split('\n')
 
-    running_table = [['conjugateGradientInversion', 'Default', 'temple', '50x25', 0]]
+    running_table = [['conjugateGradientInversion', 'Default', 'temple', '50x25', 0, 'default']]
     os.chdir(current_directory + '/inputFiles/default/input/')
     if not os.path.isdir('temp'):
         os.mkdir('temp')
@@ -238,21 +247,23 @@ if sys.platform.startswith('linux'):
         print('Running project:')
         if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
             os.mkdir('../FWIInstall')
-        os.system('cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall')
+        os.system('cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
         os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default/input/')
+        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5] + '/input/')
         os.system('cp -r temp/temp' + str(ind_run[4]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
                   'Input.json')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
-        check = os.system('./FWI_PreProcess ../default/')
+        check = os.system('./FWI_PreProcess ../' + ind_run[5])
         checking_for_errors(check)
-        check = os.system('./FWI_UnifiedProcess ../default/ ' + ind_run[0])
+        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0])
         checking_for_errors(check)
 
-        print('Now post processing')
+    print('Now post processing')
+    for ind_run in running_table:
+        print(ind_run[5], ':')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')
         os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
-        check = os.system('python3 postProcessing-python3.py default/')
+        check = os.system('python3 postProcessing-python3.py ' + ind_run[5])
         checking_for_errors(check)
         # os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default/output')
         # os.system('eog defaultResult.png')
