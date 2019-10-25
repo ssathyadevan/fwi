@@ -39,23 +39,23 @@ contents = f.readlines()
 # Take the first line entirely...
 x = contents[1]
 # Split it into its constituent words
-y, u, v = x.split()
+_, _, v = x.split()
 # Cast the third word to an integer, we know this is nxt, we built the .txt after all
 nxt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[2]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[3]
-y, u, v = x.split()
+_, _, v = x.split()
 nxt_original = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[4]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt_original = int(v)
 
 # zerothfile="src/ShowChi.py"
@@ -78,7 +78,9 @@ v_min = chi1.min()
 v_max = chi1.max()                   # ...(just copy-pasted this)
 
 # We upscale the smaller image to avoid information loss
-if (nxt_original > nxt):
+chi1_original = chi1
+chi2_original = chi2
+if nxt_original > nxt:
     chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
     nxt = nxt_original
     nzt = nzt_original
@@ -91,7 +93,7 @@ elif (nxt > nxt_original):
 diff_chi = chi2-chi1
 mse = (np.square(diff_chi)).mean()
 square_mean_original = (np.square(chi1)).mean()
-avg_relative_error = np.sqrt(mse)/square_mean_original*100
+avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
 print("The MSE (mean square error) is:       "+str(mse))
 print("The average relative error is:        "+str(avg_relative_error))
 
@@ -105,19 +107,20 @@ print("Execution time in seconds:            "+str(new_total_seconds))
 
 # Here we make and save the actual plots
 plt.clf
+plt.subplots_adjust(hspace=0.5)
 
 plt.subplot(3, 1, 1)
-plt.text(64., 38., 'Chi values in original reservoir')
-plt.imshow(chi1, interpolation='nearest', vmin=v_min, vmax=v_max)
+plt.title("Chi values in original reservoir")
+plt.imshow(chi1_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 plt.subplot(3, 1, 2)
-plt.text(64., 38., 'Chi values in reconstructed reservoir')
-plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
+plt.title("Chi values in reconstructed reservoir")
+plt.imshow(chi2_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 plt.subplot(3, 1, 3)
-plt.text(64., 38., 'Difference between chi values')
+plt.title("Difference between chi values")
 plt.imshow(diff_chi, interpolation='nearest')
 plt.colorbar()
 

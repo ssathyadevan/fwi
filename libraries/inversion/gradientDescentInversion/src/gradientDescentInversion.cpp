@@ -13,7 +13,8 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
-    double gamma, alpha, res, resSq;
+    double res;
+    double gamma = 0;
 
     pressureFieldSerial chiEst(_grid), chiOld(_grid), g(_grid), gOld(_grid), zeta(_grid);
     pressureFieldComplexSerial tmp(_grid); // eq: integrandForDiscreteK, tmp is the argument of Re()
@@ -33,7 +34,7 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
 
     int counter = 1;
 
-    std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData); // Fx to minimize;
+    _forwardModel->calculateResidual(chiEst, pData); // Fx to minimize;
     for (int it1 = 0; it1 < _gdInput.iter; it1++)
     {
         std::cout << "Iteration number: " << it1 + 1 << std::endl;

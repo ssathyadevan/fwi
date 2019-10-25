@@ -16,11 +16,12 @@ function( build_test )
     gtest_discover_tests( ${TEST_TARGET} )
 endfunction( build_test )
 
-#core_library integral_forwardModel_library conjugate_gradient_inversion_library
+#core_library integral_forwardModel_library conjugate_gradient_inversion_library finite_difference_forwardModel_library
 
 build_test( TARGET helmholtz2DTest SOURCE helmholtz2DTest.cpp LIBRARIES core_library finite_difference_forwardModel_library)
 build_test( TARGET unittest SOURCE unittest_1.cpp LIBRARIES core_library)
 build_test( TARGET genericinputtest SOURCE genericinputtest.cpp LIBRARIES core_library)
+build_test( TARGET finiteDifferenceForwardModelInputTest SOURCE finitedifferenceforwardmodelinputtest.cpp LIBRARIES core_library finite_difference_forwardModel_library)
 build_test( TARGET integralforwardmodelinputtest SOURCE integralforwardmodelinputtest.cpp LIBRARIES core_library integral_forwardModel_library)
 build_test( TARGET CGInversionInputTest SOURCE cginversiontest.cpp LIBRARIES core_library conjugate_gradient_inversion_library)
 
@@ -33,5 +34,4 @@ build_test( TARGET CGInversionInputTest SOURCE cginversiontest.cpp LIBRARIES cor
 #target_link_libraries( genericinputtest ${GTEST_BOTH_LIBRARIES} core_library pthread)
 #gtest_discover_tests( genericinputtest )
 
-install( TARGETS unittest DESTINATION bin) #genericinputtest integralforwardmodelinputtest CGInversionInputTest unittest
-
+install( TARGETS unittest DESTINATION bin) #genericinputtest integralforwardmodelinputtest CGInversionInputTest finiteDifferenceForwardModelInputTest unittest 

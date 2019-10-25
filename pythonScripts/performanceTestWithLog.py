@@ -8,6 +8,7 @@ import filecmp
 import difflib
 import os
 import sys
+import numpy as np
 from datetime import datetime
 import matplotlib
 matplotlib.use('Agg')
@@ -18,6 +19,12 @@ if (len(sys.argv) != 2):
     sys.exit()
 else:  # if (sys.argv==3):
     new = sys.argv[1]
+
+outputPath = sys.argv[1]
+
+g = open(outputPath + "/output/lastRunName.txt", "r")
+contents = g.readlines()
+runName = contents[0].rstrip()
 
 output_route = "./default/output/"
 newPyFile = open(output_route + new+".pythonIn", "r")
