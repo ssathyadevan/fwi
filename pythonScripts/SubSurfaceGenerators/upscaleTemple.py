@@ -17,13 +17,13 @@ scalefactor = 2
 
 fd = np.loadtxt('temple.txt', delimiter='\n')
 
-image = fd.reshape(nz,nx)
+image = fd.reshape(nz, nx)
 
-#plt.imshow(image)
+# plt.imshow(image)
 
-imagenew = cv2.resize(image,dsize=(scalefactor*nx,scalefactor*nz))
+imagenew = cv2.resize(image, dsize=(scalefactor*nx, scalefactor*nz))
 
-#plt.imshow(imagenew)
+# plt.imshow(imagenew)
 
 fd = imagenew.flatten()
 for i in range(0, len(fd)):
@@ -31,7 +31,7 @@ for i in range(0, len(fd)):
         fd[i] = 0.1869132054239393
     else:
         fd[i] = 0.0
-        
-#plt.imshow(fd.reshape(scalefactor*nz,scalefactor*nx))                
+
+# plt.imshow(fd.reshape(scalefactor*nz,scalefactor*nx))
 
 np.savetxt("largetemple.txt", fd)
