@@ -36,9 +36,9 @@
         "z": 32
     },
     "ngrid": {
-        "x": 50,
-        "z": 25
+        "x": 64,
+        "z": 32
     },
     "verbosity": false,
-    "fileName": "temple"
+    "fileName": "ruitjes"
 }

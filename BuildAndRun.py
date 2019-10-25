@@ -84,7 +84,7 @@ def add_to(table):
         answer = input('~: ')
     image = available_images[int(answer)][:-4]
 
-    print('What output resolution do you want?')
+    print('What output resolution do you want (mxn)?')
     answer = input('~: ')
     temp = answer.split('x')
     while (not temp[0].isdigit()) and (not temp[1].isdigit()):
@@ -145,7 +145,7 @@ def edit(table):
         answer = input('~: ')
     table[index][2] = available_images[int(answer)][:-4]
 
-    print('What output resolution do you want?')
+    print('What output resolution do you want (mxn)?')
     answer = input('~: ')
     temp = answer.split('x')
     while (not temp[0].isdigit()) and (not temp[1].isdigit()):
@@ -194,6 +194,7 @@ def check_file_res(image):
             answer = input('~: ')
         return int(temp[0]), int(temp[1])
 if sys.platform.startswith('linux'):
+    os.system('sudo apt install python3-skimage')
     current_directory = os.getcwd()
 
     os.chdir('libraries/inversion/')
