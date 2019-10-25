@@ -10,6 +10,16 @@ matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
 import sys, csv
+from skimage import data, color
+from skimage.transform import resize
+
+def find(substr,whichin):
+    from datetime import datetime
+    lines           = [x for x in open(whichin+"Process.out") if substr in x]
+    line            = lines[0]
+    manip           = line.replace(substr,'').replace("\n",'')
+    start_or_finish = (datetime.strptime(manip,'%c'))
+    return start_or_finish
 
 outputPath = sys.argv[1] # Enter here the name of the case folder you want to post process
 
@@ -50,18 +60,51 @@ chi2 = chi2.reshape((nzt, nxt))
 v_min = chi1.min()                   # set the minimum and maximum values to chi...
 v_max = chi1.max()                   # ...(just copy-pasted this)
 
+#We upscale the smaller image to avoid information loss
+if (nxt_original>nxt):
+    chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
+    nxt = nxt_original
+    nzt = nzt_original
+elif (nxt>nxt_original):
+    chi1 = resize(chi2, (nzt, nxt), mode='reflect')
+    nxt_original = nxt
+    nzt_original = nzt
+
+#We compute the error per pixel, the square mean of the original image and the mse
+diff_chi=chi2-chi1
+mse = (np.square(diff_chi)).mean()
+square_mean_original = (np.square(chi1)).mean()
+avg_relative_error = np.sqrt(mse)/square_mean_original*100
+print("The MSE (mean square error) is:       "+str(mse))
+print("The average relative error is:        "+str(avg_relative_error))
+
+#We find the execution time in the logs
+datetime_new_start    = find("Starting at ", outputPath+ "/output/" + runName)
+datetime_new_finish   = find("Finished at ", outputPath+ "/output/" + runName)
+new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds
+
+print("Execution time in seconds:            "+str(new_total_seconds))
+
+
 # Here we make and save the actual plots
 plt.clf
 
-plt.subplot(2,2,1)
+plt.subplot(3,1,1)
+plt.text(64.,38.,'Chi values in original reservoir')
 plt.imshow(chi1, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
-plt.subplot(2,2,2)
+plt.subplot(3,1,2)
+plt.text(64.,38.,'Chi values in reconstructed reservoir')
 plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
-plt.savefig(filenameout, dpi=400)
+plt.subplot(3,1,3)
+plt.text(64.,38.,'Difference between chi values')
+plt.imshow(diff_chi, interpolation='nearest')
+plt.colorbar()
+
+plt.savefig(filenameout, dpi=400, bbox_inches='tight')
 
 ####################################
 ####  Create the residual plots ####
@@ -81,3 +124,4 @@ plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 print("The pictures have been generated with Python")
 
 sys.exit()
+
