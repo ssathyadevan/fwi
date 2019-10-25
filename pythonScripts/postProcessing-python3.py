@@ -39,23 +39,23 @@ contents = f.readlines()
 # Take the first line entirely...
 x = contents[1]
 # Split it into its constituent words
-y, u, v = x.split()
+_, _, v = x.split()
 # Cast the third word to an integer, we know this is nxt, we built the .txt after all
 nxt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[2]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[3]
-y, u, v = x.split()
+_, _, v = x.split()
 nxt_original = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[4]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt_original = int(v)
 
 # zerothfile="src/ShowChi.py"
@@ -78,11 +78,11 @@ v_min = chi1.min()
 v_max = chi1.max()                   # ...(just copy-pasted this)
 
 # We upscale the smaller image to avoid information loss
-if (nxt_original > nxt):
+if nxt_original > nxt:
     chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
     nxt = nxt_original
     nzt = nzt_original
-elif (nxt > nxt_original):
+elif nxt > nxt_original:
     chi1 = resize(chi2, (nzt, nxt), mode='reflect')
     nxt_original = nxt
     nzt_original = nzt
