@@ -84,8 +84,13 @@ if nxt_original > nxt:
     chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
     nxt = nxt_original
     nzt = nzt_original
+<<<<<<< HEAD
+elif (nxt > nxt_original):
+    chi1 = resize(chi1, (nzt, nxt), mode='reflect')
+=======
 elif nxt > nxt_original:
     chi1 = resize(chi2, (nzt, nxt), mode='reflect')
+>>>>>>> 313e286e88cf5bd000e90b07c9d6d5d16f97eae2
     nxt_original = nxt
     nzt_original = nzt
 
@@ -93,7 +98,7 @@ elif nxt > nxt_original:
 diff_chi = chi2-chi1
 mse = (np.square(diff_chi)).mean()
 square_mean_original = (np.square(chi1)).mean()
-avg_relative_error = np.sqrt(mse)/square_mean_original*100
+avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
 print("The MSE (mean square error) is:       "+str(mse))
 print("The average relative error is:        "+str(avg_relative_error))
 
