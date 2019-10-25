@@ -78,6 +78,8 @@ v_min = chi1.min()
 v_max = chi1.max()                   # ...(just copy-pasted this)
 
 # We upscale the smaller image to avoid information loss
+chi1_original = chi1
+chi2_original = chi2
 if (nxt_original > nxt):
     chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
     nxt = nxt_original
@@ -105,19 +107,20 @@ print("Execution time in seconds:            "+str(new_total_seconds))
 
 # Here we make and save the actual plots
 plt.clf
+plt.subplots_adjust(hspace=0.5)
 
 plt.subplot(3, 1, 1)
-plt.text(64., 38., 'Chi values in original reservoir')
-plt.imshow(chi1, interpolation='nearest', vmin=v_min, vmax=v_max)
+plt.title("Chi values in original reservoir")
+plt.imshow(chi1_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 plt.subplot(3, 1, 2)
-plt.text(64., 38., 'Chi values in reconstructed reservoir')
-plt.imshow(chi2, interpolation='nearest', vmin=v_min, vmax=v_max)
+plt.title("Chi values in reconstructed reservoir")
+plt.imshow(chi2_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
 plt.subplot(3, 1, 3)
-plt.text(64., 38., 'Difference between chi values')
+plt.title("Difference between chi values")
 plt.imshow(diff_chi, interpolation='nearest')
 plt.colorbar()
 
