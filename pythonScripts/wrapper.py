@@ -14,7 +14,7 @@ import sys
 
 caseFolder = ''
 
-if (len(sys.argv) != 2):
+if len(sys.argv) != 2:
     print("please supply the directory of a case folder")
     sys.exit()
 else:

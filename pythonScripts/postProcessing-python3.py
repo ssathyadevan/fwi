@@ -39,23 +39,23 @@ contents = f.readlines()
 # Take the first line entirely...
 x = contents[1]
 # Split it into its constituent words
-y, u, v = x.split()
+_, _, v = x.split()
 # Cast the third word to an integer, we know this is nxt, we built the .txt after all
 nxt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[2]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[3]
-y, u, v = x.split()
+_, _, v = x.split()
 nxt_original = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[4]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt_original = int(v)
 
 # zerothfile="src/ShowChi.py"
@@ -80,12 +80,17 @@ v_max = chi1.max()                   # ...(just copy-pasted this)
 # We upscale the smaller image to avoid information loss
 chi1_original = chi1
 chi2_original = chi2
-if (nxt_original > nxt):
+if nxt_original > nxt:
     chi2 = resize(chi2, (nzt_original, nxt_original), mode='reflect')
     nxt = nxt_original
     nzt = nzt_original
+<<<<<<< HEAD
 elif (nxt > nxt_original):
+    chi1 = resize(chi1, (nzt, nxt), mode='reflect')
+=======
+elif nxt > nxt_original:
     chi1 = resize(chi2, (nzt, nxt), mode='reflect')
+>>>>>>> 313e286e88cf5bd000e90b07c9d6d5d16f97eae2
     nxt_original = nxt
     nzt_original = nzt
 
@@ -93,7 +98,7 @@ elif (nxt > nxt_original):
 diff_chi = chi2-chi1
 mse = (np.square(diff_chi)).mean()
 square_mean_original = (np.square(chi1)).mean()
-avg_relative_error = np.sqrt(mse)/square_mean_original*100
+avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
 print("The MSE (mean square error) is:       "+str(mse))
 print("The average relative error is:        "+str(avg_relative_error))
 

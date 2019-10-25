@@ -24,13 +24,13 @@ f = open(outputPath+"/output/"+runName+".pythonIn", "r")
 # Just dump the contents of this file into a big variable
 contents = f.readlines()
 x = contents[1]                       			# Take the first line entirely...
-y, u, v = x.split()                     			# Split it into its constituent words
+_, _, v = x.split()                     			# Split it into its constituent words
 # Cast the third word to an integer, we know this is nxt, we built the .txt after all
 nxt = int(v)
 
 # The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
 x = contents[2]
-y, u, v = x.split()
+_, _, v = x.split()
 nzt = int(v)
 
 # zerothfile="src/ShowChi.py"
@@ -81,6 +81,6 @@ plt.grid(True)
 plt.savefig(outputPath + "/output/" + runName + "Residual.png", dpi=400)
 
 
-print"The pictures have been generated with Python"
+print("The pictures have been generated with Python")
 
 sys.exit()
