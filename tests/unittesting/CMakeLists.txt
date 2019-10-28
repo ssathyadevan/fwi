@@ -1,9 +1,13 @@
+# Include libraries
 include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARDMODEL} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CONJUGATE_GRADIENT_INVERSION} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARDMODEL} )
+include_directories( ${LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION} )
+include_directories( ${LIBRARY_INCLUDE_DIRS_RANDOM_INVERSION} )
 
+# Template function for building a test
 function( build_test )
     set( PREFIX "TEST" )
     set( OPTIONS )
@@ -16,22 +20,7 @@ function( build_test )
     gtest_discover_tests( ${TEST_TARGET} )
 endfunction( build_test )
 
-#core_library integral_forwardModel_library conjugate_gradient_inversion_library finite_difference_forwardModel_library
+# Build the tests!
+build_test( TARGET InputTest SOURCE InputCardReaderTests.cpp LIBRARIES core_library integral_forwardModel_library random_inversion_library gradient_descent_inversion_library finite_difference_forwardModel_library conjugate_gradient_inversion_library )
 
-build_test( TARGET helmholtz2DTest SOURCE helmholtz2DTest.cpp LIBRARIES core_library finite_difference_forwardModel_library)
-build_test( TARGET unittest SOURCE unittest_1.cpp LIBRARIES core_library)
-build_test( TARGET genericinputtest SOURCE genericinputtest.cpp LIBRARIES core_library)
-build_test( TARGET finiteDifferenceForwardModelInputTest SOURCE finitedifferenceforwardmodelinputtest.cpp LIBRARIES core_library finite_difference_forwardModel_library)
-build_test( TARGET integralforwardmodelinputtest SOURCE integralforwardmodelinputtest.cpp LIBRARIES core_library integral_forwardModel_library)
-build_test( TARGET CGInversionInputTest SOURCE cginversiontest.cpp LIBRARIES core_library conjugate_gradient_inversion_library)
-
-
-#add_executable ( unittest unittest_1.cpp)
-#target_link_libraries( unittest ${GTEST_LIBRARIES} core_library pthread)
-#gtest_discover_tests( unittest )
-
-#add_executable( genericinputtest genericinputtest.cpp)
-#target_link_libraries( genericinputtest ${GTEST_BOTH_LIBRARIES} core_library pthread)
-#gtest_discover_tests( genericinputtest )
-
-install( TARGETS unittest DESTINATION bin) #genericinputtest integralforwardmodelinputtest CGInversionInputTest finiteDifferenceForwardModelInputTest unittest 
+install( TARGETS InputTest DESTINATION bin)
