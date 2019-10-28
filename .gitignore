@@ -5,3 +5,5 @@ inputFiles/default/input/temp/temp1.json
 inputFiles/default/input/temp/temp2.json
 inputFiles/default/input/GenericInput.json
 inputFiles/default/input/RandomInversionInput.json
+*.idea
+*.vscode
