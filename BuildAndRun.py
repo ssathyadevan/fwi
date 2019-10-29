@@ -32,6 +32,10 @@ def print_run(running_table):
     for ind_run in running_table:
         print(row_format.format(*ind_run[:-1]))
 
+def enter_description():
+    description = input('Please enter a description of the run or press enter: \n')
+    with open("../../../../parallelized-fwi/results/description.txt", "w") as in_file:
+        in_file.write(description)
 
 def ask_options(running_table):
     answer = '10'
@@ -43,9 +47,11 @@ def ask_options(running_table):
             answer = input('~: ')
         if int(answer) == 1:
             running_table = edit(running_table)
+            enter_description()
             print_run(running_table)
         elif int(answer) == 2:
             running_table = add_to(running_table)
+            enter_description()
             print_run(running_table)
     return running_table
 
@@ -228,6 +234,9 @@ if sys.platform.startswith('linux'):
     ask_options(running_table)
 
     install_gtest()
+
+    if running_table[0][1] == 'Default':
+        enter_description()
 
     for ind_run in running_table:
         print('We start with the ' + ind_run[0] + ' method.')

@@ -13,7 +13,7 @@ class OutputLogger(object):
             average_relative_error=np.sqrt(mse) / np.sqrt(square_mean) * 100,
             input_resolution=list,
             output_resolution=list,
-            RAM=int,
+            RAM=str,
             CPU=str,
             description="",
             image=str,
@@ -42,15 +42,22 @@ class OutputLogger(object):
         os.system("lshw -json > hardware_specs.json")
         with open("hardware_specs.json") as json_file:
             hardware_specs = json.load(json_file)
-        self.log["RAM"] = hardware_specs["children"][0]["children"][0]["size"]
+        self.log["RAM"] = str(round(hardware_specs["children"][0]["children"][0]["size"]/1024**2,0))
         self.log["CPU"] = hardware_specs["children"][0]["children"][1]["product"]
         os.remove("hardware_specs.json")
+
+    def get_description(self):
+        if os.path.isfile("../parallelized-fwi/results/description.txt"):
+            with open("../parallelized-fwi/results/description.txt", 'r') as in_file:
+                self.log["description"] = in_file.read()
+            os.remove("../parallelized-fwi/results/description.txt")
 
     def complete_output_log(self):
         generic_input = self.open_generic_input_json()
         self.log["image"] = generic_input["fileName"]
         self.determine_resolutions(generic_input)
         self.determine_hardware_specs()
+        self.get_description()
 
     def save_output_log(self):
         log = self.log.copy()
