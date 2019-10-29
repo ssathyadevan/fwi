@@ -7,3 +7,4 @@ inputFiles/default/input/GenericInput.json
 inputFiles/default/input/RandomInversionInput.json
 *.idea
 *.vscode
+results/*

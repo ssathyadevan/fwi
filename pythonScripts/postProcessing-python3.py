@@ -12,11 +12,12 @@ from skimage import data, color
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
+from datetime import datetime
 # matplotlib.use('Agg')
-
+sys.path.insert(0, "../parallelized-fwi/pythonScripts/classes")
+from OutputLogger import OutputLogger
 
 def find(substr, whichin):
-    from datetime import datetime
     lines = [x for x in open(whichin+"Process.out") if substr in x]
     line = lines[0]
     manip = line.replace(substr, '').replace("\n", '')
@@ -140,6 +141,7 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
+OutputLogger(datetime_new_start, datetime_new_finish, diff_chi, mse, square_mean_original)
 
 print("The pictures have been generated with Python")
 
