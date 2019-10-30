@@ -12,7 +12,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal));
-    double resSq, chiEstRes;
+    double resSq, chiEstRes, newResSq, newChiEstRes;
 
     pressureFieldSerial chiEst(_grid);
 
@@ -29,10 +29,11 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
     }
 
     int counter = 1;
-
+    _forwardModel->calculateKappa();
     //main loop//
     for (int it = 0; it < _riInput.nMaxOuter; it++)
     {
+        
         std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData);
 
         resSq = _forwardModel->calculateResidualNormSq(resArray);
@@ -45,22 +46,24 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
             pressureFieldSerial tempRandomChi(_grid);
             tempRandomChi.RandomSaurabh();
 
-            resSq = _forwardModel->calculateResidualNormSq(resArray);
-            chiEstRes = eta * resSq;
+            newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
+            newChiEstRes = eta * newResSq;
 
-            if (it1 == 0)
+            if (it1 == 0 && it == 0)
             {
                 tempRandomChi.CopyTo(chiEst);
+                resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
+                chiEstRes = eta * resSq;
             }
-            else if (std::abs(resSq) < std::abs(chiEstRes))
+            else if (std::abs(newChiEstRes) < std::abs(chiEstRes))
             {
                 std::cout << "Randomizing the temple again" << std::endl;
                 tempRandomChi.CopyTo(chiEst);
 
-                resSq = _forwardModel->calculateResidualNormSq(resArray);
+                resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
-
+            std::cerr << newResSq << " | " << resSq << std::endl;
             std::cout << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
 
             file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
