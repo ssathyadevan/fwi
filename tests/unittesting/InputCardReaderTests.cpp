@@ -12,7 +12,7 @@
 TEST(InputTest, conjugateGradientTest)
 {
     //std::string temp = "../../../tests/testCase/"; //jenkins path
-    std::string temp = "../../../parallelized-fwi/tests/testCase"; //qt path
+    std::string temp = "../../parallelized-fwi/tests/testCase"; //qt path
     conjugateGradientInversionInputCardReader cardReader = conjugateGradientInversionInputCardReader(temp);
     conjugateGradientInversionInput input = cardReader.getInput();
 
@@ -47,7 +47,7 @@ TEST(InputTest, genericTest)
 //Finite Difference Forward Model Input Card Reader Test:
 TEST(InputTest, finiteDifferenceForwardModelTest){
     //std::string temp = "../../../tests/testCase/"; //jenkins path
-    std::string temp = "../../../parallelized-fwi/tests/testCase"; //qt path
+    std::string temp = "../../parallelized-fwi/tests/testCase"; //qt path
 
     finiteDifferenceForwardModelInputCardReader cardReader = finiteDifferenceForwardModelInputCardReader(temp);
     finiteDifferenceForwardModelInput input = cardReader.getInput();
@@ -61,7 +61,7 @@ TEST(InputTest, finiteDifferenceForwardModelTest){
 //Random Inversion Input Card Reader Test:
 TEST(InputTest, randomInversionTest){
     //std::string temp = "../../../tests/testCase/"; //jenkins path
-    std::string temp = "../../../parallelized-fwi/tests/testCase"; //qt path
+    std::string temp = "../../parallelized-fwi/tests/testCase"; //qt path
 
     randomInversionInputCardReader cardReader = randomInversionInputCardReader(temp);
     randomInversionInput input = cardReader.getInput();
@@ -74,7 +74,7 @@ TEST(InputTest, randomInversionTest){
 //Gradient Descent Inversion Input Card Reader Test:
 TEST(InputTest, gradientDescentInversionTest){
     //std::string temp = "../../../tests/testCase/"; //jenkins path
-    std::string temp = "../../../parallelized-fwi/tests/testCase"; //qt path
+    std::string temp = "../../parallelized-fwi/tests/testCase"; //qt path
 
     gradientDescentInversionInputCardReader cardReader = gradientDescentInversionInputCardReader(temp);
     gradientDescentInversionInput input = cardReader.getInput();
@@ -88,7 +88,7 @@ TEST(InputTest, gradientDescentInversionTest){
 //Integral Forward Model Input Card Reader Test:
 TEST(InputTest, integralForwardModelTest){
     //std::string temp = "../../../tests/testCase/"; //jenkins path
-    std::string temp = "../../../parallelized-fwi/tests/testCase"; //qt path
+    std::string temp = "../../parallelized-fwi/tests/testCase"; //qt path
 
     integralForwardModelInputCardReader cardReader = integralForwardModelInputCardReader(temp);
     integralForwardModelInput input = cardReader.getInput();
