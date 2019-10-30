@@ -15,7 +15,7 @@
 class pressureFieldSerial : public pressureField
 {
 
-    double * const data;
+    double * const data; // initialised on heap by constructor: data(new double[grid_size]).
 
 public:
 

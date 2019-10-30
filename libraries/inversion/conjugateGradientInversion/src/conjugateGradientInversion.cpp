@@ -88,6 +88,7 @@ pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<d
 
                 vecResFirstIter.push_back(res);
 
+                // Terminate when iteration > 0 & (tolerance met OR ?)
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
                                   (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance))))
                 {

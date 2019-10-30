@@ -12,8 +12,8 @@ class pressureField
 protected:
 
     const grid2D &grid;
-    const int nGridPoints;
-    const double cellVolume;
+    const int nGridPoints; // These are the same properties as contained in Grid2D. Why repeat?
+    const double cellVolume; // These are the same properties as contained in Grid2D. Why repeat?
 
     pressureField(const pressureField&) = delete;
     pressureField& operator=(const pressureField&) = delete;
@@ -29,8 +29,8 @@ public:
 
     const grid2D &GetGrid() const { return grid; }
 
-    int GetNumberOfGridPoints() const { return nGridPoints; }
-    double getCellVolume() const { return cellVolume; }
+    int GetNumberOfGridPoints() const { return nGridPoints; } // These are the same properties as contained in Grid2D. Why repeat?
+    double getCellVolume() const { return cellVolume; } // These are the same properties as contained in Grid2D. Why repeat?
 
     virtual void Zero() = 0;
     virtual void Square() = 0;
