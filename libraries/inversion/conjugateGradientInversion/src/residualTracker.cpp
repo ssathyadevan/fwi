@@ -1,39 +1,45 @@
 #include "residualTracker.h"
 #include <algorithm>
 
-ResidualTracker::ResidualTracker(int cgInputIter1N) 
-    : mNumConsecutiveDecreases(cgInputIter1N-1), mPreviousResiduals(cgInputIter1N+1, 0) 
+ResidualTracker::ResidualTracker(int cgInputIter1N)
+    : mPeakPeriod(cgInputIter1N)
 {
-
+    mPreviousResiduals = {1.0, 1.0};
+    mCurrentLowPoint = 1.0;
+    mPreviousLowPoint = 1.0;
+    mFinalPeriodCounter = 0;
+    mDiverging = false;
 }
 
-bool ResidualTracker::determineIfIncreasing() 
-{
-    if (mPreviousResiduals[1] - mPreviousResiduals[0] > 0) {
-        return true;
+void ResidualTracker::updatePreviousResiduals(double residual) {
+    mPreviousResiduals[0] = mPreviousResiduals[1];
+    mPreviousResiduals[1] = residual;
+}
+
+void ResidualTracker::updateLowPoints() {
+    if (mPreviousResiduals[1] > mPreviousResiduals[0]) {
+        mPreviousLowPoint = mCurrentLowPoint;
+        mCurrentLowPoint = mPreviousResiduals[0];
     }
-    return false;
 }
 
-bool ResidualTracker::determineIfDiverging() 
+void ResidualTracker::determineIfDiverging(double residual) 
 {
-    if (determineIfIncreasing()) {
-        for (unsigned i = 1; i <= mNumConsecutiveDecreases-1; ++i) {
-            if (mPreviousResiduals[i+1] - mPreviousResiduals[i] > 0) {
-                return true;
-            }
-        }
+    updatePreviousResiduals(residual);
+    updateLowPoints();
+    if (mPreviousLowPoint < mCurrentLowPoint) {
+        mDiverging = true;
     }
-    return false;
 }
 
-void ResidualTracker::updateResidualList(double residual) 
-{
-    std::rotate(mPreviousResiduals.begin(),mPreviousResiduals.begin()+1,mPreviousResiduals.end());
-    mPreviousResiduals.back() = residual;
+void ResidualTracker::incrementFinalPeriodCounter() {
+    mFinalPeriodCounter++;
 }
 
-std::vector<double>& ResidualTracker:: getResidualList() 
-{
-    return mPreviousResiduals;
+int ResidualTracker::getFinalPeriodCounter() {
+    return mFinalPeriodCounter;
+}
+
+bool ResidualTracker::isDiverging() {
+    return mDiverging;
 }

@@ -8,13 +8,20 @@ class ResidualTracker
         explicit ResidualTracker(int cgInputIter1N);
         ~ResidualTracker() {}
 
-        bool determineIfDiverging();
-        void updateResidualList(double residual);
-        std::vector<double>& getResidualList();
+        void determineIfDiverging(double residual);
+        void incrementFinalPeriodCounter();
+        int getFinalPeriodCounter();
+        bool isDiverging();
+
 
     private:
-        unsigned mNumConsecutiveDecreases;
+        bool mDiverging;
         std::vector<double> mPreviousResiduals;
+        double mPreviousLowPoint;
+        double mCurrentLowPoint;
+        int mFinalPeriodCounter;
+        int mPeakPeriod;
 
-        bool determineIfIncreasing();
+        void updatePreviousResiduals(double residual);
+        void updateLowPoints();
 };
