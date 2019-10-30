@@ -34,7 +34,10 @@ def print_run(running_table):
 
 def enter_description():
     description = input('Please enter a description of the run or press enter: \n')
-    with open("../../../../parallelized-fwi/results/description.txt", "w") as in_file:
+    if not os.path.exists(current_directory + '/results'):
+            os.mkdir(current_directory + '/results')
+    os.chdir(current_directory + '/results')
+    with open("description.txt", "w+") as in_file:
         in_file.write(description)
 
 def ask_options(running_table):
@@ -256,10 +259,10 @@ if sys.platform.startswith('linux'):
         print('Running project:')
         if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
             os.mkdir('../FWIInstall')
-        os.system('cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
-        os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
+        os.system('sudo cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
+        os.system('sudo cp -r ../Build/runtime/bin/ ../FWIInstall')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5] + '/input/')
-        os.system('cp -r temp/temp' + str(ind_run[4]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
+        os.system('sudo cp -r temp/temp' + str(ind_run[4]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
                   'Input.json')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
         check = os.system('./FWI_PreProcess ../' + ind_run[5])
