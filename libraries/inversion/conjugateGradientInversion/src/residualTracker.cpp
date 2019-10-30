@@ -2,24 +2,24 @@
 #include <algorithm>
 
 ResidualTracker::ResidualTracker(int cgInputIter1N)
-    : mPeakPeriod(cgInputIter1N)
+    : _peakPeriod(cgInputIter1N)
 {
-    mPreviousResiduals = {1.0, 1.0};
-    mCurrentLowPoint = 1.0;
-    mPreviousLowPoint = 1.0;
-    mFinalPeriodCounter = 0;
-    mDiverging = false;
+    _previousResiduals = {1.0, 1.0};
+    _currentLowPoint = 1.0;
+    _previousLowPoint = 1.0;
+    _finalPeriodCounter = 0;
+    _diverging = false;
 }
 
 void ResidualTracker::updatePreviousResiduals(double residual) {
-    mPreviousResiduals[0] = mPreviousResiduals[1];
-    mPreviousResiduals[1] = residual;
+    _previousResiduals[0] = _previousResiduals[1];
+    _previousResiduals[1] = residual;
 }
 
 void ResidualTracker::updateLowPoints() {
-    if (mPreviousResiduals[1] > mPreviousResiduals[0]) {
-        mPreviousLowPoint = mCurrentLowPoint;
-        mCurrentLowPoint = mPreviousResiduals[0];
+    if (_previousResiduals[1] > _previousResiduals[0]) {
+        _previousLowPoint = _currentLowPoint;
+        _currentLowPoint = _previousResiduals[0];
     }
 }
 
@@ -27,19 +27,19 @@ void ResidualTracker::determineIfDiverging(double residual)
 {
     updatePreviousResiduals(residual);
     updateLowPoints();
-    if (mPreviousLowPoint < mCurrentLowPoint) {
-        mDiverging = true;
+    if (_previousLowPoint < _currentLowPoint) {
+        _diverging = true;
     }
 }
 
 void ResidualTracker::incrementFinalPeriodCounter() {
-    mFinalPeriodCounter++;
+    _finalPeriodCounter++;
 }
 
 int ResidualTracker::getFinalPeriodCounter() {
-    return mFinalPeriodCounter;
+    return _finalPeriodCounter;
 }
 
 bool ResidualTracker::isDiverging() {
-    return mDiverging;
+    return _diverging;
 }

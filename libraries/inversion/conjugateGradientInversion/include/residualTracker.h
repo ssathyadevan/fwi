@@ -15,12 +15,12 @@ class ResidualTracker
 
 
     private:
-        bool mDiverging;
-        std::vector<double> mPreviousResiduals;
-        double mPreviousLowPoint;
-        double mCurrentLowPoint;
-        int mFinalPeriodCounter;
-        int mPeakPeriod;
+        bool _diverging;
+        std::vector<double> _previousResiduals;
+        double _previousLowPoint;
+        double _currentLowPoint;
+        int _finalPeriodCounter;
+        int _peakPeriod;
 
         void updatePreviousResiduals(double residual);
         void updateLowPoints();
