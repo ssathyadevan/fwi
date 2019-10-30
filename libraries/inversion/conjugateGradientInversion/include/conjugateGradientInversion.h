@@ -22,7 +22,6 @@ private:
     const receivers& _recv;
     const frequenciesGroup& _freq;
 
-
 public:
 
     conjugateGradientInversion(ForwardModelInterface *forwardModel, const genericInput& gInput);

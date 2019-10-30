@@ -7,6 +7,7 @@
 #include "randomInversionInputCardReader.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "integralForwardModelInputCardReader.h"
+#include "residualTracker.h"
 
 //Conjugate Gradient Input Card Reader Test:
 TEST(InputTest, conjugateGradientTest)
@@ -96,4 +97,40 @@ TEST(InputTest, integralForwardModelTest){
     EXPECT_EQ(input.iter2.n, 100);
     EXPECT_EQ(input.iter2.tolerance, 5.0e-5);
     EXPECT_EQ(input.iter2.calcAlpha, false);
+}
+
+TEST(InputTest, residualTrackerTeUpdateResidualListTest) {
+    int cgInputIter1N = 5;
+    ResidualTracker residualTracker(cgInputIter1N);
+    
+    std::vector<double> pre_convergence_with_spike = {10.0, 11.0, 10.0, 9.0, 8.0, 7.0};
+
+    for (double& residual : pre_convergence_with_spike) {
+        residualTracker.updateResidualList(residual);
+    };
+    EXPECT_EQ(residualTracker.getResidualList(), pre_convergence_with_spike) << "residual list is not updated properly";
+}
+
+TEST(InputTest, residualTrackerDerermineDivergenceTest) {
+    int cgInputIter1N = 5;
+    ResidualTracker residualTracker(cgInputIter1N);
+    
+    std::vector<double> pre_convergence_with_spike = {10.0, 11.0, 10.0, 9.0, 8.0, 7.0};
+    std::vector<double> pre_convergence_without_spike = {12.0, 11.0, 10.0, 9.0, 8.0, 7.0};
+    std::vector<double> post_convergence_with_spike = {10.0, 11.0, 10.0, 9.0, 10.0, 8.0};
+
+    for (double& residual : pre_convergence_with_spike) {
+        residualTracker.updateResidualList(residual);
+    };
+    EXPECT_EQ(residualTracker.determineIfDiverging(), false) << "residuals are claimed to be diverging although this is not the case";
+
+    for (double& residual : pre_convergence_without_spike) {
+        residualTracker.updateResidualList(residual);
+    };
+    EXPECT_EQ(residualTracker.determineIfDiverging(), false) << "residuals are claimed to be diverging although this is not the case";
+
+    for (double& residual : post_convergence_with_spike) {
+        residualTracker.updateResidualList(residual);
+    };
+    EXPECT_EQ(residualTracker.determineIfDiverging(), true) << "residuals are claimed to be converging although this is not the case";
 }

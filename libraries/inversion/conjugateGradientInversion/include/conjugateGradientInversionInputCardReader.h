@@ -5,7 +5,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-class conjugateGradientInversionInputCardReader:public inputCardReader
+
+class conjugateGradientInversionInputCardReader : public inputCardReader
 {
 public:
     conjugateGradientInversionInputCardReader(const std::string &caseFolder);
