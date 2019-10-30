@@ -60,4 +60,7 @@ TEST(CoreTest, FrequenciesGroupTest)
     int n = 10;
 
     Freq freq{min, max, n};
+    frequenciesGroup freq_group{freq, 2000};
+
+    EXPECT_NEAR(freq_group.k[9], 0.063, 0.01); // 2*pi*20/2000 ~ 0.063
 }
