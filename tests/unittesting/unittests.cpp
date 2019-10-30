@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include <grid2D.h>
-#include <sources.h>
+#include <receivers.h>
 
 /* TEMPLATE
 
@@ -25,7 +25,14 @@ TEST(CoreTests, Grid2DTest)
     EXPECT_NEAR(grid.GetDomainArea(), 4, 0.1);
 }
 
-TEST(CoreTest, PressureFieldTest)
+TEST(CoreTest, ReceiverTest)
 {
-    
+    std::array<double, 2> xMin{0, 0};
+    std::array<double, 2> xMax{10, 0};
+    int nRecv = 6;
+    receivers receivers(xMin, xMax, nRecv);
+
+    EXPECT_EQ(receivers.nRecv, nRecv);
+    EXPECT_NEAR(receivers.xRecv[2][0], 4.0, 0.01);
+    EXPECT_NEAR(receivers.xRecv[2][1], 0.0, 0.01);
 }
