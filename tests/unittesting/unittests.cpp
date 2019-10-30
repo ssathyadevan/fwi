@@ -4,6 +4,8 @@
 #include <grid2D.h>
 #include <receivers.h>
 #include <sources.h>
+#include <freq.h>
+#include <frequenciesGroup.h>
 
 /* TEMPLATE
 
@@ -26,6 +28,7 @@ TEST(CoreTests, Grid2DTest)
     EXPECT_NEAR(grid.GetDomainArea(), 4, 0.1);
 }
 
+// Test receiver construction, assert that the last (5th) receiver is located at (10,0).
 TEST(CoreTest, ReceiverTest)
 {
     std::array<double, 2> xMin{0, 0};
@@ -34,10 +37,11 @@ TEST(CoreTest, ReceiverTest)
     receivers receivers(xMin, xMax, nRecv);
 
     EXPECT_EQ(receivers.nRecv, nRecv);
-    EXPECT_NEAR(receivers.xRecv[2][0], 4.0, 0.01);
-    EXPECT_NEAR(receivers.xRecv[2][1], 0.0, 0.01);
+    EXPECT_NEAR(receivers.xRecv[5][0], 10.0, 0.01);
+    EXPECT_NEAR(receivers.xRecv[5][1], 0.0, 0.01);
 }
 
+// Test source construction, assert that the last (5th) source is located at (10,0).
 TEST(CoreTest, SourceTest)
 {
     std::array<double, 2> xMin{0, 0};
@@ -46,6 +50,14 @@ TEST(CoreTest, SourceTest)
     sources sources(xMin, xMax, nSrc);
 
     EXPECT_EQ(sources.nSrc, nSrc);
-    EXPECT_NEAR(sources.xSrc[2][0], 4.0, 0.01);
-    EXPECT_NEAR(sources.xSrc[2][1], 0.0, 0.01);
+    EXPECT_NEAR(sources.xSrc[5][0], 10.0, 0.01);
+    EXPECT_NEAR(sources.xSrc[5][1], 0.0, 0.01);
+}
+
+TEST(CoreTest, FrequenciesGroupTest)
+{
+    double min{10}, max{20};
+    int n = 10;
+
+    Freq freq{min, max, n};
 }
