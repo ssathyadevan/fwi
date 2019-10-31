@@ -9,7 +9,8 @@ if sys.platform.startswith('linux'):
     os.chdir('libraries/inversion/')
     available_methods = os.popen('ls -d */').read().split('\n')
 
-    running_table = [['conjugateGradientInversion', 'Default', 'temple', '50x25', 0, 'default']]
+    running_table = [['conjugateGradientInversion', 'Default', 'temple', '64x32', 0, 'default']]
+    set_jsons_todefault(current_directory)
     os.chdir(current_directory + '/inputFiles/default/input/')
     if not os.path.isdir('temp'):
         os.mkdir('temp')
@@ -21,7 +22,7 @@ if sys.platform.startswith('linux'):
 
     install_gtest()
 
-    if running_table[0][1] == 'Default':
+    if running_table[0][1] == 'Default' and running_table[0][-1] == 'default':
         enter_description(current_directory)
 
     for ind_run in running_table:

@@ -194,6 +194,26 @@ def change_json(input_image, output_resolution, current_directory):
         json.dump(data, jsonFile, indent=4)
         jsonFile.truncate()
 
+def set_jsons_todefault(current_directory):
+    os.chdir(current_directory + '/inputFiles/default/input/')
+    with open('GenericInput.json', 'r+') as jsonFile:
+        data = json.load(jsonFile)
+        data['ngrid']['x'] = 64
+        data['ngrid']['z'] = 32
+        data['fileName'] = 'temple'
+        data['ngrid_original']['x'] = 64
+        data['ngrid_original']['z'] = 32
+        jsonFile.seek(0)
+        json.dump(data, jsonFile, indent=4)
+        jsonFile.truncate()
+    with open('ConjugateGradientInversionInput.json', 'r+') as jsonFile:
+        data = json.load(jsonFile)
+        data['n_max'] = 5
+        jsonFile.seek(0)
+        json.dump(data, jsonFile, indent=4)
+        jsonFile.truncate()
+
+
 def check_file_res(image):
     count = len(open(image + '.txt').readlines())
     if count == 2048:
