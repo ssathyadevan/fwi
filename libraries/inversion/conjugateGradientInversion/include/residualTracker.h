@@ -5,7 +5,7 @@
 class ResidualTracker 
 {
     public:
-        explicit ResidualTracker(int cgInputIter1N);
+        ResidualTracker();
         ~ResidualTracker() {}
 
         void determineIfDiverging(double residual);
@@ -20,7 +20,6 @@ class ResidualTracker
         double _previousLowPoint;
         double _currentLowPoint;
         int _finalPeriodCounter;
-        int _peakPeriod;
 
         void updatePreviousResiduals(double residual);
         void updateLowPoints();

@@ -31,7 +31,7 @@ double conjugateGradientInversion::findRealRootFromCubic(double a, double b, dou
 
 pressureFieldSerial conjugateGradientInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
 {
-    ResidualTracker residualTracker(_cgInput.iteration1.n);
+    ResidualTracker residualTracker;
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
