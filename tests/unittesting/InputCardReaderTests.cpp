@@ -100,8 +100,7 @@ TEST(InputTest, integralForwardModelTest){
 }
 
 TEST(InputTest, residualTrackerConvergenceTest) {
-    int cgInputIter1N = 3;
-    ResidualTracker residualTracker(cgInputIter1N);
+    ResidualTracker residualTracker;
 
     std::vector<double> convergingSequence = {1.0, 0.7, 0.4, 0.9, 0.6, 0.3, 0.8, 0.5, 0.2};
 
@@ -112,8 +111,7 @@ TEST(InputTest, residualTrackerConvergenceTest) {
 }
 
 TEST(InputTest, residualTrackerDivergenceTest) {
-    int cgInputIter1N = 3;
-    ResidualTracker residualTracker(cgInputIter1N);
+    ResidualTracker residualTracker;
 
     std::vector<double> divergingSequence = {0.8, 0.5, 0.2, 0.9, 0.6, 0.3, 1.0, 0.7, 0.4};
 

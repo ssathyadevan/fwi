@@ -1,12 +1,16 @@
 #include "residualTracker.h"
 #include <algorithm>
+#include <limits>
 
-ResidualTracker::ResidualTracker(int cgInputIter1N)
-    : _peakPeriod(cgInputIter1N)
+inline double max_double(){
+    return std::numeric_limits<double>::max();
+}
+
+ResidualTracker::ResidualTracker()
 {
-    _previousResiduals = {1.0, 1.0};
-    _currentLowPoint = 1.0;
-    _previousLowPoint = 1.0;
+    _previousResiduals = { max_double(),  max_double()};
+    _currentLowPoint =  max_double();
+    _previousLowPoint =  max_double();
     _finalPeriodCounter = 0;
     _diverging = false;
 }
