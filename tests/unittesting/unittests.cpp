@@ -7,11 +7,7 @@
 #include <freq.h>
 #include <frequenciesGroup.h>
 
-#include <iter2.h>
-#include <integralForwardModel.h>
-#include <integralForwardModelInput.h>
-#include <forwardModelInterface.h>
-#include <greensSerial.h>
+#include <pressureFieldSerial.h>
 
 /* TEMPLATE
 
@@ -22,7 +18,7 @@ TEST(CoreTest, )
 
 */
 
-TEST(CoreTests, Grid2DTest)
+TEST(CoreTest, Grid2DTest)
 {
     std::array<double, 2> x_min = {0.0, 0.0};
     std::array<double, 2> x_max = {2.0, 2.0};
@@ -51,7 +47,7 @@ TEST(CoreTest, ReceiverTest)
 TEST(CoreTest, SourceTest)
 {
     std::array<double, 2> xMin{0, 0};
-    std::array<double, 2> xMax{10, 0};.
+    std::array<double, 2> xMax{10, 0};
     int nSrc = 6;
     sources sources(xMin, xMax, nSrc);
 
@@ -71,38 +67,19 @@ TEST(CoreTest, FrequenciesGroupTest)
     EXPECT_NEAR(freq_group.k[9], 0.063, 0.01); // 2*pi*20/2000 ~ 0.063
 }
 
-/*TEST(CoreTest, IntegralForwardModelTest)
+TEST(CoreTest, PressureFieldSerialTest)
 {
-    // test configuration:
-    //  ssssssrrrrr
-    //  -----------
-    //  |  10x10  |
-    //  -----------   
-    //
-    double x_min_grid[2] = {0, 0};
-    double x_max_grid[2] = {10, 10};
-    int n_x_grid[2] = {10, 10};
+    std::array<double, 2> x_min_grid = {0, 0};
+    std::array<double, 2> x_max_grid = {10, 10};
+    std::array<int, 2> n_x_grid = {10, 10};
     grid2D grid(x_min_grid, x_max_grid, n_x_grid);
     
-    double x_min_src[2] = {0, 0};
-    double x_max_src[2] = {5, 0};
-    int n_src[2] = {6, 1};
-    sources sources(x_min_src, x_max_src, n_src);
+    pressureFieldSerial pf_serial(grid);
+    
+    std::function<double(double, double)> f_field = [](double x, double z){return x+z;}; // Linear plane, x & z are centroids of grid cell.
+    pf_serial.SetField(f_field);
+    double* pf_data = pf_serial.GetDataPtr();
 
-    double x_min_recv[2] = {6, 0};
-    double x_max_recv[2] = {10, 0};
-    int n_recv[2] = {5, 0};
-    receivers receivers(x_min_recv, x_max_recv, n_recv);
-
-    double f_min{10}, f_max{20};
-    int n_freqs = 10;
-    Freq freq{min, max, n};
-    frequenciesGroup freq_group{freq, 2000};
-
-    Iter2 iter{15, 5.0e-5, false};
-    integralForwardModelInput ifm_input{iter};
-
-    IntegralForwardModel if_model{grid, sources, receivers, freq_group, ifm_input};
-    if_model.calculateKappa();
-    if_model.calculateResidual(pressureFieldSerial chi_est(grid), )
-}*/
+    EXPECT_EQ(pf_data[0], 1); // x + z = (0+(0+0.5)*1) + (0+(0+0.5)*1) = 0.5 + 0.5 = 1
+    EXPECT_EQ(pf_data[99], 19);
+}
