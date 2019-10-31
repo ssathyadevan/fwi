@@ -28,18 +28,8 @@ if sys.platform.startswith('linux'):
         print('We start with the ' + ind_run[0] + ' method.')
         change_json(ind_run[2], ind_run[3].split('x'), current_directory)
 
-        print('Build project:')
-        os.chdir(current_directory[:current_directory.rfind('/')])
-        if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
-            os.mkdir('Build')
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
-        check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release ' +
-                          '-DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
-        checking_for_errors(check)
-        check = os.system('sudo make install')
-        checking_for_errors(check)
-
         print('Running project:')
+        os.chdir(current_directory)
         if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
             os.mkdir('../FWIInstall')
         os.system('cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
