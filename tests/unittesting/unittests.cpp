@@ -51,7 +51,7 @@ TEST(CoreTest, ReceiverTest)
 TEST(CoreTest, SourceTest)
 {
     std::array<double, 2> xMin{0, 0};
-    std::array<double, 2> xMax{10, 0};.
+    std::array<double, 2> xMax{10, 0};
     int nSrc = 6;
     sources sources(xMin, xMax, nSrc);
 
