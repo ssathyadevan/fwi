@@ -6,11 +6,13 @@
 #include <string>
 
 
-class inversionFactory
+class Factory
 {
 
 public:
-    inversionFactory() {}
+    Factory() {}
 
     static inversionInterface* createInversion(std::string desired_inversion, ForwardModelInterface *forwardModel, const genericInput gInput);
+    static ForwardModelInterface* createForwardModel(const genericInput &gInput, const std::string desired_forward_model, const grid2D &grid, const sources &src, const receivers &recv,
+                    const frequenciesGroup &freq);
 };

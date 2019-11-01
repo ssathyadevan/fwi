@@ -1,4 +1,4 @@
-#include "inversionFactory.h"
+#include "factory.h"
 #include "inversionInterface.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
@@ -7,11 +7,8 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "integralForwardModel.h"
-#include "finiteDifferenceForwardModel.h"
 #include <string>
 
-ForwardModelInterface* createForwardModel(const genericInput &gInput, const std::string desired_forward_model);
 void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model);
 void writePlotInput(const genericInput &gInput);
 
@@ -127,10 +124,10 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     }
 
     ForwardModelInterface *model;
-    model = createForwardModel(gInput, desired_forward_model);
+    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
 
     inversionInterface *inverse;
-    inverse = inversionFactory::createInversion(desired_inversion, model, gInput);
+    inverse = Factory::createInversion(desired_inversion, model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
@@ -144,24 +141,4 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     delete inverse;
 }
 
-ForwardModelInterface* createForwardModel(const genericInput &gInput, const std::string desired_forward_model){
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
-    src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
-    recv.Print();
-    frequenciesGroup freq(gInput.freq, gInput.c_0);
-    freq.Print(gInput.freq.nTotal);
 
-    ForwardModelInterface *model;
-    if (desired_forward_model == "integralForwardModel"){
-        model = new IntegralForwardModel(grid, src, recv, freq, gInput);
-        return model;
-    }
-    if (desired_forward_model == "finiteDifferenceForwardModel"){
-        model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
-        return model;
-    }
-    exit(EXIT_FAILURE);
-        
-}
