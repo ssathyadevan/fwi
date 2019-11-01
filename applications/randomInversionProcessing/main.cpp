@@ -10,7 +10,7 @@
 #include "cpuClock.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput);
+void performInversion(const genericInput &gInput);
 void writePlotInput(genericInput gInput);
 
 int main(int argc, char **argv)
@@ -27,10 +27,10 @@ int main(int argc, char **argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
-    integralForwardModelInput fmInput = forwardModelReader.getInput();
+    //integralForwardModelInput fmInput = forwardModelReader.getInput();
     //randomInversionInput riInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput);
+    performInversion(gInput);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -77,7 +77,7 @@ void writePlotInput(genericInput gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput)
+void performInversion(const genericInput &gInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -105,7 +105,7 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
+    model = new IntegralForwardModel(grid, src, recv, freqg, gInput);
 
     inversionInterface *inverse;
     inverse = new randomInversion(model, gInput);

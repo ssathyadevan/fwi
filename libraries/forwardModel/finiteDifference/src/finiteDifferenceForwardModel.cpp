@@ -1,11 +1,15 @@
 #include "finiteDifferenceForwardModel.h"
 #include "helmholtz2D.h"
+#include "finiteDifferenceForwardModelInputCardReader.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const grid2D &grid, const sources &src, const receivers &recv,
-                                                           const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
+                                                           const frequenciesGroup &freq, const genericInput &gInput)
     : ForwardModelInterface(grid, src, recv, freq),
-      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
+      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput()
 {
+    finiteDifferenceForwardModelInputCardReader finiteDifferenceForwardModelReader(gInput.caseFolder);
+    _fmInput = finiteDifferenceForwardModelReader.getInput();
+
     std::cout << "Creating Greens function field..." << std::endl;
     createGreens();
     std::cout << "Creating p0..." << std::endl;

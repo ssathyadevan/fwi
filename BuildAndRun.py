@@ -267,7 +267,7 @@ if sys.platform.startswith('linux'):
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
         check = os.system('./FWI_PreProcess ../' + ind_run[5])
         checking_for_errors(check)
-        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0])
+        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' integralForwardModel')
         checking_for_errors(check)
 
     print('Now post processing')

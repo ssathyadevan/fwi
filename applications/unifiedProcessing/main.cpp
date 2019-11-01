@@ -7,16 +7,17 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
+#include "finiteDifferenceForwardModel.h"
 #include <string>
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput, const std::string &runName, const std::string desired_inversion);
+ForwardModelInterface* createForwardModel(const genericInput &gInput, const std::string desired_forward_model);
+void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
+    if (argc != 4)
     {
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
@@ -25,6 +26,10 @@ int main(int argc, char **argv)
                   << "Please specify the desired inversion method" << std::endl;
         std::cout << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
 
+        std::cout << std::endl
+                  << "Please specify the desired forward model" << std::endl;
+        std::cout << "Make sure the forward model has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
+
         exit(EXIT_FAILURE);
     }
 
@@ -32,11 +37,12 @@ int main(int argc, char **argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
     std::string desired_inversion = arguments[1];
+    std::string desired_forward_model = arguments[2];
 
-    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //conjugateGradientInversionInputCardReader conjugateGradientInversionReader(gInput.caseFolder);
 
-    integralForwardModelInput fmInput = forwardModelReader.getInput();
+    //integralForwardModelInput fmInput = forwardModelReader.getInput();
     //conjugateGradientInput cgInput = conjugateGradientInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -50,7 +56,7 @@ int main(int argc, char **argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gInput.runName, desired_inversion);
+    performInversion(gInput, gInput.runName, desired_inversion, desired_forward_model);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -83,7 +89,7 @@ void writePlotInput(const genericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput, const std::string &runName, const std::string desired_inversion)
+void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model)
 {
 
     // initialize the grid, sources, receivers, grouped frequencies
@@ -121,7 +127,7 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
+    model = createForwardModel(gInput, desired_forward_model);
 
     inversionInterface *inverse;
     inverse = inversionFactory::createInversion(desired_inversion, model, gInput);
@@ -136,4 +142,26 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
 
     delete model;
     delete inverse;
+}
+
+ForwardModelInterface* createForwardModel(const genericInput &gInput, const std::string desired_forward_model){
+    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    src.Print();
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    recv.Print();
+    frequenciesGroup freq(gInput.freq, gInput.c_0);
+    freq.Print(gInput.freq.nTotal);
+
+    ForwardModelInterface *model;
+    if (desired_forward_model == "integralForwardModel"){
+        model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+        return model;
+    }
+    if (desired_forward_model == "finiteDifferenceForwardModel"){
+        model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
+        return model;
+    }
+    exit(EXIT_FAILURE);
+        
 }

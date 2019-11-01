@@ -6,10 +6,9 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
 
-void performInversion(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName);
+void performInversion(const genericInput &gInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char **argv)
@@ -18,10 +17,10 @@ int main(int argc, char **argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
-    finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
+    //finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
     //conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -35,7 +34,7 @@ int main(int argc, char **argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gInput.runName);
+    performInversion(gInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -68,7 +67,7 @@ void writePlotInput(const genericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName)
+void performInversion(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -105,7 +104,7 @@ void performInversion(const genericInput &gInput, const finiteDifferenceForwardM
     }
 
     ForwardModelInterface *model;
-    model = new FiniteDifferenceForwardModel(grid, src, recv, freq, fmInput);
+    model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
 
     inversionInterface *inverse;
     inverse = new conjugateGradientInversion(model, gInput);

@@ -1,11 +1,10 @@
-#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
 #include "finiteDifferenceForwardModel.h"
 #include "cpuClock.h"
 
-void generateReferencePressureFieldFromChi(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName);
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName);
 
 int main(int argc, char **argv)
 {
@@ -13,8 +12,8 @@ int main(int argc, char **argv)
     genericInputCardReader genericReader(arguments[0]);
     const genericInput gInput = genericReader.getInput();
 
-    finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    const finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
+    //finiteDifferenceForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //const finiteDifferenceForwardModelInput fmInput = forwardModelReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -26,14 +25,14 @@ int main(int argc, char **argv)
     cpuClock clock;
 
     clock.Start();
-    generateReferencePressureFieldFromChi(gInput, fmInput, gInput.runName);
+    generateReferencePressureFieldFromChi(gInput,  gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
     return 0;
 }
 
-void generateReferencePressureFieldFromChi(const genericInput &gInput, const finiteDifferenceForwardModelInput &fmInput, const std::string &runName)
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -54,7 +53,7 @@ void generateReferencePressureFieldFromChi(const genericInput &gInput, const fin
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
     ForwardModelInterface *model;
-    model = new FiniteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
+    model = new FiniteDifferenceForwardModel(grid, src, recv, freqg, gInput);
 
     std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
     model->calculatePTot(chi);

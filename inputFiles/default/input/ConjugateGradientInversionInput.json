@@ -7,6 +7,6 @@
         "start": 100.0,
         "slope": 10.0
     },
-    "n_max": 60,
+    "n_max": 2,
     "do_reg": true
 }

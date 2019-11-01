@@ -6,10 +6,9 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput, const std::string &runName);
+void performInversion(const genericInput &gInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput);
 
 int main(int argc, char **argv)
@@ -18,10 +17,10 @@ int main(int argc, char **argv)
     genericInputCardReader genericReader(arguments[0]);
     genericInput gInput = genericReader.getInput();
 
-    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //conjugateGradientInversionInputCardReader randomInversionReader(gInput.caseFolder);
 
-    integralForwardModelInput fmInput = forwardModelReader.getInput();
+    //integralForwardModelInput fmInput = forwardModelReader.getInput();
     //conjugateGradientInput cgInput = randomInversionReader.getInput();
 
     if (!gInput.verbose)
@@ -35,7 +34,7 @@ int main(int argc, char **argv)
     cpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput, gInput.runName);
+    performInversion(gInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -68,7 +67,7 @@ void writePlotInput(const genericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput, const std::string &runName)
+void performInversion(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -105,7 +104,7 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, fmInput);
+    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
 
     inversionInterface *inverse;
     inverse = new conjugateGradientInversion(model, gInput);

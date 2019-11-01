@@ -4,6 +4,7 @@
 #include "greensFunctions.h"
 #include "greensSerial.h"
 #include "integralForwardModelInput.h"
+#include "genericInput.h"
 
 class IntegralForwardModel : public ForwardModelInterface
 {
@@ -11,7 +12,7 @@ class IntegralForwardModel : public ForwardModelInterface
 public:
 
     IntegralForwardModel( const grid2D &grid, const sources &src, const receivers &recv,
-                    const frequenciesGroup &freq, const integralForwardModelInput &fmInput );
+                    const frequenciesGroup &freq, const genericInput &gInput );
 
     ~IntegralForwardModel();
 
@@ -29,7 +30,7 @@ private:
     pressureFieldComplexSerial  ***_p0;
     pressureFieldComplexSerial  **_pTot;
     pressureFieldComplexSerial  **_Kappa;
-    const integralForwardModelInput _fmInput;
+    integralForwardModelInput _fmInput;
 
     void createP0();
     void deleteP0();
