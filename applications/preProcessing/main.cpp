@@ -4,13 +4,13 @@
 #include "integralForwardModel.h"
 #include "cpuClock.h"
 
-void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName);
+void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std::string &runName);
 
 int main(int argc, char **argv)
 {
     std::vector<std::string> arguments = returnInputDirectory(argc, argv);
-    genericInputCardReader genericReader(arguments[0]);
-    const genericInput gInput = genericReader.getInput();
+    GenericInputCardReader genericReader(arguments[0]);
+    const GenericInput gInput = genericReader.getInput();
 
     //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
     //const integralForwardModelInput fmInput = forwardModelReader.getInput();
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
     std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
 
-    cpuClock clock;
+    CpuClock clock;
 
     clock.Start();
     generateReferencePressureFieldFromChi(gInput, gInput.runName);
@@ -32,17 +32,17 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName)
+void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std::string &runName)
 {
-    // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid_original);
-    pressureFieldSerial chi(grid);
+    // initialize the grid, Sources, receivers, grouped frequencies
+    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid_original);
+    PressureFieldSerial chi(grid);
     chi.fromFile(gInput);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freqg(gInput.freq, gInput.c_0);
+    FrequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;

@@ -8,10 +8,10 @@
 
 #include "json.h"
 
-class inputCardReader
+class InputCardReader
 {
 public:
-    virtual ~inputCardReader() = default;
+    virtual ~InputCardReader() = default;
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
 

@@ -1,6 +1,6 @@
 #include "helmholtz2D.h"
 
-Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceForwardModelInput &fmInput)
+Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
     double waveLength = _c0 / freq;
@@ -21,7 +21,7 @@ Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &s
     // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
 
-    //sources can be outside imaging domain. Area that we solve for needs to include all sources
+    //sources can be outside imaging domain. Area that we solve for needs to include all Sources
     double extraWidthLeft = 0.0;
     double extraWidthRight = 0.0;
     double extraHeightBottom = 0.0;
@@ -91,7 +91,7 @@ Helmholtz2D::~Helmholtz2D()
     delete _newgrid;
 }
 
-void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
+void Helmholtz2D::updateChi(const PressureFieldSerial &chi)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
@@ -116,7 +116,7 @@ void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
     }
 }
 
-pressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
+PressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &source, PressureFieldComplexSerial &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();

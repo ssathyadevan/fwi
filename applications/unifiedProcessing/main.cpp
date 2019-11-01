@@ -9,8 +9,8 @@
 #include "cpuClock.h"
 #include <string>
 
-void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model);
-void writePlotInput(const genericInput &gInput);
+void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model);
+void writePlotInput(const GenericInput &gInput);
 
 int main(int argc, char **argv)
 {
@@ -31,8 +31,8 @@ int main(int argc, char **argv)
     }
 
     std::vector<std::string> arguments(argv + 1, argc + argv);
-    genericInputCardReader genericReader(arguments[0]);
-    genericInput gInput = genericReader.getInput();
+    GenericInputCardReader genericReader(arguments[0]);
+    GenericInput gInput = genericReader.getInput();
     std::string desired_inversion = arguments[1];
     std::string desired_forward_model = arguments[2];
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-    cpuClock clock;
+    CpuClock clock;
 
     clock.Start();
     performInversion(gInput, gInput.runName, desired_inversion, desired_forward_model);
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(const genericInput &gInput)
+void writePlotInput(const GenericInput &gInput)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -86,16 +86,16 @@ void writePlotInput(const genericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model)
+void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model)
 {
 
     // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freq(gInput.freq, gInput.c_0);
+    FrequenciesGroup freq(gInput.freq, gInput.c_0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -126,12 +126,12 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     ForwardModelInterface *model;
     model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
 
-    inversionInterface *inverse;
+    InversionInterface *inverse;
     inverse = Factory::createInversion(desired_inversion, model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
-    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
+    PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
     std::cout << "Done, writing to file" << std::endl;
 

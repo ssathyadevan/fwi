@@ -1,26 +1,26 @@
 #include "pressureFieldSerial.h"
 
-pressureFieldSerial::pressureFieldSerial(const grid2D &grid) : pressureField(grid),
+PressureFieldSerial::PressureFieldSerial(const Grid2D &grid) : PressureField(grid),
                                                                data(new double[this->GetNumberOfGridPoints()]) {}
 
-pressureFieldSerial::pressureFieldSerial(const pressureFieldSerial &rhs) : pressureFieldSerial(rhs.grid)
+PressureFieldSerial::PressureFieldSerial(const PressureFieldSerial &rhs) : PressureFieldSerial(rhs.grid)
 {
 
     memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-pressureFieldSerial::~pressureFieldSerial()
+PressureFieldSerial::~PressureFieldSerial()
 {
     delete[] data;
 }
 
 // Virtual overrides
-void pressureFieldSerial::Zero()
+void PressureFieldSerial::Zero()
 {
     memset(data, 0, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void pressureFieldSerial::Random()
+void PressureFieldSerial::Random()
 {
     for (int i = 0; i < this->GetGrid().GetNumberOfGridPoints(); i++)
     {
@@ -28,7 +28,7 @@ void pressureFieldSerial::Random()
     }
 }
 
-void pressureFieldSerial::RandomSaurabh()
+void PressureFieldSerial::RandomSaurabh()
 {
     for (int i = 0; i < this->GetGrid().GetNumberOfGridPoints(); i++)
     {
@@ -37,17 +37,17 @@ void pressureFieldSerial::RandomSaurabh()
     }
 }
 
-void pressureFieldSerial::toBuffer(double *buffer) const
+void PressureFieldSerial::toBuffer(double *buffer) const
 {
     memcpy(buffer, data, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void pressureFieldSerial::fromBuffer(const double *buffer)
+void PressureFieldSerial::fromBuffer(const double *buffer)
 {
     memcpy(data, buffer, sizeof(double) * this->GetNumberOfGridPoints());
 }
 
-void pressureFieldSerial::toFile(const std::string &fileName) const
+void PressureFieldSerial::toFile(const std::string &fileName) const
 {
     std::ofstream file;
     file.open(fileName, std::ios::out | std::ios::trunc);
@@ -64,7 +64,7 @@ void pressureFieldSerial::toFile(const std::string &fileName) const
     file.close();
 }
 
-void pressureFieldSerial::fromFile(const genericInput &input)
+void PressureFieldSerial::fromFile(const GenericInput &input)
 {
     std::string inputFolder = input.inputFolder;
 
@@ -83,7 +83,7 @@ void pressureFieldSerial::fromFile(const genericInput &input)
     file.close();
 }
 
-void pressureFieldSerial::SetField(const std::function<double(double, double)> func)
+void PressureFieldSerial::SetField(const std::function<double(double, double)> func)
 {
     const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
     const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions();
@@ -100,10 +100,10 @@ void pressureFieldSerial::SetField(const std::function<double(double, double)> f
     }
 }
 
-double pressureFieldSerial::Norm() const { return std::sqrt(InnerProduct(*this)); }
-double pressureFieldSerial::RelNorm() const { return std::sqrt(InnerProduct(*this) / this->GetNumberOfGridPoints()); }
+double PressureFieldSerial::Norm() const { return std::sqrt(InnerProduct(*this)); }
+double PressureFieldSerial::RelNorm() const { return std::sqrt(InnerProduct(*this) / this->GetNumberOfGridPoints()); }
 
-void pressureFieldSerial::Square()
+void PressureFieldSerial::Square()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -111,7 +111,7 @@ void pressureFieldSerial::Square()
     }
 }
 
-void pressureFieldSerial::Sqrt()
+void PressureFieldSerial::Sqrt()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -119,7 +119,7 @@ void pressureFieldSerial::Sqrt()
     }
 }
 
-void pressureFieldSerial::Reciprocal()
+void PressureFieldSerial::Reciprocal()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -127,7 +127,7 @@ void pressureFieldSerial::Reciprocal()
     }
 }
 
-double pressureFieldSerial::Summation() const
+double PressureFieldSerial::Summation() const
 {
     double result = double(0.0);
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -138,7 +138,7 @@ double pressureFieldSerial::Summation() const
 }
 
 // Non virtual members
-double pressureFieldSerial::InnerProduct(const pressureFieldSerial &y) const
+double PressureFieldSerial::InnerProduct(const PressureFieldSerial &y) const
 {
     assert(&this->GetGrid() == &y.GetGrid());
     double result = double(0.0);
@@ -149,7 +149,7 @@ double pressureFieldSerial::InnerProduct(const pressureFieldSerial &y) const
     return result;
 }
 
-double pressureFieldSerial::Summation(const pressureFieldSerial &rhs) const
+double PressureFieldSerial::Summation(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -162,7 +162,7 @@ double pressureFieldSerial::Summation(const pressureFieldSerial &rhs) const
     return sum;
 }
 
-void pressureFieldSerial::Gradient(pressureFieldSerial **output)
+void PressureFieldSerial::Gradient(PressureFieldSerial **output)
 {
     //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
 
@@ -204,7 +204,7 @@ void pressureFieldSerial::Gradient(pressureFieldSerial **output)
     }
 }
 
-pressureFieldSerial &pressureFieldSerial::operator=(const pressureFieldSerial &rhs)
+PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {
     if (this != &rhs)
     {
@@ -215,7 +215,7 @@ pressureFieldSerial &pressureFieldSerial::operator=(const pressureFieldSerial &r
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator=(const double rhs)
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -224,7 +224,7 @@ pressureFieldSerial &pressureFieldSerial::operator=(const double rhs)
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator-=(const pressureFieldSerial &rhs)
+PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -234,7 +234,7 @@ pressureFieldSerial &pressureFieldSerial::operator-=(const pressureFieldSerial &
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator*=(const pressureFieldSerial &rhs)
+PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &rhs)
 {
 
     assert(&this->GetGrid() == &rhs.GetGrid());
@@ -245,7 +245,7 @@ pressureFieldSerial &pressureFieldSerial::operator*=(const pressureFieldSerial &
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator/=(const pressureFieldSerial &rhs)
+PressureFieldSerial &PressureFieldSerial::operator/=(const PressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -255,7 +255,7 @@ pressureFieldSerial &pressureFieldSerial::operator/=(const pressureFieldSerial &
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator-=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator-=(const double rhs)
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -264,7 +264,7 @@ pressureFieldSerial &pressureFieldSerial::operator-=(const double rhs)
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator*=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator*=(const double rhs)
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -273,7 +273,7 @@ pressureFieldSerial &pressureFieldSerial::operator*=(const double rhs)
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator/=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator/=(const double rhs)
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
@@ -282,12 +282,12 @@ pressureFieldSerial &pressureFieldSerial::operator/=(const double rhs)
     return *this;
 }
 
-void pressureFieldSerial::CopyTo(pressureFieldSerial &dest)
+void PressureFieldSerial::CopyTo(PressureFieldSerial &dest)
 {
     dest = *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator+=(const pressureFieldSerial &rhs)
+PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
 {
     assert(&this->GetGrid() == &rhs.GetGrid());
 
@@ -298,7 +298,7 @@ pressureFieldSerial &pressureFieldSerial::operator+=(const pressureFieldSerial &
     return *this;
 }
 
-pressureFieldSerial &pressureFieldSerial::operator+=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator+=(const double rhs)
 {
 
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)

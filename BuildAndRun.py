@@ -49,9 +49,9 @@ if sys.platform.startswith('linux'):
         os.system('cp -r temp/temp' + str(ind_run[4]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
                   'Input.json')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
-        check = os.system('./FWI_PreProcess ../' + ind_run[5])
+        check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
         checking_for_errors(check)
-        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' integralForwardModel')
+        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' finiteDifferenceForwardModel')
         checking_for_errors(check)
 
     print('Now post processing')

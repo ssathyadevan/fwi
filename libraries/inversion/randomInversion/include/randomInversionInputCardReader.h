@@ -6,12 +6,12 @@
 #include <fstream>
 #include <sstream>
 
-class randomInversionInputCardReader: public inputCardReader
+class RandomInversionInputCardReader: public InputCardReader
 {
 public:
-    randomInversionInputCardReader(const std::string &caseFolder);
-    randomInversionInput getInput();
+    RandomInversionInputCardReader(const std::string &caseFolder);
+    RandomInversionInput getInput();
 private:
-    randomInversionInput _input;
+    RandomInversionInput _input;
     void readCard(const std::string &caseFolder);
 };

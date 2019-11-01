@@ -3,22 +3,22 @@
 #include "conjugateGradientInversionInputCardReader.h"
 #include "json.h"
 
-conjugateGradientInversionInputCardReader::conjugateGradientInversionInputCardReader(const std::string &caseFolder)
-    : inputCardReader()
+ConjugateGradientInversionInputCardReader::ConjugateGradientInversionInputCardReader(const std::string &caseFolder)
+    : InputCardReader()
 {
     readCard(caseFolder);
 }
 
-conjugateGradientInversionInput conjugateGradientInversionInputCardReader::getInput()
+ConjugateGradientInversionInput ConjugateGradientInversionInputCardReader::getInput()
 {
     return _input;
 }
 
-void conjugateGradientInversionInputCardReader::readCard(const std::string &caseFolder)
+void ConjugateGradientInversionInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/ConjugateGradientInversionInput.json");
 
-    conjugateGradientInversionInput input{
+    ConjugateGradientInversionInput input{
         {j["Iter1"]["n"], j["Iter1"]["tolerance"]},
         {j["DeltaAmplification"]["start"], j["DeltaAmplification"]["slope"]},
         j["do_reg"],

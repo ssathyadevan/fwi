@@ -6,7 +6,7 @@
 #include <array>
 
 
-class sources
+class Sources
 {
 
 public:
@@ -15,7 +15,7 @@ public:
   std::vector< std::array<double, 2> > xSrc;
 
   // Place the sources on a linear line from xMin to xMax, including the end points
-  sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
+  Sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
                   int nSrc_);
 
   void Print();

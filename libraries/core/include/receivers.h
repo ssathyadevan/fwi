@@ -6,17 +6,17 @@
 
 #include "sources.h"
 
-class receivers
+class Receivers
 {
 
-    receivers& operator=(const receivers&);
+    Receivers& operator=(const Receivers&);
 
 public:
 
   const int nRecv;
   std::vector< std::array<double, 2> > xRecv;
 
-  receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
+  Receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
 
   void Print();
 

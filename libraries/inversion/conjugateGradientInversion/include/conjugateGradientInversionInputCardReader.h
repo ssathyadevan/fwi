@@ -6,13 +6,13 @@
 #include <fstream>
 #include <sstream>
 
-class conjugateGradientInversionInputCardReader : public inputCardReader
+class ConjugateGradientInversionInputCardReader : public InputCardReader
 {
 public:
-    conjugateGradientInversionInputCardReader(const std::string &caseFolder);
-    conjugateGradientInversionInput getInput();
+    ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
+    ConjugateGradientInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
-    conjugateGradientInversionInput _input;
+    ConjugateGradientInversionInput _input;
 };
 

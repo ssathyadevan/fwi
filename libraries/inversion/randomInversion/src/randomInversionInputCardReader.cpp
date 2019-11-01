@@ -2,22 +2,22 @@
 #include "randomInversionInputCardReader.h"
 #include "json.h"
 
-randomInversionInputCardReader::randomInversionInputCardReader(const std::string &caseFolder)
-    : inputCardReader()
+RandomInversionInputCardReader::RandomInversionInputCardReader(const std::string &caseFolder)
+    : InputCardReader()
 {
     readCard(caseFolder);
 }
 
-randomInversionInput randomInversionInputCardReader::getInput()
+RandomInversionInput RandomInversionInputCardReader::getInput()
 {
     return _input;
 }
 
-void randomInversionInputCardReader::readCard(const std::string &caseFolder)
+void RandomInversionInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/RandomInversionInput.json");
 
-    randomInversionInput input{
+    RandomInversionInput input{
         j["toleranceOuter"], j["nMaxOuter"], j["nMaxInner"]};
 
     _input = input;

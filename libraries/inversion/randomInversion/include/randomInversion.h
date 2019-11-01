@@ -11,24 +11,24 @@ using std::cout;
 using std::endl;
 
 
-class randomInversion : public inversionInterface
+class RandomInversion : public InversionInterface
 {
 
 public:
 
-    randomInversion(ForwardModelInterface *forwardModel, genericInput gInput);
+    RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput);
 
-    randomInversion(const randomInversion&) = delete;
-    randomInversion& operator=(const randomInversion&) = delete;
+    RandomInversion(const RandomInversion&) = delete;
+    RandomInversion& operator=(const RandomInversion&) = delete;
 
-    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput);
+    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, GenericInput gInput);
 
 private:
     ForwardModelInterface   *_forwardModel;
-    randomInversionInput             _riInput;
+    RandomInversionInput             _riInput;
 
-    const grid2D&                    _grid;
-    const sources&                   _src;
-    const receivers&                 _recv;
-    const frequenciesGroup&          _freq;
+    const Grid2D&                    _grid;
+    const Sources&                   _src;
+    const Receivers&                 _recv;
+    const FrequenciesGroup&          _freq;
 };

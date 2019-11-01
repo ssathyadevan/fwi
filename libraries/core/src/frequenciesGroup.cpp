@@ -1,6 +1,6 @@
 #include "frequenciesGroup.h"
 
-frequenciesGroup::frequenciesGroup(Freq freqStruct, double c_0_)
+FrequenciesGroup::FrequenciesGroup(Freq freqStruct, double c_0_)
     : nFreq(freqStruct.nTotal), c_0(c_0_), d_freq((freqStruct.max-freqStruct.min) / (freqStruct.nTotal - 1)), freq(), k()
 {
     assert(nFreq > 1);
@@ -12,7 +12,7 @@ frequenciesGroup::frequenciesGroup(Freq freqStruct, double c_0_)
     }
 }
 
-void frequenciesGroup::Print(int nFreqTotal)
+void FrequenciesGroup::Print(int nFreqTotal)
 {
     std::cout << "Total number of frequencies is " << nFreqTotal << ". Values:" << std::endl;
     for (int i = 0; i < nFreqTotal; i++)

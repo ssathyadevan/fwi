@@ -35,24 +35,24 @@ class ForwardModelInterface
 {
 
 public:
-    ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq);
+    ForwardModelInterface(const Grid2D &grid, const Sources &src, const Receivers &recv,
+                          const FrequenciesGroup &freq);
 
     virtual ~ForwardModelInterface();
 
-    const grid2D& getGrid();
-    const sources& getSrc();
-    const receivers& getRecv();
-    const frequenciesGroup& getFreq();
+    const Grid2D& getGrid();
+    const Sources& getSrc();
+    const Receivers& getRecv();
+    const FrequenciesGroup& getFreq();
 
-    virtual void calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
-    virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
+    virtual void calculatePData(const PressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
+    virtual void calculatePTot(const PressureFieldSerial &chiEst) = 0;
+    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
 
     virtual void calculateKappa() {std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE);}
-    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformation(std::complex<double>* res, PressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
 
-    std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *pDataRef);
+    std::complex<double>* calculateResidual(const PressureFieldSerial &chiEst, const std::complex<double> *pDataRef);
     double calculateResidualNormSq(std::complex<double> *residual);
 
 private:
@@ -60,10 +60,10 @@ private:
     std::complex<double> *_residual;
 
 protected:
-    const grid2D            &_grid;
-    const sources           &_src;
-    const receivers         &_recv;
-    const frequenciesGroup  &_freq;
+    const Grid2D            &_grid;
+    const Sources           &_src;
+    const Receivers         &_recv;
+    const FrequenciesGroup  &_freq;
 
 };
 

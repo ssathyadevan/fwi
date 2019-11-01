@@ -2056,7 +2056,7 @@ struct ImageFormat : public cl_image_format
 /*! \brief Class interface for cl_device_id.
  *
  *  \note Copies of these objects are inexpensive, since they don't 'own'
- *        any underlying resources or data structures.
+ *        any underlying reSources or data structures.
  *
  *  \see cl_device_id
  */
@@ -2336,7 +2336,7 @@ CL_HPP_DEFINE_STATIC_MEMBER_ cl_int Device::default_error_ = CL_SUCCESS;
 /*! \brief Class interface for cl_platform_id.
  *
  *  \note Copies of these objects are inexpensive, since they don't 'own'
- *        any underlying resources or data structures.
+ *        any underlying reSources or data structures.
  *
  *  \see cl_platform_id
  */
@@ -3402,7 +3402,7 @@ public:
      *
      *  Repeated calls to this function, for a given cl_mem value, will append
      *  to the list of functions called (in reverse order) when memory object's
-     *  resources are freed and the memory object is deleted.
+     *  reSources are freed and the memory object is deleted.
      *
      *  \note
      *  The registered callbacks are associated with the underlying cl_mem
@@ -6242,24 +6242,24 @@ public:
      * Does not compile or link the program.
      */
     Program(
-        const Sources& sources,
+        const Sources& Sources,
         cl_int* err = NULL)
     {
         cl_int error;
         Context context = Context::getDefault(err);
 
-        const size_type n = (size_type)sources.size();
+        const size_type n = (size_type)Sources.size();
 
         vector<size_type> lengths(n);
         vector<const char*> strings(n);
 
         for (size_type i = 0; i < n; ++i) {
 #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
-            strings[i] = sources[(int)i].data();
-            lengths[i] = sources[(int)i].length();
+            strings[i] = Sources[(int)i].data();
+            lengths[i] = Sources[(int)i].length();
 #else // #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
-            strings[i] = sources[(int)i].first;
-            lengths[i] = sources[(int)i].second;
+            strings[i] = Sources[(int)i].first;
+            lengths[i] = Sources[(int)i].second;
 #endif // #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
         }
 
@@ -6278,23 +6278,23 @@ public:
      */
     Program(
         const Context& context,
-        const Sources& sources,
+        const Sources& Sources,
         cl_int* err = NULL)
     {
         cl_int error;
 
-        const size_type n = (size_type)sources.size();
+        const size_type n = (size_type)Sources.size();
 
         vector<size_type> lengths(n);
         vector<const char*> strings(n);
 
         for (size_type i = 0; i < n; ++i) {
 #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
-            strings[i] = sources[(int)i].data();
-            lengths[i] = sources[(int)i].length();
+            strings[i] = Sources[(int)i].data();
+            lengths[i] = Sources[(int)i].length();
 #else // #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
-            strings[i] = sources[(int)i].first;
-            lengths[i] = sources[(int)i].second;
+            strings[i] = Sources[(int)i].first;
+            lengths[i] = Sources[(int)i].second;
 #endif // #if !defined(CL_HPP_ENABLE_PROGRAM_CONSTRUCTION_FROM_ARRAY_COMPATIBILITY)
         }
 
@@ -6434,7 +6434,7 @@ public:
      *     or if any entry in binaries is NULL or has length 0.
      *   CL_INVALID_DEVICE if OpenCL devices listed in devices are not in the list of devices associated with context.
      *   CL_INVALID_BINARY if an invalid program binary was encountered for any device. binaryStatus will return specific status for each device.
-     *   CL_OUT_OF_HOST_MEMORY if there is a failure to allocate resources required by the OpenCL implementation on the host.
+     *   CL_OUT_OF_HOST_MEMORY if there is a failure to allocate reSources required by the OpenCL implementation on the host.
      */
     Program(
         const Context& context,

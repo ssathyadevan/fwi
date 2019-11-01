@@ -1,6 +1,6 @@
 #include "grid2D.h"
 
-grid2D::grid2D(const std::array<double, 2> &x_min_,
+Grid2D::Grid2D(const std::array<double, 2> &x_min_,
                const std::array<double, 2> &x_max_,
                const std::array<int, 2> &nx_) : x_min(x_min_),
                                                 x_max(x_max_),

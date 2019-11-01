@@ -4,7 +4,7 @@
 #include <array>
 #include "nSourcesReceivers.h"
 
-struct genericInput
+struct GenericInput
 {
      std::string caseFolder;
      std::string inputFolder;

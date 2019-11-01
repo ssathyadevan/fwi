@@ -5,13 +5,13 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-class gradientDescentInversionInputCardReader:public inputCardReader
+class GradientDescentInversionInputCardReader:public InputCardReader
 {
 public:
-    gradientDescentInversionInputCardReader(const std::string &caseFolder);
-    gradientDescentInversionInput getInput();
+    GradientDescentInversionInputCardReader(const std::string &caseFolder);
+    GradientDescentInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
-    gradientDescentInversionInput _input;
+    GradientDescentInversionInput _input;
 };
 

@@ -11,25 +11,25 @@
 using std::cout;
 using std::endl;
 
-class conjugateGradientInversion : public inversionInterface
+class ConjugateGradientInversion : public InversionInterface
 {
 private:
     ForwardModelInterface* _forwardModel;
-    conjugateGradientInversionInput _cgInput;
+    ConjugateGradientInversionInput _cgInput;
 
-    const grid2D& _grid;
-    const sources& _src;
-    const receivers& _recv;
-    const frequenciesGroup& _freq;
+    const Grid2D& _grid;
+    const Sources& _src;
+    const Receivers& _recv;
+    const FrequenciesGroup& _freq;
 
 public:
 
-    conjugateGradientInversion(ForwardModelInterface *forwardModel, const genericInput& gInput);
+    ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput& gInput);
 
-    conjugateGradientInversion(const conjugateGradientInversion&) = delete;
-    conjugateGradientInversion& operator=(const conjugateGradientInversion&) = delete;
+    ConjugateGradientInversion(const ConjugateGradientInversion&) = delete;
+    ConjugateGradientInversion& operator=(const ConjugateGradientInversion&) = delete;
 
     double findRealRootFromCubic(double a, double b, double c, double d);
 
-    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
+    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, GenericInput gInput );
 };

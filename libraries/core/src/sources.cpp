@@ -1,6 +1,6 @@
 #include "sources.h"
 // Place the sources on a linear line from xMin to xMax, including the end points
-sources::sources(const std::array<double, 2> xMin,
+Sources::Sources(const std::array<double, 2> xMin,
                  const std::array<double, 2> xMax, int nSrc_) : nSrc(nSrc_), xSrc()
 {
 
@@ -23,7 +23,7 @@ sources::sources(const std::array<double, 2> xMin,
     }
 }
 
-void sources::Print()
+void Sources::Print()
 {
     std::cout << "Total number of sources is " << nSrc << ". Positions:" << std::endl;
     for (int i = 0; i < nSrc; i++)

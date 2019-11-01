@@ -2,7 +2,7 @@
 
 using namespace Eigen;
 
-Greens_rect_2D_cpu::Greens_rect_2D_cpu(const grid2D &grid_, const std::function<std::complex<double>(double, double)> G_func_, const sources &src_, const receivers &recv_, double k_)
+Greens_rect_2D_cpu::Greens_rect_2D_cpu(const Grid2D &grid_, const std::function<std::complex<double>(double, double)> G_func_, const Sources &src_, const Receivers &recv_, double k_)
     : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 {
     const std::array<int, 2> &nx = grid.GetGridDimensions();
@@ -18,11 +18,11 @@ Greens_rect_2D_cpu::~Greens_rect_2D_cpu()
     delete[] G_vol;
 }
 
-pressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const pressureFieldComplexSerial &x) const
+PressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const PressureFieldComplexSerial &x) const
 {
     // Assure we are working on the same grid
     assert(&grid == &x.GetGrid());
-    pressureFieldComplexSerial y(grid);
+    PressureFieldComplexSerial y(grid);
     std::complex<double> *y_data = y.GetDataPtr();
     const std::array<int, 2> &nx = grid.GetGridDimensions();
     contract_Greens_rect_2D(G_vol, x.GetDataPtr(), y_data, nx, 2 * nx[0] - 1);
@@ -31,13 +31,13 @@ pressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const pressureF
 
 // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
 // Equation ID: "rel:buildField"
-pressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const pressureFieldComplexSerial &dW) const
+PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSerial &dW) const
 {
     const std::array<int, 2> &nx1 = grid.GetGridDimensions();
     const int &nx = nx1[0];
     const int &nz = nx1[1];
 
-    pressureFieldComplexSerial prod1(grid);
+    PressureFieldComplexSerial prod1(grid);
     int l1, l2, l3, l4;
 
     std::complex<double> *p_prod = prod1.GetDataPtr();
@@ -147,7 +147,7 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
     for (int i = 0; i < nx; i++)
     {
         double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
-        pressureFieldComplexSerial G_x(grid);
+        PressureFieldComplexSerial G_x(grid);
 
         G_x.SetField([this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
 
@@ -159,12 +159,12 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
 void Greens_rect_2D_cpu::create_Greens_recv()
 {
     double vol = grid.GetCellVolume();
-    pressureFieldComplexSerial G_bound_cpu(grid);
+    PressureFieldComplexSerial G_bound_cpu(grid);
     for (int i = 0; i < recv.nRecv; i++)
     {
         double x_recv = recv.xRecv[i][0];
         double z_recv = recv.xRecv[i][1];
-        pressureFieldComplexSerial *G_bound = new pressureFieldComplexSerial(grid);
+        PressureFieldComplexSerial *G_bound = new PressureFieldComplexSerial(grid);
         G_bound->SetField(
             [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
         G_recv.push_back(G_bound);
