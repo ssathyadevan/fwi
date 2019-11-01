@@ -16,6 +16,8 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     double res;
     double gamma = 0;
 
+    // some extra comment
+
     pressureFieldSerial chiEst(_grid), chiOld(_grid), g(_grid), gOld(_grid), zeta(_grid);
     pressureFieldComplexSerial tmp(_grid); // eq: integrandForDiscreteK, tmp is the argument of Re()
     std::vector<double> dfdxi(_grid.GetNumberOfGridPoints(), 0);
