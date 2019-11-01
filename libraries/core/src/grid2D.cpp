@@ -12,5 +12,5 @@ grid2D::grid2D(const std::array<double, 2> &x_min_,
     dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(nx[1]);
 
     cellVolume = dx[0] * dx[1];
-    nGridPoints = nx[0] * nx[1];
+    nGridPoints = nx[0] * nx[1]; // Should be renamed to nCells.
 }
