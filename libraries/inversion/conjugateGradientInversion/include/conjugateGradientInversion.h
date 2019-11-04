@@ -21,6 +21,7 @@ private:
     const sources& _src;
     const receivers& _recv;
     const frequenciesGroup& _freq;
+    double _previousLowPoint = std::numeric_limits<double>::max();
 
 public:
 
