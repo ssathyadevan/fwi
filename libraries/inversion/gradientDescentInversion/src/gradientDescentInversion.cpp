@@ -18,10 +18,9 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     double eta;
     double Fx;
     double gamma = _gdInput.gamma0;
-    double residual;
 
-    std::vector<double> dfdx(_grid.GetNumberOfGridPoints(), 0);
-    std::vector<double> dfdxPrevious;
+    std::vector<double> dFdx(_grid.GetNumberOfGridPoints(), 0);
+    std::vector<double> dFdxPrevious;
     std::vector<double> residuals;
 
     pressureFieldSerial chiEstimate(_grid);
@@ -46,16 +45,25 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
 
     for (int it1 = 0; it1 < _gdInput.iter; it1++)
     {
-        dfdxPrevious = dfdx;
-        dfdx = differential(pData, chiEstimate, gamma, eta);
+        dFdxPrevious = dFdx;
+        dFdx = differential(pData, chiEstimate, _gdInput.h, eta);
 
-        gamma = determineGamma(dfdxPrevious, dfdx, chiEstimatePrevious, chiEstimate);
+        if (it1 > 0)
+        {
+            gamma = determineGamma(dFdxPrevious, dFdx, chiEstimatePrevious, chiEstimate);
+        }
+        else
+        {
+            gamma = _gdInput.gamma0;
+        }
 
         chiEstimatePrevious = chiEstimate;
-        chiEstimate = gradientDescent(pData, chiEstimate, dfdx, gamma, eta);
+        chiEstimate = gradientDescent(pData, chiEstimate, dFdx, gamma, eta);
         Fx = functionF(chiEstimate, pData, eta);
-        file << std::setprecision(17) << residual << "," << counter << std::endl;
+        file << std::setprecision(17) << Fx << "," << counter << std::endl;
 
+        double* chiEstimateData = chiEstimate.GetDataPtr();
+        
         ++counter;
     }
 
@@ -63,21 +71,22 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
 }
 
 
-std::vector<double> gradientDescentInversion::differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi, double eta)
+std::vector<double> gradientDescentInversion::differential(const std::complex<double> *const pData, pressureFieldSerial chiEstimate, double h, double eta)
 {
+    int numGridPoints = chiEstimate.GetNumberOfGridPoints();
+    std::vector<double> dFdx(numGridPoints);
 
-    std::vector<double> dFdx(xi.GetNumberOfGridPoints());
-    double Fx = functionF(xi, pData, eta);
-    pressureFieldSerial xidxi = xi;
-    std::cout << "The residual is :" << Fx << std::endl;
-    for (int i = 0; i < xi.GetNumberOfGridPoints(); i++)
+    double FxPlusH;
+    double Fx = functionF(chiEstimate, pData, eta);
+    pressureFieldSerial chiEstimatePlusH = chiEstimate;
+    double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
+
+    for (int i = 0; i != numGridPoints; ++i)
     {
-
-        xidxi.GetDataPtr()[i] += dxi;
-
-        double Fxdx = functionF(xidxi, pData, eta);
-        dFdx[i] = (Fxdx - Fx) / dxi;
-        xidxi.GetDataPtr()[i] = xi.GetDataPtr()[i];
+        p_chiEstimatePlusH[i] += h;
+        FxPlusH = functionF(chiEstimatePlusH, pData, eta);
+        dFdx[i] = (FxPlusH - Fx) / h;
+        p_chiEstimatePlusH[i] -= h;
     }
     return dFdx;
 }
@@ -93,24 +102,21 @@ pressureFieldSerial gradientDescentInversion::gradientDescent(const std::complex
 {
     double* p_x = x.GetDataPtr();
 
-    for (int j = 0; j != x.GetNumberOfGridPoints(); j++)
+    for (int i = 0; i != x.GetNumberOfGridPoints(); ++i)
     {
-        p_x[j] -= gamma * dfdx[j];
+        p_x[i] -= gamma * dfdx[i];
     }
 
     return x;
 }
 
 
-double gradientDescentInversion::determineGamma(std::vector<double> dfdxPrevious, std::vector<double> dfdx, pressureFieldSerial xPrevious, pressureFieldSerial x)
+double gradientDescentInversion::determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, pressureFieldSerial xPrevious, pressureFieldSerial x)
 {
     double* p_x = x.GetDataPtr();
     double* p_xPrevious = xPrevious.GetDataPtr();
 
     int nGridPoints = x.GetNumberOfGridPoints();
-    
-    std::ofstream xFile("/home/chris/Documents/parallelized full waveform inversion/FWIInstall/some_name/output/x_values.log");
-    std::ofstream xPreviousFile("/home/chris/Documents/parallelized full waveform inversion/FWIInstall/some_name/output/x_prev_values.log"); 
 
     std::vector<double> dx(nGridPoints);
     for (int i = 0; i != nGridPoints; ++i) 
@@ -118,25 +124,24 @@ double gradientDescentInversion::determineGamma(std::vector<double> dfdxPrevious
         dx[i] = p_x[i] - p_xPrevious[i];
     }
 
-    std::vector<double> ddfdx(nGridPoints);
+    std::vector<double> ddFdx(nGridPoints);
     for (int i = 0; i != nGridPoints; ++i) 
     {
-        ddfdx[i] = dfdx[i] - dfdxPrevious[i];
+        ddFdx[i] = dFdx[i] - dFdxPrevious[i];
     }
 
     double gammaNumerator = 0;
     for  (int i = 0; i != nGridPoints; ++i) 
     {
-        gammaNumerator += dx[i]*ddfdx[i];
+        gammaNumerator += dx[i]*ddFdx[i];
     }
     gammaNumerator = fabs(gammaNumerator);
 
     double gammaDenominator = 0;
     for  (int i = 0; i != nGridPoints; ++i) 
     {
-        gammaDenominator += pow(ddfdx[i], 2);
+        gammaDenominator += pow(ddFdx[i], 2);
     }
-    gammaDenominator = pow(gammaDenominator, 0.5);
 
     double gamma = gammaNumerator / gammaDenominator;
 

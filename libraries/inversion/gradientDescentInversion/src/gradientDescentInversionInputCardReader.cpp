@@ -18,14 +18,10 @@ void gradientDescentInversionInputCardReader::readCard(const std::string &caseFo
 {
     nlohmann::json j = readFile(caseFolder + "/input/GradientDescentInversionInput.json");
 
-    // temporary lines
-    #include <iostream>
-    std::cout << "5" << std::endl;
-    //
-
     gradientDescentInversionInput input{
         j["gamma0"],
         j["x0"],
+        j["h"],
         j["iter"]};
 
     _input = input;

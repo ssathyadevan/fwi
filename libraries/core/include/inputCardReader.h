@@ -15,11 +15,6 @@ public:
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
 
-    // temporary lines
-    #include <iostream>
-    std::cout << "1" << std:endl;
-    //
-
     nlohmann::json readFile(const std::string &fileName);
 };
 

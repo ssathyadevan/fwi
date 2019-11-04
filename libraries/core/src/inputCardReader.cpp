@@ -3,11 +3,6 @@
 nlohmann::json inputCardReader::readFile(const std::string &fileName)
 {
     
-    // temporary lines
-    #include <iostream>
-    std::cout << "1" << std::endl;
-    //
-
     std::ifstream in(fileName);
 
     if (!in.is_open())

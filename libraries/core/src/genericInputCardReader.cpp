@@ -37,11 +37,6 @@ void genericInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/GenericInput.json");
 
-    // temporary lines
-    #include <iostream>
-    std::cout << "2" << std::endl;
-    //
-
     genericInput jsonInput{
         _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName, j["c_0"], {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"]}, {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]}, {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]}, {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]}, {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]}, {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]}, {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]}, {j["ngrid_original"]["x"], j["ngrid_original"]["z"]}, {j["ngrid"]["x"], j["ngrid"]["z"]}, {j["nSources"], j["nReceivers"]}, j["fileName"], j["verbosity"]};
 

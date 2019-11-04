@@ -81,7 +81,8 @@ TEST(InputTest, gradientDescentInversionTest){
     gradientDescentInversionInput input = cardReader.getInput();
 
     EXPECT_EQ(input.gamma0, 0.1);
-    EXPECT_EQ(input.x0, 0.5);
+    EXPECT_EQ(input.x0, 0.001);
+    EXPECT_EQ(input.h, 0.001);
     EXPECT_EQ(input.iter, 5);
 }
 
