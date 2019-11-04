@@ -11,5 +11,5 @@ pythonScripts/classes/__pycache__/
 *.vscode
 venv/*
 results/*
-.idea/*
-.vscode/*
+.idea/
+.vscode/
