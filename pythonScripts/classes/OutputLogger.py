@@ -39,12 +39,15 @@ class OutputLogger(object):
         ]
 
     def determine_hardware_specs(self):
-        os.system("lshw -json > hardware_specs.json")
-        with open("hardware_specs.json") as json_file:
-            hardware_specs = json.load(json_file)
-        self.log["RAM"] = str(round(hardware_specs["children"][0]["children"][0]["size"]/1024**2,0))
-        self.log["CPU"] = hardware_specs["children"][0]["children"][1]["product"]
-        os.remove("hardware_specs.json")
+        os.system("lshw -class cpu -short > cpu_specs")
+        cpu = list(open("cpu_specs"))
+        os.system("lshw -class memory -short > memory_specs")
+        memory = list(open("memory_specs"))
+        #print(memory[-1][memory[-1].rfind("  "):memory[-1].rfind("\n")])
+        self.log["RAM"] = memory[-1][memory[-1].rfind("  "):memory[-1].rfind("\n")]
+        self.log["CPU"] = cpu[-1][cpu[-1].rfind("  "):cpu[-1].rfind("\n")]
+        os.remove("cpu_specs")
+        os.remove("memory_specs")
 
     def get_description(self):
         if os.path.isfile("../parallelized-fwi/results/description.txt"):

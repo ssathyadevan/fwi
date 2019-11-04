@@ -1,6 +1,5 @@
 #include <memory>
 #include "conjugateGradientInversion.h"
-#include "residualTracker.h"
 
 ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
@@ -31,8 +30,6 @@ double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, dou
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<double> *const pData, GenericInput gInput)
 {
-    ResidualTracker residualTracker;
-
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
@@ -68,10 +65,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
     //main loop//
     for (int it = 0; it < _cgInput.n_max; it++)
     {
-        if (residualTracker.getFinalPeriodCounter() == _cgInput.iteration1.n) {
-            break;
-        }
-
         std::vector<std::complex<double>> vecResFirstIter;
         if (_cgInput.doReg == 0)
         {
@@ -81,10 +74,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
 
             for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
             {
-                if (residualTracker.getFinalPeriodCounter() == _cgInput.iteration1.n) {
-                    break;
-                }
-
                 resSq = _forwardModel->calculateResidualNormSq(resArray);
                 res = eta * resSq;
 
@@ -185,16 +174,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                     resSq = _forwardModel->calculateResidualNormSq(resArray);
 
                     res = eta * resSq;
-
-                    if (!residualTracker.isDiverging()) {
-                        residualTracker.determineIfDiverging(res);
-                    } else {
-                        residualTracker.incrementFinalPeriodCounter();
-                        if (residualTracker.getFinalPeriodCounter() == _cgInput.iteration1.n) {
-                            break;
-                        }
-                    }
-
 
                     std::cout << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
 
@@ -316,6 +295,15 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                     bsquaredOld = bsquared;
                 }
             } // end regularisation loop
+        }
+
+        if (res >= _previousLowPoint)
+        {
+            break;
+        }
+        else
+        {
+            _previousLowPoint = res;
         }
 
         _forwardModel->calculatePTot(chiEst);

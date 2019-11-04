@@ -7,7 +7,6 @@
 #include "randomInversionInputCardReader.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "integralForwardModelInputCardReader.h"
-#include "residualTracker.h"
 
 //Conjugate Gradient Input Card Reader Test:
 TEST(InputTest, conjugateGradientTest)
@@ -97,26 +96,4 @@ TEST(InputTest, integralForwardModelTest){
     EXPECT_EQ(input.iter2.n, 100);
     EXPECT_EQ(input.iter2.tolerance, 5.0e-5);
     EXPECT_EQ(input.iter2.calcAlpha, false);
-}
-
-TEST(InputTest, residualTrackerConvergenceTest) {
-    ResidualTracker residualTracker;
-
-    std::vector<double> convergingSequence = {1.0, 0.7, 0.4, 0.9, 0.6, 0.3, 0.8, 0.5, 0.2};
-
-    for (double& residual : convergingSequence) {
-        residualTracker.determineIfDiverging(residual);
-    }
-    EXPECT_EQ(residualTracker.isDiverging(), false);
-}
-
-TEST(InputTest, residualTrackerDivergenceTest) {
-    ResidualTracker residualTracker;
-
-    std::vector<double> divergingSequence = {0.8, 0.5, 0.2, 0.9, 0.6, 0.3, 1.0, 0.7, 0.4};
-
-    for (double& residual : divergingSequence) {
-        residualTracker.determineIfDiverging(residual);
-    }
-    EXPECT_EQ(residualTracker.isDiverging(), true);
 }
