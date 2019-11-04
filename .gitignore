@@ -11,3 +11,4 @@ pythonScripts/classes/__pycache__/
 *.vscode
 venv/*
 results/*
+.vscode/settings.json
