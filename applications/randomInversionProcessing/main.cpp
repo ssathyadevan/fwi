@@ -10,8 +10,8 @@
 #include "cpuClock.h"
 #include "integralForwardModel.h"
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput);
-void writePlotInput(genericInput gInput);
+void performInversion(const GenericInput &gInput);
+void writePlotInput(GenericInput gInput);
 
 int main(int argc, char **argv)
 {
@@ -24,14 +24,14 @@ int main(int argc, char **argv)
     }
 
     std::vector<std::string> arguments(argv + 1, argc + argv);
-    genericInputCardReader genericReader(arguments[0]);
-    genericInput gInput = genericReader.getInput();
+    GenericInputCardReader genericReader(arguments[0]);
+    GenericInput gInput = genericReader.getInput();
 
-    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    //randomInversionInputCardReader randomInversionReader(gInput.caseFolder);
+    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //randomInversionInputCardReader RandomInversionReader(gInput.caseFolder);
 
-    integralForwardModelInput fmInput = forwardModelReader.getInput();
-    //randomInversionInput riInput = randomInversionReader.getInput();
+    //integralForwardModelInput fmInput = forwardModelReader.getInput();
+    //randomInversionInput riInput = RandomInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -41,10 +41,10 @@ int main(int argc, char **argv)
     chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-    cpuClock clock;
+    CpuClock clock;
 
     clock.Start();
-    performInversion(gInput, fmInput);
+    performInversion(gInput);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(genericInput gInput)
+void writePlotInput(GenericInput gInput)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -77,15 +77,15 @@ void writePlotInput(genericInput gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &fmInput)
+void performInversion(const GenericInput &gInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freqg(gInput.freq, gInput.c_0);
+    FrequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
@@ -105,14 +105,14 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freqg, fmInput);
+    model = new IntegralForwardModel(grid, src, recv, freqg, gInput);
 
-    inversionInterface *inverse;
-    inverse = new randomInversion(model, gInput);
+    InversionInterface *inverse;
+    inverse = new RandomInversion(model, gInput);
 
     std::cout << "Estimating Chi..." << std::endl;
 
-    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
+    PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
     std::cout << "Done, writing to file" << std::endl;
 

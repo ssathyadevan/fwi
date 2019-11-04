@@ -5,6 +5,9 @@ inputFiles/default/input/temp/temp1.json
 inputFiles/default/input/temp/temp2.json
 inputFiles/default/input/GenericInput.json
 inputFiles/default/input/RandomInversionInput.json
+pythonScripts/__pycache__/
+pythonScripts/classes/__pycache__/
 *.idea
 *.vscode
+venv/*
 results/*

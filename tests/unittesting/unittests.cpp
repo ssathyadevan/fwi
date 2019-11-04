@@ -24,7 +24,7 @@ TEST(CoreTest, Grid2DTest)
     std::array<double, 2> x_max = {2.0, 2.0};
     std::array<int, 2> n_x = {2,4};
 
-    grid2D grid = grid2D(x_min, x_max, n_x);
+    Grid2D grid = Grid2D(x_min, x_max, n_x);
     EXPECT_NEAR(grid.GetCellVolume(), 0.5, 0.01);
     EXPECT_EQ(grid.GetNumberOfGridPoints(), 8);
     EXPECT_NEAR(grid.GetDomainArea(), 4, 0.1);
@@ -36,7 +36,7 @@ TEST(CoreTest, ReceiverTest)
     std::array<double, 2> xMin{0, 0};
     std::array<double, 2> xMax{10, 0};
     int nRecv = 6;
-    receivers receivers(xMin, xMax, nRecv);
+    Receivers receivers(xMin, xMax, nRecv);
 
     EXPECT_EQ(receivers.nRecv, nRecv);
     EXPECT_NEAR(receivers.xRecv[5][0], 10.0, 0.01);
@@ -49,7 +49,7 @@ TEST(CoreTest, SourceTest)
     std::array<double, 2> xMin{0, 0};
     std::array<double, 2> xMax{10, 0};
     int nSrc = 6;
-    sources sources(xMin, xMax, nSrc);
+    Sources sources(xMin, xMax, nSrc);
 
     EXPECT_EQ(sources.nSrc, nSrc);
     EXPECT_NEAR(sources.xSrc[5][0], 10.0, 0.01);
@@ -62,7 +62,7 @@ TEST(CoreTest, FrequenciesGroupTest)
     int n = 10;
 
     Freq freq{min, max, n};
-    frequenciesGroup freq_group{freq, 2000};
+    FrequenciesGroup freq_group{freq, 2000};
 
     EXPECT_NEAR(freq_group.k[9], 0.063, 0.01); // 2*pi*20/2000 ~ 0.063
 }
@@ -72,9 +72,9 @@ TEST(CoreTest, PressureFieldSerialTest)
     std::array<double, 2> x_min_grid = {0, 0};
     std::array<double, 2> x_max_grid = {10, 10};
     std::array<int, 2> n_x_grid = {10, 10};
-    grid2D grid(x_min_grid, x_max_grid, n_x_grid);
+    Grid2D grid(x_min_grid, x_max_grid, n_x_grid);
     
-    pressureFieldSerial pf_serial(grid);
+    PressureFieldSerial pf_serial(grid);
     
     std::function<double(double, double)> f_field = [](double x, double z){return x+z;}; // Linear plane, x & z are centroids of grid cell.
     pf_serial.SetField(f_field);

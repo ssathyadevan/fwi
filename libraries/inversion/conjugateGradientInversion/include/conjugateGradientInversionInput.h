@@ -3,7 +3,7 @@
 #include "iter1.h"
 #include "deltaAmplification.h"
 
-struct conjugateGradientInversionInput
+struct ConjugateGradientInversionInput
 {
       iter1 iteration1;
       deltaAmplification dAmplification;

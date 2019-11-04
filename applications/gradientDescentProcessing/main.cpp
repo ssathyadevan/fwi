@@ -6,13 +6,12 @@
 #include "createChiCSV.h"
 #include "csvReader.h"
 #include "cpuClock.h"
-#include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
 #include "inversionInterface.h"
 #include "gradientDescentInversion.h"
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &ifmInput, const std::string &runName);
-void writePlotInput(const genericInput &gInput);
+void performInversion(const GenericInput &gInput, const std::string &runName);
+void writePlotInput(const GenericInput &gInput);
 
 int main(int argc, char **argv)
 {
@@ -25,14 +24,14 @@ int main(int argc, char **argv)
     }
 
     std::vector<std::string> arguments(argv + 1, argc + argv);
-    genericInputCardReader genericReader(arguments[0]);
-    genericInput gInput = genericReader.getInput();
+    GenericInputCardReader genericReader(arguments[0]);
+    GenericInput gInput = genericReader.getInput();
 
-    integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    //gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
+    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
+    //gradientDescentInversionInputCardReader GradientDescentInversionReader(gInput.caseFolder);
 
-    integralForwardModelInput ifmInput = forwardModelReader.getInput();
-    //gradientDescentInversionInput gdInput = gradientDescentInversionReader.getInput();
+    //integralForwardModelInput ifmInput = forwardModelReader.getInput();
+    //gradientDescentInversionInput gdInput = GradientDescentInversionReader.getInput();
 
     if (!gInput.verbose)
     {
@@ -42,10 +41,10 @@ int main(int argc, char **argv)
     chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-    cpuClock clock;
+    CpuClock clock;
 
     clock.Start();
-    performInversion(gInput, ifmInput, gInput.runName);
+    performInversion(gInput, gInput.runName);
     clock.End();
     clock.PrintTimeElapsed();
 
@@ -57,7 +56,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(const genericInput &gInput)
+void writePlotInput(const GenericInput &gInput)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -77,15 +76,15 @@ void writePlotInput(const genericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const integralForwardModelInput &ifmInput, const std::string &runName)
+void performInversion(const GenericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
     recv.Print();
-    frequenciesGroup freq(gInput.freq, gInput.c_0);
+    FrequenciesGroup freq(gInput.freq, gInput.c_0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -114,15 +113,15 @@ void performInversion(const genericInput &gInput, const integralForwardModelInpu
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, ifmInput);
+    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
 
-    inversionInterface *inverse;
-    inverse = new gradientDescentInversion(model, gInput);
+    InversionInterface *inverse;
+    inverse = new GradientDescentInversion(model, gInput);
 
-    //    gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
+    //    gradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
     std::cout << "Estimating Chi..." << std::endl;
 
-    pressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
+    PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
     std::cout << "Done, writing to file" << std::endl;
 

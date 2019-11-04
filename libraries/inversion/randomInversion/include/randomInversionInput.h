@@ -1,6 +1,6 @@
 #pragma once
 
-struct randomInversionInput
+struct RandomInversionInput
 {
     double toleranceOuter;
     int nMaxOuter;

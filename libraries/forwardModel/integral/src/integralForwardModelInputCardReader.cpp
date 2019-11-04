@@ -3,22 +3,22 @@
 #include "integralForwardModelInputCardReader.h"
 #include "json.h"
 
-integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder)
-    : inputCardReader()
+IntegralForwardModelInputCardReader::IntegralForwardModelInputCardReader(const std::string &caseFolder)
+    : InputCardReader()
 {
     readCard(caseFolder);
 }
 
-integralForwardModelInput integralForwardModelInputCardReader::getInput()
+IntegralForwardModelInput IntegralForwardModelInputCardReader::getInput()
 {
     return _input;
 }
 
-void integralForwardModelInputCardReader::readCard(const std::string &caseFolder)
+void IntegralForwardModelInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/IntegralFMInput.json");
 
-    integralForwardModelInput input{
+    IntegralForwardModelInput input{
         j["Iter2"]["n"], j["Iter2"]["tolerance"], j["Iter2"]["calcAlpha"]};
 
     _input = input;

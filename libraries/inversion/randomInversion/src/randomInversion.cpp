@@ -1,20 +1,20 @@
 #include "randomInversion.h"
-randomInversion::randomInversion(ForwardModelInterface *forwardModel, genericInput gInput)
+RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
     : _forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    randomInversionInputCardReader randomInversionInputCardReader(gInput.caseFolder);
+    RandomInversionInputCardReader RandomInversionInputCardReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _riInput = randomInversionInputCardReader.getInput();
+    _riInput = RandomInversionInputCardReader.getInput();
 }
 
-pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+PressureFieldSerial RandomInversion::Reconstruct(const std::complex<double> *const pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
-    pressureFieldSerial chiEst(_grid);
+    PressureFieldSerial chiEst(_grid);
 
     chiEst.Zero();
 
@@ -43,7 +43,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
         for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
 
-            pressureFieldSerial tempRandomChi(_grid);
+            PressureFieldSerial tempRandomChi(_grid);
             tempRandomChi.RandomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
@@ -75,7 +75,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
 
     file.close(); // close the residual.log file
 
-    pressureFieldSerial result(_grid);
+    PressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
 }

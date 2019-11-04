@@ -2,8 +2,8 @@
 #include "helmholtz2D.h"
 
 #include "pressureFieldComplexSerial.h"
-#include "grid2D.h"
-#include "sources.h"
+#include "Grid2D.h"
+#include "Sources.h"
 #include "finiteDifferenceForwardModelInput.h"
 
 /* Test Finite Difference implementation of calculating pTot by comparing it to
@@ -18,10 +18,10 @@ TEST(helmholtz2DTest, testClass)
     std::array<double, 2> source1 = {-480.0, -5.0};
     std::array<double, 2> source2 = {480.0, -5.0};
 
-    grid2D testGrid(upperLeft, lowerRight, nx);
-    sources src(source1, source2, 2);
+    Grid2D testGrid(upperLeft, lowerRight, nx);
+    Sources src(source1, source2, 2);
 
-    pressureFieldSerial chi(testGrid);
+    PressureFieldSerial chi(testGrid);
     chi.Zero();
 
     PMLWidthFactor pmlWidth;
@@ -30,22 +30,22 @@ TEST(helmholtz2DTest, testClass)
     SourceParameter srcPar;
     srcPar.r = 4;
     srcPar.beta = 6.31;
-    finiteDifferenceForwardModelInput fmInput;
+    FiniteDifferenceForwardModelInput fmInput;
     fmInput.pmlWidthFactor = pmlWidth;
     fmInput.sourceParameter = srcPar;
     Helmholtz2D Helmholtz10Hz(testGrid, 10.0, src, 2000.0, chi, fmInput);
 
-    pressureFieldComplexSerial pTot(testGrid);
+    PressureFieldComplexSerial pTot(testGrid);
     pTot = Helmholtz10Hz.solve(source1, pTot);
     //pTot.toFile("pTotTest.csv");
 
-    pressureFieldComplexSerial pythonBenchpTot(testGrid);
+    PressureFieldComplexSerial pythonBenchpTot(testGrid);
 
     std::string path = "../../../tests/testCase/";
     pythonBenchpTot.fromFile(path + "PythonBenchpTotNewSource.csv");
     //pythonBenchpTot.fromFile("PythonBenchpTotNewSource.csv");
 
-    pressureFieldComplexSerial diff(pythonBenchpTot);
+    PressureFieldComplexSerial diff(pythonBenchpTot);
     diff = diff - pTot;
     double res = diff.Norm();
     double tol = 1e-10;

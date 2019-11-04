@@ -6,13 +6,13 @@
 #include "inputCardReader.h"
 #include "integralForwardModelInput.h"
 
-class integralForwardModelInputCardReader: public inputCardReader
+class IntegralForwardModelInputCardReader: public InputCardReader
 {
 public:
-    integralForwardModelInputCardReader(const std::string &caseFolder);
-    integralForwardModelInput getInput();
+    IntegralForwardModelInputCardReader(const std::string &caseFolder);
+    IntegralForwardModelInput getInput();
 
 private:
     virtual void readCard(const std::string &caseFolder);
-    integralForwardModelInput _input;
+    IntegralForwardModelInput _input;
 };
