@@ -16,12 +16,12 @@ public:
 
     ~IntegralForwardModel();
 
-    virtual void calculatePData(const PressureFieldSerial &chiEst, std::complex<double> *kOperator);
+    virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator);
 
     void calculateKappa();
     virtual void calculatePTot(const PressureFieldSerial &chiEst);
-    virtual void getUpdateDirectionInformation(std::complex<double>* res, PressureFieldComplexSerial &kRes);
-    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator);
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes);
+    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
 private:
 
@@ -44,7 +44,7 @@ private:
 
     PressureFieldComplexSerial calcTotalField(const Greens_rect_2D_cpu &G, const PressureFieldSerial &chiEst, const PressureFieldComplexSerial &Pinit);
 
-    void applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double>* pData);
+    void applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
     void createKappa(const FrequenciesGroup &freq, const Sources &src, const Receivers &recv);
     void deleteKappa();
 };

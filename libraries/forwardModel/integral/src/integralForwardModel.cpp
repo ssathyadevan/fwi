@@ -255,7 +255,7 @@ void IntegralForwardModel::calculatePTot(const PressureFieldSerial &chiEst)
     }
 }
 
-void IntegralForwardModel::calculatePData(const PressureFieldSerial &chiEst, std::complex<double> *kOperator)
+void IntegralForwardModel::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(chiEst, kOperator);
 }
@@ -280,12 +280,12 @@ void IntegralForwardModel::calculateKappa()
     }
 }
 
-void IntegralForwardModel::mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
+void IntegralForwardModel::mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(CurrentPressureFieldSerial, kOperator);
 }
 
-void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
+void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -301,7 +301,7 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
 //    }
 //}
 
-void IntegralForwardModel::getUpdateDirectionInformation(std::complex<double> *res, PressureFieldComplexSerial &kRes)
+void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 

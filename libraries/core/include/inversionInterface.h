@@ -10,5 +10,5 @@ public:
     InversionInterface() {}
     virtual ~InversionInterface() = default;
 
-    virtual PressureFieldSerial Reconstruct(const std::complex<double> *const p_data, GenericInput input) = 0;
+    virtual PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &p_data, GenericInput input) = 0;
 };

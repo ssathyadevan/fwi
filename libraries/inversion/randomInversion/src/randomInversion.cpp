@@ -7,7 +7,7 @@ RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInp
     _riInput = RandomInversionInputCardReader.getInput();
 }
 
-PressureFieldSerial RandomInversion::Reconstruct(const std::complex<double> *const pData, GenericInput gInput)
+PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -34,7 +34,7 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::complex<double> *con
     for (int it = 0; it < _riInput.nMaxOuter; it++)
     {
         
-        std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData);
+        std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
 
         resSq = _forwardModel->calculateResidualNormSq(resArray);
         chiEstRes = eta * resSq;

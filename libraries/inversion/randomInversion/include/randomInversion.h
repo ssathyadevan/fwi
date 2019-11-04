@@ -21,10 +21,10 @@ public:
     RandomInversion(const RandomInversion&) = delete;
     RandomInversion& operator=(const RandomInversion&) = delete;
 
-    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, GenericInput gInput);
+    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput);
 
 private:
-    ForwardModelInterface   *_forwardModel;
+    ForwardModelInterface           *_forwardModel;
     RandomInversionInput             _riInput;
 
     const Grid2D&                    _grid;

@@ -76,7 +76,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
 
     //read referencePressureData from a CSV file format
-    std::complex<double> referencePressureData[magnitude];
+    std::vector<std::complex<double>> referencePressureData(magnitude);
 
     std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);

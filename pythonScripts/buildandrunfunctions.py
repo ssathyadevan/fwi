@@ -176,7 +176,7 @@ def add_to(table, current_directory):
     table.append([method, forwardmodel, conditions, image, out_resolution, folder, table[-1][6] + 1])
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('cp -r ' + method[:1].upper() + method[1:] +
-              'Input.json temp/temp' + str(table[-1][4]) + '.json')
+              'Input.json temp/temp' + str(table[-1][6]) + '.json')
     return table
 
 def edit(table, current_directory):

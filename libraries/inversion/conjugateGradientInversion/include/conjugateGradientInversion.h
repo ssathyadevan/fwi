@@ -21,6 +21,7 @@ private:
     const Sources& _src;
     const Receivers& _recv;
     const FrequenciesGroup& _freq;
+    double _previousLowPoint = std::numeric_limits<double>::max();
 
 public:
 
@@ -31,5 +32,5 @@ public:
 
     double findRealRootFromCubic(double a, double b, double c, double d);
 
-    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, GenericInput gInput );
+    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
 };

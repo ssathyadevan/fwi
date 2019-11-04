@@ -8,7 +8,7 @@ GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwar
     _gdInput = GradientDescentInversionReader.getInput();
 }
 
-PressureFieldSerial GradientDescentInversion::Reconstruct(const std::complex<double> *const pData, GenericInput gInput)
+PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -60,7 +60,7 @@ PressureFieldSerial GradientDescentInversion::Reconstruct(const std::complex<dou
 
     return chiEst;
 }
-std::vector<double> GradientDescentInversion::differential(const std::complex<double> *const pData, PressureFieldSerial xi, double dxi, double eta)
+std::vector<double> GradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta)
 {
 
     std::vector<double> dFdx(xi.GetNumberOfGridPoints());
@@ -78,12 +78,12 @@ std::vector<double> GradientDescentInversion::differential(const std::complex<do
     }
     return dFdx;
 }
-double GradientDescentInversion::functionF(PressureFieldSerial xi, const std::complex<double> *const pData, double eta)
+double GradientDescentInversion::functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta)
 {
     return eta * _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(xi, pData));
 }
 
-PressureFieldSerial GradientDescentInversion::gradientDescent(const std::complex<double> *const pData, PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma, double eta)
+PressureFieldSerial GradientDescentInversion::gradientDescent(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma, double eta)
 {
     for (int j = 0; j < xi.GetNumberOfGridPoints(); j++)
     {

@@ -164,7 +164,7 @@ void FiniteDifferenceForwardModel::calculatePTot(const PressureFieldSerial &chiE
     std::cout << " " << std::endl;
 }
 
-void FiniteDifferenceForwardModel::calculatePData(const PressureFieldSerial &chiEst, std::complex<double> *kOperator)
+void FiniteDifferenceForwardModel::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(chiEst, kOperator);
 }
@@ -189,12 +189,12 @@ void FiniteDifferenceForwardModel::calculateKappa()
     }
 }
 
-void FiniteDifferenceForwardModel::mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
+void FiniteDifferenceForwardModel::mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(CurrentPressureFieldSerial, kOperator);
 }
 
-void FiniteDifferenceForwardModel::applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator)
+void FiniteDifferenceForwardModel::applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -202,7 +202,7 @@ void FiniteDifferenceForwardModel::applyKappa(const PressureFieldSerial &Current
     }
 }
 
-void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<double> *res, PressureFieldComplexSerial &kRes)
+void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 
@@ -229,7 +229,7 @@ void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::complex<do
     }
 }
 
-void FiniteDifferenceForwardModel::getResidualGradient(std::complex<double> *res, PressureFieldComplexSerial &kRes)
+void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 

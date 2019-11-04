@@ -48,7 +48,7 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
 
     //std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
-    std::complex<double> referencePressureData[magnitude];
+    std::vector<std::complex<double>> referencePressureData(magnitude);
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 

@@ -28,7 +28,7 @@ double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, dou
     return realroot;
 }
 
-PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<double> *const pData, GenericInput gInput)
+PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -70,7 +70,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
         {
             _forwardModel->calculateKappa();
 
-            std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData);
+            std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
 
             for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
             {
@@ -114,7 +114,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
 
                 //std::unique_ptr<std::complex<double>> zetaTemp(new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv]);
 
-                std::complex<double> *zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
+                std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                 for (int i = 0; i < nTotal; i++)
@@ -125,8 +125,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                 alpha = alphaDiv[0] / alphaDiv[1];
                 chiEst += alpha * zeta; // the step size of the parameter in Eq: ContrastUpdate in the user manual.
                 gOld = g;
-
-                delete[] zetaTemp;
             }
         }
         else if (_cgInput.doReg == 1)
@@ -141,7 +139,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
 
             _forwardModel->calculateKappa();
 
-            std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData);
+            std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
 
             //start the inner loop
             for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
@@ -156,7 +154,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                     alphaDiv[0] = double(0.0);
                     alphaDiv[1] = double(0.0);
 
-                    std::complex<double> *zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
+                    std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
                     _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
@@ -164,7 +162,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                         alphaDiv[0] += std::real(conj(resArray[i]) * zetaTemp[i]);
                         alphaDiv[1] += std::real(conj(zetaTemp[i]) * zetaTemp[i]);
                     }
-                    delete[] zetaTemp;
 
                     alpha = alphaDiv[0] / alphaDiv[1]; //eq:optimalStepSizeCG in the readme pdf
                     chiEst += alpha * zeta;
@@ -222,7 +219,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
 
                     std::array<double, 2> A = {0.0, 0.0};
 
-                    std::complex<double> *zetaTemp = new std::complex<double>[_freq.nFreq * _src.nSrc * _recv.nRecv];
+                    std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
                     _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                     for (int i = 0; i < nTotal; i++)
@@ -230,8 +227,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::complex<d
                         A[1] += eta * std::real(conj(zetaTemp[i]) * zetaTemp[i]);
                         A[0] += double(-2.0) * eta * std::real(conj(resArray[i]) * zetaTemp[i]);
                     }
-
-                    delete[] zetaTemp;
 
                     double A0 = fDataOld;
                     zeta.Gradient(gradientZetaTmp);
