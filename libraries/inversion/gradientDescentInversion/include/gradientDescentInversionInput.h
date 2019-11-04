@@ -3,8 +3,7 @@
 
 struct gradientDescentInversionInput
 {
-    double gamma;
-    double dx;
+    double gamma0;
     double x0;
     int iter;
 };

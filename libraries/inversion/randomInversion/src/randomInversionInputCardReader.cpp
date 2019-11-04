@@ -17,6 +17,11 @@ void randomInversionInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/RandomInversionInput.json");
 
+    // temporary lines
+    #include <iostream>
+    std::cout << "6" << std::endl;
+    //
+
     randomInversionInput input{
         j["toleranceOuter"], j["nMaxOuter"], j["nMaxInner"]};
 

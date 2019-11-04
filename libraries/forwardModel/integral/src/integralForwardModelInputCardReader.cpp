@@ -18,6 +18,11 @@ void integralForwardModelInputCardReader::readCard(const std::string &caseFolder
 {
     nlohmann::json j = readFile(caseFolder + "/input/IntegralFMInput.json");
 
+    // temporary lines
+    #include <iostream>
+    std::cout << "4" << std::endl;
+    //
+
     integralForwardModelInput input{
         j["Iter2"]["n"], j["Iter2"]["tolerance"], j["Iter2"]["calcAlpha"]};
 

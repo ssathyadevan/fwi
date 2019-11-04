@@ -17,7 +17,7 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
 
     double eta;
     double Fx;
-    double gamma;
+    double gamma = _gdInput.gamma0;
     double residual;
 
     std::vector<double> dfdx(_grid.GetNumberOfGridPoints(), 0);
@@ -36,7 +36,7 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     double* p_chiEstimate = chiEstimate.GetDataPtr();
     for (int i = 0; i != chiEstimate.GetNumberOfGridPoints(); ++i) 
     {
-        p_chiEstimate[i] = _gdInput.dx;
+        p_chiEstimate[i] = _gdInput.x0;
     }
 
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
@@ -47,7 +47,7 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     for (int it1 = 0; it1 < _gdInput.iter; it1++)
     {
         dfdxPrevious = dfdx;
-        dfdx = differential(pData, chiEstimate, _gdInput.gamma, eta);
+        dfdx = differential(pData, chiEstimate, gamma, eta);
 
         gamma = determineGamma(dfdxPrevious, dfdx, chiEstimatePrevious, chiEstimate);
 
