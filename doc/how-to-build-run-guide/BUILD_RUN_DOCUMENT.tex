@@ -9,11 +9,13 @@
  }
 
 \title{BUILD-RUN-DOCUMENT}
-\author{Saurabh Sharma}
+\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen}
 \date{\today}
 
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
 
 \begin{document}
 
@@ -166,5 +168,33 @@ This section details the comparison of a \textit{default} run with the \textit{f
 \texttt{python3 regressionTestPreProcessing\_python3.py fast default}
 \newline
 \texttt{python3 regressionTestProcessing\_python3.py fast default}
+
+\section{Troubleshooting}
+\subsection{SSH Tunneling}
+In case the Ubuntu Virtual Machine is very slow and has long response times, try setting up an SSH connection between the \textbf{Ubuntu host} \& \textbf{Windows guest}. This way, you can use Visual Studio Code for development with fast response times from Windows. \href{https://stackoverflow.com/questions/5906441/how-to-ssh-to-a-virtualbox-guest-externally-through-a-host}{\color{blue}{This post}} explains how to set up such a connection.
+\begin{enumerate}
+    \item In the \textbf{host} Ubuntu virtual machine toolbar (make sure full-screen view is disabled), go to \texttt{Devices > Network > Network Settings > Advanced > Port Forwarding}
+    \item Add a new port forwarding rule with the following parameters: \\
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        Name & Protocol & Host IP & Host Port & Guest IP & Guest Port \\ \hline
+        ssh & TCP & & 3022 & & 22 \\ \hline 
+    \end{tabular}
+    \item In the \textbf{host}, install an ssh server: \\
+    \texttt{sudo apt-get install openssh-server}
+    \item In the \textbf{guest}, install Visual Studio Code with the Remote Development extension.
+    \item In the \textbf{guest}, open cmd and write: \\
+    \texttt{ssh -p 3022 user@127.0.0.1}
+    \item Run Visual Studio Code \& click on the Remote Development icon in the bottom-left corner.
+    \item From the drop-down menu, go to Remote-SSH: Open Configuration File. Select one, remember which one.
+    \item Add to this document the following lines: \\
+    \texttt{Host 127.0.0.1} \\
+    \texttt{HostName 127.0.0.1} \\
+    \texttt{Port 3022} \\
+    \texttt{User user} \\
+    Where \texttt{user} is the account in the virtual machine, before the '@' sign.
+    \item Click the Remote Development button in the bottom-left corner again \& select Remote-SSH: Connect To Host. Select the SSH configuration file you just modified.
+    \item Don't forget to provide the \textbf{host} password in an easily overlooked password field, located at the top of the editor.
+\end{enumerate}
 
 \end{document}
