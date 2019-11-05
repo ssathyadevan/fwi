@@ -18,7 +18,7 @@ void EvolutionInversionInputCardReader::readCard(const std::string &caseFolder)
     nlohmann::json j = readFile(caseFolder + "/input/EvolutionInversionInput.json");
 
     EvolutionInversionInput input{
-        j["toleranceOuter"], j["nMaxOuter"], j["nMaxInner"]};
+        j["toleranceOuter"], j["nGenerations"], j["nChildrenPerGeneration"]};
 
     _input = input;
 }

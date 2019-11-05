@@ -8,3 +8,6 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 
 add_library( evolution_inversion_library ${CPP_SOURCES} ${H_HEADERS} )
 target_link_libraries (evolution_inversion_library Eigen3::Eigen)
+
+target_link_libraries (evolution_inversion_library
+                        core_library)

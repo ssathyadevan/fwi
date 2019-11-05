@@ -1,6 +1,7 @@
 #include "factory.h"
 #include "conjugateGradientInversion.h"
 #include "randomInversion.h"
+#include "evolutionInversion.h"
 #include "gradientDescentInversion.h"
 #include "integralForwardModel.h"
 #include "finiteDifferenceForwardModel.h"
@@ -25,6 +26,11 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
         if (desired_inversion == "gradientDescentInversion")
         {
                 inversion = new GradientDescentInversion(forwardModel, gInput);
+                return inversion;
+        }
+        if (desired_inversion == "evolutionInversion")
+        {
+                inversion = new EvolutionInversion(forwardModel, gInput);
                 return inversion;
         }
         std::cout << "The method was not found. you PUNK!" << std::endl;

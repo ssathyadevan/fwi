@@ -3,6 +3,6 @@
 struct EvolutionInversionInput
 {
     double toleranceOuter;
-    int nMaxOuter;
-    int nMaxInner;
+    int nGenerations;
+    int nChildrenPerGeneration;
 };

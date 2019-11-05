@@ -5,6 +5,7 @@
 #include "evolutionInversionInput.h"
 #include "evolutionInversionInputCardReader.h"
 #include "genericInput.h"
+#include "progressBar.h"
 
 
 using std::cout;
@@ -21,11 +22,11 @@ public:
     EvolutionInversion(const EvolutionInversion&) = delete;
     EvolutionInversion& operator=(const EvolutionInversion&) = delete;
 
-    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, GenericInput gInput);
+    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput);
 
 private:
-    ForwardModelInterface   *_forwardModel;
-    EvolutionInversionInput             _riInput;
+    ForwardModelInterface           *_forwardModel;
+    EvolutionInversionInput             _eiInput;
 
     const Grid2D&                    _grid;
     const Sources&                   _src;
