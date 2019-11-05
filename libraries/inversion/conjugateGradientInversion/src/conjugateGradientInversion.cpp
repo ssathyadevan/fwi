@@ -62,6 +62,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
         std::exit(EXIT_FAILURE);
     }
     int counter = 1;
+    
     //main loop//
     for (int it = 0; it < _cgInput.n_max; it++)
     {
@@ -72,6 +73,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
             std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
 
+            //secondary loop//
             for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
             {
                 resSq = _forwardModel->calculateResidualNormSq(resArray);

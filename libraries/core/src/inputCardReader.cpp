@@ -2,6 +2,7 @@
 
 nlohmann::json InputCardReader::readFile(const std::string &fileName)
 {
+    
     std::ifstream in(fileName);
 
     if (!in.is_open())

@@ -43,6 +43,8 @@ if sys.platform.startswith('linux'):
         print('Running project:')
         if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
             os.mkdir('../FWIInstall')
+        elif os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5]):
+            os.system('rm -r ../FWIInstall/' + ind_run[5])
         os.system('cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
         os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5] + '/input/')
