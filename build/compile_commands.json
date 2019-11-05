@@ -1,0 +1,197 @@
+[
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/chiIntegerVisualisation.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/chiIntegerVisualisation.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/chiIntegerVisualisation.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/contraction.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/contraction.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/contraction.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/cpuClock.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/cpuClock.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/cpuClock.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/createChiCSV.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/createChiCSV.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/createChiCSV.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/csvReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/csvReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/csvReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/forwardModelInterface.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/forwardModelInterface.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/forwardModelInterface.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/frequenciesGroup.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/frequenciesGroup.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/frequenciesGroup.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/genericInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/genericInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/genericInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/greensFunctions.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/greensFunctions.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/greensFunctions.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/greensSerial.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/greensSerial.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/greensSerial.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/grid2D.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/grid2D.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/grid2D.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/inputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/inputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/inputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/pressureFieldComplex.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldComplex.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldComplex.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/pressureFieldComplexSerial.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldComplexSerial.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldComplexSerial.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/pressureFieldSerial.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldSerial.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/pressureFieldSerial.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/receivers.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/receivers.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/receivers.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/core_library.dir/src/sources.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/sources.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/src/sources.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/finiteDifference",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/finite_difference_forwardModel_library.dir/src/finiteDifferenceForwardModel.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceForwardModel.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceForwardModel.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/finiteDifference",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/finite_difference_forwardModel_library.dir/src/finiteDifferenceForwardModelInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceForwardModelInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceForwardModelInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/finiteDifference",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/finite_difference_forwardModel_library.dir/src/finiteDifferenceGrid2D.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceGrid2D.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/finiteDifferenceGrid2D.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/finiteDifference",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/finite_difference_forwardModel_library.dir/src/helmholtz2D.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/helmholtz2D.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/src/helmholtz2D.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/integral",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/integral_forwardModel_library.dir/src/integralForwardModel.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/src/integralForwardModel.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/src/integralForwardModel.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/integral",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/integral_forwardModel_library.dir/src/integralForwardModelInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/src/integralForwardModelInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/src/integralForwardModelInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversion.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversion.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversionInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversionInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/randomInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/random_inversion_library.dir/src/randomInversion.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/src/randomInversion.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/src/randomInversion.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/randomInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/random_inversion_library.dir/src/randomInversionInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/src/randomInversionInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/src/randomInversionInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/gradientDescentInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/gradient_descent_inversion_library.dir/src/gradientDescentInversion.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/src/gradientDescentInversion.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/src/gradientDescentInversion.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/gradientDescentInversion",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/gradient_descent_inversion_library.dir/src/gradientDescentInversionInputCardReader.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/src/gradientDescentInversionInputCardReader.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/src/gradientDescentInversionInputCardReader.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/factory",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/factory/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/factory_library.dir/src/factory.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/factory/src/factory.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/factory/src/factory.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/preProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_PreProcess.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/preProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/preProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/finiteDifferencePreProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_PreProcess_Finite_Difference.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/finiteDifferencePreProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/finiteDifferencePreProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/finiteDifferenceProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_Process_Finite_Difference.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/finiteDifferenceProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/finiteDifferenceProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/processing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_Process.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/processing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/processing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/randomInversionProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_Process_Random_Inversion.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/randomInversionProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/randomInversionProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/unifiedProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/factory/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_UnifiedProcess.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/unifiedProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/unifiedProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/applications/gradientDescentProcessing",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/FWI_Process_Gradient_Descent.dir/main.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/gradientDescentProcessing/main.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/applications/gradientDescentProcessing/main.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/tests/unittesting",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/CoreTest.dir/unittests.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/tests/unittesting/unittests.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/tests/unittesting/unittests.cpp"
+},
+{
+  "directory": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/tests/unittesting",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/core/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include\" -I\"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include\" -isystem /usr/include/eigen3   -Wall -Werror=vla --std=c++17 -g   -o CMakeFiles/InputTest.dir/InputCardReaderTests.cpp.o -c \"/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/tests/unittesting/InputCardReaderTests.cpp\"",
+  "file": "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/tests/unittesting/InputCardReaderTests.cpp"
+}
+]

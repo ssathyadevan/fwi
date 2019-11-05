@@ -1,0 +1,1 @@
+/usr/bin/x86_64-linux-gnu-g++-7   -Wall -Werror=vla --std=c++17 -g   CMakeFiles/FWI_Process_Random_Inversion.dir/main.cpp.o  -o ../../runtime/bin/FWI_Process_Random_Inversion ../../runtime/lib/librandom_inversion_library.a ../../runtime/lib/libintegral_forwardModel_library.a ../../runtime/lib/libcore_library.a 

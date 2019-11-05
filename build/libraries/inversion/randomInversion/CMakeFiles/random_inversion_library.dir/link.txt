@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../runtime/lib/librandom_inversion_library.a  CMakeFiles/random_inversion_library.dir/src/randomInversion.cpp.o CMakeFiles/random_inversion_library.dir/src/randomInversionInputCardReader.cpp.o
+/usr/bin/ranlib ../../../runtime/lib/librandom_inversion_library.a
