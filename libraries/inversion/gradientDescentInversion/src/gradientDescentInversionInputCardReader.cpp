@@ -3,18 +3,18 @@
 #include "gradientDescentInversionInputCardReader.h"
 #include "json.h"
 
-gradientDescentInversionInputCardReader::gradientDescentInversionInputCardReader(const std::string &caseFolder)
+GradientDescentInversionInputCardReader::gradientDescentInversionInputCardReader(const std::string &caseFolder)
     : inputCardReader()
 {
     readCard(caseFolder);
 }
 
-gradientDescentInversionInput gradientDescentInversionInputCardReader::getInput()
+GradientDescentInversionInput gradientDescentInversionInputCardReader::getInput()
 {
     return _input;
 }
 
-void gradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
+void GradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/GradientDescentInversionInput.json");
 

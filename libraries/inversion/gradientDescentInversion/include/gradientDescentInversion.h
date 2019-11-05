@@ -4,12 +4,12 @@
 #include "forwardModelInterface.h"
 #include "gradientDescentInversionInput.h"
 #include "genericInput.h"
-class gradientDescentInversion : public inversionInterface{
+class GradientDescentInversion : public InversionInterface{
 
 private:
 
     ForwardModelInterface* _forwardModel;
-    gradientDescentInversionInput _gdInput;
+    GradientDescentInversionInput _gdInput;
 
     const grid2D& _grid;
     const sources& _src;
@@ -17,14 +17,14 @@ private:
     const frequenciesGroup _freq;
 
  public:
-    gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
+    GradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
 
-    gradientDescentInversion(const gradientDescentInversion&) = delete;
-    gradientDescentInversion & operator = (const gradientDescentInversion&) = delete;
+    GradientDescentInversion(const GradientDescentInversion&) = delete;
+    GradientDescentInversion & operator = (const GradientDescentInversion&) = delete;
 
-    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
+    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
     std::vector<double> differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi, double eta);
-    pressureFieldSerial gradientDescent(const std::complex<double> *const pData, pressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
+    PressureFieldSerial gradientDescent(const std::complex<double> *const pData, pressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
     double functionF(pressureFieldSerial xi, const std::complex<double> *const pData, double eta);
     double determineGamma(std::vector<double> dFdxiOld, std::vector<double> dFdxi, pressureFieldSerial xiOld, pressureFieldSerial xi);
 };

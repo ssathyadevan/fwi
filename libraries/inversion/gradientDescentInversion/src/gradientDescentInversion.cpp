@@ -2,16 +2,16 @@
 #include "gradientDescentInversionInputCardReader.h"
 
 
-gradientDescentInversion::gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gInput)
+GradientDescentInversion::gradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gInput)
     : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    gradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
+    GradientDescentInversionInputCardReader gradientDescentInversionReader(gInput.caseFolder);
     _forwardModel = forwardModel;
     _gdInput = gradientDescentInversionReader.getInput();
 }
 
 
-pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+PressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -23,8 +23,8 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
     std::vector<double> dFdxPrevious;
     std::vector<double> residuals;
 
-    pressureFieldSerial chiEstimate(_grid);
-    pressureFieldSerial chiEstimatePrevious(_grid);
+    PressureFieldSerial chiEstimate(_grid);
+    PressureFieldSerial chiEstimatePrevious(_grid);
 
     chiEstimate.Zero();
     chiEstimatePrevious.Zero();
@@ -61,8 +61,6 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
         chiEstimate = gradientDescent(pData, chiEstimate, dFdx, gamma, eta);
         Fx = functionF(chiEstimate, pData, eta);
         file << std::setprecision(17) << Fx << "," << counter << std::endl;
-
-        double* chiEstimateData = chiEstimate.GetDataPtr();
         
         ++counter;
     }
@@ -71,14 +69,14 @@ pressureFieldSerial gradientDescentInversion::Reconstruct(const std::complex<dou
 }
 
 
-std::vector<double> gradientDescentInversion::differential(const std::complex<double> *const pData, pressureFieldSerial chiEstimate, double h, double eta)
+std::vector<double> GradientDescentInversion::differential(const std::complex<double> *const pData, PressureFieldSerial chiEstimate, double h, double eta)
 {
     int numGridPoints = chiEstimate.GetNumberOfGridPoints();
     std::vector<double> dFdx(numGridPoints);
 
     double FxPlusH;
     double Fx = functionF(chiEstimate, pData, eta);
-    pressureFieldSerial chiEstimatePlusH = chiEstimate;
+    PressureFieldSerial chiEstimatePlusH = chiEstimate;
     double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
 
     for (int i = 0; i != numGridPoints; ++i)
@@ -92,13 +90,13 @@ std::vector<double> gradientDescentInversion::differential(const std::complex<do
 }
 
 
-double gradientDescentInversion::functionF(pressureFieldSerial xi, const std::complex<double> *const pData, double eta)
+double GradientDescentInversion::functionF(PressureFieldSerial xi, const std::complex<double> *const pData, double eta)
 {
     return eta * _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(xi, pData));
 }
 
 
-pressureFieldSerial gradientDescentInversion::gradientDescent(const std::complex<double> *const pData, pressureFieldSerial x, std::vector<double> dfdx, double gamma, double eta)
+PressureFieldSerial gradientDescentInversion::gradientDescent(const std::complex<double> *const pData, PressureFieldSerial x, std::vector<double> dfdx, double gamma, double eta)
 {
     double* p_x = x.GetDataPtr();
 
@@ -111,7 +109,7 @@ pressureFieldSerial gradientDescentInversion::gradientDescent(const std::complex
 }
 
 
-double gradientDescentInversion::determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, pressureFieldSerial xPrevious, pressureFieldSerial x)
+double GradientDescentInversion::determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, pressureFieldSerial x)
 {
     double* p_x = x.GetDataPtr();
     double* p_xPrevious = xPrevious.GetDataPtr();
