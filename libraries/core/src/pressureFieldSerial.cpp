@@ -37,6 +37,18 @@ void PressureFieldSerial::RandomSaurabh()
     }
 }
 
+void PressureFieldSerial::RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution)
+{
+    
+    for (int i = 0; i < this->GetGrid().GetNumberOfGridPoints(); i++)
+    {
+        double temp = distribution(generator);
+        data[i] = parent.data[i] + temp;
+        if (data[i] > 0.18 ) data[i] -= 0.18; //If larger than 0.18, loops back from 0
+        if (data[i] < 0.00 ) data[i] += 0.18; //If negative, loops back from 0.18
+    }
+}
+
 void PressureFieldSerial::toBuffer(double *buffer) const
 {
     memcpy(buffer, data, sizeof(double) * this->GetNumberOfGridPoints());

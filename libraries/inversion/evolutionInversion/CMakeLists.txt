@@ -1,0 +1,13 @@
+file(GLOB CPP_SOURCES src/*.cpp)
+file(GLOB H_HEADERS include/*.h)
+
+set( LIBRARY_INCLUDE_DIRS_EVOLUTION_INVERSION "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE INTERNAL "" )
+include_directories( ${LIBRARY_INCLUDE_DIRS_EVOLUTION_INVERSION} )
+include_directories( ${LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARDMODEL} )
+include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
+
+add_library( evolution_inversion_library ${CPP_SOURCES} ${H_HEADERS} )
+target_link_libraries (evolution_inversion_library Eigen3::Eigen)
+
+target_link_libraries (evolution_inversion_library
+                        core_library)

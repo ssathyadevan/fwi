@@ -10,6 +10,7 @@
 #include <functional>
 #include <cassert>
 #include <string.h>
+#include <random>
 #include "genericInput.h"
 
 class PressureFieldSerial : public PressureField
@@ -30,6 +31,7 @@ public:
 
     virtual void Random();
     virtual void RandomSaurabh(); //Generates random approximations of Saurabh
+    virtual void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
 
     virtual void toBuffer(double *buffer) const;
 
