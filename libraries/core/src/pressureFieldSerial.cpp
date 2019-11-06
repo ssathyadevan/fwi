@@ -161,10 +161,11 @@ double PressureFieldSerial::InnerProduct(const PressureFieldSerial &y) const
     return result;
 }
 
+// How is this a summation of 2 PressureFields? It's not even proper matrix multiplication.
 double PressureFieldSerial::Summation(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(&this->GetGrid() == &rhs.GetGrid()); // Both this & rhs use the same grid memory address.
 
     const double *rhs_data = rhs.GetDataPtr();
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
