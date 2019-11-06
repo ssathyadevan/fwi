@@ -32,7 +32,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 {
     int nSignals = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
-    double residual_numerator = 1.0 / (normSq(pData, nSignals));
+    double eta = 1.0 / (normSq(pData, nSignals));
 
 
     PressureFieldSerial chiEstimateCurrent(_grid);
@@ -40,8 +40,9 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
     std::vector<std::complex<double>> residualCurrent = pData;
 
-    PressureFieldSerial directionGCurrent(_grid);
-    directionGCurrent = residual_numerator * 
+    PressureFieldSerial directionCurrent(_grid);
+    
+    directionGCurrent = eta * 
 
 
 
