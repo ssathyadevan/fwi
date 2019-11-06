@@ -14,6 +14,6 @@ if sys.platform.startswith('linux'):
     os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
     check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release ' +
                       '-DCMAKE_INSTALL_PREFIX=~/FWIInstall ../parallelized-fwi/')
-    checking_for_errors(check)
+    checking_for_errors(check, current_directory)
     check = os.system('sudo make install')
-    checking_for_errors(check)
+    checking_for_errors(check, current_directory)
