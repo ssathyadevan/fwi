@@ -32,13 +32,14 @@
     "nSources": 17,
     "nReceivers": 17,
     "ngrid_original": {
-        "x": 64,
-        "z": 32
+        "x": 38,
+        "z": 59
     },
     "ngrid": {
-        "x": 32,
-        "z": 16
+        "x": 38,
+        "z": 59
     },
     "verbosity": false,
-    "fileName": "riool"
+    "fileName": "altenwoborders"
+
 }

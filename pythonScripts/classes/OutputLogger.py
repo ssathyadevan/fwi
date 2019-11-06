@@ -4,8 +4,10 @@ from datetime import datetime
 import numpy as np
 
 class OutputLogger(object):
-    def __init__(self, t_in, t_out, diff_chi, mse, square_mean ):
+    def __init__(self, run_num, t_in, t_out, diff_chi, mse, square_mean):
         self.log = dict(
+            forward_model = str,
+            inversion_method = str,
             time_in=t_in.strftime("%d-%m-%Y %H:%M:%S"),
             time_out=t_out.strftime("%d-%m-%Y %H:%M:%S"),
             time_execution=(t_out - t_in).seconds,
@@ -17,8 +19,9 @@ class OutputLogger(object):
             CPU=str,
             description="",
             image=str,
+            inputfile=dict,
         )
-        self.complete_output_log()
+        self.complete_output_log(run_num)
         self.save_output_log()
 
     @staticmethod
@@ -49,18 +52,28 @@ class OutputLogger(object):
         os.remove("cpu_specs")
         os.remove("memory_specs")
 
-    def get_description(self):
-        if os.path.isfile("../parallelized-fwi/results/description.txt"):
-            with open("../parallelized-fwi/results/description.txt", 'r') as in_file:
-                self.log["description"] = in_file.read()
-            os.remove("../parallelized-fwi/results/description.txt")
+    def get_description(self, run_num):
+        if os.path.isfile("../parallelized-fwi/results/description" + str(run_num) + ".txt"):
+            with open("../parallelized-fwi/results/description" + str(run_num) + ".txt", 'r') as in_file:
+                self.log["inversion_method"] = in_file.readline()[:-1]
+                self.log["forward_model"] = in_file.readline()[:-1]
+                path = in_file.readline()[:-1]
+                self.log["description"] = in_file.readline()
+            os.remove("../parallelized-fwi/results/description" + str(run_num) + ".txt")
+        return path
 
-    def complete_output_log(self):
+    def get_input(self, path):
+        with open("../FWIInstall/" + path[:] + "/input/" + self.log["inversion_method"][:1].upper() + 
+        self.log["inversion_method"][1:] + "Input.json") as json_file:
+            self.log["inputfile"] = json.load(json_file)
+
+    def complete_output_log(self, run_num):
         generic_input = self.open_generic_input_json()
         self.log["image"] = generic_input["fileName"]
         self.determine_resolutions(generic_input)
         self.determine_hardware_specs()
-        self.get_description()
+        path = self.get_description(run_num)
+        self.get_input(path)
 
     def save_output_log(self):
         log = self.log.copy()
