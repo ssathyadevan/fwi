@@ -112,3 +112,21 @@ TEST(CoreTest, PFSGradientTest)
     EXPECT_EQ(ptr_1[0], 1);
     EXPECT_EQ(ptr_1[10], 1);
 }
+
+TEST(CoreTest, PFSSummationTest)
+{
+    Grid2D grid({0, 0}, {10, 10}, {10, 10});
+    PressureFieldSerial pf_serial_1(grid);
+    std::function<double(double, double)> f_field_1 = [](double x, double z){return x + z;};
+    pf_serial_1.SetField(f_field_1);
+
+    PressureFieldSerial pf_serial_2(grid);
+    std::function<double(double, double)> f_field_2 = [](double x, double z){return 0;};
+    pf_serial_2.SetField(f_field_2);
+
+    double sum = pf_serial_1.Summation(pf_serial_2); 
+    // Poor definition of Summation. It's not a summation. 
+    // It's element-wise matrix multiplication, and then the sum of all elements.
+
+    EXPECT_EQ(sum, 0);
+}
