@@ -11,7 +11,7 @@ ProgressBar::ProgressBar(const int total, const int counter): _total(total), _co
 
 void ProgressBar::hideCursor(){
 #ifdef __unix__
-    std::cerr<< "\e[?25l" << std::endl; //hide cursor and leave some space
+    std::cerr<< "\e[?25l" << std::endl << std::endl; //hide cursor and leave some space
 #endif
 }
 

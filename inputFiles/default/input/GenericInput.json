@@ -36,9 +36,9 @@
         "z": 32
     },
     "ngrid": {
-        "x": 32,
-        "z": 16
+        "x": 64,
+        "z": 32
     },
     "verbosity": false,
-    "fileName": "riool"
+    "fileName": "temple"
 }

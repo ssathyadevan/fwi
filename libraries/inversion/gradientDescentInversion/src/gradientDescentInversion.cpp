@@ -1,5 +1,6 @@
 #include "gradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
+#include "progressBar.h"
 
 GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
@@ -13,6 +14,8 @@ GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwar
 PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
+
+    ProgressBar bar(_gdInput.iter);
 
     double eta;
     double Fx;
@@ -62,6 +65,7 @@ PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std:
         file << std::setprecision(17) << Fx << "," << counter << std::endl;
         
         ++counter;
+        bar++;
     }
 
     return chiEstimate;

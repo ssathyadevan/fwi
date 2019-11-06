@@ -1,5 +1,6 @@
 #include <memory>
 #include "conjugateGradientInversion.h"
+#include "progressBar.h"
 
 ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
@@ -30,6 +31,7 @@ double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, dou
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
+    ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
@@ -291,6 +293,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                     gOld = g;
                     bsquaredOld = bsquared;
                 }
+                bar++;
             } // end regularisation loop
         }
 
