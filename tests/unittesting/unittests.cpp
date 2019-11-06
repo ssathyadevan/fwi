@@ -25,6 +25,7 @@ TEST(CoreTest, Grid2DTest)
     std::array<int, 2> n_x = {2,4};
 
     Grid2D grid = Grid2D(x_min, x_max, n_x);
+
     EXPECT_NEAR(grid.GetCellVolume(), 0.5, 0.01);
     EXPECT_EQ(grid.GetNumberOfGridPoints(), 8);
     EXPECT_NEAR(grid.GetDomainArea(), 4, 0.1);
@@ -82,4 +83,32 @@ TEST(CoreTest, PressureFieldSerialTest)
 
     EXPECT_EQ(pf_data[0], 1); // x + z = (0+(0+0.5)*1) + (0+(0+0.5)*1) = 0.5 + 0.5 = 1
     EXPECT_EQ(pf_data[99], 19);
+    pf_serial.Zero();
+    EXPECT_EQ(pf_data[0], 0);
+}
+
+TEST(CoreTest, PFSGradientTest)
+{
+    // 10x10 grid with function x+z. Gradient must be 1 in all directions at any point.
+    Grid2D grid({0, 0}, {10, 10}, {10, 10});
+    PressureFieldSerial pf_serial(grid);
+    std::function<double(double, double)> f_field = [](double x, double z){return x + z;};
+    pf_serial.SetField(f_field);
+
+    // Prepare output pointer for Gradient()
+    PressureFieldSerial** p = new PressureFieldSerial *[2]; // 0: x, 1: z.
+    for (int i = 0; i < 2; i++)
+    {
+        p[i] = new PressureFieldSerial(grid);
+    }
+    pf_serial.Gradient(p);
+
+    // Get data pointers from ppointers.
+    double* ptr_0 = p[0]->GetDataPtr();
+    double* ptr_1 = p[1]->GetDataPtr();
+    
+    EXPECT_EQ(ptr_0[0], 1);
+    EXPECT_EQ(ptr_0[10], 1);
+    EXPECT_EQ(ptr_1[0], 1);
+    EXPECT_EQ(ptr_1[10], 1);
 }
