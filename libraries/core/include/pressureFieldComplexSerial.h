@@ -13,19 +13,19 @@
 #include <string>
 
 
-class pressureFieldComplexSerial : public pressureFieldComplex
+class PressureFieldComplexSerial : public PressureFieldComplex
 {
 private:
     std::complex<double> * const data;
 
 public:
-    pressureFieldComplexSerial(const grid2D &grid)
-        : pressureFieldComplex(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
+    PressureFieldComplexSerial(const Grid2D &grid)
+        : PressureFieldComplex(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
     {}
 
-    pressureFieldComplexSerial(const pressureFieldComplexSerial &rhs);
+    PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs);
 
-    virtual ~pressureFieldComplexSerial();
+    virtual ~PressureFieldComplexSerial();
 
     virtual void SetField(const std::function< std::complex<double>(double,double) > func);
 
@@ -55,102 +55,102 @@ public:
 
     std::complex<double>* GetDataPtr();
 
-    pressureFieldComplexSerial& operator=(const pressureFieldComplexSerial& rhs);
+    PressureFieldComplexSerial& operator=(const PressureFieldComplexSerial& rhs);
 
-    pressureFieldComplexSerial& operator=(const pressureFieldSerial& rhs);
+    PressureFieldComplexSerial& operator=(const PressureFieldSerial& rhs);
 
-    pressureFieldComplexSerial& operator=(const double& rhs);
+    PressureFieldComplexSerial& operator=(const double& rhs);
 
-    pressureFieldComplexSerial& operator+=(const pressureFieldComplexSerial& rhs);
+    PressureFieldComplexSerial& operator+=(const PressureFieldComplexSerial& rhs);
 
-    pressureFieldComplexSerial& operator-=(const pressureFieldComplexSerial& rhs);
+    PressureFieldComplexSerial& operator-=(const PressureFieldComplexSerial& rhs);
 
-    pressureFieldComplexSerial& operator*=(const pressureFieldComplexSerial& rhs);
+    PressureFieldComplexSerial& operator*=(const PressureFieldComplexSerial& rhs);
 
-    pressureFieldComplexSerial& operator*=(const pressureFieldSerial& rhs);
+    PressureFieldComplexSerial& operator*=(const PressureFieldSerial& rhs);
 
-    pressureFieldComplexSerial & operator+=(const double& rhs);
+    PressureFieldComplexSerial & operator+=(const double& rhs);
 
-    pressureFieldComplexSerial& operator-=(const double& rhs);
+    PressureFieldComplexSerial& operator-=(const double& rhs);
 
-    pressureFieldComplexSerial& operator*=(const double& rhs);
+    PressureFieldComplexSerial& operator*=(const double& rhs);
 
-    pressureFieldComplexSerial& operator/=(const double& rhs);
+    PressureFieldComplexSerial& operator/=(const double& rhs);
 
-    pressureFieldComplexSerial & operator+=(const std::complex<double>& rhs);
+    PressureFieldComplexSerial & operator+=(const std::complex<double>& rhs);
 
-    pressureFieldComplexSerial & operator-=(const std::complex<double>& rhs);
+    PressureFieldComplexSerial & operator-=(const std::complex<double>& rhs);
 
-    pressureFieldComplexSerial & operator*=(const std::complex<double>& rhs);
+    PressureFieldComplexSerial & operator*=(const std::complex<double>& rhs);
 
-    pressureFieldComplexSerial & operator/=(const std::complex<double>& rhs);
+    PressureFieldComplexSerial & operator/=(const std::complex<double>& rhs);
 
-    std::complex<double> InnerProduct(const pressureFieldComplexSerial& rhs) const;
+    std::complex<double> InnerProduct(const PressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const pressureFieldComplexSerial& rhs) const;
+    std::complex<double> Summation(const PressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const pressureFieldSerial& rhs) const;
+    std::complex<double> Summation(const PressureFieldSerial& rhs) const;
 
-    pressureFieldSerial GetRealPart() const;
+    PressureFieldSerial GetRealPart() const;
 };
 
 
-inline std::complex<double> InnerProduct(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
+inline std::complex<double> InnerProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
 {
     return t1.InnerProduct(t2);
 }
 
-inline std::complex<double> Summation(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
+inline std::complex<double> Summation(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
 {
     return t1.Summation(t2);
 }
 
-inline std::complex<double> Summation(const pressureFieldComplexSerial &t1, const pressureFieldSerial &t2)
+inline std::complex<double> Summation(const PressureFieldComplexSerial &t1, const PressureFieldSerial &t2)
 {
     return t1.Summation(t2);
 }
 
-inline pressureFieldComplexSerial operator-(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
+inline PressureFieldComplexSerial operator-(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
 {
-    pressureFieldComplexSerial t3(t1);
+    PressureFieldComplexSerial t3(t1);
     t3 -= t2;
     return t3;
 }
 
-inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const pressureFieldSerial &t2)
+inline PressureFieldComplexSerial operator*(const PressureFieldComplexSerial &t1, const PressureFieldSerial &t2)
 {
-    pressureFieldComplexSerial t3(t1);
+    PressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const pressureFieldComplexSerial &t2)
+inline PressureFieldComplexSerial operator*(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
 {
-    pressureFieldComplexSerial t3(t1);
+    PressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline pressureFieldComplexSerial operator*(const pressureFieldSerial &t1, const pressureFieldComplexSerial &t2)
+inline PressureFieldComplexSerial operator*(const PressureFieldSerial &t1, const PressureFieldComplexSerial &t2)
 {
     return t2*t1;
 }
 
-inline pressureFieldComplexSerial operator*(const pressureFieldComplexSerial &t1, const std::complex<double> &t2)
+inline PressureFieldComplexSerial operator*(const PressureFieldComplexSerial &t1, const std::complex<double> &t2)
 {
-    pressureFieldComplexSerial t3(t1);
+    PressureFieldComplexSerial t3(t1);
     t3 *= t2;
     return t3;
 }
 
-inline pressureFieldComplexSerial operator*(const std::complex<double> &t1, const pressureFieldComplexSerial &t2)
+inline PressureFieldComplexSerial operator*(const std::complex<double> &t1, const PressureFieldComplexSerial &t2)
 {
     return t2*t1;
 }
 
-inline pressureFieldComplexSerial operator/(const pressureFieldComplexSerial &t1, const double &t2)
+inline PressureFieldComplexSerial operator/(const PressureFieldComplexSerial &t1, const double &t2)
 {
-    pressureFieldComplexSerial t3(t1);
+    PressureFieldComplexSerial t3(t1);
     t3 /= t2;
     return t3;
 }

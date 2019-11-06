@@ -11,20 +11,20 @@ private:
     ForwardModelInterface* _forwardModel;
     GradientDescentInversionInput _gdInput;
 
-    const grid2D& _grid;
-    const sources& _src;
-    const receivers& _recv;
-    const frequenciesGroup _freq;
+    const Grid2D& _grid;
+    const Sources& _src;
+    const Receivers& _recv;
+    const FrequenciesGroup _freq;
 
  public:
-    GradientDescentInversion(ForwardModelInterface *forwardModel, const genericInput &gdInput);
+    GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
 
     GradientDescentInversion(const GradientDescentInversion&) = delete;
     GradientDescentInversion & operator = (const GradientDescentInversion&) = delete;
 
-    PressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
-    std::vector<double> differential(const std::complex<double> *const pData, pressureFieldSerial xi, double dxi, double eta);
-    PressureFieldSerial gradientDescent(const std::complex<double> *const pData, pressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
-    double functionF(pressureFieldSerial xi, const std::complex<double> *const pData, double eta);
-    double determineGamma(std::vector<double> dFdxiOld, std::vector<double> dFdxi, pressureFieldSerial xiOld, pressureFieldSerial xi);
+    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
+    std::vector<double> differential(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta);
+    PressureFieldSerial gradientDescent(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
+    double functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta);
+    double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x);
 };

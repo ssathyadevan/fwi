@@ -27,6 +27,7 @@ def find(substr, whichin):
 
 # Enter here the name of the case folder you want to post process
 outputPath = sys.argv[1]
+run_number = sys.argv[2]
 
 g = open(outputPath + "/output/lastRunName.txt", "r")
 contents = g.readlines()
@@ -141,7 +142,10 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
-OutputLogger(datetime_new_start, datetime_new_finish, diff_chi, mse, square_mean_original)
+if not run_number:
+    run_number = 0
+
+OutputLogger(run_number, datetime_new_start, datetime_new_finish, diff_chi, mse, square_mean_original)
 
 print("The pictures have been generated with Python")
 

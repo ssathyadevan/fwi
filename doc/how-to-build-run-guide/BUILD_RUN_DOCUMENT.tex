@@ -9,44 +9,34 @@
  }
 
 \title{BUILD-RUN-DOCUMENT}
-\author{Saurabh Sharma}
-\date{30 November 2018}
+\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen}
+\date{\today}
 
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
 
 \begin{document}
 
 \maketitle
-\noindent This document shows the steps needed to clone, build and run the FWI code and to install the prerequisite packages. 
+\noindent This document shows the steps needed to install the prerequisite packages, clone, build, run, and do post-processing analysis for the FWI code.
+
 \section{Pre-requisites}
 The prerequisite development tools needed can be installed using the following commands.\\
 
-\noindent \texttt{sudo apt install git qt5-default libeigen3-dev python3.7 python3.7-dev python3-tk}\\
-\texttt{sudo apt install python3-numpy python3-matplotlib eog cmake}  
-%    \item \texttt{sudo apt-get install qt5-default}
-%    \item \texttt{sudo apt-get install libeigen3-dev}
-%    \item \texttt{sudo apt-get install python3.7-dev}
-%    \item \texttt{sudo apt-get install python3.7}
-%    \item \texttt{sudo apt-get install python3-tk}
-%    \item \texttt{sudo apt-get install python3-numpy}
-%    \item \texttt{sudo apt-get install python3-matplotlib}
-%  	\item \texttt{sudo apt-get install eog}
-%  	\item \texttt{sudo apt-get install cmake}
+\noindent \texttt{sudo apt install git qt5-default libeigen3-dev eog cmake python3.7}\\
+\texttt{sudo apt install python3.7-dev python3-tk python3-numpy python3-matplotlib python3-skimage}  
+
 
 \section{Cloning the Repository}
-\noindent To clone the FWI repository using git,
-\newline
-\texttt{git clone -o redmine https://git.alten.nl/parallelized-fwi.git}
-\newline
-This will create a copy of the repository, in a folder named \textit{parallelized-fwi}
-\newline
-Any branch as needed can then be checked out from inside the \textit{parallelized-fwi} folder, e.g. the develop branch
-\newline
+\noindent To clone the FWI repository using git, \newline
+\texttt{git clone -o redmine https://git.alten.nl/parallelized-fwi.git} \newline
+This will create a copy of the repository, in a folder named \textit{parallelized-fwi}. Any branch as needed can then be checked out from inside the \textit{parallelized-fwi} folder, e.g. the develop branch: \newline
 \texttt{git checkout develop}
 
-\section{Build/Run}
-In this section the process to build the code is explained in two steps, namely downloading and installing Google Test and thereafter building the code and finally running it.  
+\section{Build}
+In this section, the process to build is explained. It is worth noticing that there is a \texttt{Build} and a \texttt{BuildAndRun} python scripts which does the build of the project automatically. 
 
 
 \subsection{Install Google Test}
@@ -102,7 +92,8 @@ First we need to install Google Test using the following commands:\\
 %\texttt{source \textasciitilde/.bashrc}
 
 \subsection{Build}
-To build the project, first create a folder titled \textit{build} outside the \textit{parallelized-fwi} folder. Afterwards the code is built and run. NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.
+To build the project, first create a folder titled \textit{build} outside the \textit{parallelized-fwi} folder. Afterwards the code is built and run. 
+NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.
 \newline
 \texttt{cd \textasciitilde}
 \newline
@@ -110,27 +101,24 @@ To build the project, first create a folder titled \textit{build} outside the \t
 \newline
 \texttt{cd Build}
 \newline
-\texttt{cmake -DCMAKE\_BUILD\_TYPE=Release -DCMAKE\_INSTALL\_PREFIX= \textasciitilde/FWIInstall ../parallelized-fwi/}
+\texttt{cmake -DCMAKE\_BUILD\_TYPE=Release -DCMAKE\_INSTALL\_PREFIX=../FWIInstall ../parallelized-fwi/}
 \newline
 \texttt{make install} 
 \newline
 
 \noindent The first flag in the cmake command above enforces that the release version of the code be built and the 2nd flag implies that all the executables of the program will be placed in a folder \textit{FWIInstall} (executables are in \textit{FWIInstall/bin})
 
-\subsection{Run}
-First check out the \textit{inputFiles} folder in the parallelized-fwi folder and copy the \textit{default} folder to the \textit{FWIInstall} folder. This can be done by issuing the following command:
-\newline
-\texttt{cp -r ../parallelized-fwi/inputFiles/default/ \textasciitilde/FWIInstall} 
-\newline
-Now, the individual scripts for the preProcessing and the processing part can be run as shown below:
-\newline
-\texttt{cd \textasciitilde/FWIInstall/bin/}
-\newline
-\texttt{./FWI\_PreProcess ../default/}
-\newline
-\texttt{./FWI\_Process ../default/}
-\newline
-\noindent For both executables we have to pass one argument which is the path to the case to be run (in this case \textit{../default/}. Note that the arguments are the locations relative to the executable position. The default input parameters are stored in the \textit{default/} which is located in \textit{\textasciitilde/parallelized-fwi/inputFiles/}. Users can create their own set of input cards by copying the default folder into a new folder, modifying the input cards and giving the new folder's location argument to both PreProcess and Process.\\
+\section{Run}
+To run, first check out the \textit{inputFiles} folder in the parallelized-fwi folder and copy the \textit{default} folder to the \textit{FWIInstall} folder. This can be done by issuing the following command: \newline
+\texttt{cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall} \newline
+Also, make sure that there is a \textit{bin} folder in \textit{FWIInstall}, if there is not you can copy it from \textit{Build/runtime/}. You can do this with the command: \newline
+\texttt{cp -r ../Build/runtime/bin/ ../FWIInstall} \newline
+Now, the individual scripts for the preProcessing and the processing part can be run as shown below: \newline
+\texttt{cd \textasciitilde/FWIInstall/bin/} \newline
+\texttt{./FWI\_PreProcess ../default/} \newline
+\texttt{./FWI\_UnifiedProcess ../default/ conjugateGradientInversion}
+
+\noindent For both executables we have to pass one argument which is the path to the case to be run (in this case \textit{../default/}. It is important to notice that for the UnifiedProcess, a second argument is needed, this argument corresponds to the name of the inversion method you want to use. Note that the arguments are the locations relative to the executable position. The default input parameters are stored in the \textit{default/} which is located in \textit{\textasciitilde/parallelized-fwi/inputFiles/}. Users can create their own set of input cards by copying the default folder into a new folder, modifying the input cards and giving the new folder's location argument to both PreProcess and Process.\\
 
 %Note: It is very useful to add the \textit{$\sim$/FWIInstall/bin/} folder to the PATH environment variable. This means that both the \texttt{FWI\_PreProcess} and \texttt{FW\_Process} commands can be run from any folder without having to give the path to where they can be found. This can be achieved by issuing the following commands. \\
 %\texttt{vim $\sim$/.bashrc}\\
@@ -140,22 +128,17 @@ Now, the individual scripts for the preProcessing and the processing part can be
 %\texttt{source $\sim$/.bashrc}\\
 %Now you can run \texttt{FWI\_PreProcess} and \texttt{FW\_Process} commands from anywhere in your terminal!
 
-\noindent For post-processing (i.e. generation of image using the estimated chi values and the residual plot), the python script \texttt{postProcessing.py} can be used. This script is located inside the \textit{parallelized-fwi/pythonScripts} folder. This can be copied to the FWIInstall folder and then executed using the following commands:
-\newline
-\texttt{cp \textasciitilde/parallelized-fwi/pythonScipts/postProcessing-python3.py ..}
-\newline
-\texttt{cd ..}
-\newline
-\texttt{python3 postProcessing-python3.py default/}
-\newline
+\section{Post-Processing}
+For post-processing (i.e. generation of image using the estimated chi values and the residual plot), the python script \texttt{postProcessing-python3.py} can be used. Note that when using the \texttt{BuildAndRun} and \texttt{Run} scripts, the postprocessing is done automatically. The \texttt{postProcessing-python3.py} script is located inside the \textit{parallelized-fwi/pythonScripts} folder. This can be copied to the FWIInstall folder and then executed using 
+the following commands: \newline
+\texttt{cp \textasciitilde/parallelized-fwi/pythonScipts/postProcessing-python3.py ..} \newline
+\texttt{cd ..} \newline
+\texttt{python3 postProcessing-python3.py default/} \newline
 The run case folder is provided as the argument for the python script. The pre-processing, processing and the post-processing can all be grouped together using the python wrapper \texttt{wrapper.py} located inside the \textit{parallelized-fwi/pythonScripts} folder.
 
-\noindent The postprocessed data can then be visualized using EOG from the output folder:
-\newline
-\texttt{cd default/output/}
-\newline
-\texttt{eog defaultResult.png}
-\newline
+\noindent The postprocessed data can then be visualized using EOG from the output folder: \newline
+\texttt{cd default/output/} \newline
+\texttt{eog defaultResult.png} \newline
  
 \section{Unit Test}
 
@@ -185,5 +168,33 @@ This section details the comparison of a \textit{default} run with the \textit{f
 \texttt{python3 regressionTestPreProcessing\_python3.py fast default}
 \newline
 \texttt{python3 regressionTestProcessing\_python3.py fast default}
+
+\section{Troubleshooting}
+\subsection{SSH Tunneling}
+In case the Ubuntu Virtual Machine is very slow and has long response times, try setting up an SSH connection between the \textbf{Ubuntu host} \& \textbf{Windows guest}. This way, you can use Visual Studio Code for development with fast response times from Windows. \href{https://stackoverflow.com/questions/5906441/how-to-ssh-to-a-virtualbox-guest-externally-through-a-host}{\color{blue}{This post}} explains how to set up such a connection.
+\begin{enumerate}
+    \item In the \textbf{host} Ubuntu virtual machine toolbar (make sure full-screen view is disabled), go to \texttt{Devices > Network > Network Settings > Advanced > Port Forwarding}
+    \item Add a new port forwarding rule with the following parameters: \\
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        Name & Protocol & Host IP & Host Port & Guest IP & Guest Port \\ \hline
+        ssh & TCP & & 3022 & & 22 \\ \hline 
+    \end{tabular}
+    \item In the \textbf{host}, install an ssh server: \\
+    \texttt{sudo apt-get install openssh-server}
+    \item In the \textbf{guest}, install Visual Studio Code with the Remote Development extension.
+    \item In the \textbf{guest}, open cmd and write: \\
+    \texttt{ssh -p 3022 user@127.0.0.1}
+    \item Run Visual Studio Code \& click on the Remote Development icon in the bottom-left corner.
+    \item From the drop-down menu, go to Remote-SSH: Open Configuration File. Select one, remember which one.
+    \item Add to this document the following lines: \\
+    \texttt{Host 127.0.0.1} \\
+    \texttt{HostName 127.0.0.1} \\
+    \texttt{Port 3022} \\
+    \texttt{User user} \\
+    Where \texttt{user} is the account in the virtual machine, before the '@' sign.
+    \item Click the Remote Development button in the bottom-left corner again \& select Remote-SSH: Connect To Host. Select the SSH configuration file you just modified.
+    \item Don't forget to provide the \textbf{host} password in an easily overlooked password field, located at the top of the editor.
+\end{enumerate}
 
 \end{document}

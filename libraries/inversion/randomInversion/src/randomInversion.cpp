@@ -1,20 +1,23 @@
 #include "randomInversion.h"
-randomInversion::randomInversion(ForwardModelInterface *forwardModel, genericInput gInput)
+#include "progressBar.h"
+RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
     : _forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    randomInversionInputCardReader randomInversionInputCardReader(gInput.caseFolder);
+    RandomInversionInputCardReader RandomInversionInputCardReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _riInput = randomInversionInputCardReader.getInput();
+    _riInput = RandomInversionInputCardReader.getInput();
 }
 
-pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *const pData, genericInput gInput)
+PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
+
+    ProgressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
     double eta = 1.0 / (normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
-    pressureFieldSerial chiEst(_grid);
+    PressureFieldSerial chiEst(_grid);
 
     chiEst.Zero();
 
@@ -34,7 +37,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
     for (int it = 0; it < _riInput.nMaxOuter; it++)
     {
         
-        std::complex<double> *resArray = _forwardModel->calculateResidual(chiEst, pData);
+        std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
 
         resSq = _forwardModel->calculateResidualNormSq(resArray);
         chiEstRes = eta * resSq;
@@ -43,7 +46,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
         for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
 
-            pressureFieldSerial tempRandomChi(_grid);
+            PressureFieldSerial tempRandomChi(_grid);
             tempRandomChi.RandomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
@@ -63,11 +66,11 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
-            std::cerr << newResSq << " | " << resSq << std::endl;
             std::cout << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
 
             file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
             counter++; // store the residual value in the residual log
+            bar++;
         }
 
         _forwardModel->calculatePTot(chiEst);
@@ -75,7 +78,7 @@ pressureFieldSerial randomInversion::Reconstruct(const std::complex<double> *con
 
     file.close(); // close the residual.log file
 
-    pressureFieldSerial result(_grid);
+    PressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
 }

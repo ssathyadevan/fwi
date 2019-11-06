@@ -3,9 +3,11 @@ import sys
 import json
 import numpy as np
 
-def checking_for_errors(err):
+def checking_for_errors(err, current_directory):
     if err != 0:
         print('An error was found, we will not continue with the Build and Run script')
+        os.chdir(current_directory + '/inputFiles/default/input/')
+        os.system('rm -r temp')
         sys.exit()
 
 def install_gtest():
@@ -24,18 +26,29 @@ def install_gtest():
 
 def print_run(running_table):
     print('The Build and run is set to run:')
-    row_format = "|{:^25}" * 4
-    headers_list = ['Method', 'Conditions', 'Input Image', 'Output resolution']
+    row_format = "|{:^20}" * 5
+    headers_list = ['Inversion Method', 'Forward Model', 'Conditions', 'Input Image', 'Output resolution']
     print(row_format.format(*headers_list))
     for ind_run in running_table:
-        print(row_format.format(*ind_run[:-1]))
+        inv_method = ind_run[0][0].upper()
+        for a in ind_run[0]:
+            if a.isupper():
+                inv_method += a
+        fm = ind_run[1][0].upper()
+        for a in ind_run[1]:
+            if a.isupper():
+                fm += a
+        print(row_format.format(inv_method, fm, *ind_run[2:-2]))
 
-def enter_description(current_directory):
+def enter_description(current_directory, table):
     description = input('Please enter a description of the run or press enter: \n')
     if not os.path.isdir(current_directory + '/results'):
         os.mkdir(current_directory + '/results')
     os.chdir(current_directory + '/results')
-    with open("description.txt", "w+") as in_file:
+    with open("description" + str(table[6]) + ".txt", "w+") as in_file:
+        in_file.write(table[0] + '\n')
+        in_file.write(table[1] + '\n')
+        in_file.write(table[5] + '\n')
         in_file.write(description)
 
 def ask_options(running_table, current_directory):
@@ -43,16 +56,17 @@ def ask_options(running_table, current_directory):
     while int(answer) != 0:
         print('\nDo you want to (0)-run, (1)-edit, or (2)-add?')
         answer = input('~:')
-        while int(answer) not in [0, 1, 2]:
+        while answer not in ['0', '1', '2']:
             print('You introduced an invalid command, maybe try again.')
             answer = input('~: ')
         if int(answer) == 1:
             running_table = edit(running_table, current_directory)
-            enter_description(current_directory)
+            enter_description(current_directory, running_table[-1])
+            print_run(running_table)
         elif int(answer) == 2:
             running_table = add_to(running_table, current_directory)
-            enter_description(current_directory)
-        print_run(running_table)
+            enter_description(current_directory, running_table[-1])
+            print_run(running_table)
     return running_table
 
 def ask_method(current_directory):
@@ -61,19 +75,32 @@ def ask_method(current_directory):
     valid_numbers = []
     print("Which method do you want to try?")
     for i, method in enumerate(available_methods[:-1]):
-        if method != 'inversionFactory/':
-            print(i, method[:-1])
-            valid_numbers.append(i)
+        print(i, method[:-1])
+        valid_numbers.append(str(i))
     answer = input('~: ')
-    while int(answer) not in valid_numbers:
+    while answer not in valid_numbers:
         print('You introduced an invalid command, maybe try again.')
         answer = input('~: ')
     return available_methods[int(answer)][:-1]
 
+def ask_forwardmodel(current_directory):
+    os.chdir(current_directory + '/libraries/forwardModel/')
+    available_fm = os.popen('ls -d */').read().split('\n')
+    valid_numbers = []
+    print("Which forward model do you want to use?")
+    for i, method in enumerate(available_fm[:-1]):
+        print(i, method[:-1])
+        valid_numbers.append(str(i))
+    answer = input('~: ')
+    while answer not in valid_numbers:
+        print('You introduced an invalid command, maybe try again.')
+        answer = input('~: ')
+    return available_fm[int(answer)][:-1] + 'ForwardModel'
+
 def change_conditions(method, current_directory):
     print('Do you want to change the default conditions of the method? (0)-No (1)-Yes')
     answer = input('~: ')
-    while int(answer) not in [0, 1]:
+    while answer not in ['0', '1']:
         print('You introduced an invalid command, maybe try again.')
         answer = input('~: ')
     if answer == '1':
@@ -118,11 +145,11 @@ def ask_input(current_directory):
     valid_numbers = []
     for i, im in enumerate(available_images[:-1]):
         print(i, im[:-4])
-        valid_numbers.append(i)
-    valid_numbers.append(99)
+        valid_numbers.append(str(i))
+    valid_numbers.append('99')
     print('99', 'Add new image.')
     answer = input('~: ')
-    while int(answer) not in valid_numbers:
+    while answer not in valid_numbers:
         print('You introduced an invalid command, maybe try again.')
         answer = input('~: ')
     if int(answer) == 99:
@@ -145,15 +172,16 @@ def ask_outputfile():
 
 def add_to(table, current_directory):
     method = ask_method(current_directory)
+    forwardmodel = ask_forwardmodel(current_directory)
     conditions = change_conditions(method, current_directory)
     image = ask_input(current_directory)
     out_resolution = ask_output()
     folder = ask_outputfile()
 
-    table.append([method, conditions, image, out_resolution, table[-1][4] + 1, folder])
+    table.append([method, forwardmodel, conditions, image, out_resolution, folder, table[-1][6] + 1])
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('cp -r ' + method[:1].upper() + method[1:] +
-              'Input.json temp/temp' + str(table[-1][4]) + '.json')
+              'Input.json temp/temp' + str(table[-1][6]) + '.json')
     return table
 
 def edit(table, current_directory):
@@ -168,14 +196,15 @@ def edit(table, current_directory):
         index = 0
 
     table[index][0] = ask_method(current_directory)
-    table[index][1] = change_conditions(table[index][0], current_directory)
-    table[index][2] = ask_input(current_directory)
-    table[index][3] = ask_output()
+    table[index][1] = ask_forwardmodel(current_directory)
+    table[index][2] = change_conditions(table[index][0], current_directory)
+    table[index][3] = ask_input(current_directory)
+    table[index][4] = ask_output()
     table[index][5] = ask_outputfile()
 
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('cp -r ' + table[index][0][:1].upper() + table[index][0][1:] +
-              'Input.json temp/temp' + str(table[index][4]) + '.json')
+              'Input.json temp/temp' + str(table[index][6]) + '.json')
     return table
 
 def change_json(input_image, output_resolution, current_directory):

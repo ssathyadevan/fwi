@@ -1,6 +1,6 @@
 #include "inputCardReader.h"
 
-nlohmann::json inputCardReader::readFile(const std::string &fileName)
+nlohmann::json InputCardReader::readFile(const std::string &fileName)
 {
     
     std::ifstream in(fileName);

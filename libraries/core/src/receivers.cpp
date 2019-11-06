@@ -1,7 +1,7 @@
 #include "receivers.h"
 
 // Place the receivers on a linear line from xMin to xMax, including the end points
-receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_)
+Receivers::Receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_)
     : nRecv(nRecv_), xRecv()
 {
     assert(nRecv > 1);
@@ -23,7 +23,7 @@ receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 
     }
 }
 
-void receivers::Print()
+void Receivers::Print()
 {
     std::cout << "Total number is receivers is " << nRecv << ". Positions:" << std::endl;
     for (int i = 0; i < nRecv; i++)

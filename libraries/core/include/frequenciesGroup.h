@@ -5,13 +5,12 @@
 #include <vector>
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "frequenciesGroup.h"
 #include "freq.h"
 
-class frequenciesGroup
+class FrequenciesGroup
 {
 
-    frequenciesGroup operator=(const frequenciesGroup&);
+    FrequenciesGroup operator=(const FrequenciesGroup&);
 
 public:
 
@@ -20,7 +19,7 @@ public:
   std::vector<double> freq;
   std::vector<double> k;
 
-  frequenciesGroup(Freq freqStruct, double c_0_);
+  FrequenciesGroup(Freq freqStruct, double c_0_);
 
   void Print(int nFreqTotal);
 };

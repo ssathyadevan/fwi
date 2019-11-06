@@ -1,5 +1,0 @@
-if(EXISTS "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/tests/unittesting/CoreTests[1]_tests.cmake")
-  include("/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/tests/unittesting/CoreTests[1]_tests.cmake")
-else()
-  add_test(CoreTests_NOT_BUILT CoreTests_NOT_BUILT)
-endif()

@@ -7,11 +7,7 @@
 #include <freq.h>
 #include <frequenciesGroup.h>
 
-#include <iter2.h>
-#include <integralForwardModel.h>
-#include <integralForwardModelInput.h>
-#include <forwardModelInterface.h>
-#include <greensSerial.h>
+#include <pressureFieldSerial.h>
 
 /* TEMPLATE
 
@@ -22,13 +18,14 @@ TEST(CoreTest, )
 
 */
 
-TEST(CoreTests, Grid2DTest)
+TEST(CoreTest, Grid2DTest)
 {
     std::array<double, 2> x_min = {0.0, 0.0};
     std::array<double, 2> x_max = {2.0, 2.0};
     std::array<int, 2> n_x = {2,4};
 
-    grid2D grid = grid2D(x_min, x_max, n_x);
+    Grid2D grid = Grid2D(x_min, x_max, n_x);
+
     EXPECT_NEAR(grid.GetCellVolume(), 0.5, 0.01);
     EXPECT_EQ(grid.GetNumberOfGridPoints(), 8);
     EXPECT_NEAR(grid.GetDomainArea(), 4, 0.1);
@@ -40,7 +37,7 @@ TEST(CoreTest, ReceiverTest)
     std::array<double, 2> xMin{0, 0};
     std::array<double, 2> xMax{10, 0};
     int nRecv = 6;
-    receivers receivers(xMin, xMax, nRecv);
+    Receivers receivers(xMin, xMax, nRecv);
 
     EXPECT_EQ(receivers.nRecv, nRecv);
     EXPECT_NEAR(receivers.xRecv[5][0], 10.0, 0.01);
@@ -53,7 +50,7 @@ TEST(CoreTest, SourceTest)
     std::array<double, 2> xMin{0, 0};
     std::array<double, 2> xMax{10, 0};
     int nSrc = 6;
-    sources sources(xMin, xMax, nSrc);
+    Sources sources(xMin, xMax, nSrc);
 
     EXPECT_EQ(sources.nSrc, nSrc);
     EXPECT_NEAR(sources.xSrc[5][0], 10.0, 0.01);
@@ -66,43 +63,70 @@ TEST(CoreTest, FrequenciesGroupTest)
     int n = 10;
 
     Freq freq{min, max, n};
-    frequenciesGroup freq_group{freq, 2000};
+    FrequenciesGroup freq_group{freq, 2000};
 
     EXPECT_NEAR(freq_group.k[9], 0.063, 0.01); // 2*pi*20/2000 ~ 0.063
 }
 
-/*TEST(CoreTest, IntegralForwardModelTest)
+TEST(CoreTest, PressureFieldSerialTest)
 {
-    // test configuration:
-    //  ssssssrrrrr
-    //  -----------
-    //  |  10x10  |
-    //  -----------   
-    //
-    double x_min_grid[2] = {0, 0};
-    double x_max_grid[2] = {10, 10};
-    int n_x_grid[2] = {10, 10};
-    grid2D grid(x_min_grid, x_max_grid, n_x_grid);
+    std::array<double, 2> x_min_grid = {0, 0};
+    std::array<double, 2> x_max_grid = {10, 10};
+    std::array<int, 2> n_x_grid = {10, 10};
+    Grid2D grid(x_min_grid, x_max_grid, n_x_grid);
     
-    double x_min_src[2] = {0, 0};
-    double x_max_src[2] = {5, 0};
-    int n_src[2] = {6, 1};
-    sources sources(x_min_src, x_max_src, n_src);
+    PressureFieldSerial pf_serial(grid);
+    
+    std::function<double(double, double)> f_field = [](double x, double z){return x+z;}; // Linear plane, x & z are centroids of grid cell.
+    pf_serial.SetField(f_field);
+    double* pf_data = pf_serial.GetDataPtr();
 
-    double x_min_recv[2] = {6, 0};
-    double x_max_recv[2] = {10, 0};
-    int n_recv[2] = {5, 0};
-    receivers receivers(x_min_recv, x_max_recv, n_recv);
+    EXPECT_EQ(pf_data[0], 1); // x + z = (0+(0+0.5)*1) + (0+(0+0.5)*1) = 0.5 + 0.5 = 1
+    EXPECT_EQ(pf_data[99], 19);
+    pf_serial.Zero();
+    EXPECT_EQ(pf_data[0], 0);
+}
 
-    double f_min{10}, f_max{20};
-    int n_freqs = 10;
-    Freq freq{min, max, n};
-    frequenciesGroup freq_group{freq, 2000};
+TEST(CoreTest, PFSGradientTest)
+{
+    // 10x10 grid with function x+z. Gradient must be 1 in all directions at any point.
+    Grid2D grid({0, 0}, {10, 10}, {10, 10});
+    PressureFieldSerial pf_serial(grid);
+    std::function<double(double, double)> f_field = [](double x, double z){return x + z;};
+    pf_serial.SetField(f_field);
 
-    Iter2 iter{15, 5.0e-5, false};
-    integralForwardModelInput ifm_input{iter};
+    // Prepare output pointer for Gradient()
+    PressureFieldSerial** p = new PressureFieldSerial *[2]; // 0: x, 1: z.
+    for (int i = 0; i < 2; i++)
+    {
+        p[i] = new PressureFieldSerial(grid);
+    }
+    pf_serial.Gradient(p);
 
-    IntegralForwardModel if_model{grid, sources, receivers, freq_group, ifm_input};
-    if_model.calculateKappa();
-    if_model.calculateResidual(pressureFieldSerial chi_est(grid), )
-}*/
+    // Get data pointers from ppointers.
+    double* ptr_0 = p[0]->GetDataPtr();
+    double* ptr_1 = p[1]->GetDataPtr();
+    
+    EXPECT_EQ(ptr_0[0], 1);
+    EXPECT_EQ(ptr_0[10], 1);
+    EXPECT_EQ(ptr_1[0], 1);
+    EXPECT_EQ(ptr_1[10], 1);
+}
+
+TEST(CoreTest, PFSSummationTest)
+{
+    Grid2D grid({0, 0}, {10, 10}, {10, 10});
+    PressureFieldSerial pf_serial_1(grid);
+    std::function<double(double, double)> f_field_1 = [](double x, double z){return x + z;};
+    pf_serial_1.SetField(f_field_1);
+
+    PressureFieldSerial pf_serial_2(grid);
+    std::function<double(double, double)> f_field_2 = [](double x, double z){return 0;};
+    pf_serial_2.SetField(f_field_2);
+
+    double sum = pf_serial_1.Summation(pf_serial_2); 
+    // Poor definition of Summation. It's not a summation. 
+    // It's element-wise matrix multiplication, and then the sum of all elements.
+
+    EXPECT_EQ(sum, 0);
+}

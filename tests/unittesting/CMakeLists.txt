@@ -22,6 +22,6 @@ endfunction( build_test )
 
 # Build the tests!
 build_test( TARGET InputTest SOURCE InputCardReaderTests.cpp LIBRARIES core_library integral_forwardModel_library random_inversion_library gradient_descent_inversion_library finite_difference_forwardModel_library conjugate_gradient_inversion_library )
-build_test( TARGET CoreTests SOURCE unittests.cpp LIBRARIES core_library)
+build_test( TARGET CoreTest SOURCE unittests.cpp LIBRARIES core_library)
 
-install( TARGETS InputTest CoreTests DESTINATION bin)
+install( TARGETS InputTest CoreTest DESTINATION bin)
