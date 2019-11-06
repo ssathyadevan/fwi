@@ -48,6 +48,10 @@ const int ProgressBar::getCounter(){
     return _counter;
 }
 
+const int ProgressBar::getTotal(){
+    return _total;
+}
+
 ProgressBar& ProgressBar::operator++(){
     _counter++;
     print();

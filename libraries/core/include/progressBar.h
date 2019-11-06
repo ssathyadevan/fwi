@@ -24,6 +24,7 @@ public:
     void setTerminalWidth(const int width);
     void setTotal(const int total);
     const int getCounter();
+    const int getTotal();
     const void print();
     ProgressBar& operator++();
     ProgressBar& operator++(int);

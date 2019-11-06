@@ -35,7 +35,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
-    double gamma, alpha, res, resSq;
+    double gamma, alpha, resSq, res = 0;
 
     std::array<double, 2> alphaDiv;
 
@@ -96,6 +96,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
                                   (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance))))
                 {
+                    bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;
                 }
 
@@ -129,6 +130,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 alpha = alphaDiv[0] / alphaDiv[1];
                 chiEst += alpha * zeta; // the step size of the parameter in Eq: ContrastUpdate in the user manual.
                 gOld = g;
+                bar++;
             }
         }
         else if (_cgInput.doReg == 1)
@@ -274,8 +276,11 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
                     //breakout check
                     if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
-                                      (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance))))
-                        break;
+                                      (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance)))){
+                        bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
+                        break;                  
+                    }
+                        
                     //                    std::cout << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
                     //                    if ( (it1 > 0) && ( res/std::abs(vecResFirstIter[0]) < 0.15 )  )
                     //                        break;
@@ -297,14 +302,15 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
             } // end regularisation loop
         }
 
-        if (res >= _previousLowPoint)
-        {
-            break;
-        }
-        else
-        {
-            _previousLowPoint = res;
-        }
+        // if (res >= _previousLowPoint)
+        // {
+        //     bar.setCounter(bar.getTotal());
+        //     break;
+        // }
+        // else
+        // {
+        //     _previousLowPoint = res;
+        // }
 
         _forwardModel->calculatePTot(chiEst);
     }
