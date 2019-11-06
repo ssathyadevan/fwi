@@ -7,3 +7,4 @@
 subdirs("conjugateGradientInversion")
 subdirs("randomInversion")
 subdirs("gradientDescentInversion")
+subdirs("inversionFactory")

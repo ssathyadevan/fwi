@@ -222,6 +222,9 @@ gradient_descent_inversion_library_LIB_DEPENDS:STATIC=
 //Dependencies for target
 integral_forwardModel_library_LIB_DEPENDS:STATIC=
 
+//Dependencies for the target
+inversion_factory_library_LIB_DEPENDS:STATIC=general;conjugate_gradient_inversion_library;general;random_inversion_library;general;gradient_descent_inversion_library;
+
 //Dependencies for target
 random_inversion_library_LIB_DEPENDS:STATIC=
 
@@ -393,5 +396,6 @@ LIBRARY_INCLUDE_DIRS_FACTORY:INTERNAL=/home/chris/Documents/parallelized full wa
 LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARDMODEL:INTERNAL=/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/finiteDifference/include
 LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION:INTERNAL=/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/gradientDescentInversion/include
 LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARDMODEL:INTERNAL=/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/forwardModel/integral/include
+LIBRARY_INCLUDE_DIRS_INVERSION_FACTORY:INTERNAL=/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/inversionFactory/include
 LIBRARY_INCLUDE_DIRS_RANDOM_INVERSION:INTERNAL=/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/randomInversion/include
 

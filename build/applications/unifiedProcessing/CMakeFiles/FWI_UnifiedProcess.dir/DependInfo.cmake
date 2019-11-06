@@ -12,16 +12,14 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../libraries/core/include"
   "../libraries/forwardModel/integral/include"
-  "../libraries/forwardModel/finiteDifference/include"
-  "../libraries/factory/include"
+  "../libraries/inversion/inversionFactory/include"
   "/usr/include/eigen3"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/factory/CMakeFiles/factory_library.dir/DependInfo.cmake"
+  "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/DependInfo.cmake"
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/DependInfo.cmake"
-  "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/DependInfo.cmake"
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core/CMakeFiles/core_library.dir/DependInfo.cmake"
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/DependInfo.cmake"
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/DependInfo.cmake"

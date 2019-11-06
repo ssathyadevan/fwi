@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversion.cpp" "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o"
   "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/conjugateGradientInversionInputCardReader.cpp" "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o"
+  "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/residualTracker.cpp" "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

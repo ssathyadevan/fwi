@@ -105,19 +105,45 @@ libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inv
 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o.provides.build: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o
 
 
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/flags.make
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o: ../libraries/inversion/conjugateGradientInversion/src/residualTracker.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o"
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion" && /usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o -c "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/residualTracker.cpp"
+
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.i"
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion" && /usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/residualTracker.cpp" > CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.i
+
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.s"
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion" && /usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/libraries/inversion/conjugateGradientInversion/src/residualTracker.cpp" -o CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.s
+
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.requires:
+
+.PHONY : libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.requires
+
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.provides: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.requires
+	$(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.provides.build
+.PHONY : libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.provides
+
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.provides.build: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o
+
+
 # Object files for target conjugate_gradient_inversion_library
 conjugate_gradient_inversion_library_OBJECTS = \
 "CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o" \
-"CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o"
+"CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o" \
+"CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o"
 
 # External object files for target conjugate_gradient_inversion_library
 conjugate_gradient_inversion_library_EXTERNAL_OBJECTS =
 
 runtime/lib/libconjugate_gradient_inversion_library.a: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o
 runtime/lib/libconjugate_gradient_inversion_library.a: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o
+runtime/lib/libconjugate_gradient_inversion_library.a: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o
 runtime/lib/libconjugate_gradient_inversion_library.a: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make
 runtime/lib/libconjugate_gradient_inversion_library.a: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ../../../runtime/lib/libconjugate_gradient_inversion_library.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library ../../../runtime/lib/libconjugate_gradient_inversion_library.a"
 	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion" && $(CMAKE_COMMAND) -P CMakeFiles/conjugate_gradient_inversion_library.dir/cmake_clean_target.cmake
 	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/conjugateGradientInversion" && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/conjugate_gradient_inversion_library.dir/link.txt --verbose=$(VERBOSE)
 
@@ -128,6 +154,7 @@ libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inv
 
 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/requires: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o.requires
 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/requires: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o.requires
+libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/requires: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o.requires
 
 .PHONY : libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/requires
 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../runtime/lib/libinversion_factory_library.a  CMakeFiles/inversion_factory_library.dir/src/inversionFactory.cpp.o
+/usr/bin/ranlib ../../../runtime/lib/libinversion_factory_library.a

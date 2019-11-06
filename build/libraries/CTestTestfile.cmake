@@ -7,4 +7,3 @@
 subdirs("core")
 subdirs("forwardModel")
 subdirs("inversion")
-subdirs("factory")

@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/install")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -42,7 +42,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/core/cmake_install.cmake")
   include("/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/forwardModel/cmake_install.cmake")
   include("/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/inversion/cmake_install.cmake")
-  include("/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/libraries/factory/cmake_install.cmake")
 
 endif()
 

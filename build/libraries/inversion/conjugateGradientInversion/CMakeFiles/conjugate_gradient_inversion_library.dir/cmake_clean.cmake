@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversion.cpp.o"
   "CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.o"
+  "CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o"
   "../../../runtime/lib/libconjugate_gradient_inversion_library.pdb"
   "../../../runtime/lib/libconjugate_gradient_inversion_library.a"
 )

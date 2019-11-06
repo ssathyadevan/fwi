@@ -90,9 +90,8 @@ FWI_UnifiedProcess_EXTERNAL_OBJECTS =
 
 runtime/bin/FWI_UnifiedProcess: applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/main.cpp.o
 runtime/bin/FWI_UnifiedProcess: applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/build.make
-runtime/bin/FWI_UnifiedProcess: runtime/lib/libfactory_library.a
+runtime/bin/FWI_UnifiedProcess: runtime/lib/libinversion_factory_library.a
 runtime/bin/FWI_UnifiedProcess: runtime/lib/libintegral_forwardModel_library.a
-runtime/bin/FWI_UnifiedProcess: runtime/lib/libfinite_difference_forwardModel_library.a
 runtime/bin/FWI_UnifiedProcess: runtime/lib/libcore_library.a
 runtime/bin/FWI_UnifiedProcess: runtime/lib/libconjugate_gradient_inversion_library.a
 runtime/bin/FWI_UnifiedProcess: runtime/lib/librandom_inversion_library.a

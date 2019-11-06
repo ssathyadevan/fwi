@@ -246,17 +246,17 @@ gradient_descent_inversion_library/fast:
 .PHONY : gradient_descent_inversion_library/fast
 
 #=============================================================================
-# Target rules for targets named factory_library
+# Target rules for targets named inversion_factory_library
 
 # Build rule for target.
-factory_library: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 factory_library
-.PHONY : factory_library
+inversion_factory_library: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 inversion_factory_library
+.PHONY : inversion_factory_library
 
 # fast build rule for target.
-factory_library/fast:
-	$(MAKE) -f libraries/factory/CMakeFiles/factory_library.dir/build.make libraries/factory/CMakeFiles/factory_library.dir/build
-.PHONY : factory_library/fast
+inversion_factory_library/fast:
+	$(MAKE) -f libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build.make libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build
+.PHONY : inversion_factory_library/fast
 
 #=============================================================================
 # Target rules for targets named FWI_PreProcess
@@ -350,17 +350,17 @@ FWI_Process_Gradient_Descent/fast:
 .PHONY : FWI_Process_Gradient_Descent/fast
 
 #=============================================================================
-# Target rules for targets named CoreTest
+# Target rules for targets named CoreTests
 
 # Build rule for target.
-CoreTest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 CoreTest
-.PHONY : CoreTest
+CoreTests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 CoreTests
+.PHONY : CoreTests
 
 # fast build rule for target.
-CoreTest/fast:
-	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/build
-.PHONY : CoreTest/fast
+CoreTests/fast:
+	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/build
+.PHONY : CoreTests/fast
 
 #=============================================================================
 # Target rules for targets named InputTest
@@ -394,7 +394,7 @@ help:
 	@echo "... conjugate_gradient_inversion_library"
 	@echo "... random_inversion_library"
 	@echo "... gradient_descent_inversion_library"
-	@echo "... factory_library"
+	@echo "... inversion_factory_library"
 	@echo "... FWI_PreProcess"
 	@echo "... FWI_PreProcess_Finite_Difference"
 	@echo "... FWI_Process_Finite_Difference"
@@ -402,7 +402,7 @@ help:
 	@echo "... FWI_Process_Random_Inversion"
 	@echo "... FWI_UnifiedProcess"
 	@echo "... FWI_Process_Gradient_Descent"
-	@echo "... CoreTest"
+	@echo "... CoreTests"
 	@echo "... InputTest"
 .PHONY : help
 

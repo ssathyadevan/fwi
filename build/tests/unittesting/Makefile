@@ -168,19 +168,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-tests/unittesting/CMakeFiles/CoreTest.dir/rule:
-	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f CMakeFiles/Makefile2 tests/unittesting/CMakeFiles/CoreTest.dir/rule
-.PHONY : tests/unittesting/CMakeFiles/CoreTest.dir/rule
+tests/unittesting/CMakeFiles/CoreTests.dir/rule:
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f CMakeFiles/Makefile2 tests/unittesting/CMakeFiles/CoreTests.dir/rule
+.PHONY : tests/unittesting/CMakeFiles/CoreTests.dir/rule
 
 # Convenience name for target.
-CoreTest: tests/unittesting/CMakeFiles/CoreTest.dir/rule
+CoreTests: tests/unittesting/CMakeFiles/CoreTests.dir/rule
 
-.PHONY : CoreTest
+.PHONY : CoreTests
 
 # fast build rule for target.
-CoreTest/fast:
-	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/build
-.PHONY : CoreTest/fast
+CoreTests/fast:
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/build
+.PHONY : CoreTests/fast
 
 # Convenience name for target.
 tests/unittesting/CMakeFiles/InputTest.dir/rule:
@@ -230,7 +230,7 @@ unittests.o: unittests.cpp.o
 
 # target to build an object file
 unittests.cpp.o:
-	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/unittests.cpp.o
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/unittests.cpp.o
 .PHONY : unittests.cpp.o
 
 unittests.i: unittests.cpp.i
@@ -239,7 +239,7 @@ unittests.i: unittests.cpp.i
 
 # target to preprocess a source file
 unittests.cpp.i:
-	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/unittests.cpp.i
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/unittests.cpp.i
 .PHONY : unittests.cpp.i
 
 unittests.s: unittests.cpp.s
@@ -248,7 +248,7 @@ unittests.s: unittests.cpp.s
 
 # target to generate assembly for a file
 unittests.cpp.s:
-	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/unittests.cpp.s
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/unittests.cpp.s
 .PHONY : unittests.cpp.s
 
 # Help Target
@@ -259,7 +259,7 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install"
-	@echo "... CoreTest"
+	@echo "... CoreTests"
 	@echo "... edit_cache"
 	@echo "... install/local"
 	@echo "... test"

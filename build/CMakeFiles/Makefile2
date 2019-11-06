@@ -66,7 +66,6 @@ CMAKE_BINARY_DIR = "/home/chris/Documents/parallelized full waveform inversion/p
 libraries/all: libraries/core/all
 libraries/all: libraries/forwardModel/all
 libraries/all: libraries/inversion/all
-libraries/all: libraries/factory/all
 
 .PHONY : libraries/all
 
@@ -74,7 +73,6 @@ libraries/all: libraries/factory/all
 libraries/clean: libraries/core/clean
 libraries/clean: libraries/forwardModel/clean
 libraries/clean: libraries/inversion/clean
-libraries/clean: libraries/factory/clean
 
 .PHONY : libraries/clean
 
@@ -82,7 +80,6 @@ libraries/clean: libraries/factory/clean
 libraries/preinstall: libraries/core/preinstall
 libraries/preinstall: libraries/forwardModel/preinstall
 libraries/preinstall: libraries/inversion/preinstall
-libraries/preinstall: libraries/factory/preinstall
 
 .PHONY : libraries/preinstall
 
@@ -111,7 +108,7 @@ libraries/core/preinstall:
 libraries/core/CMakeFiles/core_library.dir/all:
 	$(MAKE) -f libraries/core/CMakeFiles/core_library.dir/build.make libraries/core/CMakeFiles/core_library.dir/depend
 	$(MAKE) -f libraries/core/CMakeFiles/core_library.dir/build.make libraries/core/CMakeFiles/core_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39 "Built target core_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40 "Built target core_library"
 .PHONY : libraries/core/CMakeFiles/core_library.dir/all
 
 # Include target in all.
@@ -187,7 +184,7 @@ libraries/forwardModel/finiteDifference/preinstall:
 libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/all:
 	$(MAKE) -f libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/build.make libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/depend
 	$(MAKE) -f libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/build.make libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=42,43,44,45,46 "Built target finite_difference_forwardModel_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=41,42,43,44,45 "Built target finite_difference_forwardModel_library"
 .PHONY : libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/all
 
 # Include target in all.
@@ -242,7 +239,7 @@ libraries/forwardModel/integral/preinstall:
 libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/all:
 	$(MAKE) -f libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/build.make libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/depend
 	$(MAKE) -f libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/build.make libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=50,51,52 "Built target integral_forwardModel_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=49,50,51 "Built target integral_forwardModel_library"
 .PHONY : libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/all
 
 # Include target in all.
@@ -279,6 +276,7 @@ clean: libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.
 libraries/inversion/all: libraries/inversion/conjugateGradientInversion/all
 libraries/inversion/all: libraries/inversion/randomInversion/all
 libraries/inversion/all: libraries/inversion/gradientDescentInversion/all
+libraries/inversion/all: libraries/inversion/inversionFactory/all
 
 .PHONY : libraries/inversion/all
 
@@ -286,6 +284,7 @@ libraries/inversion/all: libraries/inversion/gradientDescentInversion/all
 libraries/inversion/clean: libraries/inversion/conjugateGradientInversion/clean
 libraries/inversion/clean: libraries/inversion/randomInversion/clean
 libraries/inversion/clean: libraries/inversion/gradientDescentInversion/clean
+libraries/inversion/clean: libraries/inversion/inversionFactory/clean
 
 .PHONY : libraries/inversion/clean
 
@@ -293,6 +292,7 @@ libraries/inversion/clean: libraries/inversion/gradientDescentInversion/clean
 libraries/inversion/preinstall: libraries/inversion/conjugateGradientInversion/preinstall
 libraries/inversion/preinstall: libraries/inversion/randomInversion/preinstall
 libraries/inversion/preinstall: libraries/inversion/gradientDescentInversion/preinstall
+libraries/inversion/preinstall: libraries/inversion/inversionFactory/preinstall
 
 .PHONY : libraries/inversion/preinstall
 
@@ -321,7 +321,7 @@ libraries/inversion/conjugateGradientInversion/preinstall:
 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all:
 	$(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/depend
 	$(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=19,20,21 "Built target conjugate_gradient_inversion_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=19,20,21,22 "Built target conjugate_gradient_inversion_library"
 .PHONY : libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all
 
 # Include target in all.
@@ -331,7 +331,7 @@ all: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradien
 
 # Build rule for subdir invocation for target.
 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 3
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 4
 	$(MAKE) -f CMakeFiles/Makefile2 libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
 .PHONY : libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/rule
@@ -376,7 +376,7 @@ libraries/inversion/randomInversion/preinstall:
 libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/all:
 	$(MAKE) -f libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/build.make libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/depend
 	$(MAKE) -f libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/build.make libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=53,54,55 "Built target random_inversion_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=54,55,56 "Built target random_inversion_library"
 .PHONY : libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/all
 
 # Include target in all.
@@ -431,7 +431,7 @@ libraries/inversion/gradientDescentInversion/preinstall:
 libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/all:
 	$(MAKE) -f libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/build.make libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/depend
 	$(MAKE) -f libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/build.make libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=47,48,49 "Built target gradient_descent_inversion_library"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=46,47,48 "Built target gradient_descent_inversion_library"
 .PHONY : libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/all
 
 # Include target in all.
@@ -462,59 +462,59 @@ clean: libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_
 .PHONY : clean
 
 #=============================================================================
-# Directory level rules for directory libraries/factory
+# Directory level rules for directory libraries/inversion/inversionFactory
 
 # Convenience name for "all" pass in the directory.
-libraries/factory/all: libraries/factory/CMakeFiles/factory_library.dir/all
+libraries/inversion/inversionFactory/all: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all
 
-.PHONY : libraries/factory/all
+.PHONY : libraries/inversion/inversionFactory/all
 
 # Convenience name for "clean" pass in the directory.
-libraries/factory/clean: libraries/factory/CMakeFiles/factory_library.dir/clean
+libraries/inversion/inversionFactory/clean: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/clean
 
-.PHONY : libraries/factory/clean
+.PHONY : libraries/inversion/inversionFactory/clean
 
 # Convenience name for "preinstall" pass in the directory.
-libraries/factory/preinstall:
+libraries/inversion/inversionFactory/preinstall:
 
-.PHONY : libraries/factory/preinstall
+.PHONY : libraries/inversion/inversionFactory/preinstall
 
 #=============================================================================
-# Target rules for target libraries/factory/CMakeFiles/factory_library.dir
+# Target rules for target libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir
 
 # All Build rule for target.
-libraries/factory/CMakeFiles/factory_library.dir/all: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all
-libraries/factory/CMakeFiles/factory_library.dir/all: libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/all
-libraries/factory/CMakeFiles/factory_library.dir/all: libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/all
-	$(MAKE) -f libraries/factory/CMakeFiles/factory_library.dir/build.make libraries/factory/CMakeFiles/factory_library.dir/depend
-	$(MAKE) -f libraries/factory/CMakeFiles/factory_library.dir/build.make libraries/factory/CMakeFiles/factory_library.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=40,41 "Built target factory_library"
-.PHONY : libraries/factory/CMakeFiles/factory_library.dir/all
+libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all
+libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all: libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/all
+libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all: libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/all
+	$(MAKE) -f libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build.make libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/depend
+	$(MAKE) -f libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build.make libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=52,53 "Built target inversion_factory_library"
+.PHONY : libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all
 
 # Include target in all.
-all: libraries/factory/CMakeFiles/factory_library.dir/all
+all: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-libraries/factory/CMakeFiles/factory_library.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 11
-	$(MAKE) -f CMakeFiles/Makefile2 libraries/factory/CMakeFiles/factory_library.dir/all
+libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 12
+	$(MAKE) -f CMakeFiles/Makefile2 libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
-.PHONY : libraries/factory/CMakeFiles/factory_library.dir/rule
+.PHONY : libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/rule
 
 # Convenience name for target.
-factory_library: libraries/factory/CMakeFiles/factory_library.dir/rule
+inversion_factory_library: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/rule
 
-.PHONY : factory_library
-
-# clean rule for target.
-libraries/factory/CMakeFiles/factory_library.dir/clean:
-	$(MAKE) -f libraries/factory/CMakeFiles/factory_library.dir/build.make libraries/factory/CMakeFiles/factory_library.dir/clean
-.PHONY : libraries/factory/CMakeFiles/factory_library.dir/clean
+.PHONY : inversion_factory_library
 
 # clean rule for target.
-clean: libraries/factory/CMakeFiles/factory_library.dir/clean
+libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/clean:
+	$(MAKE) -f libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/build.make libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/clean
+.PHONY : libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/clean
+
+# clean rule for target.
+clean: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/clean
 
 .PHONY : clean
 
@@ -703,7 +703,7 @@ all: applications/finiteDifferenceProcessing/CMakeFiles/FWI_Process_Finite_Diffe
 
 # Build rule for subdir invocation for target.
 applications/finiteDifferenceProcessing/CMakeFiles/FWI_Process_Finite_Difference.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 28
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 29
 	$(MAKE) -f CMakeFiles/Makefile2 applications/finiteDifferenceProcessing/CMakeFiles/FWI_Process_Finite_Difference.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
 .PHONY : applications/finiteDifferenceProcessing/CMakeFiles/FWI_Process_Finite_Difference.dir/rule
@@ -760,7 +760,7 @@ all: applications/processing/CMakeFiles/FWI_Process.dir/all
 
 # Build rule for subdir invocation for target.
 applications/processing/CMakeFiles/FWI_Process.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 26
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 27
 	$(MAKE) -f CMakeFiles/Makefile2 applications/processing/CMakeFiles/FWI_Process.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
 .PHONY : applications/processing/CMakeFiles/FWI_Process.dir/rule
@@ -860,12 +860,11 @@ applications/unifiedProcessing/preinstall:
 
 # All Build rule for target.
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/core/CMakeFiles/core_library.dir/all
-applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/forwardModel/finiteDifference/CMakeFiles/finite_difference_forwardModel_library.dir/all
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/forwardModel/integral/CMakeFiles/integral_forwardModel_library.dir/all
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/all
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/inversion/randomInversion/CMakeFiles/random_inversion_library.dir/all
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/inversion/gradientDescentInversion/CMakeFiles/gradient_descent_inversion_library.dir/all
-applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/factory/CMakeFiles/factory_library.dir/all
+applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all: libraries/inversion/inversionFactory/CMakeFiles/inversion_factory_library.dir/all
 	$(MAKE) -f applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/build.make applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/depend
 	$(MAKE) -f applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/build.make applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=15,16 "Built target FWI_UnifiedProcess"
@@ -878,7 +877,7 @@ all: applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all
 
 # Build rule for subdir invocation for target.
 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 39
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 35
 	$(MAKE) -f CMakeFiles/Makefile2 applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
 .PHONY : applications/unifiedProcessing/CMakeFiles/FWI_UnifiedProcess.dir/rule
@@ -977,13 +976,13 @@ tests/preinstall: tests/unittesting/preinstall
 # Directory level rules for directory tests/unittesting
 
 # Convenience name for "all" pass in the directory.
-tests/unittesting/all: tests/unittesting/CMakeFiles/CoreTest.dir/all
+tests/unittesting/all: tests/unittesting/CMakeFiles/CoreTests.dir/all
 tests/unittesting/all: tests/unittesting/CMakeFiles/InputTest.dir/all
 
 .PHONY : tests/unittesting/all
 
 # Convenience name for "clean" pass in the directory.
-tests/unittesting/clean: tests/unittesting/CMakeFiles/CoreTest.dir/clean
+tests/unittesting/clean: tests/unittesting/CMakeFiles/CoreTests.dir/clean
 tests/unittesting/clean: tests/unittesting/CMakeFiles/InputTest.dir/clean
 
 .PHONY : tests/unittesting/clean
@@ -994,39 +993,39 @@ tests/unittesting/preinstall:
 .PHONY : tests/unittesting/preinstall
 
 #=============================================================================
-# Target rules for target tests/unittesting/CMakeFiles/CoreTest.dir
+# Target rules for target tests/unittesting/CMakeFiles/CoreTests.dir
 
 # All Build rule for target.
-tests/unittesting/CMakeFiles/CoreTest.dir/all: libraries/core/CMakeFiles/core_library.dir/all
-	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/depend
-	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=1,2 "Built target CoreTest"
-.PHONY : tests/unittesting/CMakeFiles/CoreTest.dir/all
+tests/unittesting/CMakeFiles/CoreTests.dir/all: libraries/core/CMakeFiles/core_library.dir/all
+	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/depend
+	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" --progress-num=1,2 "Built target CoreTests"
+.PHONY : tests/unittesting/CMakeFiles/CoreTests.dir/all
 
 # Include target in all.
-all: tests/unittesting/CMakeFiles/CoreTest.dir/all
+all: tests/unittesting/CMakeFiles/CoreTests.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-tests/unittesting/CMakeFiles/CoreTest.dir/rule: cmake_check_build_system
+tests/unittesting/CMakeFiles/CoreTests.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 20
-	$(MAKE) -f CMakeFiles/Makefile2 tests/unittesting/CMakeFiles/CoreTest.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 tests/unittesting/CMakeFiles/CoreTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
-.PHONY : tests/unittesting/CMakeFiles/CoreTest.dir/rule
+.PHONY : tests/unittesting/CMakeFiles/CoreTests.dir/rule
 
 # Convenience name for target.
-CoreTest: tests/unittesting/CMakeFiles/CoreTest.dir/rule
+CoreTests: tests/unittesting/CMakeFiles/CoreTests.dir/rule
 
-.PHONY : CoreTest
-
-# clean rule for target.
-tests/unittesting/CMakeFiles/CoreTest.dir/clean:
-	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTest.dir/build.make tests/unittesting/CMakeFiles/CoreTest.dir/clean
-.PHONY : tests/unittesting/CMakeFiles/CoreTest.dir/clean
+.PHONY : CoreTests
 
 # clean rule for target.
-clean: tests/unittesting/CMakeFiles/CoreTest.dir/clean
+tests/unittesting/CMakeFiles/CoreTests.dir/clean:
+	$(MAKE) -f tests/unittesting/CMakeFiles/CoreTests.dir/build.make tests/unittesting/CMakeFiles/CoreTests.dir/clean
+.PHONY : tests/unittesting/CMakeFiles/CoreTests.dir/clean
+
+# clean rule for target.
+clean: tests/unittesting/CMakeFiles/CoreTests.dir/clean
 
 .PHONY : clean
 
@@ -1052,7 +1051,7 @@ all: tests/unittesting/CMakeFiles/InputTest.dir/all
 
 # Build rule for subdir invocation for target.
 tests/unittesting/CMakeFiles/InputTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 37
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 38
 	$(MAKE) -f CMakeFiles/Makefile2 tests/unittesting/CMakeFiles/InputTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build/CMakeFiles" 0
 .PHONY : tests/unittesting/CMakeFiles/InputTest.dir/rule

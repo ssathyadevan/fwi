@@ -236,6 +236,33 @@ src/conjugateGradientInversionInputCardReader.cpp.s:
 	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/conjugateGradientInversionInputCardReader.cpp.s
 .PHONY : src/conjugateGradientInversionInputCardReader.cpp.s
 
+src/residualTracker.o: src/residualTracker.cpp.o
+
+.PHONY : src/residualTracker.o
+
+# target to build an object file
+src/residualTracker.cpp.o:
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.o
+.PHONY : src/residualTracker.cpp.o
+
+src/residualTracker.i: src/residualTracker.cpp.i
+
+.PHONY : src/residualTracker.i
+
+# target to preprocess a source file
+src/residualTracker.cpp.i:
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.i
+.PHONY : src/residualTracker.cpp.i
+
+src/residualTracker.s: src/residualTracker.cpp.s
+
+.PHONY : src/residualTracker.s
+
+# target to generate assembly for a file
+src/residualTracker.cpp.s:
+	cd "/home/chris/Documents/parallelized full waveform inversion/parallelized-fwi/build" && $(MAKE) -f libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/build.make libraries/inversion/conjugateGradientInversion/CMakeFiles/conjugate_gradient_inversion_library.dir/src/residualTracker.cpp.s
+.PHONY : src/residualTracker.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -256,6 +283,9 @@ help:
 	@echo "... src/conjugateGradientInversionInputCardReader.o"
 	@echo "... src/conjugateGradientInversionInputCardReader.i"
 	@echo "... src/conjugateGradientInversionInputCardReader.s"
+	@echo "... src/residualTracker.o"
+	@echo "... src/residualTracker.i"
+	@echo "... src/residualTracker.s"
 .PHONY : help
 
 
