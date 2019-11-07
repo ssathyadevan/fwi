@@ -303,27 +303,12 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
 
 void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
-    int l_i, l_j;
 
     kRes.Zero();
 
-    PressureFieldComplexSerial kDummy(_grid);
-
-    for (int i = 0; i < _freq.nFreq; i++)
+    for (int i = 0; i < _src.nSrc * _recv.nRecv * _freq.nFreq; i++)
     {
-        l_i = i * _recv.nRecv * _src.nSrc;
-
-        for (int j = 0; j < _recv.nRecv; j++)
-        {
-            l_j = j * _src.nSrc;
-
-            for (int k = 0; k < _src.nSrc; k++)
-            {
-                kDummy = *_Kappa[l_i + l_j + k];
-                kDummy.Conjugate();
-
-                kRes += kDummy * res[l_i + l_j + k];
-            }
-        }
+        kRes += (*_Kappa[i]).Conjugate() * res[i]; 
     }
+
 }

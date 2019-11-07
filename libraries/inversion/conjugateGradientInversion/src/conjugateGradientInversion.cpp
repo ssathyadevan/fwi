@@ -51,7 +51,6 @@ double ConjugateGradientInversion::calculateAlpha(std::vector<std::complex<doubl
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
-
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal));
