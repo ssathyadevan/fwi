@@ -43,7 +43,7 @@ public:
 
     virtual void Reciprocal();
 
-    virtual void Conjugate();
+    virtual PressureFieldComplexSerial& Conjugate();
 
     virtual void Random();
 
