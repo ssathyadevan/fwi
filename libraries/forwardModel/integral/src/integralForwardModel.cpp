@@ -306,13 +306,7 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
 
     kRes.Zero();
 
-<<<<<<< HEAD
     for (int i = 0; i < _src.nSrc * _recv.nRecv * _freq.nFreq; i++)
-=======
-    PressureFieldComplexSerial kDummy(_grid);
-
-    for (int i = 0; i < _freq.nFreq; i++)
->>>>>>> chris_develop
     {
         kRes += (*_Kappa[i]).Conjugate() * res[i]; 
     }
