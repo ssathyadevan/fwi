@@ -32,14 +32,13 @@
     "nSources": 17,
     "nReceivers": 17,
     "ngrid_original": {
-        "x": 38,
-        "z": 59
+        "x": 64,
+        "z": 32
     },
     "ngrid": {
-        "x": 38,
-        "z": 59
+        "x": 64,
+        "z": 32
     },
     "verbosity": false,
-    "fileName": "altenwoborders"
-
+    "fileName": "temple"
 }

@@ -21,9 +21,8 @@ private:
     const Sources& _src;
     const Receivers& _recv;
     const FrequenciesGroup& _freq;
-    double _previousLowPoint = std::numeric_limits<double>::max();
-
-    double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
+    
+    double calculateAlpha(std::vector<std::complex<double>>& residuals, PressureFieldSerial& zeta);
 
 public:
 
