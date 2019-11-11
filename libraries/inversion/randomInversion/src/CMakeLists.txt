@@ -1,7 +1,7 @@
-file(GLOB CPP_SOURCES *.cpp)
-file(GLOB H_HEADERS include/*.h)
-
-add_library(random_inversion_library ${CPP_SOURCES} ${H_HEADERS})
+add_library(random_inversion_library
+    randomInversion.cpp                     ../include/randomInversion.h
+                                            ../include/randomInversionInput.h
+    randomInversionInputCardReader.cpp      ../include/randomInversionInputCardReader.h)
 
 set( LIBRARY_INCLUDE_DIRS_RANDOM_INVERSION ${CMAKE_SOURCE_DIR}/libraries/inversion/randomInversion/include CACHE INTERNAL "" )
 target_include_directories(random_inversion_library PUBLIC ${LIBRARY_INCLUDE_DIRS_RANDOM_INVERSION})

@@ -1,7 +1,8 @@
-file(GLOB CPP_SOURCES *.cpp)
-file(GLOB H_HEADERS include/*.h)
 
-add_library(evolution_inversion_library ${CPP_SOURCES} ${H_HEADERS})
+add_library(evolution_inversion_library
+    evolutionInversion.cpp                      ../include/evolutionInversion.h
+                                                ../include/evolutionInversionInput.h
+    evolutionInversionInputCardReader.cpp       ../include/evolutionInversionInputCardReader.h)
 
 set( LIBRARY_INCLUDE_DIRS_EVOLUTION_INVERSION ${CMAKE_SOURCE_DIR}/libraries/inversion/evolutionInversion/include CACHE INTERNAL "" )
 target_include_directories(evolution_inversion_library PUBLIC ${LIBRARY_INCLUDE_DIRS_EVOLUTION_INVERSION})
