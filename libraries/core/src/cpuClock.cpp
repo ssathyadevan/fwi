@@ -22,8 +22,3 @@ void CpuClock::PrintTimeElapsed()
 {
     std::cout << "CPU time: " << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" << std::endl;
 }
-
-void CpuClock::PrintTimeElapsedWithMessage(std::string msg)
-{
-    std::cout << msg << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" << std::endl;
-}

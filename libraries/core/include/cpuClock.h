@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ctime>
-#include <string>
 
 class CpuClock
 {
@@ -16,5 +15,4 @@ public:
     void Start();
     void End();
     void PrintTimeElapsed();
-    void PrintTimeElapsedWithMessage(std::string msg);
 };
