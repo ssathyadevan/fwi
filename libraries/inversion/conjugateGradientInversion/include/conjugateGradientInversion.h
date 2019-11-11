@@ -23,6 +23,8 @@ private:
     const FrequenciesGroup& _freq;
     double _previousLowPoint = std::numeric_limits<double>::max();
 
+    double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
+
 public:
 
     ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput& gInput);
