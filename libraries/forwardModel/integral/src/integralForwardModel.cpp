@@ -293,6 +293,17 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
     }
 }
 
+std::vector<std::complex<double>> IntegralForwardModel::calculateKappaZeta(PressureFieldSerial& zeta)
+{
+    std::vector<std::complex<double>> kappaZeta(_freq.nFreq * _src.nSrc * _recv.nRecv);
+    for (int i = 0; i != _freq.nFreq * _src.nSrc * _recv.nRecv; ++i)
+    {
+        kappaZeta[i] = Summation(*_Kappa[i], zeta);
+    }
+
+    return kappaZeta;
+}
+
 //void IntegralForwardModel::createKappaOperator(const PressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
 //{
 //    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
@@ -310,5 +321,19 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
     {
         kRes += (*_Kappa[i]).Conjugate() * res[i]; 
     }
+
+}
+
+PressureFieldComplexSerial IntegralForwardModel::calculateKappaConjugateResidual(std::vector<std::complex<double>> &res)
+{
+    PressureFieldComplexSerial kRes;
+
+    kRes.Zero();
+
+    for (int i = 0; i < _src.nSrc * _recv.nRecv * _freq.nFreq; i++)
+    {
+        kRes += (*_Kappa[i]).Conjugate() * res[i]; 
+    }
+    return kRes;
 
 }

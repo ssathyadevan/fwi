@@ -23,6 +23,8 @@ private:
     const FrequenciesGroup& _freq;
     
     double calculateAlpha(std::vector<std::complex<double>>& residuals, PressureFieldSerial& zeta);
+    PressureFieldSerial calculateB(PressureFieldSerial** gradientChiNMin1);
+    double calculateDeltaSquared(PressureFieldSerial** gradientChiNMin1)
 
 public:
 
