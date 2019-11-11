@@ -1,4 +1,4 @@
-#include "factory.h"
+#include <factory.h>
 #include "conjugateGradientInversion.h"
 #include "randomInversion.h"
 #include "evolutionInversion.h"

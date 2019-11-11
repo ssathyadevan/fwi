@@ -17,5 +17,7 @@ function( build_test )
     install(TARGETS ${TEST_TARGET} DESTINATION bin/test)
 endfunction( build_test )
 
+SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
+
 # Build the tests!
 build_test(TARGET grid2DTest SOURCE grid2DTest.cpp LIBRARIES core_library)
