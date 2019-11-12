@@ -93,6 +93,10 @@ TEST(PressureFieldSerialTest, GradientTest)
     EXPECT_NEAR(data_ptr[1][0], 1, 0.01);
     EXPECT_NEAR(data_ptr[1][11], 1, 0.01);
 
-    delete[] pfs_out;
+    for(int i=0; i<2; i++)
+    {
+        delete pfs_out[i];
+    }
+    delete pfs_out;
 }
 
