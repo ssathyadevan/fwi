@@ -1,5 +1,4 @@
 # Add your new .cpp and/or .h files here before configuring
-include_directories(../include)
 add_library(core_library                #Relative path required to find file.
     chiIntegerVisualisation.cpp         ../include/chiIntegerVisualisation.h 
     contraction.cpp                     ../include/contraction.h
