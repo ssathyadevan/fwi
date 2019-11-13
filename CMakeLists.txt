@@ -22,7 +22,7 @@ find_package(GTest REQUIRED)
 
 # display all compiler warnings if compiler is gnu
 if ( CMAKE_COMPILER_IS_GNUCC )
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror=vla")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror=vla -O3")
 endif()
 
 # display all compiler warnings if compiler is some version of Microsoft Visual C

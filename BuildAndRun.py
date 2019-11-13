@@ -36,10 +36,10 @@ if sys.platform.startswith('linux'):
         if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
             os.mkdir('Build')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
-        check = os.system('cmake -DCMAKE_BUILD_TYPE=Release ' +
-                          '-DCMAKE_INSTALL_PREFIX=../FWIInstall ../parallelized-fwi/')
+        check = os.system('sudo cmake -D CMAKE_CXX_COMPILER=mpicxx CMAKE_BUILD_TYPE=Release ' +
+                          '-DCMAKE_INSTALL_PREFIX= ../FWIInstall ../parallelized-fwi/')
         checking_for_errors(check, current_directory)
-        check = os.system('make install')
+        check = os.system('sudo make install')
         checking_for_errors(check, current_directory)
 
         print('Running project:')
@@ -51,11 +51,6 @@ if sys.platform.startswith('linux'):
         checking_for_errors(check, current_directory)
         check = os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
         checking_for_errors(check, current_directory)
-
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
-        check = os.system('rm -r *Test')
-        checking_for_errors(check, current_directory) 
-
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5] + '/input/')
         check = os.system('cp -r temp/temp' + str(ind_run[6]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
                   'Input.json')
@@ -70,7 +65,7 @@ if sys.platform.startswith('linux'):
             print('there is something wrong with the ForwardModel you choose. The preprocessing was done with integralForwardModel')
             check = os.system('./FWI_PreProcess ../' + ind_run[5])
         checking_for_errors(check, current_directory)
-        check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
+        check = os.system('mpiexec -n 4 --allow-run-as-root ./FWI_MPIProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
         checking_for_errors(check, current_directory)
 
     print('Now post processing')

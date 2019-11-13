@@ -1,6 +1,8 @@
 #include <memory>
 #include "conjugateGradientInversion.h"
 #include "progressBar.h"
+#include <mpi.h>
+#include <iostream>
 
 ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
@@ -48,7 +50,7 @@ double ConjugateGradientInversion::calculateAlpha(PressureFieldSerial& zeta, std
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
-    ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
+    //ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -230,7 +232,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 //breakout check
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
                                     (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance)))){
-                    bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
+                    //bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;                  
                 }
                     
@@ -251,7 +253,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 gOld = g;
                 bsquaredOld = bsquared;
             }
-            bar++;
+            //bar++;
         } // end regularisation loop
         
 
@@ -282,4 +284,22 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     PressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
+}
+
+void ConjugateGradientInversion::ReconstructMPISlave(GenericInput gInput){
+    double data;
+    MPI_Recv(&data, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    std::cerr << data <<  std::endl;
+    return;
+}
+
+PressureFieldSerial ConjugateGradientInversion::ReconstructMPI(const std::vector<std::complex<double>> &pData, GenericInput gInput ){
+    int mpi_size;
+    double pi = 3.23434634567;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+    for (int r = 1; r< mpi_size; r++) {
+        MPI_Send(&pi, 1, MPI_DOUBLE, r, 1, MPI_COMM_WORLD);
+        pi+=r;
+    }
+    return this->Reconstruct(pData, gInput);
 }
