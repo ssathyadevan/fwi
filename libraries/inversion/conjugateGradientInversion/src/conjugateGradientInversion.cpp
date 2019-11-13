@@ -349,7 +349,9 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
 
 void ConjugateGradientInversion::ReconstructMPISlave(GenericInput gInput){
-    int mpi_command;
+    int mpi_command, mpi_size, mpi_rank;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     _forwardModel->calculateKappa();
     PressureFieldComplexSerial tmp(_grid);
     tmp.Zero();
@@ -365,13 +367,14 @@ void ConjugateGradientInversion::ReconstructMPISlave(GenericInput gInput){
                 std::complex<double> temp = {deconstructedResArray[i*2], deconstructedResArray[i*2+1]};
                 resArray.push_back(temp);
             }
-
-            _forwardModel->getUpdateDirectionInformation(resArray, tmp);//calculate result
+            int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
+            int offset = block_size * mpi_rank;
+            _forwardModel->getUpdateDirectionInformationMPI(resArray, tmp, offset, block_size);//calculate result
 
             PressureFieldSerial result(_grid);
             result = tmp.GetRealPart();
             double* result_data = result.GetDataPtr();
-            MPI_Send(result_data, result.GetNumberOfGridPoints(), MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD);
+            MPI_Send(result_data , result.GetNumberOfGridPoints() / mpi_size, MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD);
             
             //return result
             //std::cerr<< "Get Update Direction" << std::endl;
@@ -468,15 +471,16 @@ PressureFieldSerial ConjugateGradientInversion::ReconstructMPI(const std::vector
                 result = tmp.GetRealPart();
                 double* result_data = result.GetDataPtr();
                 
-                double** partialResult = new double*[mpi_size-1];
+                int offset = 0;
                 for (int i = 0; i < mpi_size - 1; i++){
-                    partialResult[i] = new double[result.GetNumberOfGridPoints()];
-                    MPI_Recv(partialResult[i], result.GetNumberOfGridPoints(), MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
+                   // partialResult[i] = new double[result.GetNumberOfGridPoints()/mpi_size];
+                    offset += result.GetNumberOfGridPoints() / mpi_size;
+                    MPI_Recv(result_data + offset, result.GetNumberOfGridPoints()/mpi_size, MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
                 }
                 //Rebuild result
                 
 
-                g = eta * tmp.GetRealPart(); //eq: gradientRunc
+                g = eta * result; //eq: gradientRunc
                 zeta = g;
 
                 alphaDiv[0] = double(0.0);
@@ -560,13 +564,15 @@ PressureFieldSerial ConjugateGradientInversion::ReconstructMPI(const std::vector
                 result = tmp.GetRealPart();
                 double* result_data = result.GetDataPtr();
                 
-                double** partialResult = new double*[mpi_size-1];
+                //double* partialResult = new double*[];
+                int offset = 0;
                 for (int i = 0; i < mpi_size - 1; i++){
-                    partialResult[i] = new double[result.GetNumberOfGridPoints()];
-                    MPI_Recv(partialResult[i], result.GetNumberOfGridPoints(), MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
+                   // partialResult[i] = new double[result.GetNumberOfGridPoints()/mpi_size];
+                    offset += result.GetNumberOfGridPoints() / mpi_size;
+                    MPI_Recv(result_data + offset, result.GetNumberOfGridPoints()/mpi_size, MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
                 }
-                
-                g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
+
+                g = eta * fRegOld * result + fDataOld * gReg; // # eq: integrandForDiscreteK
 
                 gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
                 zeta = g + gamma * zeta;
