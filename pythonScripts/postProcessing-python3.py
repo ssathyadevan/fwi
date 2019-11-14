@@ -123,7 +123,7 @@ plt.colorbar()
 
 plt.subplot(3, 1, 3)
 plt.title("Difference between chi values")
-plt.imshow(diff_chi, interpolation='nearest')
+plt.imshow(np.absolute(diff_chi), interpolation='nearest')
 plt.colorbar()
 
 plt.savefig(filenameout, dpi=400, bbox_inches='tight')
