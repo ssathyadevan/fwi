@@ -322,6 +322,6 @@ void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::com
     for (int i = offset; i < offset + block_size; i++)
     {
         kDummy = *_Kappa[i];
-        kRes += kDummy.Conjugate() * res[i - offset];
+        kRes += kDummy.Conjugate() * res[i ];
     }
 }

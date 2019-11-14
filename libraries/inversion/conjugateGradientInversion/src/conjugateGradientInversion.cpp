@@ -355,6 +355,8 @@ void ConjugateGradientInversion::ReconstructMPISlave(GenericInput gInput){
     _forwardModel->calculateKappa();
     PressureFieldComplexSerial tmp(_grid);
     tmp.Zero();
+    PressureFieldComplexSerial tmp2(_grid);
+    tmp2.Zero();
     while(1){
         MPI_Recv(&mpi_command, 1, MPI_INT, 0, TAG_COMMAND, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive command
         if (mpi_command == COMMAND_GETUPDATEDIRECTION){
@@ -374,7 +376,11 @@ void ConjugateGradientInversion::ReconstructMPISlave(GenericInput gInput){
             PressureFieldSerial result(_grid);
             result = tmp.GetRealPart();
             double* result_data = result.GetDataPtr();
-            MPI_Send(result_data , result.GetNumberOfGridPoints() / mpi_size, MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD);
+            MPI_Send(result_data , result.GetNumberOfGridPoints(), MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD);
+
+            for (int i = 0 ; i < result.GetNumberOfGridPoints() ; i++){
+                std::cout << result_data[i] << std::endl;
+            }
             
             //return result
             //std::cerr<< "Get Update Direction" << std::endl;
@@ -465,19 +471,26 @@ PressureFieldSerial ConjugateGradientInversion::ReconstructMPI(const std::vector
 
                 for (int r = 1; r< mpi_size; r++) MPI_Send(deconstructedResArray, resArray.size() * 2, MPI_DOUBLE, r, TAG_RESARRAY, MPI_COMM_WORLD); //Send serialized array
 
-                _forwardModel->getUpdateDirectionInformation(resArray, tmp);
+                int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
+                _forwardModel->getUpdateDirectionInformationMPI(resArray, tmp, 0, block_size);
 
                 PressureFieldSerial result(_grid);
                 result = tmp.GetRealPart();
                 double* result_data = result.GetDataPtr();
+
+                //for (int i = 0 ; i < result.GetNumberOfGridPoints(); i++) std::cout << result_data[i] << std::endl;
                 
-                int offset = 0;
+                double** partialResult = new double*[mpi_size-1];
                 for (int i = 0; i < mpi_size - 1; i++){
-                   // partialResult[i] = new double[result.GetNumberOfGridPoints()/mpi_size];
-                    offset += result.GetNumberOfGridPoints() / mpi_size;
-                    MPI_Recv(result_data + offset, result.GetNumberOfGridPoints()/mpi_size, MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
+                    partialResult[i] = new double[result.GetNumberOfGridPoints()];
+                    MPI_Recv(partialResult[i], result.GetNumberOfGridPoints(), MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
                 }
-                //Rebuild result
+                
+                for (int j = 0; j < mpi_size -1; j++){
+                    for (int i = 0; i < result.GetNumberOfGridPoints(); i++){//Rebuild result
+                        result_data[i] += partialResult[j][i];
+                    }
+                }
                 
 
                 g = eta * result; //eq: gradientRunc
@@ -558,18 +571,25 @@ PressureFieldSerial ConjugateGradientInversion::ReconstructMPI(const std::vector
 
                 for (int r = 1; r< mpi_size; r++) MPI_Send(deconstructedResArray, resArray.size() * 2, MPI_DOUBLE, r, TAG_RESARRAY, MPI_COMM_WORLD); //Send serialized array
 
-                _forwardModel->getUpdateDirectionInformation(resArray, tmp);
+                int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
+                _forwardModel->getUpdateDirectionInformationMPI(resArray, tmp, 0, block_size);
 
                 PressureFieldSerial result(_grid);
                 result = tmp.GetRealPart();
                 double* result_data = result.GetDataPtr();
+
+                //for (int i = 0 ; i < result.GetNumberOfGridPoints(); i++) std::cout << result_data[i] << std::endl;
                 
-                //double* partialResult = new double*[];
-                int offset = 0;
+                double** partialResult = new double*[mpi_size-1];
                 for (int i = 0; i < mpi_size - 1; i++){
-                   // partialResult[i] = new double[result.GetNumberOfGridPoints()/mpi_size];
-                    offset += result.GetNumberOfGridPoints() / mpi_size;
-                    MPI_Recv(result_data + offset, result.GetNumberOfGridPoints()/mpi_size, MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
+                    partialResult[i] = new double[result.GetNumberOfGridPoints()];
+                    MPI_Recv(partialResult[i], result.GetNumberOfGridPoints(), MPI_DOUBLE, i+1, TAG_RESULT, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
+                }
+                
+                for (int j = 0; j < mpi_size -1; j++){
+                    for (int i = 0; i < result.GetNumberOfGridPoints(); i++){//Rebuild result
+                        result_data[i] += partialResult[j][i];
+                    }
                 }
 
                 g = eta * fRegOld * result + fDataOld * gReg; // # eq: integrandForDiscreteK
