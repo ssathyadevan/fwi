@@ -310,6 +310,7 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
     for (int i = 0; i < _freq.nFreq * _recv.nRecv * _src.nSrc; i++)
     {
         kDummy = *_Kappa[i];
-        kRes += kDummy.Conjugate() * res[i];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i];
     }
 }

@@ -96,13 +96,12 @@ void PressureFieldComplexSerial::Reciprocal()
     }
 }
 
-PressureFieldComplexSerial PressureFieldComplexSerial::Conjugate()
+void PressureFieldComplexSerial::Conjugate()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] = std::conj(data[i]);
     }
-    return *this;
 }
 
 void PressureFieldComplexSerial::Random()
