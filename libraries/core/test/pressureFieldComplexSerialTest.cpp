@@ -26,6 +26,12 @@ TEST(pressureFieldComplexSerialTest, squareTest)
 {
     PressureFieldComplexSerial pfcs(getGrid());
     pfcs = getPFCS();
+    /* Reason for initiating this way:
+    *       When doing: PressureFieldComplexSerial pfcs = getPFCS();
+    *       The copy-constructor is called, which uses memcpy().
+    *       In order to do succeed, both sides of the '=' sign must have equal grids already.
+    *       This is guaranteed by initialising an empty PF of 'size' [grid].
+    */
     
     pfcs.Square();
 
@@ -74,3 +80,9 @@ TEST(PressureFieldComplexSerialTest, conjugateTest)
     EXPECT_EQ(std::imag(ptr[0]), -0.25);
     EXPECT_EQ(std::imag(ptr[7]), -1.75);
 }
+/*
+TEST(PressureFieldComplexSerialTest, normTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs
+}*/
