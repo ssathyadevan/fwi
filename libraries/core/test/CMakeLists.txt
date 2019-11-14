@@ -23,3 +23,4 @@ SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 # Build the tests!
 build_test(TARGET grid2DTest SOURCE grid2DTest.cpp LIBRARIES core_library)
 build_test(TARGET pressureFieldSerialTest SOURCE pressureFieldSerialTest.cpp LIBRARIES core_library)
+build_test(TARGET pressureFieldComplexSerialTest SOURCE pressureFieldComplexSerialTest.cpp LIBRARIES core_library)

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "grid2D.h"
 #include "pressureFieldSerial.h"
 
 Grid2D getGrid()
@@ -16,7 +15,7 @@ PressureFieldSerial getPFS()
 {
     Grid2D grid = getGrid();
     PressureFieldSerial pfs(grid);
-    std::function<double(double, double)> func = [](double x, double z){return x+z;}; // Linear plane, x & z are centroids of grid cell.
+    std::function<double(double, double)> func = [](double x, double z){return x+z;}; // Linear tilted plane, x & z are centroids of grid cell.
     pfs.SetField(func);
     return pfs;
 }
