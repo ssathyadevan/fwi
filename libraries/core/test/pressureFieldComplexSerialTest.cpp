@@ -80,9 +80,69 @@ TEST(PressureFieldComplexSerialTest, conjugateTest)
     EXPECT_EQ(std::imag(ptr[0]), -0.25);
     EXPECT_EQ(std::imag(ptr[7]), -1.75);
 }
-/*
+
 TEST(PressureFieldComplexSerialTest, normTest)
 {
     PressureFieldComplexSerial pfcs(getGrid());
-    pfcs
-}*/
+    pfcs = getPFCS();
+
+    EXPECT_NEAR(pfcs.Norm(), 4.527, 0.1);
+}
+
+TEST(PressureFieldComplexSerialTest, relNormTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs = getPFCS();
+
+    EXPECT_NEAR(pfcs.RelNorm(), 0.566, 0.1);
+}
+
+TEST(PressureFieldComplexSerial, innerProductTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs = getPFCS();
+
+    std::complex<double> result = pfcs.InnerProduct(pfcs);
+    
+    EXPECT_NEAR(std::real(result), 20.5, 0.01);
+    EXPECT_NEAR(std::imag(result), 0, 0.01);
+}
+
+TEST(PressureFieldComplexSerial, summationPFCSTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs = getPFCS();
+
+    std::complex<double> result = pfcs.Summation(pfcs);
+    
+    EXPECT_NEAR(std::real(result), -0.5, 0.01);
+    EXPECT_NEAR(std::imag(result), 16, 0.01);
+}
+
+TEST(PressureFieldComplexSerial, summationPFSTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs = getPFCS();
+
+    PressureFieldSerial pfs(getGrid());
+    std::function<double(double, double)> func = [](double x, double z){return x+z;}; // Linear tilted plane, x & z are centroids of grid cell.
+    pfs.SetField(func);
+
+    std::complex<double> result = pfcs.Summation(pfs);
+    
+    EXPECT_NEAR(std::real(result), 18, 0.01);
+    EXPECT_NEAR(std::imag(result), 18.5, 0.01);
+}
+
+TEST(PressureFieldComplexSerial, getRealPartTest)
+{
+    PressureFieldComplexSerial pfcs(getGrid());
+    pfcs = getPFCS();
+
+    PressureFieldSerial pfs(getGrid());
+    pfs = pfcs.GetRealPart();
+    double* ptr = pfs.GetDataPtr();
+
+    EXPECT_EQ(ptr[0], 0.5);
+    EXPECT_EQ(ptr[1], 1.5);
+}
