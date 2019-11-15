@@ -310,7 +310,8 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
     for (int i = 0; i < _freq.nFreq * _recv.nRecv * _src.nSrc; i++)
     {
         kDummy = *_Kappa[i];
-        kRes += kDummy.Conjugate() * res[i];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i];
     }
 }
 
@@ -322,6 +323,7 @@ void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::com
     for (int i = offset; i < offset + block_size; i++)
     {
         kDummy = *_Kappa[i];
-        kRes += kDummy.Conjugate() * res[i ];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i ];
     }
 }

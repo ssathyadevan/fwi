@@ -24,6 +24,11 @@ def find(substr, whichin):
     start_or_finish = (datetime.strptime(manip, '%c'))
     return start_or_finish
 
+def findPreciseTiming(substr, whichin):
+    lines = [x for x in open(whichin+"Process.out") if substr in x]
+    line = lines[0]
+    return line.replace(substr, '').replace("\n", '')
+
 
 # Enter here the name of the case folder you want to post process
 outputPath = sys.argv[1]
@@ -102,7 +107,8 @@ print("The average relative error is:        "+str(avg_relative_error))
 # We find the execution time in the logs
 datetime_new_start = find("Starting at ", outputPath + "/output/" + runName)
 datetime_new_finish = find("Finished at ", outputPath + "/output/" + runName)
-new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
+#new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
+new_total_seconds = findPreciseTiming("CPU time: ", outputPath + "/output/" + runName)
 
 print("Execution time in seconds:            "+str(new_total_seconds))
 

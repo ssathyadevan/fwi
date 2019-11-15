@@ -1,8 +1,8 @@
 add_executable( FWI_MPIProcess main.cpp )
 
 target_link_libraries( FWI_MPIProcess
-    factory_library 
+    integral_forward_model_library 
     core_library
-    conjugate_gradient_inversion_library)
+    mpi_conjugate_gradient_inversion_library)
     
 install( TARGETS FWI_MPIProcess DESTINATION bin)

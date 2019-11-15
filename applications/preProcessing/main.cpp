@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "PreProcess");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "PreProcess", -1);
     }
 
     std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;

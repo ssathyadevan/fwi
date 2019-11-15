@@ -1,5 +1,5 @@
-#include "conjugateGradientInversion.h"
-#include "factory.h"
+#include "MPIConjugateGradientInversion.h"
+#include "integralForwardModel.h"
 #include "inversionInterface.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
@@ -7,64 +7,48 @@
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
-#include "cpuClock.h"
+#include "cpuClockMPI.h"
 #include <string>
 #include <mpi.h>
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model, const int mpi_rank);
+void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank);
 void writePlotInput(const GenericInput &gInput);
 
 int main(int argc, char **argv)
 {
-    if (argc != 4)
+    if (argc != 2)
     {
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
-
-        std::cout << std::endl
-                  << "Please specify the desired inversion method" << std::endl;
-        std::cout << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
-
-        std::cout << std::endl
-                  << "Please specify the desired forward model" << std::endl;
-        std::cout << "Make sure the forward model has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
-
         exit(EXIT_FAILURE);
+
     }
+    CpuClockMPI clock;
     int mpi_initialized, mpi_finalized, mpi_rank, mpi_size;
     MPI_Initialized(&mpi_initialized);
     if (!mpi_initialized) MPI_Init(&argc, &argv);
 
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-
     std::vector<std::string> arguments(argv + 1, argc + argv);
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
-    std::string desired_inversion = arguments[1];
-    std::string desired_forward_model = arguments[2];
-    time_t t1, t2;
 
+    if (mpi_rank == 0) std::cerr << "MPI initialized with " << mpi_size << " threads." <<std::endl;
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process", mpi_rank);
     }
     
     if (mpi_rank == 0) { //MASTER THREAD
         chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
         create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
-
-        
-
-        t1 = (time_t) MPI_Wtime();
-        std::cout << "Starting at " << std::asctime(std::localtime(&t1)) << std::endl;
+        clock.Start();
     }
-
-        performInversion(gInput, gInput.runName, desired_inversion, desired_forward_model, mpi_rank);
+        performInversion(gInput, gInput.runName, mpi_rank);
 
     if (mpi_rank == 0) { //MASTER THREAD
-        t2 = (time_t) MPI_Wtime();
-        std::cout << "Finished at " << std::asctime(std::localtime(&t2)) << std::endl;
+        clock.End();
 
 
         std::cout << "Visualisation of the estimated temple using FWI" << std::endl;
@@ -72,9 +56,10 @@ int main(int argc, char **argv)
         create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
         writePlotInput(gInput);
+        clock.PrintTimeElapsed();
     }
 
-
+        
         MPI_Finalized(&mpi_finalized);
         if (!mpi_finalized) MPI_Finalize();
 
@@ -101,7 +86,7 @@ void writePlotInput(const GenericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model, const int mpi_rank)
+void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank)
 {
 
     // initialize the grid, sources, receivers, grouped frequencies
@@ -116,7 +101,6 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
     //read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
-
     if (mpi_rank==0){ //MASTER
         std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
         std::ifstream file(fileLocation);
@@ -140,21 +124,20 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
 
     ForwardModelInterface *model;
-    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
-
-    ConjugateGradientInversion *inverse;
-    inverse = new ConjugateGradientInversion(model, gInput);
+    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+    MPIConjugateGradientInversion *inverse;
+    inverse = new MPIConjugateGradientInversion(model, gInput);
 
     if (mpi_rank==0){
          std::cout << "Estimating Chi..." << std::endl;
 
-        PressureFieldSerial chi_est = inverse->ReconstructMPI(referencePressureData, gInput);
+        PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
         std::cout << "Done, writing to file" << std::endl;
 
         chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
     }else{
-        inverse->ReconstructMPISlave(gInput);
+        inverse->ReconstructSlave(gInput);
     }
 
     delete model;
