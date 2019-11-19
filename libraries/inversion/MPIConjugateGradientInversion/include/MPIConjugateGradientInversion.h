@@ -24,7 +24,7 @@ private:
     double _previousLowPoint = std::numeric_limits<double>::max();
 
     double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
-    void getUpdateDirectionInformation();
+    PressureFieldSerial* getUpdateDirectionInformation(std::vector<std::complex<double>> resArray, const int mpi_size);
 
 public:
 
