@@ -11,7 +11,7 @@
 \setlength\parindent{0pt}
 
 \title{BUILD-RUN-DOCUMENT}
-\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen}
+\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen, Chris Zevenbergen}
 \date{\today}
 
 \usepackage{natbib}
@@ -136,7 +136,10 @@ Now, the individual scripts for the preProcessing and the processing part can be
 
 \texttt{cd \textasciitilde/FWIInstall/bin/} \newline
 \texttt{./FWI\_PreProcess ../default/} \newline
-\texttt{./FWI\_UnifiedProcess ../default/ conjugateGradientInversion}
+\texttt{./FWI\_UnifiedProcess ../default/ conjugateGradientInversion integralForwardModel}
+\newline
+
+Choose either integralForwardModel or finiteDifferenceForwardModel.
 \newline
 
 \noindent For both executables we have to pass one argument which is the path to the case to be run (in this case \textit{../default/}. It is important to notice that for the UnifiedProcess, a second argument is needed, this argument corresponds to the name of the inversion method you want to use. Note that the arguments are the locations relative to the executable position. The default input parameters are stored in the \textit{default/} which is located in \textit{\textasciitilde/parallelized-fwi/inputFiles/}. Users can create their own set of input cards by copying the default folder into a new folder, modifying the input cards and giving the new folder's location argument to both PreProcess and Process.\\
@@ -234,3 +237,4 @@ In case the Ubuntu Virtual Machine is very slow and has long response times, try
 \end{enumerate}
 
 \end{document}
+
