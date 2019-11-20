@@ -123,7 +123,7 @@ plt.colorbar()
 
 plt.subplot(3, 1, 3)
 plt.title("Difference between chi values")
-plt.imshow(diff_chi, interpolation='nearest')
+plt.imshow(np.absolute(diff_chi), interpolation='nearest')
 plt.colorbar()
 
 plt.savefig(filenameout, dpi=400, bbox_inches='tight')
@@ -137,7 +137,11 @@ dummy_variable_reader_pr = list(reader_residual)
 reader_residual_array = np.array(dummy_variable_reader_pr).astype("float")
 
 plt.clf()
-plt.plot(reader_residual_array[:, 0])
+residuals = []
+[residuals.append(val[0]) for val in reader_residual_array]
+residuals.insert(0, None)
+
+plt.plot(residuals)
 plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)

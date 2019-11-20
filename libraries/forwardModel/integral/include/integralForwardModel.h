@@ -21,9 +21,7 @@ public:
     void calculateKappa();
     virtual void calculatePTot(const PressureFieldSerial &chiEst);
     virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes);
-    virtual PressureFieldComplexSerial calculateKappaConjugateResidual(std::vector<std::complex<double>> &res);
     virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
-    virtual std::vector<std::complex<double>> calculateKappaZeta(PressureFieldSerial& zeta);
 
 private:
 

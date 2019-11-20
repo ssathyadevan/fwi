@@ -7,9 +7,11 @@
  left=20mm,
  top=20mm,
  }
+ 
+\setlength\parindent{0pt}
 
 \title{BUILD-RUN-DOCUMENT}
-\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen}
+\author{Saurabh Sharma, Hugo Solera Licona, Iñaki Martin Soroa, Noud van Herpen, Chris Zevenbergen}
 \date{\today}
 
 \usepackage{natbib}
@@ -30,9 +32,15 @@ The prerequisite development tools needed can be installed using the following c
 
 
 \section{Cloning the Repository}
-\noindent To clone the FWI repository using git, \newline
-\texttt{git clone -o redmine https://git.alten.nl/parallelized-fwi.git} \newline
-This will create a copy of the repository, in a folder named \textit{parallelized-fwi}. Any branch as needed can then be checked out from inside the \textit{parallelized-fwi} folder, e.g. the develop branch: \newline
+\noindent To clone the FWI repository using git, 
+\newline
+
+\texttt{git clone -o redmine https://git.alten.nl/parallelized-fwi.git} 
+\newline
+
+This will create a copy of the repository, in a folder named \textit{parallelized-fwi}. Any branch as needed can then be checked out from inside the \textit{parallelized-fwi} folder, e.g. the develop branch: 
+\newline
+
 \texttt{git checkout develop}
 
 \section{Build}
@@ -40,7 +48,9 @@ In this section, the process to build is explained. It is worth noticing that th
 
 
 \subsection{Install Google Test}
-First we need to install Google Test using the following commands:\\
+First we need to install Google Test using the following commands:
+\newline
+
 \texttt{sudo apt-get install libgtest-dev}
 \newline
 \texttt{cd /usr/src/gtest}
@@ -95,6 +105,7 @@ First we need to install Google Test using the following commands:\\
 To build the project, first create a folder titled \textit{build} outside the \textit{parallelized-fwi} folder. Afterwards the code is built and run. 
 NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.
 \newline
+
 \texttt{cd \textasciitilde}
 \newline
 \texttt{mkdir Build}
@@ -109,14 +120,27 @@ NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.
 \noindent The first flag in the cmake command above enforces that the release version of the code be built and the 2nd flag implies that all the executables of the program will be placed in a folder \textit{FWIInstall} (executables are in \textit{FWIInstall/bin})
 
 \section{Run}
-To run, first check out the \textit{inputFiles} folder in the parallelized-fwi folder and copy the \textit{default} folder to the \textit{FWIInstall} folder. This can be done by issuing the following command: \newline
-\texttt{cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall} \newline
-Also, make sure that there is a \textit{bin} folder in \textit{FWIInstall}, if there is not you can copy it from \textit{Build/runtime/}. You can do this with the command: \newline
-\texttt{cp -r ../Build/runtime/bin/ ../FWIInstall} \newline
+To run, first check out the \textit{inputFiles} folder in the parallelized-fwi folder and copy the \textit{default} folder to the \textit{FWIInstall} folder. This can be done by issuing the following command: 
+\newline
+
+\texttt{cp -r ../parallelized-fwi/inputFiles/default/ ../FWIInstall} 
+\newline
+
+Also, make sure that there is a \textit{bin} folder in \textit{FWIInstall}, if there is not you can copy it from \textit{Build/runtime/}. You can do this with the command: 
+\newline
+
+\texttt{cp -r ../Build/runtime/bin/ ../FWIInstall} 
+\newline
+
 Now, the individual scripts for the preProcessing and the processing part can be run as shown below: \newline
+
 \texttt{cd \textasciitilde/FWIInstall/bin/} \newline
 \texttt{./FWI\_PreProcess ../default/} \newline
-\texttt{./FWI\_UnifiedProcess ../default/ conjugateGradientInversion}
+\texttt{./FWI\_UnifiedProcess ../default/ conjugateGradientInversion integralForwardModel}
+\newline
+
+Choose either integralForwardModel or finiteDifferenceForwardModel.
+\newline
 
 \noindent For both executables we have to pass one argument which is the path to the case to be run (in this case \textit{../default/}. It is important to notice that for the UnifiedProcess, a second argument is needed, this argument corresponds to the name of the inversion method you want to use. Note that the arguments are the locations relative to the executable position. The default input parameters are stored in the \textit{default/} which is located in \textit{\textasciitilde/parallelized-fwi/inputFiles/}. Users can create their own set of input cards by copying the default folder into a new folder, modifying the input cards and giving the new folder's location argument to both PreProcess and Process.\\
 
@@ -130,29 +154,43 @@ Now, the individual scripts for the preProcessing and the processing part can be
 
 \section{Post-Processing}
 For post-processing (i.e. generation of image using the estimated chi values and the residual plot), the python script \texttt{postProcessing-python3.py} can be used. Note that when using the \texttt{BuildAndRun} and \texttt{Run} scripts, the postprocessing is done automatically. The \texttt{postProcessing-python3.py} script is located inside the \textit{parallelized-fwi/pythonScripts} folder. This can be copied to the FWIInstall folder and then executed using 
-the following commands: \newline
+the following commands:
+\newline
+
 \texttt{cp \textasciitilde/parallelized-fwi/pythonScipts/postProcessing-python3.py ..} \newline
 \texttt{cd ..} \newline
-\texttt{python3 postProcessing-python3.py default/} \newline
-The run case folder is provided as the argument for the python script. The pre-processing, processing and the post-processing can all be grouped together using the python wrapper \texttt{wrapper.py} located inside the \textit{parallelized-fwi/pythonScripts} folder.
+\texttt{python3 postProcessing-python3.py default/} 
+\newline
 
-\noindent The postprocessed data can then be visualized using EOG from the output folder: \newline
+The run case folder is provided as the argument for the python script. The pre-processing, processing and the post-processing can all be grouped together using the python wrapper \texttt{wrapper.py} located inside the \textit{parallelized-fwi/pythonScripts} folder.
+\newline
+
+\noindent The postprocessed data can then be visualized using EOG from the output folder: \\ \newline
 \texttt{cd default/output/} \newline
-\texttt{eog defaultResult.png} \newline
+\texttt{eog defaultResult.png}
+\newline
  
 \section{Unit Test}
 
-The unit test executable is stored in the \textit{FWIInstall/bin} folder after the make install command. The following commands can be used to run the test.
+Unit tests are written in one file per class. The file must be located in the /texttt{test} directory of the respective library. To make the unit tests available for Google Test, make sure \texttt{CMakeLists.txt} in \texttt{test} has the following line:
 \newline
-\texttt{cd ../../bin}
-\newline
-\texttt{./unittest}
 
+\texttt{build\char`_test(TARGET myClassTest SOURCE myClassTest.cpp LIBRARIES core\char`_library)}
+\newline
+
+In this case, myClassTest covers a class that is part of the core library.\\
+After building, the test can be ran by writing in the terminal:\\
+\newline
+
+\texttt{cd ../../bin/test}
+\newline
+\texttt{./myClassTest}
+\newline
 
 \section{Regression Test}
-
 This section details the comparison of a \textit{default} run with the \textit{fast} regression data. In order to run a regression test the following steps need to be taken. First, a \textit{test} folder is created, then the contents of the regression data folder, the default folder, the input cards and the regression test python scripts are copied to this \textit{test} folder. Then finally the python scripts can be run in succession.  
 \newline
+
 \texttt{cd ..}
 \newline
 \texttt{mkdir test}
@@ -184,7 +222,8 @@ In case the Ubuntu Virtual Machine is very slow and has long response times, try
     \texttt{sudo apt-get install openssh-server}
     \item In the \textbf{guest}, install Visual Studio Code with the Remote Development extension.
     \item In the \textbf{guest}, open cmd and write: \\
-    \texttt{ssh -p 3022 user@127.0.0.1}
+    \texttt{ssh -p 3022 user@127.0.0.1} \\
+    Where \texttt{user} is the account in the virtual machine, before the '@' sign, in the terminal.
     \item Run Visual Studio Code \& click on the Remote Development icon in the bottom-left corner.
     \item From the drop-down menu, go to Remote-SSH: Open Configuration File. Select one, remember which one.
     \item Add to this document the following lines: \\
@@ -198,3 +237,4 @@ In case the Ubuntu Virtual Machine is very slow and has long response times, try
 \end{enumerate}
 
 \end{document}
+

@@ -150,22 +150,10 @@ double PressureFieldSerial::Summation() const
 }
 
 // Non virtual members
-double PressureFieldSerial::InnerProduct(const PressureFieldSerial &y) const
-{
-    assert(&this->GetGrid() == &y.GetGrid());
-    double result = double(0.0);
-    for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
-    {
-        result += data[i] * y.data[i];
-    }
-    return result;
-}
-
-// How is this a summation of 2 PressureFields? It's not even proper matrix multiplication.
-double PressureFieldSerial::Summation(const PressureFieldSerial &rhs) const
+double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
-    assert(&this->GetGrid() == &rhs.GetGrid()); // Both this & rhs use the same grid memory address.
+    assert(&this->GetGrid() == &rhs.GetGrid());
 
     const double *rhs_data = rhs.GetDataPtr();
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -215,51 +203,6 @@ void PressureFieldSerial::Gradient(PressureFieldSerial **output)
             }
         }
     }
-}
-
-std::vector<PressureFieldSerial> PressureFieldSerial::Gradient(Grid2D& _grid)
-{
-    //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
-    PressureFieldSerial output_1(_grid);
-    PressureFieldSerial output_2(_grid);
-
-    const std::array<int, 2> &nx = GetGrid().GetGridDimensions();
-    const std::array<double, 2> &dx = GetGrid().GetCellDimensions();
-
-    for (int i = 0; i < nx[1]; i++)
-    {
-        for (int j = 0; j < nx[0]; j++)
-        {
-            //direction 1 dx
-            if (j == 0)
-            {
-                output_1.data[i * nx[0] + j] = (data[i * nx[0] + j + 2] - 4 * data[i * nx[0] + j + 1] + 3 * data[i * nx[0] + j]) / (-double(2.0) * dx[0]);
-            }
-            else if (j == nx[0] - 1)
-            {
-                output_1.data[i * nx[0] + j] = (data[i * nx[0] + j - 2] - 4 * data[i * nx[0] + j - 1] + 3 * data[i * nx[0] + j]) / (double(2.0) * dx[0]);
-            }
-            else
-            {
-                output_1.data[i * nx[0] + j] = (data[i * nx[0] + j + 1] - data[i * nx[0] + j - 1]) / (double(2.0) * dx[0]);
-            }
-
-            //direction 2 dz
-            if (i == 0)
-            {
-                output_2.data[i * nx[0] + j] = (data[(i + 2) * nx[0] + j] - 4 * data[(i + 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (-double(2.0) * dx[1]);
-            }
-            else if (i == nx[1] - 1)
-            {
-                output_2.data[i * nx[0] + j] = (data[(i - 2) * nx[0] + j] - 4 * data[(i - 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (double(2.0) * dx[1]);
-            }
-            else
-            {
-                output_2.data[i * nx[0] + j] = (data[(i + 1) * nx[0] + j] - data[(i - 1) * nx[0] + j]) / (double(2.0) * dx[1]);
-            }
-        }
-    }
-    return {output_1, output_2};
 }
 
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)

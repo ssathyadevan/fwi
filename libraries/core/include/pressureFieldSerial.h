@@ -51,9 +51,7 @@ public:
     virtual double Summation() const;
 
     // Non virtual members
-    double InnerProduct(const PressureFieldSerial &y) const;
-    double Summation(const PressureFieldSerial &rhs) const;
-    PressureFieldSerial Gradient(_grid)
+    double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(PressureFieldSerial **output);
 
     PressureFieldSerial& operator=(const PressureFieldSerial& rhs);

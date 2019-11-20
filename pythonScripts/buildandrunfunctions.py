@@ -2,7 +2,6 @@ import os
 import sys
 import json
 import numpy as np
-import re
 
 def checking_for_errors(err, current_directory):
     if err != 0:
@@ -131,16 +130,10 @@ def imagetotxt(imagename, resolution, current_directory):
     return filename
 
 def add_image(current_directory):
-    print('Absolute path to new image, with image name:')
+    print('Path of new image, with image name:')
     imagename = input('~: ')
-    while not os.path.isfile(imagename):
-        print("The path or name of the image is wrong, maybe try again.")
-        imagename = input('~: ')
     print('Desired resolution of image:')
     answer = input('~: ')
-    while not re.match(r"\d+[x]\d+", answer):
-        print('You introduced an invalid command, maybe try again.')
-        answer = input('~: ')
     temp = answer.split('x')
     resolution = (int(temp[1]), int(temp[0]))
     return imagetotxt(imagename, resolution, current_directory)
@@ -166,7 +159,8 @@ def ask_input(current_directory):
 def ask_output():
     print('What output resolution do you want (mxn)?')
     answer = input('~: ')
-    while not re.match(r"\d+[x]\d+", answer):
+    temp = answer.split('x')
+    while (not temp[0].isdigit()) and (not temp[1].isdigit()):
         print('You introduced an invalid command, maybe try again.')
         answer = input('~: ')
     return answer

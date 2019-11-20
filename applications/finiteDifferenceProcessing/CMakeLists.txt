@@ -1,7 +1,7 @@
 include_directories( ${LIBRARY_INCLUDE_DIRS_CONJUGATE_GRADIENT_INVERSION} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
-include_directories( ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARDMODEL} )
+include_directories( ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL} )
 
 add_executable( FWI_Process_Finite_Difference main.cpp )
-target_link_libraries( FWI_Process_Finite_Difference conjugate_gradient_inversion_library finite_difference_forwardModel_library core_library)
+target_link_libraries( FWI_Process_Finite_Difference conjugate_gradient_inversion_library finite_difference_forward_model_library core_library)
 install( TARGETS FWI_Process_Finite_Difference DESTINATION bin)

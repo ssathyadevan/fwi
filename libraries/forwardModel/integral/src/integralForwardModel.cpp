@@ -293,17 +293,6 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
     }
 }
 
-std::vector<std::complex<double>> IntegralForwardModel::calculateKappaZeta(PressureFieldSerial& zeta)
-{
-    std::vector<std::complex<double>> kappaZeta(_freq.nFreq * _src.nSrc * _recv.nRecv);
-    for (int i = 0; i != _freq.nFreq * _src.nSrc * _recv.nRecv; ++i)
-    {
-        kappaZeta[i] = Summation(*_Kappa[i], zeta);
-    }
-
-    return kappaZeta;
-}
-
 //void IntegralForwardModel::createKappaOperator(const PressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
 //{
 //    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
@@ -314,26 +303,14 @@ std::vector<std::complex<double>> IntegralForwardModel::calculateKappaZeta(Press
 
 void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
-
     kRes.Zero();
 
-    for (int i = 0; i < _src.nSrc * _recv.nRecv * _freq.nFreq; i++)
+    PressureFieldComplexSerial kDummy(_grid);
+
+    for (int i = 0; i < _freq.nFreq * _recv.nRecv * _src.nSrc; i++)
     {
-        kRes += (*_Kappa[i]).Conjugate() * res[i]; 
+        kDummy = *_Kappa[i];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i];
     }
-
-}
-
-PressureFieldComplexSerial IntegralForwardModel::calculateKappaConjugateResidual(std::vector<std::complex<double>> &res)
-{
-    PressureFieldComplexSerial kRes;
-
-    kRes.Zero();
-
-    for (int i = 0; i < _src.nSrc * _recv.nRecv * _freq.nFreq; i++)
-    {
-        kRes += (*_Kappa[i]).Conjugate() * res[i]; 
-    }
-    return kRes;
-
 }

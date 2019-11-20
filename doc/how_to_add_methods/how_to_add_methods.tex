@@ -29,8 +29,13 @@ The \textit{Factory} class takes care of instantiating the desired method and mo
 We need to edit 3 different \texttt{CMakeLists.txt} files to ensure that the libraries are properly compiled and linked.
 \begin{itemize}
     \item In \texttt{libraries/inversion/CMakeLists.txt}, add a line with the name of your folder, i.e. \texttt{add\_subdirectory ( fooBarInversion ) }. This adds the folder containing your method to the compilation path.
-    \item In your folder, i.e. \texttt{libraries/inversion/fooBarInversion}, a \texttt{CMakeLists.txt} file must compile your method and needs to include the libraries that it depends on. The simplest option is to copy the \texttt{CMakeLists.txt} file in another method, i.e. \textit{randomInversion}, and change where it says RANDOM or random for FOO\_BAR or foo\_bar respectively. If you have to add dependencies to some other library, you can add it also in that file.
-    \item In \texttt{libraries/factory/CMakeLists.txt} we need to make the library with your method available to \textit{Factory}. In order to do that add your library in the same way that the other methods have been added. Add a line adding your directory using \texttt{include\_directories}, i.e.\\\texttt{include\_directories( \$\{LIBRARY\_INCLUDE\_DIRS\_FOO\_BAR\_INVERSION\})}
+    \item Going one level deeper, we find another \texttt{CMakeLists.txt} that routes to the \texttt{src} \& \texttt{test} directories. It must contain:
+    \\
+    \texttt{add\_subdirectory ( src ) }
+    \\
+    \texttt{add\_subdirectory ( test ) }
+    \item In your src folder, i.e. \texttt{libraries/inversion/fooBarInversion/src}, a \texttt{CMakeLists.txt} file must compile your method and needs to include the libraries that it depends on. The simplest option is to copy the \texttt{CMakeLists.txt} file in another method, i.e. \textit{randomInversion}, and change where it says RANDOM or random for FOO\_BAR or foo\_bar respectively. If you have to add dependencies to some other library, you can add it also in that file.
+    \item In \texttt{libraries/factory/src/CMakeLists.txt} we need to make the library with your method available to \textit{Factory}. In order to do that, add your library in the same way that the other methods have been added. Add a line adding your directory using \texttt{include\_directories}, i.e.\\\texttt{include\_directories( \$\{LIBRARY\_INCLUDE\_DIRS\_FOO\_BAR\_INVERSION\})}
     \item In the same file, link your library to the \texttt{target\_link\_libraries} command, i.e. add \texttt{foo\_bar\_inversion\_library} to the list of libraries.
 \end{itemize}
 
@@ -38,8 +43,8 @@ We need to edit 3 different \texttt{CMakeLists.txt} files to ensure that the lib
 \section{Setting up CMake for Forward Models}
 We need to edit 4 different \texttt{CMakeLists.txt} files to ensure that the libraries are properly compiled and linked.
 \begin{itemize}
-    \item In \texttt{libraries/forwarModel/CMakeLists.txt}, add a line with the name of your folder, i.e. \texttt{add\_subdirectory ( fooBarForwardModel ) }. This adds the folder containing your method to the compilation path.
-    \item In your folder, i.e. \texttt{libraries/forwardModel/fooBarForwardModel}, a \texttt{CMakeLists.txt} file must compile your method and needs to include the libraries that it depends on. The simplest option is to copy the \texttt{CMakeLists.txt} file in another forward model, i.e. \textit{integralForwardModel}, and change where it says INTEGRAL or integral for FOO\_BAR or foo\_bar respectively. If you have to add dependencies to some other library, you can add it also in that file.
+    \item In \texttt{libraries/forwardModel/CMakeLists.txt}, add a line with the name of your folder, i.e. \texttt{add\_subdirectory ( fooBarForwardModel ) }. This adds the folder containing your method to the compilation path.
+    \item In your folder, i.e. \texttt{libraries/forwardModel/fooBarForwardModel/src}, a \texttt{CMakeLists.txt} file must compile your method and needs to include the libraries that it depends on. The simplest option is to copy the \texttt{CMakeLists.txt} file in another forward model, i.e. \textit{integralForwardModel}, and change where it says INTEGRAL or integral for FOO\_BAR or foo\_bar respectively. If you have to add dependencies to some other library, you can add it also in that file.
     \item In \texttt{libraries/factory/CMakeLists.txt} we need to make the library with your method available to \textit{Factory}. In order to do that add your library in the same way that the other methods have been added. Add a line adding your directory using \texttt{include\_directories}, i.e.\\\texttt{include\_directories( \$\{LIBRARY\_INCLUDE\_DIRS\_FOO\_BAR\_FORWARDMODEL\})}
     \item In \texttt{application/unifiedProcessing/CMakeLists.txt}, add a line including your directory using \texttt{include\_directories}, i.e. \\\texttt{include\_directories( \$\{LIBRARY\_INCLUDE\_DIRS\_FOO\_BAR\_FORWARDMODEL\})}.
     \item In the same file, add you library to the \texttt{target\_link\_libraries}, i.e. add \texttt{foo\_bar\_forwardModel\_library}.

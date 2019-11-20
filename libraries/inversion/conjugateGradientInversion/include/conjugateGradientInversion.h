@@ -21,10 +21,9 @@ private:
     const Sources& _src;
     const Receivers& _recv;
     const FrequenciesGroup& _freq;
-    
-    double calculateAlpha(std::vector<std::complex<double>>& residuals, PressureFieldSerial& zeta);
-    PressureFieldSerial calculateB(PressureFieldSerial** gradientChiNMin1);
-    double calculateDeltaSquared(PressureFieldSerial** gradientChiNMin1)
+    double _previousLowPoint = std::numeric_limits<double>::max();
+
+    double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
 
 public:
 
