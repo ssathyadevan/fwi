@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mpi.h>
+#include <string>
 
 class CpuClockMPI
 {
@@ -15,4 +16,5 @@ public:
     void Start();
     void End();
     void PrintTimeElapsed();
+    void DebugPrint(std::string msg);
 };

@@ -23,3 +23,8 @@ void CpuClockMPI::PrintTimeElapsed()
 {
     std::cout << "CPU time: " << t_end - t_start;// << " seconds" << std::endl;
 }
+
+void CpuClockMPI::DebugPrint(std::string msg)
+{
+    std::cerr << msg << "CPU time: " << t_end - t_start << " seconds" << std::endl;
+}
