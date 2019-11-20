@@ -5,10 +5,8 @@
 #include <mpi.h>
 #include <iostream>
 
-#define TAG_COMMAND     0
-    #define COMMAND_GETUPDATEDIRECTION  1
-    #define COMMAND_EXIT                -99
-#define TAG_SIZE        1 
+#define COMMAND_GETUPDATEDIRECTION  1
+#define COMMAND_EXIT                -99
 #define TAG_RESARRAY    2 
 #define TAG_RESULT      3
 
@@ -69,31 +67,24 @@ void MPIConjugateGradientInversion::ReconstructSlave(GenericInput gInput){
     while(1){
         MPI_Bcast(&mpi_command, 1, MPI_INT, 0, MPI_COMM_WORLD);//receive command
         if (mpi_command == COMMAND_GETUPDATEDIRECTION){
-            int array_size;
-            MPI_Bcast(&array_size, 1, MPI_INT, 0, MPI_COMM_WORLD);//receive array size
-            //std::cerr << "Un" << std::endl;
+            int array_size = (_src.nSrc * _recv.nRecv * _freq.nFreq * 2) / mpi_size;
+            int block_size = array_size / 2;
+            int offset = block_size * mpi_rank;
             double* deconstructedResArray = new double[array_size];
             MPI_Recv(deconstructedResArray, array_size, MPI_DOUBLE, 0, TAG_RESARRAY, MPI_COMM_WORLD, MPI_STATUS_IGNORE);//receive resArray
             std::vector<std::complex<double>> resArray;
-            //std::cerr << "Dos" << std::endl;
-            for (int i = 0; i < array_size /2 ; i++){                                                       //rebuild resArray
+            for (int i = 0; i < block_size ; i++){                                                       //rebuild resArray
                 std::complex<double> temp = {deconstructedResArray[i*2], deconstructedResArray[i*2+1]};
                 resArray.push_back(temp);
-               // std::cerr << std::setprecision(8) << temp << endl;
             }
-            int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
-            int offset = block_size * mpi_rank;
+            
             _forwardModel->getUpdateDirectionInformationMPI(resArray, tmp, offset, block_size);//calculate result
             PressureFieldSerial result(_grid);
             result = tmp.GetRealPart();
             double* result_data = result.GetDataPtr();
             MPI_Request send_req;
-            //std::cerr << "Tres" << std::endl;
             MPI_Isend(result_data , result.GetNumberOfGridPoints(), MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD, &send_req);//send ResArray
-            //std::cerr << "Y" << std::endl;
             MPI_Waitall( 1, &send_req, MPI_STATUSES_IGNORE);
-            //std::cerr << "Cuatro" << std::endl;
-            //return result
             //std::cerr<< "Get Update Direction" << std::endl;
         }
         if (mpi_command == COMMAND_EXIT){
@@ -108,24 +99,17 @@ void MPIConjugateGradientInversion::ReconstructSlave(GenericInput gInput){
 
 PressureFieldSerial* MPIConjugateGradientInversion::getUpdateDirectionInformation(std::vector<std::complex<double>> resArray, const int mpi_size){
     // MPI GetUpdateDirection
-    CpuClockMPI t;
     int mpi_command = COMMAND_GETUPDATEDIRECTION;
     MPI_Bcast(&mpi_command, 1, MPI_INT, 0, MPI_COMM_WORLD); //Send command
 
-    int array_size = resArray.size()*2;
-    double* deconstructedResArray = new double[ array_size ];
+    int deconstructed_array_size = resArray.size()*2;
+    double* deconstructedResArray = new double[ deconstructed_array_size ];
     int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
-    int partial_array_size = array_size / mpi_size;
-    // if (block_size != partial_array_size){
-    //     std::cerr << "Block is: " << block_size << " and partial array size is : " << partial_array_size << std::endl;
-    //     //exit(EXIT_FAILURE);
-    // }else{
-    //     std::cerr << "is equal" << std::endl;
-    // }
+    int partial_array_size = deconstructed_array_size / mpi_size;
 
-    MPI_Bcast(&partial_array_size, 1, MPI_INT, 0, MPI_COMM_WORLD); //Send size
+    //MPI_Bcast(&partial_array_size, 1, MPI_INT, 0, MPI_COMM_WORLD); //Send size
 
-    for (unsigned i = 0; i < resArray.size() ; i++){                                   //Serialize resArray into chain of doubles
+    for (unsigned i = 0; i < resArray.size() ; i++){              //Serialize resArray into chain of doubles
         deconstructedResArray[i * 2]     = resArray[i].real();
         deconstructedResArray[i * 2 + 1] = resArray[i].imag();
     }
@@ -138,17 +122,12 @@ PressureFieldSerial* MPIConjugateGradientInversion::getUpdateDirectionInformatio
     }
     
     PressureFieldComplexSerial tmp(_grid);
-    //std::cerr << block_size << std::endl;
     tmp.Zero();
-    t.Start();
     _forwardModel->getUpdateDirectionInformationMPI(resArray, tmp, 0, block_size);
-    t.End();
-    //t.DebugPrint("just the update part in FWM: ");
     PressureFieldSerial* result = new PressureFieldSerial(_grid);
     *result = tmp.GetRealPart();
     double* result_data = result->GetDataPtr();
 
-    //for (int i = 0 ; i < result.GetNumberOfGridPoints(); i++) std::cout << result_data[i] << std::endl;
     
     double** partialResult = new double*[mpi_size-1];
     MPI_Request* recv_req = new MPI_Request[mpi_size-1];
@@ -169,8 +148,6 @@ PressureFieldSerial* MPIConjugateGradientInversion::getUpdateDirectionInformatio
 PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput ){
     int mpi_size, mpi_command;
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-
-    CpuClockMPI c, t;
 
     //ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
 
@@ -227,13 +204,10 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
         //start the inner loop
         for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
         {
-            t.Start();
             if (it1 == 0)
             {
-                c.Start();
-                PressureFieldSerial* result = this->getUpdateDirectionInformation(resArray, mpi_size);               
-                c.End();
-                //c.DebugPrint("GetUpdateDirectionInformation ");
+                PressureFieldSerial* result = this->getUpdateDirectionInformation(resArray, mpi_size);      
+
                 g = eta * *result; //eq: gradientRunc
                 zeta = g;
 
@@ -370,8 +344,6 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 bsquaredOld = bsquared;
             }
             //bar++;
-            t.End();
-            t.DebugPrint("Total iter ");
         } // end regularisation loop
     }
     file.close(); // close the residual.log file

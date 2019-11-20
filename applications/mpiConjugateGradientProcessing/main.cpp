@@ -88,7 +88,7 @@ void writePlotInput(const GenericInput &gInput)
 
 void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank)
 {
-    CpuClockMPI a;
+    //CpuClockMPI a;
     
     // initialize the grid, sources, receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
@@ -131,11 +131,9 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
     if (mpi_rank==0){
          std::cout << "Estimating Chi..." << std::endl;
-a.Start();
+
         PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
-    a.End();
-    a.DebugPrint("reconstruct ");
         std::cout << "Done, writing to file" << std::endl;
 
         chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
