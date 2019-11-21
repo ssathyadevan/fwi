@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../../runtime/lib/libgradient_descent_inversion_library.a  CMakeFiles/gradient_descent_inversion_library.dir/gradientDescentInversion.cpp.o CMakeFiles/gradient_descent_inversion_library.dir/gradientDescentInversionInputCardReader.cpp.o
+/usr/bin/ranlib ../../../../runtime/lib/libgradient_descent_inversion_library.a
