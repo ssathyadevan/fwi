@@ -24,6 +24,7 @@ TEST(SourcesTest, ConstructorTest)
     for (std::vector<std::array<double, 2>>::iterator iter = sources.xSrc.begin(); iter != sources.xSrc.end(); ++iter)
     {
         EXPECT_NEAR(iter->front(), iteration_counter*dx, 0.001);
+        EXPECT_NEAR(iter->back(), iteration_counter*dx, 0.001);
         ++iteration_counter;
     }
 }
