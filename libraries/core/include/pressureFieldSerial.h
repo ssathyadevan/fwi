@@ -29,7 +29,7 @@ public:
     // Virtual overrides
     virtual void Zero();
 
-    virtual void Random();
+    virtual void Random(); // unused?
     virtual void RandomSaurabh(); //Generates random approximations of Saurabh
     virtual void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
 
@@ -72,7 +72,6 @@ public:
     PressureFieldSerial& operator+=(const PressureFieldSerial &rhs);
 
     PressureFieldSerial& operator+=(const double rhs);
-
 };
 
 inline double InnerProduct(const PressureFieldSerial &x, const PressureFieldSerial &y)
