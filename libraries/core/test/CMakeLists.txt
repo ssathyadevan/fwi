@@ -26,3 +26,4 @@ build_test(TARGET pressureFieldSerialTest SOURCE pressureFieldSerialTest.cpp LIB
 build_test(TARGET pressureFieldComplexSerialTest SOURCE pressureFieldComplexSerialTest.cpp LIBRARIES core_library)
 build_test(TARGET greensSerialTest SOURCE greensSerialTest.cpp LIBRARIES core_library)
 build_test(TARGET sourcesTest SOURCE sourcesTest.cpp LIBRARIES core_library)
+build_test(TARGET receiversTest SOURCE receiversTest.cpp LIBRARIES core_library)
