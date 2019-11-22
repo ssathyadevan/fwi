@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../../runtime/lib/libevolution_inversion_library.a  CMakeFiles/evolution_inversion_library.dir/evolutionInversion.cpp.o CMakeFiles/evolution_inversion_library.dir/evolutionInversionInputCardReader.cpp.o
-/usr/bin/ranlib ../../../../runtime/lib/libevolution_inversion_library.a

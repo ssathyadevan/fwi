@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../../runtime/lib/libconjugate_gradient_inversion_library.a  CMakeFiles/conjugate_gradient_inversion_library.dir/conjugateGradientInversion.cpp.o CMakeFiles/conjugate_gradient_inversion_library.dir/conjugateGradientInversionInputCardReader.cpp.o
-/usr/bin/ranlib ../../../../runtime/lib/libconjugate_gradient_inversion_library.a
