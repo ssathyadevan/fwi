@@ -1,4 +1,5 @@
 #include "MPIConjugateGradientInversion.h"
+#include "factory.h"
 #include "integralForwardModel.h"
 #include "inversionInterface.h"
 #include "inputCardReader.h"
@@ -11,15 +12,17 @@
 #include <string>
 #include <mpi.h>
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank);
+void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank, std::string desired_forward_model);
 void writePlotInput(const GenericInput &gInput);
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    if (argc != 3)
     {
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
+
+        std::cout << "Please give the forward model as argument." << std::endl;
         exit(EXIT_FAILURE);
 
     }
@@ -33,6 +36,7 @@ int main(int argc, char **argv)
     std::vector<std::string> arguments(argv + 1, argc + argv);
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
+    std::string desired_forward_model = arguments[1];
 
     if (mpi_rank == 0) std::cerr << "MPI initialized with " << mpi_size << " threads." <<std::endl;
     if (!gInput.verbose)
@@ -45,7 +49,7 @@ int main(int argc, char **argv)
         create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
         clock.Start();
     }
-        performInversion(gInput, gInput.runName, mpi_rank);
+        performInversion(gInput, gInput.runName, mpi_rank, desired_forward_model);
 
     if (mpi_rank == 0) { //MASTER THREAD
         clock.End();
@@ -86,7 +90,7 @@ void writePlotInput(const GenericInput &gInput)
     lastrun.close();
 }
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank)
+void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank, std::string desired_forward_model)
 {
     //CpuClockMPI a;
     
@@ -125,7 +129,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
     MPIConjugateGradientInversion *inverse;
     inverse = new MPIConjugateGradientInversion(model, gInput);
 

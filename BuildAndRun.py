@@ -58,33 +58,22 @@ if sys.platform.startswith('linux'):
         checking_for_errors(check, current_directory)
         os.system('rm -r temp')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')    
+        if ind_run[1] == 'integralForwardModel':
+            check = os.system('./FWI_PreProcess ../' + ind_run[5])
+        elif ind_run[1] == 'finiteDifferenceForwardModel':
+            check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
+        else:
+            print('there is something wrong with the ForwardModel you choose. The preprocessing was done with integralForwardModel')
+            check = os.system('./FWI_PreProcess ../' + ind_run[5])
+        checking_for_errors(check, current_directory)
         if ind_run[0] != "MPIConjugateGradientInversion":
-            if ind_run[1] == 'integralForwardModel':
-                check = os.system('./FWI_PreProcess ../' + ind_run[5])
-            elif ind_run[1] == 'finiteDifferenceForwardModel':
-                check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
-            else:
-                print('there is something wrong with the ForwardModel you choose. The preprocessing was done with integralForwardModel')
-                check = os.system('./FWI_PreProcess ../' + ind_run[5])
-            checking_for_errors(check, current_directory)
             check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
         else:
             if mpi:
-                print("MPI requires using the integral forward model")
-                check = os.system('./FWI_PreProcess ../' + ind_run[5])
-                checking_for_errors(check, current_directory)
-                check = os.system('mpiexec -n 3 --allow-run-as-root ./FWI_MPIProcess ../' + ind_run[5])#+ ' ' + ind_run[0] + ' ' + ind_run[1]) #valgrind --tool=callgrind --cache-sim=yes --separate-threads=yes
+                check = os.system('mpiexec -n 3 --allow-run-as-root ./FWI_MPIProcess ../' + ind_run[5] + ' ' + ind_run[1])#+ ' ' + ind_run[0] + ' ' + ind_run[1]) #valgrind --tool=callgrind --cache-sim=yes --separate-threads=yes
             else: 
                 print("MPI is not installed, using conjugate gradient inversion on single thread instead")
                 ind_run[0] = "conjugateGradientInversion"
-                if ind_run[1] == 'integralForwardModel':
-                    check = os.system('./FWI_PreProcess ../' + ind_run[5])
-                elif ind_run[1] == 'finiteDifferenceForwardModel':
-                    check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
-                else:
-                    print('there is something wrong with the ForwardModel you choose. The preprocessing was done with integralForwardModel')
-                    check = os.system('./FWI_PreProcess ../' + ind_run[5])
-                checking_for_errors(check, current_directory)
                 check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
         checking_for_errors(check, current_directory)
 

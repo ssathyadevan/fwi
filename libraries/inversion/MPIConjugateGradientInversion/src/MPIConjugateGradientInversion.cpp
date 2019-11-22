@@ -149,8 +149,8 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     int mpi_size, mpi_command;
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
-    ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
-    bar.setTerminalWidth(80);
+    //ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
+    //bar.setTerminalWidth(80);
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
     double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
@@ -327,7 +327,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
                 //breakout check
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) || (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance)))) {
-                    bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
+                    //bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break; }        
 
                 chiEst.Gradient(gradientChiOld);
@@ -343,7 +343,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 gOld = g;
                 bsquaredOld = bsquared;
             }
-            bar++;
+            //bar++;
         } // end regularisation loop
     }
     file.close(); // close the residual.log file
