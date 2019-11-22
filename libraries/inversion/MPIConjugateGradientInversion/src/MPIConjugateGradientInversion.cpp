@@ -64,7 +64,8 @@ void MPIConjugateGradientInversion::ReconstructSlave(GenericInput gInput){
     tmp.Zero();
     PressureFieldComplexSerial tmp2(_grid);
     tmp2.Zero();
-    while(1){
+    mpi_command = 0;
+    while(mpi_command != COMMAND_EXIT){
         MPI_Bcast(&mpi_command, 1, MPI_INT, 0, MPI_COMM_WORLD);//receive command
         if (mpi_command == COMMAND_GETUPDATEDIRECTION){
             int array_size = (_src.nSrc * _recv.nRecv * _freq.nFreq * 2) / mpi_size;
@@ -85,12 +86,8 @@ void MPIConjugateGradientInversion::ReconstructSlave(GenericInput gInput){
             MPI_Request send_req;
             MPI_Isend(result_data , result.GetNumberOfGridPoints(), MPI_DOUBLE, 0, TAG_RESULT, MPI_COMM_WORLD, &send_req);//send ResArray
             MPI_Waitall( 1, &send_req, MPI_STATUSES_IGNORE);
+            delete deconstructedResArray;
             //std::cerr<< "Get Update Direction" << std::endl;
-        }
-        if (mpi_command == COMMAND_EXIT){
-            //std::cerr<< "Exit" << std::endl;
-
-            break;
         }
         //loop
     }
@@ -142,6 +139,11 @@ PressureFieldSerial* MPIConjugateGradientInversion::getUpdateDirectionInformatio
             result_data[i] += partialResult[j][i];
         }
     }
+    delete deconstructedResArray;
+    for (int i = 0; i < mpi_size - 1; i++){
+        delete partialResult[i];
+    }
+    delete partialResult;
     return result;
 }
 

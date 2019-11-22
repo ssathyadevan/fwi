@@ -319,7 +319,7 @@ void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::com
     kRes.Zero();
 
     PressureFieldComplexSerial kDummy(_grid);
-
+    
     for (int i = offset; i < offset + block_size; i++)
     {
         kDummy = *_Kappa[i];
