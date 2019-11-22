@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process");
+        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process", -1);
     }
 
     chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
