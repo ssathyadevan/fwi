@@ -1,6 +1,5 @@
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
-#include "cpuClockMPI.h"
 
 IntegralForwardModel::IntegralForwardModel(const Grid2D &grid, const Sources &src, const Receivers &recv,
                                            const FrequenciesGroup &freq, const GenericInput &gInput)
@@ -320,18 +319,14 @@ void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::com
     kRes.Zero();
 
     PressureFieldComplexSerial kDummy(_grid);
-    //CpuClockMPI c;
     
     int count = 0;
     for (int i = offset; i < offset + block_size; i++)
     {
-        //c.Start();
         kDummy = *_Kappa[i];
         kDummy.Conjugate();
         kRes += kDummy * res[i - offset];
         count++;
-        //c.End();
-        //c.DebugPrint( std::to_string(count) );
     }
     
 }
