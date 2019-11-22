@@ -224,3 +224,15 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
         EXPECT_NEAR(data_pfs_1[i], 0.4, 0.0001);
     }
 }
+
+TEST(PressureFieldSerialTEST, SummationTest)
+{
+    PressureFieldSerial pfs_1 = getPFS();
+    pfs_1 = 0.1;
+    int numGridPoints = pfs_1.GetNumberOfGridPoints();
+
+    double summationResult = pfs_1.Summation();
+    double correctResult = 0.1 * static_cast<double>(numGridPoints);
+
+    EXPECT_NEAR(summationResult, correctResult, 0.0001);
+}
