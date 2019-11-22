@@ -13,7 +13,7 @@ if sys.platform.startswith('linux'):
         os.mkdir('Build')
     os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
     check = os.system('cmake -DCMAKE_BUILD_TYPE=Release ' +
-                      '-DCMAKE_INSTALL_PREFIX=~/FWIInstall ../parallelized-fwi/')
+                      '-DCMAKE_INSTALL_PREFIX=../FWIInstall ../parallelized-fwi/')
     checking_for_errors(check, current_directory)
-    check = os.system('make -j4 install')
+    check = os.system('make install')
     checking_for_errors(check, current_directory)
