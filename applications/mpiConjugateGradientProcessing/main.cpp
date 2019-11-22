@@ -21,12 +21,12 @@ int main(int argc, char **argv)
         std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
         exit(EXIT_FAILURE);
-
     }
     CpuClockMPI clock;
     int mpi_initialized, mpi_finalized, mpi_rank, mpi_size;
     MPI_Initialized(&mpi_initialized);
-    if (!mpi_initialized) MPI_Init(&argc, &argv);
+    if (!mpi_initialized)
+        MPI_Init(&argc, &argv);
 
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -34,22 +34,23 @@ int main(int argc, char **argv)
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
 
-    if (mpi_rank == 0) std::cerr << "MPI initialized with " << mpi_size << " threads." <<std::endl;
     if (!gInput.verbose)
     {
         WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process", mpi_rank);
     }
-    
-    if (mpi_rank == 0) { //MASTER THREAD
+
+    if (mpi_rank == 0)
+    { //MASTER THREAD
+        std::cerr << "MPI initialized with " << mpi_size << " threads." << std::endl;
         chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
         create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
         clock.Start();
     }
-        performInversion(gInput, gInput.runName, mpi_rank);
+    performInversion(gInput, gInput.runName, mpi_rank);
 
-    if (mpi_rank == 0) { //MASTER THREAD
+    if (mpi_rank == 0)
+    { //MASTER THREAD
         clock.End();
-
 
         std::cout << "Visualisation of the estimated temple using FWI" << std::endl;
         chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
@@ -59,11 +60,11 @@ int main(int argc, char **argv)
         clock.PrintTimeElapsed();
     }
 
-        
-        MPI_Finalized(&mpi_finalized);
-        if (!mpi_finalized) MPI_Finalize();
+    MPI_Finalized(&mpi_finalized);
+    if (!mpi_finalized)
+        MPI_Finalize();
 
-        return 0;
+    return 0;
 }
 
 void writePlotInput(const GenericInput &gInput)
@@ -89,7 +90,7 @@ void writePlotInput(const GenericInput &gInput)
 void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank)
 {
     //CpuClockMPI a;
-    
+
     // initialize the grid, sources, receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
@@ -102,7 +103,8 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
     //read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
-    if (mpi_rank==0){ //MASTER
+    if (mpi_rank == 0)
+    { //MASTER
         std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
         std::ifstream file(fileLocation);
         CSVReader row;
@@ -129,19 +131,20 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     MPIConjugateGradientInversion *inverse;
     inverse = new MPIConjugateGradientInversion(model, gInput);
 
-    if (mpi_rank==0){
-         std::cout << "Estimating Chi..." << std::endl;
+    if (mpi_rank == 0)
+    {
+        std::cout << "Estimating Chi..." << std::endl;
 
         PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
         std::cout << "Done, writing to file" << std::endl;
 
         chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
-    }else{
+    }
+    else
+    {
         inverse->ReconstructSlave(gInput);
     }
     delete model;
     delete inverse;
 }
-
-
