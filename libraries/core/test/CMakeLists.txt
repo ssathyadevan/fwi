@@ -24,4 +24,10 @@ SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 build_test(TARGET grid2DTest SOURCE grid2DTest.cpp LIBRARIES core_library)
 build_test(TARGET pressureFieldSerialTest SOURCE pressureFieldSerialTest.cpp LIBRARIES core_library)
 build_test(TARGET pressureFieldComplexSerialTest SOURCE pressureFieldComplexSerialTest.cpp LIBRARIES core_library)
+<<<<<<< HEAD
 build_test(TARGET greensSerialTest SOURCE greensSerialTest.cpp LIBRARIES core_library)
+=======
+build_test(TARGET greensSerialTest SOURCE greensSerialTest.cpp LIBRARIES core_library)
+build_test(TARGET sourcesTest SOURCE sourcesTest.cpp LIBRARIES core_library)
+build_test(TARGET receiversTest SOURCE receiversTest.cpp LIBRARIES core_library)
+>>>>>>> chris_develop
