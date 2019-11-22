@@ -1,5 +1,4 @@
-#ifndef VOLCOMPLEXFIELD_RECT_2D_H
-#define VOLCOMPLEXFIELD_RECT_2D_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -8,22 +7,22 @@
 #include <grid2D.h>
 #include <pressureField.h>
 
-class pressureFieldComplex
+class PressureFieldComplex
 {
 
-  const grid2D &grid;
+  const Grid2D &grid;
   const int nGridPoints;
   const double cellVolume;
-  pressureFieldComplex(const pressureFieldComplex&) = delete;
-  pressureFieldComplex& operator=(const pressureFieldComplex&) = delete;
+  PressureFieldComplex(const PressureFieldComplex&) = delete;
+  PressureFieldComplex& operator=(const PressureFieldComplex&) = delete;
 
 public:
 
-  pressureFieldComplex(const grid2D &grid_);
+  PressureFieldComplex(const Grid2D &grid_);
 
-  virtual ~pressureFieldComplex() {}
+  virtual ~PressureFieldComplex() {}
 
-  const grid2D &GetGrid() const { return grid; }
+  const Grid2D &GetGrid() const { return grid; }
 
   int GetNumberOfGridPoints() const { return nGridPoints; }
   double getCellVolume() const { return cellVolume; }
@@ -40,4 +39,3 @@ public:
 
 };
 
-#endif /* VOLCOMPLEXFIELD_RECT_2D_H */

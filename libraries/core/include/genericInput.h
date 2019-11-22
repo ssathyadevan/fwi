@@ -1,9 +1,10 @@
 #pragma once
+
 #include "freq.h"
 #include <array>
 #include "nSourcesReceivers.h"
 
-struct genericInput
+struct GenericInput
 {
      std::string caseFolder;
      std::string inputFolder;
@@ -17,6 +18,7 @@ struct genericInput
      std::array<double,2> sourcesBottomRightCornerInM;
      std::array<double,2> receiversTopLeftCornerInM;
      std::array<double,2> receiversBottomRightCornerInM;
+	std::array<int,2> ngrid_original;
      std::array<int,2> ngrid;
      NSourcesReceivers nSourcesReceivers;
      std::string fileName;

@@ -1,5 +1,4 @@
-#ifndef RECEIVERS_RECT_2D_H
-#define RECEIVERS_RECT_2D_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -7,20 +6,19 @@
 
 #include "sources.h"
 
-class receivers
+class Receivers
 {
 
-    receivers& operator=(const receivers&);
+  Receivers &operator=(const Receivers &); // unused?
 
 public:
-
   const int nRecv;
-  std::vector< std::array<double, 2> > xRecv;
+  std::vector<std::array<double, 2>> xRecv;
 
-  receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
+  Receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
 
   void Print();
 
+private:
+  std::array<double, 2> calculate_distance(const std::array<double, 2> xMin, const std::array<double, 2> xMax);
 };
-
-#endif

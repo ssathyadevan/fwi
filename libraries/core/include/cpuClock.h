@@ -1,9 +1,8 @@
-#ifndef CPUCLOCK_H
-#define CPUCLOCK_H
+#pragma once
 
 #include <ctime>
 
-class cpuClock
+class CpuClock
 {
 private:
 
@@ -11,11 +10,9 @@ private:
     clock_t t_end;
 
 public:
-    cpuClock();
-    ~cpuClock();
+    CpuClock();
+    ~CpuClock();
     void Start();
     void End();
     void PrintTimeElapsed();
 };
-
-#endif /* CPUCLOCK_H */

@@ -5,8 +5,7 @@
  *      Author: Michiel de Reus
  */
 
-#ifndef GREENSFUNCTIONS_H
-#define GREENSFUNCTIONS_H
+#pragma once
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -30,4 +29,3 @@ double Helmholtz3D_imag(double k, double r);
 
 std::complex<double>  Helmholtz3D(double k, double r);
 }
-#endif /* GREENSFUNCTIONS_H */

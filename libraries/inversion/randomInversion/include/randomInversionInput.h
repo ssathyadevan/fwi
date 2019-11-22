@@ -1,9 +1,8 @@
-#ifndef RANDOMINVERSIONINPUT_H
-#define RANDOMINVERSIONINPUT_H
-struct randomInversionInput
+#pragma once
+
+struct RandomInversionInput
 {
     double toleranceOuter;
     int nMaxOuter;
     int nMaxInner;
 };
-#endif // RANDOMINVERSIONINPUT_H

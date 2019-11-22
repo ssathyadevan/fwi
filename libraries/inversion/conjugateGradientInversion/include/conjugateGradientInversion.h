@@ -1,38 +1,38 @@
-#ifndef INVERSION_CPU
-#define INVERSION_CPU
+#pragma once
 
 #include <fstream>
 #include <sstream>
+#include "genericInput.h"
+#include "conjugateGradientInversionInputCardReader.h"
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
-#include "conjugateGradientInput.h"
+#include "conjugateGradientInversionInput.h"
 
 using std::cout;
 using std::endl;
 
-class conjugateGradientInversion : public inversionInterface
+class ConjugateGradientInversion : public InversionInterface
 {
 private:
     ForwardModelInterface* _forwardModel;
-    conjugateGradientInput _cgInput;
+    ConjugateGradientInversionInput _cgInput;
 
-    const grid2D& _grid;
-    const sources& _src;
-    const receivers& _recv;
-    const frequenciesGroup& _freq;
+    const Grid2D& _grid;
+    const Sources& _src;
+    const Receivers& _recv;
+    const FrequenciesGroup& _freq;
+    double _previousLowPoint = std::numeric_limits<double>::max();
 
+    double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
 
 public:
 
-    conjugateGradientInversion(ForwardModelInterface *forwardModel, const conjugateGradientInput &cgInput);
+    ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput& gInput);
 
-    conjugateGradientInversion(const conjugateGradientInversion&) = delete;
-    conjugateGradientInversion& operator=(const conjugateGradientInversion&) = delete;
+    ConjugateGradientInversion(const ConjugateGradientInversion&) = delete;
+    ConjugateGradientInversion& operator=(const ConjugateGradientInversion&) = delete;
 
     double findRealRootFromCubic(double a, double b, double c, double d);
 
-    pressureFieldSerial Reconstruct(const std::complex<double> *const pData, genericInput gInput );
+    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
 };
-
-#endif // INVERSION_CPU
-

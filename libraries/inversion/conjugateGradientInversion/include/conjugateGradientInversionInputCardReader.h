@@ -1,18 +1,18 @@
-#ifndef CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
-#define CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H
+#pragma once
+
 #include "inputCardReader.h"
-#include "conjugateGradientInput.h"
+#include "conjugateGradientInversionInput.h"
 #include <string>
 #include <fstream>
 #include <sstream>
-class conjugateGradientInversionInputCardReader:public inputCardReader
+
+class ConjugateGradientInversionInputCardReader : public InputCardReader
 {
 public:
-    conjugateGradientInversionInputCardReader(const std::string &caseFolder);
-    conjugateGradientInput getInput();
+    ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
+    ConjugateGradientInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
-    conjugateGradientInput _input;
+    ConjugateGradientInversionInput _input;
 };
 
-#endif // CONJUGATEGRADIENTINVERSIONINPUTCARDREADER_H

@@ -1,5 +1,4 @@
-#ifndef CHI_VISUALISATION_IN_INTEGER_FORM_H
-#define CHI_VISUALISATION_IN_INTEGER_FORM_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -10,4 +9,3 @@
 
 void chi_visualisation_in_integer_form(std::string filename, int nxt);
 
-#endif // CHI_VISUALISATION_IN_INTEGER_FORM_H

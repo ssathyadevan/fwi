@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -Werror=vla --std=c++17 -O3 -DNDEBUG   CMakeFiles/FWI_Process_Gradient_Descent.dir/main.cpp.o  -o ../../runtime/bin/FWI_Process_Gradient_Descent ../../runtime/lib/libgradient_descent_inversion_library.a ../../runtime/lib/libintegral_forward_model_library.a ../../runtime/lib/libcore_library.a 

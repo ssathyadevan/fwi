@@ -6,7 +6,7 @@
 #include "frequenciesGroup.h"
 #include "pressureFieldComplexSerial.h"
 #include "sources.h"
-#include "finiteDifferenceInput.h"
+#include "finiteDifferenceForwardModelInput.h"
 
 #include <complex>
 #include <vector>
@@ -14,13 +14,13 @@
 
 class Helmholtz2D {
   public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceInput &fmInput);
+    explicit Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput);
     ~Helmholtz2D();
-    pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
+    PressureFieldComplexSerial solve(const std::array<double, 2> &source, PressureFieldComplexSerial &pInit);
   private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
-    const grid2D _oldgrid;
+    const Grid2D _oldgrid;
     FiniteDifferenceGrid2D *_newgrid;
     std::array<int, 2> _PMLwidth;
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
@@ -33,5 +33,5 @@ class Helmholtz2D {
 
     void buildMatrix();
     void buildVector(const std::array<double, 2> &source);
-    void updateChi(const pressureFieldSerial &chi);
+    void updateChi(const PressureFieldSerial &chi);
 };

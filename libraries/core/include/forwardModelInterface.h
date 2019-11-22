@@ -1,5 +1,4 @@
-#ifndef FORWARDMODELINTERFACE_H
-#define FORWARDMODELINTERFACE_H
+#pragma once
 
 #include "pressureFieldSerial.h"
 #include "pressureFieldComplexSerial.h"
@@ -10,7 +9,7 @@
 
 #include <complex>
 
-inline double normSq(const std::complex<double> *data, int n)
+inline double normSq(const std::vector<std::complex<double>> &data, int n)
 {
     double result = double(0.0);
     for(int i=0; i<n; i++)
@@ -21,7 +20,7 @@ inline double normSq(const std::complex<double> *data, int n)
     return result;
 }
 
-inline double normSq(std::complex<double> *data, int n)
+inline double normSq(std::vector<std::complex<double>> &data, int n)
 {
     double result = double(0.0);
     for(int i=0; i<n; i++)
@@ -36,37 +35,35 @@ class ForwardModelInterface
 {
 
 public:
-    ForwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                          const frequenciesGroup &freq);
+    ForwardModelInterface(const Grid2D &grid, const Sources &src, const Receivers &recv,
+                          const FrequenciesGroup &freq);
 
     virtual ~ForwardModelInterface();
 
-    const grid2D& getGrid();
-    const sources& getSrc();
-    const receivers& getRecv();
-    const frequenciesGroup& getFreq();
+    const Grid2D& getGrid();
+    const Sources& getSrc();
+    const Receivers& getRecv();
+    const FrequenciesGroup& getFreq();
 
-    virtual void calculatePData(const pressureFieldSerial &chiEst, std::complex<double> *pData) = 0;
-    virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::complex<double> *kOperator) = 0;
+    virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData) = 0;
+    virtual void calculatePTot(const PressureFieldSerial &chiEst) = 0;
+    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
     virtual void calculateKappa() {std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE);}
-    virtual void getUpdateDirectionInformation(std::complex<double>* res, pressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
 
-    std::complex<double>* calculateResidual(const pressureFieldSerial &chiEst, const std::complex<double> *pDataRef);
-    double calculateResidualNormSq(std::complex<double> *residual);
+    std::vector<std::complex<double>>& calculateResidual(const PressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
+    double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
 
 private:
 
-    std::complex<double> *_residual;
+    std::vector<std::complex<double>> _residual;
 
 protected:
-    const grid2D            &_grid;
-    const sources           &_src;
-    const receivers         &_recv;
-    const frequenciesGroup  &_freq;
+    const Grid2D            &_grid;
+    const Sources           &_src;
+    const Receivers         &_recv;
+    const FrequenciesGroup  &_freq;
 
 };
-
-#endif
 

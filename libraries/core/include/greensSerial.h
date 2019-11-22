@@ -1,5 +1,4 @@
-#ifndef GREENS_RECT_2D_CPU_H
-#define GREENS_RECT_2D_CPU_H
+#pragma once
 
 #include <cassert>
 
@@ -8,7 +7,7 @@
 #include "receivers.h"
 #include "grid2D.h"
 #include "contraction.h"
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <pressureFieldComplexSerial.h>
 
 using namespace Eigen;
@@ -17,25 +16,25 @@ class Greens_rect_2D_cpu
 {
 public:
 
-  Greens_rect_2D_cpu(const grid2D &grid_,
+  Greens_rect_2D_cpu(const Grid2D &grid_,
                      const std::function< std::complex<double>(double,double) > G_func_,
-                     const sources &src_, const receivers &recv_,
+                     const Sources &src_, const Receivers &recv_,
                      double k_);
 
   ~Greens_rect_2D_cpu();
 
   const std::complex<double>* GetGreensVolume() const { return G_vol; }
 
-  const pressureFieldComplexSerial* GetReceiverCont(int iRecv) const { return G_recv[iRecv];}
+  const PressureFieldComplexSerial* GetReceiverCont(int iRecv) const { return G_recv[iRecv];}
 
-  pressureFieldComplexSerial ContractWithField(const pressureFieldComplexSerial &x) const;
+  PressureFieldComplexSerial ContractWithField(const PressureFieldComplexSerial &x) const;
 
-  const grid2D &GetGrid() const { return grid; }
+  const Grid2D &GetGrid() const { return grid; }
 
   // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
   // Equation ID: "rel:buildField"
 
-  pressureFieldComplexSerial dot1(const pressureFieldComplexSerial &dW) const;
+  PressureFieldComplexSerial dot1(const PressureFieldComplexSerial &dW) const;
 
 private:
 
@@ -49,13 +48,13 @@ private:
 
   std::function< std::complex<double>(double,double) > G_func;
 
-  const grid2D &grid;
-  const sources &src;
-  const receivers &recv;
+  const Grid2D &grid;
+  const Sources &src;
+  const Receivers &recv;
   const double k;
 
   std::complex<double> *G_vol;
-  std::vector< pressureFieldComplexSerial *> G_recv;
+  std::vector< PressureFieldComplexSerial *> G_recv;
 
   Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
 
@@ -64,4 +63,3 @@ private:
 
 };
 
-#endif /* GREENS_RECT_2D_CPU_H */

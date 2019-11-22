@@ -1,18 +1,19 @@
 #pragma once
+
 #include <vector>
-#include<string>
+#include <string>
 #include "inputCardReader.h"
 #include "genericInput.h"
 
 
-class genericInputCardReader: public inputCardReader
+class GenericInputCardReader: public InputCardReader
 {   
 public:
-    genericInputCardReader(const std::string &runName);
-    genericInput getInput();
+    GenericInputCardReader(const std::string &runName);
+    GenericInput getInput();
 
 private:
     void readCard(const std::string &caseFolder);
 
-    genericInput _input;
+    GenericInput _input;
 };

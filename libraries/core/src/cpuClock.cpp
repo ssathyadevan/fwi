@@ -1,25 +1,24 @@
 #include "cpuClock.h"
 #include <iostream>
 
-cpuClock::cpuClock() {}
-cpuClock::~cpuClock(){}
+CpuClock::CpuClock() {}
+CpuClock::~CpuClock() {}
 
-void cpuClock::Start()
+void CpuClock::Start()
 {
     std::time_t start = std::time(nullptr);
-    std::cout << "Starting at " <<  std::asctime(std::localtime(&start)) << std::endl;
+    std::cout << "Starting at " << std::asctime(std::localtime(&start)) << std::endl;
     t_start = clock();
 }
 
-void cpuClock::End()
+void CpuClock::End()
 {
     std::time_t finish = std::time(nullptr);
-    std::cout << "Finished at " <<  std::asctime(std::localtime(&finish)) << std::endl;
+    std::cout << "Finished at " << std::asctime(std::localtime(&finish)) << std::endl;
     t_end = clock();
 }
 
-void cpuClock::PrintTimeElapsed()
+void CpuClock::PrintTimeElapsed()
 {
-    std::cout << "CPU time: " << (float(t_end-t_start))/CLOCKS_PER_SEC << " seconds" << std::endl;
+    std::cout << "CPU time: " << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" << std::endl;
 }
-

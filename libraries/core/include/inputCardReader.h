@@ -1,5 +1,5 @@
-#ifndef READERVAR
-#define READERVAR
+#pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -8,14 +8,13 @@
 
 #include "json.h"
 
-class inputCardReader
+class InputCardReader
 {
 public:
-    virtual ~inputCardReader() = default;
+    virtual ~InputCardReader() = default;
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
 
     nlohmann::json readFile(const std::string &fileName);
 };
 
-#endif

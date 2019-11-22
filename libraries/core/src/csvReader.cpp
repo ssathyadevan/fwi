@@ -1,6 +1,6 @@
 #include "csvReader.h"
 
-std::string const& CSVReader::operator[](std::size_t index) const
+std::string const &CSVReader::operator[](std::size_t index) const
 {
     return m_data[index];
 }
@@ -10,16 +10,16 @@ std::size_t CSVReader::size() const
     return m_data.size();
 }
 
-void CSVReader::readNextRow(std::istream& str)
+void CSVReader::readNextRow(std::istream &str)
 {
-    std::string         line;
+    std::string line;
     std::getline(str, line);
 
-    std::stringstream   lineStream(line);
-    std::string         cell;
+    std::stringstream lineStream(line);
+    std::string cell;
 
     m_data.clear();
-    while(std::getline(lineStream, cell, ','))
+    while (std::getline(lineStream, cell, ','))
     {
         m_data.push_back(cell);
     }
@@ -30,5 +30,3 @@ void CSVReader::readNextRow(std::istream& str)
         m_data.push_back("");
     }
 }
-
-

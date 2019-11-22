@@ -1,5 +1,5 @@
 {
-    "nMaxInner": 10,
+    "nMaxInner": 5,
     "nMaxOuter": 10,
     "toleranceOuter": 5.0e-5
 }
