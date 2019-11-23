@@ -31,7 +31,7 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
     while (std::getline(myfile, line))
     {
         value = stod(line);
-        dummy = std::round(((value) / contrast_difference * resolution) + rock_character); //cast value read to int printed by linear interpol
+        dummy = std::lround(((value) / contrast_difference * resolution) + rock_character); //cast value read to int printed by linear interpol
         if (dummy < 0)
         {
             dummy = 0;

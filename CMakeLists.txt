@@ -24,9 +24,14 @@ endif()
 
 # Setup consistent and strict warning flags across compilers
 if ( MSVC )
+    # Disable some of the security warnings
+    message( STATUS "    Additional compiler flag to disable 'unsafe methods' security-warnings:" )
+    message( STATUS "        '-D_CRT_SECURE_NO_WARNINGS' -D_SCL_SECURE_NO_WARNINGS" )
+    add_definitions( -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS )
+
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W4")
 elseif ( CMAKE_COMPILER_IS_GNUCC )
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror=vla")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Werror=vla")
 endif()
 
 enable_testing()
