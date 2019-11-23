@@ -44,11 +44,11 @@ void ProgressBar::setTotal(const int total){
     _total = total;
 }
 
-const int ProgressBar::getCounter(){
+int ProgressBar::getCounter(){
     return _counter;
 }
 
-const int ProgressBar::getTotal(){
+int ProgressBar::getTotal(){
     return _total;
 }
 
@@ -77,7 +77,7 @@ ProgressBar& ProgressBar::operator--(int)
    return --*this;
 }
 
-const void ProgressBar::print(){
+void ProgressBar::print(){
 #ifdef __unix__
     std::cerr << "\033[1A";
     std::cerr << "\033[1A";

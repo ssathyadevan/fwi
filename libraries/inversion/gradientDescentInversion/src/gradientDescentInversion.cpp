@@ -98,7 +98,7 @@ double GradientDescentInversion::functionF(PressureFieldSerial xi, const std::ve
 }
 
 
-PressureFieldSerial GradientDescentInversion::gradientDescent(const std::vector<std::complex<double>> &pData, PressureFieldSerial x, std::vector<double> dfdx, double gamma, double eta)
+PressureFieldSerial GradientDescentInversion::gradientDescent(const std::vector<std::complex<double>> &, PressureFieldSerial x, std::vector<double> dfdx, double gamma, double)
 {
     double* p_x = x.GetDataPtr();
 
