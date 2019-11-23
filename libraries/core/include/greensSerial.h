@@ -48,9 +48,9 @@ private:
 
   std::function< std::complex<double>(double,double) > G_func;
 
-  const Grid2D &grid;
-  const Sources &src;
-  const Receivers &recv;
+  const Grid2D grid;
+  const Sources src;
+  const Receivers recv;
   const double k;
 
   std::complex<double> *G_vol;

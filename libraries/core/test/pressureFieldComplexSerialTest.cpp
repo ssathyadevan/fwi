@@ -12,10 +12,10 @@ Grid2D getGrid()
     return grid;
 }
 
-PressureFieldComplexSerial getPFCS()
+PressureFieldComplexSerial getPFCS( Grid2D&  g )
 {
-    Grid2D grid = getGrid();
-    PressureFieldComplexSerial pfcs(grid);
+    //Grid2D grid = getGrid();
+    PressureFieldComplexSerial pfcs( g );
     std::function<std::complex<double>(double, double)> func = [](double a, double b){return std::complex<double>(a, b);}; // y = a + bi
     pfcs.SetField(func);
 
@@ -24,8 +24,9 @@ PressureFieldComplexSerial getPFCS()
 
 TEST(pressureFieldComplexSerialTest, squareTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs( g );
+    pfcs = getPFCS( g );
     /* Reason for initiating this way:
     *       When doing: PressureFieldComplexSerial pfcs = getPFCS();
     *       The copy-constructor is called, which uses memcpy().
@@ -58,8 +59,9 @@ TEST(pressureFieldComplexSerialTest, setFieldTest)
 
 TEST(pressureFieldComplexSerialTest, reciprocalTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
 
     pfcs.Reciprocal();
 
@@ -72,8 +74,9 @@ TEST(pressureFieldComplexSerialTest, reciprocalTest)
 
 TEST(PressureFieldComplexSerialTest, conjugateTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
     pfcs.Conjugate();
 
     std::complex<double>* ptr = pfcs.GetDataPtr();
@@ -83,25 +86,27 @@ TEST(PressureFieldComplexSerialTest, conjugateTest)
 
 TEST(PressureFieldComplexSerialTest, normTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
 
     EXPECT_NEAR(pfcs.Norm(), 4.527, 0.1);
 }
 
 TEST(PressureFieldComplexSerialTest, relNormTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
 
     EXPECT_NEAR(pfcs.RelNorm(), 0.566, 0.1);
 }
 
 TEST(PressureFieldComplexSerial, innerProductTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
-
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
     std::complex<double> result = pfcs.InnerProduct(pfcs);
     
     EXPECT_NEAR(std::real(result), 20.5, 0.01);
@@ -110,8 +115,9 @@ TEST(PressureFieldComplexSerial, innerProductTest)
 
 TEST(PressureFieldComplexSerial, summationPFCSTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
 
     std::complex<double> result = pfcs.Summation(pfcs);
     
@@ -121,10 +127,11 @@ TEST(PressureFieldComplexSerial, summationPFCSTest)
 
 TEST(PressureFieldComplexSerial, summationPFSTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
 
-    PressureFieldSerial pfs(getGrid());
+    PressureFieldSerial pfs(g);
     std::function<double(double, double)> func = [](double x, double z){return x+z;}; // Linear tilted plane, x & z are centroids of grid cell.
     pfs.SetField(func);
 
@@ -136,10 +143,10 @@ TEST(PressureFieldComplexSerial, summationPFSTest)
 
 TEST(PressureFieldComplexSerial, getRealPartTest)
 {
-    PressureFieldComplexSerial pfcs(getGrid());
-    pfcs = getPFCS();
-
-    PressureFieldSerial pfs(getGrid());
+	Grid2D g = getGrid();
+	PressureFieldComplexSerial pfcs(g);
+	pfcs = getPFCS(g);
+    PressureFieldSerial pfs(g);
     pfs = pfcs.GetRealPart();
     double* ptr = pfs.GetDataPtr();
 
