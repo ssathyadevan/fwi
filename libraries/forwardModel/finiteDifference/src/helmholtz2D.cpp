@@ -1,5 +1,7 @@
 #include "helmholtz2D.h"
 
+static const double pi = std::atan(1.0) / 4.0;
+
 Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
@@ -157,7 +159,7 @@ void Helmholtz2D::buildMatrix()
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
     std::array<double, 2> xMin = _newgrid->GetGridStart();
-    double omega = _freq * 2.0 * M_PI;
+    double omega = _freq * 2.0 * pi;
 
     // Build matrix from new elements
     std::vector<Eigen::Triplet<std::complex<double>>> triplets;
@@ -386,7 +388,7 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
                     // Sine source function
                     if (nxdist > 0.0)
                     {
-                        fx = Wx * sin(M_PI * nxdist) / (dx[0] * M_PI * nxdist);
+                        fx = Wx * sin(pi * nxdist) / (dx[0] * pi * nxdist);
                     }
                     else
                     {
@@ -395,7 +397,7 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
 
                     if (nzdist > 0.0)
                     {
-                        fz = Wz * sin(M_PI * nzdist) / (dx[1] * M_PI * nzdist);
+                        fz = Wz * sin(pi * nzdist) / (dx[1] * pi * nzdist);
                     }
                     else
                     {

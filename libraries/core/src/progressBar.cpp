@@ -27,7 +27,7 @@ int ProgressBar::findTerminalSize(){
     ioctl(STDERR_FILENO, TIOCGWINSZ, &size);
     return size.ws_col;
 #else
-    std::err << "Progress bar disbled on windows";
+    std::cerr << "Progress bar disbled on windows";
     return 80;
 #endif
 }

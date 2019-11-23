@@ -1,5 +1,7 @@
 #include "greensFunctions.h"
 
+static const double pi = std::atan(1.0) / 4.0;
+
 namespace GreensFunctions
 {
 
@@ -30,12 +32,12 @@ std::complex<double> Helmholtz2D(double k, double r)
 
 double Helmholtz3D_real(double k, double r)
 {
-    return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::cos(k * r) * k * k); // Babak 2018 10 25: Equation ID "GreensFunc2d": real pardouble of Greens function from a 3D Helmhotz equation.
+    return (r == 0.0 ? 0.0 : 0.25 / (r * pi) * std::cos(k * r) * k * k); // Babak 2018 10 25: Equation ID "GreensFunc2d": real pardouble of Greens function from a 3D Helmhotz equation.
 }
 
 double Helmholtz3D_imag(double k, double r)
 {
-    return (r == 0.0 ? 0.0 : 0.25 / (r * M_PI) * std::sin(k * r) * k * k); // Babak 2018 10 25: Equation ID "GreensFunc2d": imnaginary pardouble of Greens function from a 3D Helmhotz equation
+    return (r == 0.0 ? 0.0 : 0.25 / (r * pi) * std::sin(k * r) * k * k); // Babak 2018 10 25: Equation ID "GreensFunc2d": imnaginary pardouble of Greens function from a 3D Helmhotz equation
 }
 
 std::complex<double> Helmholtz3D(double k, double r)

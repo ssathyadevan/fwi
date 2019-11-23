@@ -7,7 +7,7 @@
 #include "receivers.h"
 #include "grid2D.h"
 #include "contraction.h"
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 #include <pressureFieldComplexSerial.h>
 
 using namespace Eigen;
