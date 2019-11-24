@@ -60,7 +60,8 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "cassert": "cpp"
     },
     "python.pythonPath": "venv/bin/python3.7"
 }

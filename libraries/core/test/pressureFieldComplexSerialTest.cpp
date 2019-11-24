@@ -153,3 +153,127 @@ TEST(PressureFieldComplexSerial, getRealPartTest)
     EXPECT_EQ(ptr[0], 0.5);
     EXPECT_EQ(ptr[1], 1.5);
 }
+
+TEST(PressureFieldComplexSerialTest, ZeroTest)
+{
+    using namespace std::complex_literals;
+
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs = getPFCS(g);
+    pfcs.Zero();
+    std::complex<double> *data_pfcs = pfcs.GetDataPtr();
+
+    std::complex<double> correctResult = 0i;
+    EXPECT_EQ(data_pfcs[1], correctResult);
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorAssignPressureFieldComplexSerialTest)
+{
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g);
+    PressureFieldComplexSerial pfcs_2 = pfcs_1;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+    std::complex<double> *data_pfcs_2 = pfcs_2.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], data_pfcs_2[i]);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorAssignDoubleTest)
+{
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g);
+    pfcs_1 = 0.1;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], 0.1);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorSubtractPressureFieldComplexSerialTest)
+{
+	Grid2D g1 = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g1);
+	// Grid2D g2 = getGrid();
+    PressureFieldComplexSerial pfcs_2 = getPFCS(g1);
+    pfcs_1 = 0.2;
+    pfcs_2 = 0.1;
+
+    pfcs_1 -= pfcs_2;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], 0.1);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorSubtractDoubleTest)
+{
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g);
+    pfcs_1.Zero();
+    pfcs_1 -= 0.1;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], -0.1);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorDivideByDoubleTest)
+{
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g);
+    pfcs_1 = 0.2;
+    pfcs_1 /= 2.0;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], 0.1);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorMultiplyByPressureComplexFieldSerialTest)
+{
+	Grid2D g1 = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g1);
+	// Grid2D g2 = getGrid();
+    PressureFieldComplexSerial pfcs_2 = getPFCS(g1);
+    pfcs_1 = 0.2;
+    pfcs_2 = 2.0;
+    pfcs_1 *= pfcs_2;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], 0.4);
+    }
+}
+
+TEST(PressureFieldComplexSerialTest, OperatorMultiplyByDoubleTest)
+{
+	Grid2D g = getGrid();
+    PressureFieldComplexSerial pfcs_1 = getPFCS(g);
+    pfcs_1 = 0.2;
+    pfcs_1 *= 2.0;
+
+    std::complex<double> *data_pfcs_1 = pfcs_1.GetDataPtr();
+
+    for (int i = 0; i != pfcs_1.GetNumberOfGridPoints(); ++i)
+    {
+        EXPECT_EQ(data_pfcs_1[i], 0.4);
+    }
+}

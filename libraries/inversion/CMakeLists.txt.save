@@ -1,7 +1,0 @@
-
-add_subdirectory(conjugateGradientInversion)
-add_subdirectory(randomInversion)
-<<<<<<< HEAD
-add_subdirectory(inversionFactoryadd_subdirectory(gradientDescentInversion)
-
->>>>>>> gradientDescent

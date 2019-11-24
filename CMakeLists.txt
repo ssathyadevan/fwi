@@ -22,6 +22,15 @@ if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
    set( CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install )
 endif()
 
+find_package(MPI)
+
+if ( UNIX )
+if(MPI_FOUND)
+    set(CMAKE_CXX_COMPILER /usr/bin/mpicxx)
+else(MPI_FOUND)
+    set(CMAKE_CXX_COMPILER /usr/bin/g++)
+endif(MPI_FOUND)
+endif( )
 # Setup consistent and strict warning flags across compilers
 if ( MSVC )
     # Disable some of the security warnings

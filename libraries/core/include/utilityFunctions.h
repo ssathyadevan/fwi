@@ -3,13 +3,18 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <sstream>
 #include <vector>
 
-inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix)
+inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix, const int rank)
 {
-    std::cout << "Printing the program output onto a file named: " + runName + postfix + ".out in the output folder" << std::endl;
-    std::string tempString = outputLocation + runName + postfix + ".out";
-    if (freopen(tempString.c_str(),"w", stdout)) {}
+	if (rank > 0) {
+		std::cout.setstate(std::ios_base::failbit);//Supress cout output
+		return;
+	}
+	std::cout << "Printing the program output onto a file named: " + runName + postfix + ".out in the output folder" << std::endl;
+	std::string tempString = outputLocation + runName + postfix + ".out";
+	if (freopen(tempString.c_str(),"w", stdout)) {}
 }
 
 inline double dist(double x, double z)
@@ -20,8 +25,8 @@ inline double dist(double x, double z)
 inline std::vector<std::string> returnInputDirectory(int c, char** v = NULL)
 {
         if(c < 2) {
-                std::vector<std::string> arguments = {"./"};
-                return arguments;
+        	std::vector<std::string> arguments = {"./"};
+            return arguments;
         }
         std::vector<std::string> arguments(v+1, c+v);
         return arguments;

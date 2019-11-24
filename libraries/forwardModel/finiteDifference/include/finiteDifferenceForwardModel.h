@@ -21,6 +21,7 @@ public:
     void calculateKappa();
     virtual void calculatePTot(const PressureFieldSerial &chiEst);
     virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes);
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size);
     virtual void getResidualGradient(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes);
     virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
