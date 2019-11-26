@@ -138,7 +138,7 @@ void IntegralForwardModel::deleteKappa()
 
 PressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rect_2D_cpu &G, const PressureFieldSerial &chi, const PressureFieldComplexSerial &p_init)
 {
-    assert(&G.GetGrid() == &p_init.GetGrid());
+    assert(G.GetGrid() == p_init.GetGrid());
 
     Iter2 iter2 = _fmInput.iter2;
 

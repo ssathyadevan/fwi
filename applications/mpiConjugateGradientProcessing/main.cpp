@@ -148,7 +148,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
     else
     {
-        inverse->ReconstructSlave(gInput);
+        inverse->ReconstructSlave();
     }
     delete model;
     delete inverse;

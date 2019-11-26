@@ -55,7 +55,7 @@ double MPIConjugateGradientInversion::calculateAlpha(PressureFieldSerial& zeta, 
     return alphaDiv[0] / alphaDiv[1];
 }
 
-void MPIConjugateGradientInversion::ReconstructSlave(GenericInput gInput){
+void MPIConjugateGradientInversion::ReconstructSlave(){
     int mpi_command, mpi_size, mpi_rank;
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);

@@ -10,15 +10,15 @@ ProgressBar::ProgressBar(const int total, const int counter): _total(total), _co
 }
 
 void ProgressBar::hideCursor(){
-#ifdef __unix__
-    std::cerr<< "\e[?25l" << std::endl << std::endl; //hide cursor and leave some space
-#endif
+// #ifdef __unix__
+//     std::cerr<< "\e[?25l" << std::endl << std::endl; //hide cursor and leave some space
+// #endif
 }
 
 void ProgressBar::showCursor(){
-#ifdef __unix__
-    std::cerr<< "\e[?25h"; //show cursor
-#endif
+// #ifdef __unix__
+//     std::cerr<< "\e[?25h"; //show cursor
+// #endif
 }
 
 int ProgressBar::findTerminalSize(){

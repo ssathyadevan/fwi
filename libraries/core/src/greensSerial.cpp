@@ -21,7 +21,7 @@ Greens_rect_2D_cpu::~Greens_rect_2D_cpu()
 PressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const PressureFieldComplexSerial &x) const
 {
     // Assure we are working on the same grid
-    assert(&grid == &x.GetGrid());
+    assert(grid == x.GetGrid());
     PressureFieldComplexSerial y(grid);
     std::complex<double> *y_data = y.GetDataPtr();
     const std::array<int, 2> &nx = grid.GetGridDimensions();
@@ -43,7 +43,7 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
     std::complex<double> *p_prod = prod1.GetDataPtr();
     const std::complex<double> *p_dW = dW.GetDataPtr();
 
-    assert(&grid == &dW.GetGrid());
+    assert(grid == dW.GetGrid());
 
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> dummy;
