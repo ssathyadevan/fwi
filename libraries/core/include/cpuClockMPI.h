@@ -9,12 +9,14 @@ private:
 
     double t_start;
     double t_end;
+    time_t start;
+    time_t end;
 
 public:
-    CpuClockMPI();
-    ~CpuClockMPI();
     void Start();
     void End();
-    void PrintTimeElapsed();
+    std::string OutputString();
+    CpuClockMPI();
+    ~CpuClockMPI();
     void DebugPrint(std::string msg);
 };

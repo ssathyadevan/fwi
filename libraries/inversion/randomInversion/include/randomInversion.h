@@ -7,9 +7,6 @@
 #include "genericInput.h"
 
 
-using std::cout;
-using std::endl;
-
 
 class RandomInversion : public InversionInterface
 {

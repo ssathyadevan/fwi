@@ -1,4 +1,5 @@
 #include "frequenciesGroup.h"
+#include "log.h"
 
 namespace fwi {
 	static const double pi = std::atan(1.0) * 4.0;
@@ -17,10 +18,9 @@ FrequenciesGroup::FrequenciesGroup(Freq freqStruct, double c_0_)
 
 void FrequenciesGroup::Print(int nFreqTotal)
 {
-    std::cout << "Total number of frequencies is " << nFreqTotal << ". Values:" << std::endl;
+    L_(linfo) << "Total number of frequencies is " << nFreqTotal << ". Values:" ;
     for (int i = 0; i < nFreqTotal; i++)
     {
-        std::cout << "f = " << freq[i] << ", k = " << k[i] << std::endl;
+        L_(linfo) << "f = " << freq[i] << ", k = " << k[i] ;
     }
-    std::cout << std::endl;
 }

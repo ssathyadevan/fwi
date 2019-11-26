@@ -2,6 +2,7 @@
 #include "MPIConjugateGradientInversion.h"
 #include "progressBar.h"
 #include "cpuClockMPI.h"
+#include "log.h"
 #include <mpi.h>
 #include <iostream>
 
@@ -181,7 +182,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     file.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
     if (!file)
     {
-        std::cout << "Failed to open the file to store residuals" << std::endl;
+        L_(lerror) << "Failed to open the file to store residuals" ;
         std::exit(EXIT_FAILURE);
     }
     int counter = 1;
@@ -234,7 +235,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
                 res = eta * resSq;
 
-                std::cout << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
+                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res ;
 
                 file << std::setprecision(17) << res << "," << counter << std::endl;
                 counter++; // store the residual value in the residual log
@@ -319,8 +320,8 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 resSq = _forwardModel->calculateResidualNormSq(resArray);
                 res = eta * resSq;
 
-                std::cout << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: "
-                            << std::setprecision(17) << res << std::endl;
+                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: "
+                            << std::setprecision(17) << res ;
 
                 file << std::setprecision(17) << res << "," << counter << std::endl; // store the residual value in the residual log
                 counter++;

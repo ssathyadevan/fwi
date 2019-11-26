@@ -1,4 +1,5 @@
 #include "pressureFieldSerial.h"
+#include "log.h"
 
 PressureFieldSerial::PressureFieldSerial(const Grid2D &grid) : PressureField(grid),
                                                                data(new double[this->GetNumberOfGridPoints()]) {}
@@ -64,7 +65,7 @@ void PressureFieldSerial::toFile(const std::string &fileName) const
     file.open(fileName, std::ios::out | std::ios::trunc);
     if (!file)
     {
-        std::cout << "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
@@ -82,8 +83,8 @@ void PressureFieldSerial::fromFile(const GenericInput &input)
     std::ifstream file(inputFolder + input.fileName + ".txt", std::ios::in);
     if (!file)
     {
-        std::cout << "Looking for file " << inputFolder + input.fileName + ".txt" << std::endl;
-        std::cout << "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Looking for file " << inputFolder + input.fileName + ".txt" ;
+        L_(lerror) << "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " ;
         std::exit(EXIT_FAILURE);
     }
 

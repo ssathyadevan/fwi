@@ -1,6 +1,8 @@
 #include "cpuClockMPI.h"
 #include <iostream>
+#include <sstream>
 #include <ctime>
+#include "log.h"
 
 CpuClockMPI::CpuClockMPI() {}
 CpuClockMPI::~CpuClockMPI() {}
@@ -8,20 +10,28 @@ CpuClockMPI::~CpuClockMPI() {}
 void CpuClockMPI::Start()
 {
     t_start = MPI_Wtime();
-    time_t start = (time_t) t_start;
-    std::cout << "Starting at " << std::asctime(std::localtime(&start)) << std::endl;
+    start = (time_t) t_start;
+    L_(linfo) << "Starting at " << std::asctime(std::localtime(&start)) ;
 }
 
 void CpuClockMPI::End()
 {
     t_end = MPI_Wtime();
-    time_t end = (time_t) t_end;
-    std::cout << "Finished at " << std::asctime(std::localtime(&end)) << std::endl;
+    end = (time_t) t_end;
+    L_(linfo) << "Finished at " << std::asctime(std::localtime(&end)) ;
 }
 
-void CpuClockMPI::PrintTimeElapsed()
+std::string CpuClockMPI::OutputString()
 {
-    std::cout << "CPU time: " << t_end - t_start;// << " seconds" << std::endl;
+    L_(linfo) << "CPU time: " << (float(t_end - t_start)) << " seconds" ;
+        // This part is needed for plotting the chi values in postProcessing.py
+    std::stringstream ss;
+    ss << std::endl << "Timing:" << std::endl;
+    ss << "Starting at " << std::asctime(std::localtime(&start));
+    ss << "Finished at " << std::asctime(std::localtime(&end));
+    ss << "CPU time: " << (float(t_end - t_start)) << " seconds" << std::endl;
+    
+    return ss.str();
 }
 
 void CpuClockMPI::DebugPrint(std::string msg)

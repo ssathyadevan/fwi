@@ -1,4 +1,5 @@
 #include "inputCardReader.h"
+#include "log.h"
 
 nlohmann::json InputCardReader::readFile(const std::string &fileName)
 {
@@ -7,7 +8,7 @@ nlohmann::json InputCardReader::readFile(const std::string &fileName)
 
     if (!in.is_open())
     {
-        std::cout << "Could not open file at " << fileName << std::endl;
+        L_(lwarning) << "Could not open file at " << fileName ;
         std::exit(EXIT_FAILURE);
     }
 

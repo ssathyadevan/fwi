@@ -1,4 +1,5 @@
 #include "helmholtz2D.h"
+#include "log.h"
 
 namespace fwi {
     static const double pi = std::atan(1.0) * 4.0;
@@ -130,7 +131,7 @@ PressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &sourc
     Eigen::VectorXcd result = _solver.solve(_b);
     if (_solver.info() != Eigen::Success)
     {
-        std::cout << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
+        L_(lerror) << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage() ;
         exit(EXIT_FAILURE);
     }
 
@@ -341,7 +342,7 @@ void Helmholtz2D::buildMatrix()
     _solver.factorize(_A);
     if (_solver.info() != Eigen::Success)
     {
-        std::cout << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage() << std::endl;
+        L_(lerror) << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage() ;
         exit(EXIT_FAILURE);
     }
 }

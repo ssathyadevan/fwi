@@ -1,4 +1,5 @@
 #include "pressureFieldComplexSerial.h"
+#include "log.h"
 
 PressureFieldComplexSerial::PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs)
     : PressureFieldComplexSerial(rhs.GetGrid())
@@ -48,13 +49,13 @@ void PressureFieldComplexSerial::toFile(const std::string &fileName) const
     file.open(fileName, std::ios::out | std::ios::trunc);
     if (!file)
     {
-        std::cout << "Unable to open the file in .toFile method of volComplexField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Unable to open the file in .toFile method of volComplexField_rect_2D_cpu class " << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
-        file << std::showpos << std::setprecision(17) << "(" << real(data[i]) << imag(data[i]) << "j)" << std::endl;
+        file << std::showpos << std::setprecision(17) << "(" << real(data[i]) << imag(data[i]) << "j)" ;
     }
     file.close();
 }
@@ -65,7 +66,7 @@ void PressureFieldComplexSerial::fromFile(const std::string &fileName)
     std::ifstream file(fileName, std::ios::in);
     if (!file)
     {
-        std::cout << "Unable to open the file in .fromFile method of volComplexField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Unable to open the file in .fromFile method of volComplexField_rect_2D_cpu class " ;
         std::exit(EXIT_FAILURE);
     }
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)

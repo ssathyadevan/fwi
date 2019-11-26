@@ -9,16 +9,17 @@
 #include "integralForwardModel.h"
 #include "inversionInterface.h"
 #include "gradientDescentInversion.h"
+#include "log.h"
 
 void performInversion(const GenericInput &gInput, const std::string &runName);
-void writePlotInput(const GenericInput &gInput);
+void writePlotInput(const GenericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
     if (argc != 2)
     {
-        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
+        L_(lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        L_(lerror) << "Make sure the input folder inside the case folder contains the files GenericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
@@ -27,15 +28,12 @@ int main(int argc, char **argv)
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
 
-    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    //gradientDescentInversionInputCardReader GradientDescentInversionReader(gInput.caseFolder);
-
-    //integralForwardModelInput ifmInput = forwardModelReader.getInput();
-    //gradientDescentInversionInput gdInput = GradientDescentInversionReader.getInput();
+    std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process", -1);
+        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+        initLogger( logFileName.c_str(), ldebug);
     }
 
     chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
@@ -46,17 +44,17 @@ int main(int argc, char **argv)
     clock.Start();
     performInversion(gInput, gInput.runName);
     clock.End();
-    clock.PrintTimeElapsed();
 
-    std::cout << "Visualisation of the estimated temple using FWI" << std::endl;
+    L_(linfo) << "Visualisation of the estimated temple using FWI" ;
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
-    writePlotInput(gInput);
+    std::string msg = clock.OutputString();
+    writePlotInput(gInput, msg);
 
     return 0;
 }
 
-void writePlotInput(const GenericInput &gInput)
+void writePlotInput(const GenericInput &gInput, std::string msg)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -66,7 +64,7 @@ void writePlotInput(const GenericInput &gInput)
     outputfwi << "nxt   = " << gInput.ngrid[0] << std::endl;
     outputfwi << "nzt   = " << gInput.ngrid[1] << std::endl;
     outputfwi << "nxt_original   = " << gInput.ngrid_original[0] << std::endl;
-    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl;
+    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl << msg;
     outputfwi.close();
 
     // This part is needed for plotting the chi values in postProcessing.py
@@ -98,7 +96,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
 
     if (!file.is_open())
     {
-        std::cout << "Could not open file at " << fileLocation;
+        L_(lerror) << "Could not open file at " << fileLocation;
         exit(EXIT_FAILURE);
     }
 
@@ -119,11 +117,11 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
     inverse = new GradientDescentInversion(model, gInput);
 
     //    gradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
-    std::cout << "Estimating Chi..." << std::endl;
+    L_(linfo) << "Estimating Chi..." ;
 
     PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
-    std::cout << "Done, writing to file" << std::endl;
+    L_(linfo) << "Done, writing to file" ;
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 

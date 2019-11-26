@@ -8,9 +8,6 @@
 #include "forwardModelInterface.h"
 #include "MPIConjugateGradientInversionInput.h"
 
-using std::cout;
-using std::endl;
-
 class MPIConjugateGradientInversion : public InversionInterface
 {
 private:

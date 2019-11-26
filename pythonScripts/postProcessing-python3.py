@@ -18,14 +18,14 @@ sys.path.insert(0, "../parallelized-fwi/pythonScripts/classes")
 from OutputLogger import OutputLogger
 
 def find(substr, whichin):
-    lines = [x for x in open(whichin+"Process.out") if substr in x]
+    lines = [x for x in open(whichin+".pythonIn") if substr in x]
     line = lines[0]
     manip = line.replace(substr, '').replace("\n", '')
     start_or_finish = (datetime.strptime(manip, '%c'))
     return start_or_finish
 
 def findPreciseTiming(substr, whichin):
-    lines = [x for x in open(whichin+"Process.out") if substr in x]
+    lines = [x for x in open(whichin+".pythonIn") if substr in x]
     line = lines[0]
     return line.replace(substr, '').replace("\n", '')
 

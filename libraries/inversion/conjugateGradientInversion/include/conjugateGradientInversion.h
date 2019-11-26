@@ -7,9 +7,7 @@
 #include "inversionInterface.h"
 #include "forwardModelInterface.h"
 #include "conjugateGradientInversionInput.h"
-
-using std::cout;
-using std::endl;
+#include "log.h"
 
 class ConjugateGradientInversion : public InversionInterface
 {

@@ -1,24 +1,34 @@
 #include "cpuClock.h"
-#include <iostream>
+#include <sstream>
+#include "log.h"
 
 CpuClock::CpuClock() {}
 CpuClock::~CpuClock() {}
 
 void CpuClock::Start()
 {
-    std::time_t start = std::time(nullptr);
-    std::cout << "Starting at " << std::asctime(std::localtime(&start)) << std::endl;
+    start = std::time(nullptr);
+    L_(linfo) << "Starting at " << std::asctime(std::localtime(&start)) ;
     t_start = clock();
 }
 
 void CpuClock::End()
 {
-    std::time_t finish = std::time(nullptr);
-    std::cout << "Finished at " << std::asctime(std::localtime(&finish)) << std::endl;
+    finish = std::time(nullptr);
+    L_(linfo) << "Finished at " << std::asctime(std::localtime(&finish)) ;
     t_end = clock();
 }
 
-void CpuClock::PrintTimeElapsed()
+std::string CpuClock::OutputString()
 {
-    std::cout << "CPU time: " << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" << std::endl;
+    L_(linfo) << "CPU time: " << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" ;
+        // This part is needed for plotting the chi values in postProcessing.py
+    std::stringstream ss;
+    
+    ss << "Timing:" << std::endl;
+    ss << "Starting at " << std::asctime(std::localtime(&start)) << std::endl;
+    ss << "Finished at " << std::asctime(std::localtime(&finish)) << std::endl;
+    ss<< "CPU time: " << (float(t_end - t_start)) / CLOCKS_PER_SEC << " seconds" << std::endl;
+
+    return ss.str();
 }

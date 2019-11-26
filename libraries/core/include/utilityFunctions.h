@@ -6,16 +6,16 @@
 #include <sstream>
 #include <vector>
 
-inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix, const int rank)
-{
-	if (rank > 0) {
-		std::cout.setstate(std::ios_base::failbit);//Supress cout output
-		return;
-	}
-	std::cout << "Printing the program output onto a file named: " + runName + postfix + ".out in the output folder" << std::endl;
-	std::string tempString = outputLocation + runName + postfix + ".out";
-	if (freopen(tempString.c_str(),"w", stdout)) {}
-}
+// inline void WriteToFileNotToTerminal(std::string outputLocation, std::string runName, std::string postfix, const int rank)
+// {
+// 	if (rank > 0) {
+// 		L_(linfo).setstate(std::ios_base::failbit);//Supress cout output
+// 		return;
+// 	}
+// 	L_(linfo) << "Printing the program output onto a file named: " + runName + postfix + ".out in the output folder" << std::endl;
+// 	std::string tempString = outputLocation + runName + postfix + ".out";
+// 	if (freopen(tempString.c_str(),"w", stdout)) {}
+// }
 
 inline double dist(double x, double z)
 {
