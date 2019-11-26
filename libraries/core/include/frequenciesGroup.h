@@ -15,7 +15,8 @@ class FrequenciesGroup
 public:
 
   const int nFreq;
-  const double c_0, &d_freq;
+  const double c_0;
+  const double d_freq;
   std::vector<double> freq;
   std::vector<double> k;
 

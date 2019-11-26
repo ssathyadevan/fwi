@@ -10,15 +10,15 @@ ProgressBar::ProgressBar(const int total, const int counter): _total(total), _co
 }
 
 void ProgressBar::hideCursor(){
-#ifdef __unix__
-    std::cerr<< "\e[?25l" << std::endl << std::endl; //hide cursor and leave some space
-#endif
+// #ifdef __unix__
+//     std::cerr<< "\e[?25l" << std::endl << std::endl; //hide cursor and leave some space
+// #endif
 }
 
 void ProgressBar::showCursor(){
-#ifdef __unix__
-    std::cerr<< "\e[?25h"; //show cursor
-#endif
+// #ifdef __unix__
+//     std::cerr<< "\e[?25h"; //show cursor
+// #endif
 }
 
 int ProgressBar::findTerminalSize(){
@@ -27,7 +27,7 @@ int ProgressBar::findTerminalSize(){
     ioctl(STDERR_FILENO, TIOCGWINSZ, &size);
     return size.ws_col;
 #else
-    std::err << "Progress bar disbled on windows";
+    std::cerr << "Progress bar disbled on windows";
     return 80;
 #endif
 }
@@ -44,11 +44,11 @@ void ProgressBar::setTotal(const int total){
     _total = total;
 }
 
-const int ProgressBar::getCounter(){
+int ProgressBar::getCounter(){
     return _counter;
 }
 
-const int ProgressBar::getTotal(){
+int ProgressBar::getTotal(){
     return _total;
 }
 
@@ -77,7 +77,7 @@ ProgressBar& ProgressBar::operator--(int)
    return --*this;
 }
 
-const void ProgressBar::print(){
+void ProgressBar::print(){
 #ifdef __unix__
     std::cerr << "\033[1A";
     std::cerr << "\033[1A";

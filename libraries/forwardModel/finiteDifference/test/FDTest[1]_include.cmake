@@ -1,5 +1,0 @@
-if(EXISTS "/home/chris/Documents/parallelized-fwi/libraries/forwardModel/finiteDifference/test/FDTest[1]_tests.cmake")
-  include("/home/chris/Documents/parallelized-fwi/libraries/forwardModel/finiteDifference/test/FDTest[1]_tests.cmake")
-else()
-  add_test(FDTest_NOT_BUILT FDTest_NOT_BUILT)
-endif()

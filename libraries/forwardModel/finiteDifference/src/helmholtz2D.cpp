@@ -1,5 +1,8 @@
 #include "helmholtz2D.h"
 
+namespace fwi {
+    static const double pi = std::atan(1.0) * 4.0;
+}
 Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
@@ -15,8 +18,8 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
     dx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0] - 1);
     dx[1] = (xMax[1] - xMin[1]) / static_cast<double>(oldnx[1] - 1);
 
-    _PMLwidth[0] = std::ceil(fmInput.pmlWidthFactor.x * waveLength / dx[0]);
-    _PMLwidth[1] = std::ceil(fmInput.pmlWidthFactor.z * waveLength / dx[1]);
+    _PMLwidth[0] = static_cast< int >( std::ceil(fmInput.pmlWidthFactor.x * waveLength / dx[0]) );
+    _PMLwidth[1] = static_cast< int >( std::ceil(fmInput.pmlWidthFactor.z * waveLength / dx[1]) );
 
     // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
@@ -51,10 +54,10 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
         extraHeightBottom = srcZmin[1] - xMax[1] + dx[1] * r;
     }
 
-    int extraGridPointsLeft = std::ceil(extraWidthLeft / dx[0]);
-    int extraGridPointsRight = std::ceil(extraWidthRight / dx[0]);
-    int extraGridPointsBottom = std::ceil(extraHeightBottom / dx[1]);
-    int extraGridPointsTop = std::ceil(extraHeightTop / dx[1]);
+    int extraGridPointsLeft = static_cast< int >( std::ceil(extraWidthLeft / dx[0]) );
+    int extraGridPointsRight = static_cast<int>( std::ceil(extraWidthRight / dx[0]) );
+    int extraGridPointsBottom = static_cast<int>( std::ceil(extraHeightBottom / dx[1]) );
+    int extraGridPointsTop = static_cast<int>( std::ceil(extraHeightTop / dx[1]) );
 
     _idxUpperLeftDomain[0] = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1] = _PMLwidth[1] + extraGridPointsTop;
@@ -157,7 +160,7 @@ void Helmholtz2D::buildMatrix()
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<double, 2> dx = _newgrid->GetMeshSize();
     std::array<double, 2> xMin = _newgrid->GetGridStart();
-    double omega = _freq * 2.0 * M_PI;
+    double omega = _freq * 2.0 * fwi::pi;
 
     // Build matrix from new elements
     std::vector<Eigen::Triplet<std::complex<double>>> triplets;
@@ -356,8 +359,8 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
     {
         // Add point source to the nearest grid point
         std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
-        int i = _idxUpperLeftDomain[0] + std::round((source[0] - originalxMin[0]) / dx[0]);
-        int j = _idxUpperLeftDomain[1] + std::round((source[1] - originalxMin[1]) / dx[1]);
+        int i = _idxUpperLeftDomain[0] + std::lround((source[0] - originalxMin[0]) / dx[0]);
+        int j = _idxUpperLeftDomain[1] + std::lround((source[1] - originalxMin[1]) / dx[1]);
         _b[j * nx[0] + i] = 1. / (dx[0] * dx[1]);
     }
     else
@@ -386,7 +389,7 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
                     // Sine source function
                     if (nxdist > 0.0)
                     {
-                        fx = Wx * sin(M_PI * nxdist) / (dx[0] * M_PI * nxdist);
+                        fx = Wx * sin(fwi::pi * nxdist) / (dx[0] * fwi::pi * nxdist);
                     }
                     else
                     {
@@ -395,7 +398,7 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
 
                     if (nzdist > 0.0)
                     {
-                        fz = Wz * sin(M_PI * nzdist) / (dx[1] * M_PI * nzdist);
+                        fz = Wz * sin(fwi::pi * nzdist) / (dx[1] * fwi::pi * nzdist);
                     }
                     else
                     {

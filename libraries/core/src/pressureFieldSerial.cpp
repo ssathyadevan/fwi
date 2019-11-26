@@ -152,7 +152,7 @@ double PressureFieldSerial::Summation() const
 double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
 
     const double *rhs_data = rhs.GetDataPtr();
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -208,7 +208,7 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
 {
     if (this != &rhs)
     {
-        assert(&this->GetGrid() == &rhs.GetGrid());
+        assert(this->GetGrid() == rhs.GetGrid());
         memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
     }
 
@@ -226,7 +226,7 @@ PressureFieldSerial &PressureFieldSerial::operator=(const double rhs)
 
 PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] -= rhs.data[i];
@@ -237,7 +237,7 @@ PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &
 PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &rhs)
 {
 
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] *= rhs.data[i];
@@ -247,7 +247,7 @@ PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &
 
 PressureFieldSerial &PressureFieldSerial::operator/=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] /= rhs.data[i];
@@ -289,7 +289,7 @@ void PressureFieldSerial::CopyTo(PressureFieldSerial &dest)
 
 PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
 
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {

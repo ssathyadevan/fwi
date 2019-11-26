@@ -138,7 +138,7 @@ void IntegralForwardModel::deleteKappa()
 
 PressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rect_2D_cpu &G, const PressureFieldSerial &chi, const PressureFieldComplexSerial &p_init)
 {
-    assert(&G.GetGrid() == &p_init.GetGrid());
+    assert(G.GetGrid() == p_init.GetGrid());
 
     Iter2 iter2 = _fmInput.iter2;
 
@@ -289,7 +289,7 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = Summation(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = DotProduct(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 
@@ -313,4 +313,18 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
         kDummy.Conjugate();
         kRes += kDummy * res[i];
     }
+}
+
+void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size) {
+    kRes.Zero();
+
+    PressureFieldComplexSerial kDummy(_grid);
+    
+    for (int i = offset; i < offset + block_size; i++)
+    {
+        kDummy = *_Kappa[i];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i - offset];
+    }
+    
 }

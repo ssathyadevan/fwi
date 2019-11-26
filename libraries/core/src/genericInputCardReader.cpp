@@ -12,7 +12,7 @@ GenericInputCardReader::GenericInputCardReader(const std::string &caseFolder_)
 
     std::string runName = caseFolder;
 
-    const unsigned int idx = runName.find_last_of('/');
+    const std::size_t idx = runName.find_last_of('/');
     if (std::string::npos != idx)
     {
         runName = runName.substr(idx + 1);

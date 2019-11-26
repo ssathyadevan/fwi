@@ -7,7 +7,7 @@
 #include "receivers.h"
 #include "grid2D.h"
 #include "contraction.h"
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 #include <pressureFieldComplexSerial.h>
 
 using namespace Eigen;
@@ -48,9 +48,9 @@ private:
 
   std::function< std::complex<double>(double,double) > G_func;
 
-  const Grid2D &grid;
-  const Sources &src;
-  const Receivers &recv;
+  const Grid2D grid;
+  const Sources src;
+  const Receivers recv;
   const double k;
 
   std::complex<double> *G_vol;

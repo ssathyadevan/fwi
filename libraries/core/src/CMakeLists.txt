@@ -1,5 +1,4 @@
-# Add your new .cpp and/or .h files here before configuring
-add_library(core_library                #Relative path required to find file.
+set(CPP_SOURCES_AND_H_HEADERS 
     chiIntegerVisualisation.cpp         ../include/chiIntegerVisualisation.h 
     contraction.cpp                     ../include/contraction.h
     cpuClock.cpp                        ../include/cpuClock.h
@@ -25,6 +24,12 @@ add_library(core_library                #Relative path required to find file.
     receivers.cpp                       ../include/receivers.h
     sources.cpp                         ../include/sources.h
                                         ../include/utilityFunctions.h)
+
+if (MPI_FOUND)
+    set(CPP_SOURCES_AND_H_HEADERS ${CPP_SOURCES_AND_H_HEADERS} cpuClockMPI.cpp ../include/cpuClockMPI.h)
+endif(MPI_FOUND)
+
+add_library(core_library ${CPP_SOURCES_AND_H_HEADERS})
 
 set( LIBRARY_INCLUDE_DIRS_CORE ${CMAKE_SOURCE_DIR}/libraries/core/include CACHE INTERNAL "" )
 target_include_directories(core_library PUBLIC ${LIBRARY_INCLUDE_DIRS_CORE})

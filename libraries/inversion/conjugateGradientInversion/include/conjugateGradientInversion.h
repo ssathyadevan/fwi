@@ -35,4 +35,6 @@ public:
     double findRealRootFromCubic(double a, double b, double c, double d);
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
+    PressureFieldSerial ReconstructMPI(const std::vector<std::complex<double>> &pData, GenericInput gInput );
+    void ReconstructMPISlave(GenericInput gInput);
 };

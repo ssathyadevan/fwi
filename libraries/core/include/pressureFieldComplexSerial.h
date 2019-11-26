@@ -87,9 +87,9 @@ public:
 
     std::complex<double> InnerProduct(const PressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const PressureFieldComplexSerial& rhs) const;
+    std::complex<double> DotProduct(const PressureFieldComplexSerial& rhs) const;
 
-    std::complex<double> Summation(const PressureFieldSerial& rhs) const;
+    std::complex<double> DotProduct(const PressureFieldSerial& rhs) const;
 
     PressureFieldSerial GetRealPart() const;
 };
@@ -100,14 +100,14 @@ inline std::complex<double> InnerProduct(const PressureFieldComplexSerial &t1, c
     return t1.InnerProduct(t2);
 }
 
-inline std::complex<double> Summation(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
+inline std::complex<double> DotProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
 {
-    return t1.Summation(t2);
+    return t1.DotProduct(t2);
 }
 
-inline std::complex<double> Summation(const PressureFieldComplexSerial &t1, const PressureFieldSerial &t2)
+inline std::complex<double> DotProduct(const PressureFieldComplexSerial &t1, const PressureFieldSerial &t2)
 {
-    return t1.Summation(t2);
+    return t1.DotProduct(t2);
 }
 
 inline PressureFieldComplexSerial operator-(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2)
