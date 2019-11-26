@@ -1,7 +1,7 @@
 #include "greensFunctions.h"
 
 namespace fwi {
-	static const double pi = std::atan(1.0) / 4.0;
+	static const double pi = std::atan(1.0) * 4.0;
 }
 
 namespace GreensFunctions

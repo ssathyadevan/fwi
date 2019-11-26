@@ -225,7 +225,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
     }
 }
 
-TEST(PressureFieldSerialTEST, SummationTest)
+TEST(PressureFieldSerialTest, SummationTest)
 {
     PressureFieldSerial pfs_1 = getPFS();
     pfs_1 = 0.1;

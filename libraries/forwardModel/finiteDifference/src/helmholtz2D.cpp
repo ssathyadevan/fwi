@@ -1,7 +1,7 @@
 #include "helmholtz2D.h"
 
 namespace fwi {
-    static const double pi = std::atan(1.0) / 4.0;
+    static const double pi = std::atan(1.0) * 4.0;
 }
 Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput)
     : _A(), _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)

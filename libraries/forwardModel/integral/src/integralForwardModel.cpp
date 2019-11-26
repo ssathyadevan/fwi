@@ -289,7 +289,7 @@ void IntegralForwardModel::applyKappa(const PressureFieldSerial &CurrentPressure
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = Summation(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = DotProduct(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 

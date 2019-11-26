@@ -271,7 +271,7 @@ std::complex<double> PressureFieldComplexSerial::InnerProduct(const PressureFiel
     return prod;
 }
 
-std::complex<double> PressureFieldComplexSerial::Summation(const PressureFieldComplexSerial &rhs) const
+std::complex<double> PressureFieldComplexSerial::DotProduct(const PressureFieldComplexSerial &rhs) const
 {
     std::complex<double> sum(0.0, 0.0);
     assert(this->GetGrid() == rhs.GetGrid());
@@ -281,7 +281,7 @@ std::complex<double> PressureFieldComplexSerial::Summation(const PressureFieldCo
     return sum;
 }
 
-std::complex<double> PressureFieldComplexSerial::Summation(const PressureFieldSerial &rhs) const
+std::complex<double> PressureFieldComplexSerial::DotProduct(const PressureFieldSerial &rhs) const
 {
     std::complex<double> sum(0.0, 0.0);
     assert(this->GetGrid() == rhs.GetGrid());
