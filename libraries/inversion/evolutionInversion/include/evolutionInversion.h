@@ -8,10 +8,6 @@
 #include "progressBar.h"
 
 
-using std::cout;
-using std::endl;
-
-
 class EvolutionInversion : public InversionInterface
 {
 

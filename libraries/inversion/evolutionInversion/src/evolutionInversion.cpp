@@ -1,5 +1,6 @@
 #include "evolutionInversion.h"
 #include "progressBar.h"
+#include "log.h"
 
 EvolutionInversion::EvolutionInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
     : _forwardModel(), _eiInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
@@ -19,7 +20,7 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
 
     if (!file)
     {
-        std::cout << "Failed to open the file to store residuals" << std::endl;
+        L_(lerror) << "Failed to open the file to store residuals" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
@@ -36,7 +37,7 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
     parent.RandomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
-    std::cout << "Parent Res | Gen | Mutation Rate" << std::endl;
+    L_(linfo) << "Parent Res | Gen | Mutation Rate" << std::endl;
     std::cerr << "\n";
 
     //main loop// Looping through the generations
@@ -63,8 +64,8 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
             counter++; // store the residual value in the residual log
             ++bar;            
         }
-        std::cout << std::setprecision(7) << parentResSq << "   |  "<< it << " | "<<  mutationRate << std::endl;
-        //std::cerr << "\033[1A" << it << "/"<<  _eiInput.nGenerations << "(" << 100 * double(it)/double(_eiInput.nGenerations) << "%)        " << std::endl;
+        L_(linfo) << std::setprecision(7) << parentResSq << "   |  "<< it << " | "<<  mutationRate << std::endl;
+        //std::cerr << "\033[1A" << it << "/"<<  _eiInput.nGenerations << "(" << 100 * double(it)/double(_eiInput.nGenerations) << "%)        " ;
         
         if (favouriteChildResSq == parentResSq && preParentResSq == favouriteChildResSq){
             mutationRate /=1.1;

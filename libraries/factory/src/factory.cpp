@@ -5,6 +5,7 @@
 #include "gradientDescentInversion.h"
 #include "integralForwardModel.h"
 #include "finiteDifferenceForwardModel.h"
+#include "log.h"
 
 #include <iostream>
 
@@ -33,7 +34,7 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
                 inversion = new EvolutionInversion(forwardModel, gInput);
                 return inversion;
         }
-        std::cout << "The method was not found. you PUNK!" << std::endl;
+        L_(linfo) << "The method was not found" ;
         exit(EXIT_FAILURE);
 }
 

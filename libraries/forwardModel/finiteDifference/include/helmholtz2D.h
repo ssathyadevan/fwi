@@ -6,7 +6,7 @@
 #endif // _MSC_VER
 #include "Eigen/Sparse"
 
-#ifdef _MSVC_VER
+#ifdef _MSC_VER
 #pragma warning( pop )
 #endif // _MSC_VER
 

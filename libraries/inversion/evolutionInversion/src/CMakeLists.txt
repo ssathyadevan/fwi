@@ -9,5 +9,6 @@ target_include_directories(evolution_inversion_library PUBLIC ${LIBRARY_INCLUDE_
 
 target_link_libraries(
     evolution_inversion_library
+    utilities_library
     core_library
     integral_forward_model_library)

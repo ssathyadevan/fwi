@@ -1,5 +1,6 @@
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
+#include "log.h"
 
 IntegralForwardModel::IntegralForwardModel(const Grid2D &grid, const Sources &src, const Receivers &recv,
                                            const FrequenciesGroup &freq, const GenericInput &gInput)
@@ -8,9 +9,9 @@ IntegralForwardModel::IntegralForwardModel(const Grid2D &grid, const Sources &sr
 {
     IntegralForwardModelInputCardReader integralFWInversionReader(gInput.caseFolder);
     _fmInput = integralFWInversionReader.getInput();
-    std::cout << "Creating Greens function field..." << std::endl;
+    L_(linfo) << "Creating Greens function field..." ;
     createGreens();
-    std::cout << "Creating p0..." << std::endl;
+    L_(linfo) << "Creating p0..." ;
     createP0();
     createPTot(freq, src);
     createKappa(freq, src, recv);
@@ -180,7 +181,7 @@ PressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
             {
                 std::string itstring = std::to_string(it);
                 std::string line_to_print = "Convergence after " + itstring + "iterations";
-                std::cout << line_to_print << std::endl;
+                L_(linfo) << line_to_print ;
             }
 
             break;
@@ -226,8 +227,8 @@ PressureFieldComplexSerial IntegralForwardModel::calcTotalField(const Greens_rec
 
     if (res >= iter2.tolerance)
     {
-        std::cout << "No convergence after " << iter2.n << " iterations."
-                  << "Res = " << res << std::endl;
+        L_(linfo) << "No convergence after " << iter2.n << " iterations."
+                  << "Res = " << res ;
     }
 
     return p_tot;
@@ -244,9 +245,7 @@ void IntegralForwardModel::calculatePTot(const PressureFieldSerial &chiEst)
     {
         li = i * _src.nSrc;
 
-        std::cout << "  " << std::endl;
-        std::cout << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" << std::endl;
-        std::cout << "  " << std::endl;
+        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" ;
 
         for (int j = 0; j < _src.nSrc; j++)
         {
