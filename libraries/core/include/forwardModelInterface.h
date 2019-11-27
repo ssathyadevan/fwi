@@ -51,6 +51,7 @@ public:
 
     virtual void calculateKappa() {std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE);}
     virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
 
     std::vector<std::complex<double>>& calculateResidual(const PressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSq(std::vector<std::complex<double>> &residual);

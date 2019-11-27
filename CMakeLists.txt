@@ -20,9 +20,17 @@ enable_testing()
 
 find_package(GTest REQUIRED)
 
+find_package(MPI)
+
+if(MPI_FOUND)
+    set(CMAKE_CXX_COMPILER /usr/bin/mpicxx)
+else(MPI_FOUND)
+    set(CMAKE_CXX_COMPILER /usr/bin/g++)
+endif(MPI_FOUND)
+
 # display all compiler warnings if compiler is gnu
 if ( CMAKE_COMPILER_IS_GNUCC )
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror=vla")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror=vla -O3")
 endif()
 
 # display all compiler warnings if compiler is some version of Microsoft Visual C

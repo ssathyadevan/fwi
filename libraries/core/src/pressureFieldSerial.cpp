@@ -39,7 +39,6 @@ void PressureFieldSerial::RandomSaurabh()
 
 void PressureFieldSerial::RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution)
 {
-    
     for (int i = 0; i < this->GetGrid().GetNumberOfGridPoints(); i++)
     {
         double temp = distribution(generator);

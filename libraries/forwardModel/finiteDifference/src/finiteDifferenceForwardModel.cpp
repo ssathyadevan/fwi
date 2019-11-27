@@ -229,6 +229,20 @@ void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::vector<std
     }
 }
 
+void FiniteDifferenceForwardModel::getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size) {
+    kRes.Zero();
+
+    PressureFieldComplexSerial kDummy(_grid);
+
+    for (int i = offset; i < offset + block_size; i++)
+    {
+        kDummy = *_Kappa[i];
+        kDummy.Conjugate();
+        kRes += kDummy * res[i - offset];
+    }
+    
+}
+
 void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;

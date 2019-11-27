@@ -2,10 +2,10 @@
 #include "greensSerial.h"
 #include <iostream>
 
-Grid2D grid()
-{
+// Grid2D grid()
+// {
     
-}
+// }
 
 Greens_rect_2D_cpu* getGreens()
 {
