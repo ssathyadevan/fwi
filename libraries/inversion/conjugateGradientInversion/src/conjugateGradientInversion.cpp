@@ -58,7 +58,7 @@ double ConjugateGradientInversion::calculateAlpha(PressureFieldSerial& zeta, std
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
-    //ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
+    ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -240,7 +240,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 //breakout check
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
                                     (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance)))){
-                    //bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
+                    bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;                  
                 }
                     
@@ -261,7 +261,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 gOld = g;
                 bsquaredOld = bsquared;
             }
-            //bar++;
+            bar++;
         } // end regularisation loop
         
 
