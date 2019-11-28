@@ -4,13 +4,16 @@ from datetime import datetime
 import numpy as np
 
 class OutputLogger(object):
-    def __init__(self, run_num, t_in, t_out, diff_chi, mse, square_mean):
+    def __init__(self, run_num, t_in, t_out, t_exec, virtual_mem, physical_mem, diff_chi, mse, square_mean):
         self.log = dict(
             forward_model = str,
             inversion_method = str,
-            time_in=t_in.strftime("%d-%m-%Y %H:%M:%S"),
-            time_out=t_out.strftime("%d-%m-%Y %H:%M:%S"),
-            time_execution=(t_out - t_in).seconds,
+            time_in=t_in.strftime("%d-%m-%Y %H:%M:%S.%f"),
+            time_out=t_out.strftime("%d-%m-%Y %H:%M:%S.%f"),
+            wall_time_execution=((t_out - t_in).seconds + (t_out - t_in).microseconds / 10**6),
+            cpu_time_execution = t_exec,
+            virtual_memory_usage_kB = virtual_mem,
+            physical_memory_usage_kB = physical_mem,
             mean_squared_error=(np.square(diff_chi)).mean(),
             average_relative_error=np.sqrt(mse) / np.sqrt(square_mean) * 100,
             input_resolution=list,
