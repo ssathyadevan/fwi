@@ -16,6 +16,8 @@ private:
     const Receivers& _recv;
     const FrequenciesGroup _freq;
 
+    PressureFieldSerial gradientDescent(PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
+    
  public:
     GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
 
@@ -24,7 +26,6 @@ private:
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
     std::vector<double> differential(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta);
-    PressureFieldSerial gradientDescent(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma,  double eta);
     double functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x);
 };

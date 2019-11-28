@@ -80,21 +80,6 @@ long parseLine(char* line){
     return i;
 }
 
-// long getValue(std::string what){ //Note: this value is in KB!
-//     FILE* file = fopen("/proc/self/status", "r");
-//     long result = -1;
-//     char line[128];
-
-//     while (fgets(line, 128, file) != NULL){
-//         if (strncmp(line, what.c_str(), 7) == 0){
-//             result = parseLine(line);
-//             break;
-//         }
-//     }
-//     fclose(file);
-//     return result;
-// }
-
 int getValue(const char* item){ //Note: this value is in KB!
     FILE* file = fopen("/proc/self/status", "r");
     int result = -1;
