@@ -156,7 +156,7 @@ inline std::string NowTime()
     return result;
 }
 
-#else
+#else //WIN32
 
 #include <sys/time.h>
 

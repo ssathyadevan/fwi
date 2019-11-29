@@ -26,6 +26,7 @@ public:
     int getCounter() const;
     int getTotal() const;
     void print() const;
+    void initBar() const;
     ProgressBar& operator++();
     ProgressBar& operator++(int);
     ProgressBar& operator--(); 

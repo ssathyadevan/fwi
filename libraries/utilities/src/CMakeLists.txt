@@ -1,5 +1,15 @@
 set(CPP_SOURCES_AND_H_HEADERS 
-    log.cpp			../include/log.h)
+	chiIntegerVisualisation.cpp		../include/chiIntegerVisualisation.h
+	cpuClock.cpp    			../include/cpuClock.h
+	csvReader.cpp     			../include/csvReader.h
+						../include/json.h
+	log.cpp					../include/log.h
+	progressBar.cpp       			../include/progressBar.h
+                                  		../include/utilityFunctions.h)
+
+if (MPI_FOUND)
+    set(CPP_SOURCES_AND_H_HEADERS ${CPP_SOURCES_AND_H_HEADERS} cpuClockMPI.cpp ../include/cpuClockMPI.h)
+endif(MPI_FOUND)
 
 add_library(utilities_library ${CPP_SOURCES_AND_H_HEADERS})
 
