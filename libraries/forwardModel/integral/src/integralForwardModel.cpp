@@ -325,5 +325,4 @@ void IntegralForwardModel::getUpdateDirectionInformationMPI(std::vector<std::com
         kDummy.Conjugate();
         kRes += kDummy * res[i - offset];
     }
-    
 }

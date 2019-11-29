@@ -70,7 +70,7 @@ if sys.platform.startswith('linux'):
             check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
         else:
             if mpi:
-                check = os.system('mpiexec -n 4 --allow-run-as-root ./FWI_MPIProcess ../' + ind_run[5] + ' ' + ind_run[1])#+ ' ' + ind_run[0] + ' ' + ind_run[1]) #valgrind --tool=callgrind --cache-sim=yes --separate-threads=yes
+                check = os.system('mpiexec -n 3 --allow-run-as-root ./FWI_MPIProcess ../' + ind_run[5] + ' ' + ind_run[1])#+ ' ' + ind_run[0] + ' ' + ind_run[1]) #valgrind --tool=callgrind --cache-sim=yes --separate-threads=yes
             else: 
                 print("MPI is not installed, using conjugate gradient inversion on single thread instead")
                 ind_run[0] = "conjugateGradientInversion"

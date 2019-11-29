@@ -41,11 +41,7 @@ int main(int argc, char **argv)
 
     std::string logFileName;
     
-    if (mpi_rank == 0){
-        logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
-    }else{
-        logFileName =  gInput.outputLocation + gInput.runName + "Process" + std::to_string(mpi_rank) + ".log";
-    }
+    logFileName =  gInput.outputLocation + gInput.runName + "Process" + std::to_string(mpi_rank) + ".log";
 
     if (!gInput.verbose)
     {
