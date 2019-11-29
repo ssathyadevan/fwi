@@ -58,12 +58,14 @@ void CpuClock::MemoryUse(long& virtual_mem, long& physical_mem){
         virtual_mem = getValue("VmSize:");
         physical_mem = getValue("VmRSS:");
     #else   
-        PROCESS_MEMORY_COUNTERS_EX pmc;
-        GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-        SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-        SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
-        virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
-        physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
+        // PROCESS_MEMORY_COUNTERS_EX pmc;
+        // GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+        // SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
+        // SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+        // virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
+        // physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
+        virtual_mem = 0;
+        physical_mem = 0;
     #endif
     L_(ldebug) << "Virtual memory used: " << virtual_mem<< " kB";
     L_(ldebug) << "Physical memory used: " << physical_mem<< " kB";

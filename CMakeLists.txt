@@ -37,6 +37,8 @@ if ( MSVC )
     message( STATUS "    Additional compiler flag to disable 'unsafe methods' security-warnings:" )
     message( STATUS "        '-D_CRT_SECURE_NO_WARNINGS' -D_SCL_SECURE_NO_WARNINGS" )
     add_definitions( -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS )
+    # Disable min and max macros on Windows, which interfere with numeric_limits::max
+    add_definitions( -DNOMINMAX )
 
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W4")
 elseif ( CMAKE_COMPILER_IS_GNUCC )
