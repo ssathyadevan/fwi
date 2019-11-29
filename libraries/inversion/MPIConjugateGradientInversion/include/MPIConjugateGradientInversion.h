@@ -8,9 +8,6 @@
 #include "forwardModelInterface.h"
 #include "MPIConjugateGradientInversionInput.h"
 
-using std::cout;
-using std::endl;
-
 class MPIConjugateGradientInversion : public InversionInterface
 {
 private:
@@ -36,5 +33,5 @@ public:
     double findRealRootFromCubic(double a, double b, double c, double d);
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
-    void ReconstructSlave(GenericInput gInput);
+    void ReconstructSlave();
 };

@@ -60,7 +60,7 @@ PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std:
         }
 
         chiEstimatePrevious = chiEstimate;
-        chiEstimate = gradientDescent(pData, chiEstimate, dFdx, gamma, eta);
+        chiEstimate = gradientDescent(chiEstimate, dFdx, gamma);
         Fx = functionF(chiEstimate, pData, eta);
         file << std::setprecision(17) << Fx << "," << counter << std::endl;
         
@@ -98,7 +98,7 @@ double GradientDescentInversion::functionF(PressureFieldSerial xi, const std::ve
 }
 
 
-PressureFieldSerial GradientDescentInversion::gradientDescent(const std::vector<std::complex<double>> &pData, PressureFieldSerial x, std::vector<double> dfdx, double gamma, double eta)
+PressureFieldSerial GradientDescentInversion::gradientDescent(PressureFieldSerial x, std::vector<double> dfdx, double gamma)
 {
     double* p_x = x.GetDataPtr();
 

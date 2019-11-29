@@ -2,11 +2,6 @@
 #include "greensSerial.h"
 #include <iostream>
 
-// Grid2D grid()
-// {
-    
-// }
-
 Greens_rect_2D_cpu* getGreens()
 {
     std::array<double, 2> x_min = {0.0, 0.0};

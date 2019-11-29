@@ -3,6 +3,7 @@
 //#include "forwardModel.h"
 #include "integralForwardModel.h"
 #include "cpuClock.h"
+#include "log.h"
 
 void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std::string &runName);
 
@@ -12,22 +13,21 @@ int main(int argc, char **argv)
     GenericInputCardReader genericReader(arguments[0]);
     const GenericInput gInput = genericReader.getInput();
 
-    //integralForwardModelInputCardReader forwardModelReader(gInput.caseFolder);
-    //const integralForwardModelInput fmInput = forwardModelReader.getInput();
+    std::string logFileName =  gInput.outputLocation + gInput.runName + "PreProcess.log";
 
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "PreProcess", -1);
+        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+        initLogger( logFileName.c_str(), ldebug);
     }
 
-    std::cout << "Preprocessing the provided input to create the reference pressure-field" << std::endl;
+    L_(linfo) << "Preprocessing the provided input to create the reference pressure-field" ;
 
     CpuClock clock;
 
     clock.Start();
     generateReferencePressureFieldFromChi(gInput, gInput.runName);
     clock.End();
-    clock.PrintTimeElapsed();
 
     return 0;
 }
@@ -55,13 +55,13 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
     ForwardModelInterface *model;
     model = new IntegralForwardModel(grid, src, recv, freqg, gInput);
 
-    std::cout << "Calculate pData (the reference pressure-field)..." << std::endl;
+    L_(linfo) << "Calculate pData (the reference pressure-field)..." ;
     model->calculatePTot(chi);
     model->calculateKappa();
     model->calculatePData(chi, referencePressureData);
 
     // writing the referencePressureData to a text file in complex form
-    std::cout << "calculateData done" << std::endl;
+    L_(linfo) << "calculateData done" ;
 
     std::string invertedChiToPressureFileName = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ofstream file;
@@ -69,7 +69,7 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
 
     if (!file)
     {
-        std::cout << "Failed to open the file to store inverted chi to pressure field" << std::endl;
+        L_(lerror) << "Failed to open the file to store inverted chi to pressure field" ;
         std::exit(EXIT_FAILURE);
     }
 

@@ -1,6 +1,7 @@
 #include "finiteDifferenceForwardModel.h"
 #include "helmholtz2D.h"
 #include "finiteDifferenceForwardModelInputCardReader.h"
+#include "log.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const Grid2D &grid, const Sources &src, const Receivers &recv,
                                                            const FrequenciesGroup &freq, const GenericInput &gInput)
@@ -10,9 +11,9 @@ FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const Grid2D &grid, c
     FiniteDifferenceForwardModelInputCardReader finiteDifferenceForwardModelReader(gInput.caseFolder);
     _fmInput = finiteDifferenceForwardModelReader.getInput();
 
-    std::cout << "Creating Greens function field..." << std::endl;
+    L_(linfo) << "Creating Greens function field..." ;
     createGreens();
-    std::cout << "Creating p0..." << std::endl;
+    L_(linfo) << "Creating p0..." ;
     createP0();
     createPTot(freq, src);
     createKappa(freq, src, recv);
@@ -151,17 +152,14 @@ void FiniteDifferenceForwardModel::calculatePTot(const PressureFieldSerial &chiE
 
         Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c_0, chiEst, _fmInput);
 
-        std::cout << "  " << std::endl;
-        std::cout << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" << std::endl;
-        std::cout << "  " << std::endl;
+        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" ;
 
         for (int j = 0; j < _src.nSrc; j++)
         {
-            std::cout << "Solving p_tot for source: (" << _src.xSrc[j][0] << "," << _src.xSrc[j][1] << ")" << std::endl;
+            L_(linfo) << "Solving p_tot for source: (" << _src.xSrc[j][0] << "," << _src.xSrc[j][1] << ")" ;
             *_pTot[li + j] = helmholtzFreq.solve(_src.xSrc[j], *_pTot[li + j]);
         }
     }
-    std::cout << " " << std::endl;
 }
 
 void FiniteDifferenceForwardModel::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator)
@@ -198,7 +196,7 @@ void FiniteDifferenceForwardModel::applyKappa(const PressureFieldSerial &Current
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = Summation(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = DotProduct(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 

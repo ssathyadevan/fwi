@@ -1,6 +1,7 @@
 #include <memory>
 #include "conjugateGradientInversion.h"
 #include "progressBar.h"
+#include "log.h"
 #include <iostream>
 
 #define TAG_COMMAND     0
@@ -57,7 +58,7 @@ double ConjugateGradientInversion::calculateAlpha(PressureFieldSerial& zeta, std
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
-    //ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
+    ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -87,7 +88,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     file.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
     if (!file)
     {
-        std::cout << "Failed to open the file to store residuals" << std::endl;
+        L_(lerror) << "Failed to open the file to store residuals" ;
         std::exit(EXIT_FAILURE);
     }
     int counter = 1;
@@ -140,7 +141,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
                 res = eta * resSq;
 
-                std::cout << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res << std::endl;
+                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << res;
 
                 file << std::setprecision(17) << res << "," << counter << std::endl;
                 counter++; // store the residual value in the residual log
@@ -228,8 +229,8 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 resSq = _forwardModel->calculateResidualNormSq(resArray);
                 res = eta * resSq;
 
-                std::cout << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: "
-                            << std::setprecision(17) << res << std::endl;
+                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: "
+                            << std::setprecision(17) << res;
 
                 file << std::setprecision(17) << res << "," << counter << std::endl; // store the residual value in the residual log
                 counter++;
@@ -239,11 +240,11 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 //breakout check
                 if ((it1 > 0) && ((res < double(_cgInput.iteration1.tolerance)) ||
                                     (std::abs(vecResFirstIter[it1 - 1] - res) < double(_cgInput.iteration1.tolerance)))){
-                    //bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
+                    bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;                  
                 }
                     
-                //                    std::cout << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
+                //                    L_(linfo) << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
                 //                    if ( (it1 > 0) && ( res/std::abs(vecResFirstIter[0]) < 0.15 )  )
                 //                        break;
 
@@ -260,7 +261,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 gOld = g;
                 bsquaredOld = bsquared;
             }
-            //bar++;
+            bar++;
         } // end regularisation loop
         
 

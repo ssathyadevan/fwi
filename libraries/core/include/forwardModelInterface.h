@@ -6,6 +6,7 @@
 #include "frequenciesGroup.h"
 #include "sources.h"
 #include "receivers.h"
+#include "log.h"
 
 #include <complex>
 
@@ -49,9 +50,9 @@ public:
     virtual void calculatePTot(const PressureFieldSerial &chiEst) = 0;
     virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
-    virtual void calculateKappa() {std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE);}
-    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
-    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size) { std::cout << "This ForwardModel is not compatible with the Inversion model" << std::endl; exit(EXIT_FAILURE); }
+    virtual void calculateKappa() {L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE);}
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, PressureFieldComplexSerial &) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, PressureFieldComplexSerial &, const int, const int) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
 
     std::vector<std::complex<double>>& calculateResidual(const PressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSq(std::vector<std::complex<double>> &residual);

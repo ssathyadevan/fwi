@@ -30,4 +30,6 @@ public:
     double GetCellVolume() const { return cellVolume; }
     double GetDomainArea() const { return (x_max[0] - x_min[0]) * (x_max[1] - x_min[1]); }
 
+    bool operator==(const Grid2D &rhs) const;
+
 };

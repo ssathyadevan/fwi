@@ -1,4 +1,5 @@
 #include "pressureFieldSerial.h"
+#include "log.h"
 
 PressureFieldSerial::PressureFieldSerial(const Grid2D &grid) : PressureField(grid),
                                                                data(new double[this->GetNumberOfGridPoints()]) {}
@@ -64,7 +65,7 @@ void PressureFieldSerial::toFile(const std::string &fileName) const
     file.open(fileName, std::ios::out | std::ios::trunc);
     if (!file)
     {
-        std::cout << "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
@@ -82,8 +83,8 @@ void PressureFieldSerial::fromFile(const GenericInput &input)
     std::ifstream file(inputFolder + input.fileName + ".txt", std::ios::in);
     if (!file)
     {
-        std::cout << "Looking for file " << inputFolder + input.fileName + ".txt" << std::endl;
-        std::cout << "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " << std::endl;
+        L_(lerror) << "Looking for file " << inputFolder + input.fileName + ".txt" ;
+        L_(lerror) << "Unable to open the file in .fromFile method of volField_rect_2D_cpu class " ;
         std::exit(EXIT_FAILURE);
     }
 
@@ -152,7 +153,7 @@ double PressureFieldSerial::Summation() const
 double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
 
     const double *rhs_data = rhs.GetDataPtr();
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
@@ -208,7 +209,7 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
 {
     if (this != &rhs)
     {
-        assert(&this->GetGrid() == &rhs.GetGrid());
+        assert(this->GetGrid() == rhs.GetGrid());
         memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
     }
 
@@ -226,7 +227,7 @@ PressureFieldSerial &PressureFieldSerial::operator=(const double rhs)
 
 PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] -= rhs.data[i];
@@ -237,7 +238,7 @@ PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &
 PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &rhs)
 {
 
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] *= rhs.data[i];
@@ -247,7 +248,7 @@ PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &
 
 PressureFieldSerial &PressureFieldSerial::operator/=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
         data[i] /= rhs.data[i];
@@ -289,7 +290,7 @@ void PressureFieldSerial::CopyTo(PressureFieldSerial &dest)
 
 PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
 {
-    assert(&this->GetGrid() == &rhs.GetGrid());
+    assert(this->GetGrid() == rhs.GetGrid());
 
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {

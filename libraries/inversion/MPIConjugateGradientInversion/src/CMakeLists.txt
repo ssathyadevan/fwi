@@ -8,4 +8,5 @@ target_include_directories(mpi_conjugate_gradient_inversion_library PUBLIC ${LIB
 
 target_link_libraries(
     mpi_conjugate_gradient_inversion_library
+    utilities_library
     core_library)

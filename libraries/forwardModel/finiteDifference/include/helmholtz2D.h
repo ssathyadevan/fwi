@@ -1,6 +1,15 @@
 #pragma once
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable: 4127 )
+#endif // _MSC_VER
 #include "Eigen/Sparse"
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif // _MSC_VER
+
 #include "grid2D.h"
 #include "finiteDifferenceGrid2D.h"
 #include "frequenciesGroup.h"

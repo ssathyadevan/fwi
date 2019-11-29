@@ -14,3 +14,12 @@ Grid2D::Grid2D(const std::array<double, 2> &x_min_,
     cellVolume = dx[0] * dx[1];
     nGridPoints = nx[0] * nx[1]; // Should be renamed to nCells.
 }
+
+bool Grid2D::operator==(const Grid2D &rhs) const
+{
+    if (x_min != rhs.x_min || x_max != rhs.x_max || nx != rhs.nx || dx != rhs.dx )
+    {
+        return false;
+    }
+    return true;
+}

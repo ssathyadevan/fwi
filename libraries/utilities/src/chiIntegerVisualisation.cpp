@@ -1,6 +1,9 @@
+#include <sstream>
+#include <string>
 #include <iostream>
 
 #include "chiIntegerVisualisation.h"
+#include "log.h"
 
 // this function visualises the chi field in an integer matrix form (where chi is normalised between values 2 and 7), where 2 represents background medium and 7 represents the subsurface.
 // 1 and 8 are acceptable out of bounds, while 0 and 9 imply a relatively significant out of bound estimation of chi
@@ -12,7 +15,7 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
 
     if (!myfile.is_open())
     {
-        std::cout << "Couldn't open file at " << filename << std::endl;
+        L_(lerror) << "Couldn't open file at " << filename ;
         exit(EXIT_FAILURE);
     }
 
@@ -26,11 +29,12 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
     double contrast_difference = contrast - no_contrast; // just gives you back the contrast
     double value;                                        //value read in from file
     int dummy;                                           //value printed to screen
+    std::string ss = "";
 
     while (std::getline(myfile, line))
     {
         value = stod(line);
-        dummy = std::round(((value) / contrast_difference * resolution) + rock_character); //cast value read to int printed by linear interpol
+        dummy = std::lround(((value) / contrast_difference * resolution) + rock_character); //cast value read to int printed by linear interpol
         if (dummy < 0)
         {
             dummy = 0;
@@ -40,7 +44,7 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
             dummy = 9;
         } // above bounds back to 9, see above
 
-        std::cout << dummy; //print integer
+        ss = ss + std::to_string(dummy); //print integer
 
         //first increment x and then start printing the next line if nxt is reached
         x++;
@@ -48,7 +52,8 @@ void chi_visualisation_in_integer_form(std::string filename, int nxt)
         {
             z++;
             x = 0;
-            std::cout << std::endl;
+            L_(linfo) << ss;
+            ss = "";
         }
     }
     myfile.close();

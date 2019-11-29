@@ -11,18 +11,19 @@
 #include "cpuClockMPI.h"
 #include <string>
 #include <mpi.h>
+#include "log.h"
 
 void performInversion(const GenericInput &gInput, const std::string &runName, const int mpi_rank, std::string desired_forward_model);
-void writePlotInput(const GenericInput &gInput);
+void writePlotInput(const GenericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
     if (argc != 3)
     {
-        std::cout << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        std::cout << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
+        L_(lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        L_(lerror) << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
 
-        std::cout << "Please give the forward model as argument." << std::endl;
+        L_(lerror) << "Please give the forward model as argument." << std::endl;
         exit(EXIT_FAILURE);
     }
     CpuClockMPI clock;
@@ -38,9 +39,14 @@ int main(int argc, char **argv)
     GenericInput gInput = genericReader.getInput();
     std::string desired_forward_model = arguments[1];
 
+    std::string logFileName;
+    
+    logFileName =  gInput.outputLocation + gInput.runName + "Process" + std::to_string(mpi_rank) + ".log";
+
     if (!gInput.verbose)
     {
-        WriteToFileNotToTerminal(gInput.outputLocation, gInput.runName, "Process", mpi_rank);
+        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+        initLogger( logFileName.c_str(), ldebug);
     }
 
     if (mpi_rank == 0)
@@ -57,12 +63,13 @@ int main(int argc, char **argv)
     { //MASTER THREAD
         clock.End();
 
-        std::cout << "Visualisation of the estimated temple using FWI" << std::endl;
+        L_(linfo) << "Visualisation of the estimated temple using FWI" ;
         chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
         create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
-        writePlotInput(gInput);
-        clock.PrintTimeElapsed();
+        std::string msg = clock.OutputString();
+        writePlotInput(gInput, msg);
+        
     }
 
     MPI_Finalized(&mpi_finalized);
@@ -72,7 +79,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(const GenericInput &gInput)
+void writePlotInput(const GenericInput &gInput, std::string msg)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -82,7 +89,7 @@ void writePlotInput(const GenericInput &gInput)
     outputfwi << "nxt   = " << gInput.ngrid[0] << std::endl;
     outputfwi << "nzt   = " << gInput.ngrid[1] << std::endl;
     outputfwi << "nxt_original   = " << gInput.ngrid_original[0] << std::endl;
-    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl;
+    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl << msg;
     outputfwi.close();
 
     // This part is needed for plotting the chi values in postProcessing.py
@@ -116,7 +123,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
         if (!file.is_open())
         {
-            std::cout << "Could not open file at " << fileLocation;
+            L_(lerror) << "Could not open file at " << fileLocation;
             exit(EXIT_FAILURE);
         }
 
@@ -138,17 +145,17 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
     if (mpi_rank == 0)
     {
-        std::cout << "Estimating Chi..." << std::endl;
+        L_(linfo) << "Estimating Chi..." ;
 
         PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
-        std::cout << "Done, writing to file" << std::endl;
+        L_(linfo) << "Done, writing to file" ;
 
         chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
     }
     else
     {
-        inverse->ReconstructSlave(gInput);
+        inverse->ReconstructSlave();
     }
     delete model;
     delete inverse;

@@ -1,5 +1,7 @@
 #include "randomInversion.h"
 #include "progressBar.h"
+#include "log.h"
+
 RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
     : _forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
@@ -27,7 +29,7 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
 
     if (!file)
     {
-        std::cout << "Failed to open the file to store residuals" << std::endl;
+        L_(lerror) << "Failed to open the file to store residuals" ;
         std::exit(EXIT_FAILURE);
     }
 
@@ -60,13 +62,13 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
             }
             else if (std::abs(newChiEstRes) < std::abs(chiEstRes))
             {
-                std::cout << "Randomizing the temple again" << std::endl;
+                L_(linfo) << "Randomizing the temple again" ;
                 tempRandomChi.CopyTo(chiEst);
 
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
-            std::cout << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
+            L_(linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes ;
 
             file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
             counter++; // store the residual value in the residual log
