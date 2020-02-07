@@ -19,3 +19,6 @@ doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.fls
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.log
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.out
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.synctex.gz
+*.user
+*.so
+*.exe

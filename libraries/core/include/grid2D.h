@@ -13,7 +13,7 @@ class Grid2D
     int nGridPoints;
     double cellVolume;
 
-    Grid2D &operator=(const Grid2D &);
+    Grid2D &operator=(const Grid2D &) = delete;
 
 public:
 

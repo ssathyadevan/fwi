@@ -4,7 +4,10 @@
 PressureFieldComplexSerial::PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs)
     : PressureFieldComplexSerial(rhs.GetGrid())
 {
-    memcpy(data, rhs.data, this->GetNumberOfGridPoints() * sizeof(std::complex<double>));
+    for ( int i = 0; i < GetNumberOfGridPoints(); ++i )
+    {
+        data[i] = rhs.data[i];
+    }
 }
 
 PressureFieldComplexSerial::~PressureFieldComplexSerial()
@@ -35,12 +38,18 @@ void PressureFieldComplexSerial::SetField(const std::function<std::complex<doubl
 
 void PressureFieldComplexSerial::toBuffer(std::complex<double> *buffer) const
 {
-    memcpy(buffer, data, sizeof(std::complex<double>) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i < GetNumberOfGridPoints(); ++i )
+    {
+        buffer[i] = data[i];
+    }
 }
 
 void PressureFieldComplexSerial::fromBuffer(const std::complex<double> *buffer)
 {
-    memcpy(data, buffer, sizeof(std::complex<double>) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i < GetNumberOfGridPoints(); ++i )
+    {
+        data[i] = buffer[i];
+    }
 }
 
 void PressureFieldComplexSerial::toFile(const std::string &fileName) const
@@ -69,7 +78,7 @@ void PressureFieldComplexSerial::fromFile(const std::string &fileName)
         L_(lerror) << "Unable to open the file in .fromFile method of volComplexField_rect_2D_cpu class " ;
         std::exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
+    for (int i = 0; i < GetNumberOfGridPoints(); i++)
     {
         file >> data[i];
     }
@@ -78,12 +87,15 @@ void PressureFieldComplexSerial::fromFile(const std::string &fileName)
 
 void PressureFieldComplexSerial::Zero()
 {
-    memset(data, 0, sizeof(std::complex<double>) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        data[i] = 0;
+    }
 }
 
 void PressureFieldComplexSerial::Square()
 {
-    for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
+    for (int i = 0; i < GetNumberOfGridPoints(); i++)
     {
         data[i] *= data[i];
     }
@@ -138,7 +150,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const Pressure
     if (this != &rhs)
     {
         assert(this->GetNumberOfGridPoints() == rhs.GetNumberOfGridPoints());
-        memcpy(data, rhs.data, sizeof(std::complex<double>) * this->GetNumberOfGridPoints());
+        for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+        {
+            data[i] = rhs.data[i];
+        }
     }
 
     return *this;
@@ -148,7 +163,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const Pressure
 {
     assert(this->GetGrid() == rhs.GetGrid());
     const double *rhs_data = rhs.GetDataPtr();
-    memcpy(data, rhs_data, sizeof(std::complex<double>) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        data[i] = rhs_data[i];
+    }
     return *this;
 }
 

@@ -6,8 +6,10 @@ PressureFieldSerial::PressureFieldSerial(const Grid2D &grid) : PressureField(gri
 
 PressureFieldSerial::PressureFieldSerial(const PressureFieldSerial &rhs) : PressureFieldSerial(rhs.grid)
 {
-
-    memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        data[i] = rhs.data[i];
+    }
 }
 
 PressureFieldSerial::~PressureFieldSerial()
@@ -18,7 +20,10 @@ PressureFieldSerial::~PressureFieldSerial()
 // Virtual overrides
 void PressureFieldSerial::Zero()
 {
-    memset(data, 0, sizeof(double) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        data[i] = 0;
+    }
 }
 
 void PressureFieldSerial::Random()
@@ -51,12 +56,18 @@ void PressureFieldSerial::RandomChild(const PressureFieldSerial &parent, std::de
 
 void PressureFieldSerial::toBuffer(double *buffer) const
 {
-    memcpy(buffer, data, sizeof(double) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        buffer[i] = data[i];
+    }
 }
 
 void PressureFieldSerial::fromBuffer(const double *buffer)
 {
-    memcpy(data, buffer, sizeof(double) * this->GetNumberOfGridPoints());
+    for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+    {
+        data[i] = buffer[i];
+    }
 }
 
 void PressureFieldSerial::toFile(const std::string &fileName) const
@@ -210,7 +221,10 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
     if (this != &rhs)
     {
         assert(this->GetGrid() == rhs.GetGrid());
-        memcpy(data, rhs.data, sizeof(double) * this->GetNumberOfGridPoints());
+        for ( int i = 0; i< GetNumberOfGridPoints(); ++i)
+        {
+            data[i] = rhs.data[i];
+        }
     }
 
     return *this;

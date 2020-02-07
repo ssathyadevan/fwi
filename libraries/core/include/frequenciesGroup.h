@@ -10,7 +10,7 @@
 class FrequenciesGroup
 {
 
-    FrequenciesGroup operator=(const FrequenciesGroup&);
+    FrequenciesGroup operator=(const FrequenciesGroup&) = delete;
 
 public:
 

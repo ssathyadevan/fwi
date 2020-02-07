@@ -9,7 +9,7 @@
 class Receivers
 {
 
-  Receivers &operator=(const Receivers &); // unused?
+  Receivers &operator=(const Receivers &) = delete;
 
 public:
   const int nRecv;
