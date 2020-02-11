@@ -1,5 +1,5 @@
 #pragma once
 struct NSourcesReceivers
 {
-    int src;      int rec;
+    int nsources;      int nreceivers;
 };
