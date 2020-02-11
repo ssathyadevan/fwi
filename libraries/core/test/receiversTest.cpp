@@ -18,3 +18,27 @@ TEST(ReceiversTest, ConstructorTest)
         ++iteration_counter;
     }
 }
+
+TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
+{
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {10.0, 10.0};
+    Receivers receivers(xMin, xMax, 11);
+
+    EXPECT_EQ(receivers.xRecv.size(), 11);
+}
+
+
+TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
+{
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {10.0, 10.0};
+    Receivers receivers(xMin, xMax, 11);
+    std::array<double, 11> expectedXPositions = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
+
+    for (unsigned int i = 0; i < expectedXPositions.size(); i++)
+    {
+        EXPECT_NEAR(expectedXPositions[i], receivers.xRecv[i][0], 0.001);
+    }
+}
+
