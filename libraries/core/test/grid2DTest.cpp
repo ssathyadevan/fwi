@@ -36,7 +36,7 @@ TEST(grid2DTest, GetGridEndTest)
     EXPECT_EQ(grid.GetGridEnd(), x_max);
 }
 
-TEST(grid2DTest, GetNumverOfGridPointsTest)
+TEST(grid2DTest, GetNumberOfGridPointsTest)
 {
     EXPECT_EQ(grid.GetNumberOfGridPoints(), 8);
 }

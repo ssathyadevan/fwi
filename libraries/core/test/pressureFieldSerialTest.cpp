@@ -110,7 +110,10 @@ TEST(PressureFieldSerialTest, ZeroTest)
 TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialTest)
 {
     PressureFieldSerial pfs_1 = getPFS();
-    PressureFieldSerial pfs_2 = pfs_1;
+    PressureFieldSerial pfs_2 = getPFS();
+
+    pfs_1.Square();
+    pfs_2 = pfs_1;
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
     double *data_pfs_2 = pfs_2.GetDataPtr();

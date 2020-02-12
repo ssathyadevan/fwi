@@ -79,14 +79,14 @@ void performInversion(const GenericInput &gInput)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
     src.Print();
-    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
     recv.Print();
     FrequenciesGroup freqg(gInput.freq, gInput.c_0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.src * gInput.nSourcesReceivers.rec;
+    int magnitude = gInput.freq.nTotal * gInput.nSourcesReceivers.nsources * gInput.nSourcesReceivers.nreceivers;
 
     //read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);

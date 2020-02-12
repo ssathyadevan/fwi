@@ -70,9 +70,9 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.src);
+    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
     src.Print();
-    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.rec);
+    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
     recv.Print();
     FrequenciesGroup freq(gInput.freq, gInput.c_0);
     freq.Print(gInput.freq.nTotal);
