@@ -26,7 +26,9 @@ class Helmholtz2D {
     explicit Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput);
     ~Helmholtz2D();
     PressureFieldComplexSerial solve(const std::array<double, 2> &source, PressureFieldComplexSerial &pInit);
-  private:
+    void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx); //Temporary for testing
+
+private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
     const Grid2D _oldgrid;
@@ -43,4 +45,5 @@ class Helmholtz2D {
     void buildMatrix();
     void buildVector(const std::array<double, 2> &source);
     void updateChi(const PressureFieldSerial &chi);
+    void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx, std::array<double, 2> xMin);
 };
