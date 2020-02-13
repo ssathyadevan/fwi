@@ -1,12 +1,18 @@
 #include <gtest/gtest.h>
 #include <iterator>
 #include "receivers.h"
-
-TEST(ReceiversTest, ConstructorTest)
+Receivers InitializeReceivers()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {10.0, 10.0};
     Receivers receivers(xMin, xMax, 11);
+    return receivers;
+}
+
+TEST(ReceiversTest, ConstructorTest)
+{
+    Receivers receivers = InitializeReceivers();
+
 
     double dx = 1.0;
     double iteration_counter = 0.0;
@@ -21,9 +27,7 @@ TEST(ReceiversTest, ConstructorTest)
 
 TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 {
-    std::array<double, 2> xMin = {0.0, 0.0};
-    std::array<double, 2> xMax = {10.0, 10.0};
-    Receivers receivers(xMin, xMax, 11);
+    Receivers receivers = InitializeReceivers();
 
     EXPECT_EQ(receivers.xRecv.size(), 11);
 }
@@ -31,9 +35,8 @@ TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 
 TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
 {
-    std::array<double, 2> xMin = {0.0, 0.0};
-    std::array<double, 2> xMax = {10.0, 10.0};
-    Receivers receivers(xMin, xMax, 11);
+    Receivers receivers = InitializeReceivers();
+
     std::array<double, 11> expectedXPositions = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
 
     for (unsigned int i = 0; i < expectedXPositions.size(); i++)
