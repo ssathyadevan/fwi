@@ -311,27 +311,25 @@ print("\nMinimum deviation")
 print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
 
-if ((mse_bench > mse_new) \
-and (bench_max>new_max) \
-and (abs(bench_min) > abs(new_min))):
-    increased_precision_test = True
+if (mse_bench > mse_new):
+    increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
 print("************************************************************\n")
 
-def find(substr,whichin):
+def find(substr,whichin,date_format):
     from datetime import datetime
     lines           = [x for x in open(whichin+"Process.out") if substr in x]
     line            = lines[0]
-    manip           = line.replace(substr,'').replace("\n",'')
-    start_or_finish = (datetime.strptime(manip,'%c'))
+    manip = line.replace(substr, '').replace("\n", '')
+    start_or_finish = (datetime.strptime(manip, date_format))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/output/" +bench)
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench)
+datetime_bench_start  = find("Starting at ", bench + "/output/" +bench, "%c")
+datetime_bench_finish = find("Finished at ", bench + "/output/" +bench, "%c")
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find("Starting at ", new + "/output/"+ new)
-datetime_new_finish   = find("Finished at ", new + "/output/" +new)
+datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f")
+datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f")
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):
@@ -348,7 +346,7 @@ print("************************************************************\n")
 print("Increased overall precision:  " + str(increased_precision_test_passed))
 print("Increased performance:        " + str(increased_performance_test_passed))
 
-if regression_test_passed is True:
+if (increased_precision_test_passed or increased_performance_test_passed):
     s = 'True'
 else:
     s = 'False'
@@ -357,7 +355,7 @@ f= open("RegressionTest_Passed.txt","w+")
 f.write(str(s))
 f.close()
 
-print_regression_test_passed_message(regression_test_passed)
+print_regression_test_passed_message(s)
 
 if (len(sys.argv) == 2):
     os.system("rm hiquality.*")
