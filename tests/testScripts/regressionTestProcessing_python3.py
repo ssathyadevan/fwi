@@ -317,19 +317,19 @@ print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
 print("************************************************************\n")
 
-def find(substr,whichin,date_format):
+def find(substr,whichin,date_format, file_type):
     from datetime import datetime
-    lines           = [x for x in open(whichin+"Process.out") if substr in x]
+    lines           = [x for x in open(whichin+"Process."+file_type) if substr in x]
     line            = lines[0]
     manip = line.replace(substr, '').replace("\n", '')
     start_or_finish = (datetime.strptime(manip, date_format))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/output/" +bench, "%c")
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench, "%c")
+datetime_bench_start  = find("Starting at ", bench + "/output/" +bench, "%c", "out")
+datetime_bench_finish = find("Finished at ", bench + "/output/" +bench, "%c", "out")
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f")
-datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f")
+datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f", "log")
+datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f", "log")
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):
