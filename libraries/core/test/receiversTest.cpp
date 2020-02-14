@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <iterator>
 #include "receivers.h"
+
 Receivers InitializeReceivers()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
