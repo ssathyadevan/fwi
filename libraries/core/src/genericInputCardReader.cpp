@@ -37,8 +37,16 @@ void GenericInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/GenericInput.json");
 
+    nlohmann::json::json_pointer p_ngridx("/ngrid/x");
+    nlohmann::json::json_pointer p_ngridz("/ngrid/z");
+    nlohmann::json::json_pointer p_ngrid_original_x("/ngrid_original/x");
+    nlohmann::json::json_pointer p_ngrid_original_z("/ngrid_original/z");
+
+    int n_gid_default_x = j.value(p_ngridx, 0);
+    int n_gid_default_z = j.value(p_ngridz, 0);
+
     GenericInput jsonInput{
-        _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName, j["c_0"], {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"]}, {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]}, {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]}, {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]}, {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]}, {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]}, {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]}, {j["ngrid_original"]["x"], j["ngrid_original"]["z"]}, {j["ngrid"]["x"], j["ngrid"]["z"]}, {j["nSources"], j["nReceivers"]}, j["fileName"], j["verbosity"]};
+        _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName, j["c_0"], {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"]}, {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]}, {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]}, {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]}, {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]}, {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]}, {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]}, {j.value(p_ngrid_original_x, n_gid_default_x), j.value(p_ngrid_original_z, n_gid_default_z)}, {j["ngrid"]["x"], j["ngrid"]["z"]}, {j["nSources"], j["nReceivers"]}, j["fileName"], j["verbosity"]};
 
     _input = jsonInput;
 }
