@@ -23,6 +23,7 @@ if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
 endif()
 
 find_package(MPI)
+find_package(OpenMP)
 
 if ( UNIX )
 if(MPI_FOUND)
