@@ -7,32 +7,12 @@ namespace fwi {
 namespace GreensFunctions
 {
 
-float Helmholtz2D_real(float k, float r)
-{
-    float value = 0.0f;
-    if (r != 0.0f)
-    {
-        value = 0.25f * static_cast<float>(std::cyl_neumann(0, k * r)) * k * k; // Babak 2018 10 25: GreensFunc2d (first part of rhs). y0 indicates the Bessel function of the first kind.
-    }
-    return value;
-}
-
-float Helmholtz2D_imag(float k, float r)
-{
-    float value = 0.0f;
-    if (r != 0.0f)
-    {
-        value = -0.25f * static_cast<float>(std::cyl_bessel_j(0, k * r)) * k * k; // Babak 2018 10 25: Equation ID "GreensFunc2d": (second part of rhs). j0 indicates the Bessel function of the second kind.
-    }
-    return value;
-}
-
 double Helmholtz2D_real(double k, double r)
 {
     double value = 0.0;
     if (r != 0.0)
     {
-        value = 0.25 * std::cyl_neumann(0, k * r) * k * k; // Babak 2018 10 25: Equation ID "GreensFunc2d": (first part of rhs). y0 indicates the Bessel function of the first kind.
+        value = -0.25 * std::cyl_neumann(0, k * r) * k * k; // Babak 2018 10 25: Equation ID "GreensFunc2d": (first part of rhs). y0 indicates the Bessel function of the first kind.
     }
     return value;
 }
@@ -42,7 +22,7 @@ double Helmholtz2D_imag(double k, double r)
     double value = 0.0;
     if (r != 0.0)
     {
-        value = -0.25 * std::cyl_bessel_j(0, k * r) * k * k; // Babak 2018 10 25: Equation ID "GreensFunc2d": (second part of rhs). j0 indicates the Bessel function of the second kind.
+        value = 0.25 * std::cyl_bessel_j(0, k * r) * k * k; // Babak 2018 10 25: Equation ID "GreensFunc2d": (second part of rhs). j0 indicates the Bessel function of the second kind.
 
     }
     return value;
