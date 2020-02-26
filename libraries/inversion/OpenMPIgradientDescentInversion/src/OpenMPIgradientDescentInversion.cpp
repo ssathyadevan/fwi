@@ -15,7 +15,8 @@ OpenMPIGradientDescentInversion::OpenMPIGradientDescentInversion(ForwardModelInt
 PressureFieldSerial OpenMPIGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-
+    omp_set_num_threads(2);
+    std::cout << "Parallelization of Gradient descent with max" << omp_get_max_threads() << " threads." << std::endl;
     ProgressBar bar(_gdInput.iter);
 
     double eta;
@@ -76,12 +77,16 @@ std::vector<double> OpenMPIGradientDescentInversion::differential(const std::vec
 {
     int numGridPoints = chiEstimate.GetNumberOfGridPoints();
     std::vector<double> dFdx(numGridPoints);
-    std::cout << "\n Start parallelization of Differential with " << omp_get_max_threads() << " threads." << std::endl;
+    //std::cout << "\n Start parallelization of Differential with " << omp_get_num_threads() << " threads." << std::endl;
     #pragma omp parallel shared(dFdx) shared(pData) shared(chiEstimate) shared(h) shared(eta)
     {
+        if (omp_get_thread_num() == 0)
+        {
+            std::cout << "\n Start parallelization of Differential with " << omp_get_num_threads() << " threads." << std::endl;
+        }
         const std::vector<std::complex<double>> mypData = pData;
         PressureFieldSerial mychi = chiEstimate;
-        unsigned int blocksize = dFdx.size() / omp_get_max_threads();
+        unsigned int blocksize = dFdx.size() / omp_get_num_threads();
         unsigned int offset = blocksize * omp_get_thread_num();
         if (offset + blocksize > dFdx.size() )
         {
