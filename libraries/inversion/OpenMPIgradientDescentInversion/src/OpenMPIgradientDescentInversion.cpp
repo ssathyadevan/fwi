@@ -15,7 +15,6 @@ OpenMPIGradientDescentInversion::OpenMPIGradientDescentInversion(ForwardModelInt
 PressureFieldSerial OpenMPIGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    omp_set_num_threads(2);
     std::cout << "Parallelization of Gradient descent with max" << omp_get_max_threads() << " threads." << std::endl;
     ProgressBar bar(_gdInput.iter);
 
