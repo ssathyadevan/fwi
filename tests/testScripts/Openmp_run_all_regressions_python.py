@@ -80,7 +80,7 @@ for test in tests:
     f.write("Passed {} regression test: ".format(test))
     f.close()
 
-    os.system("python3 regressionTestProcessing_python3.py {} {}RUN".format(test,test))
+    os.system("python3 GradientDescent_regressionTestProcessing_python3.py {} {}RUN".format(test,test))
     os.system("python3 read_results.py")
 
     destdir2 = "testname.txt"
