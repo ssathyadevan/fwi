@@ -48,9 +48,7 @@ def regressiontest() {
 		env.MYSTAGE_NAME = 'Regression Testing'
 		sh '''
 		cp tests/testScripts/Openmp_run_all_regressions_python.py .
-		python3 Openmp_run_all_regressions_python.py 0	
-		cp tests/testScripts/run_all_regressions_python.py .
-		python3 run_all_regressions_python.py 0	
+		python3 Openmp_run_all_regressions_python.py 0
 		'''
 }
 
