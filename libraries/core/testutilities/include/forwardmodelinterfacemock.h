@@ -13,8 +13,8 @@ public:
     ForwardModelInterfaceMock( const Grid2D &grid, const Sources &src, const Receivers &recv,
                                const FrequenciesGroup &freq);
 
-    ~ForwardModelInterfaceMock();
-    void calculateKappa();
+    ~ForwardModelInterfaceMock(){}
+    void calculateKappa(){};
 
     virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData);
     virtual void calculatePTot(const PressureFieldSerial &chiEst){chiEst.GetGrid();}

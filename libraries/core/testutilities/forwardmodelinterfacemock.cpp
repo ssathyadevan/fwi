@@ -7,18 +7,10 @@ ForwardModelInterfaceMock::ForwardModelInterfaceMock(const Grid2D &grid, const S
 
 }
 
-ForwardModelInterfaceMock::~ForwardModelInterfaceMock()
-{
-}
-
-void ForwardModelInterfaceMock::calculateKappa()
-{
-}
-
-
 void ForwardModelInterfaceMock::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData)
 {
     chiEst.GetGrid();
+
     for(std::complex<double>& element : pData)
     {
         element = 2;
