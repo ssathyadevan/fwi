@@ -23,4 +23,4 @@ endfunction( build_test )
 SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 
 # Build the tests!
-build_test(TARGET OpenMPIgradientDescentInversionTest SOURCE OpenMPIgradientDescentInversionTest.cpp LIBRARIES OpenMPI_gradient_descent_inversion_library integral_forward_model_library core_library)
+build_test(TARGET OpenMPgradientDescentInversionTest SOURCE OpenMPgradientDescentInversionTest.cpp LIBRARIES OpenMP_gradient_descent_inversion_library integral_forward_model_library core_library)

@@ -6,6 +6,6 @@ add_subdirectory(evolutionInversion)
 if(MPI_FOUND)
     add_subdirectory(MPIConjugateGradientInversion)
 endif(MPI_FOUND)
-add_subdirectory(OpenMPIgradientDescentInversion)
+add_subdirectory(OpenMPgradientDescentInversion)
 
 

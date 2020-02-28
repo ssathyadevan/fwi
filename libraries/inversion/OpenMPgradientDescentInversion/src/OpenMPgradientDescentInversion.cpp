@@ -1,9 +1,9 @@
-#include "OpenMPIgradientDescentInversion.h"
+#include "OpenMPgradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "progressBar.h"
 #include <omp.h>
 
-OpenMPIGradientDescentInversion::OpenMPIGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
+OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     GradientDescentInversionInputCardReader GradientDescentInversionReader(gInput.caseFolder);
@@ -12,7 +12,7 @@ OpenMPIGradientDescentInversion::OpenMPIGradientDescentInversion(ForwardModelInt
 }
 
 
-PressureFieldSerial OpenMPIGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
+PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
     std::cout << "Parallelization of Gradient descent with max" << omp_get_max_threads() << " threads." << std::endl;
@@ -72,27 +72,30 @@ PressureFieldSerial OpenMPIGradientDescentInversion::Reconstruct(const std::vect
     return chiEstimate;
 }
 
-std::vector<double> OpenMPIGradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta)
+std::vector<double> OpenMPGradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial chiEstimate, const double h, const double eta)
 {
-    int numGridPoints = chiEstimate.GetNumberOfGridPoints();
+    const int numGridPoints = chiEstimate.GetNumberOfGridPoints();
     std::vector<double> dFdx(numGridPoints);
-    //std::cout << "\n Start parallelization of Differential with " << omp_get_num_threads() << " threads." << std::endl;
-    #pragma omp parallel shared(dFdx) shared(pData) shared(chiEstimate) shared(h) shared(eta)
+    std::cout << "\n Start parallelization of Differential with " << omp_get_max_threads() << " threads." << std::endl;
+    #pragma omp parallel shared(dFdx)
     {
-        if (omp_get_thread_num() == 0)
-        {
-            std::cout << "\n Start parallelization of Differential with " << omp_get_num_threads() << " threads." << std::endl;
-        }
-        const std::vector<std::complex<double>> mypData = pData;
-        PressureFieldSerial mychi = chiEstimate;
         unsigned int blocksize = dFdx.size() / omp_get_num_threads();
-        unsigned int offset = blocksize * omp_get_thread_num();
-        if (offset + blocksize > dFdx.size() )
+        int remainder = dFdx.size() % omp_get_num_threads();
+        int before_remainder = std::min(omp_get_thread_num(), remainder);
+        int after_remainder = std::max(0, omp_get_thread_num() - remainder);
+
+        unsigned int offset = before_remainder * (blocksize +1) + after_remainder * blocksize;
+        if (before_remainder < remainder)
         {
-            blocksize = dFdx.size() - offset;
+            blocksize += 1;
         }
+        if (omp_get_thread_num() == omp_get_num_threads() - 1 && offset + blocksize != dFdx.size())
+        {
+            std::cout << "Not all gridpoints are covered with the parallelization of the computation of differential" << std::endl;
+        }
+
         std::vector<double> my_dFdx(blocksize);
-        differential_parallel(mypData, mychi, h, eta, blocksize, offset, my_dFdx);
+        differential_parallel(pData, chiEstimate, h, eta, blocksize, offset, my_dFdx);
         std::copy(my_dFdx.begin(), my_dFdx.end(), dFdx.begin() + offset);
     }
     std::cout << "Finish parallelization \n" << std::endl;
@@ -100,13 +103,13 @@ std::vector<double> OpenMPIGradientDescentInversion::differential(const std::vec
 }
 
 
-double OpenMPIGradientDescentInversion::functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta)
+double OpenMPGradientDescentInversion::functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta)
 {
     return eta * _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(xi, pData));
 }
 
 
-PressureFieldSerial OpenMPIGradientDescentInversion::gradientDescent(PressureFieldSerial x, std::vector<double> dfdx, double gamma)
+PressureFieldSerial OpenMPGradientDescentInversion::gradientDescent(PressureFieldSerial x, std::vector<double> dfdx, double gamma)
 {
     double* p_x = x.GetDataPtr();
 
@@ -118,14 +121,14 @@ PressureFieldSerial OpenMPIGradientDescentInversion::gradientDescent(PressureFie
     return x;
 }
 
-void OpenMPIGradientDescentInversion::differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta, int blocksize, int offset, std::vector<double> &my_dFdx)
+void OpenMPGradientDescentInversion::differential_parallel(const std::vector<std::complex<double>> &pData, const PressureFieldSerial chiEstimate, const double h, const double eta, const unsigned int blocksize, const unsigned int offset, std::vector<double> &my_dFdx)
 {
     double FxPlusH;
     double Fx = functionF(chiEstimate, pData, eta);
     PressureFieldSerial chiEstimatePlusH = chiEstimate;
     double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
 
-    for (int i = offset; i != offset + blocksize; ++i)
+    for (unsigned int i = offset; i != offset + blocksize; ++i)
     {
         p_chiEstimatePlusH[i] += h;
         FxPlusH = functionF(chiEstimatePlusH, pData, eta);
@@ -135,7 +138,7 @@ void OpenMPIGradientDescentInversion::differential_parallel(const std::vector<st
 }
 
 
-double OpenMPIGradientDescentInversion::determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x)
+double OpenMPGradientDescentInversion::determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x)
 {
     double* p_x = x.GetDataPtr();
     double* p_xPrevious = xPrevious.GetDataPtr();
