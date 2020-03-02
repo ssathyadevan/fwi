@@ -3,7 +3,7 @@
 #include "genericInput.h"
 #include <ostream>
 
-const std::string inputPath = "./";
+const std::string inputPath = "./../tests";
 
 TEST(genericinputcardreadertest, readc0Test)
 {

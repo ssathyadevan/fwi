@@ -17,7 +17,7 @@ function( build_test )
     target_link_libraries( ${TEST_TARGET} GTest::Main ${TEST_LIBRARIES} )
     gtest_discover_tests( ${TEST_TARGET} )
 
-    install(TARGETS ${TEST_TARGET} DESTINATION bin/test)
+    install(TARGETS ${TEST_TARGET} DESTINATION bin)
 endfunction( build_test )
 
 SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
