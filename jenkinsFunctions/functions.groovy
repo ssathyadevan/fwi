@@ -69,9 +69,6 @@ def deploy(){
 
 def sendEmail() {
 
-        echo 'Sending mail'
-		env.MYSTAGE_NAME = 'E-mail'
-
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
