@@ -66,22 +66,19 @@ def deploy(){
 }
 
 
-post {
-	always {
-		def sendEmail() {
 
-			echo 'Sending mail'
-				env.MYSTAGE_NAME = 'E-mail'
+def sendEmail() {
 
-			email = evaluate readTrusted('jenkinsFunctions/email.groovy')
-			if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
-				email.sendEmail()
-			}
-			else{          
-				email.sendEmailFailure()
-			}
-		}
-	}
+        echo 'Sending mail'
+		env.MYSTAGE_NAME = 'E-mail'
+
+        email = evaluate readTrusted('jenkinsFunctions/email.groovy')
+        if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
+                email.sendEmail()
+        }
+        else{          
+                email.sendEmailFailure()
+        }
 }
 
 
