@@ -2,8 +2,9 @@
 #include "genericInputCardReader.h"
 #include "genericInput.h"
 #include <ostream>
+#include "utilityFunctions.h"
 
-const std::string inputPath = "./../tests";
+const std::string inputPath = "./../../../tests";
 
 TEST(genericinputcardreadertest, readc0Test)
 {
@@ -102,6 +103,7 @@ TEST(genericinputcardreadertest, readngridTest)
     GenericInputCardReader reader(inputPath);
     std::array<int,2> expectedngrid {64, 32};
 
+    // Then
     EXPECT_NEAR(reader.getInput().ngrid[0], expectedngrid[0], 0.0001);
     EXPECT_NEAR(reader.getInput().ngrid[1], expectedngrid[1], 0.0001);
 }
@@ -111,6 +113,7 @@ TEST(genericinputcardreadertest, readngridoriginalTest)
     GenericInputCardReader reader(inputPath);
     std::array<int,2> expectedngrid {64, 32};
 
+    // Then
     EXPECT_NEAR(reader.getInput().ngrid_original[0], expectedngrid[0], 0.0001);
     EXPECT_NEAR(reader.getInput().ngrid_original[1], expectedngrid[1], 0.0001);
 }

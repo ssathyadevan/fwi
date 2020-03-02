@@ -4,6 +4,8 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories(../include)
 include_directories(../testutilities)
 include_directories(../testutilities/include)
+include_directories(../../tests)
+
 
 # Template function for building a test
 function( build_test )
