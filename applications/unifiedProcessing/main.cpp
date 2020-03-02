@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    
+    try{
     std::vector<std::string> arguments(argv + 1, argc + argv);
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
@@ -65,6 +65,15 @@ int main(int argc, char **argv)
     std::string msg = clock.OutputString();
     writePlotInput(gInput, msg);
     endLogger();
+    }
+    catch(const std::invalid_argument& e){
+      std::cout << "An invalid argument found!" << std::endl;
+      std::cout<< e.what() << std::endl;
+    }
+    catch( const std::exception& e){
+        std::cout<< e.what()<< std::endl;
+    }
+
     return 0;
 }
 
