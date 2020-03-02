@@ -24,7 +24,10 @@ endif()
 
 find_package(MPI)
 find_package(OpenMP)
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp")
+
+if (OpenMP_CXX_FOUND)
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp")
+endif(OpenMP_CXX_FOUND)
 
 if ( UNIX )
 if(MPI_FOUND)
