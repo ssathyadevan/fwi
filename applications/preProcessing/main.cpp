@@ -9,25 +9,34 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
 
 int main(int argc, char **argv)
 {
-    std::vector<std::string> arguments = returnInputDirectory(argc, argv);
-    GenericInputCardReader genericReader(arguments[0]);
-    const GenericInput gInput = genericReader.getInput();
+    try {
+        std::vector<std::string> arguments = returnInputDirectory(argc, argv);
+        GenericInputCardReader genericReader(arguments[0]);
+        const GenericInput gInput = genericReader.getInput();
 
-    std::string logFileName =  gInput.outputLocation + gInput.runName + "PreProcess.log";
+        std::string logFileName =  gInput.outputLocation + gInput.runName + "PreProcess.log";
 
-    if (!gInput.verbose)
-    {
-        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-        initLogger( logFileName.c_str(), ldebug);
+        if (!gInput.verbose)
+        {
+            std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+            initLogger( logFileName.c_str(), ldebug);
+        }
+
+        L_(linfo) << "Preprocessing the provided input to create the reference pressure-field" ;
+
+        CpuClock clock;
+
+        clock.Start();
+        generateReferencePressureFieldFromChi(gInput, gInput.runName);
+        clock.End();
     }
-
-    L_(linfo) << "Preprocessing the provided input to create the reference pressure-field" ;
-
-    CpuClock clock;
-
-    clock.Start();
-    generateReferencePressureFieldFromChi(gInput, gInput.runName);
-    clock.End();
+    catch(const std::invalid_argument& e){
+        std::cout << "An invalid argument found!" << std::endl;
+        std::cout<< e.what() << std::endl;
+    }
+    catch( const std::exception& e){
+        std::cout<< e.what()<< std::endl;
+    }
 
     return 0;
 }
