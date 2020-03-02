@@ -119,4 +119,20 @@ TEST(genericinputcardreadertest, readngridoriginalTest)
 }
 
 
+TEST(genericinputcardreadertest, readVerbosityTest)
+{
+    // Given
+    GenericInputCardReader reader(inputPath);
+    bool expectedVerbosity = false;
+
+    EXPECT_EQ(expectedVerbosity, reader.getInput().verbose);
+}
+
+TEST(genericinputcardreadertest, readFileNameTest)
+{
+    GenericInputCardReader reader(inputPath);
+    std::string expectedFileName = "temple";
+    EXPECT_EQ(expectedFileName, reader.getInput().fileName);
+
+}
 
