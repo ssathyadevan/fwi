@@ -6,7 +6,8 @@ import hudson.model.Actionable
 
 import com.cloudbees.groovy.cps.NonCPS
 
-
+try
+{
 def setEnvironment() {
 
         // Get commit parameters like commit code and author
@@ -64,7 +65,10 @@ def deploy(){
         archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
+}
 
+finally
+{
 def sendEmail() {
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
@@ -73,6 +77,7 @@ def sendEmail() {
         else{          
                 email.sendEmailFailure()
         }
+}
 }
 
 return this
