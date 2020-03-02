@@ -22,3 +22,8 @@ void RandomInversionInputCardReader::readCard(const std::string &caseFolder)
 
     _input = input;
 }
+
+void RandomInversionInputCardReader::checkinput()
+{
+
+}

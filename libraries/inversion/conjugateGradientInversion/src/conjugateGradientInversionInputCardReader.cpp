@@ -26,3 +26,8 @@ void ConjugateGradientInversionInputCardReader::readCard(const std::string &case
 
     _input = input;
 }
+
+void ConjugateGradientInversionInputCardReader::checkinput()
+{
+
+}

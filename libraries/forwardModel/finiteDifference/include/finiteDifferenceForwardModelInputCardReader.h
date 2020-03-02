@@ -16,5 +16,6 @@ public:
 
 private:
     virtual void readCard(const std::string &caseFolder);
+    void checkinput();
     FiniteDifferenceForwardModelInput _input;
 };

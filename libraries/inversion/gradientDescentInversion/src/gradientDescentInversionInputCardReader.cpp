@@ -26,3 +26,8 @@ void GradientDescentInversionInputCardReader::readCard(const std::string &caseFo
 
     _input = input;
 }
+
+void GradientDescentInversionInputCardReader::checkinput()
+{
+
+}

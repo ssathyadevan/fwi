@@ -26,3 +26,8 @@ void MPIConjugateGradientInversionInputCardReader::readCard(const std::string &c
 
     _input = input;
 }
+
+void MPIConjugateGradientInversionInputCardReader::checkinput()
+{
+
+}

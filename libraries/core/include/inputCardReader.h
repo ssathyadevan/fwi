@@ -14,7 +14,9 @@ public:
     virtual ~InputCardReader() = default;
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
+    virtual void checkinput() = 0;
 
     nlohmann::json readFile(const std::string &fileName);
+
 };
 

@@ -22,3 +22,8 @@ void EvolutionInversionInputCardReader::readCard(const std::string &caseFolder)
 
     _input = input;
 }
+
+void EvolutionInversionInputCardReader::checkinput()
+{
+
+}

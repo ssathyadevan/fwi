@@ -13,6 +13,7 @@ public:
     ConjugateGradientInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
+    void checkinput();
     ConjugateGradientInversionInput _input;
 };
 

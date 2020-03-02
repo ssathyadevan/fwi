@@ -23,3 +23,8 @@ void IntegralForwardModelInputCardReader::readCard(const std::string &caseFolder
 
     _input = input;
 }
+
+void IntegralForwardModelInputCardReader::checkinput()
+{
+
+}

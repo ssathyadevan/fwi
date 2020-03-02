@@ -24,3 +24,8 @@ void FiniteDifferenceForwardModelInputCardReader::readCard(const std::string &ca
 
     _input = input;
 }
+
+void FiniteDifferenceForwardModelInputCardReader::checkinput()
+{
+
+}
