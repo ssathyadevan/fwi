@@ -4,7 +4,7 @@
 #include <ostream>
 #include "utilityFunctions.h"
 
-const std::string inputPath = "./../../../../testsfaulty";
+const std::string inputPath = "./../../../../tests";
 
 TEST(genericinputcardreadertest, readc0Test)
 {
@@ -14,6 +14,7 @@ TEST(genericinputcardreadertest, readc0Test)
     // Then
     EXPECT_NEAR(reader.getInput().c_0, 2000.0, 0.0001);
 }
+buildmistake
 
 TEST(genericinputcardreadertest, readFreqTest)
 {
