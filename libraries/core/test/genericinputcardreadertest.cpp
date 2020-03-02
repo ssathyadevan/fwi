@@ -4,7 +4,7 @@
 #include <ostream>
 #include "utilityFunctions.h"
 
-const std::string inputPath = "./../../../tests";
+const std::string inputPath = "./../../../../tests";
 
 TEST(genericinputcardreadertest, readc0Test)
 {
