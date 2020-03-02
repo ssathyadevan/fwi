@@ -7,6 +7,7 @@ GradientDescentInversionInputCardReader::GradientDescentInversionInputCardReader
     : InputCardReader()
 {
     readCard(caseFolder);
+    checkinput();
 }
 
 GradientDescentInversionInput GradientDescentInversionInputCardReader::getInput()
@@ -29,5 +30,6 @@ void GradientDescentInversionInputCardReader::readCard(const std::string &caseFo
 
 void GradientDescentInversionInputCardReader::checkinput()
 {
-
+    if (_input.h >= 0 ) {throw std::invalid_argument("Invalid step size h in GradientDescentInversionInput.json");}
+    if (_input.iter >= 0 ) {throw std::invalid_argument("Invalid numer of iterations in GradientDescentInversionInput.json");}
 }

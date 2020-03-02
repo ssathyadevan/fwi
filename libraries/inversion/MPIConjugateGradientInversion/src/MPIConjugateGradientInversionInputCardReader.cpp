@@ -7,6 +7,7 @@ MPIConjugateGradientInversionInputCardReader::MPIConjugateGradientInversionInput
     : InputCardReader()
 {
     readCard(caseFolder);
+    checkinput();
 }
 
 MPIConjugateGradientInversionInput MPIConjugateGradientInversionInputCardReader::getInput()
@@ -29,5 +30,7 @@ void MPIConjugateGradientInversionInputCardReader::readCard(const std::string &c
 
 void MPIConjugateGradientInversionInputCardReader::checkinput()
 {
-
+    if (_input.iteration1.n <= 0) {throw std::invalid_argument("Invalid number of iterations n in MPIConjugateGradientInversionInput.json");}
+    if (_input.iteration1.tolerance <= 0) {throw std::invalid_argument("Invalid tolerance in MPIConjugateGradientInversionInput.json");}
+    if (_input.n_max <= 0 ) {throw std::invalid_argument("Invalid number of iterations n_max in MPIConjugateGradientInversionInput.json");}v
 }

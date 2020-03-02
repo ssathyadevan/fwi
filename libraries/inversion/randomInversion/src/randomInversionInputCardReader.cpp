@@ -6,6 +6,7 @@ RandomInversionInputCardReader::RandomInversionInputCardReader(const std::string
     : InputCardReader()
 {
     readCard(caseFolder);
+    checkinput();
 }
 
 RandomInversionInput RandomInversionInputCardReader::getInput()
@@ -25,5 +26,7 @@ void RandomInversionInputCardReader::readCard(const std::string &caseFolder)
 
 void RandomInversionInputCardReader::checkinput()
 {
-
+    if(_input.toleranceOuter <= 0) {throw std::invalid_argument("Invalid tolerance in RandomInversionInput.json");}
+    if (_input.nMaxOuter <= 0) {throw std::invalid_argument("Invalid number of iterations nMaxOuter in RandomInversionInput.json");}
+    if (_input.nMaxInner <= 0 ) {throw std::invalid_argument("Invalid number of iterations nMaxInner in RandomInversionInput.json");}
 }
