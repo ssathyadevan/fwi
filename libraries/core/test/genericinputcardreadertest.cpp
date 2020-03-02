@@ -15,7 +15,6 @@ TEST(genericinputcardreadertest, readc0Test)
     EXPECT_NEAR(reader.getInput().c_0, 2000.0, 0.0001);
 }
 
-
 TEST(genericinputcardreadertest, readFreqTest)
 {
     // Given
@@ -28,8 +27,6 @@ TEST(genericinputcardreadertest, readFreqTest)
     EXPECT_NEAR(actualFreq.max, expectedFreq.max, 0.0001);
     EXPECT_NEAR(actualFreq.nTotal, expectedFreq.nTotal, 0.0001);
 }
-
-buildmistake
 
 TEST(genericinputcardreadertest, readReservoirTest)
 {
