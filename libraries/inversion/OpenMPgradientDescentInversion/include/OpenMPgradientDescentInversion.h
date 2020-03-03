@@ -4,7 +4,7 @@
 #include "forwardModelInterface.h"
 #include "gradientDescentInversionInput.h"
 #include "genericInput.h"
-class OpenMPIGradientDescentInversion : public InversionInterface{
+class OpenMPGradientDescentInversion : public InversionInterface{
 
 private:
 
@@ -17,16 +17,16 @@ private:
     const FrequenciesGroup _freq;
 
     PressureFieldSerial gradientDescent(PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
-    void differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta, int blocksize, int offset, std::vector<double>& my_dFdx);
+    void differential_parallel(const std::vector<std::complex<double>> &pData, const PressureFieldSerial xi, const double dxi, const double eta, const unsigned int blocksize, const unsigned int offset, std::vector<double>& my_dFdx);
     
  public:
-    OpenMPIGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
+    OpenMPGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
 
-    OpenMPIGradientDescentInversion(const OpenMPIGradientDescentInversion&) = delete;
-    OpenMPIGradientDescentInversion & operator = (const OpenMPIGradientDescentInversion&) = delete;
+    OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion&) = delete;
+    OpenMPGradientDescentInversion & operator = (const OpenMPGradientDescentInversion&) = delete;
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
-    std::vector<double> differential(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta);
+    std::vector<double> differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial xi, const double dxi, const double eta);
     double functionF(PressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x);
 };

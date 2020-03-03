@@ -8,7 +8,7 @@
 #include "cpuClock.h"
 #include "log.h"
 #include "integralForwardModel.h"
-#include "OpenMPIgradientDescentInversion.h"
+#include "OpenMPgradientDescentInversion.h"
 #include <string>
 
 void performInversion(const GenericInput &gInput, const std::string &runName);
@@ -121,7 +121,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
 
     L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;
-    inverse = new OpenMPIGradientDescentInversion(model, gInput);
+    inverse = new OpenMPGradientDescentInversion(model, gInput);
 
     L_(linfo) << "Estimating Chi..." ;
 
