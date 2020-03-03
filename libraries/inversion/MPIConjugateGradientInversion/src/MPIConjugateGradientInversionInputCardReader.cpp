@@ -32,5 +32,6 @@ void MPIConjugateGradientInversionInputCardReader::checkinput()
 {
     if (_input.iteration1.n <= 0) {throw std::invalid_argument("Invalid number of iterations n in MPIConjugateGradientInversionInput.json");}
     if (_input.iteration1.tolerance <= 0) {throw std::invalid_argument("Invalid tolerance in MPIConjugateGradientInversionInput.json");}
+    if (_input.dAmplification.start <= 0 || _input.dAmplification.slope < 0) {throw std::invalid_argument("Invalid input for DeltaAmplification in MPIConjugateGradientInversionInput.json");}
     if (_input.n_max <= 0 ) {throw std::invalid_argument("Invalid number of iterations n_max in MPIConjugateGradientInversionInput.json");}
 }

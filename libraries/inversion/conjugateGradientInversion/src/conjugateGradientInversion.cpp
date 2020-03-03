@@ -132,6 +132,8 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                     alphaDiv[1] += std::real(conj(zetaTemp[i]) * zetaTemp[i]);
                 }
 
+                if (alphaDiv[1] == 0.0) {throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero.");}
+
                 alpha = alphaDiv[0] / alphaDiv[1]; //eq:optimalStepSizeCG in the readme pdf
                 chiEst += alpha * zeta;
                 gOld = g;
@@ -151,6 +153,11 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
             }
             else
             {
+
+                tmp.Zero();
+
+                _forwardModel->getUpdateDirectionInformation(resArray, tmp);
+
                 chiEst.Gradient(gradientChiOld);
                 PressureFieldSerial gradientChiOldNormsquared(_grid);
 
@@ -167,7 +174,10 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 PressureFieldSerial tmpVolField2 = b * *gradientChiOld[1];
                 tmpVolField2.Square();
                 tmpVolField += tmpVolField2;
-                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared.Summation(); // # eq. 2.23
+
+                double bsquared_sum = bsquared.Summation();
+                if (bsquared_sum == 0.0) {throw std::overflow_error("ConjugateGradient: the computation of deltasquared devides by zero.");}
+                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared_sum; // # eq. 2.23
 
                 tmpVolField = bsquaredOld * *gradientChiOld[0];
                 tmpVolField.Gradient(gradientGregTmp);
@@ -177,13 +187,14 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 tmpVolField2 = *gradientGregTmp[1];
 
                 PressureFieldSerial gReg = tmpVolField + tmpVolField2; //# eq. 2.24
-                tmp.Zero();
 
-                _forwardModel->getUpdateDirectionInformation(resArray, tmp);
 
                 g = eta * fRegOld * tmp.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
 
-                gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
+                double inproduct_gOld = gOld.InnerProduct(gOld);
+                if (inproduct_gOld == 0.0) {throw std::overflow_error("ConjugateGradient: the computation of gamma devides by zero.");}
+
+                gamma = g.InnerProduct(g - gOld) / inproduct_gOld; // # eq: PolakRibiereDirection
                 zeta = g + gamma * zeta;
 
                 std::array<double, 2> A = {0.0, 0.0};
