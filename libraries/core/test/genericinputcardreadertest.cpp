@@ -133,6 +133,5 @@ TEST(genericinputcardreadertest, readFileNameTest)
     GenericInputCardReader reader(inputPath);
     std::string expectedFileName = "temple";
     EXPECT_EQ(expectedFileName, reader.getInput().fileName);
-
 }
 
