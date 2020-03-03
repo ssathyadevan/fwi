@@ -75,7 +75,8 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
 std::vector<double> OpenMPGradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial chiEstimate, const double h, const double eta)
 {
     const int numGridPoints = chiEstimate.GetNumberOfGridPoints();
-    std::vector<double> dFdx(numGridPoints);
+    std::vector<double> dFdx(numGridPoints, 0.00001);
+
     std::cout << "\n Start parallelization of Differential with " << omp_get_max_threads() << " threads." << std::endl;
     #pragma omp parallel shared(dFdx)
     {
@@ -94,7 +95,7 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
             std::cout << "Not all gridpoints are covered with the parallelization of the computation of differential" << std::endl;
         }
 
-        std::vector<double> my_dFdx(blocksize);
+        std::vector<double> my_dFdx(blocksize, 0.00001);
         differential_parallel(pData, chiEstimate, h, eta, blocksize, offset, my_dFdx);
         std::copy(my_dFdx.begin(), my_dFdx.end(), dFdx.begin() + offset);
     }
