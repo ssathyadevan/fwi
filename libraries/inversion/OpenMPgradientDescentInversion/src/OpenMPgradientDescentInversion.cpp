@@ -97,7 +97,14 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
 
         std::vector<double> my_dFdx(blocksize, 0.00001);
         differential_parallel(pData, chiEstimate, h, eta, blocksize, offset, my_dFdx);
-        std::copy(my_dFdx.begin(), my_dFdx.end(), dFdx.begin() + offset);
+        //std::copy(my_dFdx.begin(), my_dFdx.end(), dFdx.begin() + offset);
+
+        for (unsigned int i = offset; i != offset + blocksize; ++i)
+        {
+            dFdx[i] = my_dFdx[i - offset];
+        }
+
+
     }
     std::cout << "Finish parallelization \n" << std::endl;
     return dFdx;
