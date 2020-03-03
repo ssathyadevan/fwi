@@ -116,6 +116,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
 
     int i = 0;
+    L_(linfo) << "Read reference data" << fileLocation;
     while (file >> row)
     {
         if (i < magnitude)
@@ -124,10 +125,11 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
         }
         i++;
     }
-
+    L_(linfo) << "Create ForwardModel";
     ForwardModelInterface *model;
     model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
 
+    L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;
     inverse = Factory::createInversion(desired_inversion, model, gInput);
 

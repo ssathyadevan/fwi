@@ -34,7 +34,7 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
                 inversion = new EvolutionInversion(forwardModel, gInput);
                 return inversion;
         }
-        L_(linfo) << "The method was not found" ;
+        L_(linfo) << "The Inversion method "<< desired_inversion <<" was not found" ;
         exit(EXIT_FAILURE);
 }
 
@@ -50,6 +50,7 @@ ForwardModelInterface* Factory::createForwardModel(const GenericInput &gInput, c
         model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
         return model;
     }
+    L_(linfo) << "The ForwardModel "<< desired_forward_model <<" was not found" ;
     exit(EXIT_FAILURE);
         
 }
