@@ -71,6 +71,7 @@ int main(int argc, char **argv)
         std::cout<< e.what() << std::endl;
     }
     catch( const std::exception& e){
+        std::cout << "Another exception is found!" << std::endl;
         std::cout<< e.what()<< std::endl;
     }
 
