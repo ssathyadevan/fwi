@@ -200,7 +200,7 @@ void FiniteDifferenceForwardModel::applyKappa(const PressureFieldSerial &Current
     }
 }
 
-void FiniteDifferenceForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
+void FiniteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes)
 {
     int l_i, l_j;
 

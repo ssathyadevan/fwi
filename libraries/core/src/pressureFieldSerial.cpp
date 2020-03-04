@@ -174,7 +174,7 @@ double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
     return sum;
 }
 
-void PressureFieldSerial::Gradient(PressureFieldSerial **output)
+void PressureFieldSerial::Gradient(PressureFieldSerial **output) const
 {
     //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
 
