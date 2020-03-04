@@ -65,7 +65,10 @@ def deploy(){
 
 }
 
+
+
 def sendEmail() {
+
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
@@ -74,6 +77,7 @@ def sendEmail() {
                 email.sendEmailFailure()
         }
 }
+
 
 return this
 

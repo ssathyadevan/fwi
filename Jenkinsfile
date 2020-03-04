@@ -61,6 +61,10 @@ pipeline{
         }
         post {
                 always {
+			echo 'Sending email'
+                        script {
+                                functions.sendEmail()
+                        }
                         echo 'Creating unit-test Result Summary (junit)'
 							xunit (
 											tools: [ CTest (pattern: 'build/*.xml') ])
@@ -69,9 +73,7 @@ pipeline{
 						echo 'Cleaning the workspace'
                         //deleteDir()
 						
-                        script {
-                                functions.sendEmail()
-                        }
+
 
 						}
                 }

@@ -1,24 +1,71 @@
 #include <gtest/gtest.h>
-#include "forwardModelInterface.h"
+#include "forwardmodelinterfacemock.h"
+
+const Grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
+const Sources src({0.0, 0.0}, {2.0, 2.0}, 8);
+const Receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
+const Freq freq = { 10, 40, 15 };
+const FrequenciesGroup freqgroup(freq, 1.0);
+
+
 
 TEST(forwardModelInterfaceTest, constructorTest)
 {
-    const Grid2D grid2D({1.0, 1.0}, {1.0, 1.0}, {1, 1});
-
-    const Sources src({1.0, 1.0}, {1.0, 1.0}, 2);
-
-    const Receivers recv({1.0, 1.0}, {1.0, 1.0}, 2);
-
-    const Freq freq;
-
-    FrequenciesGroup(freq, 1.0);
-
-    ForwardModelInterface forwardModelInterface(grid2D, src, recv, freq);
+    ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqgroup);
+    EXPECT_TRUE(grid2D == forwardModelInterfaceMock.getGrid());
 }
 
-ForwardModelInterface::ForwardModelInterface(const Grid2D &grid, const Sources &src, const Receivers &recv,
-                                             const FrequenciesGroup &freq)
-    : /*_residual(), */ _grid(grid), _src(src), _recv(recv), _freq(freq)
+TEST(forwardModelInterfaceTest, calculateResidualTest)
 {
-    _residual = std::vector<std::complex<double>>(_freq.nFreq * _src.nSrc * _recv.nRecv);
+    // Given
+    ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqgroup);
+    std::vector<std::complex<double>> pDataRef(freqgroup.nFreq * recv.nRecv * src.nSrc);
+    for(std::complex<double>& element : pDataRef)
+    {
+        element = 1.5;
+    }
+
+    // When
+
+    PressureFieldSerial chiEst(grid2D);
+    std::vector<std::complex<double>> residual;
+    residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
+
+
+    //Then
+    std::vector<std::complex<double>> expectedResidual(freqgroup.nFreq * recv.nRecv * src.nSrc);
+    for(std::complex<double>& element : expectedResidual)
+    {
+        element = -0.5;
+    }
+    for (unsigned int i = 0; i < residual.size(); ++i)
+    {
+        EXPECT_NEAR(residual[i].imag(), expectedResidual[i].imag(), 0.001);
+        EXPECT_NEAR(residual[i].real(), expectedResidual[i].real(), 0.001);
+
+    }
 }
+
+TEST(forwardModelInterfaceTest, calculateResidualNormSqTest)
+{
+    // Given
+    ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqgroup);
+    std::vector<std::complex<double>> pDataRef(freqgroup.nFreq * recv.nRecv * src.nSrc);
+    for(std::complex<double>& element : pDataRef)
+    {
+        element = 1;
+    }
+    PressureFieldSerial chiEst(grid2D);
+    std::vector<std::complex<double>> residual;
+
+    //When
+    residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
+    double residualSq = forwardModelInterfaceMock.calculateResidualNormSq(residual);
+    double expectedResidualSq = residual.size();
+
+    //Then
+    EXPECT_NEAR(residualSq, expectedResidualSq, 0.001);
+}
+
+
+
