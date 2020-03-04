@@ -1,4 +1,3 @@
-#include "factory.h"
 #include "inversionInterface.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
@@ -8,77 +7,55 @@
 #include "csvReader.h"
 #include "cpuClock.h"
 #include "log.h"
+#include "integralForwardModel.h"
+#include "OpenMPgradientDescentInversion.h"
 #include <string>
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model);
+void performInversion(const GenericInput &gInput, const std::string &runName);
 void writePlotInput(const GenericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
-    if (argc != 4)
+    if (argc != 2)
     {
         L_(linfo) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         L_(linfo) << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
 
-        L_(linfo) << std::endl
-                  << "Please specify the desired inversion method" << std::endl;
-        L_(linfo) << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
-
-        L_(linfo) << std::endl
-                  << "Please specify the desired forward model" << std::endl;
-        L_(linfo) << "Make sure the forward model has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
-
         exit(EXIT_FAILURE);
     }
 
-    try{
-        std::vector<std::string> arguments(argv + 1, argc + argv);
-        GenericInputCardReader genericReader(arguments[0]);
-        GenericInput gInput = genericReader.getInput();
-        std::string desired_inversion = arguments[1];
-        std::string desired_forward_model = arguments[2];
+    
+    std::vector<std::string> arguments(argv + 1, argc + argv);
+    GenericInputCardReader genericReader(arguments[0]);
+    GenericInput gInput = genericReader.getInput();
 
-        std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
+    std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
 
-        if (!gInput.verbose)
-        {
-            std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger( logFileName.c_str(), ldebug);
-        }
-
-
-        L_(linfo) << "Test";
-
-        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
-        create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
-
-        CpuClock clock;
-
-        clock.Start();
-        performInversion(gInput, gInput.runName, desired_inversion, desired_forward_model);
-        clock.End();
-
-        L_(linfo) << "Visualisation of the estimated temple using FWI" ;
-        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-        create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
-
-        std::string msg = clock.OutputString();
-        writePlotInput(gInput, msg);
-        endLogger();
+    if (!gInput.verbose)
+    {
+        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+        initLogger( logFileName.c_str(), ldebug);
     }
-    catch(const std::invalid_argument& e){
-        std::cout << "An invalid argument found!" << std::endl;
-        std::cout<< e.what() << std::endl;
-    }
-    catch( const std::exception& e){
-        std::cout << "Another exception is found!" << std::endl;
-        std::cout<< e.what()<< std::endl;
-    }
+    
+
+    L_(linfo) << "Test";
+
+    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
+    create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+
+    CpuClock clock;
+
+    clock.Start();
+    performInversion(gInput, gInput.runName);
+    clock.End();
+
+    L_(linfo) << "Visualisation of the estimated temple using FWI" ;
+    chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
+    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
     std::string msg = clock.OutputString();
     writePlotInput(gInput, msg);
     endLogger();
-
     return 0;
 }
 
@@ -102,7 +79,7 @@ void writePlotInput(const GenericInput &gInput, std::string msg)
     lastrun.close();
 }
 
-void performInversion(const GenericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model)
+void performInversion(const GenericInput &gInput, const std::string &runName)
 {
 
     // initialize the grid, sources, receivers, grouped frequencies
@@ -130,7 +107,6 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
 
     int i = 0;
-    L_(linfo) << "Read reference data" << fileLocation;
     while (file >> row)
     {
         if (i < magnitude)
@@ -141,11 +117,11 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
     L_(linfo) << "Create ForwardModel";
     ForwardModelInterface *model;
-    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
+    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
 
     L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;
-    inverse = Factory::createInversion(desired_inversion, model, gInput);
+    inverse = new OpenMPGradientDescentInversion(model, gInput);
 
     L_(linfo) << "Estimating Chi..." ;
 

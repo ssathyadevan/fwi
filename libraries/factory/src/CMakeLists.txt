@@ -20,4 +20,5 @@ target_link_libraries(
     conjugate_gradient_inversion_library
     gradient_descent_inversion_library
     random_inversion_library
-    evolution_inversion_library)
+    evolution_inversion_library
+    OpenMP_gradient_descent_inversion_library)
