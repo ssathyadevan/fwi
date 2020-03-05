@@ -26,7 +26,6 @@ TEST(forwardModelInterfaceTest, calculateResidualTest)
     }
 
     // When
-
     PressureFieldSerial chiEst(grid2D);
     std::vector<std::complex<double>> residual;
     residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
@@ -42,7 +41,6 @@ TEST(forwardModelInterfaceTest, calculateResidualTest)
     {
         EXPECT_NEAR(residual[i].imag(), expectedResidual[i].imag(), 0.001);
         EXPECT_NEAR(residual[i].real(), expectedResidual[i].real(), 0.001);
-
     }
 }
 
