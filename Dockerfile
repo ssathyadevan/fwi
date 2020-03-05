@@ -1,4 +1,4 @@
-FROM ubuntu:18.04.4
+FROM ubuntu:18.04
 
 # Create jenkins
 RUN groupadd -g 10000 jenkins && \
@@ -22,7 +22,7 @@ RUN         apt-get update \
                     qt5-default \
                     libeigen3-dev \
                     python3-dev \
-                    python3 \
+                    python3.7.5 \
                     python3-tk \
                     python3-numpy \
                     python3-matplotlib \
