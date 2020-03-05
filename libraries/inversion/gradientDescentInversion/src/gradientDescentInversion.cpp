@@ -1,7 +1,7 @@
 #include "gradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "progressBar.h"
-#include "omp.h"
+#include <omp.h>
 GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
