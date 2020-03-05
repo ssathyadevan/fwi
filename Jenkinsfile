@@ -61,7 +61,7 @@ pipeline{
         }
         post {
                 always {
-                        if (currentBuild.currentResult == "SUCCESS") {
+                        if (currentBuild.currentResult != "FAILED") {
 				echo 'Creating unit-test Result Summary (junit)'
 							xunit (
 											tools: [ CTest (pattern: 'build/*.xml') ])
@@ -70,8 +70,7 @@ pipeline{
 						echo 'Cleaning the workspace'
                         //deleteDir()
 			}
-			else {
-			}
+
 
 			echo 'Sending email'
                         script {
