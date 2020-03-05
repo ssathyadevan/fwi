@@ -1,4 +1,4 @@
-FROM ubuntu:18.04.3
+FROM ubuntu:19.10
 
 # Create jenkins
 RUN groupadd -g 10000 jenkins && \
