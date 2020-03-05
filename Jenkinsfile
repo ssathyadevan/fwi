@@ -70,6 +70,9 @@ pipeline{
 						echo 'Cleaning the workspace'
                         //deleteDir()
 			}
+			else {
+			}
+
 			echo 'Sending email'
                         script {
                                 functions.sendEmail()
@@ -79,5 +82,5 @@ pipeline{
 						
                 }
         }
-
+}
 
