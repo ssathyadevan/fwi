@@ -14,7 +14,7 @@ public:
                                const FrequenciesGroup &freq);
 
     ~ForwardModelInterfaceMock(){}
-    void calculateKappa(){};
+    void calculateKappa(){}
 
     virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData);
     virtual void calculatePTot(const PressureFieldSerial &chiEst){chiEst.GetGrid();}

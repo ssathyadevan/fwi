@@ -9,7 +9,7 @@ ForwardModelInterfaceMock::ForwardModelInterfaceMock(const Grid2D &grid, const S
 
 void ForwardModelInterfaceMock::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData)
 {
-    chiEst.GetGrid();
+    (void)chiEst;
 
     for(std::complex<double>& element : pData)
     {
