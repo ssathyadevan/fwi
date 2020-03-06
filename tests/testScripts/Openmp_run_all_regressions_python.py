@@ -109,5 +109,5 @@ print(f.read())
 f.close()
 #not sure why 
 os.chdir(os.path.join(FWI_INSTALL_PATH))
-shutil.rmtree(os.path.join(FWI_INSTALL_PATH,"test"))
+#shutil.rmtree(os.path.join(FWI_INSTALL_PATH,"test"))
 
