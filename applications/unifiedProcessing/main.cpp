@@ -74,11 +74,6 @@ int main(int argc, char **argv)
         std::cout << "Another exception is found!" << std::endl;
         std::cout<< e.what()<< std::endl;
     }
-
-    std::string msg = clock.OutputString();
-    writePlotInput(gInput, msg);
-    endLogger();
-
     return 0;
 }
 
