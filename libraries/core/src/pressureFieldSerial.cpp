@@ -216,6 +216,11 @@ void PressureFieldSerial::Gradient(PressureFieldSerial **output)
     }
 }
 
+void PressureFieldSerial::PlusElement(const int location, const double value)
+{
+    data[location] += value;
+}
+
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {
     if (this != &rhs)
@@ -226,7 +231,6 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
             data[i] = rhs.data[i];
         }
     }
-
     return *this;
 }
 

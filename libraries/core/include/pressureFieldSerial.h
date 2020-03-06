@@ -54,6 +54,8 @@ public:
     double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(PressureFieldSerial **output);
 
+    void PlusElement ( const int location, const double value);
+
     PressureFieldSerial& operator=(const PressureFieldSerial& rhs);
     PressureFieldSerial& operator=(const double rhs);
     PressureFieldSerial& operator-=(const PressureFieldSerial &rhs);
