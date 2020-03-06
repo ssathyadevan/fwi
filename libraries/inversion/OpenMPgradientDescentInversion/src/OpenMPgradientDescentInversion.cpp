@@ -91,8 +91,10 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
         }
         if (omp_get_thread_num() == omp_get_num_threads() - 1 && offset + blocksize != dFdx.size())
         {
-            std::cout << "Not all gridpoints are covered with the parallelization of the computation of differential" << std::endl;
+            throw std::length_error("Not all gridpoints are covered with the parallelization of the computation of differential");
         }
+        std::vector<double> zero_vec(blocksize, 0.0);
+        if (!std::equal(dFdx.begin()+offset, dFdx.begin()+offset +blocksize, zero_vec.begin())) {throw std::invalid_argument("dFdx is not zero!");}
 
         std::vector<double> my_dFdx(blocksize);
         differential_parallel(pData, chiEstimate, h, eta, blocksize, offset, my_dFdx);
