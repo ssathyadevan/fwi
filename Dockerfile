@@ -22,7 +22,7 @@ RUN         apt-get update \
                     qt5-default \
                     libeigen3-dev \
                     python3-dev \
-                    python3.7.5 \
+                    python3 \
                     python3-tk \
                     python3-numpy \
                     python3-matplotlib \

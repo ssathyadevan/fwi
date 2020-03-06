@@ -1,7 +1,7 @@
 #include "gradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "progressBar.h"
-#include <omp.h>
+
 GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
     : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
@@ -78,12 +78,11 @@ std::vector<double> GradientDescentInversion::differential(const std::vector<std
 
     double FxPlusH;
     double Fx = functionF(chiEstimate, pData, eta);
+    PressureFieldSerial chiEstimatePlusH = chiEstimate;
+    double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
 
-    #pragma omp parallel for
-    for (int i = 0; i < numGridPoints; ++i)
+    for (int i = 0; i != numGridPoints; ++i)
     {
-        PressureFieldSerial chiEstimatePlusH = chiEstimate;
-        double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
         p_chiEstimatePlusH[i] += h;
         FxPlusH = functionF(chiEstimatePlusH, pData, eta);
         dFdx[i] = (FxPlusH - Fx) / h;

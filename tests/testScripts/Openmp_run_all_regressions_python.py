@@ -72,7 +72,7 @@ for test in tests:
     shutil.copytree(os.path.join(FWI_SOURCE_PATH, "tests","regression_data","{}".format(test),"output"), os.path.join(FWI_INSTALL_PATH,"test","{}RUN".format(test),"output"))
 
     forwardmodel = "integralForwardModel"
-    inversionmodel = "gradientDescentInversion"
+    inversionmodel = "OpenmpgradientDescentInversion"
 
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_UnifiedProcess {}RUN {} {}".format(test, inversionmodel, forwardmodel)))
