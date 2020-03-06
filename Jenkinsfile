@@ -61,23 +61,26 @@ pipeline{
         }
         post {
                 always {
-                        if (currentBuild.currentResult == "SUCCESS") {
-				echo 'Creating unit-test Result Summary (junit)'
-							xunit (
-											tools: [ CTest (pattern: 'build/*.xml') ])
-							junit ('build/*.xml')
-                        
-						echo 'Cleaning the workspace'
-                        //deleteDir()
+			script {
+		                if (currentBuild.currentResult != "FAILED") {
+					echo 'Creating unit-test Result Summary (junit)'
+								xunit (
+												tools: [ CTest (pattern: 'build/*.xml') ])
+								junit ('build/*.xml')
+		                
+							echo 'Cleaning the workspace'
+		                //deleteDir()
+				}
 			}
+
 			echo 'Sending email'
                         script {
                                 functions.sendEmail()
                         }			
 
 
-						}
+						
                 }
         }
-
+}
 
