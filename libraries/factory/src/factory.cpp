@@ -1,10 +1,16 @@
 #include <factory.h>
 #include "conjugateGradientInversion.h"
+#include "conjugateGradientInversionInputCardReader.h"
 #include "randomInversion.h"
+#include "randomInversionInputCardReader.h"
 #include "evolutionInversion.h"
+#include "evolutionInversionInputCardReader.h"
 #include "gradientDescentInversion.h"
+#include "gradientDescentInversionInputCardReader.h"
 #include "integralForwardModel.h"
+#include "integralForwardModelInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
+#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "log.h"
 
 #include <iostream>
@@ -14,24 +20,28 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
         InversionInterface *inversion;
         if (desired_inversion == "conjugateGradientInversion")
         {
-                inversion = new ConjugateGradientInversion(forwardModel, gInput);
+                ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
+                inversion = new ConjugateGradientInversion(forwardModel, conjugategradientreader.getInput());
                 return inversion;
         }
 
         if (desired_inversion == "randomInversion")
         {
-                inversion = new RandomInversion(forwardModel, gInput);
+                RandomInversionInputCardReader randomreader(gInput.caseFolder);
+                inversion = new RandomInversion(forwardModel, randomreader.getInput());
                 return inversion;
         }
 
         if (desired_inversion == "gradientDescentInversion")
         {
-                inversion = new GradientDescentInversion(forwardModel, gInput);
+                GradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
+                inversion = new GradientDescentInversion(forwardModel, gradientdescentreader.getInput());
                 return inversion;
         }
         if (desired_inversion == "evolutionInversion")
         {
-                inversion = new EvolutionInversion(forwardModel, gInput);
+                EvolutionInversionInputCardReader evolutionreader(gInput.caseFolder);
+                inversion = new EvolutionInversion(forwardModel, evolutionreader.getInput());
                 return inversion;
         }
         L_(linfo) << "The Inversion method "<< desired_inversion <<" was not found" ;
@@ -43,11 +53,13 @@ ForwardModelInterface* Factory::createForwardModel(const GenericInput &gInput, c
        
     ForwardModelInterface *model;
     if (desired_forward_model == "integralForwardModel"){
-        model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+        IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+        model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
         return model;
     }
     if (desired_forward_model == "finiteDifferenceForwardModel"){
-        model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
+        FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+        model = new FiniteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
         return model;
     }
     L_(linfo) << "The ForwardModel "<< desired_forward_model <<" was not found" ;

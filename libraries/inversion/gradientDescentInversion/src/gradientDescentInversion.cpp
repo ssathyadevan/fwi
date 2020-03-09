@@ -2,12 +2,10 @@
 #include "gradientDescentInversionInputCardReader.h"
 #include "progressBar.h"
 
-GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
-    : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+GradientDescentInversion::GradientDescentInversion(ForwardModelInterface *forwardModel, const GradientDescentInversionInput &gdInput)
+    : _forwardModel(), _gdInput(gdInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    GradientDescentInversionInputCardReader GradientDescentInversionReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _gdInput = GradientDescentInversionReader.getInput();
 }
 
 

@@ -2,13 +2,10 @@
 #include "progressBar.h"
 #include "log.h"
 
-EvolutionInversion::EvolutionInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
-    : _forwardModel(), _eiInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+EvolutionInversion::EvolutionInversion(ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+    : _forwardModel(), _eiInput(eiInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    EvolutionInversionInputCardReader EvolutionInversionInputCardReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _eiInput = EvolutionInversionInputCardReader.getInput();
-    
 }
 
 PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)

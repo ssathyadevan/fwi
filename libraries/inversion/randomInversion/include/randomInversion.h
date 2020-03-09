@@ -13,7 +13,7 @@ class RandomInversion : public InversionInterface
 
 public:
 
-    RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput);
+    RandomInversion(ForwardModelInterface *forwardModel, const RandomInversionInput& riInput);
 
     RandomInversion(const RandomInversion&) = delete;
     RandomInversion& operator=(const RandomInversion&) = delete;

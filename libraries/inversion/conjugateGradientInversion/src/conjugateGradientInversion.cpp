@@ -12,12 +12,10 @@
 #define TAG_RESULT      3
 
 
-ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
-    : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+    : _forwardModel(), _cgInput(invInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    ConjugateGradientInversionInputCardReader ConjugateGradientInversionReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _cgInput = ConjugateGradientInversionReader.getInput();
 }
 
 double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, double c, double d)

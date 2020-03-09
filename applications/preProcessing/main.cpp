@@ -2,6 +2,7 @@
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
 #include "integralForwardModel.h"
+#include "integralForwardModelInputCardReader.h"
 #include "cpuClock.h"
 #include "log.h"
 
@@ -53,7 +54,8 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freqg, gInput);
+    IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    model = new IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
 
     L_(linfo) << "Calculate pData (the reference pressure-field)..." ;
     model->calculatePTot(chi);

@@ -7,7 +7,9 @@
 #include "csvReader.h"
 #include "cpuClock.h"
 #include "integralForwardModel.h"
+#include "integralForwardModelInputCardReader.h"
 #include "inversionInterface.h"
+#include "gradientDescentInversionInputCardReader.h"
 #include "gradientDescentInversion.h"
 #include "log.h"
 
@@ -111,10 +113,12 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
     }
 
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+    IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
 
     InversionInterface *inverse;
-    inverse = new GradientDescentInversion(model, gInput);
+    GradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
+    inverse = new GradientDescentInversion(model, gradientdescentreader.getInput());
 
     //    gradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
     L_(linfo) << "Estimating Chi..." ;

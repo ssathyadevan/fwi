@@ -25,7 +25,7 @@ private:
 
 public:
 
-    MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput& gInput);
+    MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const MPIConjugateGradientInversionInput& cgInput);
 
     MPIConjugateGradientInversion(const MPIConjugateGradientInversion&) = delete;
     MPIConjugateGradientInversion& operator=(const MPIConjugateGradientInversion&) = delete;

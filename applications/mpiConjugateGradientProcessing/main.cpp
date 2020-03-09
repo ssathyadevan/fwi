@@ -1,4 +1,5 @@
 #include "MPIConjugateGradientInversion.h"
+#include "MPIConjugateGradientInversionInputCardReader.h"
 #include "factory.h"
 #include "integralForwardModel.h"
 #include "inversionInterface.h"
@@ -141,7 +142,8 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     ForwardModelInterface *model;
     model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
     MPIConjugateGradientInversion *inverse;
-    inverse = new MPIConjugateGradientInversion(model, gInput);
+    MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
+    inverse = new MPIConjugateGradientInversion(model, mpiconjugategradientreader.getInput());
 
     if (mpi_rank == 0)
     {

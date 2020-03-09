@@ -4,13 +4,10 @@
 #include "log.h"
 
 FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const Grid2D &grid, const Sources &src, const Receivers &recv,
-                                                           const FrequenciesGroup &freq, const GenericInput &gInput)
+                                                           const FrequenciesGroup &freq, const FiniteDifferenceForwardModelInput &fmInput)
     : ForwardModelInterface(grid, src, recv, freq),
-      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput()
+      _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
 {
-    FiniteDifferenceForwardModelInputCardReader finiteDifferenceForwardModelReader(gInput.caseFolder);
-    _fmInput = finiteDifferenceForwardModelReader.getInput();
-
     L_(linfo) << "Creating Greens function field..." ;
     createGreens();
     L_(linfo) << "Creating p0..." ;

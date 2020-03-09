@@ -12,7 +12,7 @@ class FiniteDifferenceForwardModel : public ForwardModelInterface
 public:
 
     FiniteDifferenceForwardModel( const Grid2D &grid, const Sources &src, const Receivers &recv,
-                    const FrequenciesGroup &freq, const GenericInput &gInput );
+                    const FrequenciesGroup &freq, const FiniteDifferenceForwardModelInput &fmInput );
 
     ~FiniteDifferenceForwardModel();
 
