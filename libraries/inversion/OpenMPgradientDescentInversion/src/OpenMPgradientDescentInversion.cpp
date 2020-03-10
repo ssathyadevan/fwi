@@ -83,7 +83,7 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
     #pragma omp parallel
     {
         #pragma omp for
-        for (int i = 0; i != numGridPoints; ++i)
+        for (int i = 0; i < numGridPoints; ++i)
         {
             PressureFieldSerial chiEstimatePlusH = chiEstimate;
             chiEstimatePlusH.PlusElement(i, h);
@@ -91,7 +91,6 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
             dFdx[i] = (FxPlusH - Fx) / h;
         }
     }
-
 
     for (int i=0; i<numGridPoints ; i++ )
     {
