@@ -80,6 +80,8 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
     std::vector<double> dFdx(numGridPoints);
 
     double Fx = functionF(chiEstimate, pData, eta);
+    std::map<int, double> dFdxmap;
+
     #pragma omp parallel
     {
         #pragma omp for
@@ -88,13 +90,14 @@ std::vector<double> OpenMPGradientDescentInversion::differential(const std::vect
             PressureFieldSerial chiEstimatePlusH = chiEstimate;
             chiEstimatePlusH.PlusElement(i, h);
             double FxPlusH = functionF(chiEstimatePlusH, pData, eta);
-            dFdx[i] = (FxPlusH - Fx) / h;
+            double dFdxLocal = (FxPlusH - Fx) / h;
+            dFdxmap.insert(std::pair<int, double>(i, dFdxLocal));
         }
     }
 
-    for (int i=0; i<numGridPoints ; i++ )
+    for (auto pair : dFdxmap)
     {
-        std::cout << "i: " << i << ", dFdx: " << dFdx[i] << std::endl;
+        dFdx[pair.first] = pair.second;
     }
 
     return dFdx;
