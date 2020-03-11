@@ -27,6 +27,8 @@ private:
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
     std::vector<double> differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial &xi, const double dxi, const double eta);
+    std::vector<double> differentialSerial(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta);
+
     double functionF(const PressureFieldSerial& xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x);
 };
