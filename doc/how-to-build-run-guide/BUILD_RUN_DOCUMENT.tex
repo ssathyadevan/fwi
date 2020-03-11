@@ -1,5 +1,6 @@
 \documentclass[10pt]{article}
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc} % Under score not copyable
+\usepackage[T1]{fontenc}
 \usepackage{geometry}
  \geometry{
  a4paper,
@@ -160,7 +161,7 @@ For post-processing (i.e. generation of image using the estimated chi values and
 the following commands:
 \newline
 
-\texttt{cp \textasciitilde/parallelized-fwi/pythonScipts/postProcessing-python3.py ..} \newline
+\texttt{cp \textasciitilde/parallelized-fwi/pythonScripts/postProcessing-python3.py ..} \newline
 \texttt{cd ..} \newline
 \texttt{python3 postProcessing-python3.py default/} 
 \newline
