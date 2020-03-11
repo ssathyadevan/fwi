@@ -54,25 +54,6 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
     {
         dFdxPrevious = dFdx;
         dFdx = differential(pData, chiEstimate, _gdInput.h, eta);
-        dFdxSerial = differentialSerial(pData, chiEstimate, _gdInput.h, eta);
-        int numDifferences = 0;
-
-        for (int i = 0; i < static_cast<int>(dFdx.size()); i++)
-        {
-            std::cout << "dFdx serial = " << dFdxSerial[i] << "| dFdx parallel = " << dFdx[i] << std::endl;
-
-
-
-            if ((dFdx[i] - dFdxSerial[i]) < 0.0001)
-            {
-                numDifferences++;
-            }
-        }
-
-        if (numDifferences > 0)
-        {
-            //std::cout << "There are " << numDifferences << " differences between the serial and parallel methods" << std::endl;
-        }
 
         if (it1 > 0)
         {
