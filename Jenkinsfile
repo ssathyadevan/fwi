@@ -62,15 +62,7 @@ pipeline{
         post {
                 always {
 			script {
-		                if (currentBuild.currentResult != "FAILED") {
-					echo 'Creating unit-test Result Summary (junit)'
-								xunit (
-												tools: [ CTest (pattern: 'build/*.xml') ])
-								junit ('build/*.xml')
-		                
-							echo 'Cleaning the workspace'
-		                //deleteDir()
-				}
+		               functions.unitTestSummary()
 			}
 
 			echo 'Sending email'
