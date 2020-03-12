@@ -16,12 +16,12 @@
 class PressureFieldComplexSerial : public PressureFieldComplex
 {
 private:
-    std::complex<double> * const data;
+    std::vector<std::complex<double>> _data;
+    std::complex<double> * const _dataPointer;
+
 
 public:
-    PressureFieldComplexSerial(const Grid2D &grid)
-        : PressureFieldComplex(grid), data(new std::complex<double>[this->GetNumberOfGridPoints()])
-    {}
+    PressureFieldComplexSerial(const Grid2D &grid);
 
     PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs);
 
