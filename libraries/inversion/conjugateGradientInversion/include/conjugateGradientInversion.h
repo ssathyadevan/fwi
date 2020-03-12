@@ -23,9 +23,11 @@ private:
 
     double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
 
+    double calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, PressureFieldSerial **gradientZetaTmp, const int nTotal, const double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, PressureFieldSerial **gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
+    
 public:
 
-    ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput& gInput);
+    ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput& invInput);
 
     ConjugateGradientInversion(const ConjugateGradientInversion&) = delete;
     ConjugateGradientInversion& operator=(const ConjugateGradientInversion&) = delete;

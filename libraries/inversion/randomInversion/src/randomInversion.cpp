@@ -2,12 +2,10 @@
 #include "progressBar.h"
 #include "log.h"
 
-RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
-    : _forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+    : _forwardModel(), _riInput(riInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    RandomInversionInputCardReader RandomInversionInputCardReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _riInput = RandomInversionInputCardReader.getInput();
 }
 
 PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)

@@ -12,7 +12,7 @@ class IntegralForwardModel : public ForwardModelInterface
 public:
 
     IntegralForwardModel( const Grid2D &grid, const Sources &src, const Receivers &recv,
-                    const FrequenciesGroup &freq, const GenericInput &gInput );
+                    const FrequenciesGroup &freq, const IntegralForwardModelInput &fmInput );
 
     ~IntegralForwardModel();
 

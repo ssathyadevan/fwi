@@ -2,6 +2,7 @@
 #include "utilityFunctions.h"
 //#include "forwardModel.h"
 #include "finiteDifferenceForwardModel.h"
+#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "cpuClock.h"
 #include "log.h"
 
@@ -54,7 +55,9 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
     ForwardModelInterface *model;
-    model = new FiniteDifferenceForwardModel(grid, src, recv, freqg, gInput);
+    FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+    FiniteDifferenceForwardModelInput fmInput = finitedifferencereader.getInput();
+    model = new FiniteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
 
     L_(linfo) << "Calculate pData (the reference pressure-field)..." ;
     model->calculatePTot(chi);

@@ -1,4 +1,5 @@
 #include "conjugateGradientInversion.h"
+#include "conjugateGradientInversionInputCardReader.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
@@ -7,6 +8,7 @@
 #include "csvReader.h"
 #include "cpuClock.h"
 #include "finiteDifferenceForwardModel.h"
+#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "log.h"
 
 void performInversion(const GenericInput &gInput, const std::string &runName);
@@ -102,10 +104,12 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
     }
 
     ForwardModelInterface *model;
-    model = new FiniteDifferenceForwardModel(grid, src, recv, freq, gInput);
+    FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+    model = new FiniteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
 
     InversionInterface *inverse;
-    inverse = new ConjugateGradientInversion(model, gInput);
+    ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
+    inverse = new ConjugateGradientInversion(model, conjugategradientreader.getInput());
 
     L_(linfo) << "Estimating Chi..." ;
 

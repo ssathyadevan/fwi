@@ -317,19 +317,19 @@ print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
 print("************************************************************\n")
 
-def find(substr,whichin,date_format, file_type):
+def find(substr,whichin):
     from datetime import datetime
-    lines           = [x for x in open(whichin+"Process."+file_type) if substr in x]
+    lines           = [x for x in open(whichin+"Process.log") if substr in x]
     line            = lines[0]
     manip = line.replace(substr, '').replace("\n", '')
-    start_or_finish = (datetime.strptime(manip, date_format))
+    start_or_finish = (datetime.strptime(manip, "%X.%f"))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/output/" +bench, "%c", "out")
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench, "%c", "out")
+datetime_bench_start  = find(" INFO: Starting", bench + "/output/" +bench)
+datetime_bench_finish = find("Finished at ", bench + "/output/" +bench)
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f", "log")
-datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f", "log")
+datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new)
+datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new)
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):
@@ -346,7 +346,7 @@ print("************************************************************\n")
 print("Increased overall precision:  " + str(increased_precision_test_passed))
 print("Increased performance:        " + str(increased_performance_test_passed))
 
-if (increased_precision_test_passed or increased_performance_test_passed):
+if (regression_test_passed is True):
     s = 'True'
 else:
     s = 'False'

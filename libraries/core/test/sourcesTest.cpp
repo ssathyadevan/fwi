@@ -30,7 +30,6 @@ TEST(SourcesTest, ConstructorTest)
 TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 {
     Sources sources = InitializeSources();
-
     EXPECT_EQ(sources.xSrc.size(), 11);
 }
 

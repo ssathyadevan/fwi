@@ -18,8 +18,6 @@ PressureFieldComplexSerial::~PressureFieldComplexSerial()
 void PressureFieldComplexSerial::SetField(const std::function<std::complex<double>(double, double)> func)
 {
     const std::array<int, 2> &nx = this->GetGrid().GetGridDimensions();
-    //const std::array<T,2> &dx = this->GetGrid().GetCellDimensions();// Babak 2018 10 29: get rid of template for grid_rect_2D
-    //const std::array<T,2> &x_min = this->GetGrid().GetGridStart();// Babak 2018 10 29: get rid of template for grid_rect_2D
     const std::array<double, 2> &dx = this->GetGrid().GetCellDimensions(); // Babak 2018 10 29: get rid of template for grid_rect_2D
     const std::array<double, 2> &x_min = this->GetGrid().GetGridStart();   // Babak 2018 10 29: get rid of template for grid_rect_2D
 

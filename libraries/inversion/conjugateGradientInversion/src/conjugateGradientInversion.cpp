@@ -12,12 +12,10 @@
 #define TAG_RESULT      3
 
 
-ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
-    : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+    : _forwardModel(), _cgInput(invInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    ConjugateGradientInversionInputCardReader ConjugateGradientInversionReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _cgInput = ConjugateGradientInversionReader.getInput();
 }
 
 double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, double c, double d)
@@ -54,6 +52,43 @@ double ConjugateGradientInversion::calculateAlpha(PressureFieldSerial& zeta, std
     }
 
     return alphaDiv[0] / alphaDiv[1];
+}
+
+double ConjugateGradientInversion::calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, PressureFieldSerial **gradientZetaTmp, const int nTotal, double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, PressureFieldSerial **gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta)
+{
+    std::array<double, 2> A = {0.0, 0.0};
+
+    for (int i = 0; i < nTotal; i++)
+    {
+        A[1] += eta * std::real(conj(zetaTemp[i]) * zetaTemp[i]);
+        A[0] += double(-2.0) * eta * std::real(conj(resArray[i]) * zetaTemp[i]);
+    }
+
+    double A0 = fDataOld;
+    zeta.Gradient(gradientZetaTmp);
+    PressureFieldSerial tmpVolField = b * *gradientZetaTmp[0];
+    PressureFieldSerial tmpVolField2 = b * *gradientZetaTmp[1];
+    tmpVolField.Square();
+    tmpVolField2.Square();
+    double B2 = (tmpVolField.Summation() + tmpVolField2.Summation()) * _grid.GetCellVolume();
+
+    tmpVolField = (b * *gradientZetaTmp[0]) * (b * *gradientChiOld[0]);
+    tmpVolField2 = (b * *gradientZetaTmp[1]) * (b * *gradientChiOld[1]);
+    double B1 = double(2.0) * (tmpVolField.Summation() + tmpVolField2.Summation()) *
+                _grid.GetCellVolume();
+
+    tmpVolField = (b * *gradientChiOld[0]) * (b * *gradientChiOld[0]);
+    tmpVolField2 = (b * *gradientChiOld[1]) * (b * *gradientChiOld[1]);
+    double B0 = ((tmpVolField.Summation() + tmpVolField2.Summation()) + deltasquaredOld *
+                                                                            bsquared.Summation()) *
+                _grid.GetCellVolume();
+
+    double derA = double(4.0) * A[1] * B2;
+    double derB = double(3.0) * (A[1] * B1 + A[0] * B2);
+    double derC = double(2.0) * (A[1] * B0 + A[0] * B1 + A0 * B2);
+    double derD = A[0] * B0 + A0 * B1;
+
+    return this->findRealRootFromCubic(derA, derB, derC, derD);
 }
 
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
@@ -186,42 +221,9 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
                 zeta = g + gamma * zeta;
 
-                std::array<double, 2> A = {0.0, 0.0};
-
                 std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
-
-                for (int i = 0; i < nTotal; i++)
-                {
-                    A[1] += eta * std::real(conj(zetaTemp[i]) * zetaTemp[i]);
-                    A[0] += double(-2.0) * eta * std::real(conj(resArray[i]) * zetaTemp[i]);
-                }
-
-                double A0 = fDataOld;
-                zeta.Gradient(gradientZetaTmp);
-                tmpVolField = b * *gradientZetaTmp[0];
-                tmpVolField2 = b * *gradientZetaTmp[1];
-                tmpVolField.Square();
-                tmpVolField2.Square();
-                double B2 = (tmpVolField.Summation() + tmpVolField2.Summation()) * _grid.GetCellVolume();
-
-                tmpVolField = (b * *gradientZetaTmp[0]) * (b * *gradientChiOld[0]);
-                tmpVolField2 = (b * *gradientZetaTmp[1]) * (b * *gradientChiOld[1]);
-                double B1 = double(2.0) * (tmpVolField.Summation() + tmpVolField2.Summation()) *
-                            _grid.GetCellVolume();
-
-                tmpVolField = (b * *gradientChiOld[0]) * (b * *gradientChiOld[0]);
-                tmpVolField2 = (b * *gradientChiOld[1]) * (b * *gradientChiOld[1]);
-                double B0 = ((tmpVolField.Summation() + tmpVolField2.Summation()) + deltasquaredOld *
-                                                                                        bsquared.Summation()) *
-                            _grid.GetCellVolume();
-
-                double derA = double(4.0) * A[1] * B2;
-                double derB = double(3.0) * (A[1] * B1 + A[0] * B2);
-                double derC = double(2.0) * (A[1] * B0 + A[0] * B1 + A0 * B2);
-                double derD = A[0] * B0 + A0 * B1;
-
-                alpha = this->findRealRootFromCubic(derA, derB, derC, derD);
+                alpha = calculateAlpha_regression(zetaTemp, gradientZetaTmp, nTotal, deltasquaredOld, b, bsquared, resArray, gradientChiOld, eta, fDataOld, zeta);
 
                 chiEst += alpha * zeta;
 

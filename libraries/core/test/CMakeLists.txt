@@ -2,6 +2,10 @@
 include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories(../include)
+include_directories(../testutilities)
+include_directories(../testutilities/include)
+include_directories(../../tests)
+
 
 # Template function for building a test
 function( build_test )
@@ -27,3 +31,9 @@ build_test(TARGET pressureFieldComplexSerialTest SOURCE pressureFieldComplexSeri
 build_test(TARGET greensSerialTest SOURCE greensSerialTest.cpp LIBRARIES core_library)
 build_test(TARGET sourcesTest SOURCE sourcesTest.cpp LIBRARIES core_library)
 build_test(TARGET receiversTest SOURCE receiversTest.cpp LIBRARIES core_library)
+build_test(TARGET contractionTest SOURCE contractionTest.cpp LIBRARIES core_library)
+build_test(TARGET forwardModelInterfaceTest SOURCE forwardModelInterfaceTest.cpp LIBRARIES core_library)
+build_test(TARGET genericinputcardreadertest SOURCE genericinputcardreadertest.cpp LIBRARIES core_library)
+
+
+

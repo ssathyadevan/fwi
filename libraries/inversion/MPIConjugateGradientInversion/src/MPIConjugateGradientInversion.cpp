@@ -12,12 +12,10 @@
 #define TAG_RESULT      3
 
 int once = 0;
-MPIConjugateGradientInversion::MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
-    : _forwardModel(), _cgInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+MPIConjugateGradientInversion::MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const MPIConjugateGradientInversionInput &cgInput)
+    : _forwardModel(), _cgInput(cgInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    MPIConjugateGradientInversionInputCardReader reader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _cgInput = reader.getInput();
 }
 
 double MPIConjugateGradientInversion::findRealRootFromCubic(double a, double b, double c, double d)

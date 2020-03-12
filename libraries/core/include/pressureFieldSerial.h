@@ -16,7 +16,9 @@
 class PressureFieldSerial : public PressureField
 {
 
-    double * const data; // initialised on heap by constructor: data(new double[grid_size]).
+    std::vector<double> _data;
+    double * const _dataPointer; // initialised on heap by constructor: data(new double[grid_size]).
+
 
 public:
 
@@ -52,7 +54,7 @@ public:
 
     // Non virtual members
     double InnerProduct(const PressureFieldSerial &rhs) const;
-    void Gradient(PressureFieldSerial **output);
+    void Gradient(PressureFieldSerial **output) const;
 
     void PlusElement ( const int location, const double value);
 
@@ -65,8 +67,8 @@ public:
     PressureFieldSerial& operator*=(const double rhs);
     PressureFieldSerial& operator/=(const double rhs);
 
-    const double *GetDataPtr() const { return data; }
-    double *GetDataPtr() { return data; }
+    const double *GetDataPtr() const { return _dataPointer; }
+    double *GetDataPtr() { return _dataPointer; }
 
     void CopyTo(PressureFieldSerial &dest);
 

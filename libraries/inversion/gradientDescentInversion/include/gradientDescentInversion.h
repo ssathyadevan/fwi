@@ -19,7 +19,7 @@ private:
     PressureFieldSerial gradientDescent(PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
     
  public:
-    GradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
+    GradientDescentInversion(ForwardModelInterface *forwardModel, const GradientDescentInversionInput &gdInput);
 
     GradientDescentInversion(const GradientDescentInversion&) = delete;
     GradientDescentInversion & operator = (const GradientDescentInversion&) = delete;

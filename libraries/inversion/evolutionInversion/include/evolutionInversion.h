@@ -13,7 +13,7 @@ class EvolutionInversion : public InversionInterface
 
 public:
 
-    EvolutionInversion(ForwardModelInterface *forwardModel, GenericInput gInput);
+    EvolutionInversion(ForwardModelInterface *forwardModel, const EvolutionInversionInput& eiInput);
 
     EvolutionInversion(const EvolutionInversion&) = delete;
     EvolutionInversion& operator=(const EvolutionInversion&) = delete;
