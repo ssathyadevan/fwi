@@ -220,7 +220,7 @@ void PressureFieldSerial::Gradient(PressureFieldSerial **output) const
 
 void PressureFieldSerial::PlusElement(const int location, const double value)
 {
-    data[location] += value;
+    _data[location] += value;
 }
 
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)

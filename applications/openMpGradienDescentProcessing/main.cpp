@@ -8,6 +8,7 @@
 #include "cpuClock.h"
 #include "log.h"
 #include "integralForwardModel.h"
+#include "integralForwardModelInputCardReader.h"
 #include "OpenMPgradientDescentInversion.h"
 #include <string>
 
@@ -117,7 +118,8 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
     }
     L_(linfo) << "Create ForwardModel";
     ForwardModelInterface *model;
-    model = new IntegralForwardModel(grid, src, recv, freq, gInput);
+    IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
 
     L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;

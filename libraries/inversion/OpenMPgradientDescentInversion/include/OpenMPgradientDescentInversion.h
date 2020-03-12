@@ -19,7 +19,8 @@ private:
     PressureFieldSerial gradientDescent(PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
     std::vector<double> differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta, unsigned int blocksize, unsigned int offset);
 
- public:
+
+public:
     OpenMPGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
 
     OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion&) = delete;
@@ -27,6 +28,7 @@ private:
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
     std::vector<double> differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial &xi, const double dxi, const double eta);
+
     std::vector<double> differentialSerial(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta);
 
     double functionF(const PressureFieldSerial& xi, const std::vector<std::complex<double>> &pData, double eta);
