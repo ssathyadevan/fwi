@@ -158,6 +158,7 @@ we will study them in more detail")
 print("\n************************************************************")
 print("                      GENERAL ANALYSIS")
 print("************************************************************")
+regression_test_passed = False
 
 reader_prfct_rsrvr = csv.reader(open(chi_ref_bench_csv),delimiter=',')
 dummy_variable_reader_pr = list(reader_prfct_rsrvr)
@@ -210,8 +211,8 @@ for i in range (0,prfct_rsrvr_chi_array.shape[0]):
         (new_est_chi_array[i,j] - bench_est_chi_array[i,j]) \
         / resolution_of_bench * 100
         )
-        if (abs(diff_new_and_bench[i,j]) > tolerance):
-            regression_test_passed = False
+        if (abs(diff_new_and_bench[i,j]) < tolerance):
+            regression_test_passed = True
             
 
 
@@ -311,7 +312,7 @@ print("\nMinimum deviation")
 print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
 
-if (mse_bench > mse_new):
+if (mse_new - mse_bench < 0.0001):
     increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
@@ -326,7 +327,7 @@ def find(substr,whichin):
     return start_or_finish 
 
 datetime_bench_start  = find(" INFO: Starting", bench + "/output/" +bench)
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench)
+datetime_bench_finish = find(" INFO: Finished", bench + "/output/" +bench)
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
 datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new)
 datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new)
