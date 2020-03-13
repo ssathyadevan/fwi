@@ -136,11 +136,10 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     int counter = 1;
     for (int it = 0; it < _cgInput.n_max; it++)
     {
-        std::vector<double> errorPerIteration;
 
         double deltasquaredOld = double(0.0);
         double fRegOld = double(1.0);
-        double fDataOld = double(0.0);
+        double errorOld = double(0.0);
         double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + double(1.0));
 
         PressureFieldSerial bsquaredOld(_grid);
@@ -163,21 +162,20 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 alpha = calculateAlpha(zeta, residualArray);
 
                 chiEstimate += alpha * zeta;
-                gOld = g;
 
                 // eq: errorFunc
                 residualArray = _forwardModel->calculateResidual(chiEstimate, pData);
                 residualSquared = _forwardModel->calculateResidualNormSq(residualArray);
                 error = eta * residualSquared;
 
-                fDataOld = error;
-                errorPerIteration.push_back(error);
+                gOld = g;
+                errorOld = error;
 
+                // store the residual value in the residual log
                 L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << error;
                 residualLogFile << std::setprecision(17) << error << "," << counter << std::endl;
 
-                counter++; // store the residual value in the residual log
-
+                counter++;
             }
             else
             {
@@ -211,14 +209,14 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
                 _forwardModel->getUpdateDirectionInformation(residualArray, KappaTimesResidual);
 
-                g = eta * fRegOld * KappaTimesResidual.GetRealPart() + fDataOld * gReg; // # eq: integrandForDiscreteK
+                g = eta * fRegOld * KappaTimesResidual.GetRealPart() + errorOld * gReg; // # eq: integrandForDiscreteK
 
                 gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
                 zeta = g + gamma * zeta;
 
                 std::vector<std::complex<double>> zetaTemp(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
-                alpha = calculateAlpha_regression(zetaTemp, gradientZetaTmp, nTotal, deltasquaredOld, b, bsquared, residualArray, gradientChiOld, eta, fDataOld, zeta);
+                alpha = calculateAlpha_regression(zetaTemp, gradientZetaTmp, nTotal, deltasquaredOld, b, bsquared, residualArray, gradientChiOld, eta, errorOld, zeta);
 
                 chiEstimate += alpha * zeta;
 
@@ -231,12 +229,11 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
                 residualLogFile << std::setprecision(17) << error << "," << counter << std::endl; // store the residual value in the residual log
                 counter++;
-                fDataOld = error;
-                errorPerIteration.push_back(error);
+
 
                 //breakout check
                 if ((it1 > 0) && ((error < double(_cgInput.iteration1.tolerance)) ||
-                                    (std::abs(errorPerIteration[it1 - 1] - error) < double(_cgInput.iteration1.tolerance)))){
+                                    (std::abs(errorOld - error) < double(_cgInput.iteration1.tolerance)))){
                     bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;                  
                 }
@@ -253,7 +250,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 tmpVolField = (gradientChiNormsquared + deltasquaredOld) / (gradientChiOldNormsquared + deltasquaredOld);
                 fRegOld = (double(1.0) / (_grid.GetDomainArea())) *
                             tmpVolField.Summation() * _grid.GetCellVolume();
-
+                errorOld = error;
                 deltasquaredOld = deltasquared;
                 gOld = g;
                 bsquaredOld = bsquared;
