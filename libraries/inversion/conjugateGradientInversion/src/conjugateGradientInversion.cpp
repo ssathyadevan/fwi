@@ -13,7 +13,9 @@
 
 
 ConjugateGradientInversion::ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
-    : _forwardModel(), _cgInput(invInput), _grid(forwardModel->getGrid()), _sources(forwardModel->getSrc()), _receivers(forwardModel->getRecv()), _frequencies(forwardModel->getFreq())
+    : _forwardModel(), _cgInput(invInput), _grid(forwardModel->getGrid())
+    , _sources(forwardModel->getSrc()), _receivers(forwardModel->getRecv())
+    , _frequencies(forwardModel->getFreq()), _chiEstimate(_grid)
 {
     _forwardModel = forwardModel;
 }
@@ -92,7 +94,7 @@ double ConjugateGradientInversion::calculateAlpha_regression(const std::vector<s
     return findRealRootFromCubic(derA, derB, derC, derD);
 }
 
-std::ofstream ConjugateGradientInversion::OpenResidualLogFile(GenericInput gInput)
+std::ofstream ConjugateGradientInversion::OpenResidualLogFile(GenericInput &gInput)
 {
     std::ofstream residualLogFile;
     residualLogFile.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
@@ -104,20 +106,33 @@ std::ofstream ConjugateGradientInversion::OpenResidualLogFile(GenericInput gInpu
     return residualLogFile;
 }
 
+void ConjugateGradientInversion::logResidualResults(int it1, int it, double error, int counter, std::ofstream &residualLogFile)
+{
+    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << error;
+    residualLogFile << std::setprecision(17) << error << "," << counter << std::endl;
+}
+
+double ConjugateGradientInversion::errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta)
+{
+    residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
+    double residualSquared = _forwardModel->calculateResidualNormSq(residualArray);
+    double residual = eta * residualSquared;
+    return residual;
+}
+
 PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _frequencies.nFreq * _sources.nSrc * _receivers.nRecv;
-    const double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis
+    const double eta = 1.0 / (normSq(pData, nTotal)); //scaling factor eq 2.10 in thesis/ eq: errorFuncSubEtaInv
 
-    double gamma, alpha, residualSquared, error = 0;
+    double gamma, alpha, residual = 0.0;
 
-    PressureFieldSerial chiEstimate(_grid), g(_grid), gOld(_grid), zeta(_grid);
+    PressureFieldSerial g(_grid), gOld(_grid), zeta(_grid);
+    PressureFieldComplexSerial KappaTimesResidual(_grid); // eq: integrandForDiscreteK, KappaTimesResidual is the argument of Re()
 
-    PressureFieldComplexSerial KappaTimesResidual(_grid); // eq: integrandForDiscreteK, tmp is the argument of Re()
-
-    chiEstimate.Zero();
+    _chiEstimate.Zero();
 
     PressureFieldSerial **gradientChiOld = new PressureFieldSerial *[2];
     PressureFieldSerial **gradientGregTmp = new PressureFieldSerial *[2];
@@ -136,10 +151,9 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     int counter = 1;
     for (int it = 0; it < _cgInput.n_max; it++)
     {
-
         double deltasquaredOld = double(0.0);
         double fRegOld = double(1.0);
-        double errorOld = double(0.0);
+        double residualOld = double(0.0);
         double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + double(1.0));
 
         PressureFieldSerial bsquaredOld(_grid);
@@ -147,7 +161,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
 
         _forwardModel->calculateKappa();
 
-        std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(chiEstimate, pData);
+        std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
 
         //start the inner loop
         for (int it1 = 0; it1 < _cgInput.iteration1.n; it1++)
@@ -157,32 +171,33 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
             {
                 _forwardModel->getUpdateDirectionInformation(residualArray, KappaTimesResidual);
 
-                g = eta * KappaTimesResidual.GetRealPart(); //eq: gradientRunc
-                zeta = g;
-                alpha = calculateAlpha(zeta, residualArray);
+                g = eta * KappaTimesResidual.GetRealPart();                         // eq: integrandForDiscreteK
+                zeta = g;                                                           // eq: updateDirectionsCG
+                alpha = calculateAlpha(zeta, residualArray);                        // eq: optimalStepSizeCG
 
-                chiEstimate += alpha * zeta;
+                _chiEstimate += alpha * zeta;                                       // eq: contrastUpdate
 
-                // eq: errorFunc
-                residualArray = _forwardModel->calculateResidual(chiEstimate, pData);
-                residualSquared = _forwardModel->calculateResidualNormSq(residualArray);
-                error = eta * residualSquared;
+                residual = errorFunctional(residualArray, pData, eta);       // eq: errorFunc
 
                 gOld = g;
-                errorOld = error;
+                residualOld = residual;
 
-                // store the residual value in the residual log
-                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << error;
-                residualLogFile << std::setprecision(17) << error << "," << counter << std::endl;
+                logResidualResults(it1, it, residual, counter, residualLogFile);
 
                 counter++;
             }
             else
             {
-                chiEstimate.Gradient(gradientChiOld);
-                PressureFieldSerial gradientChiOldNormsquared(_grid);
+                if (_cgInput.doRegularisation)
+                {
 
+                }
+
+
+                _chiEstimate.Gradient(gradientChiOld);
+                PressureFieldSerial gradientChiOldNormsquared(_grid);
                 gradientChiOldNormsquared = (*gradientChiOld[0] * *gradientChiOld[0]) + (*gradientChiOld[1] * *gradientChiOld[1]);
+
 
                 PressureFieldSerial bsquared = (gradientChiOldNormsquared + deltasquaredOld); // eq: errorFuncRegulWeighting
                 bsquared.Reciprocal();
@@ -195,7 +210,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 PressureFieldSerial tmpVolField2 = b * *gradientChiOld[1];
                 tmpVolField2.Square();
                 tmpVolField += tmpVolField2;
-                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared.Summation(); // # eq. 2.23
+                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared.Summation(); // eq. 2.23
 
                 tmpVolField = bsquaredOld * *gradientChiOld[0];
                 tmpVolField.Gradient(gradientGregTmp);
@@ -204,45 +219,40 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 tmpVolField2.Gradient(gradientGregTmp);
                 tmpVolField2 = *gradientGregTmp[1];
 
-                PressureFieldSerial gReg = tmpVolField + tmpVolField2; //# eq. 2.24
-                KappaTimesResidual.Zero();
+                PressureFieldSerial gReg = tmpVolField + tmpVolField2;                              // eq. 2.24
 
+                KappaTimesResidual.Zero();
                 _forwardModel->getUpdateDirectionInformation(residualArray, KappaTimesResidual);
 
-                g = eta * fRegOld * KappaTimesResidual.GetRealPart() + errorOld * gReg; // # eq: integrandForDiscreteK
+                g = eta * fRegOld * KappaTimesResidual.GetRealPart() + residualOld * gReg;          // eq: 2.25
 
-                gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
-                zeta = g + gamma * zeta;
+                gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld);                         // eq: PolakRibiereDirection
+                zeta = g + gamma * zeta;                                                            // eq: updateDirectionsCG
 
                 std::vector<std::complex<double>> zetaTemp(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
-                alpha = calculateAlpha_regression(zetaTemp, gradientZetaTmp, nTotal, deltasquaredOld, b, bsquared, residualArray, gradientChiOld, eta, errorOld, zeta);
+                alpha = calculateAlpha_regression(zetaTemp, gradientZetaTmp, nTotal, deltasquaredOld, b, bsquared, residualArray, gradientChiOld, eta, residualOld, zeta);
 
-                chiEstimate += alpha * zeta;
+                _chiEstimate += alpha * zeta;
 
-                residualArray = _forwardModel->calculateResidual(chiEstimate, pData);
-                residualSquared = _forwardModel->calculateResidualNormSq(residualArray);
-                error = eta * residualSquared;
+                residual = errorFunctional(residualArray, pData, eta);       // eq: errorFunc
 
-                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: "
-                            << std::setprecision(17) << error;
 
-                residualLogFile << std::setprecision(17) << error << "," << counter << std::endl; // store the residual value in the residual log
+
+                logResidualResults(it1, it, residual, counter, residualLogFile);
+
+
                 counter++;
 
 
                 //breakout check
-                if ((it1 > 0) && ((error < double(_cgInput.iteration1.tolerance)) ||
-                                    (std::abs(errorOld - error) < double(_cgInput.iteration1.tolerance)))){
+                if ((it1 > 0) && ((residual < double(_cgInput.iteration1.tolerance)) ||
+                                    (std::abs(residualOld - residual) < double(_cgInput.iteration1.tolerance)))){
                     bar.setCounter(_cgInput.iteration1.n + bar.getCounter() - (bar.getCounter() % _cgInput.iteration1.n));
                     break;                  
                 }
-                    
-                //                    L_(linfo) << "Relative Tol: " << res/std::abs(vecResFirstIter[0]) << std::endl;
-                //                    if ( (it1 > 0) && ( res/std::abs(vecResFirstIter[0]) < 0.15 )  )
-                //                        break;
 
-                chiEstimate.Gradient(gradientChiOld);
+                _chiEstimate.Gradient(gradientChiOld);
                 PressureFieldSerial gradientChiNormsquared(_grid);
                 gradientChiNormsquared = (*gradientChiOld[0] * *gradientChiOld[0]) +
                                             (*gradientChiOld[1] * *gradientChiOld[1]);
@@ -250,7 +260,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
                 tmpVolField = (gradientChiNormsquared + deltasquaredOld) / (gradientChiOldNormsquared + deltasquaredOld);
                 fRegOld = (double(1.0) / (_grid.GetDomainArea())) *
                             tmpVolField.Summation() * _grid.GetCellVolume();
-                errorOld = error;
+                residualOld = residual;
                 deltasquaredOld = deltasquared;
                 gOld = g;
                 bsquaredOld = bsquared;
@@ -273,6 +283,6 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     delete[] gradientZetaTmp;
 
     PressureFieldSerial result(_grid);
-    chiEstimate.CopyTo(result);
+    _chiEstimate.CopyTo(result);
     return result;
 }

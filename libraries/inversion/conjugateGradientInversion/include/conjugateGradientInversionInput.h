@@ -7,6 +7,6 @@ struct ConjugateGradientInversionInput
 {
       iter1 iteration1;
       deltaAmplification dAmplification;
-      bool doReg;
+      bool doRegularisation;
       int n_max;
 };
