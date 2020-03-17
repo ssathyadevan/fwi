@@ -75,10 +75,6 @@ int main(int argc, char **argv)
         std::cout<< e.what()<< std::endl;
     }
 
-    std::string msg = clock.OutputString();
-    writePlotInput(gInput, msg);
-    endLogger();
-
     return 0;
 }
 

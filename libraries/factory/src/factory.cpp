@@ -6,7 +6,6 @@
 #include "integralForwardModel.h"
 #include "finiteDifferenceForwardModel.h"
 #include "log.h"
-#include "OpenMPgradientDescentInversion.h"
 
 #include <iostream>
 
@@ -33,11 +32,6 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
         if (desired_inversion == "evolutionInversion")
         {
                 inversion = new EvolutionInversion(forwardModel, gInput);
-                return inversion;
-        }
-        if (desired_inversion == "OpenmpgradientDescentInversion")
-        {
-                inversion = new OpenMPGradientDescentInversion(forwardModel, gInput);
                 return inversion;
         }
         L_(linfo) << "The Inversion method "<< desired_inversion <<" was not found" ;
