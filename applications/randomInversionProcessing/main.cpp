@@ -24,34 +24,42 @@ int main(int argc, char **argv)
 
         exit(EXIT_FAILURE);
     }
+    try {
+        std::vector<std::string> arguments(argv + 1, argc + argv);
+        GenericInputCardReader genericReader(arguments[0]);
+        GenericInput gInput = genericReader.getInput();
 
-    std::vector<std::string> arguments(argv + 1, argc + argv);
-    GenericInputCardReader genericReader(arguments[0]);
-    GenericInput gInput = genericReader.getInput();
+        std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
 
-    std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
+        if (!gInput.verbose)
+        {
+            std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+            initLogger( logFileName.c_str(), ldebug);
+        }
 
-    if (!gInput.verbose)
-    {
-        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-        initLogger( logFileName.c_str(), ldebug);
+        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
+        create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+
+        CpuClock clock;
+
+        clock.Start();
+        performInversion(gInput);
+        clock.End();
+
+        L_(linfo) << "Visualisation of the estimated temple using FWI" ;
+        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
+        create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+
+        std::string msg = clock.OutputString();
+        writePlotInput(gInput, msg);
     }
-
-    chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
-
-    CpuClock clock;
-
-    clock.Start();
-    performInversion(gInput);
-    clock.End();
-
-    L_(linfo) << "Visualisation of the estimated temple using FWI" ;
-    chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-    create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
-
-    std::string msg = clock.OutputString();
-    writePlotInput(gInput, msg);
+    catch(const std::invalid_argument& e){
+        std::cout << "An invalid argument found!" << std::endl;
+        std::cout<< e.what() << std::endl;
+    }
+    catch( const std::exception& e){
+        std::cout<< e.what()<< std::endl;
+    }
 
     return 0;
 }

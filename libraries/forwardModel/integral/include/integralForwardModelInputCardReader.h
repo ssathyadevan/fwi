@@ -14,5 +14,6 @@ public:
 
 private:
     virtual void readCard(const std::string &caseFolder);
+    void checkinput();
     IntegralForwardModelInput _input;
 };
