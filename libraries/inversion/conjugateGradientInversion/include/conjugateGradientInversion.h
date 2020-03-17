@@ -25,16 +25,21 @@ private:
     double _previousLowPoint = std::numeric_limits<double>::max();
 
     double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
-    double calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, PressureFieldSerial **gradientZetaTmp, const int nTotal, const double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, PressureFieldSerial **gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
+    double calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, std::vector<PressureFieldSerial> &gradientZetaTmp, const int nTotal, const double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, const std::vector<PressureFieldSerial> &gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
+
+    double errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta);
+    double calculateSteeringFactor(const PressureFieldSerial &b, const PressureFieldSerial &bSquared, const std::vector<PressureFieldSerial> &gradientChiOld, double deltaAmplification);
+    PressureFieldSerial calculateRegularisationGradient(const PressureFieldSerial &bSquaredOld, const std::vector<PressureFieldSerial> &gradientChiOld, std::vector<PressureFieldSerial>&gradientGregTmp);
+    PressureFieldSerial calculateWeightingFactor(const PressureFieldSerial &gradientChiOldNormSquared, double deltaSquaredOld);
+
+
 
     std::ofstream OpenResidualLogFile(GenericInput& gInput);
     double findRealRootFromCubic(double a, double b, double c, double d);
 
     void logResidualResults(int it1, int it, double error, int counter, std::ofstream &residualLogFile);
     
-    double errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta);
 
-    PressureFieldSerial determineRegularisationGradient(PressureFieldSerial **gradientChiOld, PressureFieldSerial **gradientGregTmp, PressureFieldSerial &bsquaredOld);
 
 public:
 
