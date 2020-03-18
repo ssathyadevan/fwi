@@ -5,11 +5,10 @@
 #include <sstream>
 #include <iostream>
 
-OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gInput)
-    : _forwardModel(), _gdInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const GenericInput &gInput, ForwardModelContainer& forwardmodels)
+    : _forwardModelsParallel(forwardmodels), _gdInput(), _grid(forwardmodels.getGrid()), _src(forwardmodels.getSources()), _recv(forwardmodels.getReceivers()), _freq(forwardmodels.getFrequencies())
 {
     GradientDescentInversionInputCardReader GradientDescentInversionReader(gInput.caseFolder);
-    _forwardModel = forwardModel;
     _gdInput = GradientDescentInversionReader.getInput();
 }
 
@@ -17,7 +16,7 @@ OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(ForwardModelInter
 PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    std::cout << "Parallelization of Gradient descent with max" << omp_get_max_threads() << " threads." << std::endl;
+    L_(linfo)<< "Parallelization of Gradient descent with " << omp_get_max_threads() << " threads.";
     ProgressBar bar(_gdInput.iter);
 
     double eta;
@@ -25,10 +24,8 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
     double gamma = _gdInput.gamma0;
 
     std::vector<double> dFdx(_grid.GetNumberOfGridPoints(), 0.0);
-    std::vector<double> dFdxSerial(_grid.GetNumberOfGridPoints(), 0.0);
 
     std::vector<double> dFdxPrevious;
-    std::vector<double> residuals;
 
     PressureFieldSerial chiEstimate(_grid);
     PressureFieldSerial chiEstimatePrevious(_grid);
@@ -47,27 +44,12 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
 
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 
-    _forwardModel->calculateKappa();
-    _forwardModel->calculateResidual(chiEstimate, pData);
+    _forwardModelsParallel.calculateKappaParallel();
 
     for (int it1 = 0; it1 < _gdInput.iter; it1++)
     {
         dFdxPrevious = dFdx;
-        dFdx = differential(pData, chiEstimate, _gdInput.h, eta);
-        dFdxSerial = differentialSerial(pData, chiEstimate, _gdInput.h, eta);
-
-        int numDifferences = 0;
-
-        for (int i = 0; i < static_cast<int>(dFdx.size()); i++)
-        {
-            if (std::abs(dFdx[i] - dFdxSerial[i]) > 0.0001)
-            {
-                numDifferences++;
-            }
-
-        }
-
-
+        dFdx = differential_parallel(pData, chiEstimate, _gdInput.h, eta);
 
         if (it1 > 0)
         {
@@ -80,8 +62,7 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
 
         chiEstimatePrevious = chiEstimate;
         chiEstimate = gradientDescent(chiEstimate, dFdx, gamma);
-        Fx = functionF(chiEstimate, pData, eta);
-        std::cout << "Fx: " << Fx << std::endl;
+        Fx = functionF_parallel(chiEstimate, pData, eta);
         file << std::setprecision(17) << Fx << "," << counter << std::endl;
         
         ++counter;
@@ -91,63 +72,11 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
     return chiEstimate;
 }
 
-std::vector<double> OpenMPGradientDescentInversion::differential(const std::vector<std::complex<double>>& pData, const PressureFieldSerial& chiEstimate, const double h, const double eta)
+
+
+double OpenMPGradientDescentInversion::functionF_parallel(const PressureFieldSerial &xi, const std::vector<std::complex<double> > &pData, double eta)
 {
-    int numGridPoints = chiEstimate.GetNumberOfGridPoints();
-    std::vector<double> dFdx(numGridPoints, 0);
-
-    const double Fx = functionF(chiEstimate, pData, eta);
-
-
-    omp_set_num_threads(1);
-
-#pragma omp parallel
-    {
-        int blockSize = numGridPoints / omp_get_num_threads();
-        int my_offset = omp_get_thread_num() * blockSize;
-        PressureFieldSerial chiEstimatePlusH = chiEstimate;
-        std::vector<double> my_dFdx(blockSize);
-
-        int counter = 0;
-        for (int i = my_offset; i < my_offset + blockSize; ++i)
-        {
-            chiEstimatePlusH.PlusElement(i, h);
-            const double FxPlusH = functionF(chiEstimatePlusH, pData, eta);
-            my_dFdx[counter] = (FxPlusH - Fx) / h;
-            chiEstimatePlusH.PlusElement(i, -h);
-            counter++;
-        }
-
-        std::copy(my_dFdx.begin(), my_dFdx.end(), dFdx.begin() + my_offset);
-    }
-    return dFdx;
-}
-
-std::vector<double> OpenMPGradientDescentInversion::differentialSerial(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta)
-{
-    int numGridPoints = chiEstimate.GetNumberOfGridPoints();
-    std::vector<double> dFdx(numGridPoints);
-
-    double FxPlusH;
-    double Fx = functionF(chiEstimate, pData, eta);
-    PressureFieldSerial chiEstimatePlusH = chiEstimate;
-
-    for (int i = 0; i != numGridPoints; ++i)
-    {
-        chiEstimatePlusH.PlusElement(i, h);
-        FxPlusH = functionF(chiEstimatePlusH, pData, eta);
-        dFdx[i] = (FxPlusH - Fx) / h;
-        chiEstimatePlusH.PlusElement(i, -h);
-    }
-
-    return dFdx;
-}
-
-
-
-double OpenMPGradientDescentInversion::functionF(const PressureFieldSerial &xi, const std::vector<std::complex<double>> &pData, double eta)
-{
-    return eta * _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(xi, pData));
+    return eta * _forwardModelsParallel.calculateResidualNormSqParallel(_forwardModelsParallel.calculateResidualParallel(xi,pData));
 }
 
 
@@ -163,23 +92,23 @@ PressureFieldSerial OpenMPGradientDescentInversion::gradientDescent(PressureFiel
     return x;
 }
 
-std::vector<double> OpenMPGradientDescentInversion::differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta, unsigned int blocksize, unsigned int offset)
+std::vector<double> OpenMPGradientDescentInversion::differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta)
 {
-    double FxPlusH;
-    double Fx = functionF(chiEstimate, pData, eta);
-    PressureFieldSerial chiEstimatePlusH = chiEstimate;
-    std::vector<double> my_dFdx(blocksize, 0.0);
-    //double* p_chiEstimatePlusH = chiEstimatePlusH.GetDataPtr();
-    std::vector<double> expectedDFdx= {-1.44655, -2.65177, -4.61663, -5.35039, -2.94658, -1.57442,1.35354,2.75141,3.31655,3.44341,2.76171,1.45595,0.495105,0.514024, 0.249245, 0.204169,0.543168,0.472388};
 
-    for (unsigned int i = offset; i != offset + blocksize; ++i)
+    int numGridPoints = chiEstimate.GetNumberOfGridPoints();
+    double FxPlusH;
+    std::vector<double> dFdx(numGridPoints);
+    double Fx = functionF_parallel(chiEstimate, pData, eta);
+    PressureFieldSerial chiEstimatePlusH = chiEstimate;
+
+    for (int i = 0; i != numGridPoints; ++i)
     {
         chiEstimatePlusH.PlusElement(i,h);
-        FxPlusH = functionF(chiEstimatePlusH, pData, eta);
-        my_dFdx[i - offset] = (FxPlusH - Fx) / h;
+        FxPlusH = functionF_parallel(chiEstimatePlusH, pData, eta);
+        dFdx[i] = (FxPlusH - Fx) / h;
         chiEstimatePlusH.PlusElement(i,-h);
     }
-    return my_dFdx;
+    return dFdx;
 }
 
 

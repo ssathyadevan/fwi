@@ -45,11 +45,11 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
                 inversion = new EvolutionInversion(forwardModel, evolutionreader.getInput());
                 return inversion;
         }
-        if (desired_inversion == "OpenmpgradientDescentInversion")
+        /*if (desired_inversion == "OpenmpgradientDescentInversion")
         {
                 inversion = new OpenMPGradientDescentInversion(forwardModel, gInput);
                 return inversion;
-        }
+        }*/
         L_(linfo) << "The Inversion method "<< desired_inversion <<" was not found" ;
         exit(EXIT_FAILURE);
 }
@@ -70,5 +70,5 @@ ForwardModelInterface* Factory::createForwardModel(const GenericInput &gInput, c
     }
     L_(linfo) << "The ForwardModel "<< desired_forward_model <<" was not found" ;
     exit(EXIT_FAILURE);
-        
+
 }

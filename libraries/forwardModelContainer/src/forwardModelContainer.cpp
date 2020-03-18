@@ -11,7 +11,7 @@
 
 ForwardModelContainer::ForwardModelContainer(const GenericInput &gInput, const std::string desired_forward_model, const Grid2D &grid, const Sources &src, const Receivers &recv,
                                              const FrequenciesGroup &freq)
-            : _forwardmodels(), _nrSources(src.nSrc), _nrReceivers(recv.nRecv), _nrFrequencies(omp_get_max_threads(), 1), _residuals(), _frequenciesVector()
+            : _forwardmodels(), _nrSources(src.nSrc), _nrReceivers(recv.nRecv), _nrFrequencies(omp_get_max_threads(), 1), _residuals(), _frequenciesVector(), _allFrequencies(freq)
 {
     devideFrequencies(freq,omp_get_max_threads());
     createForwardModels(gInput, desired_forward_model, grid, src, recv, freq);
@@ -63,6 +63,17 @@ void ForwardModelContainer::calculateKappaParallel()
 
 }
 
+int ForwardModelContainer::ComputeThreadOffset()
+{
+    int prev_freq = 0;
+    for (int i = 0 ; i <omp_get_thread_num() ; i++){
+        prev_freq+= _nrFrequencies[i];
+    }
+    int my_offset =  _nrReceivers*_nrSources* prev_freq;
+
+    return my_offset;
+}
+
 std::vector<std::complex<double> > &ForwardModelContainer::calculateResidualParallel(const PressureFieldSerial &chiEstimate, const std::vector<std::complex<double> > &pDataRef)
 {
     int total_freq = std::accumulate(_nrFrequencies.begin(), _nrFrequencies.end(), 0);
@@ -70,11 +81,7 @@ std::vector<std::complex<double> > &ForwardModelContainer::calculateResidualPara
 
 #pragma omp parallel
     {
-        int prev_freq = 0;
-        for (int i = 0 ; i <omp_get_thread_num() ; i++){
-            prev_freq+= _nrFrequencies[i];
-        }
-        int my_offset =  _nrReceivers*_nrSources* prev_freq;
+        int my_offset = ComputeThreadOffset();
 
         int my_length = _nrReceivers * _nrSources * _nrFrequencies[omp_get_thread_num()];
         std::vector<std::complex<double>> my_pDataRef(my_length);
@@ -88,15 +95,43 @@ std::vector<std::complex<double> > &ForwardModelContainer::calculateResidualPara
     return _residuals;
 }
 
-double ForwardModelContainer::calculateResidualNormSqParallel(std::vector<std::complex<double> > &residual)
+double ForwardModelContainer::calculateResidualNormSqParallel(const std::vector<std::complex<double> > &residual)
 {
-    double residualNormSQ = 0.0;
-#pragma omp parallel reduction(+: residualNormSQ)
+    double residualNormSq = 0.0;
+#pragma omp parallel reduction(+: residualNormSq)
     {
-        residualNormSQ = _forwardmodels[omp_get_thread_num()]->calculateResidualNormSq(residual);
-        std::cout << "Thread: " << omp_get_thread_num() << " computed res norm square of: " << residualNormSQ << std::endl;
+        int offset = ComputeThreadOffset();
+        int length = _nrReceivers * _nrSources * _nrFrequencies[omp_get_thread_num()];
+
+        std::vector<std::complex<double> > my_residual(length);
+        std::copy(residual.begin() + offset, residual.begin() + offset + length, my_residual.begin());
+
+        double my_residualNormSq;
+        my_residualNormSq = _forwardmodels[omp_get_thread_num()]->calculateResidualNormSq(my_residual);
+        residualNormSq = my_residualNormSq;
+
     }
-    return residualNormSQ;
+    return residualNormSq;
+}
+
+const FrequenciesGroup &ForwardModelContainer::getFrequencies()
+{
+    return _allFrequencies;
+}
+
+const Grid2D &ForwardModelContainer::getGrid()
+{
+    return _forwardmodels[0]->getGrid();
+}
+
+const Sources &ForwardModelContainer::getSources()
+{
+    return _forwardmodels[0]->getSrc();
+}
+
+const Receivers &ForwardModelContainer::getReceivers()
+{
+    return _forwardmodels[0]->getRecv();
 }
 
 void ForwardModelContainer::devideFrequencies(const FrequenciesGroup &frequenties, const int& nr_threads)

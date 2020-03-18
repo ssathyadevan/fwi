@@ -1,4 +1,5 @@
 #include "factory.h"
+#include "forwardModelContainer.h"
 #include "inversionInterface.h"
 #include "inputCardReader.h"
 #include "genericInputCardReader.h"

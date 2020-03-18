@@ -4,33 +4,31 @@
 #include "forwardModelInterface.h"
 #include "gradientDescentInversionInput.h"
 #include "genericInput.h"
+#include "forwardModelContainer.h"
+
 class OpenMPGradientDescentInversion : public InversionInterface{
 
 private:
-
-    ForwardModelInterface* _forwardModel;
+    ForwardModelContainer& _forwardModelsParallel;
     GradientDescentInversionInput _gdInput;
 
     const Grid2D& _grid;
     const Sources& _src;
     const Receivers& _recv;
-    const FrequenciesGroup _freq;
+    const FrequenciesGroup& _freq;
 
     PressureFieldSerial gradientDescent(PressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
-    std::vector<double> differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta, unsigned int blocksize, unsigned int offset);
+    std::vector<double> differential_parallel(const std::vector<std::complex<double>> &pData, PressureFieldSerial xi, double dxi, double eta);
 
 
 public:
-    OpenMPGradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
+    OpenMPGradientDescentInversion(const GenericInput &gdInput, ForwardModelContainer &forwardmodels);
 
     OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion&) = delete;
     OpenMPGradientDescentInversion & operator = (const OpenMPGradientDescentInversion&) = delete;
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
-    std::vector<double> differential(const std::vector<std::complex<double>> &pData, const PressureFieldSerial &xi, const double dxi, const double eta);
 
-    std::vector<double> differentialSerial(const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta);
-
-    double functionF(const PressureFieldSerial& xi, const std::vector<std::complex<double>> &pData, double eta);
+    double functionF_parallel(const PressureFieldSerial& xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, PressureFieldSerial xPrevious, PressureFieldSerial x);
 };

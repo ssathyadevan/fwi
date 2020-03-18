@@ -10,6 +10,7 @@
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
 #include "OpenMPgradientDescentInversion.h"
+#include "forwardModelContainer.h"
 #include <string>
 
 void performInversion(const GenericInput &gInput, const std::string &runName);
@@ -117,13 +118,15 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
         i++;
     }
     L_(linfo) << "Create ForwardModel";
-    ForwardModelInterface *model;
-    IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
+    //ForwardModelInterface *model;
+    //IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    //model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
+
+    ForwardModelContainer forwardmodelcontainer(gInput,"integralForwardModel",grid, src, recv, freq);
 
     L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;
-    inverse = new OpenMPGradientDescentInversion(model, gInput);
+    inverse = new OpenMPGradientDescentInversion(gInput, forwardmodelcontainer);
 
     L_(linfo) << "Estimating Chi..." ;
 
@@ -133,7 +136,6 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 
-    delete model;
     delete inverse;
 }
 

@@ -18,7 +18,12 @@ public:
                     const FrequenciesGroup &freq);
    void calculateKappaParallel();
    std::vector<std::complex<double>>& calculateResidualParallel(const PressureFieldSerial& chiEstimate, const std::vector<std::complex<double>>& pDataRef);
-   double calculateResidualNormSqParallel(std::vector<std::complex<double>> &residual);
+   double calculateResidualNormSqParallel(const std::vector<std::complex<double> > &residual);
+
+   const FrequenciesGroup& getFrequencies();
+   const Grid2D& getGrid();
+   const Sources& getSources();
+   const Receivers& getReceivers();
 
 
 private:
@@ -28,6 +33,8 @@ private:
     std::vector<int> _nrFrequencies;
     std::vector<std::complex<double>> _residuals;
     std::vector<FrequenciesGroup> _frequenciesVector;
+    FrequenciesGroup _allFrequencies;
 
     void devideFrequencies(const FrequenciesGroup& frequenties, const int& nr_threads);
+    int ComputeThreadOffset();
 };
