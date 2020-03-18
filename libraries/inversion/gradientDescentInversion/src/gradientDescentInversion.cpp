@@ -87,11 +87,6 @@ std::vector<double> GradientDescentInversion::differential(const std::vector<std
         p_chiEstimatePlusH[i] -= h;
     }
 
-    for (int i=0; i<numGridPoints ; i++ )
-    {
-        std::cout << "i: " << i << ", dFdx: " << dFdx[i] << std::endl;
-    }
-
     return dFdx;
 }
 
