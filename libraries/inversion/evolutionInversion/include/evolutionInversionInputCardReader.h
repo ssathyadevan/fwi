@@ -14,4 +14,5 @@ public:
 private:
     EvolutionInversionInput _input;
     void readCard(const std::string &caseFolder);
+    void checkinput();
 };

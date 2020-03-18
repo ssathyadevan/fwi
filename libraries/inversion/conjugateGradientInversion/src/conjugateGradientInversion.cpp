@@ -161,6 +161,7 @@ double ConjugateGradientInversion::calculateStepSize(PressureFieldSerial& zeta, 
         alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
         alphaDenominator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
     }
+    if (alphaDenominator == 0.0) {throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero.");}
     double alpha = alphaNumerator / alphaDenominator;
     return alpha;
 }
@@ -188,6 +189,7 @@ void ConjugateGradientInversion::calculateRegularisationParameters(Regularisatio
     calculateSteeringFactor(regularisationPrevious, regularisationCurrent, deltaAmplification); // eq. 2.23
     calculateRegularisationGradient(regularisationPrevious, regularisationCurrent);
 }
+
 
 void ConjugateGradientInversion::calculateWeightingFactor(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent)
 {
@@ -222,6 +224,7 @@ void ConjugateGradientInversion::calculateRegularisationGradient(const Regularis
 }
 
 
+
 PressureFieldSerial ConjugateGradientInversion::calculateUpdateDirection_regularisation(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, const PressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent, const RegularisationParameters &regularisationPrevious, PressureFieldSerial &zeta, double residualPrevious)
 {
     PressureFieldComplexSerial kappaTimesResidual(_grid);
@@ -235,7 +238,6 @@ PressureFieldSerial ConjugateGradientInversion::calculateUpdateDirection_regular
 
 double ConjugateGradientInversion::calculateStepSize_regularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &resArray, const double eta, const double fDataOld, const PressureFieldSerial& zeta)
 {
-
     std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
     _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
 

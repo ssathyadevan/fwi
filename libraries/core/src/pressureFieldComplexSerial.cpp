@@ -103,6 +103,7 @@ void PressureFieldComplexSerial::Reciprocal()
 {
     for (int i = 0; i < this->GetNumberOfGridPoints(); i++)
     {
+        if (data[i] == 0.0) {throw std::overflow_error("Reciprocal devides by zero");}
         data[i] = double(1.0) / data[i];
     }
 }
