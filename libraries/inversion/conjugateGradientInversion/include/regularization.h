@@ -2,16 +2,18 @@
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "log.h"
-struct Regularization
+struct RegularisationParameters
 {
     double deltaSquared;
+    double fRegularisation;
+    std::vector<PressureFieldSerial> gradientChi;
     PressureFieldSerial gradientChiNormSquared;
     PressureFieldSerial b;
     PressureFieldSerial bSquared;
     PressureFieldSerial gRegularisation;
 
-    Regularization(Grid2D grid):
-        gradientChiNormSquared (grid), b(grid), bSquared(grid), gRegularisation(grid)
+    RegularisationParameters(Grid2D grid):
+        gradientChi(2, PressureFieldSerial(grid)), gradientChiNormSquared (grid), b(grid), bSquared(grid), gRegularisation(grid)
     {
 
     }

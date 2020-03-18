@@ -25,13 +25,15 @@ private:
 
     double _previousLowPoint = std::numeric_limits<double>::max();
 
-    double calculateAlpha(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
-    double calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, std::vector<PressureFieldSerial> &gradientZetaTmp, const int nTotal, const double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, const std::vector<PressureFieldSerial> &gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
+    double calculateStepSize(PressureFieldSerial& zeta, std::vector<std::complex<double>>& residuals);
+    double calculateStepSize_regularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &resArray, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
 
     double errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta);
-    void calculateSteeringFactor(const std::vector<PressureFieldSerial> &gradientChiOld, double deltaAmplification, Regularization &regularizationCurrent);
-    void calculateWeightingFactor(const PressureFieldSerial &gradientChiOldNormSquared, const Regularization &regularizationPrevious, Regularization &regularizationCurrent);
-    void calculateRegularisationGradient(const PressureFieldSerial &bSquaredOld, const std::vector<PressureFieldSerial> &gradientChiOld, std::vector<PressureFieldSerial>&gradientGregTmp, Regularization &regularizationCurrent);
+
+    void calculateRegularisationParameters(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent, double deltaAmplification);
+    void calculateSteeringFactor(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,  double deltaAmplification);
+    void calculateWeightingFactor(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
+    void calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
 
     std::ofstream OpenResidualLogFile(GenericInput& gInput);
@@ -40,13 +42,18 @@ private:
     void logResidualResults(int it1, int it, double error, int counter, std::ofstream &residualLogFile);
     
 
+
+    PressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, const double eta);
+    PressureFieldSerial calculateUpdateDirection_regularisation(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, const PressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent, const RegularisationParameters &regularisationPrevious, PressureFieldSerial &zeta, double residualPrevious);
+
+    void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
+
 public:
 
     ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput& invInput);
-
     ConjugateGradientInversion(const ConjugateGradientInversion&) = delete;
-    ConjugateGradientInversion& operator=(const ConjugateGradientInversion&) = delete;
 
+    ConjugateGradientInversion& operator=(const ConjugateGradientInversion&) = delete;
 
     PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput );
     PressureFieldSerial ReconstructMPI(const std::vector<std::complex<double>> &pData, GenericInput gInput );
