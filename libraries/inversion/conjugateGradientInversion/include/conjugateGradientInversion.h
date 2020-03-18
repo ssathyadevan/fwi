@@ -8,6 +8,7 @@
 #include "forwardModelInterface.h"
 #include "conjugateGradientInversionInput.h"
 #include "log.h"
+#include "regularization.h"
 
 class ConjugateGradientInversion : public InversionInterface
 {
@@ -28,10 +29,9 @@ private:
     double calculateAlpha_regression(const std::vector<std::complex<double>>& zetaTemp, std::vector<PressureFieldSerial> &gradientZetaTmp, const int nTotal, const double deltasquaredOld, const PressureFieldSerial& b, const PressureFieldSerial& bsquared, const std::vector<std::complex<double>> &resArray, const std::vector<PressureFieldSerial> &gradientChiOld, const double eta, const double fDataOld, const PressureFieldSerial& zeta);
 
     double errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta);
-    double calculateSteeringFactor(const PressureFieldSerial &b, const PressureFieldSerial &bSquared, const std::vector<PressureFieldSerial> &gradientChiOld, double deltaAmplification);
-    PressureFieldSerial calculateRegularisationGradient(const PressureFieldSerial &bSquaredOld, const std::vector<PressureFieldSerial> &gradientChiOld, std::vector<PressureFieldSerial>&gradientGregTmp);
-    PressureFieldSerial calculateWeightingFactor(const PressureFieldSerial &gradientChiOldNormSquared, double deltaSquaredOld);
-
+    void calculateSteeringFactor(const std::vector<PressureFieldSerial> &gradientChiOld, double deltaAmplification, Regularization &regularizationCurrent);
+    void calculateWeightingFactor(const PressureFieldSerial &gradientChiOldNormSquared, const Regularization &regularizationPrevious, Regularization &regularizationCurrent);
+    void calculateRegularisationGradient(const PressureFieldSerial &bSquaredOld, const std::vector<PressureFieldSerial> &gradientChiOld, std::vector<PressureFieldSerial>&gradientGregTmp, Regularization &regularizationCurrent);
 
 
     std::ofstream OpenResidualLogFile(GenericInput& gInput);
@@ -39,7 +39,6 @@ private:
 
     void logResidualResults(int it1, int it, double error, int counter, std::ofstream &residualLogFile);
     
-
 
 public:
 
