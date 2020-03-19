@@ -5,7 +5,7 @@
 struct RegularisationParameters
 {
     double deltaSquared;
-    double fRegularisation;
+    double errorFunctional;
     std::vector<PressureFieldSerial> gradientChi;
     PressureFieldSerial gradientChiNormSquared;
     PressureFieldSerial b;
