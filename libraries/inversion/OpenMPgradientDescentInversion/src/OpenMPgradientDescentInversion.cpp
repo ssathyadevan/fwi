@@ -16,7 +16,7 @@ OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const GenericInpu
 PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    L_(linfo) << "Parallelization of Gradient descent with " << omp_get_max_threads() << " threads.";
+    L_(linfo) << "Parallelization of Gradient descent.";
     ProgressBar bar(_gdInput.iter);
 
     double eta;

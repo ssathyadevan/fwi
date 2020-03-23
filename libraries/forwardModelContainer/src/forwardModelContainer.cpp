@@ -15,6 +15,7 @@ ForwardModelContainer::ForwardModelContainer(const GenericInput &gInput, const s
     _numberOfThreads(std::min(freq.nFreq, omp_get_max_threads())), _nrSources(src.nSrc), _nrReceivers(recv.nRecv), _nrFrequencies(_numberOfThreads, 1),
     _residuals(), _frequenciesVector(), _allFrequencies(freq)
 {
+    L_(linfo) << "Container uses " << _numberOfThreads << " threads for parallelization.";
     devideFrequencies(freq);
     createForwardModels(gInput, desired_forward_model, grid, src, recv);
 }
