@@ -1,16 +1,16 @@
-#include "inversionInterface.h"
-#include "inputCardReader.h"
-#include "genericInputCardReader.h"
-#include "utilityFunctions.h"
+#include "OpenMPgradientDescentInversion.h"
 #include "chiIntegerVisualisation.h"
+#include "cpuClock.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
-#include "cpuClock.h"
-#include "log.h"
+#include "forwardModelContainer.h"
+#include "genericInputCardReader.h"
+#include "inputCardReader.h"
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
-#include "OpenMPgradientDescentInversion.h"
-#include "forwardModelContainer.h"
+#include "inversionInterface.h"
+#include "log.h"
+#include "utilityFunctions.h"
 #include <string>
 
 void performInversion(const GenericInput &gInput, const std::string &runName);
@@ -18,7 +18,7 @@ void writePlotInput(const GenericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    if(argc != 2)
     {
         L_(linfo) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         L_(linfo) << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
@@ -26,19 +26,17 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    
     std::vector<std::string> arguments(argv + 1, argc + argv);
     GenericInputCardReader genericReader(arguments[0]);
     GenericInput gInput = genericReader.getInput();
 
-    std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
+    std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
 
-    if (!gInput.verbose)
+    if(!gInput.verbose)
     {
         std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-        initLogger( logFileName.c_str(), ldebug);
+        initLogger(logFileName.c_str(), ldebug);
     }
-    
 
     L_(linfo) << "Test";
 
@@ -51,7 +49,7 @@ int main(int argc, char **argv)
     performInversion(gInput, gInput.runName);
     clock.End();
 
-    L_(linfo) << "Visualisation of the estimated temple using FWI" ;
+    L_(linfo) << "Visualisation of the estimated temple using FWI";
     chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
     create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
@@ -83,7 +81,6 @@ void writePlotInput(const GenericInput &gInput, std::string msg)
 
 void performInversion(const GenericInput &gInput, const std::string &runName)
 {
-
     // initialize the grid, sources, receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
@@ -95,48 +92,43 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
 
-    //read referencePressureData from a CSV file format
+    // read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
 
     std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
     CSVReader row;
 
-    if (!file.is_open())
+    if(!file.is_open())
     {
         L_(linfo) << "Could not open file at " << fileLocation;
         exit(EXIT_FAILURE);
     }
 
     int i = 0;
-    while (file >> row)
+    while(file >> row)
     {
-        if (i < magnitude)
-        {
-            referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
-        }
+        if(i < magnitude) { referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())}; }
         i++;
     }
     L_(linfo) << "Create ForwardModel";
-    //ForwardModelInterface *model;
-    //IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    //model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
+    // ForwardModelInterface *model;
+    // IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    // model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
 
-    ForwardModelContainer forwardmodelcontainer(gInput,"integralForwardModel",grid, src, recv, freq);
+    ForwardModelContainer forwardmodelcontainer(gInput, "integralForwardModel", grid, src, recv, freq);
 
     L_(linfo) << "Create InversionModel";
     InversionInterface *inverse;
     inverse = new OpenMPGradientDescentInversion(gInput, forwardmodelcontainer);
 
-    L_(linfo) << "Estimating Chi..." ;
+    L_(linfo) << "Estimating Chi...";
 
     PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
-    L_(linfo) << "Done, writing to file" ;
+    L_(linfo) << "Done, writing to file";
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 
     delete inverse;
 }
-
-
