@@ -49,7 +49,7 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
     for(int it1 = 0; it1 < _gdInput.iter; it1++)
     {
         dFdxPrevious = dFdx;
-        dFdx = differential_parallel(pData, chiEstimate, _gdInput.h, eta);
+        dFdx = differentialParallel(pData, chiEstimate, _gdInput.h, eta);
 
         if(it1 > 0) { gamma = determineGamma(dFdxPrevious, dFdx, chiEstimatePrevious, chiEstimate); }
         else
@@ -59,7 +59,7 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
 
         chiEstimatePrevious = chiEstimate;
         chiEstimate = gradientDescent(chiEstimate, dFdx, gamma);
-        Fx = functionF_parallel(chiEstimate, pData, eta);
+        Fx = functionFParallel(chiEstimate, pData, eta);
         file << std::setprecision(17) << Fx << "," << counter << std::endl;
 
         ++counter;
@@ -69,7 +69,7 @@ PressureFieldSerial OpenMPGradientDescentInversion::Reconstruct(const std::vecto
     return chiEstimate;
 }
 
-double OpenMPGradientDescentInversion::functionF_parallel(const PressureFieldSerial &xi, const std::vector<std::complex<double>> &pData, double eta)
+double OpenMPGradientDescentInversion::functionFParallel(const PressureFieldSerial &xi, const std::vector<std::complex<double>> &pData, double eta)
 {
     return eta * _forwardModelsParallel.calculateResidualNormSqParallel(_forwardModelsParallel.calculateResidualParallel(xi, pData));
 }
@@ -86,19 +86,19 @@ PressureFieldSerial OpenMPGradientDescentInversion::gradientDescent(PressureFiel
     return x;
 }
 
-std::vector<double> OpenMPGradientDescentInversion::differential_parallel(
+std::vector<double> OpenMPGradientDescentInversion::differentialParallel(
     const std::vector<std::complex<double>> &pData, PressureFieldSerial chiEstimate, double h, double eta)
 {
     int numGridPoints = chiEstimate.GetNumberOfGridPoints();
     double FxPlusH;
     std::vector<double> dFdx(numGridPoints);
-    double Fx = functionF_parallel(chiEstimate, pData, eta);
+    double Fx = functionFParallel(chiEstimate, pData, eta);
     PressureFieldSerial chiEstimatePlusH = chiEstimate;
 
     for(int i = 0; i != numGridPoints; ++i)
     {
         chiEstimatePlusH.PlusElement(i, h);
-        FxPlusH = functionF_parallel(chiEstimatePlusH, pData, eta);
+        FxPlusH = functionFParallel(chiEstimatePlusH, pData, eta);
         dFdx[i] = (FxPlusH - Fx) / h;
         chiEstimatePlusH.PlusElement(i, -h);
     }

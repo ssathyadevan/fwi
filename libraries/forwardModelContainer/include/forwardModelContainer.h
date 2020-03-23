@@ -26,13 +26,13 @@ class ForwardModelContainer
     private:
     std::vector<ForwardModelInterface *> _forwardmodels;
     const int _numberOfThreads;
-    const int _nrSources;
-    const int _nrReceivers;
-    std::vector<int> _nrFrequencies;
+    const int _numberOfSources;
+    const int _numberOfReceivers;
+    std::vector<int> _numberOfFrequencies;
     std::vector<std::complex<double>> _residuals;
     std::vector<FrequenciesGroup> _frequenciesVector;
     FrequenciesGroup _allFrequencies;
 
-    void devideFrequencies(const FrequenciesGroup &frequenties);
+    void devideFrequencies();
     int ComputeThreadOffset();
 };
