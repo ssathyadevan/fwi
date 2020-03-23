@@ -325,8 +325,8 @@ def find(substr,whichin,date_format, file_type):
     start_or_finish = (datetime.strptime(manip, date_format))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/output/" +bench, "%c", "out")
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench, "%c", "out")
+datetime_bench_start    = find(" INFO: Starting", bench + "/output/"+ bench, "%X.%f", "log")
+datetime_bench_finish   = find(" INFO: Finished", bench + "/output/" +bench, "%X.%f", "log")
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
 datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f", "log")
 datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f", "log")
