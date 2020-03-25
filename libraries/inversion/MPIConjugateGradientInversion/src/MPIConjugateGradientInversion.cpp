@@ -241,6 +241,8 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                     alphaDiv[1] += std::real(conj(zetaTemp[i]) * zetaTemp[i]);
                 }
 
+                if (alphaDiv[1] == 0.0) {throw std::overflow_error("MPIConjugateGradient: the computation of alpha devides by zero.");}
+
                 alpha = alphaDiv[0] / alphaDiv[1]; //eq:optimalStepSizeCG in the readme pdf
                 chiEst += alpha * zeta;
                 gOld = g;
@@ -276,7 +278,10 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 PressureFieldSerial tmpVolField2 = b * *gradientChiOld[1];
                 tmpVolField2.Square();
                 tmpVolField += tmpVolField2;
-                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared.Summation(); // # eq. 2.23
+
+                double bsquared_sum = bsquared.Summation();
+                if (bsquared_sum == 0.0) {throw std::overflow_error("MPIConjugateGradient: the computation of deltasquared devides by zero.");}
+                double deltasquared = deltaAmplification * double(0.5) * tmpVolField.Summation() / bsquared_sum; // # eq. 2.23
 
                 tmpVolField = bsquaredOld * *gradientChiOld[0];
                 tmpVolField.Gradient(gradientGregTmp);
@@ -292,7 +297,10 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
                 g = eta * fRegOld * *result + fDataOld * gReg; // # eq: integrandForDiscreteK
 
-                gamma = g.InnerProduct(g - gOld) / gOld.InnerProduct(gOld); // # eq: PolakRibiereDirection
+                double inproduct_gOld = gOld.InnerProduct(gOld);
+                if (inproduct_gOld == 0.0) {throw std::overflow_error("MPIConjugateGradient: the computation of gamma devides by zero.");}
+
+                gamma = g.InnerProduct(g - gOld) / inproduct_gOld; // # eq: PolakRibiereDirection
                 zeta = g + gamma * zeta;
 
                 std::array<double, 2> A = {0.0, 0.0};

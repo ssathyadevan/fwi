@@ -27,55 +27,64 @@ int main(int argc, char **argv)
         L_(lerror) << "Please give the forward model as argument." << std::endl;
         exit(EXIT_FAILURE);
     }
-    CpuClockMPI clock;
-    int mpi_initialized, mpi_finalized, mpi_rank, mpi_size;
-    MPI_Initialized(&mpi_initialized);
-    if (!mpi_initialized)
-        MPI_Init(&argc, &argv);
+    try{
+        CpuClockMPI clock;
+        int mpi_initialized, mpi_finalized, mpi_rank, mpi_size;
+        MPI_Initialized(&mpi_initialized);
+        if (!mpi_initialized)
+            MPI_Init(&argc, &argv);
 
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-    std::vector<std::string> arguments(argv + 1, argc + argv);
-    GenericInputCardReader genericReader(arguments[0]);
-    GenericInput gInput = genericReader.getInput();
-    std::string desired_forward_model = arguments[1];
+        MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+        MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+        std::vector<std::string> arguments(argv + 1, argc + argv);
+        GenericInputCardReader genericReader(arguments[0]);
+        GenericInput gInput = genericReader.getInput();
+        std::string desired_forward_model = arguments[1];
 
-    std::string logFileName;
-    
-    logFileName =  gInput.outputLocation + gInput.runName + "Process" + std::to_string(mpi_rank) + ".log";
+        std::string logFileName;
 
-    if (!gInput.verbose)
-    {
-        std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-        initLogger( logFileName.c_str(), ldebug);
-    }
+        logFileName =  gInput.outputLocation + gInput.runName + "Process" + std::to_string(mpi_rank) + ".log";
 
-    if (mpi_rank == 0)
-    { //MASTER THREAD
-        std::cerr << "MPI initialized with " << mpi_size << " threads." << std::endl;
-        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
-        create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
-        clock.Start();
-    }
-    
+        if (!gInput.verbose)
+        {
+            std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
+            initLogger( logFileName.c_str(), ldebug);
+        }
+
+        if (mpi_rank == 0)
+        { //MASTER THREAD
+            std::cerr << "MPI initialized with " << mpi_size << " threads." << std::endl;
+            chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
+            create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+            clock.Start();
+        }
+
         performInversion(gInput, gInput.runName, mpi_rank, desired_forward_model);
 
-    if (mpi_rank == 0)
-    { //MASTER THREAD
-        clock.End();
+        if (mpi_rank == 0)
+        { //MASTER THREAD
+            clock.End();
 
-        L_(linfo) << "Visualisation of the estimated temple using FWI" ;
-        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-        create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+            L_(linfo) << "Visualisation of the estimated temple using FWI" ;
+            chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
+            create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
-        std::string msg = clock.OutputString();
-        writePlotInput(gInput, msg);
-        
+            std::string msg = clock.OutputString();
+            writePlotInput(gInput, msg);
+
+        }
+
+        MPI_Finalized(&mpi_finalized);
+        if (!mpi_finalized)
+            MPI_Finalize();
     }
-
-    MPI_Finalized(&mpi_finalized);
-    if (!mpi_finalized)
-        MPI_Finalize();
+    catch(const std::invalid_argument& e){
+        std::cout << "An invalid argument found!" << std::endl;
+        std::cout<< e.what() << std::endl;
+    }
+    catch( const std::exception& e){
+        std::cout<< e.what()<< std::endl;
+    }
 
     return 0;
 }

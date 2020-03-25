@@ -12,6 +12,7 @@ public:
     GradientDescentInversionInput getInput();
 private:
     void readCard(const std::string &caseFolder);
+    void checkinput();
     GradientDescentInversionInput _input;
 };
 

@@ -14,6 +14,7 @@ public:
 
 private:
     void readCard(const std::string &caseFolder);
+    void checkinput();
 
     GenericInput _input;
 };

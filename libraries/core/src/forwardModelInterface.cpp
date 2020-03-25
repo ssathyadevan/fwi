@@ -1,4 +1,5 @@
 #include "forwardModelInterface.h"
+#include <math.h>
 
 ForwardModelInterface::ForwardModelInterface(const Grid2D &grid, const Sources &src, const Receivers &recv,
                                              const FrequenciesGroup &freq)
@@ -40,6 +41,7 @@ std::vector<std::complex<double>> &ForwardModelInterface::calculateResidual(cons
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
         _residual[i] = pDataRef[i] - pDataEst[i];
+        if (isnan(std::abs(_residual[i]))) {throw std::overflow_error("Residual is not a number");}
     }
 
     return _residual;

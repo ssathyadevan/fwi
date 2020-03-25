@@ -65,10 +65,23 @@ def deploy(){
 
 }
 
+def unitTestSummary() {
+	if (currentBuild.currentResult != "FAILURE") {
+		echo 'Creating unit-test Result Summary (junit)'
+		xunit (
+			tools: [ CTest (pattern: 'build/*.xml') ])
+		junit ('build/*.xml')
+		            
+		echo 'Cleaning the workspace'
+	}
+	else {
+		echo 'Previous steps failed, so no summary of unit-test is made'	
+	}
+}
+
 
 
 def sendEmail() {
-
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail()
