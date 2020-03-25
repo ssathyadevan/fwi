@@ -10,13 +10,11 @@ struct RegularisationParameters
     PressureFieldSerial gradientChiNormSquared;
     PressureFieldSerial b;
     PressureFieldSerial bSquared;
-    PressureFieldSerial gRegularisation;
+    PressureFieldSerial gradient;
 
-    RegularisationParameters(Grid2D grid):
-        gradientChi(2, PressureFieldSerial(grid)), gradientChiNormSquared (grid), b(grid), bSquared(grid), gRegularisation(grid)
+    RegularisationParameters(Grid2D grid) :
+        deltaSquared(0.0), errorFunctional(1.0), gradientChi(2, PressureFieldSerial(grid)), gradientChiNormSquared(grid), b(grid), bSquared(grid),
+        gradient(grid)
     {
-
     }
-
 };
-
