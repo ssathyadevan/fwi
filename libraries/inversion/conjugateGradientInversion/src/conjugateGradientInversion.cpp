@@ -34,9 +34,8 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
     {
         // Initialize conjugate gradient parameters
         PressureFieldSerial gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
-        double residualPrevious = 0.0;
-        double alpha = 0.0;
-        double residualCurrent = 0.0;
+        double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
+
         _forwardModel->calculateKappa();
         std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
 
@@ -97,6 +96,7 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
             // Save regularisation variables for next iteration
             _chiEstimate.Gradient(regularisationCurrent.gradientChi);
             calculateRegularisationErrorFunctional(regularisationPrevious, regularisationPrevious);
+
             regularisationPrevious.deltaSquared = regularisationCurrent.deltaSquared;
             regularisationPrevious.bSquared = regularisationCurrent.bSquared;
 
