@@ -1,12 +1,12 @@
 #pragma once
 
-#include "iter1.h"
 #include "deltaAmplification.h"
+#include "iter1.h"
 
 struct ConjugateGradientInversionInput
 {
-      iter1 iteration1;
-      deltaAmplification dAmplification;
-      bool doRegularisation;
-      int n_max;
+    iter1 iteration1;
+    DeltaAmplification dAmplification;
+    bool doRegularisation;
+    int n_max;
 };
