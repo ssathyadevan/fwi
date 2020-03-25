@@ -123,7 +123,7 @@ std::ofstream ConjugateGradientInversion::openResidualLogFile(GenericInput &gInp
 }
 
 PressureFieldSerial ConjugateGradientInversion::calculateUpdateDirection(
-    std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, const double eta)
+    std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, double eta)
 {
     PressureFieldComplexSerial kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
     _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
@@ -132,7 +132,7 @@ PressureFieldSerial ConjugateGradientInversion::calculateUpdateDirection(
     return gradientCurrent;
 }
 
-double ConjugateGradientInversion::calculateStepSize(PressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray)
+double ConjugateGradientInversion::calculateStepSize(const PressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray)
 {
     double alphaNumerator = 0.0;
     double alphaDenominator = 0.0;
@@ -224,7 +224,7 @@ PressureFieldSerial ConjugateGradientInversion::calculateRegularisationGradient(
 
 PressureFieldSerial ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray,
     PressureFieldSerial &gradientCurrent, const PressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-    const RegularisationParameters &regularisationPrevious, PressureFieldSerial &zeta, double residualPrevious)
+    const RegularisationParameters &regularisationPrevious, const PressureFieldSerial &zeta, double residualPrevious)
 {
     PressureFieldComplexSerial kappaTimesResidual(_grid);
     kappaTimesResidual.Zero();
@@ -244,44 +244,44 @@ double ConjugateGradientInversion::calculateStepSizeRegularisation(const Regular
     std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
     _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
 
-    double A0 = fDataPrevious;
+    double a0 = fDataPrevious;
 
-    double A1 = 0.0;
-    double A2 = 0.0;
+    double a1 = 0.0;
+    double a2 = 0.0;
 
     for(int i = 0; i < nTotal; i++)
     {
-        A2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
-        A1 += -2.0 * eta * std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+        a1 += -2.0 * eta * std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+        a2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
     }
-
-    std::vector<PressureFieldSerial> gradientZeta(2, PressureFieldSerial(_grid));
-
-    zeta.Gradient(gradientZeta);
-    PressureFieldSerial bTimesGradientZetaXdirection = regularisationCurrent.b * gradientZeta[0];
-    PressureFieldSerial bTimesGradientZetaZdirection = regularisationCurrent.b * gradientZeta[1];
-    bTimesGradientZetaXdirection.Square();
-    bTimesGradientZetaZdirection.Square();
-    double B2 = (bTimesGradientZetaXdirection.Summation() + bTimesGradientZetaZdirection.Summation()) * _grid.GetCellVolume();
-
-    PressureFieldSerial bGradientZetabGradientChiXDirection =
-        (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
-    PressureFieldSerial bGradientZetabGradientChiZDirection =
-        (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
-    double B1 = 2.0 * (bGradientZetabGradientChiXDirection.Summation() + bGradientZetabGradientChiZDirection.Summation()) * _grid.GetCellVolume();
 
     PressureFieldSerial bGradientChiSquaredXDirection =
         (regularisationCurrent.b * regularisationPrevious.gradientChi[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
     PressureFieldSerial bGradientChiSquaredZDirection =
         (regularisationCurrent.b * regularisationPrevious.gradientChi[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
-    double B0 = ((bGradientChiSquaredXDirection.Summation() + bGradientChiSquaredZDirection.Summation()) +
+    double b0 = ((bGradientChiSquaredXDirection.Summation() + bGradientChiSquaredZDirection.Summation()) +
                     regularisationPrevious.deltaSquared * regularisationCurrent.bSquared.Summation()) *
                 _grid.GetCellVolume();
 
-    double derA = 4.0 * A2 * B2;
-    double derB = 3.0 * (A2 * B1 + A1 * B2);
-    double derC = 2.0 * (A2 * B0 + A1 * B1 + A0 * B2);
-    double derD = A1 * B0 + A0 * B1;
+    std::vector<PressureFieldSerial> gradientZeta(2, PressureFieldSerial(_grid));
+    zeta.Gradient(gradientZeta);
+
+    PressureFieldSerial bGradientZetabGradientChiX =
+        (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
+    PressureFieldSerial bGradientZetabGradientChiZ =
+        (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
+    double b1 = 2.0 * (bGradientZetabGradientChiX.Summation() + bGradientZetabGradientChiZ.Summation()) * _grid.GetCellVolume();
+
+    PressureFieldSerial bTimesGradientZetaXdirection = regularisationCurrent.b * gradientZeta[0];
+    PressureFieldSerial bTimesGradientZetaZdirection = regularisationCurrent.b * gradientZeta[1];
+    bTimesGradientZetaXdirection.Square();
+    bTimesGradientZetaZdirection.Square();
+    double b2 = (bTimesGradientZetaXdirection.Summation() + bTimesGradientZetaZdirection.Summation()) * _grid.GetCellVolume();
+
+    double derA = 4.0 * a2 * b2;
+    double derB = 3.0 * (a2 * b1 + a1 * b2);
+    double derC = 2.0 * (a2 * b0 + a1 * b1 + a0 * b2);
+    double derD = a1 * b0 + a0 * b1;
 
     return findRealRootFromCubic(derA, derB, derC, derD);
 }

@@ -43,7 +43,7 @@ class ConjugateGradientInversion : public InversionInterface
      * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
      * @return PressureFieldSerial zeta is the update direction for each value in the contrast function
      */
-    PressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, const double eta);
+    PressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, double eta);
 
     /**
      * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -51,7 +51,7 @@ class ConjugateGradientInversion : public InversionInterface
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @return double alpha, the optimum step size
      */
-    double calculateStepSize(PressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray);
+    double calculateStepSize(const PressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray);
 
     /**
      * @brief errorFunctional calculates the residual according to equation eq: errorFunc(README)
@@ -123,7 +123,7 @@ class ConjugateGradientInversion : public InversionInterface
      */
     PressureFieldSerial calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent,
         const PressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-        const RegularisationParameters &regularisationPrevious, PressureFieldSerial &zeta, double residualPrevious);
+        const RegularisationParameters &regularisationPrevious, const PressureFieldSerial &zeta, double residualPrevious);
 
     /**
      * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect to
