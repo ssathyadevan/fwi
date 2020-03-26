@@ -25,6 +25,43 @@ void PressureFieldSerial::Zero()
     }
 }
 
+void PressureFieldSerial::Square()
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] *= _data[i];
+    }
+}
+
+void PressureFieldSerial::Sqrt()
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = std::sqrt(_data[i]);
+    }
+}
+
+double PressureFieldSerial::Norm() const { return std::sqrt(InnerProduct(*this)); }
+double PressureFieldSerial::RelNorm() const { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
+
+void PressureFieldSerial::Reciprocal()
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = double(1.0) / _data[i];
+    }
+}
+
+double PressureFieldSerial::Summation() const
+{
+    double result = double(0.0);
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        result += _data[i];
+    }
+    return result;
+}
+
 void PressureFieldSerial::Random()
 {
     for(int i = 0; i < GetGrid().GetNumberOfGridPoints(); i++)
@@ -124,44 +161,41 @@ void PressureFieldSerial::SetField(const std::function<double(double, double)> f
     }
 }
 
-double PressureFieldSerial::Norm() const { return std::sqrt(InnerProduct(*this)); }
-double PressureFieldSerial::RelNorm() const { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
-
-void PressureFieldSerial::Square()
-{
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] *= _data[i];
-    }
-}
-
-void PressureFieldSerial::Sqrt()
-{
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] = std::sqrt(_data[i]);
-    }
-}
-
-void PressureFieldSerial::Reciprocal()
-{
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] = double(1.0) / _data[i];
-    }
-}
-
-double PressureFieldSerial::Summation() const
-{
-    double result = double(0.0);
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        result += _data[i];
-    }
-    return result;
-}
-
 // Non virtual members
+void PressureFieldSerial::setData(const std::vector<double> data)
+{
+    // TODO ASSERT
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = data[i];
+    }
+}
+
+void PressureFieldSerial::setValue(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = value;
+    }
+}
+
+void PressureFieldSerial::addData(const std::vector<double> data)
+{
+    // TODO ASSERT
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += data[i];
+    }
+}
+
+void PressureFieldSerial::addValue(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += value;
+    }
+}
+
 double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     double sum = double(0.0);
@@ -265,6 +299,7 @@ void PressureFieldSerial::Gradient(std::vector<PressureFieldSerial> &gradientFie
     }
 }
 
+// Operators
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {
     if(this != &rhs)

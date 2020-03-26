@@ -15,11 +15,11 @@
 
 class PressureFieldSerial : public PressureField
 {
-    private:
+private:
     std::vector<double> _data;
     double *const _dataPointer;
 
-    public:
+public:
     explicit PressureFieldSerial(const Grid2D &grid);
 
     PressureFieldSerial(const PressureFieldSerial &rhs);
@@ -28,50 +28,58 @@ class PressureFieldSerial : public PressureField
 
     // Virtual overrides
     void Zero() override;
+    void Square() override;
+    void Sqrt() override;
+    double Norm() const override;
+    double RelNorm() const override;
+    double Summation() const override;
 
     void Random() override;          // unused?
     void RandomSaurabh() override;   // Generates random approximations of Saurabh
-    virtual void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
 
     void toBuffer(double *buffer) const override;
-
     void fromBuffer(const double *buffer) override;
 
     void toFile(const std::string &fileName) const override;
 
-    virtual void fromFile(const GenericInput &input);
-
     void SetField(const std::function<double(double, double)> func) override;
 
-    double Norm() const override;
-    double RelNorm() const override;
-    void Square() override;
-    void Sqrt() override;
-    virtual void Reciprocal();
-    double Summation() const override;
-
     // Non virtual members
+    std::vector<double> GetData() const { return _data; }
+
+    void setData(const std::vector<double> data);
+    void setValue(const double value);
+    void setValue(const double value, const int index) { _data[index] = value; }
+
+    void addData(const std::vector<double> data);
+    void addValue(const double value);
+    void addValue(const double value, const int index) { _data[index] += value; }
+
+    void Reciprocal();
+    void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
+    void fromFile(const GenericInput &input);
+
     double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(PressureFieldSerial **output) const;
     void Gradient(std::vector<PressureFieldSerial> &gradientField) const;
 
+    void CopyTo(PressureFieldSerial &dest);
+
+    // TODO: REMOVE GetDataPtr()
+    const double *GetDataPtr() const { return _dataPointer; }
+    double *GetDataPtr() { return _dataPointer; }
+
+    // Operators
     PressureFieldSerial &operator=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator=(const double rhs);
+    PressureFieldSerial &operator+=(const PressureFieldSerial &rhs);
+    PressureFieldSerial &operator+=(const double rhs);
     PressureFieldSerial &operator-=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator*=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator/=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator-=(const double rhs);
     PressureFieldSerial &operator*=(const double rhs);
     PressureFieldSerial &operator/=(const double rhs);
-
-    const double *GetDataPtr() const { return _dataPointer; }
-    double *GetDataPtr() { return _dataPointer; }
-
-    void CopyTo(PressureFieldSerial &dest);
-
-    PressureFieldSerial &operator+=(const PressureFieldSerial &rhs);
-
-    PressureFieldSerial &operator+=(const double rhs);
 };
 
 inline double InnerProduct(const PressureFieldSerial &x, const PressureFieldSerial &y) { return x.InnerProduct(y); }

@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "pressureFieldSerial.h"
+#include <gtest/gtest.h>
 
 Grid2D getGrid()
 {
@@ -15,7 +15,7 @@ PressureFieldSerial getPFS()
 {
     Grid2D grid = getGrid();
     PressureFieldSerial pfs(grid);
-    std::function<double(double, double)> func = [](double x, double z) { return x + z; }; // Linear tilted plane, x & z are centroids of grid cell.
+    std::function<double(double, double)> func = [](double x, double z) { return x + z; };   // Linear tilted plane, x & z are centroids of grid cell.
     pfs.SetField(func);
     return pfs;
 }
@@ -25,6 +25,7 @@ TEST(PressureFieldSerialTest, pfsNormTest)
     PressureFieldSerial pfs = getPFS();
     EXPECT_NEAR(pfs.Norm(), 6.04, 0.01);
 }
+
 TEST(PressureFieldSerialTest, pfsRelNormTest)
 {
     PressureFieldSerial pfs = getPFS();
@@ -71,7 +72,7 @@ TEST(PressureFieldSerialTest, GradientTest)
 
     // Assign planar function to grid
     PressureFieldSerial pfs(grid);
-    std::function<double(double, double)> func = [](double x, double z) { return x + z; }; // Linear plane, x & z are centroids of grid cell.
+    std::function<double(double, double)> func = [](double x, double z) { return x + z; };   // Linear plane, x & z are centroids of grid cell.
     pfs.SetField(func);
 
     // Prepare output double pointer
@@ -92,11 +93,11 @@ TEST(PressureFieldSerialTest, GradientTest)
     EXPECT_NEAR(data_ptr[1][0], 1, 0.01);
     EXPECT_NEAR(data_ptr[1][11], 1, 0.01);
 
-    for (int i = 0; i < 2; i++)
+    for(int i = 0; i < 2; i++)
     {
         delete pfs_out[i];
     }
-    delete pfs_out;
+    delete[] pfs_out;
 }
 
 TEST(PressureFieldSerialTest, ZeroTest)
@@ -118,7 +119,7 @@ TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialTest)
     double *data_pfs_1 = pfs_1.GetDataPtr();
     double *data_pfs_2 = pfs_2.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], data_pfs_2[i], 0.0001);
     }
@@ -131,7 +132,7 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 0.1, 0.0001);
     }
@@ -148,7 +149,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 0.1, 0.0001);
     }
@@ -162,7 +163,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractDoubleTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], -0.1, 0.0001);
     }
@@ -178,7 +179,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 2.0, 0.0001);
     }
@@ -192,7 +193,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 0.1, 0.0001);
     }
@@ -208,7 +209,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByPressureFieldSerialTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 0.4, 0.0001);
     }
@@ -222,7 +223,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
 
     double *data_pfs_1 = pfs_1.GetDataPtr();
 
-    for (int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
+    for(int i = 0; i != pfs_1.GetNumberOfGridPoints(); ++i)
     {
         EXPECT_NEAR(data_pfs_1[i], 0.4, 0.0001);
     }
