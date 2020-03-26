@@ -53,6 +53,7 @@ class PressureFieldSerial : public PressureField
     // Non virtual members
     double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(PressureFieldSerial **output) const;
+    void Gradient(std::vector<PressureFieldSerial> &gradientField) const;
 
     PressureFieldSerial &operator=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator=(const double rhs);
