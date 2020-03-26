@@ -2,7 +2,7 @@
 #include "log.h"
 
 PressureFieldComplexSerial ::PressureFieldComplexSerial(const Grid2D &grid) :
-    PressureFieldComplex(grid), _data(std::vector<std::complex<double>>(GetNumberOfGridPoints())), _dataPointer(&_data[0])
+    PressureFieldComplex(grid), _data(std::vector<std::complex<double>>(GetNumberOfGridPoints()), 0.0), _dataPointer(&_data[0])
 {
 }
 
