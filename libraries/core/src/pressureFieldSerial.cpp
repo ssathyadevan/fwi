@@ -48,8 +48,10 @@ void PressureFieldSerial::RandomChild(const PressureFieldSerial &parent, std::de
     {
         double temp = distribution(generator);
         _data[i] = parent._data[i] + temp;
-        if(_data[i] > 0.18) _data[i] -= 0.18;   // If larger than 0.18, loops back from 0
-        if(_data[i] < 0.00) _data[i] += 0.18;   // If negative, loops back from 0.18
+        if(_data[i] > 0.18)
+            _data[i] -= 0.18;   // If larger than 0.18, loops back from 0
+        if(_data[i] < 0.00)
+            _data[i] += 0.18;   // If negative, loops back from 0.18
     }
 }
 
@@ -219,47 +221,49 @@ void PressureFieldSerial::Gradient(PressureFieldSerial **output) const
 
 void PressureFieldSerial::Gradient(std::vector<PressureFieldSerial> &gradientField) const
 {
-    //note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
+    // note that the python script has the order reversed, so gradient(c++)[0] is gradient(python)[1] and vice versa, switch for clarity?
 
     const std::array<int, 2> &nx = GetGrid().GetGridDimensions();
     const std::array<double, 2> &dx = GetGrid().GetCellDimensions();
 
-    for (int i = 0; i < nx[1]; i++)
+    for(int i = 0; i < nx[1]; i++)
     {
-        for (int j = 0; j < nx[0]; j++)
+        for(int j = 0; j < nx[0]; j++)
         {
-            //direction 1 dx
-            if (j == 0)
+            // direction 1 dx
+            if(j == 0)
             {
-                gradientField[0].GetDataPtr()[i * nx[0] + j] = (data[i * nx[0] + j + 2] - 4 * data[i * nx[0] + j + 1] + 3 * data[i * nx[0] + j]) / (-double(2.0) * dx[0]);
+                gradientField[0].GetDataPtr()[i * nx[0] + j] =
+                    (_data[i * nx[0] + j + 2] - 4 * _data[i * nx[0] + j + 1] + 3 * _data[i * nx[0] + j]) / (-double(2.0) * dx[0]);
             }
-            else if (j == nx[0] - 1)
+            else if(j == nx[0] - 1)
             {
-                gradientField[0].GetDataPtr()[i * nx[0] + j] = (data[i * nx[0] + j - 2] - 4 * data[i * nx[0] + j - 1] + 3 * data[i * nx[0] + j]) / (double(2.0) * dx[0]);
+                gradientField[0].GetDataPtr()[i * nx[0] + j] =
+                    (_data[i * nx[0] + j - 2] - 4 * _data[i * nx[0] + j - 1] + 3 * _data[i * nx[0] + j]) / (double(2.0) * dx[0]);
             }
             else
             {
-                gradientField[0].GetDataPtr()[i * nx[0] + j] = (data[i * nx[0] + j + 1] - data[i * nx[0] + j - 1]) / (double(2.0) * dx[0]);
+                gradientField[0].GetDataPtr()[i * nx[0] + j] = (_data[i * nx[0] + j + 1] - _data[i * nx[0] + j - 1]) / (double(2.0) * dx[0]);
             }
 
-            //direction 2 dz
-            if (i == 0)
+            // direction 2 dz
+            if(i == 0)
             {
-                gradientField[1].GetDataPtr()[i * nx[0] + j] = (data[(i + 2) * nx[0] + j] - 4 * data[(i + 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (-double(2.0) * dx[1]);
+                gradientField[1].GetDataPtr()[i * nx[0] + j] =
+                    (_data[(i + 2) * nx[0] + j] - 4 * _data[(i + 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (-double(2.0) * dx[1]);
             }
-            else if (i == nx[1] - 1)
+            else if(i == nx[1] - 1)
             {
-                gradientField[1].GetDataPtr()[i * nx[0] + j] = (data[(i - 2) * nx[0] + j] - 4 * data[(i - 1) * nx[0] + j] + 3 * data[i * nx[0] + j]) / (double(2.0) * dx[1]);
+                gradientField[1].GetDataPtr()[i * nx[0] + j] =
+                    (_data[(i - 2) * nx[0] + j] - 4 * _data[(i - 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (double(2.0) * dx[1]);
             }
             else
             {
-                gradientField[1].GetDataPtr()[i * nx[0] + j] = (data[(i + 1) * nx[0] + j] - data[(i - 1) * nx[0] + j]) / (double(2.0) * dx[1]);
+                gradientField[1].GetDataPtr()[i * nx[0] + j] = (_data[(i + 1) * nx[0] + j] - _data[(i - 1) * nx[0] + j]) / (double(2.0) * dx[1]);
             }
         }
     }
-
 }
-
 
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {

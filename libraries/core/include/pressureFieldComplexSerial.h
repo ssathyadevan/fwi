@@ -3,7 +3,6 @@
 #include "grid2D.h"
 #include "pressureFieldComplex.h"
 #include "pressureFieldSerial.h"
-
 #include <array>
 #include <cassert>
 #include <complex>
@@ -14,11 +13,11 @@
 
 class PressureFieldComplexSerial : public PressureFieldComplex
 {
-    private:
+private:
     std::vector<std::complex<double>> _data;
     std::complex<double> *const _dataPointer;
 
-    public:
+public:
     PressureFieldComplexSerial(const Grid2D &grid);
 
     PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs);
