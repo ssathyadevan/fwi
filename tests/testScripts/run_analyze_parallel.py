@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import bisect
 
 matplotlib.use('Agg')
+//os.system("export DISPLAY=:0.0")
 
 ######### Define all functions #################################################
 
@@ -215,7 +216,6 @@ residualdifferencefile = open("residualDifferences.txt", 'w+')
 residualdifferencefile.write(residualDifferencetext)
 residualdifferencefile.close()
 
-os.system("export DISPLAY=:0.0")
 # Create plots
 print("Create residual difference plot")
 plt.clf()
