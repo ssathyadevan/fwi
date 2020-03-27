@@ -27,22 +27,29 @@ pipeline{
                                 }
                         }
                 }
+		stage('parallelAnalysis'){
+			steps{
+				script{
+					functions.parallelAnalysis()
+				}
+			}		
+		}
 
-                stage('Test') {
+                /*stage('Test') {
                         steps{
                                 script{
                                         functions.testAll()
                                 }
                         }
-                }
+                }*/
 
-                stage('RegressionTesting'){
+                /*stage('RegressionTesting'){
                         steps{
                                 script{
                                         functions.regressiontest()
                                 }
                         }
-                }
+                }*/
                
                 stage('Deploy') {
                 /* when {
