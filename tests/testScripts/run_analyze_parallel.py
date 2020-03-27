@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import bisect
 
 matplotlib.use('Agg')
-//os.system("export DISPLAY=:0.0")
+#os.system("export DISPLAY=:0.0")
 
 ######### Define all functions #################################################
 
