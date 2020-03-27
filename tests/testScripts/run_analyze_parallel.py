@@ -1,8 +1,11 @@
 import sys, os, shutil
 import numpy as np
 from datetime import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 import bisect
+
+matplotlib.use('Agg')
 
 ######### Define all functions #################################################
 
@@ -78,9 +81,9 @@ os.chdir(FWIInstalLocation)
 _makeFolder(newFolder)
 
 # Copy input of the input folder
-splittedFolder = folder.split("/")
+splittedFolder = folder.strip("/").split("/")
 if len(splittedFolder) > 1:
-  runName = splittedFolder[-2]
+  runName = splittedFolder[-1]
 else:
   runName = folder
 
