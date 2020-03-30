@@ -1,0 +1,40 @@
+{
+    "c_0": 2000.0,
+    "Freq": {
+        "min": 10.0,
+        "max": 40.0,
+        "nTotal": 15
+    },
+    "reservoirTopLeft": {
+        "x": -300.0,
+        "z": 0.0
+    },
+    "reservoirBottomRight": {
+        "x": 300.0, 
+        "z": 300.0
+    },
+    "sourcesTopLeft": {
+        "x": -350.0,
+        "z": -50.0
+    },
+    "sourcesBottomRight": {
+        "x": -350.0,
+        "z":  350.0
+    },
+    "receiversTopLeft": {
+        "x": 350.0,
+        "z": -50.0
+    },
+    "receiversBottomRight": {
+        "x": 350.0,
+        "z": 350.0
+    },
+    "nSources": 17,
+    "nReceivers": 17,
+    "ngrid": {
+        "x": 64,
+        "z": 32
+    },
+    "verbosity": false,
+    "fileName": "temple"
+}
