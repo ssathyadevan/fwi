@@ -110,10 +110,6 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
         i++;
     }
     L_(linfo) << "Create ForwardModel";
-    // ForwardModelInterface *model;
-    // IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    // model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
-
     ForwardModelContainer forwardmodelcontainer(gInput, "integralForwardModel", grid, src, recv, freq);
 
     L_(linfo) << "Create InversionModel";

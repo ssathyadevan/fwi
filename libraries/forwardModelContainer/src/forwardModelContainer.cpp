@@ -9,15 +9,15 @@
 
 #include <iostream>
 
-ForwardModelContainer::ForwardModelContainer(const GenericInput &gInput, const std::string &desired_forward_model, const Grid2D &grid, const Sources &src,
-    const Receivers &recv, const FrequenciesGroup &freq) :
+ForwardModelContainer::ForwardModelContainer(const GenericInput &genericInput, const std::string &desiredForwardModel, const Grid2D &grid,
+    const Sources &sources, const Receivers &receivers, const FrequenciesGroup &frequencies) :
     _forwardmodels(),
-    _numberOfThreads(std::min(freq.nFreq, omp_get_max_threads())), _numberOfSources(src.nSrc), _numberOfReceivers(recv.nRecv),
-    _numberOfFrequencies(_numberOfThreads, 1), _residuals(), _frequenciesVector(), _allFrequencies(freq)
+    _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads())), _numberOfSources(sources.nSrc), _numberOfReceivers(receivers.nRecv),
+    _numberOfFrequenciesPerThread(_numberOfThreads, 0), _residuals(), _frequenciesVector(), _allFrequencies(frequencies)
 {
     L_(linfo) << "Container uses " << _numberOfThreads << " threads for parallelization.";
-    devideFrequencies();
-    createForwardModels(gInput, desired_forward_model, grid, src, recv);
+    divideFrequencies();
+    createForwardModels(genericInput, desiredForwardModel, grid, sources, receivers);
 }
 
 ForwardModelContainer::~ForwardModelContainer()
@@ -29,30 +29,30 @@ ForwardModelContainer::~ForwardModelContainer()
 }
 
 void ForwardModelContainer::createForwardModels(
-    const GenericInput &gInput, const std::string &desired_forward_model, const Grid2D &grid, const Sources &src, const Receivers &recv)
+    const GenericInput &gInput, const std::string &desiredForwardModel, const Grid2D &grid, const Sources &sources, const Receivers &receivers)
 {
-    if(desired_forward_model == "integralForwardModel")
+    if(desiredForwardModel == "integralForwardModel")
     {
         IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            ForwardModelInterface *model = new IntegralForwardModel(grid, src, recv, _frequenciesVector[threadNumber], integralreader.getInput());
+            ForwardModelInterface *model = new IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
             _forwardmodels.push_back(model);
         }
     }
-    else if(desired_forward_model == "finiteDifferenceForwardModel")
+    else if(desiredForwardModel == "finiteDifferenceForwardModel")
     {
         FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
             ForwardModelInterface *model =
-                new FiniteDifferenceForwardModel(grid, src, recv, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
+                new FiniteDifferenceForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
             _forwardmodels.push_back(model);
         }
     }
     else
     {
-        L_(linfo) << "The ForwardModel " << desired_forward_model << " was not found";
+        L_(linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
         exit(EXIT_FAILURE);
     }
 }
@@ -66,12 +66,12 @@ void ForwardModelContainer::calculateKappaParallel()
     }
 }
 
-int ForwardModelContainer::ComputeThreadOffset()
+int ForwardModelContainer::computeThreadOffset()
 {
     int cummulativeNumberOfFrequencies = 0;
     for(int threadNumber = 0; threadNumber < omp_get_thread_num(); threadNumber++)
     {
-        cummulativeNumberOfFrequencies += _numberOfFrequencies[threadNumber];
+        cummulativeNumberOfFrequencies += _numberOfFrequenciesPerThread[threadNumber];
     }
     int offset = _numberOfReceivers * _numberOfSources * cummulativeNumberOfFrequencies;
 
@@ -81,21 +81,21 @@ int ForwardModelContainer::ComputeThreadOffset()
 std::vector<std::complex<double>> &ForwardModelContainer::calculateResidualParallel(
     const PressureFieldSerial &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
 {
-    std::vector<std::complex<double>> all_residuals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
+    std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
     omp_set_num_threads(_numberOfThreads);
 #pragma omp parallel
     {
-        int privateOffset = ComputeThreadOffset();
-        int privateLength = _numberOfReceivers * _numberOfSources * _numberOfFrequencies[omp_get_thread_num()];
+        int privateOffset = computeThreadOffset();
+        int privateLength = _numberOfReceivers * _numberOfSources * _numberOfFrequenciesPerThread[omp_get_thread_num()];
 
-        std::vector<std::complex<double>> my_pDataRef(privateLength);
-        std::copy(pDataRef.begin() + privateOffset, pDataRef.begin() + privateOffset + privateLength, my_pDataRef.begin());
+        std::vector<std::complex<double>> privatePDataRef(privateLength);
+        std::copy(pDataRef.begin() + privateOffset, pDataRef.begin() + privateOffset + privateLength, privatePDataRef.begin());
 
-        std::vector<std::complex<double>> privateResiduals = _forwardmodels[omp_get_thread_num()]->calculateResidual(chiEstimate, my_pDataRef);
+        std::vector<std::complex<double>> privateResiduals = _forwardmodels[omp_get_thread_num()]->calculateResidual(chiEstimate, privatePDataRef);
 
-        std::copy(privateResiduals.begin(), privateResiduals.end(), all_residuals.begin() + privateOffset);
+        std::copy(privateResiduals.begin(), privateResiduals.end(), allResiduals.begin() + privateOffset);
     }
-    _residuals = all_residuals;
+    _residuals = allResiduals;
     return _residuals;
 }
 
@@ -105,8 +105,8 @@ double ForwardModelContainer::calculateResidualNormSqParallel(const std::vector<
     omp_set_num_threads(_numberOfThreads);
 #pragma omp parallel reduction(+ : residualNormSq)
     {
-        int privateOffset = ComputeThreadOffset();
-        int privateLength = _numberOfReceivers * _numberOfSources * _numberOfFrequencies[omp_get_thread_num()];
+        int privateOffset = computeThreadOffset();
+        int privateLength = _numberOfReceivers * _numberOfSources * _numberOfFrequenciesPerThread[omp_get_thread_num()];
 
         std::vector<std::complex<double>> privateResidual(privateLength);
         std::copy(residual.begin() + privateOffset, residual.begin() + privateOffset + privateLength, privateResidual.begin());
@@ -117,15 +117,7 @@ double ForwardModelContainer::calculateResidualNormSqParallel(const std::vector<
     return residualNormSq;
 }
 
-const FrequenciesGroup &ForwardModelContainer::getFrequencies() { return _allFrequencies; }
-
-const Grid2D &ForwardModelContainer::getGrid() { return _forwardmodels[0]->getGrid(); }
-
-const Sources &ForwardModelContainer::getSources() { return _forwardmodels[0]->getSrc(); }
-
-const Receivers &ForwardModelContainer::getReceivers() { return _forwardmodels[0]->getRecv(); }
-
-void ForwardModelContainer::devideFrequencies()
+void ForwardModelContainer::divideFrequencies()
 {
     double currentMinimumFrequency = _allFrequencies.freq[0];
     for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
@@ -142,7 +134,7 @@ void ForwardModelContainer::devideFrequencies()
         frequenciesForThread.Print(totalFrequenciesForThread);
         _frequenciesVector.push_back(frequenciesForThread);
 
-        _numberOfFrequencies[threadNumber] = totalFrequenciesForThread;
+        _numberOfFrequenciesPerThread[threadNumber] = totalFrequenciesForThread;
         currentMinimumFrequency = maximumFrequencyForThread + _allFrequencies.d_freq;
     }
 }
