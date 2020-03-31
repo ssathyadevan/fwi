@@ -110,7 +110,8 @@ void Helmholtz2D::updateChi(const PressureFieldSerial &chi)
         _waveVelocity[i] = _c0;
     }
 
-    const double *chiVal = chi.GetDataPtr();
+    std::vector<double> chiVal = chi.getData();
+
     for(int i = 0; i < oldnx[0]; ++i)
     {
         idx1 = i + _idxUpperLeftDomain[0];
@@ -140,7 +141,7 @@ PressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &sourc
     }
 
     int indexpTot, indexResult;
-    std::complex<double> *pTot = pInit.GetDataPtr();
+    std::vector<std::complex<double>> pTot = pInit.getData();
 
     int idx1, idx2;
     for(int i = 0; i < oldnx[0]; ++i)
