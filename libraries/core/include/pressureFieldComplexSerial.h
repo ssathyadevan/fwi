@@ -62,24 +62,36 @@ public:
 
     PressureFieldComplexSerial &operator=(const PressureFieldComplexSerial &rhs);
     PressureFieldComplexSerial &operator=(const PressureFieldSerial &rhs);
+    PressureFieldComplexSerial &operator=(const std::vector<std::complex<double>> &rhs);
+    PressureFieldComplexSerial &operator=(const std::vector<double> &rhs);
     PressureFieldComplexSerial &operator=(const std::complex<double> rhs);
     PressureFieldComplexSerial &operator=(const double rhs);
 
     PressureFieldComplexSerial &operator+=(const PressureFieldComplexSerial &rhs);
+    PressureFieldComplexSerial &operator+=(const PressureFieldSerial &rhs);
+    PressureFieldComplexSerial &operator+=(const std::vector<std::complex<double>> &rhs);
+    PressureFieldComplexSerial &operator+=(const std::vector<double> &rhs);
     PressureFieldComplexSerial &operator+=(const std::complex<double> rhs);
     PressureFieldComplexSerial &operator+=(const double rhs);
 
     PressureFieldComplexSerial &operator-=(const PressureFieldComplexSerial &rhs);
+    PressureFieldComplexSerial &operator-=(const PressureFieldSerial &rhs);
+    PressureFieldComplexSerial &operator-=(const std::vector<std::complex<double>> &rhs);
+    PressureFieldComplexSerial &operator-=(const std::vector<double> &rhs);
     PressureFieldComplexSerial &operator-=(const std::complex<double> rhs);
     PressureFieldComplexSerial &operator-=(const double rhs);
 
     PressureFieldComplexSerial &operator*=(const PressureFieldComplexSerial &rhs);
     PressureFieldComplexSerial &operator*=(const PressureFieldSerial &rhs);
+    PressureFieldComplexSerial &operator*=(const std::vector<std::complex<double>> &rhs);
+    PressureFieldComplexSerial &operator*=(const std::vector<double> &rhs);
     PressureFieldComplexSerial &operator*=(const std::complex<double> rhs);
     PressureFieldComplexSerial &operator*=(const double rhs);
 
     PressureFieldComplexSerial &operator/=(const PressureFieldComplexSerial &rhs);
     PressureFieldComplexSerial &operator/=(const PressureFieldSerial &rhs);
+    PressureFieldComplexSerial &operator/=(const std::vector<std::complex<double>> &rhs);
+    PressureFieldComplexSerial &operator/=(const std::vector<double> &rhs);
     PressureFieldComplexSerial &operator/=(const std::complex<double> rhs);
     PressureFieldComplexSerial &operator/=(const double rhs);
 };

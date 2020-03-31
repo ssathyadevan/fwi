@@ -206,7 +206,6 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const Pressure
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); ++i)
     {
@@ -215,20 +214,40 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const Pressure
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const std::complex<double> rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const std::vector<std::complex<double>> &complexData)
 {
+    assert(GetNumberOfGridPoints() == (int)complexData.size());
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] = rhs;
+        _data[i] = complexData[i];
     }
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const double rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = data[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const std::complex<double> complexValue)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] = std::complex<double>(rhs, 0.0);
+        _data[i] = complexValue;
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = std::complex<double>(value, 0.0);
     }
     return *this;
 }
@@ -236,7 +255,6 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator=(const double r
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const PressureFieldComplexSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
@@ -245,20 +263,51 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const Pressur
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const double rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const PressureFieldSerial &rhs)
 {
+    assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] += rhs;
+        _data[i] += rhsData[i];
     }
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const std::complex<double> rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const std::vector<std::complex<double>> &complexData)
+{
+    assert(GetNumberOfGridPoints() == (int)complexData.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += complexData[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += data[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const std::complex<double> complexValue)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] += rhs;
+        _data[i] += complexValue;
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator+=(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += value;
     }
     return *this;
 }
@@ -274,20 +323,51 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const Pressur
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const std::complex<double> rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const PressureFieldSerial &rhs)
 {
+    assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] -= rhs;
+        _data[i] -= rhsData[i];
     }
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const double rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const std::vector<std::complex<double>> &complexData)
+{
+    assert(GetNumberOfGridPoints() == (int)complexData.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] -= complexData[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] -= data[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const std::complex<double> complexValue)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] -= rhs;
+        _data[i] -= complexValue;
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] -= value;
     }
     return *this;
 }
@@ -295,7 +375,6 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator-=(const double 
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const PressureFieldComplexSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
@@ -307,7 +386,6 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const Pressur
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
@@ -316,20 +394,40 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const Pressur
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const std::complex<double> rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const std::vector<std::complex<double>> &complexData)
 {
+    assert(GetNumberOfGridPoints() == (int)complexData.size());
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] *= rhs;
+        _data[i] *= complexData[i];
     }
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const double rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] *= data[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const std::complex<double> complexValue)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] *= rhs;
+        _data[i] *= complexValue;
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] *= value;
     }
     return *this;
 }
@@ -349,7 +447,6 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const Pressur
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
@@ -358,20 +455,40 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const Pressur
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::complex<double> rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::vector<std::complex<double>> &complexData)
 {
+    assert(GetNumberOfGridPoints() == (int)complexData.size());
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] /= rhs;
+        _data[i] /= complexData[i];
     }
     return *this;
 }
 
-PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const double rhs)
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] /= data[i];
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::complex<double> complexValue)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] /= rhs;
+        _data[i] /= complexValue;
+    }
+    return *this;
+}
+
+PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const double value)
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] /= value;
     }
     return *this;
 }

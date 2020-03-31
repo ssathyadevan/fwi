@@ -417,8 +417,9 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleTest)
     const int nrOfGridPoints = grid.GetNumberOfGridPoints();
     PressureFieldSerial pfs(grid);
 
-    // When
     double value = 5.0;
+
+    // When
     pfs = value;
 
     // Then
@@ -426,6 +427,58 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleTest)
     for(int i = 0; i < nrOfGridPoints; i++)
     {
         ASSERT_DOUBLE_EQ(data[i], value);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    PressureFieldSerial pfs(grid);
+
+    double value = 5.0;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value);
+
+    // When
+    pfs = dataVector;
+
+    // Then
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], value);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 2.0;
+    PressureFieldSerial pfs(grid);
+    pfs = value;
+
+    int count = 0;
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfs = dataIncreasing;
+
+    // Then
+    count = 0;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], count);
+        count++;
     }
 }
 
@@ -485,6 +538,62 @@ TEST(PressureFieldSerialTest, OperatorAddPressureFieldSerialTest2)
     for(int i = 0; i < nrOfGridPoints; i++)
     {
         ASSERT_DOUBLE_EQ(data[i], count + value);
+        count++;
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 5.0;
+    PressureFieldSerial pfs(grid);
+    pfs = value1;
+
+    double value2 = 8.3;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value2);
+
+    // When
+    pfs += dataVector;
+
+    // Then
+    double solution = value1 + value2;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 5.0;
+    PressureFieldSerial pfs(grid);
+    pfs = value;
+
+    int count = 0;
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfs += dataIncreasing;
+
+    // Then
+    count = 0;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], value + count);
         count++;
     }
 }
@@ -572,6 +681,62 @@ TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest2)
     }
 }
 
+TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 2.3;
+    PressureFieldSerial pfs(grid);
+    pfs = value;
+
+    int count = 0;
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfs -= dataIncreasing;
+
+    // Then
+    count = 0;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], value - count);
+        count++;
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 3.8;
+    PressureFieldSerial pfs(grid);
+    pfs = value1;
+
+    double value2 = 22.4;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value2);
+
+    // When
+    pfs -= dataVector;
+
+    // Then
+    double solution = value1 - value2;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
 TEST(PressureFieldSerialTest, OperatorSubtractDoubleTest)
 {
     // Given
@@ -588,6 +753,111 @@ TEST(PressureFieldSerialTest, OperatorSubtractDoubleTest)
 
     // Then
     double solution = value1 - value2;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorMultiplyByPressureFieldSerialTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 4.9;
+    PressureFieldSerial pfs1(grid);
+    pfs1 = value1;
+
+    double value2 = 7.0;
+    PressureFieldSerial pfs2(grid);
+    pfs2 = value2;
+
+    // When
+    pfs2 *= pfs1;
+
+    // Then
+    double solution = value2 * value1;
+    const std::vector<double> &data = pfs2.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 6.2;
+    PressureFieldSerial pfs(grid);
+    pfs = value1;
+
+    double value2 = 1.3;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value2);
+
+    // When
+    pfs *= dataVector;
+
+    // Then
+    double solution = value1 * value2;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 4.9;
+    PressureFieldSerial pfs(grid);
+    pfs = value;
+
+    int count = 0;
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfs *= dataIncreasing;
+
+    // Then
+    count = 0;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], value * count);
+        count++;
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 3.3;
+    PressureFieldSerial pfs(grid);
+    pfs = value1;
+
+    // When
+    double value2 = 5.9;
+    pfs *= value2;
+
+    // Then
+    double solution = value1 * value2;
     const std::vector<double> &data = pfs.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
@@ -640,6 +910,82 @@ TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialTest)
     }
 }
 
+TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    PressureFieldSerial pfs1(grid);
+    pfs1 = 1.0;
+
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, 0.0);
+    // Note: Initialized with zero
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfs1 /= dataVector, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value1 = 3.8;
+    PressureFieldSerial pfs(grid);
+    pfs = value1;
+
+    double value2 = 22.4;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value2);
+
+    // When
+    pfs /= dataVector;
+
+    // Then
+    double solution = value1 / value2;
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], solution);
+    }
+}
+
+TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 4.9;
+    PressureFieldSerial pfs(grid);
+    pfs = value;
+
+    int count = 1;   // Dont start at zero because of deviding by zero ...
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfs /= dataIncreasing;
+
+    // Then
+    count = 1;   // Dont start at zero because of deviding by zero ...
+    const std::vector<double> &data = pfs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], value / count);
+        count++;
+    }
+}
+
 TEST(PressureFieldSerialTest, OperatorDivideByDoubleExceptionTest)
 {
     // Given
@@ -672,55 +1018,6 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleTest)
 
     // Then
     double solution = value1 / value2;
-    const std::vector<double> &data = pfs.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], solution);
-    }
-}
-
-TEST(PressureFieldSerialTest, OperatorMultiplyByPressureFieldSerialTest)
-{
-    // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-
-    double value1 = 4.9;
-    PressureFieldSerial pfs1(grid);
-    pfs1 = value1;
-
-    double value2 = 7.0;
-    PressureFieldSerial pfs2(grid);
-    pfs2 = value2;
-
-    // When
-    pfs2 *= pfs1;
-
-    // Then
-    double solution = value2 * value1;
-    const std::vector<double> &data = pfs2.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], solution);
-    }
-}
-
-TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
-{
-    // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-
-    double value1 = 3.3;
-    PressureFieldSerial pfs(grid);
-    pfs = value1;
-
-    // When
-    double value2 = 5.9;
-    pfs *= value2;
-
-    // Then
-    double solution = value1 * value2;
     const std::vector<double> &data = pfs.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {

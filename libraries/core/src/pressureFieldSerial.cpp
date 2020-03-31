@@ -238,18 +238,29 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
     }
 
     assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); ++i)
     {
-        _data[i] = rhs._data[i];
+        _data[i] = rhsData[i];
     }
     return *this;
 }
 
-PressureFieldSerial &PressureFieldSerial::operator=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = data[i];
+    }
+    return *this;
+}
+
+PressureFieldSerial &PressureFieldSerial::operator=(const double value)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] = rhs;
+        _data[i] = value;
     }
     return *this;
 }
@@ -257,19 +268,29 @@ PressureFieldSerial &PressureFieldSerial::operator=(const double rhs)
 PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
-
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] += rhs._data[i];
+        _data[i] += rhsData[i];
     }
     return *this;
 }
 
-PressureFieldSerial &PressureFieldSerial::operator+=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator+=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += data[i];
+    }
+    return *this;
+}
+
+PressureFieldSerial &PressureFieldSerial::operator+=(const double value)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] += rhs;
+        _data[i] += value;
     }
     return *this;
 }
@@ -277,18 +298,29 @@ PressureFieldSerial &PressureFieldSerial::operator+=(const double rhs)
 PressureFieldSerial &PressureFieldSerial::operator-=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] -= rhs._data[i];
+        _data[i] -= rhsData[i];
     }
     return *this;
 }
 
-PressureFieldSerial &PressureFieldSerial::operator-=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator-=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] -= data[i];
+    }
+    return *this;
+}
+
+PressureFieldSerial &PressureFieldSerial::operator-=(const double value)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] -= rhs;
+        _data[i] -= value;
     }
     return *this;
 }
@@ -296,18 +328,29 @@ PressureFieldSerial &PressureFieldSerial::operator-=(const double rhs)
 PressureFieldSerial &PressureFieldSerial::operator*=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] *= rhs._data[i];
+        _data[i] *= rhsData[i];
     }
     return *this;
 }
 
-PressureFieldSerial &PressureFieldSerial::operator*=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator*=(const std::vector<double> &data)
+{
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] *= data[i];
+    }
+    return *this;
+}
+
+PressureFieldSerial &PressureFieldSerial::operator*=(const double value)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] *= rhs;
+        _data[i] *= value;
     }
     return *this;
 }
@@ -315,28 +358,44 @@ PressureFieldSerial &PressureFieldSerial::operator*=(const double rhs)
 PressureFieldSerial &PressureFieldSerial::operator/=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        if(rhs._data[i] == 0.0)
+        if(rhsData[i] == 0.0)
         {
             throw std::overflow_error("Operator devides by zero");
         }
 
-        _data[i] /= rhs._data[i];
+        _data[i] /= rhsData[i];
     }
     return *this;
 }
 
-PressureFieldSerial &PressureFieldSerial::operator/=(const double rhs)
+PressureFieldSerial &PressureFieldSerial::operator/=(const std::vector<double> &data)
 {
-    if(rhs == 0.0)
+    assert(GetNumberOfGridPoints() == (int)data.size());
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        if(data[i] == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
+
+        _data[i] /= data[i];
+    }
+    return *this;
+}
+
+PressureFieldSerial &PressureFieldSerial::operator/=(const double value)
+{
+    if(value == 0.0)
     {
         throw std::overflow_error("Operator devides by zero");
     }
 
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        _data[i] /= rhs;
+        _data[i] /= value;
     }
     return *this;
 }
