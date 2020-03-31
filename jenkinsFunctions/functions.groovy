@@ -32,6 +32,15 @@ def buildAll() {
         //cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
 }
 
+def parallelAnalysis() {
+        echo 'Running parallel analysis'
+		env.MYSTAGE_NAME = 'Parallel analysis'
+		sh '''
+		cp tests/testScripts/run_analyze_parallel.py .
+		python3 run_analyze_parallel.py tests/parallelAnalyseData/default
+		'''
+}
+
 def testAll() {
 	    echo 'testing all'
     	env.MYSTAGE_NAME = 'Test'

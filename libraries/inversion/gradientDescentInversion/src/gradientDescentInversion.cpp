@@ -86,6 +86,7 @@ std::vector<double> GradientDescentInversion::differential(const std::vector<std
         dFdx[i] = (FxPlusH - Fx) / h;
         p_chiEstimatePlusH[i] -= h;
     }
+
     return dFdx;
 }
 

@@ -15,11 +15,11 @@
 
 class PressureFieldSerial : public PressureField
 {
-    private:
+private:
     std::vector<double> _data;
     double *const _dataPointer;
 
-    public:
+public:
     explicit PressureFieldSerial(const Grid2D &grid);
 
     PressureFieldSerial(const PressureFieldSerial &rhs);
@@ -54,6 +54,8 @@ class PressureFieldSerial : public PressureField
     double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(PressureFieldSerial **output) const;
     void Gradient(std::vector<PressureFieldSerial> &gradientField) const;
+
+    void PlusElement(const int location, const double value);
 
     PressureFieldSerial &operator=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator=(const double rhs);

@@ -265,6 +265,8 @@ void PressureFieldSerial::Gradient(std::vector<PressureFieldSerial> &gradientFie
     }
 }
 
+void PressureFieldSerial::PlusElement(const int location, const double value) { _data[location] += value; }
+
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {
     if(this != &rhs)
@@ -275,7 +277,6 @@ PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &r
             _data[i] = rhs._data[i];
         }
     }
-
     return *this;
 }
 

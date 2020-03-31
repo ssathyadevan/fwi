@@ -21,17 +21,6 @@ inline double normSq(const std::vector<std::complex<double>> &data, int n)
     return result;
 }
 
-inline double normSq(std::vector<std::complex<double>> &data, int n)
-{
-    double result = double(0.0);
-    for(int i=0; i<n; i++)
-    {
-        result += std::norm(data[i]);
-    }
-
-    return result;
-}
-
 class ForwardModelInterface
 {
 
