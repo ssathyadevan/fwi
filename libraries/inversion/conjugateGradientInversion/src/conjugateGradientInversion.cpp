@@ -40,8 +40,9 @@ PressureFieldSerial ConjugateGradientInversion::Reconstruct(const std::vector<st
         std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
 
         // Initialize Regularisation parameters
-        double deltaAmplification = _cgInput.dAmplification.start /
-                                    (_cgInput.dAmplification.slope * it + 1.0);   // deltaAmplification decreases the step size for increasing iteration step
+        double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
+        // Note: deltaAmplification decreases the step size for increasing iteration step
+
         RegularisationParameters regularisationCurrent(_grid);
         RegularisationParameters regularisationPrevious(_grid);
         regularisationPrevious.bSquared.Zero();
@@ -148,7 +149,10 @@ double ConjugateGradientInversion::calculateStepSize(const PressureFieldSerial &
         alphaDenominator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
     }
 
-    if(alphaDenominator == 0.0) { throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero."); }
+    if(alphaDenominator == 0.0)
+    {
+        throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero.");
+    }
     double alpha = alphaNumerator / alphaDenominator;
 
     return alpha;

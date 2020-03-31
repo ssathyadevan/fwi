@@ -24,14 +24,12 @@ public:
 
     PressureFieldSerial(const PressureFieldSerial &rhs);
 
-    ~PressureFieldSerial() override;
-
     // Virtual overrides
     void Zero() override;
     void Square() override;
     void Sqrt() override;
-    double Norm() const override;
-    double RelNorm() const override;
+    double Norm() const override { return std::sqrt(InnerProduct(*this)); }
+    double RelNorm() const override { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
     double Summation() const override;
 
     void Random() override;          // unused?
@@ -45,25 +43,22 @@ public:
     void SetField(const std::function<double(double, double)> func) override;
 
     // Non virtual members
-    std::vector<double> GetData() const { return _data; }
+    const std::vector<double> &getData() const { return _data; }
 
     void setData(const std::vector<double> data);
-    void setValue(const double value);
-    void setValue(const double value, const int index) { _data[index] = value; }
+    void setValueAtIndex(const double value, const int index) { _data[index] = value; }
 
     void addData(const std::vector<double> data);
-    void addValue(const double value);
-    void addValue(const double value, const int index) { _data[index] += value; }
+    void addValueAtIndex(const double value, const int index) { _data[index] += value; }
 
     void Reciprocal();
     void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
     void fromFile(const GenericInput &input);
 
     double InnerProduct(const PressureFieldSerial &rhs) const;
-    void Gradient(PressureFieldSerial **output) const;
     void Gradient(std::vector<PressureFieldSerial> &gradientField) const;
 
-    void CopyTo(PressureFieldSerial &dest);
+    void CopyTo(PressureFieldSerial &dest) { dest = *this; }
 
     // TODO: REMOVE GetDataPtr()
     const double *GetDataPtr() const { return _dataPointer; }
@@ -75,14 +70,14 @@ public:
     PressureFieldSerial &operator+=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator+=(const double rhs);
     PressureFieldSerial &operator-=(const PressureFieldSerial &rhs);
-    PressureFieldSerial &operator*=(const PressureFieldSerial &rhs);
-    PressureFieldSerial &operator/=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator-=(const double rhs);
+    PressureFieldSerial &operator*=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator*=(const double rhs);
+    PressureFieldSerial &operator/=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator/=(const double rhs);
 };
 
-inline double InnerProduct(const PressureFieldSerial &x, const PressureFieldSerial &y) { return x.InnerProduct(y); }
+inline double innerProduct(const PressureFieldSerial &x, const PressureFieldSerial &y) { return x.InnerProduct(y); }
 
 inline PressureFieldSerial operator+(const PressureFieldSerial &x, const PressureFieldSerial &y)
 {

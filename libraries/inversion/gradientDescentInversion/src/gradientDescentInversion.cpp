@@ -16,7 +16,7 @@ PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std:
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 
     PressureFieldSerial chiEstimateCurrent(_grid);
-    chiEstimateCurrent.addValue(_gdInput.x0);
+    chiEstimateCurrent = _gdInput.x0;
     PressureFieldSerial chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
@@ -65,9 +65,9 @@ std::vector<double> GradientDescentInversion::differential(
     std::vector<double> dFdx(numGridPoints, 0.0);
     for(int i = 0; i < numGridPoints; ++i)
     {
-        chiEstimatePlusH.addValue(h, i);   // Add h
+        chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
         fxPlusH = functionF(chiEstimatePlusH, pData, eta);
-        chiEstimatePlusH.addValue(-h, i);   // Remove h
+        chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 
         dFdx[i] = (fxPlusH - fx) / h;
     }
@@ -100,8 +100,8 @@ double GradientDescentInversion::determineGamma(const PressureFieldSerial chiEst
 {
     const int nGridPoints = chiEstimateCurrent.GetNumberOfGridPoints();
 
-    std::vector<double> dataCurrent = chiEstimateCurrent.GetData();
-    std::vector<double> dataPrevious = chiEstimatePrevious.GetData();
+    const std::vector<double> &dataCurrent = chiEstimateCurrent.getData();
+    const std::vector<double> &dataPrevious = chiEstimatePrevious.getData();
 
     std::vector<double> dx(nGridPoints, 0.0);
     for(int i = 0; i < nGridPoints; ++i)

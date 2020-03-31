@@ -4,11 +4,11 @@
 
 class Grid2D
 {
-
-    const std::array<double, 2> x_min;
-    const std::array<double, 2> x_max;
-    const std::array<int, 2> nx;
-    std::array<double, 2> dx;
+private:
+    const std::array<double, 2> _xMin;
+    const std::array<double, 2> _xMax;
+    const std::array<int, 2> _nx;
+    std::array<double, 2> _dx;
 
     int nGridPoints;
     double cellVolume;
@@ -16,20 +16,16 @@ class Grid2D
     Grid2D &operator=(const Grid2D &) = delete;
 
 public:
+    Grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> &x_max_, const std::array<int, 2> &nx_);
 
-    Grid2D(const std::array<double, 2> &x_min_,
-                 const std::array<double, 2> &x_max_,
-                 const std::array<int, 2> &nx_);
-
-    const std::array<int, 2> &GetGridDimensions() const { return nx; }
-    const std::array<double, 2> &GetCellDimensions() const { return dx; }
-    const std::array<double, 2> &GetGridStart() const { return x_min; }
-    const std::array<double, 2> &GetGridEnd() const { return x_max; }
+    const std::array<int, 2> &GetGridDimensions() const { return _nx; }
+    const std::array<double, 2> &GetCellDimensions() const { return _dx; }
+    const std::array<double, 2> &GetGridStart() const { return _xMin; }
+    const std::array<double, 2> &GetGridEnd() const { return _xMax; }
 
     int GetNumberOfGridPoints() const { return nGridPoints; }
     double GetCellVolume() const { return cellVolume; }
-    double GetDomainArea() const { return (x_max[0] - x_min[0]) * (x_max[1] - x_min[1]); }
+    double GetDomainArea() const { return (_xMax[0] - _xMin[0]) * (_xMax[1] - _xMin[1]); }
 
     bool operator==(const Grid2D &rhs) const;
-
 };
