@@ -162,7 +162,7 @@ for threads in currentThreadList:
         _modifyOutputFileNames(runName, currentFolderName)
 
         # Set max threads
-        _setNumThreads(threads + 1)
+        _setNumThreads(threads)
 
         # Run inversion in Parallel and write duration (and result) to file
         os.system(os.path.join(applicationsLocation, "FWI_OpenMPGradienDescentProcess {}".format(currentFolderName)))
