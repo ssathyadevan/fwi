@@ -142,7 +142,7 @@ allRunTimes = [totalruntime_serial]
 allResidualDifferences = []
 runtimeErrorBar = [0.0]
 ResidualDifferencesErrorBar = []
-maximumRuns = 2
+maximumRuns = 5
 
 # Run the method maximumRuns number of times in parallel
 # for each number of threads and compute the mean and deviation

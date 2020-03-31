@@ -37,7 +37,7 @@ def parallelAnalysis() {
 		env.MYSTAGE_NAME = 'Parallel analysis'
 		sh '''
 		cp tests/testScripts/run_analyze_parallel.py .
-		python3 run_analyze_parallel.py tests/parallelAnalyseData/smallgrid
+		python3 run_analyze_parallel.py tests/parallelAnalyseData/default
 		'''
 }
 
