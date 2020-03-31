@@ -41,8 +41,6 @@ public:
 
     // Non virtual members
     const std::vector<std::complex<double>> &getData() const { return _data; }
-
-    void setData(const std::vector<std::complex<double>> data);
     void setValueAtIndex(const std::complex<double> value, const int index) { _data[index] = value; }
     void addValueAtIndex(const std::complex<double> value, const int index) { _data[index] += value; }
 
