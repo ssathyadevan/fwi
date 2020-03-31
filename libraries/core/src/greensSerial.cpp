@@ -40,7 +40,7 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
 
     int l1, l2, l3, l4;
 
-    const std::vector<std::complex<double>> dWData = dW.getData();
+    const std::vector<std::complex<double>> &dWData = dW.getData();
 
     assert(grid == dW.GetGrid());
 
