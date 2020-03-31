@@ -27,13 +27,13 @@ pipeline{
                                 }
                         }
                 }
-		stage('parallelAnalysis'){
+		/*stage('parallelAnalysis'){
 			steps{
 				script{
 					functions.parallelAnalysis()
 				}
 			}		
-		}
+		}*/
 
                 stage('Test') {
                         steps{
