@@ -38,5 +38,5 @@ void contract_Greens_rect_2D(
             }
         }
     }
-    outputField.setData(outputFieldData);
+    outputField = outputFieldData;
 }

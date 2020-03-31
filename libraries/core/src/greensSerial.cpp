@@ -111,7 +111,7 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
     {
         productData[i] = eigprod(i);
     }
-    product.setData(productData);
+    product = productData;
 
     return product;
 }
@@ -203,5 +203,5 @@ void Greens_rect_2D_cpu::setGreensFunction(PressureFieldComplexSerial &greensFun
         }
     }
 
-    greensFunctionField.setData(greensFunctionData);
+    greensFunctionField = greensFunctionData;
 }
