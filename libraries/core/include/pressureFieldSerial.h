@@ -28,6 +28,8 @@ public:
     void Zero() override;
     void Square() override;
     void Sqrt() override;
+    void Reciprocal() override;
+
     double Norm() const override { return std::sqrt(InnerProduct(*this)); }
     double RelNorm() const override { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
     double Summation() const override;
@@ -39,6 +41,7 @@ public:
     void fromBuffer(const double *buffer) override;
 
     void toFile(const std::string &fileName) const override;
+    void fromFile(const GenericInput &input) override;
 
     void SetField(const std::function<double(double, double)> func) override;
 
@@ -51,9 +54,7 @@ public:
     void addData(const std::vector<double> data);
     void addValueAtIndex(const double value, const int index) { _data[index] += value; }
 
-    void Reciprocal();
     void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
-    void fromFile(const GenericInput &input);
 
     double InnerProduct(const PressureFieldSerial &rhs) const;
     void Gradient(std::vector<PressureFieldSerial> &gradientField) const;

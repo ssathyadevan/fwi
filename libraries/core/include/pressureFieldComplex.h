@@ -1,41 +1,41 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <functional>
 #include <complex>
+#include <functional>
 #include <grid2D.h>
+#include <iostream>
 #include <pressureField.h>
+#include <string>
 
 class PressureFieldComplex
 {
-
-  const Grid2D &grid;
-  const int nGridPoints;
-  const double cellVolume;
-  PressureFieldComplex(const PressureFieldComplex&) = delete;
-  PressureFieldComplex& operator=(const PressureFieldComplex&) = delete;
+    const Grid2D &_grid;
+    const int _nGridPoints;
+    const double _cellVolume;
+    PressureFieldComplex(const PressureFieldComplex &) = delete;
+    PressureFieldComplex &operator=(const PressureFieldComplex &) = delete;
 
 public:
+    PressureFieldComplex(const Grid2D &grid_);
 
-  PressureFieldComplex(const Grid2D &grid_);
+    const Grid2D &GetGrid() const { return _grid; }
 
-  virtual ~PressureFieldComplex() {}
+    int GetNumberOfGridPoints() const { return _nGridPoints; }
+    double getCellVolume() const { return _cellVolume; }
 
-  const Grid2D &GetGrid() const { return grid; }
+    virtual void Zero() = 0;
+    virtual void Square() = 0;
+    virtual void Reciprocal() = 0;
 
-  int GetNumberOfGridPoints() const { return nGridPoints; }
-  double getCellVolume() const { return cellVolume; }
+    virtual double Norm() const = 0;
+    virtual double RelNorm() const = 0;
+    virtual std::complex<double> Summation() const = 0;
 
-  virtual void Zero() = 0;
+    virtual void toBuffer(std::complex<double> *buffer) const = 0;
+    virtual void fromBuffer(const std::complex<double> *buffer) = 0;
 
-  virtual void toBuffer(std::complex<double> *buffer) const = 0;
-  virtual void fromBuffer(const std::complex<double> *buffer) = 0;
+    virtual void toFile(const std::string &fileName) const = 0;
+    virtual void fromFile(const std::string &fileName) = 0;
 
-  virtual void SetField(const std::function< std::complex<double>(double, double) > func) = 0;
-
-  virtual double Norm() const = 0;
-  virtual double RelNorm() const = 0;
-
+    virtual void SetField(const std::function<std::complex<double>(double, double)> func) = 0;
 };
-

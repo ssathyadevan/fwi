@@ -1,15 +1,15 @@
 #include "grid2D.h"
 
 Grid2D::Grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> &x_max_, const std::array<int, 2> &nx_) :
-    _xMin(x_min_), _xMax(x_max_), _nx(nx_), _dx(), nGridPoints(), cellVolume()
+    _xMin(x_min_), _xMax(x_max_), _nx(nx_), _dx(), _nGridPoints(), _cellVolume()
 {
     // Fix this with std::transform so that we can move it to the
     // initializer list and make all members const
     _dx[0] = (_xMax[0] - _xMin[0]) / static_cast<double>(_nx[0]);
     _dx[1] = (_xMax[1] - _xMin[1]) / static_cast<double>(_nx[1]);
 
-    cellVolume = _dx[0] * _dx[1];
-    nGridPoints = _nx[0] * _nx[1];   // Should be renamed to nCells.
+    _cellVolume = _dx[0] * _dx[1];
+    _nGridPoints = _nx[0] * _nx[1];   // Should be renamed to nCells.
 }
 
 bool Grid2D::operator==(const Grid2D &rhs) const

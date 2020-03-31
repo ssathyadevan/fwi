@@ -24,7 +24,6 @@ PressureFieldSerial GradientDescentInversion::Reconstruct(const std::vector<std:
 
     std::vector<double> dFdxCurrent(_grid.GetNumberOfGridPoints(), 0);
     std::vector<double> dFdxPrevious;
-    std::vector<double> residuals;
 
     double Fx;
     int counter = 1;

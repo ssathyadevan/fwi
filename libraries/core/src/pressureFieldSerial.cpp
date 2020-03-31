@@ -14,6 +14,9 @@ PressureFieldSerial::PressureFieldSerial(const PressureFieldSerial &rhs) : Press
     }
 }
 
+// TODO REMOVE
+void PressureFieldSerial::SetField(const std::function<double(double, double)> func) {}
+
 // Virtual overrides
 void PressureFieldSerial::Zero()
 {
@@ -148,8 +151,6 @@ void PressureFieldSerial::fromFile(const GenericInput &input)
     file.close();
 }
 
-void PressureFieldSerial::SetField(const std::function<double(double, double)> func) { (void)func; }
-
 // Non virtual members
 void PressureFieldSerial::setData(const std::vector<double> data)
 {
@@ -173,9 +174,8 @@ double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     assert(GetGrid() == rhs.GetGrid());
 
-    const std::vector<double> &rhsData = rhs.getData();
-
     double sum = 0.0;
+    const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
         sum += _data[i] * rhsData[i];
