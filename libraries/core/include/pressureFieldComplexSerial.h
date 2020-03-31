@@ -52,6 +52,8 @@ public:
 
     PressureFieldSerial GetRealPart() const;
 
+    virtual ~PressureFieldComplexSerial() {}
+
     virtual void Random();
 
     // TODO: REMOVE

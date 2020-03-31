@@ -53,6 +53,7 @@ private:
     std::vector<PressureFieldComplexSerial *> G_recv;
 
     Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
+    void setGreensFunction(PressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
     Greens_rect_2D_cpu(const Greens_rect_2D_cpu &) = delete;
     Greens_rect_2D_cpu &operator=(const Greens_rect_2D_cpu &) = delete;

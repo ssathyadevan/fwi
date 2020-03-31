@@ -150,11 +150,12 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
     {
         double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
         PressureFieldComplexSerial G_x(grid);
-
-        G_x.SetField([this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
+        setGreensFunction(G_x, [this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
 
         for(int j = 0; j < nx * nz; j++)
-            G_vol2(i, j) = *(G_x.GetDataPtr() + j);
+        {
+            G_vol2(i, j) = G_x.getData()[j];
+        }
     }
 }
 
@@ -167,7 +168,9 @@ void Greens_rect_2D_cpu::create_Greens_recv()
         double x_recv = recv.xRecv[i][0];
         double z_recv = recv.xRecv[i][1];
         PressureFieldComplexSerial *G_bound = new PressureFieldComplexSerial(grid);
-        G_bound->SetField([this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
+
+        setGreensFunction(*G_bound, [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
+
         G_recv.push_back(G_bound);
     }
 }
@@ -178,4 +181,27 @@ void Greens_rect_2D_cpu::delete_Greens_recv()
     {
         delete G_recv[i];
     }
+}
+
+void Greens_rect_2D_cpu::setGreensFunction(PressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func)
+{
+    const std::array<int, 2> &nx = GetGrid().GetGridDimensions();
+    const std::array<double, 2> &dx = GetGrid().GetCellDimensions();   // Babak 2018 10 29: get rid of template for grid_rect_2D
+    const std::array<double, 2> &x_min = GetGrid().GetGridStart();     // Babak 2018 10 29: get rid of template for grid_rect_2D
+
+    std::vector<std::complex<double>> greensFunctionData(greensFunctionField.GetNumberOfGridPoints(), 0.0);
+
+    for(int j = 0; j < nx[1]; j++)
+    {
+        double z = x_min[1] + (double(0.5) + j) * dx[1];
+        int nx_j = nx[0] * j;
+
+        for(int i = 0; i < nx[0]; i++)
+        {
+            double x = x_min[0] + (double(0.5) + i) * dx[0];
+            greensFunctionData[nx_j + i] = func(x, z);
+        }
+    }
+
+    greensFunctionField.setData(greensFunctionData);
 }

@@ -17,7 +17,7 @@ PressureFieldComplexSerial::PressureFieldComplexSerial(const PressureFieldComple
 }
 
 // TODO: REMOVE
-void PressureFieldComplexSerial::SetField(const std::function<std::complex<double>(double, double)> func) {}
+void PressureFieldComplexSerial::SetField(const std::function<std::complex<double>(double, double)> func) { (void)func; }
 
 // Virtual overrides
 void PressureFieldComplexSerial::Zero()
