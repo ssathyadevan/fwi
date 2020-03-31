@@ -48,6 +48,10 @@ public:
 
     virtual double RelNorm() const;
 
+    void setData(const std::vector<std::complex<double>> data);
+
+    const std::vector<std::complex<double>> &getData() const { return _data; }
+
     const std::complex<double> *GetDataPtr() const { return _dataPointer; }
 
     std::complex<double> *GetDataPtr() { return _dataPointer; }

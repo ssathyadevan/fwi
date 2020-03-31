@@ -200,6 +200,15 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const Pressur
     return *this;
 }
 
+void PressureFieldComplexSerial::setData(const std::vector<std::complex<double>> data)
+{
+    // TODO ASSERT
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = data[i];
+    }
+}
+
 PressureFieldComplexSerial &PressureFieldComplexSerial::operator*=(const PressureFieldSerial &rhs)
 {
     assert(GetGrid() == rhs.GetGrid());

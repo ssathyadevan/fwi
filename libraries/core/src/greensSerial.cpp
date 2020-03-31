@@ -2,8 +2,10 @@
 
 using namespace Eigen;
 
-Greens_rect_2D_cpu::Greens_rect_2D_cpu(const Grid2D &grid_, const std::function<std::complex<double>(double, double)> G_func_, const Sources &src_, const Receivers &recv_, double k_)
-    : G_func(G_func_), grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
+Greens_rect_2D_cpu::Greens_rect_2D_cpu(
+    const Grid2D &grid_, const std::function<std::complex<double>(double, double)> G_func_, const Sources &src_, const Receivers &recv_, double k_) :
+    G_func(G_func_),
+    grid(grid_), src(src_), recv(recv_), k(k_), G_vol(), G_recv()
 {
     const std::array<int, 2> &nx = grid.GetGridDimensions();
     G_vol = new std::complex<double>[(2 * nx[1] - 1) * (2 * nx[0] - 1)];
@@ -18,15 +20,14 @@ Greens_rect_2D_cpu::~Greens_rect_2D_cpu()
     delete[] G_vol;
 }
 
-PressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const PressureFieldComplexSerial &x) const
+PressureFieldComplexSerial Greens_rect_2D_cpu::ContractWithField(const PressureFieldComplexSerial &inputField) const
 {
     // Assure we are working on the same grid
-    assert(grid == x.GetGrid());
-    PressureFieldComplexSerial y(grid);
-    std::complex<double> *y_data = y.GetDataPtr();
+    assert(grid == inputField.GetGrid());
+    PressureFieldComplexSerial outputField(grid);
     const std::array<int, 2> &nx = grid.GetGridDimensions();
-    contract_Greens_rect_2D(G_vol, x.GetDataPtr(), y_data, nx, 2 * nx[0] - 1);
-    return y;
+    contract_Greens_rect_2D(G_vol, inputField, outputField, nx, 2 * nx[0] - 1);
+    return outputField;
 }
 
 // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
@@ -37,11 +38,9 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
     const int &nx = nx1[0];
     const int &nz = nx1[1];
 
-    PressureFieldComplexSerial prod1(grid);
     int l1, l2, l3, l4;
 
-    std::complex<double> *p_prod = prod1.GetDataPtr();
-    const std::complex<double> *p_dW = dW.GetDataPtr();
+    const std::vector<std::complex<double>> dWData = dW.getData();
 
     assert(grid == dW.GetGrid());
 
@@ -52,20 +51,20 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
     eigprod.resize(nx * nz, NoChange);
     dummy.resize(nx, NoChange);
 
-    for (int i = 0; i < nx * nz; i++)
+    for(int i = 0; i < nx * nz; i++)
     {
-        dW_vec(i) = p_dW[i];
+        dW_vec(i) = dWData[i];
     }
 
-    for (int i = 0; i < nx * nz; i++)
+    for(int i = 0; i < nx * nz; i++)
     {
         eigprod(i) = double(0.0);
     }
 
-    for (int i = 0; i < nz; i++)
+    for(int i = 0; i < nz; i++)
     {
         l1 = i * nx;
-        for (int j = 0; j < nz - i; j++)
+        for(int j = 0; j < nz - i; j++)
         {
             l2 = j * nx;
             l3 = l1 + l2;
@@ -73,7 +72,7 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
             dummy = (G_vol2.block(0, l1, nx, nx)) * dW_vec.block(l1 + l2, 0, nx, 1);
             eigprod.block(l2, 0, nx, 1) += dummy;
 
-            if ((2 * i + j < nz) && (i > 0))
+            if((2 * i + j < nz) && (i > 0))
             {
                 l4 = 2 * l1 + l2;
                 eigprod.block(l4, 0, nx, 1) += dummy;
@@ -81,12 +80,12 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
         }
     }
 
-    for (int i = 1; i < nz; i++)
+    for(int i = 1; i < nz; i++)
     {
-        if (i <= nz - i)
+        if(i <= nz - i)
         {
             l1 = i * nx;
-            for (int j = 0; j < i; j++)
+            for(int j = 0; j < i; j++)
             {
                 l2 = j * nx;
                 l3 = l1 + l2;
@@ -97,7 +96,7 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
         {
             l1 = i * nx;
             int lnz_i = nz - i;
-            for (int j = 0; j < lnz_i; j++)
+            for(int j = 0; j < lnz_i; j++)
             {
                 l2 = j * nx;
                 l3 = l1 + l2;
@@ -106,24 +105,27 @@ PressureFieldComplexSerial Greens_rect_2D_cpu::dot1(const PressureFieldComplexSe
         }
     }
 
-    for (int i = 0; i < nx * nz; i++)
+    PressureFieldComplexSerial product(grid);
+    std::vector<std::complex<double>> productData(product.GetNumberOfGridPoints(), 0.0);
+    for(int i = 0; i < nx * nz; i++)
     {
-        p_prod[i] = eigprod(i);
+        productData[i] = eigprod(i);
     }
-    return prod1;
+    product.setData(productData);
+
+    return product;
 }
 
 void Greens_rect_2D_cpu::create_Greens_volume()
 {
-
     double vol = grid.GetCellVolume();
     const std::array<int, 2> &nx = grid.GetGridDimensions();
     const std::array<double, 2> &dx = grid.GetCellDimensions();
 
-    for (int i = -nx[1] + 1; i <= nx[1] - 1; i++)
+    for(int i = -nx[1] + 1; i <= nx[1] - 1; i++)
     {
         double z = i * dx[1];
-        for (int j = -nx[0] + 1; j <= nx[0] - 1; j++)
+        for(int j = -nx[0] + 1; j <= nx[0] - 1; j++)
         {
             double x = j * dx[0];
             double r = dist(z, x);
@@ -144,14 +146,14 @@ void Greens_rect_2D_cpu::create_Greens_volume_ankit()
     G_vol2.resize(nx, nx * nz);
 
     double p2_z = x_min[1] + dx[1] / double(2.0);
-    for (int i = 0; i < nx; i++)
+    for(int i = 0; i < nx; i++)
     {
         double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
         PressureFieldComplexSerial G_x(grid);
 
         G_x.SetField([this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
 
-        for (int j = 0; j < nx * nz; j++)
+        for(int j = 0; j < nx * nz; j++)
             G_vol2(i, j) = *(G_x.GetDataPtr() + j);
     }
 }
@@ -160,20 +162,19 @@ void Greens_rect_2D_cpu::create_Greens_recv()
 {
     double vol = grid.GetCellVolume();
     PressureFieldComplexSerial G_bound_cpu(grid);
-    for (int i = 0; i < recv.nRecv; i++)
+    for(int i = 0; i < recv.nRecv; i++)
     {
         double x_recv = recv.xRecv[i][0];
         double z_recv = recv.xRecv[i][1];
         PressureFieldComplexSerial *G_bound = new PressureFieldComplexSerial(grid);
-        G_bound->SetField(
-            [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
+        G_bound->SetField([this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
         G_recv.push_back(G_bound);
     }
 }
 
 void Greens_rect_2D_cpu::delete_Greens_recv()
 {
-    for (int i = 0; i < recv.nRecv; i++)
+    for(int i = 0; i < recv.nRecv; i++)
     {
         delete G_recv[i];
     }

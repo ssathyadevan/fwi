@@ -148,7 +148,7 @@ void PressureFieldSerial::fromFile(const GenericInput &input)
     file.close();
 }
 
-void PressureFieldSerial::SetField(const std::function<double(double, double)> func) {}
+void PressureFieldSerial::SetField(const std::function<double(double, double)> func) { (void)func; }
 
 // Non virtual members
 void PressureFieldSerial::setData(const std::vector<double> data)
