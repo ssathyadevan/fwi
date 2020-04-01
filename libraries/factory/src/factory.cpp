@@ -1,4 +1,3 @@
-#include "OpenMPgradientDescentInversion.h"
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "evolutionInversion.h"
