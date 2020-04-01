@@ -1,0 +1,58 @@
+Run 	 	 Runtime (seconds) 	 standard deviation
+Serial 	 	 	 550 
+Parallel_1_1 	 	 552 
+Parallel_1_2 	 	 552 
+Parallel_1_3 	 	 551 
+Parallel_1_4 	 	 550 
+Parallel_1_5 	 	 550 
+Parallel_1 	 	 551.0  	 0.8944271909999159 
+
+Parallel_2_1 	 	 324 
+Parallel_2_2 	 	 324 
+Parallel_2_3 	 	 324 
+Parallel_2_4 	 	 323 
+Parallel_2_5 	 	 324 
+Parallel_2 	 	 323.8  	 0.4 
+
+Parallel_4_1 	 	 249 
+Parallel_4_2 	 	 249 
+Parallel_4_3 	 	 249 
+Parallel_4_4 	 	 250 
+Parallel_4_5 	 	 249 
+Parallel_4 	 	 249.2  	 0.4 
+
+Parallel_5_1 	 	 241 
+Parallel_5_2 	 	 241 
+Parallel_5_3 	 	 240 
+Parallel_5_4 	 	 241 
+Parallel_5_5 	 	 240 
+Parallel_5 	 	 240.6  	 0.4898979485566356 
+
+Parallel_8_1 	 	 244 
+Parallel_8_2 	 	 243 
+Parallel_8_3 	 	 243 
+Parallel_8_4 	 	 244 
+Parallel_8_5 	 	 245 
+Parallel_8 	 	 243.8  	 0.7483314773547882 
+
+Parallel_13_1 	 	 258 
+Parallel_13_2 	 	 256 
+Parallel_13_3 	 	 258 
+Parallel_13_4 	 	 255 
+Parallel_13_5 	 	 257 
+Parallel_13 	 	 256.8  	 1.16619037896906 
+
+Parallel_16_1 	 	 251 
+Parallel_16_2 	 	 254 
+Parallel_16_3 	 	 249 
+Parallel_16_4 	 	 257 
+Parallel_16_5 	 	 249 
+Parallel_16 	 	 252.0  	 3.0983866769659336 
+
+Parallel_18_1 	 	 251 
+Parallel_18_2 	 	 262 
+Parallel_18_3 	 	 250 
+Parallel_18_4 	 	 249 
+Parallel_18_5 	 	 253 
+Parallel_18 	 	 253.0  	 4.69041575982343 
+
