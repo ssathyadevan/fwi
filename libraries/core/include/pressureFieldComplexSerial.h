@@ -24,6 +24,7 @@ public:
     // Virtual overrides
     void Zero() override;
     void Square() override;
+    void Sqrt() override;
     void Reciprocal() override;
     virtual void Conjugate();
 

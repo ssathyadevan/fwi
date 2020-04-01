@@ -36,6 +36,14 @@ void PressureFieldComplexSerial::Square()
     }
 }
 
+void PressureFieldComplexSerial::Sqrt()
+{
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] = std::sqrt(_data[i]);
+    }
+}
+
 void PressureFieldComplexSerial::Reciprocal()
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)

@@ -25,6 +25,7 @@ public:
 
     virtual void Zero() = 0;
     virtual void Square() = 0;
+    virtual void Sqrt() = 0;
     virtual void Reciprocal() = 0;
 
     virtual double Norm() const = 0;
