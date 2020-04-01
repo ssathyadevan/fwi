@@ -66,15 +66,19 @@ public:
     PressureFieldSerial &operator=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator=(const std::vector<double> &rhs);
     PressureFieldSerial &operator=(const double rhs);
+
     PressureFieldSerial &operator+=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator+=(const std::vector<double> &rhs);
     PressureFieldSerial &operator+=(const double rhs);
+
     PressureFieldSerial &operator-=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator-=(const std::vector<double> &rhs);
     PressureFieldSerial &operator-=(const double rhs);
+
     PressureFieldSerial &operator*=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator*=(const std::vector<double> &rhs);
     PressureFieldSerial &operator*=(const double rhs);
+
     PressureFieldSerial &operator/=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator/=(const std::vector<double> &rhs);
     PressureFieldSerial &operator/=(const double rhs);

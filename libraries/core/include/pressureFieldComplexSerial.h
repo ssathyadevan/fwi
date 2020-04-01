@@ -59,12 +59,12 @@ public:
     const std::complex<double> *GetDataPtr() const { return _dataPointer; }
     std::complex<double> *GetDataPtr() { return _dataPointer; }
 
-    PressureFieldComplexSerial &operator=(const PressureFieldComplexSerial &rhs);
-    PressureFieldComplexSerial &operator=(const PressureFieldSerial &rhs);
-    PressureFieldComplexSerial &operator=(const std::vector<std::complex<double>> &rhs);
-    PressureFieldComplexSerial &operator=(const std::vector<double> &rhs);
-    PressureFieldComplexSerial &operator=(const std::complex<double> rhs);
-    PressureFieldComplexSerial &operator=(const double rhs);
+    PressureFieldComplexSerial &operator=(const PressureFieldComplexSerial &rhs);          // check
+    PressureFieldComplexSerial &operator=(const PressureFieldSerial &rhs);                 // check
+    PressureFieldComplexSerial &operator=(const std::vector<std::complex<double>> &rhs);   // check
+    PressureFieldComplexSerial &operator=(const std::vector<double> &rhs);                 // check
+    PressureFieldComplexSerial &operator=(const std::complex<double> rhs);                 // check
+    PressureFieldComplexSerial &operator=(const double rhs);                               // check
 
     PressureFieldComplexSerial &operator+=(const PressureFieldComplexSerial &rhs);
     PressureFieldComplexSerial &operator+=(const PressureFieldSerial &rhs);
