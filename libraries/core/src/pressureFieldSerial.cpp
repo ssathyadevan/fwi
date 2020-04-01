@@ -6,16 +6,13 @@ PressureFieldSerial::PressureFieldSerial(const Grid2D &grid) :
 {
 }
 
-PressureFieldSerial::PressureFieldSerial(const PressureFieldSerial &rhs) : PressureFieldSerial(rhs.grid)
+PressureFieldSerial::PressureFieldSerial(const PressureFieldSerial &rhs) : PressureFieldSerial(rhs._grid)
 {
     for(int i = 0; i < GetNumberOfGridPoints(); ++i)
     {
         _data[i] = rhs._data[i];
     }
 }
-
-// TODO REMOVE
-void PressureFieldSerial::SetField(const std::function<double(double, double)> func) { (void)func; }
 
 // Virtual overrides
 void PressureFieldSerial::Zero()
@@ -362,7 +359,6 @@ PressureFieldSerial &PressureFieldSerial::operator/=(const std::vector<double> &
         {
             throw std::overflow_error("Operator devides by zero");
         }
-
         _data[i] /= data[i];
     }
     return *this;

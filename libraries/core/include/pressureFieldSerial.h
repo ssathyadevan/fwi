@@ -20,9 +20,9 @@ private:
     double *const _dataPointer;
 
 public:
-    explicit PressureFieldSerial(const Grid2D &grid);
-
+    PressureFieldSerial(const Grid2D &grid);
     PressureFieldSerial(const PressureFieldSerial &rhs);
+    ~PressureFieldSerial() {}
 
     // Virtual overrides
     void Zero() override;
@@ -42,8 +42,6 @@ public:
 
     void toFile(const std::string &fileName) const override;
     void fromFile(const GenericInput &input) override;
-
-    void SetField(const std::function<double(double, double)> func) override;
 
     // Non virtual members
     const std::vector<double> &getData() const { return _data; }

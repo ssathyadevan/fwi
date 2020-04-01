@@ -12,7 +12,7 @@ Grid2D getGrid()
 }
 
 // Virtual overrides
-TEST(PressureFieldSerialTest, ZeroTest)
+TEST(pressureFieldSerialTest, zeroTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -31,7 +31,7 @@ TEST(PressureFieldSerialTest, ZeroTest)
     }
 }
 
-TEST(PressureFieldSerialTest, SquareTest)
+TEST(pressureFieldSerialTest, squareTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -53,7 +53,7 @@ TEST(PressureFieldSerialTest, SquareTest)
     }
 }
 
-TEST(PressureFieldSerialTest, SqrtTest)
+TEST(pressureFieldSerialTest, sqrtTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -75,7 +75,7 @@ TEST(PressureFieldSerialTest, SqrtTest)
     }
 }
 
-TEST(PressureFieldSerialTest, NormTest)
+TEST(pressureFieldSerialTest, normTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -100,7 +100,7 @@ TEST(PressureFieldSerialTest, NormTest)
     ASSERT_DOUBLE_EQ(norm, sqrtInnerProduct);
 }
 
-TEST(PressureFieldSerialTest, RelNormTest)
+TEST(pressureFieldSerialTest, relNormTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -127,7 +127,7 @@ TEST(PressureFieldSerialTest, RelNormTest)
     ASSERT_DOUBLE_EQ(relNorm, sqrtDividedInnerProduct);
 }
 
-TEST(PressureFieldSerialTest, ReciprocalTest)
+TEST(pressureFieldSerialTest, reciprocalTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -149,7 +149,7 @@ TEST(PressureFieldSerialTest, ReciprocalTest)
     }
 }
 
-TEST(PressureFieldSerialTest, ReciprocalExceptionTest)
+TEST(pressureFieldSerialTest, reciprocalExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -164,7 +164,7 @@ TEST(PressureFieldSerialTest, ReciprocalExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldSerialTest, SummationTest)
+TEST(pressureFieldSerialTest, summationTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -189,7 +189,7 @@ TEST(PressureFieldSerialTest, SummationTest)
 }
 
 // Non virtual members
-TEST(PressureFieldSerialTest, AddValueAtIndexTest)
+TEST(pressureFieldSerialTest, addValueAtIndexTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -217,7 +217,7 @@ TEST(PressureFieldSerialTest, AddValueAtIndexTest)
     }
 }
 
-TEST(PressureFieldSerialTest, InnerProductTest)
+TEST(pressureFieldSerialTest, innerProductTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -241,7 +241,7 @@ TEST(PressureFieldSerialTest, InnerProductTest)
     ASSERT_DOUBLE_EQ(calculatedInerProduct, alternativeInnerProduct);
 }
 
-TEST(PressureFieldSerialTest, GradientTest)
+TEST(pressureFieldSerialTest, gradientTest)
 {
     // Given
     // Make grid with non-boundary cells, i.e. at least 3x3.
@@ -283,7 +283,7 @@ TEST(PressureFieldSerialTest, GradientTest)
 }
 
 // Operators
-TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialExceptionTest)
+TEST(pressureFieldSerialTest, operatorAssignPressureFieldSerialExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -297,7 +297,7 @@ TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialTest)
+TEST(pressureFieldSerialTest, operatorAssignPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -323,7 +323,7 @@ TEST(PressureFieldSerialTest, OperatorAssignPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAssignDoubleTest)
+TEST(pressureFieldSerialTest, operatorAssignDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -343,7 +343,7 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest)
+TEST(pressureFieldSerialTest, operatorAssignDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -364,7 +364,7 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest2)
+TEST(pressureFieldSerialTest, operatorAssignDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -395,7 +395,7 @@ TEST(PressureFieldSerialTest, OperatorAssignDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAddPressureFieldSerialTest)
+TEST(pressureFieldSerialTest, operatorAddPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -421,7 +421,41 @@ TEST(PressureFieldSerialTest, OperatorAddPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest)
+TEST(pressureFieldSerialTest, operatorAddPressureFieldSerialTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    double value = 5.0;
+    PressureFieldSerial pfs1(grid);
+    pfs1 = value;
+
+    int count = 0;
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    PressureFieldSerial pfs2(grid);
+    pfs2 = dataIncreasing;
+
+    // When
+    pfs2 += pfs1;
+
+    // Then
+    count = 0;
+    const std::vector<double> &data = pfs2.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i], count + value);
+        count++;
+    }
+}
+
+TEST(pressureFieldSerialTest, operatorAddDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -446,7 +480,7 @@ TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest2)
+TEST(pressureFieldSerialTest, operatorAddDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -477,7 +511,7 @@ TEST(PressureFieldSerialTest, OperatorAddDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorAddDoubleTest)
+TEST(pressureFieldSerialTest, operatorAddDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -500,7 +534,7 @@ TEST(PressureFieldSerialTest, OperatorAddDoubleTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest)
+TEST(pressureFieldSerialTest, operatorSubtractPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -526,7 +560,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest2)
+TEST(pressureFieldSerialTest, operatorSubtractPressureFieldSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -560,7 +594,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest2)
+TEST(pressureFieldSerialTest, operatorSubtractDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -591,7 +625,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest)
+TEST(pressureFieldSerialTest, operatorSubtractDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -616,7 +650,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorSubtractDoubleTest)
+TEST(pressureFieldSerialTest, operatorSubtractDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -639,7 +673,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractDoubleTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorMultiplyByPressureFieldSerialTest)
+TEST(pressureFieldSerialTest, operatorMultiplyByPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -665,7 +699,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest)
+TEST(pressureFieldSerialTest, operatorMultiplyByDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -690,7 +724,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest2)
+TEST(pressureFieldSerialTest, operatorMultiplyByDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -721,7 +755,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
+TEST(pressureFieldSerialTest, operatorMultiplyByDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -744,7 +778,7 @@ TEST(PressureFieldSerialTest, OperatorMultiplyByDoubleTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialExceptionTest)
+TEST(pressureFieldSerialTest, operatorDivideByPressureFieldSerialExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -763,7 +797,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialTest)
+TEST(pressureFieldSerialTest, operatorDivideByPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -789,14 +823,14 @@ TEST(PressureFieldSerialTest, OperatorDivideByPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorExceptionTest)
+TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
     const int nrOfGridPoints = grid.GetNumberOfGridPoints();
 
-    PressureFieldSerial pfs1(grid);
-    pfs1 = 1.0;
+    PressureFieldSerial pfs(grid);
+    pfs = 1.0;
 
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, 0.0);
     // Note: Initialized with zero
@@ -805,11 +839,11 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorExceptionTest)
     // Nothing here, see below
 
     // Then
-    EXPECT_THROW(pfs1 /= dataVector, std::overflow_error);
+    EXPECT_THROW(pfs /= dataVector, std::overflow_error);
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest)
+TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -834,7 +868,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest2)
+TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -865,7 +899,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByDoubleExceptionTest)
+TEST(pressureFieldSerialTest, operatorDivideByDoubleExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -881,7 +915,7 @@ TEST(PressureFieldSerialTest, OperatorDivideByDoubleExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldSerialTest, OperatorDivideByDoubleTest)
+TEST(pressureFieldSerialTest, operatorDivideByDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();

@@ -50,8 +50,7 @@ TEST(greensSerialTest, getReceiverContTest)
     const PressureFieldComplexSerial *pfcs = greens->GetReceiverCont(0);
 
     // Assert some property of pfcs
-    std::complex<double> ip = pfcs->InnerProduct(*pfcs);
+    double ip = pfcs->InnerProduct(*pfcs);
 
-    EXPECT_NEAR(std::real(ip), 7.125, 0.01);
-    EXPECT_NEAR(std::imag(ip), 0, 0.01);
+    EXPECT_NEAR(ip, 7.125, 0.01);
 }

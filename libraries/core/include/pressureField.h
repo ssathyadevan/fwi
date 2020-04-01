@@ -9,22 +9,18 @@
 class PressureField
 {
 protected:
-    const Grid2D &grid;
-    const int nGridPoints;     // These are the same properties as contained in Grid2D. Why repeat?
-    const double cellVolume;   // These are the same properties as contained in Grid2D. Why repeat?
+    const Grid2D &_grid;
 
     PressureField(const PressureField &) = delete;
     PressureField &operator=(const PressureField &) = delete;
 
 public:
-    PressureField(const Grid2D &grid_) : grid(grid_), nGridPoints(grid.GetNumberOfGridPoints()), cellVolume(grid.GetCellVolume()) {}
-
+    PressureField(const Grid2D &grid_) : _grid(grid_) {}
     virtual ~PressureField() {}
 
-    const Grid2D &GetGrid() const { return grid; }
-
-    int GetNumberOfGridPoints() const { return nGridPoints; }   // These are the same properties as contained in Grid2D. Why repeat?
-    double getCellVolume() const { return cellVolume; }         // These are the same properties as contained in Grid2D. Why repeat?
+    const Grid2D &GetGrid() const { return _grid; }
+    int GetNumberOfGridPoints() const { return _grid.GetNumberOfGridPoints(); }
+    double getCellVolume() const { return _grid.GetCellVolume(); }
 
     virtual void Zero() = 0;
     virtual void Square() = 0;
@@ -43,6 +39,4 @@ public:
 
     virtual void toFile(const std::string &fileName) const = 0;
     virtual void fromFile(const GenericInput &input) = 0;
-
-    virtual void SetField(const std::function<double(double, double)> func) = 0;   // TODO REMOVE
 };

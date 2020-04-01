@@ -20,19 +20,17 @@ private:
 public:
     PressureFieldComplexSerial(const Grid2D &grid);
     PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs);
+    ~PressureFieldComplexSerial() {}
 
     // Virtual overrides
     void Zero() override;
     void Square() override;
     void Sqrt() override;
     void Reciprocal() override;
-    virtual void Conjugate();
 
-    double Norm() const override { return std::sqrt(std::real(InnerProduct(*this))); }
-    double RelNorm() const override { return std::sqrt(std::real(InnerProduct(*this))) / GetNumberOfGridPoints(); }
+    double Norm() const override { return std::sqrt(InnerProduct(*this)); }
+    double RelNorm() const override { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
     std::complex<double> Summation() const override;
-
-    void SetField(const std::function<std::complex<double>(double, double)> func) override;
 
     void toBuffer(std::complex<double> *buffer) const override;
     void fromBuffer(const std::complex<double> *buffer) override;
@@ -45,15 +43,15 @@ public:
     void setValueAtIndex(const std::complex<double> value, const int index) { _data[index] = value; }
     void addValueAtIndex(const std::complex<double> value, const int index) { _data[index] += value; }
 
-    std::complex<double> InnerProduct(const PressureFieldComplexSerial &rhs) const;
+    void Conjugate();
+
+    double InnerProduct(const PressureFieldComplexSerial &rhs) const;
     std::complex<double> DotProduct(const PressureFieldComplexSerial &rhs) const;
     std::complex<double> DotProduct(const PressureFieldSerial &rhs) const;
 
     PressureFieldSerial GetRealPart() const;
 
-    virtual ~PressureFieldComplexSerial() {}
-
-    virtual void Random();
+    void Random();
 
     // TODO: REMOVE
     const std::complex<double> *GetDataPtr() const { return _dataPointer; }
@@ -95,7 +93,7 @@ public:
     PressureFieldComplexSerial &operator/=(const double rhs);
 };
 
-inline std::complex<double> InnerProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.InnerProduct(t2); }
+inline double InnerProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.InnerProduct(t2); }
 
 inline std::complex<double> DotProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.DotProduct(t2); }
 

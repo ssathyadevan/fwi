@@ -9,19 +9,19 @@
 
 class PressureFieldComplex
 {
+private:
     const Grid2D &_grid;
-    const int _nGridPoints;
-    const double _cellVolume;
+
     PressureFieldComplex(const PressureFieldComplex &) = delete;
     PressureFieldComplex &operator=(const PressureFieldComplex &) = delete;
 
 public:
     PressureFieldComplex(const Grid2D &grid_);
+    virtual ~PressureFieldComplex() {}
 
     const Grid2D &GetGrid() const { return _grid; }
-
-    int GetNumberOfGridPoints() const { return _nGridPoints; }
-    double getCellVolume() const { return _cellVolume; }
+    int GetNumberOfGridPoints() const { return _grid.GetNumberOfGridPoints(); }
+    double getCellVolume() const { return _grid.GetCellVolume(); }
 
     virtual void Zero() = 0;
     virtual void Square() = 0;
@@ -37,6 +37,4 @@ public:
 
     virtual void toFile(const std::string &fileName) const = 0;
     virtual void fromFile(const std::string &fileName) = 0;
-
-    virtual void SetField(const std::function<std::complex<double>(double, double)> func) = 0;
 };
