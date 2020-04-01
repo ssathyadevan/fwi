@@ -49,6 +49,7 @@ def regressiontest() {
 		sh '''
 		cp tests/testScripts/unified_run_all_regressions_python.py .
 		python3 unified_run_all_regressions_python.py 0	integralForwardModel gradientDescentInversion
+		python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion
 		'''
 }
 
