@@ -341,7 +341,7 @@ datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new, "%X.%f", 
 datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new, "%X.%f", "log")
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
-if (bench_total_seconds > new_total_seconds):
+if (1.01*bench_total_seconds > new_total_seconds):
     increased_performance_test_passed = True
 
 print("Time in seconds it took to do benchmark run: "+str(bench_total_seconds))
