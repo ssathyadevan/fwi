@@ -120,15 +120,15 @@ void PressureFieldComplexSerial::fromFile(const std::string &fileName)
 }
 
 // Non virtual members
-std::complex<double> PressureFieldComplexSerial::InnerProduct(const PressureFieldComplexSerial &rhs) const
+double PressureFieldComplexSerial::InnerProduct(const PressureFieldComplexSerial &rhs) const
 {
     assert(GetGrid() == rhs.GetGrid());
 
-    std::complex<double> prod(0.0, 0.0);
+    double prod = 0.0;
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
-        prod += _data[i] * conj(rhsData[i]);
+        prod += real(_data[i] * conj(rhsData[i]));
     }
     return prod;
 }

@@ -28,8 +28,8 @@ public:
     void Sqrt() override;
     void Reciprocal() override;
 
-    double Norm() const override { return std::sqrt(std::real(InnerProduct(*this))); }
-    double RelNorm() const override { return std::sqrt((std::real(InnerProduct(*this)) / GetNumberOfGridPoints())); }
+    double Norm() const override { return std::sqrt(InnerProduct(*this)); }
+    double RelNorm() const override { return std::sqrt(InnerProduct(*this) / GetNumberOfGridPoints()); }
     std::complex<double> Summation() const override;
 
     void toBuffer(std::complex<double> *buffer) const override;
@@ -45,7 +45,7 @@ public:
 
     void Conjugate();
 
-    std::complex<double> InnerProduct(const PressureFieldComplexSerial &rhs) const;
+    double InnerProduct(const PressureFieldComplexSerial &rhs) const;
     std::complex<double> DotProduct(const PressureFieldComplexSerial &rhs) const;
     std::complex<double> DotProduct(const PressureFieldSerial &rhs) const;
 
@@ -93,7 +93,7 @@ public:
     PressureFieldComplexSerial &operator/=(const double rhs);
 };
 
-inline std::complex<double> InnerProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.InnerProduct(t2); }
+inline double InnerProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.InnerProduct(t2); }
 
 inline std::complex<double> DotProduct(const PressureFieldComplexSerial &t1, const PressureFieldComplexSerial &t2) { return t1.DotProduct(t2); }
 
