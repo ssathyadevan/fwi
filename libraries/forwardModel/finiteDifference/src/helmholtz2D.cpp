@@ -110,7 +110,7 @@ void Helmholtz2D::updateChi(const PressureFieldSerial &chi)
         _waveVelocity[i] = _c0;
     }
 
-    std::vector<double> chiVal = chi.getData();
+    const std::vector<double> &chiVal = chi.getData();
 
     for(int i = 0; i < oldnx[0]; ++i)
     {

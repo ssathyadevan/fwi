@@ -88,8 +88,7 @@ PressureFieldSerial GradientDescentInversion::gradientDescent(PressureFieldSeria
     {
         descentVector[i] = -1 * gamma * dfdx[i];
     }
-
-    chiEstimate.addData(descentVector);
+    chiEstimate += descentVector;
 
     return chiEstimate;
 }

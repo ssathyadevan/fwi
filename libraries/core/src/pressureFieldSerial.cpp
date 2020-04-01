@@ -152,24 +152,6 @@ void PressureFieldSerial::fromFile(const GenericInput &input)
 }
 
 // Non virtual members
-void PressureFieldSerial::setData(const std::vector<double> data)
-{
-    assert(GetNumberOfGridPoints() == (int)data.size());
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] = data[i];
-    }
-}
-
-void PressureFieldSerial::addData(const std::vector<double> data)
-{
-    assert(GetNumberOfGridPoints() == (int)data.size());
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] += data[i];
-    }
-}
-
 double PressureFieldSerial::InnerProduct(const PressureFieldSerial &rhs) const
 {
     assert(GetGrid() == rhs.GetGrid());

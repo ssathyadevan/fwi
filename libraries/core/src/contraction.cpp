@@ -21,7 +21,7 @@ void create_Greens_rect_2D(std::complex<double> *G, const std::array<double, 2> 
 void contract_Greens_rect_2D(
     const std::complex<double> *G, const PressureFieldComplexSerial &inputField, PressureFieldComplexSerial &outputField, const std::array<int, 2> &nx, int ldG)
 {
-    std::vector<std::complex<double>> inputFieldData = inputField.getData();
+    const std::vector<std::complex<double>> &inputFieldData = inputField.getData();
 
     std::vector<std::complex<double>> outputFieldData(outputField.GetNumberOfGridPoints(), 0.0);
     for(int i = 0; i < nx[1]; i++)
@@ -38,5 +38,5 @@ void contract_Greens_rect_2D(
             }
         }
     }
-    outputField.setData(outputFieldData);
+    outputField = outputFieldData;
 }

@@ -48,10 +48,7 @@ public:
     // Non virtual members
     const std::vector<double> &getData() const { return _data; }
 
-    void setData(const std::vector<double> data);
     void setValueAtIndex(const double value, const int index) { _data[index] = value; }
-
-    void addData(const std::vector<double> data);
     void addValueAtIndex(const double value, const int index) { _data[index] += value; }
 
     void RandomChild(const PressureFieldSerial &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);

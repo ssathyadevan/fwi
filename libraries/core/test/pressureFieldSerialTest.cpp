@@ -189,93 +189,6 @@ TEST(PressureFieldSerialTest, SummationTest)
 }
 
 // Non virtual members
-TEST(PressureFieldSerialTest, SetDataTest)
-{
-    // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-
-    PressureFieldSerial pfs(grid);
-
-    // Create vextor with increasing values
-    int count = 0;
-    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        dataIncreasing[i] = count;
-        count++;
-    }
-
-    // When
-    pfs.setData(dataIncreasing);
-
-    // Then
-    count = 0;
-    const std::vector<double> &data = pfs.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], count);
-        count++;
-    }
-}
-
-TEST(PressureFieldSerialTest, AddPositiveDataTest)
-{
-    // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-
-    double value = 11;
-    PressureFieldSerial pfs(grid);
-    pfs = value;
-
-    // Create vextor with increasing values
-    int count = 0;
-    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        dataIncreasing[i] = count;
-        count++;
-    }
-
-    // When
-    pfs.addData(dataIncreasing);
-
-    // Then
-    count = 0;
-    const std::vector<double> &data = pfs.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], value + count);
-        count++;
-    }
-}
-
-TEST(PressureFieldSerialTest, AddNegativeDataTest)
-{
-    // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-
-    double value1 = 11;
-    PressureFieldSerial pfs(grid);
-    pfs = value1;
-
-    // Create vextor with increasing values
-    double value2 = -11;
-    std::vector<double> negativeData = std::vector<double>(nrOfGridPoints, value2);
-
-    // When
-    pfs.addData(negativeData);
-
-    // Then
-    const std::vector<double> &data = pfs.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], value1 + value2);
-    }
-}
-
 TEST(PressureFieldSerialTest, AddValueAtIndexTest)
 {
     // Given
@@ -354,7 +267,7 @@ TEST(PressureFieldSerialTest, GradientTest)
             data[i * n_x[0] + j] = func(x, z);
         }
     }
-    pfs.setData(data);
+    pfs = data;
 
     // When
     pfs.Gradient(pfs_out);
@@ -527,7 +440,7 @@ TEST(PressureFieldSerialTest, OperatorAddPressureFieldSerialTest2)
     }
 
     PressureFieldSerial pfs2(grid);
-    pfs2.setData(dataIncreasing);
+    pfs2 = dataIncreasing;
 
     // When
     pfs2 += pfs1;
@@ -666,7 +579,7 @@ TEST(PressureFieldSerialTest, OperatorSubtractPressureFieldSerialTest2)
     }
 
     PressureFieldSerial pfs2(grid);
-    pfs2.setData(dataIncreasing);
+    pfs2 = dataIncreasing;
 
     // When
     pfs2 -= pfs1;
