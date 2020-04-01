@@ -2,7 +2,7 @@
 #include "log.h"
 
 PressureFieldComplexSerial ::PressureFieldComplexSerial(const Grid2D &grid) :
-    PressureFieldComplex(grid), _data(std::vector<std::complex<double>>(GetNumberOfGridPoints(), 0.0)), _dataPointer(&_data[0])
+    PressureFieldComplex(grid), _data(std::vector<std::complex<double>>(GetNumberOfGridPoints(), std::complex<double>(0.0, 0.0))), _dataPointer(&_data[0])
 {
 }
 
@@ -15,9 +15,6 @@ PressureFieldComplexSerial::PressureFieldComplexSerial(const PressureFieldComple
         _data[i] = rhsData[i];
     }
 }
-
-// TODO: REMOVE
-void PressureFieldComplexSerial::SetField(const std::function<std::complex<double>(double, double)> func) { (void)func; }
 
 // Virtual overrides
 void PressureFieldComplexSerial::Zero()
@@ -52,7 +49,6 @@ void PressureFieldComplexSerial::Reciprocal()
         {
             throw std::overflow_error("Reciprocal devides by zero");
         }
-
         _data[i] = 1.0 / _data[i];
     }
 }
@@ -173,7 +169,6 @@ PressureFieldSerial PressureFieldComplexSerial::GetRealPart() const
         realData[i] = std::real(_data[i]);
     }
     result = realData;
-
     return result;
 }
 
@@ -438,6 +433,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const Pressur
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(rhsData[i].real() == 0.0 && rhsData[i].imag() == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= rhsData[i];
     }
     return *this;
@@ -449,6 +448,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const Pressur
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(rhsData[i] == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= rhsData[i];
     }
     return *this;
@@ -459,6 +462,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::ve
     assert(GetNumberOfGridPoints() == (int)complexData.size());
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(complexData[i].real() == 0.0 && complexData[i].imag() == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= complexData[i];
     }
     return *this;
@@ -469,6 +476,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::ve
     assert(GetNumberOfGridPoints() == (int)data.size());
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(data[i] == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= data[i];
     }
     return *this;
@@ -478,6 +489,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const std::co
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(complexValue.real() == 0.0 && complexValue.imag() == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= complexValue;
     }
     return *this;
@@ -487,6 +502,10 @@ PressureFieldComplexSerial &PressureFieldComplexSerial::operator/=(const double 
 {
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
+        if(value == 0.0)
+        {
+            throw std::overflow_error("Operator devides by zero");
+        }
         _data[i] /= value;
     }
     return *this;
