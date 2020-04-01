@@ -292,48 +292,7 @@ TEST(PressureFieldComplexSerialTest, innerProductTest)
     ASSERT_DOUBLE_EQ(calculatedInerProduct.real(), real(alternativeInnerProduct));
     ASSERT_DOUBLE_EQ(calculatedInerProduct.imag(), imag(alternativeInnerProduct));
 }
-/*
-TEST(PressureFieldComplexSerialTest, GradientTest)
-{
-    // Given
-    // Make grid with non-boundary cells, i.e. at least 3x3.
-    const std::array<std::complex<double>, 2> x_min = {0.0, 0.0};
-    const std::array<double, 2> x_max = {2.0, 2.0};
-    const std::array<int, 2> n_x = {3, 4};
-    Grid2D grid(x_min, x_max, n_x);
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-    const std::array<double, 2> &dx = grid.GetCellDimensions();
 
-    PressureFieldSerial pfs(grid);
-    std::vector<PressureFieldSerial> pfs_out(2, PressureFieldSerial(grid));
-
-    // Create data: Linear tilted plane, x & z are centroids of grid cell.
-    std::vector<double> data = std::vector<double>(nrOfGridPoints, 0.0);
-    const std::function<double(double, double)> func = [](double x, double z) { return x + z; };
-    for(int i = 0; i < n_x[1]; i++)
-    {
-        double z = x_min[1] + (i + double(0.5)) * dx[1];
-        for(int j = 0; j < n_x[0]; j++)
-        {
-            double x = x_min[0] + (j + double(0.5)) * dx[0];
-            data[i * n_x[0] + j] = func(x, z);
-        }
-    }
-    pfs.setData(data);
-
-    // When
-    pfs.Gradient(pfs_out);
-
-    // Then
-    const std::vector<double> &data0 = pfs_out[0].getData();
-    EXPECT_NEAR(data0[0], 1, 0.01);
-    EXPECT_NEAR(data0[11], 1, 0.01);
-
-    const std::vector<double> &data1 = pfs_out[1].getData();
-    EXPECT_NEAR(data1[0], 1, 0.01);
-    EXPECT_NEAR(data1[11], 1, 0.01);
-}
-*/
 // Operators
 TEST(PressureFieldSerialTest, operatorAssignPressureFieldSerialExceptionTest)
 {
