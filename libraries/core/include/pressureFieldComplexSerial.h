@@ -18,7 +18,7 @@ private:
     std::complex<double> *const _dataPointer;
 
 public:
-    PressureFieldComplexSerial(const Grid2D &grid);
+    explicit PressureFieldComplexSerial(const Grid2D &grid);
     PressureFieldComplexSerial(const PressureFieldComplexSerial &rhs);
     ~PressureFieldComplexSerial() {}
 

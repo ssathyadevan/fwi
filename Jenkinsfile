@@ -27,6 +27,13 @@ pipeline{
                                 }
                         }
                 }
+		/*stage('parallelAnalysis'){
+			steps{
+				script{
+					functions.parallelAnalysis()
+				}
+			}		
+		}*/
 
                 stage('Test') {
                         steps{

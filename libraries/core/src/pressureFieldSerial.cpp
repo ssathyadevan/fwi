@@ -209,6 +209,8 @@ void PressureFieldSerial::Gradient(std::vector<PressureFieldSerial> &gradientFie
 }
 
 // Operators
+void PressureFieldSerial::PlusElement(const int location, const double value) { _data[location] += value; }
+
 PressureFieldSerial &PressureFieldSerial::operator=(const PressureFieldSerial &rhs)
 {
     if(this == &rhs)
@@ -240,17 +242,6 @@ PressureFieldSerial &PressureFieldSerial::operator=(const double value)
     for(int i = 0; i < GetNumberOfGridPoints(); i++)
     {
         _data[i] = value;
-    }
-    return *this;
-}
-
-PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
-{
-    assert(GetGrid() == rhs.GetGrid());
-    const std::vector<double> &rhsData = rhs.getData();
-    for(int i = 0; i < GetNumberOfGridPoints(); i++)
-    {
-        _data[i] += rhsData[i];
     }
     return *this;
 }

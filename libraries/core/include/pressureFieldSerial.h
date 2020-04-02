@@ -20,7 +20,7 @@ private:
     double *const _dataPointer;
 
 public:
-    PressureFieldSerial(const Grid2D &grid);
+    explicit PressureFieldSerial(const Grid2D &grid);
     PressureFieldSerial(const PressureFieldSerial &rhs);
     ~PressureFieldSerial() {}
 
@@ -61,6 +61,7 @@ public:
     double *GetDataPtr() { return _dataPointer; }
 
     // Operators
+    void PlusElement(const int location, const double value);
     PressureFieldSerial &operator=(const PressureFieldSerial &rhs);
     PressureFieldSerial &operator=(const std::vector<double> &rhs);
     PressureFieldSerial &operator=(const double rhs);

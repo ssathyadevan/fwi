@@ -70,6 +70,7 @@ std::vector<double> GradientDescentInversion::differential(
 
         dFdx[i] = (fxPlusH - fx) / h;
     }
+
     return dFdx;
 }
 
