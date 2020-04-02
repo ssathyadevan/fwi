@@ -1,15 +1,14 @@
 import sys, os, shutil
 
-#from shutil import copyfile
-
 #
 # 	This script automatically runs all regression tests and writes the results to
-# 	a file in directory $HOMEPATH/Documents/FWI/build/Regression_results.txt.
-#	This script should be in the directory $HOMEPATH/Documents/FWI/ (to run it locally), 
+# 	a file in directory $HOMEPATH/FWIIntsall/test{}.format(inversionmodel)/Regression_results.txt.
+#	This script should be in the directory $HOMEPATH (to run it locally),
 #       together with folders parallelized-fwi and FWIInstall, 
-#       When running from terminal, type python3 run_all_regressions_python.py, followed by 1 to run it locally 
-#       or 0 to run on Jenkins. If you want to run one single regression test, add the name of the
-#       testcase you want. For example: "python3 run_all_regressions_python.py 1 fast" will run locally only the 
+#       When running from terminal, type python3 unified_run_all_regressions_python.py, followed by 1 to run it locally
+#       or 0 to run on Jenkins, forwardmodel (integralForwardModel or finiteDifferenceForwardModel) and inversion model (conjugateGradientInversion or gradientDescentInversion)
+#       If you want to run one single regression test, add the name of the
+#       testcase you want. For example: "python3 run_all_regressions_python.py 1 integralForwardModel conjugateGradientInversion fast" will run locally only the
 #       regression for the testcase "fast"
 
 cwd = os.getcwd()
@@ -24,10 +23,28 @@ if sys.argv[1]=='1':
     print("You selected to run locally") 
     FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
     FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
+    BUILD_PATH = os.path.join(os.path.join(ft, "Build"))
+
+    if not os.path.exists(BUILD_PATH):
+        print("Can not build project in {} because it does not exist, make sure it exists".format(BUILD_PATH))
+        sys.exit(1)
+
+    ### Make sure you use the current state of the project
+    # Build project
+    print("Build project in {}".format(BUILD_PATH))
+    os.chdir(os.path.join(BUILD_PATH))
+    os.system("make install")
+    # Copy Build to FWIInstall
+    if os.path.exists(os.path.join(FWI_INSTALL_PATH, "bin")):
+        shutil.rmtree(os.path.join(FWI_INSTALL_PATH, "bin"))
+    shutil.copytree(os.path.join(BUILD_PATH, "runtime", "bin"), os.path.join(FWI_INSTALL_PATH, "bin"))
+    os.chdir(ft)
+
 elif sys.argv[1]=='0':
     print("You selected to run on Jenkins") 
     FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
     FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
+    BUILD_PATH = os.path.join(os.path.join(ft, "build"))
 else:
     print("Please input 1 for running locally or 0 for running on Jenkins")
     sys.exit(1)
@@ -50,7 +67,7 @@ else:
     print("Inversion model in not recognized")
     sys.exit(1)
 
-print("Run Regression test with forwardmodel {} and inversionmodel {}".format(forwardmodel, inversionmodel))
+print("\nRun Regression test with forwardmodel {} and inversionmodel {}".format(forwardmodel, inversionmodel))
 
 os.chdir(os.path.join(regression_data_folder))
 
@@ -66,7 +83,6 @@ elif len(sys.argv)==4:
         if os.path.isdir(name):
             tests.append(name)
 
-
 os.chdir(os.path.join(FWI_INSTALL_PATH))               #(FWI_INSTALL_PATH+"bin/")
 cwd = os.getcwd()
 
@@ -77,8 +93,6 @@ if os.path.exists(regressiontestName):
 os.makedirs(regressiontestName)
 
 dir_from_which=os.path.join(FWI_SOURCE_PATH,"tests","testScripts")           
-
-
 
 for basename in os.listdir(dir_from_which):
     if basename.endswith('.py'):
