@@ -46,7 +46,7 @@ void generateReferencePressureFieldFromChi(const genericInput &gInput, const std
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
-    pressureFieldSerial chi(grid);
+    dataGrid2D chi(grid);
 
     chi.fromFile(gInput);
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nSources);

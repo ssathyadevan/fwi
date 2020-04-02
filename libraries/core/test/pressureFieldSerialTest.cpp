@@ -1,4 +1,4 @@
-#include "pressureFieldSerial.h"
+#include "dataGrid2D.h"
 #include <gtest/gtest.h>
 
 grid2D getGrid()
@@ -16,7 +16,7 @@ TEST(pressureFieldSerialTest, zeroTest)
 {
     // Given
     grid2D grid = getGrid();
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = 1.0;
 
     // When
@@ -38,7 +38,7 @@ TEST(pressureFieldSerialTest, squareTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 5.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // When
@@ -60,7 +60,7 @@ TEST(pressureFieldSerialTest, sqrtTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 36.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // When
@@ -82,7 +82,7 @@ TEST(pressureFieldSerialTest, normTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 1.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // Alternative calculation method
@@ -107,7 +107,7 @@ TEST(pressureFieldSerialTest, relNormTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // Alternative calculation method
@@ -134,7 +134,7 @@ TEST(pressureFieldSerialTest, reciprocalTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // When
@@ -153,7 +153,7 @@ TEST(pressureFieldSerialTest, reciprocalExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     // Note: Initialized with zero
 
     // When
@@ -171,7 +171,7 @@ TEST(pressureFieldSerialTest, summationTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // Alternative calculation method
@@ -197,7 +197,7 @@ TEST(pressureFieldSerialTest, addValueAtIndexTest)
 
     double value = 13;
     int index = 3;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
 
     // When
     pfs.addValueAtIndex(value, index);
@@ -224,7 +224,7 @@ TEST(pressureFieldSerialTest, innerProductTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     // Alternative calculation method
@@ -252,8 +252,8 @@ TEST(pressureFieldSerialTest, gradientTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
     const std::array<double, 2> &dx = grid.getCellDimensions();
 
-    pressureFieldSerial pfs(grid);
-    std::vector<pressureFieldSerial> pfsOut(2, pressureFieldSerial(grid));
+    dataGrid2D pfs(grid);
+    std::vector<dataGrid2D> pfsOut(2, dataGrid2D(grid));
 
     // Create data: Linear tilted plane, x & z are centroids of grid cell.
     std::vector<double> data = std::vector<double>(nrOfGridPoints, 0.0);
@@ -287,7 +287,7 @@ TEST(pressureFieldSerialTest, operatorAssignPressureFieldSerialExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
 
     // When
     // Nothing here, see below
@@ -304,10 +304,10 @@ TEST(pressureFieldSerialTest, operatorAssignPressureFieldSerialTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 5.0;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value;
 
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     // Note: Initialized with 0.0
 
     // When
@@ -328,7 +328,7 @@ TEST(pressureFieldSerialTest, operatorAssignDoubleTest)
     // Given
     grid2D grid = getGrid();
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
 
     double value = 5.0;
 
@@ -348,7 +348,7 @@ TEST(pressureFieldSerialTest, operatorAssignDoubleVectorTest)
     // Given
     grid2D grid = getGrid();
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
 
     double value = 5.0;
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, value);
@@ -371,7 +371,7 @@ TEST(pressureFieldSerialTest, operatorAssignDoubleVectorTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     int count = 0;
@@ -402,11 +402,11 @@ TEST(pressureFieldSerialTest, operatorAddPressureFieldSerialTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 5.0;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value1;
 
     double value2 = 3.5;
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = value2;
 
     // When
@@ -428,7 +428,7 @@ TEST(pressureFieldSerialTest, operatorAddPressureFieldSerialTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 5.0;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value;
 
     int count = 0;
@@ -439,7 +439,7 @@ TEST(pressureFieldSerialTest, operatorAddPressureFieldSerialTest2)
         count++;
     }
 
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = dataIncreasing;
 
     // When
@@ -462,7 +462,7 @@ TEST(pressureFieldSerialTest, operatorAddDoubleVectorTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 5.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     double value2 = 8.3;
@@ -487,7 +487,7 @@ TEST(pressureFieldSerialTest, operatorAddDoubleVectorTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 5.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     int count = 0;
@@ -518,7 +518,7 @@ TEST(pressureFieldSerialTest, operatorAddDoubleTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 5.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     // When
@@ -541,11 +541,11 @@ TEST(pressureFieldSerialTest, operatorSubtractPressureFieldSerialTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 9.2;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value1;
 
     double value2 = 4.8;
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = value2;
 
     // When
@@ -567,7 +567,7 @@ TEST(pressureFieldSerialTest, operatorSubtractPressureFieldSerialTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 5.0;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value;
 
     int count = 0;
@@ -578,7 +578,7 @@ TEST(pressureFieldSerialTest, operatorSubtractPressureFieldSerialTest2)
         count++;
     }
 
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = dataIncreasing;
 
     // When
@@ -601,7 +601,7 @@ TEST(pressureFieldSerialTest, operatorSubtractDoubleVectorTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 2.3;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     int count = 0;
@@ -632,7 +632,7 @@ TEST(pressureFieldSerialTest, operatorSubtractDoubleVectorTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 3.8;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     double value2 = 22.4;
@@ -657,7 +657,7 @@ TEST(pressureFieldSerialTest, operatorSubtractDoubleTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 15.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     // When
@@ -680,11 +680,11 @@ TEST(pressureFieldSerialTest, operatorMultiplyByPressureFieldSerialTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 4.9;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value1;
 
     double value2 = 7.0;
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = value2;
 
     // When
@@ -706,7 +706,7 @@ TEST(pressureFieldSerialTest, operatorMultiplyByDoubleVectorTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 6.2;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     double value2 = 1.3;
@@ -731,7 +731,7 @@ TEST(pressureFieldSerialTest, operatorMultiplyByDoubleVectorTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 4.9;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     int count = 0;
@@ -762,7 +762,7 @@ TEST(pressureFieldSerialTest, operatorMultiplyByDoubleTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 3.3;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     // When
@@ -783,10 +783,10 @@ TEST(pressureFieldSerialTest, operatorDivideByPressureFieldSerialExceptionTest)
     // Given
     grid2D grid = getGrid();
 
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = 1.0;
 
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     // Note: Initialized with zero
 
     // When
@@ -804,11 +804,11 @@ TEST(pressureFieldSerialTest, operatorDivideByPressureFieldSerialTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 5.0;
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = value1;
 
     double value2 = 15.0;
-    pressureFieldSerial pfs2(grid);
+    dataGrid2D pfs2(grid);
     pfs2 = value2;
 
     // When
@@ -829,7 +829,7 @@ TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorExceptionTest)
     grid2D grid = getGrid();
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = 1.0;
 
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, 0.0);
@@ -850,7 +850,7 @@ TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 3.8;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     double value2 = 22.4;
@@ -875,7 +875,7 @@ TEST(pressureFieldSerialTest, operatorDivideByDoubleVectorTest2)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value = 4.9;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value;
 
     int count = 1;   // Dont start at zero because of dividing by zero ...
@@ -904,7 +904,7 @@ TEST(pressureFieldSerialTest, operatorDivideByDoubleExceptionTest)
     // Given
     grid2D grid = getGrid();
 
-    pressureFieldSerial pfs1(grid);
+    dataGrid2D pfs1(grid);
     pfs1 = 1.0;
 
     // When
@@ -922,7 +922,7 @@ TEST(pressureFieldSerialTest, operatorDivideByDoubleTest)
     const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double value1 = 15.0;
-    pressureFieldSerial pfs(grid);
+    dataGrid2D pfs(grid);
     pfs = value1;
 
     // When

@@ -18,7 +18,7 @@ public:
     RandomInversion(const RandomInversion&) = delete;
     RandomInversion& operator=(const RandomInversion&) = delete;
 
-    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 
 private:
     forwardModelInterface *_forwardModel;

@@ -8,7 +8,7 @@
 #include "sources.h"
 #include "utilityFunctions.h"
 #include <Eigen/Dense>
-#include <pressureFieldComplexSerial.h>
+#include <complexDataGrid2D.h>
 
 using namespace Eigen;
 
@@ -22,16 +22,16 @@ public:
 
     const std::complex<double> *getGreensVolume() const { return gVol; }
 
-    const pressureFieldComplexSerial *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
+    const complexDataGrid2D *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
 
-    pressureFieldComplexSerial contractWithField(const pressureFieldComplexSerial &x) const;
+    complexDataGrid2D contractWithField(const complexDataGrid2D &x) const;
 
     const grid2D &getGrid() const { return grid; }
 
     // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
     // Equation ID: "rel:buildField"
 
-    pressureFieldComplexSerial dot1(const pressureFieldComplexSerial &dW) const;
+    complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
 
 private:
     void createGreensVolume();
@@ -50,10 +50,10 @@ private:
     const double k;
 
     std::complex<double> *gVol;
-    std::vector<pressureFieldComplexSerial *> gRecv;
+    std::vector<complexDataGrid2D *> gRecv;
 
     Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-    void setGreensFunction(pressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
+    void setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
     greensRect2DCpu(const greensRect2DCpu &) = delete;
     greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;

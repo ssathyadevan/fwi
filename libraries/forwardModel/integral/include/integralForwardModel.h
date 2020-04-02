@@ -16,21 +16,21 @@ public:
 
     ~IntegralForwardModel();
 
-    virtual void calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator);
+    virtual void calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator);
 
     void calculateKappa();
-    virtual void calculatePTot(const pressureFieldSerial &chiEst);
-    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, pressureFieldComplexSerial &kRes);
-    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, pressureFieldComplexSerial &kRes, const int offset, const int block_size);
+    virtual void calculatePTot(const dataGrid2D &chiEst);
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size);
 
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
+    virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
 private:
     greensRect2DCpu **_Greens;
 
-    pressureFieldComplexSerial ***_p0;
-    pressureFieldComplexSerial **_pTot;
-    pressureFieldComplexSerial **_Kappa;
+    complexDataGrid2D ***_p0;
+    complexDataGrid2D **_pTot;
+    complexDataGrid2D **_Kappa;
     integralForwardModelInput _fmInput;
 
     void createP0();
@@ -43,9 +43,9 @@ private:
 
     void deletePtot();
 
-    pressureFieldComplexSerial calcTotalField(const greensRect2DCpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit);
+    complexDataGrid2D calcTotalField(const greensRect2DCpu &G, const dataGrid2D &chiEst, const complexDataGrid2D &Pinit);
 
-    void applyKappa(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
+    void applyKappa(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
     void createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv);
     void deleteKappa();
 };

@@ -32,7 +32,7 @@ const frequenciesGroup &forwardModelInterface::getFreq()
     return _freq;
 }
 
-std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(const pressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef)
+std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
 {
     std::vector<std::complex<double>> pDataEst(_freq.nFreq * _recv.nRecv * _src.nSrc);
 

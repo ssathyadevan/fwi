@@ -12,10 +12,8 @@ set(CPP_SOURCES_AND_H_HEADERS
     inputCardReader.cpp                 ../include/inputCardReader.h
                                         ../include/inversionInterface.h
                                         ../include/nSourcesReceivers.h
-                                        ../include/pressureField.h
-    pressureFieldComplex.cpp            ../include/pressureFieldComplex.h
-    pressureFieldComplexSerial.cpp      ../include/pressureFieldComplexSerial.h
-    pressureFieldSerial.cpp             ../include/pressureFieldSerial.h
+        complexDataGrid2D.cpp ../include/complexDataGrid2D.h
+        dataGrid2D.cpp ../include/dataGrid2D.h
     receivers.cpp                       ../include/receivers.h
     sources.cpp                         ../include/sources.h)
 

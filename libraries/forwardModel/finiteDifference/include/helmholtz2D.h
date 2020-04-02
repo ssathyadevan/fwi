@@ -13,7 +13,7 @@
 #include "grid2D.h"
 #include "finiteDifferenceGrid2D.h"
 #include "frequenciesGroup.h"
-#include "pressureFieldComplexSerial.h"
+#include "complexDataGrid2D.h"
 #include "sources.h"
 #include "finiteDifferenceForwardModelInput.h"
 
@@ -23,9 +23,9 @@
 
 class Helmholtz2D {
   public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceForwardModelInput &fmInput);
+    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput);
     ~Helmholtz2D();
-    pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
+    complexDataGrid2D solve(const std::array<double, 2> &source, complexDataGrid2D &pInit);
     void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx); //Temporary for testing
 
 private:
@@ -44,6 +44,6 @@ private:
 
     void buildMatrix();
     void buildVector(const std::array<double, 2> &source);
-    void updateChi(const pressureFieldSerial &chi);
+    void updateChi(const dataGrid2D &chi);
     void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx, std::array<double, 2> xMin);
 };

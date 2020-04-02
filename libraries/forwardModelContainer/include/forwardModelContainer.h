@@ -16,7 +16,7 @@ class ForwardModelContainer
         const genericInput &gInput, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources, const receivers &receivers);
 
     void calculateKappaParallel();
-    std::vector<std::complex<double>> &calculateResidualParallel(const pressureFieldSerial &chiEstimate, const std::vector<std::complex<double>> &pDataRef);
+    std::vector<std::complex<double>> &calculateResidualParallel(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSqParallel(const std::vector<std::complex<double>> &residual);
 
     const frequenciesGroup &getFrequencies() const { return _allFrequencies; }

@@ -131,7 +131,7 @@ void performInversion(const genericInput &gInput, const std::string &runName)
     //    gradientDescentInversion(forwardModelInterface *forwardModel, const genericInput &gdInput);
     L_(linfo) << "Estimating Chi..." ;
 
-    pressureFieldSerial chi_est = inverse->reconstruct(referencePressureData, gInput);
+    dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
 
     L_(linfo) << "Done, writing to file" ;
 

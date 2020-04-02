@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "pressureFieldComplexSerial.h"
+#include "complexDataGrid2D.h"
 #include <complex>
 #include <functional>
 
@@ -15,4 +15,4 @@ void createGreensRect2D(std::complex<double> *G, const std::array<double, 2> &dx
     std::function<std::complex<double>(double, double)> gFunc, double k);
 
 void contractGreensRect2D(
-    const std::complex<double> *G, const pressureFieldComplexSerial &x, pressureFieldComplexSerial &testField, const std::array<int, 2> &nx, int ldG);
+        const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG);

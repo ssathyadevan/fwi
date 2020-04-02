@@ -19,7 +19,7 @@ void createGreensRect2D(std::complex<double> *G, const std::array<double, 2> &dx
 }
 
 void contractGreensRect2D(
-    const std::complex<double> *G, const pressureFieldComplexSerial &x, pressureFieldComplexSerial &testField, const std::array<int, 2> &nx, int ldG)
+        const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG)
 {
     const std::vector<std::complex<double>> &inputFieldData = x.getData();
 

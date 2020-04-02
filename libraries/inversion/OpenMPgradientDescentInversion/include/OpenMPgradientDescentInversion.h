@@ -1,35 +1,34 @@
 #pragma once
 
-#include "inversionInterface.h"
-#include "forwardModelInterface.h"
-#include "gradientDescentInversionInput.h"
-#include "genericInput.h"
 #include "forwardModelContainer.h"
+#include "forwardModelInterface.h"
+#include "genericInput.h"
+#include "gradientDescentInversionInput.h"
+#include "inversionInterface.h"
 
 class OpenMPGradientDescentInversion : public inversionInterface
 {
-
 private:
-    ForwardModelContainer& _forwardModelsParallel;
+    ForwardModelContainer &_forwardModelsParallel;
     gradientDescentInversionInput _gdInput;
 
-    const grid2D & _grid;
-    const sources & _src;
-    const receivers & _recv;
-    const frequenciesGroup & _freq;
+    const grid2D &_grid;
+    const sources &_src;
+    const receivers &_recv;
+    const frequenciesGroup &_freq;
 
-    pressureFieldSerial gradientDescent(pressureFieldSerial xi, std::vector<double> nablaFxi, double gamma);
-    std::vector<double> differentialParallel(const std::vector<std::complex<double>> &pData, pressureFieldSerial xi, double dxi, double eta);
-
+    dataGrid2D gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma);
+    std::vector<double> differentialParallel(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
 
 public:
     OpenMPGradientDescentInversion(const genericInput &gdInput, ForwardModelContainer &forwardmodels);
 
-    OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion&) = delete;
-    OpenMPGradientDescentInversion & operator = (const OpenMPGradientDescentInversion&) = delete;
+    OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion &) = delete;
+    OpenMPGradientDescentInversion &operator=(const OpenMPGradientDescentInversion &) = delete;
 
-    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput );
+    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 
-    double functionFParallel(const pressureFieldSerial & xi, const std::vector<std::complex<double>> &pData, double eta);
-    double determineGamma(std::vector<double> dFdxPrevious, std::vector<double> dFdx, pressureFieldSerial xPrevious, pressureFieldSerial x);
+    double functionFParallel(const dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta);
+    double determineGamma(const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
+        std::vector<double> dFdxCurrent);
 };

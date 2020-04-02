@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pressureFieldSerial.h"
-#include "pressureFieldComplexSerial.h"
+#include "dataGrid2D.h"
+#include "complexDataGrid2D.h"
 #include "grid2D.h"
 #include "frequenciesGroup.h"
 #include "sources.h"
@@ -35,15 +35,15 @@ public:
     const receivers & getRecv();
     const frequenciesGroup & getFreq();
 
-    virtual void calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData) = 0;
-    virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
+    virtual void calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
+    virtual void calculatePTot(const dataGrid2D &chiEst) = 0;
+    virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
     virtual void calculateKappa() {L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE);}
-    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, pressureFieldComplexSerial &) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
-    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, pressureFieldComplexSerial &, const int, const int) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, complexDataGrid2D &) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, complexDataGrid2D &, const int, const int) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
 
-    std::vector<std::complex<double>>& calculateResidual(const pressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
+    std::vector<std::complex<double>>& calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
 
 private:

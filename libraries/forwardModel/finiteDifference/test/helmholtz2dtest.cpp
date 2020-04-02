@@ -21,7 +21,7 @@ TEST(helmholtz2dTest, CreateABCMatrixTest)
     double c_0 = 2000.0;
     sources src(SrcMin, SrcMax, nSrc);
 
-    pressureFieldSerial chiEst(grid);
+    dataGrid2D chiEst(grid);
     chiEst.random();
 
     finiteDifferenceForwardModelInput fmInput;

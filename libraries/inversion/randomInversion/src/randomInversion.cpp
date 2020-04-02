@@ -8,7 +8,7 @@ RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const Rand
     _forwardModel = forwardModel;
 }
 
-pressureFieldSerial RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
@@ -17,7 +17,7 @@ pressureFieldSerial RandomInversion::reconstruct(const std::vector<std::complex<
     double eta = 1.0 / (normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
-    pressureFieldSerial chiEst(_grid);
+    dataGrid2D chiEst(_grid);
 
     chiEst.zero();
 
@@ -45,7 +45,7 @@ pressureFieldSerial RandomInversion::reconstruct(const std::vector<std::complex<
         //start the inner loop
         for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
-            pressureFieldSerial tempRandomChi(_grid);
+            dataGrid2D tempRandomChi(_grid);
             tempRandomChi.randomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
@@ -77,7 +77,7 @@ pressureFieldSerial RandomInversion::reconstruct(const std::vector<std::complex<
 
     file.close(); // close the residual.log file
 
-    pressureFieldSerial result(_grid);
+    dataGrid2D result(_grid);
     chiEst.CopyTo(result);
     return result;
 }

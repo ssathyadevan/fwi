@@ -13,9 +13,9 @@ public:
     ~ForwardModelInterfaceMock() {}
     void calculateKappa() {}
 
-    virtual void calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData);
-    virtual void calculatePTot(const pressureFieldSerial &chiEst) { (void)chiEst; }
-    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+    virtual void calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData);
+    virtual void calculatePTot(const dataGrid2D &chiEst) { (void)chiEst; }
+    virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
     {
         (void)CurrentPressureFieldSerial;
         (void)kOperator;

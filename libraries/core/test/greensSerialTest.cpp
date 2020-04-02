@@ -47,7 +47,7 @@ TEST(greensSerialTest, getReceiverContTest)
 {
     greensRect2DCpu *greens = getGreens();
 
-    const pressureFieldComplexSerial *pfcs = greens->getReceiverCont(0);
+    const complexDataGrid2D *pfcs = greens->getReceiverCont(0);
 
     // Assert some property of pfcs
     double ip = pfcs->innerProduct(*pfcs);

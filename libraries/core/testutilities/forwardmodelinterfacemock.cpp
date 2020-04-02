@@ -8,7 +8,7 @@ ForwardModelInterfaceMock::ForwardModelInterfaceMock(const grid2D &grid, const s
 
 }
 
-void ForwardModelInterfaceMock::calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData)
+void ForwardModelInterfaceMock::calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
 {
     (void)chiEst;
 

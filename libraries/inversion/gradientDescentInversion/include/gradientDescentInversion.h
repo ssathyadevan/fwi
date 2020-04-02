@@ -15,7 +15,7 @@ private:
     const receivers &_recv;
     const frequenciesGroup _freq;
 
-    pressureFieldSerial gradientDescent(pressureFieldSerial chiEstimate, const std::vector<double> &dfdx, const double gamma);
+    dataGrid2D gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma);
 
 public:
     gradientDescentInversion(forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
@@ -23,9 +23,9 @@ public:
     gradientDescentInversion(const gradientDescentInversion &) = delete;
     gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;
 
-    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
-    std::vector<double> differential(const std::vector<std::complex<double>> &pData, pressureFieldSerial xi, double dxi, double eta);
-    double functionF(const pressureFieldSerial xi, const std::vector<std::complex<double>> &pData, double eta);
-    double determineGamma(const pressureFieldSerial chiEstimatePrevious, const pressureFieldSerial chiEstimateCurrent, std::vector<double> dFdxPrevious,
+    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    std::vector<double> differential(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
+    double functionF(const dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta);
+    double determineGamma(const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
         std::vector<double> dFdx);
 };

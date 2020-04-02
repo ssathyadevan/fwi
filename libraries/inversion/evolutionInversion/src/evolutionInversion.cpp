@@ -8,7 +8,7 @@ EvolutionInversion::EvolutionInversion(forwardModelInterface *forwardModel, cons
     _forwardModel = forwardModel;
 }
 
-pressureFieldSerial EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     // open the file to store the residual log
     progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
@@ -30,7 +30,7 @@ pressureFieldSerial EvolutionInversion::reconstruct(const std::vector<std::compl
     std::normal_distribution<double> distribution(0.0,mutationRate);
 
     //Create initial guess, generation 0, Adam
-    pressureFieldSerial parent(_grid);
+    dataGrid2D parent(_grid);
     parent.randomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
@@ -40,13 +40,13 @@ pressureFieldSerial EvolutionInversion::reconstruct(const std::vector<std::compl
     //main loop// Looping through the generations
     for (int it = 0; it < _eiInput.nGenerations; it++)
     {
-        pressureFieldSerial favouriteChild(_grid); //This is the best child so far
+        dataGrid2D favouriteChild(_grid); //This is the best child so far
         parent.CopyTo(favouriteChild);  //The first favourite child is a clone of the parent
         favouriteChildResSq = parentResSq;
         //start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
         for (int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
         {
-            pressureFieldSerial child(_grid);
+            dataGrid2D child(_grid);
             child.randomChild(parent, generator, distribution);
             childResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(child, pData));
 
@@ -76,7 +76,7 @@ pressureFieldSerial EvolutionInversion::reconstruct(const std::vector<std::compl
 
     file.close(); // close the residual.log file
 
-    pressureFieldSerial result(_grid);
+    dataGrid2D result(_grid);
     parent.CopyTo(result);
     return result;
 }

@@ -20,11 +20,11 @@ greensRect2DCpu::~greensRect2DCpu()
     delete[] gVol;
 }
 
-pressureFieldComplexSerial greensRect2DCpu::contractWithField(const pressureFieldComplexSerial &x) const
+complexDataGrid2D greensRect2DCpu::contractWithField(const complexDataGrid2D &x) const
 {
     // Assure we are working on the same grid
     assert(grid == x.GetGrid());
-    pressureFieldComplexSerial outputField(grid);
+    complexDataGrid2D outputField(grid);
     const std::array<int, 2> &nx = grid.getGridDimensions();
     contractGreensRect2D(gVol, x, outputField, nx, 2 * nx[0] - 1);
     return outputField;
@@ -32,7 +32,7 @@ pressureFieldComplexSerial greensRect2DCpu::contractWithField(const pressureFiel
 
 // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
 // Equation ID: "rel:buildField"
-pressureFieldComplexSerial greensRect2DCpu::dot1(const pressureFieldComplexSerial &dW) const
+complexDataGrid2D greensRect2DCpu::dot1(const complexDataGrid2D &dW) const
 {
     const std::array<int, 2> &nx1 = grid.getGridDimensions();
     const int &nx = nx1[0];
@@ -105,7 +105,7 @@ pressureFieldComplexSerial greensRect2DCpu::dot1(const pressureFieldComplexSeria
         }
     }
 
-    pressureFieldComplexSerial product(grid);
+    complexDataGrid2D product(grid);
     std::vector<std::complex<double>> productData(product.getNumberOfGridPoints(), 0.0);
     for(int i = 0; i < nx * nz; i++)
     {
@@ -149,7 +149,7 @@ void greensRect2DCpu::createGreensVolumeAnkit()
     for(int i = 0; i < nx; i++)
     {
         double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
-        pressureFieldComplexSerial G_x(grid);
+        complexDataGrid2D G_x(grid);
         setGreensFunction(G_x, [this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
 
         for(int j = 0; j < nx * nz; j++)
@@ -162,12 +162,12 @@ void greensRect2DCpu::createGreensVolumeAnkit()
 void greensRect2DCpu::createGreensRecv()
 {
     double vol = grid.getCellVolume();
-    pressureFieldComplexSerial G_bound_cpu(grid);
+    complexDataGrid2D G_bound_cpu(grid);
     for(int i = 0; i < recv.nRecv; i++)
     {
         double x_recv = recv.xRecv[i][0];
         double z_recv = recv.xRecv[i][1];
-        pressureFieldComplexSerial *G_bound = new pressureFieldComplexSerial(grid);
+        complexDataGrid2D *G_bound = new complexDataGrid2D(grid);
 
         setGreensFunction(*G_bound, [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
 
@@ -183,7 +183,7 @@ void greensRect2DCpu::deleteGreensRecv()
     }
 }
 
-void greensRect2DCpu::setGreensFunction(pressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func)
+void greensRect2DCpu::setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func)
 {
     const std::array<int, 2> &nx = getGrid().getGridDimensions();
     const std::array<double, 2> &dx = getGrid().getCellDimensions();   // Babak 2018 10 29: get rid of template for grid_rect_2D

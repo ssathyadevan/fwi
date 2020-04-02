@@ -79,7 +79,7 @@ int ForwardModelContainer::computeThreadOffset()
 }
 
 std::vector<std::complex<double>> &ForwardModelContainer::calculateResidualParallel(
-    const pressureFieldSerial &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
+    const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
 {
     std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
     omp_set_num_threads(_numberOfThreads);

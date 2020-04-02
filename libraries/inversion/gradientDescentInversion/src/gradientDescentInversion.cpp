@@ -9,15 +9,15 @@ gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwar
     _forwardModel = forwardModel;
 }
 
-pressureFieldSerial gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_gdInput.iter);
 
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 
-    pressureFieldSerial chiEstimateCurrent(_grid);
+    dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _gdInput.x0;
-    pressureFieldSerial chiEstimatePrevious(_grid);
+    dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
     _forwardModel->calculateResidual(chiEstimateCurrent, pData);
@@ -25,7 +25,7 @@ pressureFieldSerial gradientDescentInversion::reconstruct(const std::vector<std:
     std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
     std::vector<double> dFdxPrevious;
 
-    double Fx;
+    double fx;
     int counter = 1;
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
     double eta = 1.0 / (normSq(pData, nTotal));
@@ -42,8 +42,8 @@ pressureFieldSerial gradientDescentInversion::reconstruct(const std::vector<std:
 
         chiEstimatePrevious = chiEstimateCurrent;
         chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-        Fx = functionF(chiEstimateCurrent, pData, eta);
-        file << std::setprecision(17) << Fx << "," << counter << std::endl;
+        fx = functionF(chiEstimateCurrent, pData, eta);
+        file << std::setprecision(17) << fx << "," << counter << std::endl;
 
         ++counter;
         bar++;
@@ -53,14 +53,14 @@ pressureFieldSerial gradientDescentInversion::reconstruct(const std::vector<std:
 }
 
 std::vector<double> gradientDescentInversion::differential(
-    const std::vector<std::complex<double>> &pData, pressureFieldSerial chiEstimate, double h, double eta)
+    const std::vector<std::complex<double>> &pData, dataGrid2D chiEstimate, double h, double eta)
 {
     const int numGridPoints = chiEstimate.getNumberOfGridPoints();
 
     double fx = functionF(chiEstimate, pData, eta);
 
     double fxPlusH;
-    pressureFieldSerial chiEstimatePlusH(chiEstimate);
+    dataGrid2D chiEstimatePlusH(chiEstimate);
     std::vector<double> dFdx(numGridPoints, 0.0);
     for(int i = 0; i < numGridPoints; ++i)
     {
@@ -74,13 +74,13 @@ std::vector<double> gradientDescentInversion::differential(
     return dFdx;
 }
 
-double gradientDescentInversion::functionF(const pressureFieldSerial chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+double gradientDescentInversion::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
     return eta * _forwardModel->calculateResidualNormSq(residual);
 }
 
-pressureFieldSerial gradientDescentInversion::gradientDescent(pressureFieldSerial chiEstimate, const std::vector<double> &dfdx, const double gamma)
+dataGrid2D gradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma)
 {
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -94,7 +94,7 @@ pressureFieldSerial gradientDescentInversion::gradientDescent(pressureFieldSeria
     return chiEstimate;
 }
 
-double gradientDescentInversion::determineGamma(const pressureFieldSerial chiEstimatePrevious, const pressureFieldSerial chiEstimateCurrent,
+double gradientDescentInversion::determineGamma(const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent,
     std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
 {
     const int nGridPoints = chiEstimateCurrent.getNumberOfGridPoints();

@@ -27,7 +27,7 @@ class ConjugateGradientInversion : public inversionInterface
     const receivers &_receivers;
     const frequenciesGroup &_frequencies;
 
-    pressureFieldSerial _chiEstimate;
+    dataGrid2D _chiEstimate;
 
     /**
      * @brief ConjugateGradientInversion::OpenResidualLogFile Opens a logfile in which the residuals can be stored.
@@ -41,9 +41,9 @@ class ConjugateGradientInversion : public inversionInterface
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @param gradientCurrent is the gradient, determined using the conjugate-gradient method
      * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
-     * @return pressureFieldSerial zeta is the update direction for each value in the contrast function
+     * @return dataGrid2D zeta is the update direction for each value in the contrast function
      */
-    pressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, pressureFieldSerial &gradientCurrent, double eta);
+    dataGrid2D calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent, double eta);
 
     /**
      * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -51,7 +51,7 @@ class ConjugateGradientInversion : public inversionInterface
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @return double alpha, the optimum step size
      */
-    double calculateStepSize(const pressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray);
+    double calculateStepSize(const dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray);
 
     /**
      * @brief errorFunctional calculates the residual according to equation eq: errorFunc(README)
@@ -97,16 +97,16 @@ class ConjugateGradientInversion : public inversionInterface
     /**
      * @brief calculateWeightingFactor uses eq. 2.22 from the thesis to calculate the weighting factor
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return pressureFieldSerial deltaSquared, the weighting factor.
+     * @return dataGrid2D deltaSquared, the weighting factor.
      */
-    pressureFieldSerial calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
+    dataGrid2D calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateRegularisationGradient uses equation 2.25 from the thesis to calculate the regularisation gradient
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return pressureFieldSerial the regularisation gradient
+     * @return dataGrid2D the regularisation gradient
      */
-    pressureFieldSerial calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
+    dataGrid2D calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateUpdateDirection_regularisation uses multiplicative regularisation parameters to calculate an update direction (zeta) which leads to
@@ -119,11 +119,11 @@ class ConjugateGradientInversion : public inversionInterface
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
      * @param zeta is the previous update direction for each value in the contrast function
      * @param residualPrevious scaled and averaged error of the previous loop
-     * @return pressureFieldSerial zeta
+     * @return dataGrid2D zeta
      */
-    pressureFieldSerial calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, pressureFieldSerial &gradientCurrent,
-        const pressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-        const RegularisationParameters &regularisationPrevious, const pressureFieldSerial &zeta, double residualPrevious);
+    dataGrid2D calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent,
+        const dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+        const RegularisationParameters &regularisationPrevious, const dataGrid2D &zeta, double residualPrevious);
 
     /**
      * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect to
@@ -139,7 +139,7 @@ class ConjugateGradientInversion : public inversionInterface
      */
     double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
         const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious,
-        const pressureFieldSerial &zeta);
+        const dataGrid2D &zeta);
 
     /**
      * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -170,7 +170,7 @@ class ConjugateGradientInversion : public inversionInterface
      * underlying structure of the earth, using the conjugate gradient method.
      * @param pData Complex vector with the real measured data
      * @param gInput Struct containing general model parameters
-     * @return pressureFieldSerial _chiEstimate, the optimized estimation for the contrast function.
+     * @return dataGrid2D _chiEstimate, the optimized estimation for the contrast function.
      */
-    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 };
