@@ -1,0 +1,333 @@
+14:42:23.364 INFO: Preprocessing the provided input to create the reference pressure-field
+14:42:23.364 INFO: Starting
+14:42:23.364 DEBUG: Virtual memory used: 1940 kB
+14:42:23.364 DEBUG: Physical memory used: 1940 kB
+14:42:23.367 INFO: Total number of sources is 17. Positions:
+14:42:23.367 INFO: x = (-480, -5)
+14:42:23.367 INFO: x = (-420, -5)
+14:42:23.367 INFO: x = (-360, -5)
+14:42:23.367 INFO: x = (-300, -5)
+14:42:23.367 INFO: x = (-240, -5)
+14:42:23.367 INFO: x = (-180, -5)
+14:42:23.367 INFO: x = (-120, -5)
+14:42:23.367 INFO: x = (-60, -5)
+14:42:23.367 INFO: x = (0, -5)
+14:42:23.367 INFO: x = (60, -5)
+14:42:23.367 INFO: x = (120, -5)
+14:42:23.367 INFO: x = (180, -5)
+14:42:23.367 INFO: x = (240, -5)
+14:42:23.367 INFO: x = (300, -5)
+14:42:23.367 INFO: x = (360, -5)
+14:42:23.367 INFO: x = (420, -5)
+14:42:23.367 INFO: x = (480, -5)
+14:42:23.367 INFO: Total number is receivers is 17. Positions:
+14:42:23.367 INFO: x = (-480, -5)
+14:42:23.367 INFO: x = (-420, -5)
+14:42:23.367 INFO: x = (-360, -5)
+14:42:23.367 INFO: x = (-300, -5)
+14:42:23.367 INFO: x = (-240, -5)
+14:42:23.367 INFO: x = (-180, -5)
+14:42:23.367 INFO: x = (-120, -5)
+14:42:23.367 INFO: x = (-60, -5)
+14:42:23.367 INFO: x = (0, -5)
+14:42:23.367 INFO: x = (60, -5)
+14:42:23.367 INFO: x = (120, -5)
+14:42:23.367 INFO: x = (180, -5)
+14:42:23.367 INFO: x = (240, -5)
+14:42:23.367 INFO: x = (300, -5)
+14:42:23.367 INFO: x = (360, -5)
+14:42:23.367 INFO: x = (420, -5)
+14:42:23.367 INFO: x = (480, -5)
+14:42:23.367 INFO: Total number of frequencies is 15. Values:
+14:42:23.367 INFO: f = 10, k = 0.0314159
+14:42:23.367 INFO: f = 12.1429, k = 0.0381479
+14:42:23.367 INFO: f = 14.2857, k = 0.0448799
+14:42:23.367 INFO: f = 16.4286, k = 0.0516119
+14:42:23.367 INFO: f = 18.5714, k = 0.0583439
+14:42:23.367 INFO: f = 20.7143, k = 0.0650758
+14:42:23.367 INFO: f = 22.8571, k = 0.0718078
+14:42:23.367 INFO: f = 25, k = 0.0785398
+14:42:23.367 INFO: f = 27.1429, k = 0.0852718
+14:42:23.367 INFO: f = 29.2857, k = 0.0920038
+14:42:23.367 INFO: f = 31.4286, k = 0.0987358
+14:42:23.367 INFO: f = 33.5714, k = 0.105468
+14:42:23.367 INFO: f = 35.7143, k = 0.1122
+14:42:23.367 INFO: f = 37.8571, k = 0.118932
+14:42:23.367 INFO: f = 40, k = 0.125664
+14:42:23.376 INFO: Creating Greens function field...
+14:42:27.139 INFO: Creating p0...
+14:42:27.215 INFO: Calculate pData (the reference pressure-field)...
+14:42:27.216 INFO: Creating this->p_tot for 1/ 15freq
+14:42:27.254 INFO: No convergence after 4 iterations.Res = 0.00684656
+14:42:27.293 INFO: No convergence after 4 iterations.Res = 0.0063153
+14:42:27.335 INFO: No convergence after 4 iterations.Res = 0.00551095
+14:42:27.374 INFO: No convergence after 4 iterations.Res = 0.00500629
+14:42:27.413 INFO: No convergence after 4 iterations.Res = 0.00575387
+14:42:27.454 INFO: No convergence after 4 iterations.Res = 0.00630948
+14:42:27.495 INFO: No convergence after 4 iterations.Res = 0.00562319
+14:42:27.525 INFO: Convergence after 3iterations
+14:42:27.558 INFO: Convergence after 3iterations
+14:42:27.587 INFO: Convergence after 3iterations
+14:42:27.625 INFO: No convergence after 4 iterations.Res = 0.00556013
+14:42:27.664 INFO: No convergence after 4 iterations.Res = 0.00623839
+14:42:27.703 INFO: No convergence after 4 iterations.Res = 0.00570339
+14:42:27.731 INFO: Convergence after 3iterations
+14:42:27.780 INFO: No convergence after 4 iterations.Res = 0.00551532
+14:42:27.827 INFO: No convergence after 4 iterations.Res = 0.0063446
+14:42:27.867 INFO: No convergence after 4 iterations.Res = 0.0068912
+14:42:27.867 INFO: Creating this->p_tot for 2/ 15freq
+14:42:27.909 INFO: No convergence after 4 iterations.Res = 0.0140986
+14:42:27.947 INFO: No convergence after 4 iterations.Res = 0.013213
+14:42:27.985 INFO: No convergence after 4 iterations.Res = 0.0123643
+14:42:28.025 INFO: No convergence after 4 iterations.Res = 0.0127486
+14:42:28.063 INFO: No convergence after 4 iterations.Res = 0.0135826
+14:42:28.100 INFO: No convergence after 4 iterations.Res = 0.01177
+14:42:28.140 INFO: No convergence after 4 iterations.Res = 0.00960939
+14:42:28.183 INFO: No convergence after 4 iterations.Res = 0.00725582
+14:42:28.222 INFO: No convergence after 4 iterations.Res = 0.00950753
+14:42:28.260 INFO: No convergence after 4 iterations.Res = 0.00767522
+14:42:28.300 INFO: No convergence after 4 iterations.Res = 0.00963622
+14:42:28.338 INFO: No convergence after 4 iterations.Res = 0.0116785
+14:42:28.377 INFO: No convergence after 4 iterations.Res = 0.0133772
+14:42:28.415 INFO: No convergence after 4 iterations.Res = 0.0125712
+14:42:28.455 INFO: No convergence after 4 iterations.Res = 0.0122656
+14:42:28.493 INFO: No convergence after 4 iterations.Res = 0.0131106
+14:42:28.531 INFO: No convergence after 4 iterations.Res = 0.0139556
+14:42:28.531 INFO: Creating this->p_tot for 3/ 15freq
+14:42:28.570 INFO: No convergence after 4 iterations.Res = 0.0254808
+14:42:28.608 INFO: No convergence after 4 iterations.Res = 0.0244658
+14:42:28.647 INFO: No convergence after 4 iterations.Res = 0.0239046
+14:42:28.686 INFO: No convergence after 4 iterations.Res = 0.0239924
+14:42:28.725 INFO: No convergence after 4 iterations.Res = 0.0207914
+14:42:28.767 INFO: No convergence after 4 iterations.Res = 0.0168897
+14:42:28.809 INFO: No convergence after 4 iterations.Res = 0.0156845
+14:42:28.850 INFO: No convergence after 4 iterations.Res = 0.0183458
+14:42:28.889 INFO: No convergence after 4 iterations.Res = 0.0154302
+14:42:28.928 INFO: No convergence after 4 iterations.Res = 0.0175126
+14:42:28.966 INFO: No convergence after 4 iterations.Res = 0.0153482
+14:42:29.005 INFO: No convergence after 4 iterations.Res = 0.0167956
+14:42:29.046 INFO: No convergence after 4 iterations.Res = 0.0208317
+14:42:29.083 INFO: No convergence after 4 iterations.Res = 0.0239658
+14:42:29.122 INFO: No convergence after 4 iterations.Res = 0.0236805
+14:42:29.160 INFO: No convergence after 4 iterations.Res = 0.0240195
+14:42:29.198 INFO: No convergence after 4 iterations.Res = 0.0249184
+14:42:29.198 INFO: Creating this->p_tot for 4/ 15freq
+14:42:29.240 INFO: No convergence after 4 iterations.Res = 0.0451833
+14:42:29.279 INFO: No convergence after 4 iterations.Res = 0.0432938
+14:42:29.318 INFO: No convergence after 4 iterations.Res = 0.0420182
+14:42:29.361 INFO: No convergence after 4 iterations.Res = 0.0400745
+14:42:29.400 INFO: No convergence after 4 iterations.Res = 0.0340878
+14:42:29.439 INFO: No convergence after 4 iterations.Res = 0.0348171
+14:42:29.486 INFO: No convergence after 4 iterations.Res = 0.0347377
+14:42:29.524 INFO: No convergence after 4 iterations.Res = 0.0347644
+14:42:29.562 INFO: No convergence after 4 iterations.Res = 0.0232654
+14:42:29.601 INFO: No convergence after 4 iterations.Res = 0.0320421
+14:42:29.639 INFO: No convergence after 4 iterations.Res = 0.0323713
+14:42:29.677 INFO: No convergence after 4 iterations.Res = 0.0337549
+14:42:29.719 INFO: No convergence after 4 iterations.Res = 0.0343024
+14:42:29.757 INFO: No convergence after 4 iterations.Res = 0.0405104
+14:42:29.812 INFO: No convergence after 4 iterations.Res = 0.0422103
+14:42:29.861 INFO: No convergence after 4 iterations.Res = 0.0431052
+14:42:29.905 INFO: No convergence after 4 iterations.Res = 0.044776
+14:42:29.905 INFO: Creating this->p_tot for 5/ 15freq
+14:42:29.949 INFO: No convergence after 4 iterations.Res = 0.0727343
+14:42:29.991 INFO: No convergence after 4 iterations.Res = 0.0650824
+14:42:30.029 INFO: No convergence after 4 iterations.Res = 0.055197
+14:42:30.068 INFO: No convergence after 4 iterations.Res = 0.0518745
+14:42:30.106 INFO: No convergence after 4 iterations.Res = 0.0532136
+14:42:30.146 INFO: No convergence after 4 iterations.Res = 0.0633367
+14:42:30.185 INFO: No convergence after 4 iterations.Res = 0.0575613
+14:42:30.223 INFO: No convergence after 4 iterations.Res = 0.0489982
+14:42:30.263 INFO: No convergence after 4 iterations.Res = 0.0371855
+14:42:30.302 INFO: No convergence after 4 iterations.Res = 0.0446841
+14:42:30.339 INFO: No convergence after 4 iterations.Res = 0.0556512
+14:42:30.379 INFO: No convergence after 4 iterations.Res = 0.0639577
+14:42:30.417 INFO: No convergence after 4 iterations.Res = 0.0548819
+14:42:30.455 INFO: No convergence after 4 iterations.Res = 0.0536594
+14:42:30.493 INFO: No convergence after 4 iterations.Res = 0.0560968
+14:42:30.533 INFO: No convergence after 4 iterations.Res = 0.0657236
+14:42:30.574 INFO: No convergence after 4 iterations.Res = 0.0736658
+14:42:30.574 INFO: Creating this->p_tot for 6/ 15freq
+14:42:30.612 INFO: No convergence after 4 iterations.Res = 0.0998466
+14:42:30.651 INFO: No convergence after 4 iterations.Res = 0.0827191
+14:42:30.690 INFO: No convergence after 4 iterations.Res = 0.0684457
+14:42:30.728 INFO: No convergence after 4 iterations.Res = 0.076126
+14:42:30.766 INFO: No convergence after 4 iterations.Res = 0.0877586
+14:42:30.806 INFO: No convergence after 4 iterations.Res = 0.0927521
+14:42:30.848 INFO: No convergence after 4 iterations.Res = 0.0753956
+14:42:30.886 INFO: No convergence after 4 iterations.Res = 0.0604806
+14:42:30.926 INFO: No convergence after 4 iterations.Res = 0.0467519
+14:42:30.964 INFO: No convergence after 4 iterations.Res = 0.0571054
+14:42:31.002 INFO: No convergence after 4 iterations.Res = 0.0748042
+14:42:31.041 INFO: No convergence after 4 iterations.Res = 0.0935836
+14:42:31.078 INFO: No convergence after 4 iterations.Res = 0.0900355
+14:42:31.117 INFO: No convergence after 4 iterations.Res = 0.078247
+14:42:31.155 INFO: No convergence after 4 iterations.Res = 0.0699154
+14:42:31.197 INFO: No convergence after 4 iterations.Res = 0.0833901
+14:42:31.236 INFO: No convergence after 4 iterations.Res = 0.100287
+14:42:31.236 INFO: Creating this->p_tot for 7/ 15freq
+14:42:31.281 INFO: No convergence after 4 iterations.Res = 0.129666
+14:42:31.320 INFO: No convergence after 4 iterations.Res = 0.0971837
+14:42:31.359 INFO: No convergence after 4 iterations.Res = 0.091823
+14:42:31.398 INFO: No convergence after 4 iterations.Res = 0.110145
+14:42:31.437 INFO: No convergence after 4 iterations.Res = 0.123894
+14:42:31.476 INFO: No convergence after 4 iterations.Res = 0.1118
+14:42:31.515 INFO: No convergence after 4 iterations.Res = 0.0957908
+14:42:31.553 INFO: No convergence after 4 iterations.Res = 0.0715347
+14:42:31.592 INFO: No convergence after 4 iterations.Res = 0.0608711
+14:42:31.631 INFO: No convergence after 4 iterations.Res = 0.0709076
+14:42:31.669 INFO: No convergence after 4 iterations.Res = 0.0983444
+14:42:31.707 INFO: No convergence after 4 iterations.Res = 0.114567
+14:42:31.746 INFO: No convergence after 4 iterations.Res = 0.125923
+14:42:31.788 INFO: No convergence after 4 iterations.Res = 0.11007
+14:42:31.838 INFO: No convergence after 4 iterations.Res = 0.0900731
+14:42:31.876 INFO: No convergence after 4 iterations.Res = 0.0957116
+14:42:31.916 INFO: No convergence after 4 iterations.Res = 0.128789
+14:42:31.916 INFO: Creating this->p_tot for 8/ 15freq
+14:42:31.954 INFO: No convergence after 4 iterations.Res = 0.152056
+14:42:31.991 INFO: No convergence after 4 iterations.Res = 0.11361
+14:42:32.030 INFO: No convergence after 4 iterations.Res = 0.13705
+14:42:32.068 INFO: No convergence after 4 iterations.Res = 0.152048
+14:42:32.107 INFO: No convergence after 4 iterations.Res = 0.159737
+14:42:32.146 INFO: No convergence after 4 iterations.Res = 0.142524
+14:42:32.185 INFO: No convergence after 4 iterations.Res = 0.112001
+14:42:32.223 INFO: No convergence after 4 iterations.Res = 0.071725
+14:42:32.265 INFO: No convergence after 4 iterations.Res = 0.085757
+14:42:32.303 INFO: No convergence after 4 iterations.Res = 0.0732983
+14:42:32.341 INFO: No convergence after 4 iterations.Res = 0.113191
+14:42:32.385 INFO: No convergence after 4 iterations.Res = 0.143269
+14:42:32.424 INFO: No convergence after 4 iterations.Res = 0.160792
+14:42:32.462 INFO: No convergence after 4 iterations.Res = 0.151645
+14:42:32.502 INFO: No convergence after 4 iterations.Res = 0.136939
+14:42:32.540 INFO: No convergence after 4 iterations.Res = 0.114307
+14:42:32.578 INFO: No convergence after 4 iterations.Res = 0.152668
+14:42:32.578 INFO: Creating this->p_tot for 9/ 15freq
+14:42:32.618 INFO: No convergence after 4 iterations.Res = 0.174592
+14:42:32.656 INFO: No convergence after 4 iterations.Res = 0.156645
+14:42:32.694 INFO: No convergence after 4 iterations.Res = 0.210682
+14:42:32.733 INFO: No convergence after 4 iterations.Res = 0.201831
+14:42:32.786 INFO: No convergence after 4 iterations.Res = 0.194062
+14:42:32.832 INFO: No convergence after 4 iterations.Res = 0.179062
+14:42:32.870 INFO: No convergence after 4 iterations.Res = 0.117226
+14:42:32.908 INFO: No convergence after 4 iterations.Res = 0.0802141
+14:42:32.948 INFO: No convergence after 4 iterations.Res = 0.0984888
+14:42:32.990 INFO: No convergence after 4 iterations.Res = 0.0843565
+14:42:33.029 INFO: No convergence after 4 iterations.Res = 0.118527
+14:42:33.068 INFO: No convergence after 4 iterations.Res = 0.177244
+14:42:33.106 INFO: No convergence after 4 iterations.Res = 0.191066
+14:42:33.144 INFO: No convergence after 4 iterations.Res = 0.196696
+14:42:33.187 INFO: No convergence after 4 iterations.Res = 0.206174
+14:42:33.225 INFO: No convergence after 4 iterations.Res = 0.156145
+14:42:33.264 INFO: No convergence after 4 iterations.Res = 0.175555
+14:42:33.264 INFO: Creating this->p_tot for 10/ 15freq
+14:42:33.302 INFO: No convergence after 4 iterations.Res = 0.214678
+14:42:33.339 INFO: No convergence after 4 iterations.Res = 0.233604
+14:42:33.377 INFO: No convergence after 4 iterations.Res = 0.285111
+14:42:33.417 INFO: No convergence after 4 iterations.Res = 0.251508
+14:42:33.455 INFO: No convergence after 4 iterations.Res = 0.236403
+14:42:33.496 INFO: No convergence after 4 iterations.Res = 0.202848
+14:42:33.534 INFO: No convergence after 4 iterations.Res = 0.141221
+14:42:33.575 INFO: No convergence after 4 iterations.Res = 0.0964372
+14:42:33.614 INFO: No convergence after 4 iterations.Res = 0.100149
+14:42:33.653 INFO: No convergence after 4 iterations.Res = 0.0988138
+14:42:33.690 INFO: No convergence after 4 iterations.Res = 0.142872
+14:42:33.729 INFO: No convergence after 4 iterations.Res = 0.202973
+14:42:33.767 INFO: No convergence after 4 iterations.Res = 0.238686
+14:42:33.805 INFO: No convergence after 4 iterations.Res = 0.253186
+14:42:33.848 INFO: No convergence after 4 iterations.Res = 0.284567
+14:42:33.886 INFO: No convergence after 4 iterations.Res = 0.233216
+14:42:33.924 INFO: No convergence after 4 iterations.Res = 0.214195
+14:42:33.924 INFO: Creating this->p_tot for 11/ 15freq
+14:42:33.962 INFO: No convergence after 4 iterations.Res = 0.277757
+14:42:33.001 INFO: No convergence after 4 iterations.Res = 0.329543
+14:42:34.039 INFO: No convergence after 4 iterations.Res = 0.346191
+14:42:34.081 INFO: No convergence after 4 iterations.Res = 0.314978
+14:42:34.120 INFO: No convergence after 4 iterations.Res = 0.303369
+14:42:34.158 INFO: No convergence after 4 iterations.Res = 0.23534
+14:42:34.205 INFO: No convergence after 4 iterations.Res = 0.175778
+14:42:34.243 INFO: No convergence after 4 iterations.Res = 0.120151
+14:42:34.283 INFO: No convergence after 4 iterations.Res = 0.101691
+14:42:34.324 INFO: No convergence after 4 iterations.Res = 0.129746
+14:42:34.362 INFO: No convergence after 4 iterations.Res = 0.175165
+14:42:34.402 INFO: No convergence after 4 iterations.Res = 0.232239
+14:42:34.439 INFO: No convergence after 4 iterations.Res = 0.301225
+14:42:34.478 INFO: No convergence after 4 iterations.Res = 0.313803
+14:42:34.517 INFO: No convergence after 4 iterations.Res = 0.342094
+14:42:34.555 INFO: No convergence after 4 iterations.Res = 0.325174
+14:42:34.593 INFO: No convergence after 4 iterations.Res = 0.275769
+14:42:34.593 INFO: Creating this->p_tot for 12/ 15freq
+14:42:34.633 INFO: No convergence after 4 iterations.Res = 0.384187
+14:42:34.671 INFO: No convergence after 4 iterations.Res = 0.441206
+14:42:34.710 INFO: No convergence after 4 iterations.Res = 0.39876
+14:42:34.749 INFO: No convergence after 4 iterations.Res = 0.391503
+14:42:34.786 INFO: No convergence after 4 iterations.Res = 0.366864
+14:42:34.827 INFO: No convergence after 4 iterations.Res = 0.263251
+14:42:34.866 INFO: No convergence after 4 iterations.Res = 0.2086
+14:42:34.904 INFO: No convergence after 4 iterations.Res = 0.153034
+14:42:34.943 INFO: No convergence after 4 iterations.Res = 0.121201
+14:42:34.983 INFO: No convergence after 4 iterations.Res = 0.161448
+14:42:35.020 INFO: No convergence after 4 iterations.Res = 0.20578
+14:42:35.058 INFO: No convergence after 4 iterations.Res = 0.256526
+14:42:35.096 INFO: No convergence after 4 iterations.Res = 0.360411
+14:42:35.134 INFO: No convergence after 4 iterations.Res = 0.387328
+14:42:35.173 INFO: No convergence after 4 iterations.Res = 0.392738
+14:42:35.216 INFO: No convergence after 4 iterations.Res = 0.431191
+14:42:35.253 INFO: No convergence after 4 iterations.Res = 0.376366
+14:42:35.254 INFO: Creating this->p_tot for 13/ 15freq
+14:42:35.293 INFO: No convergence after 4 iterations.Res = 0.498615
+14:42:35.331 INFO: No convergence after 4 iterations.Res = 0.531365
+14:42:35.368 INFO: No convergence after 4 iterations.Res = 0.450958
+14:42:35.408 INFO: No convergence after 4 iterations.Res = 0.460009
+14:42:35.448 INFO: No convergence after 4 iterations.Res = 0.407768
+14:42:35.486 INFO: No convergence after 4 iterations.Res = 0.297632
+14:42:35.527 INFO: No convergence after 4 iterations.Res = 0.255605
+14:42:35.564 INFO: No convergence after 4 iterations.Res = 0.18167
+14:42:35.603 INFO: No convergence after 4 iterations.Res = 0.1351
+14:42:35.642 INFO: No convergence after 4 iterations.Res = 0.18727
+14:42:35.681 INFO: No convergence after 4 iterations.Res = 0.250227
+14:42:35.720 INFO: No convergence after 4 iterations.Res = 0.292115
+14:42:35.758 INFO: No convergence after 4 iterations.Res = 0.405946
+14:42:35.796 INFO: No convergence after 4 iterations.Res = 0.459768
+14:42:35.837 INFO: No convergence after 4 iterations.Res = 0.451843
+14:42:35.876 INFO: No convergence after 4 iterations.Res = 0.527865
+14:42:35.914 INFO: No convergence after 4 iterations.Res = 0.493425
+14:42:35.914 INFO: Creating this->p_tot for 14/ 15freq
+14:42:35.952 INFO: No convergence after 4 iterations.Res = 0.606921
+14:42:35.993 INFO: No convergence after 4 iterations.Res = 0.593343
+14:42:36.030 INFO: No convergence after 4 iterations.Res = 0.51387
+14:42:36.069 INFO: No convergence after 4 iterations.Res = 0.50927
+14:42:36.107 INFO: No convergence after 4 iterations.Res = 0.447702
+14:42:36.145 INFO: No convergence after 4 iterations.Res = 0.333264
+14:42:36.183 INFO: No convergence after 4 iterations.Res = 0.279162
+14:42:36.222 INFO: No convergence after 4 iterations.Res = 0.218177
+14:42:36.261 INFO: No convergence after 4 iterations.Res = 0.174795
+14:42:36.301 INFO: No convergence after 4 iterations.Res = 0.216366
+14:42:36.340 INFO: No convergence after 4 iterations.Res = 0.276971
+14:42:36.378 INFO: No convergence after 4 iterations.Res = 0.32819
+14:42:36.419 INFO: No convergence after 4 iterations.Res = 0.44623
+14:42:36.459 INFO: No convergence after 4 iterations.Res = 0.50592
+14:42:36.497 INFO: No convergence after 4 iterations.Res = 0.513141
+14:42:36.536 INFO: No convergence after 4 iterations.Res = 0.591465
+14:42:36.574 INFO: No convergence after 4 iterations.Res = 0.598958
+14:42:36.574 INFO: Creating this->p_tot for 15/ 15freq
+14:42:36.612 INFO: No convergence after 4 iterations.Res = 0.703981
+14:42:36.652 INFO: No convergence after 4 iterations.Res = 0.655811
+14:42:36.690 INFO: No convergence after 4 iterations.Res = 0.596581
+14:42:36.727 INFO: No convergence after 4 iterations.Res = 0.570193
+14:42:36.767 INFO: No convergence after 4 iterations.Res = 0.511947
+14:42:36.805 INFO: No convergence after 4 iterations.Res = 0.371543
+14:42:36.846 INFO: No convergence after 4 iterations.Res = 0.314385
+14:42:36.885 INFO: No convergence after 4 iterations.Res = 0.227581
+14:42:36.922 INFO: No convergence after 4 iterations.Res = 0.191181
+14:42:36.961 INFO: No convergence after 4 iterations.Res = 0.228798
+14:42:36.000 INFO: No convergence after 4 iterations.Res = 0.310418
+14:42:37.038 INFO: No convergence after 4 iterations.Res = 0.368582
+14:42:37.075 INFO: No convergence after 4 iterations.Res = 0.513414
+14:42:37.115 INFO: No convergence after 4 iterations.Res = 0.571081
+14:42:37.154 INFO: No convergence after 4 iterations.Res = 0.597868
+14:42:37.192 INFO: No convergence after 4 iterations.Res = 0.657668
+14:42:37.231 INFO: No convergence after 4 iterations.Res = 0.698091
+14:42:37.423 INFO: calculateData done
+14:42:37.447 INFO: Finished
+14:42:37.447 DEBUG: Virtual memory used: 170564 kB
+14:42:37.447 DEBUG: Physical memory used: 170564 kB
