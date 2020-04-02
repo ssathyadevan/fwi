@@ -4,10 +4,10 @@ nzt   = 32
 nxt_original   = 64
 nzt_original   = 32
 Timing:
-Starting at 1585738826038774965
-Finished at 1585738857578545154
-CPU time: 31.3815
+Starting at 1585831405224687156
+Finished at 1585831446025272866
+CPU time: 40.6837
 
 Others:
-Virtual memory: 186612
-Physical memory: 170660
+Virtual memory: 182784
+Physical memory: 171008

@@ -1,333 +1,333 @@
-12:59:46.310 INFO: Preprocessing the provided input to create the reference pressure-field
-12:59:46.310 INFO: Starting
-12:59:46.310 DEBUG: Virtual memory used: 2072 kB
-12:59:46.310 DEBUG: Physical memory used: 2072 kB
-12:59:46.313 INFO: Total number of sources is 17. Positions:
-12:59:46.313 INFO: x = (-480, -5)
-12:59:46.313 INFO: x = (-420, -5)
-12:59:46.313 INFO: x = (-360, -5)
-12:59:46.313 INFO: x = (-300, -5)
-12:59:46.313 INFO: x = (-240, -5)
-12:59:46.313 INFO: x = (-180, -5)
-12:59:46.313 INFO: x = (-120, -5)
-12:59:46.313 INFO: x = (-60, -5)
-12:59:46.313 INFO: x = (0, -5)
-12:59:46.313 INFO: x = (60, -5)
-12:59:46.313 INFO: x = (120, -5)
-12:59:46.313 INFO: x = (180, -5)
-12:59:46.313 INFO: x = (240, -5)
-12:59:46.313 INFO: x = (300, -5)
-12:59:46.313 INFO: x = (360, -5)
-12:59:46.313 INFO: x = (420, -5)
-12:59:46.313 INFO: x = (480, -5)
-12:59:46.313 INFO: Total number is receivers is 17. Positions:
-12:59:46.313 INFO: x = (-480, -5)
-12:59:46.313 INFO: x = (-420, -5)
-12:59:46.313 INFO: x = (-360, -5)
-12:59:46.313 INFO: x = (-300, -5)
-12:59:46.313 INFO: x = (-240, -5)
-12:59:46.313 INFO: x = (-180, -5)
-12:59:46.313 INFO: x = (-120, -5)
-12:59:46.313 INFO: x = (-60, -5)
-12:59:46.313 INFO: x = (0, -5)
-12:59:46.313 INFO: x = (60, -5)
-12:59:46.313 INFO: x = (120, -5)
-12:59:46.313 INFO: x = (180, -5)
-12:59:46.313 INFO: x = (240, -5)
-12:59:46.313 INFO: x = (300, -5)
-12:59:46.313 INFO: x = (360, -5)
-12:59:46.313 INFO: x = (420, -5)
-12:59:46.313 INFO: x = (480, -5)
-12:59:46.313 INFO: Total number of frequencies is 15. Values:
-12:59:46.313 INFO: f = 10, k = 0.0314159
-12:59:46.313 INFO: f = 12.1429, k = 0.0381479
-12:59:46.313 INFO: f = 14.2857, k = 0.0448799
-12:59:46.313 INFO: f = 16.4286, k = 0.0516119
-12:59:46.313 INFO: f = 18.5714, k = 0.0583439
-12:59:46.313 INFO: f = 20.7143, k = 0.0650758
-12:59:46.313 INFO: f = 22.8571, k = 0.0718078
-12:59:46.313 INFO: f = 25, k = 0.0785398
-12:59:46.313 INFO: f = 27.1429, k = 0.0852718
-12:59:46.313 INFO: f = 29.2857, k = 0.0920038
-12:59:46.313 INFO: f = 31.4286, k = 0.0987358
-12:59:46.313 INFO: f = 33.5714, k = 0.105468
-12:59:46.313 INFO: f = 35.7143, k = 0.1122
-12:59:46.313 INFO: f = 37.8571, k = 0.118932
-12:59:46.313 INFO: f = 40, k = 0.125664
-12:59:46.323 INFO: Creating Greens function field...
-12:59:49.828 INFO: Creating p0...
-12:59:49.899 INFO: Calculate pData (the reference pressure-field)...
-12:59:49.899 INFO: Creating this->p_tot for 1/ 15freq
-12:59:49.952 INFO: Convergence after 6iterations
-12:59:50.005 INFO: Convergence after 6iterations
-12:59:50.061 INFO: Convergence after 6iterations
-12:59:50.115 INFO: Convergence after 6iterations
-12:59:50.168 INFO: Convergence after 6iterations
-12:59:50.221 INFO: Convergence after 6iterations
-12:59:50.274 INFO: Convergence after 6iterations
-12:59:50.327 INFO: Convergence after 6iterations
-12:59:50.380 INFO: Convergence after 6iterations
-12:59:50.433 INFO: Convergence after 6iterations
-12:59:50.485 INFO: Convergence after 6iterations
-12:59:50.540 INFO: Convergence after 6iterations
-12:59:50.599 INFO: Convergence after 6iterations
-12:59:50.654 INFO: Convergence after 6iterations
-12:59:50.708 INFO: Convergence after 6iterations
-12:59:50.761 INFO: Convergence after 6iterations
-12:59:50.813 INFO: Convergence after 6iterations
-12:59:50.813 INFO: Creating this->p_tot for 2/ 15freq
-12:59:50.875 INFO: Convergence after 7iterations
-12:59:50.937 INFO: Convergence after 7iterations
-12:59:51.002 INFO: Convergence after 7iterations
-12:59:51.076 INFO: Convergence after 7iterations
-12:59:51.142 INFO: Convergence after 7iterations
-12:59:51.204 INFO: Convergence after 7iterations
-12:59:51.268 INFO: Convergence after 7iterations
-12:59:51.331 INFO: Convergence after 7iterations
-12:59:51.393 INFO: Convergence after 7iterations
-12:59:51.457 INFO: Convergence after 7iterations
-12:59:51.521 INFO: Convergence after 7iterations
-12:59:51.589 INFO: Convergence after 7iterations
-12:59:51.658 INFO: Convergence after 7iterations
-12:59:51.730 INFO: Convergence after 7iterations
-12:59:51.792 INFO: Convergence after 7iterations
-12:59:51.856 INFO: Convergence after 7iterations
-12:59:51.919 INFO: Convergence after 7iterations
-12:59:51.920 INFO: Creating this->p_tot for 3/ 15freq
-12:59:51.990 INFO: Convergence after 8iterations
-12:59:52.061 INFO: Convergence after 8iterations
-12:59:52.149 INFO: Convergence after 8iterations
-12:59:52.220 INFO: Convergence after 8iterations
-12:59:52.290 INFO: Convergence after 8iterations
-12:59:52.356 INFO: Convergence after 7iterations
-12:59:52.426 INFO: Convergence after 8iterations
-12:59:52.497 INFO: Convergence after 8iterations
-12:59:52.574 INFO: Convergence after 8iterations
-12:59:52.644 INFO: Convergence after 8iterations
-12:59:52.719 INFO: Convergence after 8iterations
-12:59:52.780 INFO: Convergence after 7iterations
-12:59:52.851 INFO: Convergence after 8iterations
-12:59:52.921 INFO: Convergence after 8iterations
-12:59:52.992 INFO: Convergence after 8iterations
-12:59:53.062 INFO: Convergence after 8iterations
-12:59:53.138 INFO: Convergence after 8iterations
-12:59:53.138 INFO: Creating this->p_tot for 4/ 15freq
-12:59:53.218 INFO: Convergence after 9iterations
-12:59:53.297 INFO: Convergence after 9iterations
-12:59:53.377 INFO: Convergence after 9iterations
-12:59:53.456 INFO: Convergence after 9iterations
-12:59:53.536 INFO: Convergence after 9iterations
-12:59:53.623 INFO: Convergence after 9iterations
-12:59:53.703 INFO: Convergence after 9iterations
-12:59:53.782 INFO: Convergence after 9iterations
-12:59:53.861 INFO: Convergence after 9iterations
-12:59:53.940 INFO: Convergence after 9iterations
-12:59:54.022 INFO: Convergence after 9iterations
-12:59:54.101 INFO: Convergence after 9iterations
-12:59:54.180 INFO: Convergence after 9iterations
-12:59:54.260 INFO: Convergence after 9iterations
-12:59:54.339 INFO: Convergence after 9iterations
-12:59:54.419 INFO: Convergence after 9iterations
-12:59:54.503 INFO: Convergence after 9iterations
-12:59:54.503 INFO: Creating this->p_tot for 5/ 15freq
-12:59:54.596 INFO: Convergence after 10iterations
-12:59:54.684 INFO: Convergence after 10iterations
-12:59:54.772 INFO: Convergence after 10iterations
-12:59:54.861 INFO: Convergence after 10iterations
-12:59:54.954 INFO: Convergence after 10iterations
-12:59:55.041 INFO: Convergence after 10iterations
-12:59:55.135 INFO: Convergence after 10iterations
-12:59:55.223 INFO: Convergence after 10iterations
-12:59:55.311 INFO: Convergence after 10iterations
-12:59:55.399 INFO: Convergence after 10iterations
-12:59:55.490 INFO: Convergence after 10iterations
-12:59:55.584 INFO: Convergence after 10iterations
-12:59:55.673 INFO: Convergence after 10iterations
-12:59:55.761 INFO: Convergence after 10iterations
-12:59:55.849 INFO: Convergence after 10iterations
-12:59:55.937 INFO: Convergence after 10iterations
-12:59:56.025 INFO: Convergence after 10iterations
-12:59:56.025 INFO: Creating this->p_tot for 6/ 15freq
-12:59:56.122 INFO: Convergence after 11iterations
-12:59:56.218 INFO: Convergence after 11iterations
-12:59:56.319 INFO: Convergence after 11iterations
-12:59:56.415 INFO: Convergence after 11iterations
-12:59:56.512 INFO: Convergence after 11iterations
-12:59:56.613 INFO: Convergence after 11iterations
-12:59:56.710 INFO: Convergence after 11iterations
-12:59:56.807 INFO: Convergence after 11iterations
-12:59:56.904 INFO: Convergence after 11iterations
-12:59:56.000 INFO: Convergence after 11iterations
-12:59:57.096 INFO: Convergence after 11iterations
-12:59:57.193 INFO: Convergence after 11iterations
-12:59:57.290 INFO: Convergence after 11iterations
-12:59:57.388 INFO: Convergence after 11iterations
-12:59:57.485 INFO: Convergence after 11iterations
-12:59:57.587 INFO: Convergence after 11iterations
-12:59:57.688 INFO: Convergence after 11iterations
-12:59:57.688 INFO: Creating this->p_tot for 7/ 15freq
-12:59:57.793 INFO: Convergence after 12iterations
-12:59:57.898 INFO: Convergence after 12iterations
-12:59:58.006 INFO: Convergence after 12iterations
-12:59:58.112 INFO: Convergence after 12iterations
-12:59:58.226 INFO: Convergence after 13iterations
-12:59:58.331 INFO: Convergence after 12iterations
-12:59:58.436 INFO: Convergence after 12iterations
-12:59:58.542 INFO: Convergence after 12iterations
-12:59:58.641 INFO: Convergence after 11iterations
-12:59:58.748 INFO: Convergence after 12iterations
-12:59:58.854 INFO: Convergence after 12iterations
-12:59:58.961 INFO: Convergence after 12iterations
-12:59:59.077 INFO: Convergence after 13iterations
-12:59:59.183 INFO: Convergence after 12iterations
-12:59:59.290 INFO: Convergence after 12iterations
-12:59:59.392 INFO: Convergence after 11iterations
-12:59:59.499 INFO: Convergence after 12iterations
-12:59:59.499 INFO: Creating this->p_tot for 8/ 15freq
-12:59:59.631 INFO: Convergence after 14iterations
-12:59:59.770 INFO: Convergence after 13iterations
-12:59:59.893 INFO: Convergence after 13iterations
-13:00:00.035 INFO: Convergence after 13iterations
-13:00:00.208 INFO: Convergence after 13iterations
-13:00:00.376 INFO: Convergence after 13iterations
-13:00:00.693 INFO: Convergence after 13iterations
-13:00:00.963 INFO: Convergence after 12iterations
-13:00:01.234 INFO: Convergence after 13iterations
-13:00:01.458 INFO: Convergence after 12iterations
-13:00:01.576 INFO: Convergence after 13iterations
-13:00:01.697 INFO: Convergence after 13iterations
-13:00:01.811 INFO: Convergence after 13iterations
-13:00:01.936 INFO: Convergence after 14iterations
-13:00:02.061 INFO: Convergence after 14iterations
-13:00:02.176 INFO: Convergence after 13iterations
-13:00:02.300 INFO: Convergence after 14iterations
-13:00:02.300 INFO: Creating this->p_tot for 9/ 15freq
-13:00:02.424 INFO: Convergence after 14iterations
-13:00:02.550 INFO: Convergence after 14iterations
-13:00:02.683 INFO: Convergence after 15iterations
-13:00:02.807 INFO: Convergence after 14iterations
-13:00:02.930 INFO: Convergence after 14iterations
-13:00:03.054 INFO: Convergence after 14iterations
-13:00:03.176 INFO: Convergence after 13iterations
-13:00:03.291 INFO: Convergence after 13iterations
-13:00:03.405 INFO: Convergence after 13iterations
-13:00:03.523 INFO: Convergence after 13iterations
-13:00:03.641 INFO: Convergence after 13iterations
-13:00:03.765 INFO: Convergence after 14iterations
-13:00:03.889 INFO: Convergence after 14iterations
-13:00:04.013 INFO: Convergence after 14iterations
-13:00:04.145 INFO: Convergence after 15iterations
-13:00:04.268 INFO: Convergence after 14iterations
-13:00:04.400 INFO: Convergence after 15iterations
-13:00:04.401 INFO: Creating this->p_tot for 10/ 15freq
-13:00:04.545 INFO: Convergence after 16iterations
-13:00:04.701 INFO: Convergence after 17iterations
-13:00:04.851 INFO: Convergence after 17iterations
-13:00:04.001 INFO: Convergence after 17iterations
-13:00:05.153 INFO: Convergence after 17iterations
-13:00:05.294 INFO: Convergence after 16iterations
-13:00:05.443 INFO: Convergence after 16iterations
-13:00:05.579 INFO: Convergence after 14iterations
-13:00:05.705 INFO: Convergence after 14iterations
-13:00:05.835 INFO: Convergence after 14iterations
-13:00:05.979 INFO: Convergence after 16iterations
-13:00:06.121 INFO: Convergence after 16iterations
-13:00:06.270 INFO: Convergence after 17iterations
-13:00:06.419 INFO: Convergence after 17iterations
-13:00:06.572 INFO: Convergence after 17iterations
-13:00:06.722 INFO: Convergence after 17iterations
-13:00:06.863 INFO: Convergence after 16iterations
-13:00:06.863 INFO: Creating this->p_tot for 11/ 15freq
-13:00:07.027 INFO: Convergence after 18iterations
-13:00:07.197 INFO: Convergence after 19iterations
-13:00:07.368 INFO: Convergence after 19iterations
-13:00:07.536 INFO: Convergence after 19iterations
-13:00:07.709 INFO: Convergence after 19iterations
-13:00:07.867 INFO: Convergence after 18iterations
-13:00:08.017 INFO: Convergence after 17iterations
-13:00:08.167 INFO: Convergence after 17iterations
-13:00:08.300 INFO: Convergence after 15iterations
-13:00:08.450 INFO: Convergence after 17iterations
-13:00:08.601 INFO: Convergence after 17iterations
-13:00:08.759 INFO: Convergence after 18iterations
-13:00:08.918 INFO: Convergence after 18iterations
-13:00:09.087 INFO: Convergence after 19iterations
-13:00:09.260 INFO: Convergence after 19iterations
-13:00:09.428 INFO: Convergence after 19iterations
-13:00:09.597 INFO: Convergence after 18iterations
-13:00:09.597 INFO: Creating this->p_tot for 12/ 15freq
-13:00:09.782 INFO: Convergence after 21iterations
-13:00:09.998 INFO: Convergence after 22iterations
-13:00:10.195 INFO: Convergence after 21iterations
-13:00:10.385 INFO: Convergence after 21iterations
-13:00:10.579 INFO: Convergence after 21iterations
-13:00:10.759 INFO: Convergence after 20iterations
-13:00:10.926 INFO: Convergence after 19iterations
-13:00:11.098 INFO: Convergence after 19iterations
-13:00:11.265 INFO: Convergence after 19iterations
-13:00:11.433 INFO: Convergence after 19iterations
-13:00:11.602 INFO: Convergence after 19iterations
-13:00:11.779 INFO: Convergence after 20iterations
-13:00:11.964 INFO: Convergence after 21iterations
-13:00:12.151 INFO: Convergence after 21iterations
-13:00:12.336 INFO: Convergence after 21iterations
-13:00:12.530 INFO: Convergence after 22iterations
-13:00:12.717 INFO: Convergence after 21iterations
-13:00:12.717 INFO: Creating this->p_tot for 13/ 15freq
-13:00:12.946 INFO: Convergence after 26iterations
-13:00:13.177 INFO: Convergence after 26iterations
-13:00:13.397 INFO: Convergence after 25iterations
-13:00:13.627 INFO: Convergence after 26iterations
-13:00:13.848 INFO: Convergence after 25iterations
-13:00:14.061 INFO: Convergence after 24iterations
-13:00:14.264 INFO: Convergence after 23iterations
-13:00:14.458 INFO: Convergence after 22iterations
-13:00:14.627 INFO: Convergence after 19iterations
-13:00:14.820 INFO: Convergence after 22iterations
-13:00:15.023 INFO: Convergence after 23iterations
-13:00:15.234 INFO: Convergence after 24iterations
-13:00:15.455 INFO: Convergence after 25iterations
-13:00:15.687 INFO: Convergence after 26iterations
-13:00:15.908 INFO: Convergence after 25iterations
-13:00:16.141 INFO: Convergence after 26iterations
-13:00:16.376 INFO: Convergence after 26iterations
-13:00:16.376 INFO: Creating this->p_tot for 14/ 15freq
-13:00:16.638 INFO: Convergence after 28iterations
-13:00:16.922 INFO: Convergence after 29iterations
-13:00:17.175 INFO: Convergence after 28iterations
-13:00:17.422 INFO: Convergence after 28iterations
-13:00:17.666 INFO: Convergence after 27iterations
-13:00:17.900 INFO: Convergence after 26iterations
-13:00:18.124 INFO: Convergence after 25iterations
-13:00:18.335 INFO: Convergence after 24iterations
-13:00:18.537 INFO: Convergence after 23iterations
-13:00:18.748 INFO: Convergence after 24iterations
-13:00:18.967 INFO: Convergence after 25iterations
-13:00:19.198 INFO: Convergence after 26iterations
-13:00:19.437 INFO: Convergence after 27iterations
-13:00:19.691 INFO: Convergence after 28iterations
-13:00:19.939 INFO: Convergence after 28iterations
-13:00:20.199 INFO: Convergence after 29iterations
-13:00:20.445 INFO: Convergence after 28iterations
-13:00:20.445 INFO: Creating this->p_tot for 15/ 15freq
-13:00:20.793 INFO: Convergence after 38iterations
-13:00:21.136 INFO: Convergence after 39iterations
-13:00:21.471 INFO: Convergence after 38iterations
-13:00:21.804 INFO: Convergence after 37iterations
-13:00:22.126 INFO: Convergence after 36iterations
-13:00:22.424 INFO: Convergence after 34iterations
-13:00:22.709 INFO: Convergence after 32iterations
-13:00:22.974 INFO: Convergence after 30iterations
-13:00:23.247 INFO: Convergence after 31iterations
-13:00:23.520 INFO: Convergence after 31iterations
-13:00:23.818 INFO: Convergence after 33iterations
-13:00:24.117 INFO: Convergence after 34iterations
-13:00:24.433 INFO: Convergence after 36iterations
-13:00:24.760 INFO: Convergence after 37iterations
-13:00:25.095 INFO: Convergence after 38iterations
-13:00:25.459 INFO: Convergence after 39iterations
-13:00:25.798 INFO: Convergence after 38iterations
-13:00:25.001 INFO: calculateData done
-13:00:26.023 INFO: Finished
-13:00:26.023 DEBUG: Virtual memory used: 170776 kB
-13:00:26.023 DEBUG: Physical memory used: 170776 kB
+14:42:42.605 INFO: Preprocessing the provided input to create the reference pressure-field
+14:42:42.606 INFO: Starting
+14:42:42.606 DEBUG: Virtual memory used: 2052 kB
+14:42:42.606 DEBUG: Physical memory used: 2052 kB
+14:42:42.608 INFO: Total number of sources is 17. Positions:
+14:42:42.609 INFO: x = (-480, -5)
+14:42:42.609 INFO: x = (-420, -5)
+14:42:42.609 INFO: x = (-360, -5)
+14:42:42.609 INFO: x = (-300, -5)
+14:42:42.609 INFO: x = (-240, -5)
+14:42:42.609 INFO: x = (-180, -5)
+14:42:42.609 INFO: x = (-120, -5)
+14:42:42.609 INFO: x = (-60, -5)
+14:42:42.609 INFO: x = (0, -5)
+14:42:42.609 INFO: x = (60, -5)
+14:42:42.609 INFO: x = (120, -5)
+14:42:42.609 INFO: x = (180, -5)
+14:42:42.609 INFO: x = (240, -5)
+14:42:42.609 INFO: x = (300, -5)
+14:42:42.609 INFO: x = (360, -5)
+14:42:42.609 INFO: x = (420, -5)
+14:42:42.609 INFO: x = (480, -5)
+14:42:42.609 INFO: Total number is receivers is 17. Positions:
+14:42:42.609 INFO: x = (-480, -5)
+14:42:42.609 INFO: x = (-420, -5)
+14:42:42.609 INFO: x = (-360, -5)
+14:42:42.609 INFO: x = (-300, -5)
+14:42:42.609 INFO: x = (-240, -5)
+14:42:42.609 INFO: x = (-180, -5)
+14:42:42.609 INFO: x = (-120, -5)
+14:42:42.609 INFO: x = (-60, -5)
+14:42:42.609 INFO: x = (0, -5)
+14:42:42.609 INFO: x = (60, -5)
+14:42:42.609 INFO: x = (120, -5)
+14:42:42.609 INFO: x = (180, -5)
+14:42:42.609 INFO: x = (240, -5)
+14:42:42.609 INFO: x = (300, -5)
+14:42:42.609 INFO: x = (360, -5)
+14:42:42.609 INFO: x = (420, -5)
+14:42:42.609 INFO: x = (480, -5)
+14:42:42.609 INFO: Total number of frequencies is 15. Values:
+14:42:42.609 INFO: f = 10, k = 0.0314159
+14:42:42.609 INFO: f = 12.1429, k = 0.0381479
+14:42:42.609 INFO: f = 14.2857, k = 0.0448799
+14:42:42.609 INFO: f = 16.4286, k = 0.0516119
+14:42:42.609 INFO: f = 18.5714, k = 0.0583439
+14:42:42.609 INFO: f = 20.7143, k = 0.0650758
+14:42:42.609 INFO: f = 22.8571, k = 0.0718078
+14:42:42.609 INFO: f = 25, k = 0.0785398
+14:42:42.609 INFO: f = 27.1429, k = 0.0852718
+14:42:42.609 INFO: f = 29.2857, k = 0.0920038
+14:42:42.609 INFO: f = 31.4286, k = 0.0987358
+14:42:42.609 INFO: f = 33.5714, k = 0.105468
+14:42:42.609 INFO: f = 35.7143, k = 0.1122
+14:42:42.609 INFO: f = 37.8571, k = 0.118932
+14:42:42.609 INFO: f = 40, k = 0.125664
+14:42:42.622 INFO: Creating Greens function field...
+14:42:46.336 INFO: Creating p0...
+14:42:46.408 INFO: Calculate pData (the reference pressure-field)...
+14:42:46.408 INFO: Creating this->p_tot for 1/ 15freq
+14:42:46.469 INFO: Convergence after 6iterations
+14:42:46.530 INFO: Convergence after 6iterations
+14:42:46.588 INFO: Convergence after 6iterations
+14:42:46.645 INFO: Convergence after 6iterations
+14:42:46.702 INFO: Convergence after 6iterations
+14:42:46.760 INFO: Convergence after 6iterations
+14:42:46.823 INFO: Convergence after 6iterations
+14:42:46.888 INFO: Convergence after 6iterations
+14:42:46.944 INFO: Convergence after 6iterations
+14:42:47.002 INFO: Convergence after 6iterations
+14:42:47.060 INFO: Convergence after 6iterations
+14:42:47.123 INFO: Convergence after 6iterations
+14:42:47.180 INFO: Convergence after 6iterations
+14:42:47.241 INFO: Convergence after 6iterations
+14:42:47.298 INFO: Convergence after 6iterations
+14:42:47.356 INFO: Convergence after 6iterations
+14:42:47.412 INFO: Convergence after 6iterations
+14:42:47.412 INFO: Creating this->p_tot for 2/ 15freq
+14:42:47.481 INFO: Convergence after 7iterations
+14:42:47.549 INFO: Convergence after 7iterations
+14:42:47.616 INFO: Convergence after 7iterations
+14:42:47.683 INFO: Convergence after 7iterations
+14:42:47.757 INFO: Convergence after 7iterations
+14:42:47.830 INFO: Convergence after 7iterations
+14:42:47.896 INFO: Convergence after 7iterations
+14:42:47.963 INFO: Convergence after 7iterations
+14:42:48.032 INFO: Convergence after 7iterations
+14:42:48.099 INFO: Convergence after 7iterations
+14:42:48.166 INFO: Convergence after 7iterations
+14:42:48.235 INFO: Convergence after 7iterations
+14:42:48.303 INFO: Convergence after 7iterations
+14:42:48.374 INFO: Convergence after 7iterations
+14:42:48.442 INFO: Convergence after 7iterations
+14:42:48.511 INFO: Convergence after 7iterations
+14:42:48.580 INFO: Convergence after 7iterations
+14:42:48.580 INFO: Creating this->p_tot for 3/ 15freq
+14:42:48.657 INFO: Convergence after 8iterations
+14:42:48.736 INFO: Convergence after 8iterations
+14:42:48.813 INFO: Convergence after 8iterations
+14:42:48.893 INFO: Convergence after 8iterations
+14:42:48.970 INFO: Convergence after 8iterations
+14:42:49.038 INFO: Convergence after 7iterations
+14:42:49.114 INFO: Convergence after 8iterations
+14:42:49.191 INFO: Convergence after 8iterations
+14:42:49.272 INFO: Convergence after 8iterations
+14:42:49.349 INFO: Convergence after 8iterations
+14:42:49.426 INFO: Convergence after 8iterations
+14:42:49.494 INFO: Convergence after 7iterations
+14:42:49.571 INFO: Convergence after 8iterations
+14:42:49.651 INFO: Convergence after 8iterations
+14:42:49.728 INFO: Convergence after 8iterations
+14:42:49.824 INFO: Convergence after 8iterations
+14:42:49.900 INFO: Convergence after 8iterations
+14:42:49.900 INFO: Creating this->p_tot for 4/ 15freq
+14:42:49.987 INFO: Convergence after 9iterations
+14:42:50.073 INFO: Convergence after 9iterations
+14:42:50.159 INFO: Convergence after 9iterations
+14:42:50.245 INFO: Convergence after 9iterations
+14:42:50.334 INFO: Convergence after 9iterations
+14:42:50.421 INFO: Convergence after 9iterations
+14:42:50.507 INFO: Convergence after 9iterations
+14:42:50.593 INFO: Convergence after 9iterations
+14:42:50.679 INFO: Convergence after 9iterations
+14:42:50.775 INFO: Convergence after 9iterations
+14:42:50.867 INFO: Convergence after 9iterations
+14:42:50.955 INFO: Convergence after 9iterations
+14:42:51.043 INFO: Convergence after 9iterations
+14:42:51.127 INFO: Convergence after 9iterations
+14:42:51.214 INFO: Convergence after 9iterations
+14:42:51.304 INFO: Convergence after 9iterations
+14:42:51.392 INFO: Convergence after 9iterations
+14:42:51.392 INFO: Creating this->p_tot for 5/ 15freq
+14:42:51.489 INFO: Convergence after 10iterations
+14:42:51.585 INFO: Convergence after 10iterations
+14:42:51.679 INFO: Convergence after 10iterations
+14:42:51.783 INFO: Convergence after 10iterations
+14:42:51.885 INFO: Convergence after 10iterations
+14:42:51.982 INFO: Convergence after 10iterations
+14:42:52.078 INFO: Convergence after 10iterations
+14:42:52.184 INFO: Convergence after 10iterations
+14:42:52.282 INFO: Convergence after 10iterations
+14:42:52.378 INFO: Convergence after 10iterations
+14:42:52.474 INFO: Convergence after 10iterations
+14:42:52.570 INFO: Convergence after 10iterations
+14:42:52.667 INFO: Convergence after 10iterations
+14:42:52.793 INFO: Convergence after 10iterations
+14:42:52.893 INFO: Convergence after 10iterations
+14:42:52.991 INFO: Convergence after 10iterations
+14:42:53.088 INFO: Convergence after 10iterations
+14:42:53.088 INFO: Creating this->p_tot for 6/ 15freq
+14:42:53.193 INFO: Convergence after 11iterations
+14:42:53.299 INFO: Convergence after 11iterations
+14:42:53.405 INFO: Convergence after 11iterations
+14:42:53.512 INFO: Convergence after 11iterations
+14:42:53.616 INFO: Convergence after 11iterations
+14:42:53.722 INFO: Convergence after 11iterations
+14:42:53.832 INFO: Convergence after 11iterations
+14:42:53.937 INFO: Convergence after 11iterations
+14:42:54.043 INFO: Convergence after 11iterations
+14:42:54.150 INFO: Convergence after 11iterations
+14:42:54.258 INFO: Convergence after 11iterations
+14:42:54.367 INFO: Convergence after 11iterations
+14:42:54.483 INFO: Convergence after 11iterations
+14:42:54.614 INFO: Convergence after 11iterations
+14:42:54.721 INFO: Convergence after 11iterations
+14:42:54.835 INFO: Convergence after 11iterations
+14:42:54.941 INFO: Convergence after 11iterations
+14:42:54.941 INFO: Creating this->p_tot for 7/ 15freq
+14:42:55.058 INFO: Convergence after 12iterations
+14:42:55.175 INFO: Convergence after 12iterations
+14:42:55.294 INFO: Convergence after 12iterations
+14:42:55.410 INFO: Convergence after 12iterations
+14:42:55.535 INFO: Convergence after 13iterations
+14:42:55.649 INFO: Convergence after 12iterations
+14:42:55.767 INFO: Convergence after 12iterations
+14:42:55.888 INFO: Convergence after 12iterations
+14:42:55.994 INFO: Convergence after 11iterations
+14:42:56.111 INFO: Convergence after 12iterations
+14:42:56.230 INFO: Convergence after 12iterations
+14:42:56.348 INFO: Convergence after 12iterations
+14:42:56.476 INFO: Convergence after 13iterations
+14:42:56.590 INFO: Convergence after 12iterations
+14:42:56.706 INFO: Convergence after 12iterations
+14:42:56.815 INFO: Convergence after 11iterations
+14:42:56.935 INFO: Convergence after 12iterations
+14:42:56.935 INFO: Creating this->p_tot for 8/ 15freq
+14:42:57.071 INFO: Convergence after 14iterations
+14:42:57.252 INFO: Convergence after 13iterations
+14:42:57.403 INFO: Convergence after 13iterations
+14:42:57.529 INFO: Convergence after 13iterations
+14:42:57.652 INFO: Convergence after 13iterations
+14:42:57.776 INFO: Convergence after 13iterations
+14:42:57.905 INFO: Convergence after 13iterations
+14:42:58.019 INFO: Convergence after 12iterations
+14:42:58.143 INFO: Convergence after 13iterations
+14:42:58.268 INFO: Convergence after 12iterations
+14:42:58.400 INFO: Convergence after 13iterations
+14:42:58.526 INFO: Convergence after 13iterations
+14:42:58.651 INFO: Convergence after 13iterations
+14:42:58.784 INFO: Convergence after 14iterations
+14:42:58.924 INFO: Convergence after 14iterations
+14:42:59.071 INFO: Convergence after 13iterations
+14:42:59.209 INFO: Convergence after 14iterations
+14:42:59.209 INFO: Creating this->p_tot for 9/ 15freq
+14:42:59.344 INFO: Convergence after 14iterations
+14:42:59.480 INFO: Convergence after 14iterations
+14:42:59.625 INFO: Convergence after 15iterations
+14:42:59.758 INFO: Convergence after 14iterations
+14:42:59.898 INFO: Convergence after 14iterations
+14:43:00.052 INFO: Convergence after 14iterations
+14:43:00.189 INFO: Convergence after 13iterations
+14:43:00.332 INFO: Convergence after 13iterations
+14:43:00.461 INFO: Convergence after 13iterations
+14:43:00.589 INFO: Convergence after 13iterations
+14:43:00.714 INFO: Convergence after 13iterations
+14:43:00.853 INFO: Convergence after 14iterations
+14:43:00.989 INFO: Convergence after 14iterations
+14:43:01.123 INFO: Convergence after 14iterations
+14:43:01.279 INFO: Convergence after 15iterations
+14:43:01.423 INFO: Convergence after 14iterations
+14:43:01.570 INFO: Convergence after 15iterations
+14:43:01.570 INFO: Creating this->p_tot for 10/ 15freq
+14:43:01.724 INFO: Convergence after 16iterations
+14:43:01.890 INFO: Convergence after 17iterations
+14:43:02.054 INFO: Convergence after 17iterations
+14:43:02.215 INFO: Convergence after 17iterations
+14:43:02.382 INFO: Convergence after 17iterations
+14:43:02.536 INFO: Convergence after 16iterations
+14:43:02.692 INFO: Convergence after 16iterations
+14:43:02.831 INFO: Convergence after 14iterations
+14:43:02.965 INFO: Convergence after 14iterations
+14:43:03.097 INFO: Convergence after 14iterations
+14:43:03.255 INFO: Convergence after 16iterations
+14:43:03.411 INFO: Convergence after 16iterations
+14:43:03.577 INFO: Convergence after 17iterations
+14:43:03.739 INFO: Convergence after 17iterations
+14:43:03.915 INFO: Convergence after 17iterations
+14:43:04.078 INFO: Convergence after 17iterations
+14:43:04.235 INFO: Convergence after 16iterations
+14:43:04.235 INFO: Creating this->p_tot for 11/ 15freq
+14:43:04.411 INFO: Convergence after 18iterations
+14:43:04.598 INFO: Convergence after 19iterations
+14:43:04.804 INFO: Convergence after 19iterations
+14:43:04.991 INFO: Convergence after 19iterations
+14:43:05.174 INFO: Convergence after 19iterations
+14:43:05.350 INFO: Convergence after 18iterations
+14:43:05.515 INFO: Convergence after 17iterations
+14:43:05.676 INFO: Convergence after 17iterations
+14:43:05.821 INFO: Convergence after 15iterations
+14:43:05.990 INFO: Convergence after 17iterations
+14:43:06.157 INFO: Convergence after 17iterations
+14:43:06.332 INFO: Convergence after 18iterations
+14:43:06.513 INFO: Convergence after 18iterations
+14:43:06.694 INFO: Convergence after 19iterations
+14:43:06.885 INFO: Convergence after 19iterations
+14:43:07.071 INFO: Convergence after 19iterations
+14:43:07.242 INFO: Convergence after 18iterations
+14:43:07.242 INFO: Creating this->p_tot for 12/ 15freq
+14:43:07.449 INFO: Convergence after 21iterations
+14:43:07.662 INFO: Convergence after 22iterations
+14:43:07.872 INFO: Convergence after 21iterations
+14:43:08.077 INFO: Convergence after 21iterations
+14:43:08.281 INFO: Convergence after 21iterations
+14:43:08.472 INFO: Convergence after 20iterations
+14:43:08.658 INFO: Convergence after 19iterations
+14:43:08.845 INFO: Convergence after 19iterations
+14:43:09.026 INFO: Convergence after 19iterations
+14:43:09.209 INFO: Convergence after 19iterations
+14:43:09.406 INFO: Convergence after 19iterations
+14:43:09.599 INFO: Convergence after 20iterations
+14:43:09.800 INFO: Convergence after 21iterations
+14:43:10.021 INFO: Convergence after 21iterations
+14:43:10.222 INFO: Convergence after 21iterations
+14:43:10.437 INFO: Convergence after 22iterations
+14:43:10.641 INFO: Convergence after 21iterations
+14:43:10.641 INFO: Creating this->p_tot for 13/ 15freq
+14:43:10.893 INFO: Convergence after 26iterations
+14:43:11.144 INFO: Convergence after 26iterations
+14:43:11.384 INFO: Convergence after 25iterations
+14:43:11.635 INFO: Convergence after 26iterations
+14:43:11.884 INFO: Convergence after 25iterations
+14:43:12.114 INFO: Convergence after 24iterations
+14:43:12.334 INFO: Convergence after 23iterations
+14:43:12.564 INFO: Convergence after 22iterations
+14:43:12.822 INFO: Convergence after 19iterations
+14:43:13.035 INFO: Convergence after 22iterations
+14:43:13.261 INFO: Convergence after 23iterations
+14:43:13.489 INFO: Convergence after 24iterations
+14:43:13.733 INFO: Convergence after 25iterations
+14:43:13.999 INFO: Convergence after 26iterations
+14:43:14.245 INFO: Convergence after 25iterations
+14:43:14.495 INFO: Convergence after 26iterations
+14:43:14.745 INFO: Convergence after 26iterations
+14:43:14.746 INFO: Creating this->p_tot for 14/ 15freq
+14:43:15.019 INFO: Convergence after 28iterations
+14:43:15.305 INFO: Convergence after 29iterations
+14:43:15.574 INFO: Convergence after 28iterations
+14:43:15.863 INFO: Convergence after 28iterations
+14:43:16.126 INFO: Convergence after 27iterations
+14:43:16.373 INFO: Convergence after 26iterations
+14:43:16.614 INFO: Convergence after 25iterations
+14:43:16.847 INFO: Convergence after 24iterations
+14:43:17.073 INFO: Convergence after 23iterations
+14:43:17.305 INFO: Convergence after 24iterations
+14:43:17.544 INFO: Convergence after 25iterations
+14:43:17.801 INFO: Convergence after 26iterations
+14:43:18.066 INFO: Convergence after 27iterations
+14:43:18.336 INFO: Convergence after 28iterations
+14:43:18.604 INFO: Convergence after 28iterations
+14:43:18.884 INFO: Convergence after 29iterations
+14:43:19.151 INFO: Convergence after 28iterations
+14:43:19.151 INFO: Creating this->p_tot for 15/ 15freq
+14:43:19.516 INFO: Convergence after 38iterations
+14:43:19.890 INFO: Convergence after 39iterations
+14:43:20.254 INFO: Convergence after 38iterations
+14:43:20.614 INFO: Convergence after 37iterations
+14:43:20.959 INFO: Convergence after 36iterations
+14:43:21.284 INFO: Convergence after 34iterations
+14:43:21.606 INFO: Convergence after 32iterations
+14:43:21.897 INFO: Convergence after 30iterations
+14:43:22.192 INFO: Convergence after 31iterations
+14:43:22.491 INFO: Convergence after 31iterations
+14:43:22.813 INFO: Convergence after 33iterations
+14:43:23.135 INFO: Convergence after 34iterations
+14:43:23.483 INFO: Convergence after 36iterations
+14:43:23.841 INFO: Convergence after 37iterations
+14:43:24.200 INFO: Convergence after 38iterations
+14:43:24.622 INFO: Convergence after 39iterations
+14:43:24.993 INFO: Convergence after 38iterations
+14:43:25.185 INFO: calculateData done
+14:43:25.207 INFO: Finished
+14:43:25.207 DEBUG: Virtual memory used: 170592 kB
+14:43:25.207 DEBUG: Physical memory used: 170592 kB
