@@ -246,6 +246,17 @@ PressureFieldSerial &PressureFieldSerial::operator=(const double value)
     return *this;
 }
 
+PressureFieldSerial &PressureFieldSerial::operator+=(const PressureFieldSerial &rhs)
+{
+    assert(GetGrid() == rhs.GetGrid());
+    const std::vector<double> &rhsData = rhs.getData();
+    for(int i = 0; i < GetNumberOfGridPoints(); i++)
+    {
+        _data[i] += rhsData[i];
+    }
+    return *this;
+}
+
 PressureFieldSerial &PressureFieldSerial::operator+=(const std::vector<double> &data)
 {
     assert(GetNumberOfGridPoints() == (int)data.size());
