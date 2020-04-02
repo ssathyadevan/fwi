@@ -12,21 +12,14 @@ Grid2D getGrid()
     return grid;
 }
 
-PressureFieldComplexSerial getPFCS(Grid2D &g)
-{
-    // Grid2D grid = getGrid();
-    PressureFieldComplexSerial pfcs(g);
-    std::function<std::complex<double>(double, double)> func = [](double a, double b) { return std::complex<double>(a, b); };   // y = a + bi
-    pfcs.SetField(func);
-
-    return pfcs;
-}
-TEST(PressureFieldComplexSerialTest, zeroTest)
+TEST(pressureFieldComplexSerialTest, zeroTest)
 {
     // Given
     Grid2D grid = getGrid();
+
+    std::complex<double> testValue(1.0, 1.0);
     PressureFieldComplexSerial pfcs(grid);
-    pfcs = 1.0;
+    pfcs = testValue;
 
     // When
     pfcs.Zero();
@@ -41,14 +34,13 @@ TEST(PressureFieldComplexSerialTest, zeroTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, squareTest)
+TEST(pressureFieldComplexSerialTest, squareTest)
 {
     // Given
     Grid2D grid = getGrid();
     const int nrOfGridPoints = grid.GetNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-
     PressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
@@ -66,7 +58,7 @@ TEST(PressureFieldComplexSerialTest, squareTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, sqrtTest)
+TEST(pressureFieldComplexSerialTest, sqrtTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -89,7 +81,7 @@ TEST(PressureFieldComplexSerialTest, sqrtTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, reciprocalTest)
+TEST(pressureFieldComplexSerialTest, reciprocalTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -112,7 +104,7 @@ TEST(PressureFieldComplexSerialTest, reciprocalTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, reciprocalExceptionTest)
+TEST(pressureFieldComplexSerialTest, reciprocalExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -127,7 +119,7 @@ TEST(PressureFieldComplexSerialTest, reciprocalExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldComplexSerialTest, summationTest)
+TEST(pressureFieldComplexSerialTest, summationTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -153,7 +145,7 @@ TEST(PressureFieldComplexSerialTest, summationTest)
 }
 
 // Non virtual members
-TEST(PressureFieldComplexSerialTest, addValueAtIndexTest)
+TEST(pressureFieldComplexSerialTest, addValueAtIndexTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -189,27 +181,26 @@ TEST(PressureFieldComplexSerialTest, innerProductTest)
     Grid2D grid = getGrid();
     const int nrOfGridPoints = grid.GetNumberOfGridPoints();
 
-    std::complex<double> testValue = 2.0;
+    std::complex<double> testValue = {2.0, 1.0};
     PressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // Alternative calculation method
-    std::complex<double> alternativeInnerProduct = 0.0;
+    double alternativeInnerProduct = 0.0;
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        alternativeInnerProduct += testValue * testValue;
+        alternativeInnerProduct += real(testValue) * real(testValue) + imag(testValue) * imag(testValue);
     }
 
     // When
-    std::complex<double> calculatedInerProduct = pfcs.InnerProduct(pfcs);
+    double calculatedInerProduct = pfcs.InnerProduct(pfcs);
 
     // Then
-    ASSERT_DOUBLE_EQ(calculatedInerProduct.real(), real(alternativeInnerProduct));
-    ASSERT_DOUBLE_EQ(calculatedInerProduct.imag(), imag(alternativeInnerProduct));
+    ASSERT_DOUBLE_EQ(calculatedInerProduct, alternativeInnerProduct);
 }
 
 // Operators
-TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialExceptionTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialExceptionTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -220,10 +211,9 @@ TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialExc
 
     // Then
     EXPECT_THROW(pfcs = pfcs, std::logic_error);
-    // Note: 1 / 0.0 must throw
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -251,7 +241,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialTes
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -276,7 +266,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -297,7 +287,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -331,7 +321,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -351,7 +341,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -382,7 +372,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -402,7 +392,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignComplexDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAssignDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorAssignDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -422,7 +412,7 @@ TEST(PressureFieldComplexSerialTest, operatorAssignDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -449,7 +439,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -486,7 +476,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -513,7 +503,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -548,7 +538,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -574,7 +564,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -608,7 +598,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -629,7 +619,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -660,7 +650,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -683,7 +673,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddComplexDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorAddDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorAddDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -707,7 +697,7 @@ TEST(PressureFieldComplexSerialTest, operatorAddDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -734,7 +724,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialT
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -771,7 +761,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialT
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -798,7 +788,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -833,7 +823,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -859,7 +849,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -893,7 +883,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -919,7 +909,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -953,7 +943,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -976,7 +966,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractComplexDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1000,7 +990,7 @@ TEST(PressureFieldComplexSerialTest, operatorSubtractDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1027,7 +1017,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSeria
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1064,7 +1054,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSeria
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1091,7 +1081,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1126,7 +1116,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1152,7 +1142,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1186,7 +1176,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1211,7 +1201,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest2)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest2)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1245,7 +1235,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest2)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1268,7 +1258,7 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleTest)
     }
 }
 
-TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleTest)
+TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleTest)
 {
     // Given
     Grid2D grid = getGrid();
@@ -1289,5 +1279,347 @@ TEST(PressureFieldComplexSerialTest, operatorMultiplyByDoubleTest)
     {
         ASSERT_DOUBLE_EQ(data[i].real(), real(testSolution));
         ASSERT_DOUBLE_EQ(data[i].imag(), imag(testSolution));
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+
+    std::complex<double> testValue1(3.7, 6.2);
+    PressureFieldComplexSerial pfcs1(grid);
+    pfcs1 = testValue1;
+
+    PressureFieldComplexSerial pfcs2(grid);
+    // Note: Initialized with zero
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs1 /= pfcs2, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(-3.7, -2.7);
+    PressureFieldComplexSerial pfcs1(grid);
+    pfcs1 = testValue1;
+
+    std::complex<double> testValue2(7.2, 3.9);
+    PressureFieldComplexSerial pfcs2(grid);
+    pfcs2 = testValue2;
+
+    // When
+    pfcs1 /= pfcs2;
+
+    // Then
+    std::complex<double> solution = testValue1 / testValue2;
+    const std::vector<std::complex<double>> &data = pfcs1.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+
+    std::complex<double> testValue1(1.0, 1.0);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    PressureFieldSerial pfs(grid);
+    // Note: Initialized with zero
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs /= pfs, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(3.7, 6.2);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    double testValue2 = 9.3;
+    PressureFieldSerial pfs(grid);
+    pfs = testValue2;
+
+    // When
+    pfcs /= pfs;
+
+    // Then
+    std::complex<double> solution = testValue1 / testValue2;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(1.0, 1.0);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    std::complex<double> zero(0.0, 0.0);
+    auto dataVector = std::vector<std::complex<double>>(nrOfGridPoints, zero);
+    // Note: Initialized with zero
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs /= dataVector, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(3.8, 1.1);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    std::complex<double> testValue2(4.9, 3.6);
+    auto dataVector = std::vector<std::complex<double>>(nrOfGridPoints, testValue2);
+
+    // When
+    pfcs /= dataVector;
+
+    // Then
+    std::complex<double> solution = testValue1 / testValue2;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue(6.7, -5.3);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue;
+
+    double count = 1;   // Dont start at zero because of dividing by zero ...
+    auto dataIncreasing = std::vector<std::complex<double>>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = std::complex<double>(count, count);
+        count++;
+    }
+
+    // When
+    pfcs /= dataIncreasing;
+
+    // Then
+    count = 1;   // Dont start at zero because of deviding by zero ...
+    std::complex<double> solution;
+    std::complex<double> value(0, 0);
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        value = std::complex<double>(count, count);
+        solution = testValue / value;
+        count++;
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(1.0, 1.0);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, 0.0);
+    // Note: Initialized with zero
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs /= dataVector, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(3.8, 1.1);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    double testValue2 = 22.4;
+    std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, testValue2);
+
+    // When
+    pfcs /= dataVector;
+
+    // Then
+    std::complex<double> solution = testValue1 / testValue2;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest2)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue(6.7, -5.3);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue;
+
+    double count = 1;   // Dont start at zero because of dividing by zero ...
+    std::vector<double> dataIncreasing = std::vector<double>(nrOfGridPoints, 0.0);
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        dataIncreasing[i] = count;
+        count++;
+    }
+
+    // When
+    pfcs /= dataIncreasing;
+
+    // Then
+    count = 1;   // Dont start at zero because of deviding by zero ...
+    std::complex<double> solution;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        solution = testValue / count;
+        count++;
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+
+    std::complex<double> testValue(1.0, 1.0);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue;
+
+    std::complex<double> zero(0.0, 0.0);
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs /= zero, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(4.6, -0.7);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    // When
+    std::complex<double> testValue2(6.1, 1.9);
+    pfcs /= testValue2;
+
+    // Then
+    std::complex<double> solution = testValue1 / testValue2;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
+    }
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleExceptionTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+
+    std::complex<double> testValue1(1.0, 1.0);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    // When
+    // Nothing here, see below
+
+    // Then
+    EXPECT_THROW(pfcs /= 0.0, std::overflow_error);
+    // Note: 1 / 0.0 must throw
+}
+
+TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleTest)
+{
+    // Given
+    Grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+
+    std::complex<double> testValue1(15.0, -1.9);
+    PressureFieldComplexSerial pfcs(grid);
+    pfcs = testValue1;
+
+    // When
+    double value2 = 2.33;
+    pfcs /= value2;
+
+    // Then
+    std::complex<double> solution = testValue1 / value2;
+    const std::vector<std::complex<double>> &data = pfcs.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), solution.real());
+        ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
     }
 }
