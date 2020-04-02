@@ -1,15 +1,15 @@
 #include "progressBar.h"
 
-ProgressBar::~ProgressBar(){
+progressBar::~progressBar(){
     std::cerr << std::endl;
 }
 
-ProgressBar::ProgressBar(const int total, const int counter): _total(total), _counter(counter){
+progressBar::progressBar(const int total, const int counter): _total(total), _counter(counter){
     _terminalWidth = 80;//findTerminalSize();
     initBar();
 }
 
-// int ProgressBar::findTerminalSize(){
+// int progressBar::findTerminalSize(){
 // #ifdef __unix__
 //     struct winsize size;
 //     ioctl(STDERR_FILENO, TIOCGWINSZ, &size);
@@ -20,44 +20,44 @@ ProgressBar::ProgressBar(const int total, const int counter): _total(total), _co
 // #endif
 // }
 
-void ProgressBar::initBar() const{
+void progressBar::initBar() const{
     std::cerr  << "      out of " << std::setw(5) << _total;// << "[" << std::setw(5) << _counter;
 }
 
-void ProgressBar::setCounter(const int counter){
+void progressBar::setCounter(const int counter){
     _counter = counter;
 }
 
-void ProgressBar::setTerminalWidth(const int width){
+void progressBar::setTerminalWidth(const int width){
     _terminalWidth = width;
 }
 
-void ProgressBar::setTotal(const int total){
+void progressBar::setTotal(const int total){
     _total = total;
     initBar();
 }
 
-int ProgressBar::getCounter() const{
+int progressBar::getCounter() const{
     return _counter;
 }
 
-int ProgressBar::getTotal() const{
+int progressBar::getTotal() const{
     return _total;
 }
 
-ProgressBar& ProgressBar::operator++(){
+progressBar &progressBar::operator++(){
     _counter++;
     print();
     return *this;
 }
 
-ProgressBar& ProgressBar::operator++(int)
+progressBar &progressBar::operator++(int)
 {
    return ++*this;
 }
 
 // Define prefix decrement operator.
-ProgressBar& ProgressBar::operator--()
+progressBar &progressBar::operator--()
 {
    _counter--;
    print();
@@ -65,12 +65,12 @@ ProgressBar& ProgressBar::operator--()
 }
 
 // Define postfix decrement operator.
-ProgressBar& ProgressBar::operator--(int)
+progressBar &progressBar::operator--(int)
 {
    return --*this;
 }
 
-void ProgressBar::print() const{
+void progressBar::print() const{
     std::cerr << "\r";
     //int i;
     //int barWidth = _terminalWidth - (5 + 5 + 2 + 7); //Total: 5char[.............5char]

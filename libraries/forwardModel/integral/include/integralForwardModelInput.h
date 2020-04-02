@@ -2,7 +2,7 @@
 
 #include "iter2.h"
 
-struct IntegralForwardModelInput
+struct integralForwardModelInput
 {
         Iter2 iter2;
 };

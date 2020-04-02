@@ -3,10 +3,10 @@
 #include "json.h"
 
 EvolutionInversionInputCardReader::EvolutionInversionInputCardReader(const std::string &caseFolder)
-    : InputCardReader()
+    : inputCardReader()
 {
     readCard(caseFolder);
-    checkinput();
+    checkInput();
 }
 
 EvolutionInversionInput EvolutionInversionInputCardReader::getInput()
@@ -24,7 +24,7 @@ void EvolutionInversionInputCardReader::readCard(const std::string &caseFolder)
     _input = input;
 }
 
-void EvolutionInversionInputCardReader::checkinput()
+void EvolutionInversionInputCardReader::checkInput()
 {
     if (_input.toleranceOuter <= 0 ) {throw std::invalid_argument("Invalid tolerance in EvolutionInversionInput.json");}
     if (_input.nGenerations <= 0 ) {throw std::invalid_argument("Invalid number of generations in EvolutionInversionInput.json");}

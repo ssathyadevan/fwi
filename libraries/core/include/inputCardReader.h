@@ -8,13 +8,13 @@
 
 #include "json.h"
 
-class InputCardReader
+class inputCardReader
 {
 public:
-    virtual ~InputCardReader() = default;
+    virtual ~inputCardReader() = default;
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
-    virtual void checkinput() = 0;
+    virtual void checkInput() = 0;
 
     nlohmann::json readFile(const std::string &fileName);
 

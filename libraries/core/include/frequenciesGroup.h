@@ -7,20 +7,19 @@
 #include <cmath>
 #include "freq.h"
 
-class FrequenciesGroup
+class frequenciesGroup
 {
-
-    FrequenciesGroup operator=(const FrequenciesGroup&) = delete;
+    frequenciesGroup operator=(const frequenciesGroup &) = delete;
 
 public:
 
   const int nFreq;
-  const double c_0;
-  const double d_freq;
+  const double c0;
+  const double dFreq;
   std::vector<double> freq;
   std::vector<double> k;
 
-  FrequenciesGroup(Freq freqStruct, double c_0_);
+  frequenciesGroup(Freq freqStruct, double c_0_);
 
   void Print(int nFreqTotal);
 };

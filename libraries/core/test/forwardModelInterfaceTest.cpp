@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 #include "forwardmodelinterfacemock.h"
 
-const Grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
-const Sources src({0.0, 0.0}, {2.0, 2.0}, 8);
-const Receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
+const grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
+const sources src({0.0, 0.0}, {2.0, 2.0}, 8);
+const receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
 const Freq freq = { 10, 40, 15 };
-const FrequenciesGroup freqgroup(freq, 1.0);
+const frequenciesGroup freqgroup(freq, 1.0);
 
 
 
@@ -26,7 +26,7 @@ TEST(forwardModelInterfaceTest, calculateResidualTest)
     }
 
     // When
-    PressureFieldSerial chiEst(grid2D);
+    pressureFieldSerial chiEst(grid2D);
     std::vector<std::complex<double>> residual;
     residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
 
@@ -53,7 +53,7 @@ TEST(forwardModelInterfaceTest, calculateResidualNormSqTest)
     {
         element = 1;
     }
-    PressureFieldSerial chiEst(grid2D);
+    pressureFieldSerial chiEst(grid2D);
     std::vector<std::complex<double>> residual;
 
     //When

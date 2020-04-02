@@ -8,24 +8,24 @@
 
 
 
-class RandomInversion : public InversionInterface
+class RandomInversion : public inversionInterface
 {
 
 public:
 
-    RandomInversion(ForwardModelInterface *forwardModel, const RandomInversionInput& riInput);
+    RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput& riInput);
 
     RandomInversion(const RandomInversion&) = delete;
     RandomInversion& operator=(const RandomInversion&) = delete;
 
-    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput);
+    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 
 private:
-    ForwardModelInterface           *_forwardModel;
+    forwardModelInterface *_forwardModel;
     RandomInversionInput             _riInput;
 
-    const Grid2D&                    _grid;
-    const Sources&                   _src;
-    const Receivers&                 _recv;
-    const FrequenciesGroup&          _freq;
+    const grid2D &                    _grid;
+    const sources &                   _src;
+    const receivers &                 _recv;
+    const frequenciesGroup &          _freq;
 };

@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-class EvolutionInversionInputCardReader: public InputCardReader
+class EvolutionInversionInputCardReader: public inputCardReader
 {
 public:
     EvolutionInversionInputCardReader(const std::string &caseFolder);
@@ -14,5 +14,5 @@ public:
 private:
     EvolutionInversionInput _input;
     void readCard(const std::string &caseFolder);
-    void checkinput();
+    void checkInput();
 };

@@ -13,22 +13,22 @@
 #include "gradientDescentInversion.h"
 #include "log.h"
 
-void performInversion(const GenericInput &gInput, const std::string &runName);
-void writePlotInput(const GenericInput &gInput, std::string msg);
+void performInversion(const genericInput &gInput, const std::string &runName);
+void writePlotInput(const genericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
     if (argc != 2)
     {
         L_(lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        L_(lerror) << "Make sure the input folder inside the case folder contains the files GenericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
+        L_(lerror) << "Make sure the input folder inside the case folder contains the files genericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
 
         exit(EXIT_FAILURE);
     }
     try{
         std::vector<std::string> arguments(argv + 1, argc + argv);
-        GenericInputCardReader genericReader(arguments[0]);
-        GenericInput gInput = genericReader.getInput();
+        genericInputCardReader genericReader(arguments[0]);
+        genericInput gInput = genericReader.getInput();
 
         std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
 
@@ -38,8 +38,8 @@ int main(int argc, char **argv)
             initLogger( logFileName.c_str(), ldebug);
         }
 
-        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid[0]);
-        create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGrid[0]);
+        createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
         CpuClock clock;
 
@@ -48,8 +48,8 @@ int main(int argc, char **argv)
         clock.End();
 
         L_(linfo) << "Visualisation of the estimated temple using FWI" ;
-        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-        create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
+        createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
         std::string msg = clock.OutputString();
         writePlotInput(gInput, msg);
     }
@@ -64,17 +64,17 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(const GenericInput &gInput, std::string msg)
+void writePlotInput(const genericInput &gInput, std::string msg)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
     std::string runName = gInput.runName;
     outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
     outputfwi << "This run was parametrized as follows:" << std::endl;
-    outputfwi << "nxt   = " << gInput.ngrid[0] << std::endl;
-    outputfwi << "nzt   = " << gInput.ngrid[1] << std::endl;
-    outputfwi << "nxt_original   = " << gInput.ngrid_original[0] << std::endl;
-    outputfwi << "nzt_original   = " << gInput.ngrid_original[1] << std::endl << msg;
+    outputfwi << "nxt   = " << gInput.nGrid[0] << std::endl;
+    outputfwi << "nzt   = " << gInput.nGrid[1] << std::endl;
+    outputfwi << "nxt_original   = " << gInput.nGridOriginal[0] << std::endl;
+    outputfwi << "nzt_original   = " << gInput.nGridOriginal[1] << std::endl << msg;
     outputfwi.close();
 
     // This part is needed for plotting the chi values in postProcessing.py
@@ -84,15 +84,15 @@ void writePlotInput(const GenericInput &gInput, std::string msg)
     lastrun.close();
 }
 
-void performInversion(const GenericInput &gInput, const std::string &runName)
+void performInversion(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
+    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nSources);
     src.Print();
-    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nReceivers);
     recv.Print();
-    FrequenciesGroup freq(gInput.freq, gInput.c_0);
+    frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -120,18 +120,18 @@ void performInversion(const GenericInput &gInput, const std::string &runName)
         i++;
     }
 
-    ForwardModelInterface *model;
-    IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
+    forwardModelInterface *model;
+    integralForwardModelInputCardReader integralReader(gInput.caseFolder);
+    model = new IntegralForwardModel(grid, src, recv, freq, integralReader.getInput());
 
-    InversionInterface *inverse;
-    GradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
-    inverse = new GradientDescentInversion(model, gradientdescentreader.getInput());
+    inversionInterface *inverse;
+    gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
+    inverse = new gradientDescentInversion(model, gradientDescentReader.getInput());
 
-    //    gradientDescentInversion(ForwardModelInterface *forwardModel, const GenericInput &gdInput);
+    //    gradientDescentInversion(forwardModelInterface *forwardModel, const genericInput &gdInput);
     L_(linfo) << "Estimating Chi..." ;
 
-    PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
+    pressureFieldSerial chi_est = inverse->reconstruct(referencePressureData, gInput);
 
     L_(linfo) << "Done, writing to file" ;
 

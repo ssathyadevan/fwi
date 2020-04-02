@@ -2,7 +2,7 @@
 
 #include "inputStructs.h"
 
-struct FiniteDifferenceForwardModelInput
+struct finiteDifferenceForwardModelInput
 {
     // For more info on input parameters, see the doc/README file
     PMLWidthFactor pmlWidthFactor;

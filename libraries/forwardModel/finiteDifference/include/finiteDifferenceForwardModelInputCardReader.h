@@ -8,14 +8,14 @@
 #include <fstream>
 #include <sstream>
 
-class FiniteDifferenceForwardModelInputCardReader: public InputCardReader
+class finiteDifferenceForwardModelInputCardReader : public inputCardReader
 {
 public:
-    FiniteDifferenceForwardModelInputCardReader(const std::string &caseFolder);
-    FiniteDifferenceForwardModelInput getInput();
+    finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder);
+    finiteDifferenceForwardModelInput getInput();
 
 private:
     virtual void readCard(const std::string &caseFolder);
-    void checkinput();
-    FiniteDifferenceForwardModelInput _input;
+    void checkInput();
+    finiteDifferenceForwardModelInput _input;
 };

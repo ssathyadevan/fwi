@@ -15,9 +15,9 @@
 
 #include <iostream>
 
-InversionInterface *Factory::createInversion(std::string desired_inversion, ForwardModelInterface *forwardModel, const GenericInput gInput)
+inversionInterface *Factory::createInversion(std::string desired_inversion, forwardModelInterface *forwardModel, const genericInput gInput)
 {
-    InversionInterface *inversion;
+    inversionInterface *inversion;
     if(desired_inversion == "conjugateGradientInversion")
     {
         ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
@@ -34,8 +34,8 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
 
     if(desired_inversion == "gradientDescentInversion")
     {
-        GradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
-        inversion = new GradientDescentInversion(forwardModel, gradientdescentreader.getInput());
+        gradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
+        inversion = new gradientDescentInversion(forwardModel, gradientdescentreader.getInput());
         return inversion;
     }
 
@@ -49,20 +49,20 @@ InversionInterface *Factory::createInversion(std::string desired_inversion, Forw
     exit(EXIT_FAILURE);
 }
 
-ForwardModelInterface *Factory::createForwardModel(const GenericInput &gInput, const std::string desired_forward_model, const Grid2D &grid, const Sources &src,
-    const Receivers &recv, const FrequenciesGroup &freq)
+forwardModelInterface *Factory::createForwardModel(const genericInput &gInput, const std::string desired_forward_model, const grid2D &grid, const sources &src,
+    const receivers &recv, const frequenciesGroup &freq)
 {
-    ForwardModelInterface *model;
+    forwardModelInterface *model;
     if(desired_forward_model == "integralForwardModel")
     {
-        IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+        integralForwardModelInputCardReader integralreader(gInput.caseFolder);
         model = new IntegralForwardModel(grid, src, recv, freq, integralreader.getInput());
         return model;
     }
     if(desired_forward_model == "finiteDifferenceForwardModel")
     {
-        FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
-        model = new FiniteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
+        finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+        model = new finiteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
         return model;
     }
     L_(linfo) << "The ForwardModel " << desired_forward_model << " was not found";

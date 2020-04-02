@@ -4,10 +4,10 @@ namespace fwi {
 	static const double pi = std::atan(1.0) * 4.0;
 }
 
-namespace GreensFunctions
+namespace greensFunctions
 {
 
-double Helmholtz2D_real(double k, double r)
+double Helmholtz2DReal(double k, double r)
 {
     double value = 0.0;
     if (r != 0.0)
@@ -17,7 +17,7 @@ double Helmholtz2D_real(double k, double r)
     return value;
 }
 
-double Helmholtz2D_imag(double k, double r)
+double Helmholtz2DImag(double k, double r)
 {
     double value = 0.0;
     if (r != 0.0)
@@ -30,10 +30,11 @@ double Helmholtz2D_imag(double k, double r)
 
 std::complex<double> Helmholtz2D(double k, double r)
 {
-    return std::complex<double>(Helmholtz2D_real(k, r), Helmholtz2D_imag(k, r)); // Babak 2018 10 25: Equation ID "GreensFunc2d": Creating a complex Greens function.
+    return std::complex<double>(
+        Helmholtz2DReal(k, r), Helmholtz2DImag(k, r)); // Babak 2018 10 25: Equation ID "GreensFunc2d": Creating a complex Greens function.
 }
 
-double Helmholtz3D_real(double k, double r)
+double Helmholtz3DReal(double k, double r)
 {
     double value = 0.0;
     if (r != 0.0)
@@ -43,7 +44,7 @@ double Helmholtz3D_real(double k, double r)
     return value;
 }
 
-double Helmholtz3D_imag(double k, double r)
+double Helmholtz3DImag(double k, double r)
 {
     double value = 0.0;
     if (r != 0.0)
@@ -55,7 +56,8 @@ double Helmholtz3D_imag(double k, double r)
 
 std::complex<double> Helmholtz3D(double k, double r)
 {
-    return std::complex<double>(Helmholtz3D_real(k, r), Helmholtz3D_imag(k, r)); // Babak 2018 10 25: Equation ID "GreensFunc2d": Creating complex Greens fucntion
+    return std::complex<double>(
+        Helmholtz3DReal(k, r), Helmholtz3DImag(k, r)); // Babak 2018 10 25: Equation ID "GreensFunc2d": Creating complex Greens fucntion
 }
 
-} // namespace GreensFunctions
+} // namespace greensFunctions

@@ -3,23 +3,23 @@
 #include "gradientDescentInversionInputCardReader.h"
 #include "json.h"
 
-GradientDescentInversionInputCardReader::GradientDescentInversionInputCardReader(const std::string &caseFolder)
-    : InputCardReader()
+gradientDescentInversionInputCardReader::gradientDescentInversionInputCardReader(const std::string &caseFolder)
+    : inputCardReader()
 {
     readCard(caseFolder);
-    checkinput();
+    checkInput();
 }
 
-GradientDescentInversionInput GradientDescentInversionInputCardReader::getInput()
+gradientDescentInversionInput gradientDescentInversionInputCardReader::getInput()
 {
     return _input;
 }
 
-void GradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
+void gradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/GradientDescentInversionInput.json");
+    nlohmann::json j = readFile(caseFolder + "/input/gradientDescentInversionInput.json");
 
-    GradientDescentInversionInput input{
+    gradientDescentInversionInput input{
         j["gamma0"],
         j["x0"],
         j["h"],
@@ -28,8 +28,8 @@ void GradientDescentInversionInputCardReader::readCard(const std::string &caseFo
     _input = input;
 }
 
-void GradientDescentInversionInputCardReader::checkinput()
+void gradientDescentInversionInputCardReader::checkInput()
 {
-    if (_input.h <= 0 ) {throw std::invalid_argument("Invalid step size h in GradientDescentInversionInput.json");}
-    if (_input.iter <= 0 ) {throw std::invalid_argument("Invalid numer of iterations in GradientDescentInversionInput.json");}
+    if (_input.h <= 0 ) {throw std::invalid_argument("Invalid step size h in gradientDescentInversionInput.json");}
+    if (_input.iter <= 0 ) {throw std::invalid_argument("Invalid numer of iterations in gradientDescentInversionInput.json");}
 }

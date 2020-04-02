@@ -15,7 +15,7 @@ below the explanation of all the input parameters:
 ###############################################################################
 
 #        VARIABLE (input.):                 TYPE (const):  DEFAULT:   UNIT:
-# D1.    c_0                                dbl            2000.0     m per s
+# D1.    c0                                dbl            2000.0     m per s
 2000.0
 # D2.    Freq.min                           dbl            10         ? Hz ?     
 10.0
@@ -37,15 +37,15 @@ below the explanation of all the input parameters:
 480.0
 # D11.   sourcesBottomRightCornerInM[1]     dbl           -5.0        m
 -5.0
-# I1.    ngrid[0]                           int           64          -
+# I1.    nGrid[0]                           int           64          -
 64
-# I2.    ngrid[1]                           int           32          -
+# I2.    nGrid[1]                           int           32          -
 32
 # I3.    Freq.nTotal                        int           15          -
 15
-# I4.    NSourcesReceivers.src              int           17          -
+# I4.    nSourcesReceivers.src              int           17          -
 17
-# I5.    NSourcesReceivers.rcv              int           17          -
+# I5.    nSourcesReceivers.rcv              int           17          -
 17
 # S1.    fileName                           string        temple.txt  -
 temple
@@ -86,12 +86,12 @@ temple
 # I4-I5.  number of sources and receivers
 # S1.     reservoir file name 
 # B1.     Decision true/false whether to calculate "alpha" 
-# d1.     Convergence criteria for the Conjugate Gradient i.e. chi_estimation loop
+# d1.     Convergence criteria for the Conjugate gradient i.e. chi_estimation loop
 # d2.     Convergence criteria for the calculation of p_tot in ForwardModel
 # d3.     the variable name is "delta_amplification_start"
 # d4.     the variable name is "delta_amplification_slope"
 # i1.     maximum number of iterations outer loop 
-# i2.     Conjugate gradient maximum iterations
+# i2.     conjugate gradient maximum iterations
 # i3.     Maximum iterations for p_tot calculation in forwardModel 
 # b1.     applying multiplicative regularisation when do_reg = 1 
 # b2.     regulates if printing to cout or to diagnostic file

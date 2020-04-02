@@ -10,13 +10,13 @@
 \begin{algorithm}
 \caption{PreProcess: ./FWI\_PreProcess \{\textcolor{olive}{run\_folder}\}}
 \begin{algorithmic}
-\State \textcolor{purple}{GenericInputCardReader}: Read input from \textcolor{olive}{run\_folder}/input, \textcolor{blue}{gInput} (\textcolor{purple}{GenericInput})
+\State \textcolor{purple}{genericInputCardReader}: Read input from \textcolor{olive}{run\_folder}/input, \textcolor{blue}{gInput} (\textcolor{purple}{genericInput})
 \State Start \textcolor{blue}{clock} (\textcolor{purple}{CpuClock})
 \Procedure {generateReferencePressureFieldFromChi}{ }
-\State Initialize \textcolor{blue}{grid} (\textcolor{purple}{Grid2D}), \textcolor{blue}{chi} (\textcolor{purple}{PressureFieldSerial}),\State \textcolor{blue}{sources} (\textcolor{purple}{Sources}), \textcolor{blue}{receivers} (\textcolor{purple}{Receivers}), \textcolor{blue}{frequencies} (\textcolor{purple}{FrequenciesGroup})
+\State Initialize \textcolor{blue}{grid} (\textcolor{purple}{grid2D}), \textcolor{blue}{chi} (\textcolor{purple}{pressureFieldSerial}),\State \textcolor{blue}{sources} (\textcolor{purple}{sources}), \textcolor{blue}{receivers} (\textcolor{purple}{receivers}), \textcolor{blue}{frequencies} (\textcolor{purple}{frequenciesGroup})
 \Procedure {create\_model}{\textcolor{blue}{grid}, \textcolor{blue}{sources}, \textcolor{blue}{receivers}, \textcolor{blue}{frequencies}, \textcolor{blue}{gInput}} 
-\State \Comment {{\footnotesize \textcolor{purple}{IntegralForwardModel} from parent \textcolor{purple}{ForwardModelInterface}}}
-\State Initialize \textcolor{purple}{IntegralForwardModel}(\textcolor{blue}{grid}, \textcolor{blue}{sources}, \textcolor{blue}{receivers}, \textcolor{blue}{frequencies}), \State \textcolor{brown}{\_Greens} (\textcolor{purple}{Greens\_rect\_2D\_cpu}), \textcolor{brown}{\_p0} (\textcolor{purple}{PressureFieldComplexSerial}), \State \textcolor{brown}{\_ptot} (\textcolor{purple}{PressureFieldComplexSerial}), \textcolor{brown}{\_Kappa} (\textcolor{purple}{PressureFieldComplexSerial}),\State \textcolor{brown}{\_fmInput} (\textcolor{purple}{IntegralForwardModelInput}).
+\State \Comment {{\footnotesize \textcolor{purple}{IntegralForwardModel} from parent \textcolor{purple}{forwardModelInterface}}}
+\State Initialize \textcolor{purple}{IntegralForwardModel}(\textcolor{blue}{grid}, \textcolor{blue}{sources}, \textcolor{blue}{receivers}, \textcolor{blue}{frequencies}), \State \textcolor{brown}{\_Greens} (\textcolor{purple}{Greens\_rect\_2D\_cpu}), \textcolor{brown}{\_p0} (\textcolor{purple}{pressureFieldComplexSerial}), \State \textcolor{brown}{\_ptot} (\textcolor{purple}{pressureFieldComplexSerial}), \textcolor{brown}{\_Kappa} (\textcolor{purple}{pressureFieldComplexSerial}),\State \textcolor{brown}{\_fmInput} (\textcolor{purple}{integralForwardModelInput}).
 \State \Return \textcolor{blue}{model}
 \EndProcedure
 \State \textcolor{blue}{model} computes \Call{Ptot}{\textcolor{blue}{chi}}, \Call{Kappa}{ } and \Call{Pdata}{\textcolor{blue}{chi}, \textcolor{blue}{referencePressureData} (\textcolor{purple}{Vector$\langle$Complex$\langle$double$\rangle\rangle$})}
@@ -29,15 +29,15 @@
 \begin{algorithm}
 \caption{Process: ./FWI\_UnifiedProcess \{\textcolor{olive}{run\_folder\}} \{\textcolor{olive}{inversion\_model}\} \{\textcolor{olive}{forward\_model}\}}
 \begin{algorithmic}
-\State \textcolor{purple}{GenericInputCardReader}: Read input from \textcolor{olive}{run\_folder}/input, \textcolor{blue}{gInput} (\textcolor{purple}{GenericInput})
+\State \textcolor{purple}{genericInputCardReader}: Read input from \textcolor{olive}{run\_folder}/input, \textcolor{blue}{gInput} (\textcolor{purple}{genericInput})
 \State Start \textcolor{blue}{clock} (\textcolor{purple}{CpuClock})
 \Procedure {preformInversion}{...}
-\State Initialize \textcolor{blue}{grid} (\textcolor{purple}{Grid2D}), \textcolor{blue}{sources} (\textcolor{purple}{Sources}), \textcolor{blue}{receivers} (\textcolor{purple}{Receivers}), \textcolor{blue}{frequencies} (\textcolor{purple}{FrequenciesGroup})
+\State Initialize \textcolor{blue}{grid} (\textcolor{purple}{grid2D}), \textcolor{blue}{sources} (\textcolor{purple}{sources}), \textcolor{blue}{receivers} (\textcolor{purple}{receivers}), \textcolor{blue}{frequencies} (\textcolor{purple}{frequenciesGroup})
 \State \Call{Factory::createForwardModel}{...,\textcolor{olive}{forward\_model}} \Return \textcolor{blue}{forwardmodel}
-\State \Comment{{\footnotesize Creates a forwardmodel from parent \textcolor{purple}{ForwardModelInterface}}}
+\State \Comment{{\footnotesize Creates a forwardmodel from parent \textcolor{purple}{forwardModelInterface}}}
 \State \Call{Factory::createInversion}{..., \textcolor{olive}{inversion\_model}, \textcolor{blue}{forwardmodel}} \Return \textcolor{blue}{inversionmodel}
-\State \Comment{{\footnotesize Creates an inverse model from parent \textcolor{purple}{InversionInterface}}}
-\Procedure {\textcolor{blue}{inversionmodel} $\rightarrow$ Reconstruct}{ }
+\State \Comment{{\footnotesize Creates an inverse model from parent \textcolor{purple}{inversionInterface}}}
+\Procedure {\textcolor{blue}{inversionmodel} $\rightarrow$ reconstruct}{ }
 \State Initialize all variables
 \State Open \textcolor{teal}{residual.log} file to store the residuals
 \ForAll {iterations until N\_max}
@@ -72,8 +72,8 @@
 \State {\bf \emph {Create image}} \textcolor{teal}{residuals.png} with residuals over iterations
 \Procedure {OutputLogger}{...} \Comment{{\footnotesize from parallelized-fwi/pythonScripts/classes/\textcolor{teal}{OutputLogger.py}}}
 \Procedure {Complete\_output\_log} { }
-\State {\bf \emph {Read}} kind of image (as temple or dog) used in the procces \State from parallelized-fwi/inputFiles/default/input/\textcolor{teal}{GenericInput.json}
-\State Also {\bf \emph {read}} grid resolutions (\textcolor{blue}{ngrid} and \textcolor{blue}{ngrid\_original}) and hardwarespecifics from \textcolor{teal}{GenericInput.json}
+\State {\bf \emph {Read}} kind of image (as temple or dog) used in the procces \State from parallelized-fwi/inputFiles/default/input/\textcolor{teal}{genericInput.json}
+\State Also {\bf \emph {read}} grid resolutions (\textcolor{blue}{nGrid} and \textcolor{blue}{nGrid\_original}) and hardwarespecifics from \textcolor{teal}{genericInput.json}
 \State {\bf \emph {Read}} description of all methods used and \textcolor{blue}{path} from parallelized-fwi/results/\textcolor{teal}{description\{}\textcolor{olive}{run\_number}\textcolor{teal}{\}.txt} \State and afterward {\bf \emph {remove}} this file
 \State {\bf \emph {Get input}} file FWIInstall/\{\textcolor{blue}{path}\}/input/\textcolor{teal}{\{}\textcolor{blue}{inversionmethod}\textcolor{teal}{\}Input.json}
 \EndProcedure

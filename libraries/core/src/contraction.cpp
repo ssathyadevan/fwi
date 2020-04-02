@@ -2,8 +2,8 @@
 #include "utilityFunctions.h"
 #include <array>
 
-void create_Greens_rect_2D(std::complex<double> *G, const std::array<double, 2> &dx, const std::array<int, 2> &nx,
-    std::function<std::complex<double>(double, double)> G_func, double k)
+void createGreensRect2D(std::complex<double> *G, const std::array<double, 2> &dx, const std::array<int, 2> &nx,
+    std::function<std::complex<double>(double, double)> gFunc, double k)
 {
     double vol = dx[0] * dx[1];
     for(int i = -nx[1] + 1; i <= nx[1] - 1; i++)
@@ -13,17 +13,17 @@ void create_Greens_rect_2D(std::complex<double> *G, const std::array<double, 2> 
         {
             double x = j * dx[0];
             double r = dist(z, x);
-            G[(nx[1] + i - 1) * 2 * nx[0] + (nx[0] + j - 1)] = G_func(k, r) * vol;
+            G[(nx[1] + i - 1) * 2 * nx[0] + (nx[0] + j - 1)] = gFunc(k, r) * vol;
         }
     }
 }
 
-void contract_Greens_rect_2D(
-    const std::complex<double> *G, const PressureFieldComplexSerial &inputField, PressureFieldComplexSerial &outputField, const std::array<int, 2> &nx, int ldG)
+void contractGreensRect2D(
+    const std::complex<double> *G, const pressureFieldComplexSerial &x, pressureFieldComplexSerial &testField, const std::array<int, 2> &nx, int ldG)
 {
-    const std::vector<std::complex<double>> &inputFieldData = inputField.getData();
+    const std::vector<std::complex<double>> &inputFieldData = x.getData();
 
-    std::vector<std::complex<double>> outputFieldData(outputField.GetNumberOfGridPoints(), 0.0);
+    std::vector<std::complex<double>> outputFieldData(testField.getNumberOfGridPoints(), 0.0);
     for(int i = 0; i < nx[1]; i++)
     {
         for(int j = 0; j < nx[0]; j++)
@@ -38,5 +38,5 @@ void contract_Greens_rect_2D(
             }
         }
     }
-    outputField = outputFieldData;
+    testField = outputFieldData;
 }

@@ -6,50 +6,48 @@
 #include "finiteDifferenceForwardModelInput.h"
 #include "genericInput.h"
 
-class FiniteDifferenceForwardModel : public ForwardModelInterface
+class finiteDifferenceForwardModel : public forwardModelInterface
 {
 
 public:
+    finiteDifferenceForwardModel( const grid2D &grid, const sources &src, const receivers &recv,
+                    const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput );
 
-    FiniteDifferenceForwardModel( const Grid2D &grid, const Sources &src, const Receivers &recv,
-                    const FrequenciesGroup &freq, const FiniteDifferenceForwardModelInput &fmInput );
+    ~finiteDifferenceForwardModel();
 
-    ~FiniteDifferenceForwardModel();
-
-    virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator);
+    virtual void calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &kOperator);
 
     void calculateKappa();
-    virtual void calculatePTot(const PressureFieldSerial &chiEst);
-    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double> > &res, PressureFieldComplexSerial &kRes);
-    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes, const int offset, const int block_size);
-    virtual void getResidualGradient(std::vector<std::complex<double>> &res, PressureFieldComplexSerial &kRes);
-    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
+    virtual void calculatePTot(const pressureFieldSerial &chiEst);
+    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double> > &res, pressureFieldComplexSerial &kRes);
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, pressureFieldComplexSerial &kRes, const int offset, const int block_size);
+    virtual void getResidualGradient(std::vector<std::complex<double>> &res, pressureFieldComplexSerial &kRes);
+    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
 
-    //void createKappaOperator(const PressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
+    //void createKappaOperator(const pressureFieldComplexSerial &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
 
 private:
+    greensRect2DCpu **_Greens;
 
-    Greens_rect_2D_cpu          **_Greens;
-
-    PressureFieldComplexSerial  ***_p0;
-    PressureFieldComplexSerial  **_pTot;
-    PressureFieldComplexSerial  **_Kappa;
-    FiniteDifferenceForwardModelInput _fmInput;
+    pressureFieldComplexSerial ***_p0;
+    pressureFieldComplexSerial **_pTot;
+    pressureFieldComplexSerial **_Kappa;
+    finiteDifferenceForwardModelInput _fmInput;
 
     void createP0();
     void deleteP0();
 
-    void createPTot(const FrequenciesGroup &freq, const Sources &src);
+    void createPTot(const frequenciesGroup &freq, const sources &src);
 
     void createGreens();
     void deleteGreens();
 
     void deletePtot();
 
-    PressureFieldComplexSerial calcTotalField(const Greens_rect_2D_cpu &G, const PressureFieldSerial &chiEst, const PressureFieldComplexSerial &Pinit);
+    pressureFieldComplexSerial calcTotalField(const greensRect2DCpu &G, const pressureFieldSerial &chiEst, const pressureFieldComplexSerial &Pinit);
 
-    void applyKappa(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
-    void createKappa(const FrequenciesGroup &freq, const Sources &src, const Receivers &recv);
+    void applyKappa(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
+    void createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv);
     void deleteKappa();
 };

@@ -12,7 +12,7 @@
 \section{Naming conventions and structure}
 In order to keep the code well structured, follow the structure used for all the other inversion methods or forward models, for this example we consider that we have created the method FooBar:
 \begin{itemize}
-    \item Your inversion method must implement \textit{inversionInterface}, found in\\ \texttt{libraries/core/inversionInterface.h}. (Or the ForwardModelInterface if you add a forward model).
+    \item Your inversion method must implement \textit{inversionInterface}, found in\\ \texttt{libraries/core/inversionInterface.h}. (Or the forwardModelInterface if you add a forward model).
     \item Use an original name with camelCase ending with ``Inversion'' (or ``ForwardModel''). For example: \textit{fooBarInversion}. Please avoid unoriginal names such as: \textit{fooBarInversion}, \textit{myInversion} or \textit{fasterConjugateGradientInversion}.
     \item Use the same folder structure as other methods. Create a folder in the directory \texttt{libraries/inversion/} (or \texttt{/forwardModel} with the name of your method, e.g. \textit{fooBarInversion}. That folder must contain a \texttt{CMakeLists.txt} file, a \textit{src} folder with all the \texttt{.cpp} files and a \textit{include} folder with all the \texttt{.h} files.
     \item All the files and classes related to your method should include the method name at the beginning, i.e. an input card reader can be called \textit{fooBarInversionInputCardReader}. The name is long but much more understandable for anyone else using the code later

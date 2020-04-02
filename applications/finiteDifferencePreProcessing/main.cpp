@@ -6,14 +6,14 @@
 #include "cpuClock.h"
 #include "log.h"
 
-void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std::string &runName);
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName);
 
 int main(int argc, char **argv)
 {
     try {
         std::vector<std::string> arguments = returnInputDirectory(argc, argv);
-        GenericInputCardReader genericReader(arguments[0]);
-        const GenericInput gInput = genericReader.getInput();
+        genericInputCardReader genericReader(arguments[0]);
+        const genericInput gInput = genericReader.getInput();
 
         std::string logFileName =  gInput.outputLocation + gInput.runName + "PreProcess.log";
 
@@ -42,18 +42,18 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std::string &runName)
+void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
-    Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid_original);
-    PressureFieldSerial chi(grid);
+    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
+    pressureFieldSerial chi(grid);
 
     chi.fromFile(gInput);
-    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nSources);
     src.Print();
-    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nReceivers);
     recv.Print();
-    FrequenciesGroup freqg(gInput.freq, gInput.c_0);
+    frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
@@ -63,10 +63,10 @@ void generateReferencePressureFieldFromChi(const GenericInput &gInput, const std
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    ForwardModelInterface *model;
-    FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
-    FiniteDifferenceForwardModelInput fmInput = finitedifferencereader.getInput();
-    model = new FiniteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
+    forwardModelInterface *model;
+    finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
+    finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
+    model = new finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
 
     L_(linfo) << "Calculate pData (the reference pressure-field)..." ;
     model->calculatePTot(chi);

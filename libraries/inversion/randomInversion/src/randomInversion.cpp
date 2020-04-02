@@ -2,24 +2,24 @@
 #include "progressBar.h"
 #include "log.h"
 
-RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput &riInput)
     : _forwardModel(), _riInput(riInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;
 }
 
-PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
+pressureFieldSerial RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
-    ProgressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
+    progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
     double eta = 1.0 / (normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
-    PressureFieldSerial chiEst(_grid);
+    pressureFieldSerial chiEst(_grid);
 
-    chiEst.Zero();
+    chiEst.zero();
 
     // open the file to store the residual log
     std::ofstream file;
@@ -45,9 +45,8 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
         //start the inner loop
         for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
-
-            PressureFieldSerial tempRandomChi(_grid);
-            tempRandomChi.RandomSaurabh();
+            pressureFieldSerial tempRandomChi(_grid);
+            tempRandomChi.randomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
             newChiEstRes = eta * newResSq;
@@ -78,7 +77,7 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
 
     file.close(); // close the residual.log file
 
-    PressureFieldSerial result(_grid);
+    pressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
 }

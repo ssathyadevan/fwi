@@ -1,13 +1,14 @@
 #include "forwardmodelinterfacemock.h"
 
-ForwardModelInterfaceMock::ForwardModelInterfaceMock(const Grid2D &grid, const Sources &src, const Receivers &recv,
-                                                     const FrequenciesGroup &freq)
-    : ForwardModelInterface(grid, src, recv, freq)
+ForwardModelInterfaceMock::ForwardModelInterfaceMock(const grid2D &grid, const sources &src, const receivers &recv,
+                                                     const frequenciesGroup &freq)
+    :
+    forwardModelInterface(grid, src, recv, freq)
 {
 
 }
 
-void ForwardModelInterfaceMock::calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData)
+void ForwardModelInterfaceMock::calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData)
 {
     (void)chiEst;
 

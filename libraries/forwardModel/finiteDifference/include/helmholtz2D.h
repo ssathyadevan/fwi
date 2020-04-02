@@ -23,15 +23,15 @@
 
 class Helmholtz2D {
   public:
-    explicit Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi, const FiniteDifferenceForwardModelInput &fmInput);
+    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi, const finiteDifferenceForwardModelInput &fmInput);
     ~Helmholtz2D();
-    PressureFieldComplexSerial solve(const std::array<double, 2> &source, PressureFieldComplexSerial &pInit);
+    pressureFieldComplexSerial solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit);
     void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx); //Temporary for testing
 
 private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
-    const Grid2D _oldgrid;
+    const grid2D _oldgrid;
     FiniteDifferenceGrid2D *_newgrid;
     std::array<int, 2> _PMLwidth;
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
@@ -44,6 +44,6 @@ private:
 
     void buildMatrix();
     void buildVector(const std::array<double, 2> &source);
-    void updateChi(const PressureFieldSerial &chi);
+    void updateChi(const pressureFieldSerial &chi);
     void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx, std::array<double, 2> xMin);
 };

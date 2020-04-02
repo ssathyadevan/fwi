@@ -1,6 +1,6 @@
 #include "grid2D.h"
 
-Grid2D::Grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> &x_max_, const std::array<int, 2> &nx_) :
+grid2D::grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> &x_max_, const std::array<int, 2> &nx_) :
     _xMin(x_min_), _xMax(x_max_), _nx(nx_), _dx(), _nGridPoints(), _cellVolume()
 {
     // Fix this with std::transform so that we can move it to the
@@ -12,7 +12,7 @@ Grid2D::Grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> 
     _nGridPoints = _nx[0] * _nx[1];   // Should be renamed to nCells.
 }
 
-bool Grid2D::operator==(const Grid2D &rhs) const
+bool grid2D::operator==(const grid2D &rhs) const
 {
     if(_xMin != rhs._xMin || _xMax != rhs._xMax || _nx != rhs._nx || _dx != rhs._dx)
     {

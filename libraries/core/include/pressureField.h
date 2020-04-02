@@ -6,37 +6,37 @@
 #include <iostream>
 #include <string>
 
-class PressureField
+class pressureField
 {
 protected:
-    const Grid2D &_grid;
+    const grid2D &_grid;
 
-    PressureField(const PressureField &) = delete;
-    PressureField &operator=(const PressureField &) = delete;
+    pressureField(const pressureField &) = delete;
+    pressureField &operator=(const pressureField &) = delete;
 
 public:
-    PressureField(const Grid2D &grid_) : _grid(grid_) {}
-    virtual ~PressureField() {}
+    pressureField(const grid2D &grid_) : _grid(grid_) {}
+    virtual ~pressureField() {}
 
-    const Grid2D &GetGrid() const { return _grid; }
-    int GetNumberOfGridPoints() const { return _grid.GetNumberOfGridPoints(); }
-    double getCellVolume() const { return _grid.GetCellVolume(); }
+    const grid2D &GetGrid() const { return _grid; }
+    int getNumberOfGridPoints() const { return _grid.getNumberOfGridPoints(); }
+    double getCellVolume() const { return _grid.getCellVolume(); }
 
-    virtual void Zero() = 0;
-    virtual void Square() = 0;
-    virtual void Sqrt() = 0;
-    virtual void Reciprocal() = 0;
+    virtual void zero() = 0;
+    virtual void square() = 0;
+    virtual void sqrt() = 0;
+    virtual void reciprocal() = 0;
 
-    virtual double Norm() const = 0;
-    virtual double RelNorm() const = 0;
-    virtual double Summation() const = 0;
+    virtual double norm() const = 0;
+    virtual double relNorm() const = 0;
+    virtual double summation() const = 0;
 
-    virtual void Random() = 0;
-    virtual void RandomSaurabh() = 0;
+    virtual void random() = 0;
+    virtual void randomSaurabh() = 0;
 
     virtual void toBuffer(double *buffer) const = 0;
     virtual void fromBuffer(const double *buffer) = 0;
 
     virtual void toFile(const std::string &fileName) const = 0;
-    virtual void fromFile(const GenericInput &input) = 0;
+    virtual void fromFile(const genericInput &input) = 0;
 };

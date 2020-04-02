@@ -1,5 +1,5 @@
 /*
- * GreensFunctions.h
+ * greensFunctions.h
  *
  *  Created on: Jun 25, 2015
  *      Author: Michiel de Reus
@@ -11,21 +11,21 @@
 #include <cmath>
 #include <complex>
 
-namespace GreensFunctions
+namespace greensFunctions
 {
-float Helmholtz2D_real(float k, float r);
+float Helmholtz2DReal(float k, float r);
 
-float Helmholtz2D_imag(float k, float r);
+float Helmholtz2DImag(float k, float r);
 
-double Helmholtz2D_real(double k, double r);
+double Helmholtz2DReal(double k, double r);
 
-double Helmholtz2D_imag(double k, double r);
+double Helmholtz2DImag(double k, double r);
 
 std::complex<double> Helmholtz2D(double k, double r);
 
-double Helmholtz3D_real(double k, double r);
+double Helmholtz3DReal(double k, double r);
 
-double Helmholtz3D_imag(double k, double r);
+double Helmholtz3DImag(double k, double r);
 
 std::complex<double>  Helmholtz3D(double k, double r);
 }

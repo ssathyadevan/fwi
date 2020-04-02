@@ -2,11 +2,11 @@
 #include <iterator>
 #include "sources.h"
 
-Sources InitializeSources()
+sources InitializeSources()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {10.0, 10.0};
-    Sources sources(xMin, xMax, 11);
+    sources sources(xMin, xMax, 11);
     return sources;
 }
 
@@ -14,7 +14,7 @@ TEST(SourcesTest, ConstructorTest)
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {10.0, 10.0};
-    Sources sources(xMin, xMax, 11);
+    sources sources(xMin, xMax, 11);
 
     double dx = 1.0;
     double iteration_counter = 0.0;
@@ -29,14 +29,14 @@ TEST(SourcesTest, ConstructorTest)
 
 TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 {
-    Sources sources = InitializeSources();
+    sources sources = InitializeSources();
     EXPECT_EQ(sources.xSrc.size(), 11);
 }
 
 
 TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
 {
-    Sources sources = InitializeSources();
+    sources sources = InitializeSources();
 
     std::array<double, 11> expectedXPositions = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
 

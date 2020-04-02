@@ -16,34 +16,34 @@
  * an estimated structure to simulated pressure data.
  */
 
-class ConjugateGradientInversion : public InversionInterface
+class ConjugateGradientInversion : public inversionInterface
 {
     private:
-    ForwardModelInterface *_forwardModel;
+        forwardModelInterface *_forwardModel;
     ConjugateGradientInversionInput _cgInput;
 
-    const Grid2D &_grid;
-    const Sources &_sources;
-    const Receivers &_receivers;
-    const FrequenciesGroup &_frequencies;
+    const grid2D &_grid;
+    const sources &_sources;
+    const receivers &_receivers;
+    const frequenciesGroup &_frequencies;
 
-    PressureFieldSerial _chiEstimate;
+    pressureFieldSerial _chiEstimate;
 
     /**
      * @brief ConjugateGradientInversion::OpenResidualLogFile Opens a logfile in which the residuals can be stored.
      * @param gInput is the general input of the model, containing the outputlocation and runName.
      * @return std::ofstream residualLogFile in which the residuals can be stored.
      */
-    std::ofstream openResidualLogFile(GenericInput &gInput);
+    std::ofstream openResidualLogFile(genericInput &gInput);
 
     /**
      * @brief calculateUpdateDirection uses eq: updateDirectionsCG from the README to determine the update-direction of each gridpoint of the contrast function
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @param gradientCurrent is the gradient, determined using the conjugate-gradient method
      * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
-     * @return PressureFieldSerial zeta is the update direction for each value in the contrast function
+     * @return pressureFieldSerial zeta is the update direction for each value in the contrast function
      */
-    PressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent, double eta);
+    pressureFieldSerial calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, pressureFieldSerial &gradientCurrent, double eta);
 
     /**
      * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -51,7 +51,7 @@ class ConjugateGradientInversion : public InversionInterface
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @return double alpha, the optimum step size
      */
-    double calculateStepSize(const PressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray);
+    double calculateStepSize(const pressureFieldSerial &zeta, std::vector<std::complex<double>> &residualArray);
 
     /**
      * @brief errorFunctional calculates the residual according to equation eq: errorFunc(README)
@@ -97,16 +97,16 @@ class ConjugateGradientInversion : public InversionInterface
     /**
      * @brief calculateWeightingFactor uses eq. 2.22 from the thesis to calculate the weighting factor
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return PressureFieldSerial deltaSquared, the weighting factor.
+     * @return pressureFieldSerial deltaSquared, the weighting factor.
      */
-    PressureFieldSerial calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
+    pressureFieldSerial calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateRegularisationGradient uses equation 2.25 from the thesis to calculate the regularisation gradient
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return PressureFieldSerial the regularisation gradient
+     * @return pressureFieldSerial the regularisation gradient
      */
-    PressureFieldSerial calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
+    pressureFieldSerial calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateUpdateDirection_regularisation uses multiplicative regularisation parameters to calculate an update direction (zeta) which leads to
@@ -119,11 +119,11 @@ class ConjugateGradientInversion : public InversionInterface
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
      * @param zeta is the previous update direction for each value in the contrast function
      * @param residualPrevious scaled and averaged error of the previous loop
-     * @return PressureFieldSerial zeta
+     * @return pressureFieldSerial zeta
      */
-    PressureFieldSerial calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, PressureFieldSerial &gradientCurrent,
-        const PressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-        const RegularisationParameters &regularisationPrevious, const PressureFieldSerial &zeta, double residualPrevious);
+    pressureFieldSerial calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, pressureFieldSerial &gradientCurrent,
+        const pressureFieldSerial &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+        const RegularisationParameters &regularisationPrevious, const pressureFieldSerial &zeta, double residualPrevious);
 
     /**
      * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect to
@@ -139,7 +139,7 @@ class ConjugateGradientInversion : public InversionInterface
      */
     double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
         const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious,
-        const PressureFieldSerial &zeta);
+        const pressureFieldSerial &zeta);
 
     /**
      * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -161,16 +161,16 @@ class ConjugateGradientInversion : public InversionInterface
     void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
     public:
-    ConjugateGradientInversion(ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
+    ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
     ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
     ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
 
     /**
-     * @brief Reconstruct iteratively reconstructs the contrast function of the
+     * @brief reconstruct iteratively reconstructs the contrast function of the
      * underlying structure of the earth, using the conjugate gradient method.
      * @param pData Complex vector with the real measured data
      * @param gInput Struct containing general model parameters
-     * @return PressureFieldSerial _chiEstimate, the optimized estimation for the contrast function.
+     * @return pressureFieldSerial _chiEstimate, the optimized estimation for the contrast function.
      */
-    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput);
+    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 };

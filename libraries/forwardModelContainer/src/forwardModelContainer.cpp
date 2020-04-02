@@ -9,8 +9,8 @@
 
 #include <iostream>
 
-ForwardModelContainer::ForwardModelContainer(const GenericInput &genericInput, const std::string &desiredForwardModel, const Grid2D &grid,
-    const Sources &sources, const Receivers &receivers, const FrequenciesGroup &frequencies) :
+ForwardModelContainer::ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const grid2D &grid,
+    const sources &sources, const receivers &receivers, const frequenciesGroup &frequencies) :
     _forwardmodels(),
     _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads())), _numberOfSources(sources.nSrc), _numberOfReceivers(receivers.nRecv),
     _numberOfFrequenciesPerThread(_numberOfThreads, 0), _residuals(), _frequenciesVector(), _allFrequencies(frequencies)
@@ -29,24 +29,24 @@ ForwardModelContainer::~ForwardModelContainer()
 }
 
 void ForwardModelContainer::createForwardModels(
-    const GenericInput &gInput, const std::string &desiredForwardModel, const Grid2D &grid, const Sources &sources, const Receivers &receivers)
+    const genericInput &gInput, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources, const receivers &receivers)
 {
     if(desiredForwardModel == "integralForwardModel")
     {
-        IntegralForwardModelInputCardReader integralreader(gInput.caseFolder);
+        integralForwardModelInputCardReader integralreader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            ForwardModelInterface *model = new IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
+            forwardModelInterface *model = new IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
             _forwardmodels.push_back(model);
         }
     }
     else if(desiredForwardModel == "finiteDifferenceForwardModel")
     {
-        FiniteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+        finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            ForwardModelInterface *model =
-                new FiniteDifferenceForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
+            forwardModelInterface *model =
+                new finiteDifferenceForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
             _forwardmodels.push_back(model);
         }
     }
@@ -79,7 +79,7 @@ int ForwardModelContainer::computeThreadOffset()
 }
 
 std::vector<std::complex<double>> &ForwardModelContainer::calculateResidualParallel(
-    const PressureFieldSerial &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
+    const pressureFieldSerial &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
 {
     std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
     omp_set_num_threads(_numberOfThreads);
@@ -126,15 +126,15 @@ void ForwardModelContainer::divideFrequencies()
 
         if(threadNumber < _allFrequencies.nFreq % _numberOfThreads) { totalFrequenciesForThread += 1; }
         double minimumFrequencyForThread = currentMinimumFrequency;
-        double maximumFrequencyForThread = minimumFrequencyForThread + (totalFrequenciesForThread - 1) * _allFrequencies.d_freq;
+        double maximumFrequencyForThread = minimumFrequencyForThread + (totalFrequenciesForThread - 1) * _allFrequencies.dFreq;
 
         Freq frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
-        FrequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c_0);
+        frequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
 
         frequenciesForThread.Print(totalFrequenciesForThread);
         _frequenciesVector.push_back(frequenciesForThread);
 
         _numberOfFrequenciesPerThread[threadNumber] = totalFrequenciesForThread;
-        currentMinimumFrequency = maximumFrequencyForThread + _allFrequencies.d_freq;
+        currentMinimumFrequency = maximumFrequencyForThread + _allFrequencies.dFreq;
     }
 }

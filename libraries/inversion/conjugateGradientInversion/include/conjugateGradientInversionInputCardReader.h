@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-class ConjugateGradientInversionInputCardReader : public InputCardReader
+class ConjugateGradientInversionInputCardReader : public inputCardReader
 {
     public:
     ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
@@ -14,6 +14,6 @@ class ConjugateGradientInversionInputCardReader : public InputCardReader
 
     private:
     void readCard(const std::string &caseFolder) override;
-    void checkinput() override;
+    void checkInput() override;
     ConjugateGradientInversionInput _input;
 };

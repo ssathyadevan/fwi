@@ -9,16 +9,16 @@ const std::string inputPath = "./../../../../tests";
 TEST(genericinputcardreadertest, readc0Test)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
 
     // Then
-    EXPECT_NEAR(reader.getInput().c_0, 2000.0, 0.0001);
+    EXPECT_NEAR(reader.getInput().c0, 2000.0, 0.0001);
 }
 
 TEST(genericinputcardreadertest, readFreqTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     Freq expectedFreq = { 10, 40, 15 };
     Freq actualFreq = reader.getInput().freq;
 
@@ -31,7 +31,7 @@ TEST(genericinputcardreadertest, readFreqTest)
 TEST(genericinputcardreadertest, readReservoirTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     std::array<double,2> expectedTopLeft {-300.0, 0.0};
     std::array<double,2> expectedBottomRight {300.0, 300.0};
 
@@ -50,7 +50,7 @@ TEST(genericinputcardreadertest, readReservoirTest)
 TEST(genericinputcardreadertest, readSources)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
 
     std::array<double,2> expectedTopLeft {-480.0, -5.0};
     std::array<double,2> expectedBottomRight {480.0, -5.0};
@@ -70,7 +70,7 @@ TEST(genericinputcardreadertest, readSources)
 TEST(genericinputcardreadertest, readReceivers)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
 
     std::array<double,2> expectedTopLeft {-480.0, -5.0};
     std::array<double,2> expectedBottomRight {480.0, -5.0};
@@ -89,40 +89,40 @@ TEST(genericinputcardreadertest, readReceivers)
 TEST(genericinputcardreadertest, readNSourcesAndReceiversTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     int expectednsources = 17;
     int expectednreceivers = 17;
 
-    EXPECT_NEAR(reader.getInput().nSourcesReceivers.nsources, expectednsources, 0.0001);
-    EXPECT_NEAR(reader.getInput().nSourcesReceivers.nreceivers, expectednreceivers, 0.0001);
+    EXPECT_NEAR(reader.getInput().nSourcesReceivers.nSources, expectednsources, 0.0001);
+    EXPECT_NEAR(reader.getInput().nSourcesReceivers.nReceivers, expectednreceivers, 0.0001);
 }
 
 TEST(genericinputcardreadertest, readngridTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     std::array<int,2> expectedngrid {64, 32};
 
     // Then
-    EXPECT_NEAR(reader.getInput().ngrid[0], expectedngrid[0], 0.0001);
-    EXPECT_NEAR(reader.getInput().ngrid[1], expectedngrid[1], 0.0001);
+    EXPECT_NEAR(reader.getInput().nGrid[0], expectedngrid[0], 0.0001);
+    EXPECT_NEAR(reader.getInput().nGrid[1], expectedngrid[1], 0.0001);
 }
 TEST(genericinputcardreadertest, readngridoriginalTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     std::array<int,2> expectedngrid {64, 32};
 
     // Then
-    EXPECT_NEAR(reader.getInput().ngrid_original[0], expectedngrid[0], 0.0001);
-    EXPECT_NEAR(reader.getInput().ngrid_original[1], expectedngrid[1], 0.0001);
+    EXPECT_NEAR(reader.getInput().nGridOriginal[0], expectedngrid[0], 0.0001);
+    EXPECT_NEAR(reader.getInput().nGridOriginal[1], expectedngrid[1], 0.0001);
 }
 
 
 TEST(genericinputcardreadertest, readVerbosityTest)
 {
     // Given
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     bool expectedVerbosity = false;
 
     EXPECT_EQ(expectedVerbosity, reader.getInput().verbose);
@@ -130,7 +130,7 @@ TEST(genericinputcardreadertest, readVerbosityTest)
 
 TEST(genericinputcardreadertest, readFileNameTest)
 {
-    GenericInputCardReader reader(inputPath);
+    genericInputCardReader reader(inputPath);
     std::string expectedFileName = "temple";
     EXPECT_EQ(expectedFileName, reader.getInput().fileName);
 }

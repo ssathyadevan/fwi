@@ -2,30 +2,30 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-Grid2D getGrid()
+grid2D getGrid()
 {
-    std::array<double, 2> _xMin = {0.0, 0.0};
-    std::array<double, 2> _xMax = {2.0, 2.0};
-    std::array<int, 2> _nX = {2, 4};
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    std::array<int, 2> nX = {2, 4};
 
-    Grid2D grid(_xMin, _xMax, _nX);
+    grid2D grid(xMin, xMax, nX);
     return grid;
 }
 
 TEST(pressureFieldComplexSerialTest, zeroTest)
 {
     // Given
-    Grid2D grid = getGrid();
+    grid2D grid = getGrid();
 
     std::complex<double> testValue(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // When
-    pfcs.Zero();
+    pfcs.zero();
 
     // Then
-    const int nrOfGridPoints = pfcs.GetNumberOfGridPoints();
+    const int nrOfGridPoints = pfcs.getNumberOfGridPoints();
     const std::vector<std::complex<double>> &data = pfcs.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
@@ -37,15 +37,15 @@ TEST(pressureFieldComplexSerialTest, zeroTest)
 TEST(pressureFieldComplexSerialTest, squareTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // when
-    pfcs.Square();
+    pfcs.square();
 
     // Then
     // std::complex<double> testSolution = sqrt(testValue);
@@ -61,15 +61,15 @@ TEST(pressureFieldComplexSerialTest, squareTest)
 TEST(pressureFieldComplexSerialTest, sqrtTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(4.0, 9.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // When
-    pfcs.Sqrt();
+    pfcs.sqrt();
 
     // Then
     std::complex<double> testSolution = std::sqrt(testValue);
@@ -84,15 +84,15 @@ TEST(pressureFieldComplexSerialTest, sqrtTest)
 TEST(pressureFieldComplexSerialTest, reciprocalTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // When
-    pfcs.Reciprocal();
+    pfcs.reciprocal();
 
     // Then
     std::complex<double> testSolution = 1.0 / testValue;
@@ -107,26 +107,26 @@ TEST(pressureFieldComplexSerialTest, reciprocalTest)
 TEST(pressureFieldComplexSerialTest, reciprocalExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    pressureFieldComplexSerial pfcs(grid);
     // Note: Initialized with zero
 
     // When
     // Nothing here
 
     // Then
-    EXPECT_THROW(pfcs.Reciprocal(), std::overflow_error);
+    EXPECT_THROW(pfcs.reciprocal(), std::overflow_error);
     // Note: 1 / 0.0 must throw
 }
 
 TEST(pressureFieldComplexSerialTest, summationTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue = 2.0;
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // Alternative calculation method
@@ -148,12 +148,12 @@ TEST(pressureFieldComplexSerialTest, summationTest)
 TEST(pressureFieldComplexSerialTest, addValueAtIndexTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue = 13;
     int index = 3;
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
 
     // When
     pfcs.addValueAtIndex(testValue, index);
@@ -178,11 +178,11 @@ TEST(pressureFieldComplexSerialTest, addValueAtIndexTest)
 TEST(PressureFieldComplexSerialTest, innerProductTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue = {2.0, 1.0};
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     // Alternative calculation method
@@ -193,7 +193,7 @@ TEST(PressureFieldComplexSerialTest, innerProductTest)
     }
 
     // When
-    double calculatedInerProduct = pfcs.InnerProduct(pfcs);
+    double calculatedInerProduct = pfcs.innerProduct(pfcs);
 
     // Then
     ASSERT_DOUBLE_EQ(calculatedInerProduct, alternativeInnerProduct);
@@ -203,8 +203,8 @@ TEST(PressureFieldComplexSerialTest, innerProductTest)
 TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    pressureFieldComplexSerial pfcs(grid);
 
     // When
     // Nothing here, see below
@@ -216,14 +216,14 @@ TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialExc
 TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(0.0, 0.0);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue;
 
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     // Note: Initialized with 0.0
 
     // When
@@ -244,14 +244,14 @@ TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldComplexSerialTes
 TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(0.0, 0.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     // Note: Initialized with 0.0
 
     // When
@@ -269,9 +269,9 @@ TEST(pressureFieldComplexSerialTest, operatorAssignPressureFieldSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
+    pressureFieldComplexSerial pfcs(grid);
 
     std::complex<double> testValue(1.0, 2.0);
     std::vector<std::complex<double>> dataVector = std::vector<std::complex<double>>(nrOfGridPoints, testValue);
@@ -290,11 +290,11 @@ TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -324,9 +324,9 @@ TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
+    pressureFieldComplexSerial pfcs(grid);
 
     double testValue = 1.0;
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, testValue);
@@ -344,11 +344,11 @@ TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double testValue = 1.0;
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     int count = 0;
@@ -375,9 +375,9 @@ TEST(pressureFieldComplexSerialTest, operatorAssignDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
+    pressureFieldComplexSerial pfcs(grid);
 
     std::complex<double> testValue(1.0, 2.0);
 
@@ -395,9 +395,9 @@ TEST(pressureFieldComplexSerialTest, operatorAssignComplexDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorAssignDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
-    PressureFieldComplexSerial pfcs(grid);
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
+    pressureFieldComplexSerial pfcs(grid);
 
     double testValue = 1.0;
 
@@ -415,15 +415,15 @@ TEST(pressureFieldComplexSerialTest, operatorAssignDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 2.0);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue1;
 
     std::complex<double> testValue2(2.0, 3.0);
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = testValue2;
 
     // When
@@ -442,11 +442,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -458,7 +458,7 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
         count += increment;
     }
 
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = dataIncreasing;
 
     // When
@@ -479,15 +479,15 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldComplexSerialTest2)
 TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     double testValue2 = 2.0;
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = testValue2;
 
     // When
@@ -506,11 +506,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     double count = 0;
@@ -521,7 +521,7 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
         count++;
     }
 
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = dataIncreasing;
 
     // When
@@ -541,11 +541,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddPressureFieldSerialTest2)
 TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.0, 3.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(3.1, 4.2);
@@ -567,11 +567,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -601,11 +601,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     double testValue = 1.0;
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
 
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, testValue);
     // When
@@ -622,11 +622,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     int count = 0;
@@ -653,11 +653,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -676,11 +676,11 @@ TEST(pressureFieldComplexSerialTest, operatorAddComplexDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorAddDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -700,15 +700,15 @@ TEST(pressureFieldComplexSerialTest, operatorAddDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1 = 9.2;
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue1;
 
     std::complex<double> testValue2 = 4.8;
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = testValue2;
 
     // When
@@ -727,11 +727,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialT
 TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(21.0, 22.0);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -743,7 +743,7 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialT
         count += increment;
     }
 
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = dataIncreasing;
 
     // When
@@ -764,15 +764,15 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldComplexSerialT
 TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     double testValue2 = 2.0;
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = testValue2;
 
     // When
@@ -791,11 +791,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     double count = 0;
@@ -806,7 +806,7 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
         count++;
     }
 
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = dataIncreasing;
 
     // When
@@ -826,11 +826,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractPressureFieldSerialTest2)
 TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.0, 3.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(3.1, 4.2);
@@ -852,11 +852,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(21.0, 22.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -886,11 +886,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(3.1, 4.1);
@@ -912,11 +912,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -946,11 +946,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(31.0, 32.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -969,11 +969,11 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractComplexDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -993,15 +993,15 @@ TEST(pressureFieldComplexSerialTest, operatorSubtractDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue1;
 
     std::complex<double> testValue2(3.1, 4.1);
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = testValue2;
 
     // When
@@ -1020,11 +1020,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSeria
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -1036,7 +1036,7 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSeria
         count += increment;
     }
 
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = dataIncreasing;
 
     // When
@@ -1057,15 +1057,15 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldComplexSeria
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     double testValue2 = 2.0;
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = testValue2;
 
     // When
@@ -1084,11 +1084,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(1.0, 2.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     double count = 0;
@@ -1099,7 +1099,7 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
         count++;
     }
 
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = dataIncreasing;
 
     // When
@@ -1119,11 +1119,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByPressureFieldSerialTest2)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.0, 3.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(3.1, 4.2);
@@ -1145,11 +1145,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(21.0, 22.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -1179,11 +1179,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(3.1, 4.1);
@@ -1204,11 +1204,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> count(0.0, 0.0);
@@ -1238,11 +1238,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.2, 3.3);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -1261,11 +1261,11 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByComplexDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(2.1, 3.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -1285,13 +1285,13 @@ TEST(pressureFieldComplexSerialTest, operatorMultiplyByDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
+    grid2D grid = getGrid();
 
     std::complex<double> testValue1(3.7, 6.2);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue1;
 
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     // Note: Initialized with zero
 
     // When
@@ -1305,15 +1305,15 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialE
 TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(-3.7, -2.7);
-    PressureFieldComplexSerial pfcs1(grid);
+    pressureFieldComplexSerial pfcs1(grid);
     pfcs1 = testValue1;
 
     std::complex<double> testValue2(7.2, 3.9);
-    PressureFieldComplexSerial pfcs2(grid);
+    pressureFieldComplexSerial pfcs2(grid);
     pfcs2 = testValue2;
 
     // When
@@ -1332,13 +1332,13 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldComplexSerialT
 TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
+    grid2D grid = getGrid();
 
     std::complex<double> testValue1(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     // Note: Initialized with zero
 
     // When
@@ -1352,15 +1352,15 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialExceptio
 TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(3.7, 6.2);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     double testValue2 = 9.3;
-    PressureFieldSerial pfs(grid);
+    pressureFieldSerial pfs(grid);
     pfs = testValue2;
 
     // When
@@ -1379,11 +1379,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByPressureFieldSerialTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> zero(0.0, 0.0);
@@ -1401,11 +1401,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorExceptio
 TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(3.8, 1.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::complex<double> testValue2(4.9, 3.6);
@@ -1427,11 +1427,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(6.7, -5.3);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     double count = 1;   // Dont start at zero because of dividing by zero ...
@@ -1463,11 +1463,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     std::vector<double> dataVector = std::vector<double>(nrOfGridPoints, 0.0);
@@ -1484,11 +1484,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorExceptionTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(3.8, 1.1);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     double testValue2 = 22.4;
@@ -1510,11 +1510,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest2)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue(6.7, -5.3);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     double count = 1;   // Dont start at zero because of dividing by zero ...
@@ -1544,10 +1544,10 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleVectorTest2)
 TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
+    grid2D grid = getGrid();
 
     std::complex<double> testValue(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue;
 
     std::complex<double> zero(0.0, 0.0);
@@ -1562,11 +1562,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleExceptionTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(4.6, -0.7);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -1586,10 +1586,10 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByComplexDoubleTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleExceptionTest)
 {
     // Given
-    Grid2D grid = getGrid();
+    grid2D grid = getGrid();
 
     std::complex<double> testValue1(1.0, 1.0);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When
@@ -1603,11 +1603,11 @@ TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleExceptionTest)
 TEST(pressureFieldComplexSerialTest, operatorDivideByDoubleTest)
 {
     // Given
-    Grid2D grid = getGrid();
-    const int nrOfGridPoints = grid.GetNumberOfGridPoints();
+    grid2D grid = getGrid();
+    const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
     std::complex<double> testValue1(15.0, -1.9);
-    PressureFieldComplexSerial pfcs(grid);
+    pressureFieldComplexSerial pfcs(grid);
     pfcs = testValue1;
 
     // When

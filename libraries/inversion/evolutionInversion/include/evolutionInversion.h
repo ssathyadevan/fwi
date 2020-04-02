@@ -8,24 +8,24 @@
 #include "progressBar.h"
 
 
-class EvolutionInversion : public InversionInterface
+class EvolutionInversion : public inversionInterface
 {
 
 public:
 
-    EvolutionInversion(ForwardModelInterface *forwardModel, const EvolutionInversionInput& eiInput);
+    EvolutionInversion(forwardModelInterface *forwardModel, const EvolutionInversionInput& eiInput);
 
     EvolutionInversion(const EvolutionInversion&) = delete;
     EvolutionInversion& operator=(const EvolutionInversion&) = delete;
 
-    PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput);
+    pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 
 private:
-    ForwardModelInterface           *_forwardModel;
+    forwardModelInterface *_forwardModel;
     EvolutionInversionInput             _eiInput;
 
-    const Grid2D&                    _grid;
-    const Sources&                   _src;
-    const Receivers&                 _recv;
-    const FrequenciesGroup&          _freq;
+    const grid2D &                    _grid;
+    const sources &                   _src;
+    const receivers &                 _recv;
+    const frequenciesGroup &          _freq;
 };

@@ -7,29 +7,29 @@
 #include <pressureField.h>
 #include <string>
 
-class PressureFieldComplex
+class pressureFieldComplex
 {
 private:
-    const Grid2D &_grid;
+    const grid2D &_grid;
 
-    PressureFieldComplex(const PressureFieldComplex &) = delete;
-    PressureFieldComplex &operator=(const PressureFieldComplex &) = delete;
+    pressureFieldComplex(const pressureFieldComplex &) = delete;
+    pressureFieldComplex &operator=(const pressureFieldComplex &) = delete;
 
 public:
-    PressureFieldComplex(const Grid2D &grid_);
-    virtual ~PressureFieldComplex() {}
+    pressureFieldComplex(const grid2D &grid_);
+    virtual ~pressureFieldComplex() {}
 
-    const Grid2D &GetGrid() const { return _grid; }
-    int GetNumberOfGridPoints() const { return _grid.GetNumberOfGridPoints(); }
-    double getCellVolume() const { return _grid.GetCellVolume(); }
+    const grid2D &GetGrid() const { return _grid; }
+    int getNumberOfGridPoints() const { return _grid.getNumberOfGridPoints(); }
+    double getCellVolume() const { return _grid.getCellVolume(); }
 
-    virtual void Zero() = 0;
-    virtual void Square() = 0;
-    virtual void Sqrt() = 0;
-    virtual void Reciprocal() = 0;
+    virtual void zero() = 0;
+    virtual void square() = 0;
+    virtual void sqrt() = 0;
+    virtual void reciprocal() = 0;
 
-    virtual double Norm() const = 0;
-    virtual double RelNorm() const = 0;
+    virtual double norm() const = 0;
+    virtual double relNorm() const = 0;
     virtual std::complex<double> Summation() const = 0;
 
     virtual void toBuffer(std::complex<double> *buffer) const = 0;

@@ -21,29 +21,29 @@ inline double normSq(const std::vector<std::complex<double>> &data, int n)
     return result;
 }
 
-class ForwardModelInterface
+class forwardModelInterface
 {
 
 public:
-    ForwardModelInterface(const Grid2D &grid, const Sources &src, const Receivers &recv,
-                          const FrequenciesGroup &freq);
+    forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
+                          const frequenciesGroup &freq);
 
-    virtual ~ForwardModelInterface();
+    virtual ~forwardModelInterface();
 
-    const Grid2D& getGrid();
-    const Sources& getSrc();
-    const Receivers& getRecv();
-    const FrequenciesGroup& getFreq();
+    const grid2D & getGrid();
+    const sources & getSrc();
+    const receivers & getRecv();
+    const frequenciesGroup & getFreq();
 
-    virtual void calculatePData(const PressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData) = 0;
-    virtual void calculatePTot(const PressureFieldSerial &chiEst) = 0;
-    virtual void mapDomainToSignal(const PressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
+    virtual void calculatePData(const pressureFieldSerial &chiEst, std::vector<std::complex<double>> &pData) = 0;
+    virtual void calculatePTot(const pressureFieldSerial &chiEst) = 0;
+    virtual void mapDomainToSignal(const pressureFieldSerial &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
     virtual void calculateKappa() {L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE);}
-    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, PressureFieldComplexSerial &) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
-    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, PressureFieldComplexSerial &, const int, const int) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, pressureFieldComplexSerial &) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
+    virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, pressureFieldComplexSerial &, const int, const int) { L_(lerror) << "This ForwardModel is not compatible with the Inversion model" ; exit(EXIT_FAILURE); }
 
-    std::vector<std::complex<double>>& calculateResidual(const PressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
+    std::vector<std::complex<double>>& calculateResidual(const pressureFieldSerial &chiEst, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
 
 private:
@@ -51,10 +51,10 @@ private:
     std::vector<std::complex<double>> _residual;
 
 protected:
-    const Grid2D            &_grid;
-    const Sources           &_src;
-    const Receivers         &_recv;
-    const FrequenciesGroup  &_freq;
+    const grid2D &_grid;
+    const sources &_src;
+    const receivers &_recv;
+    const frequenciesGroup &_freq;
 
 };
 

@@ -2,16 +2,16 @@
 #include "progressBar.h"
 #include "log.h"
 
-EvolutionInversion::EvolutionInversion(ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+EvolutionInversion::EvolutionInversion(forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
     : _forwardModel(), _eiInput(eiInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;
 }
 
-PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
+pressureFieldSerial EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     // open the file to store the residual log
-    ProgressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
+    progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
     std::ofstream file;
     file.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
 
@@ -30,8 +30,8 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
     std::normal_distribution<double> distribution(0.0,mutationRate);
 
     //Create initial guess, generation 0, Adam
-    PressureFieldSerial parent(_grid);
-    parent.RandomSaurabh();
+    pressureFieldSerial parent(_grid);
+    parent.randomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
     L_(linfo) << "Parent Res | Gen | Mutation Rate" << std::endl;
@@ -40,14 +40,14 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
     //main loop// Looping through the generations
     for (int it = 0; it < _eiInput.nGenerations; it++)
     {
-        PressureFieldSerial favouriteChild(_grid); //This is the best child so far
+        pressureFieldSerial favouriteChild(_grid); //This is the best child so far
         parent.CopyTo(favouriteChild);  //The first favourite child is a clone of the parent
         favouriteChildResSq = parentResSq;
         //start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
         for (int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
         {
-            PressureFieldSerial child(_grid);
-            child.RandomChild(parent, generator, distribution);
+            pressureFieldSerial child(_grid);
+            child.randomChild(parent, generator, distribution);
             childResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(child, pData));
 
             if (childResSq < favouriteChildResSq)
@@ -76,7 +76,7 @@ PressureFieldSerial EvolutionInversion::Reconstruct(const std::vector<std::compl
 
     file.close(); // close the residual.log file
 
-    PressureFieldSerial result(_grid);
+    pressureFieldSerial result(_grid);
     parent.CopyTo(result);
     return result;
 }

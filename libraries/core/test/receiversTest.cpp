@@ -2,17 +2,17 @@
 #include <iterator>
 #include "receivers.h"
 
-Receivers InitializeReceivers()
+receivers InitializeReceivers()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {10.0, 10.0};
-    Receivers receivers(xMin, xMax, 11);
+    receivers receivers(xMin, xMax, 11);
     return receivers;
 }
 
 TEST(ReceiversTest, ConstructorTest)
 {
-    Receivers receivers = InitializeReceivers();
+    receivers receivers = InitializeReceivers();
 
 
     double dx = 1.0;
@@ -28,7 +28,7 @@ TEST(ReceiversTest, ConstructorTest)
 
 TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 {
-    Receivers receivers = InitializeReceivers();
+    receivers receivers = InitializeReceivers();
 
     EXPECT_EQ(receivers.xRecv.size(), 11);
 }
@@ -36,7 +36,7 @@ TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
 
 TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
 {
-    Receivers receivers = InitializeReceivers();
+    receivers receivers = InitializeReceivers();
 
     std::array<double, 11> expectedXPositions = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
 

@@ -12,49 +12,49 @@
 
 using namespace Eigen;
 
-class Greens_rect_2D_cpu
+class greensRect2DCpu
 {
 public:
-    Greens_rect_2D_cpu(
-        const Grid2D &grid_, const std::function<std::complex<double>(double, double)> G_func_, const Sources &src_, const Receivers &recv_, double k_);
+    greensRect2DCpu(
+        const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
 
-    ~Greens_rect_2D_cpu();
+    ~greensRect2DCpu();
 
-    const std::complex<double> *GetGreensVolume() const { return G_vol; }
+    const std::complex<double> *getGreensVolume() const { return gVol; }
 
-    const PressureFieldComplexSerial *GetReceiverCont(int iRecv) const { return G_recv[iRecv]; }
+    const pressureFieldComplexSerial *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
 
-    PressureFieldComplexSerial ContractWithField(const PressureFieldComplexSerial &x) const;
+    pressureFieldComplexSerial contractWithField(const pressureFieldComplexSerial &x) const;
 
-    const Grid2D &GetGrid() const { return grid; }
+    const grid2D &getGrid() const { return grid; }
 
     // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
     // Equation ID: "rel:buildField"
 
-    PressureFieldComplexSerial dot1(const PressureFieldComplexSerial &dW) const;
+    pressureFieldComplexSerial dot1(const pressureFieldComplexSerial &dW) const;
 
 private:
-    void create_Greens_volume();
+    void createGreensVolume();
 
-    void create_Greens_volume_ankit();
+    void createGreensVolumeAnkit();
 
-    void create_Greens_recv();
+    void createGreensRecv();
 
-    void delete_Greens_recv();
+    void deleteGreensRecv();
 
     std::function<std::complex<double>(double, double)> G_func;
 
-    const Grid2D grid;
-    const Sources src;
-    const Receivers recv;
+    const grid2D grid;
+    const sources src;
+    const receivers recv;
     const double k;
 
-    std::complex<double> *G_vol;
-    std::vector<PressureFieldComplexSerial *> G_recv;
+    std::complex<double> *gVol;
+    std::vector<pressureFieldComplexSerial *> gRecv;
 
     Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-    void setGreensFunction(PressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
+    void setGreensFunction(pressureFieldComplexSerial &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
-    Greens_rect_2D_cpu(const Greens_rect_2D_cpu &) = delete;
-    Greens_rect_2D_cpu &operator=(const Greens_rect_2D_cpu &) = delete;
+    greensRect2DCpu(const greensRect2DCpu &) = delete;
+    greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;
 };

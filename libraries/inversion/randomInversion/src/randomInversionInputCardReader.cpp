@@ -3,10 +3,10 @@
 #include "json.h"
 
 RandomInversionInputCardReader::RandomInversionInputCardReader(const std::string &caseFolder)
-    : InputCardReader()
+    : inputCardReader()
 {
     readCard(caseFolder);
-    checkinput();
+    checkInput();
 }
 
 RandomInversionInput RandomInversionInputCardReader::getInput()
@@ -24,7 +24,7 @@ void RandomInversionInputCardReader::readCard(const std::string &caseFolder)
     _input = input;
 }
 
-void RandomInversionInputCardReader::checkinput()
+void RandomInversionInputCardReader::checkInput()
 {
     if(_input.toleranceOuter <= 0) {throw std::invalid_argument("Invalid tolerance in RandomInversionInput.json");}
     if (_input.nMaxOuter <= 0) {throw std::invalid_argument("Invalid number of iterations nMaxOuter in RandomInversionInput.json");}

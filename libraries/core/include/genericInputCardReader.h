@@ -6,15 +6,15 @@
 #include "genericInput.h"
 
 
-class GenericInputCardReader: public InputCardReader
+class genericInputCardReader : public inputCardReader
 {   
 public:
-    GenericInputCardReader(const std::string &runName);
-    GenericInput getInput();
+    genericInputCardReader(const std::string &runName);
+    genericInput getInput();
 
 private:
     void readCard(const std::string &caseFolder);
-    void checkinput();
+    void checkInput();
 
-    GenericInput _input;
+    genericInput _input;
 };

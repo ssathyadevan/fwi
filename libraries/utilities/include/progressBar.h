@@ -8,7 +8,8 @@
 #include <unistd.h> //STDOUT_FILENO
 #endif
 
-class ProgressBar{
+class progressBar
+{
 private:
     int _total;
     int _counter;
@@ -18,8 +19,8 @@ private:
     void showCursor();
 
 public:
-    ~ProgressBar();
-    ProgressBar (const int total = 100, const int counter = 0);
+    ~progressBar();
+    progressBar(const int total = 100, const int counter = 0);
     void setCounter(const int counter);
     void setTerminalWidth(const int width);
     void setTotal(const int total);
@@ -27,8 +28,8 @@ public:
     int getTotal() const;
     void print() const;
     void initBar() const;
-    ProgressBar& operator++();
-    ProgressBar& operator++(int);
-    ProgressBar& operator--(); 
-    ProgressBar& operator--(int); 
+    progressBar & operator++();
+    progressBar & operator++(int);
+    progressBar & operator--();
+    progressBar & operator--(int);
 };

@@ -264,7 +264,7 @@ given by
 \frac{\imath}{4} H_0^{(1)}(k_0 \|\mathbf{x} - \mathbf{y}\|) =
 -\frac{1}{4} Y_0(k_0 \|\mathbf{x} - \mathbf{y}\|) + \frac{\imath}{4}
 J_0(k_0 \|\mathbf{x} - \mathbf{y}\|).  ]\\
-\tag*{\texttt{eq:GreensFunc2d, see GreensFunctions.h}}
+\tag*{\texttt{eq:GreensFunc2d, see greensFunctions.h}}
 \end{align}
 
 In the above equation, the $H_0$ , $J_0$ and $Y_0$ are defined as the
@@ -311,7 +311,7 @@ the induced source term.
 The contrast function is defined as:
 
 \begin{align} \label{eq:contrastFunc}\chi(\mathbf{x}) = 1 -
-\left(\frac{c_0(\vec{x})}{c(\vec{x})} \right)^2.\\
+\left(\frac{c0(\vec{x})}{c(\vec{x})} \right)^2.\\
 \tag*{\texttt{step:contrastFunc}}
 \end{align}
 
@@ -805,7 +805,7 @@ to 0.
 Once the total field $p_{tot}$ is obtained, the $p_{data}$ is
 calculated according to \ref{eq:calculateData}.
 
-\paragraph{Reconstruct()}
+\paragraph{reconstruct()}
 The reconstruct function might be the most important function of the
 code. The code runs in an iterative loop to minimise the residuals.
 According to tolerance values determined by the user and the max
@@ -813,7 +813,7 @@ number of iterations, the residuals are minimised in order to obtain
 $p_{data}$. Once the residuals are minimised below the tolerance
 level, the final model is obtained.\\
 
-The Conjugate Gradient scheme detailed in section \ref{conjgrad} is coded here.
+The conjugate gradient scheme detailed in section \ref{conjgrad} is coded here.
 
 \paragraph{MakeFigure()}
 
@@ -914,7 +914,7 @@ Additionally we added a layer below the temple to represent the
 basement. The whole structure is embedded in a homogeneous background
 which carries waves at a
 uniform acoustic velocity of
-$c_0 = 2000 m/s$.
+$c0 = 2000 m/s$.
 The temple material's carriage speed is $c = 2218 m/s$.
 In the original data in \texttt{temple.txt}, you can see a list of
 zeros and \texttt{1.869...e-01}. The zeros are the background's

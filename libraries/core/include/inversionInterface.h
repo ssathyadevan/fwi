@@ -3,12 +3,12 @@
 #include "pressureFieldSerial.h"
 #include <complex>
 
-class InversionInterface
+class inversionInterface
 {
 
 public:
-    InversionInterface() {}
-    virtual ~InversionInterface() = default;
+    inversionInterface() {}
+    virtual ~inversionInterface() = default;
 
-    virtual PressureFieldSerial Reconstruct(const std::vector<std::complex<double>> &p_data, GenericInput input) = 0;
+    virtual pressureFieldSerial reconstruct(const std::vector<std::complex<double>> &p_data, genericInput input) = 0;
 };

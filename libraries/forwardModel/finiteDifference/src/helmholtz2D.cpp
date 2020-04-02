@@ -5,8 +5,8 @@ namespace fwi
 {
     static const double pi = std::atan(1.0) * 4.0;
 }
-Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &src, const double c0, const PressureFieldSerial &chi,
-    const FiniteDifferenceForwardModelInput &fmInput) :
+Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const pressureFieldSerial &chi,
+    const finiteDifferenceForwardModelInput &fmInput) :
     _A(),
     _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
@@ -14,9 +14,9 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
 
     // calculating the width of the perfectly matching layer. (rounded up)
     std::array<double, 2> dx;
-    std::array<int, 2> oldnx = grid.GetGridDimensions();
-    std::array<double, 2> xMin = grid.GetGridStart();
-    std::array<double, 2> xMax = grid.GetGridEnd();
+    std::array<int, 2> oldnx = grid.getGridDimensions();
+    std::array<double, 2> xMin = grid.getGridStart();
+    std::array<double, 2> xMax = grid.getGridEnd();
 
     // Adjust the dx, because they are different in Finite Difference context
     dx[0] = (xMax[0] - xMin[0]) / static_cast<double>(oldnx[0] - 1);
@@ -28,7 +28,7 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
     // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
 
-    // sources can be outside imaging domain. Area that we solve for needs to include all Sources
+    // sources can be outside imaging domain. Area that we solve for needs to include all sources
     double extraWidthLeft = 0.0;
     double extraWidthRight = 0.0;
     double extraHeightBottom = 0.0;
@@ -69,8 +69,8 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
 
     _idxUpperLeftDomain[0] = _PMLwidth[0] + extraGridPointsLeft;
     _idxUpperLeftDomain[1] = _PMLwidth[1] + extraGridPointsTop;
-    _idxLowerRightDomain[0] = _PMLwidth[0] + extraGridPointsLeft + grid.GetGridDimensions()[0];
-    _idxLowerRightDomain[1] = _PMLwidth[1] + extraGridPointsTop + grid.GetGridDimensions()[1];
+    _idxLowerRightDomain[0] = _PMLwidth[0] + extraGridPointsLeft + grid.getGridDimensions()[0];
+    _idxLowerRightDomain[1] = _PMLwidth[1] + extraGridPointsTop + grid.getGridDimensions()[1];
 
     xMin[0] -= (_PMLwidth[0] + extraGridPointsLeft) * dx[0];
     xMin[1] -= (_PMLwidth[1] + extraGridPointsTop) * dx[1];
@@ -82,8 +82,8 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
     _coordPMLUp = xMin[1] + _PMLwidth[1] * dx[1];
     _coordPMLDown = xMax[1] - _PMLwidth[1] * dx[1];
 
-    std::array<int, 2> nx = {grid.GetGridDimensions()[0] + 2 * _PMLwidth[0] + extraGridPointsLeft + extraGridPointsRight,
-        grid.GetGridDimensions()[1] + 2 * _PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom};
+    std::array<int, 2> nx = {grid.getGridDimensions()[0] + 2 * _PMLwidth[0] + extraGridPointsLeft + extraGridPointsRight,
+        grid.getGridDimensions()[1] + 2 * _PMLwidth[1] + extraGridPointsTop + extraGridPointsBottom};
 
     // Initialize matrix and rhs vector
     _A.resize(nx[0] * nx[1], nx[0] * nx[1]);
@@ -99,10 +99,10 @@ Helmholtz2D::Helmholtz2D(const Grid2D &grid, const double freq, const Sources &s
 
 Helmholtz2D::~Helmholtz2D() { delete _newgrid; }
 
-void Helmholtz2D::updateChi(const PressureFieldSerial &chi)
+void Helmholtz2D::updateChi(const pressureFieldSerial &chi)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
-    std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
+    std::array<int, 2> oldnx = _oldgrid.getGridDimensions();
     int indexChiVal, indexWaveVelo, idx1, idx2;
 
     for(int i = 0; i < nx[0] * nx[1]; ++i)
@@ -125,10 +125,10 @@ void Helmholtz2D::updateChi(const PressureFieldSerial &chi)
     }
 }
 
-PressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &source, PressureFieldComplexSerial &pInit)
+pressureFieldComplexSerial Helmholtz2D::solve(const std::array<double, 2> &source, pressureFieldComplexSerial &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
-    std::array<int, 2> oldnx = _oldgrid.GetGridDimensions();
+    std::array<int, 2> oldnx = _oldgrid.getGridDimensions();
 
     // Construct vector for this source
     buildVector(source);
@@ -385,7 +385,7 @@ void Helmholtz2D::buildVector(const std::array<double, 2> &source)
     if(_srcInput.r == 0)
     {
         // Add point source to the nearest grid point
-        std::array<double, 2> originalxMin = _oldgrid.GetGridStart();
+        std::array<double, 2> originalxMin = _oldgrid.getGridStart();
         int i = _idxUpperLeftDomain[0] + std::lround((source[0] - originalxMin[0]) / dx[0]);
         int j = _idxUpperLeftDomain[1] + std::lround((source[1] - originalxMin[1]) / dx[1]);
         _b[j * nx[0] + i] = 1. / (dx[0] * dx[1]);
