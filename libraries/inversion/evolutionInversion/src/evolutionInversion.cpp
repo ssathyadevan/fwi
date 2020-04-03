@@ -41,7 +41,7 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
     for (int it = 0; it < _eiInput.nGenerations; it++)
     {
         dataGrid2D favouriteChild(_grid); //This is the best child so far
-        parent.CopyTo(favouriteChild);  //The first favourite child is a clone of the parent
+        parent.copyTo(favouriteChild);  //The first favourite child is a clone of the parent
         favouriteChildResSq = parentResSq;
         //start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
         for (int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
@@ -52,7 +52,7 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
 
             if (childResSq < favouriteChildResSq)
             {
-                child.CopyTo(favouriteChild);
+                child.copyTo(favouriteChild);
                 favouriteChildResSq = childResSq;
             }
             
@@ -68,7 +68,7 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
             mutationRate /=1.1;
             distribution = std::normal_distribution<double>(0.0,mutationRate);
         }
-        favouriteChild.CopyTo(parent);
+        favouriteChild.copyTo(parent);
         preParentResSq = parentResSq;
         parentResSq = favouriteChildResSq;
         
@@ -77,6 +77,6 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
     file.close(); // close the residual.log file
 
     dataGrid2D result(_grid);
-    parent.CopyTo(result);
+    parent.copyTo(result);
     return result;
 }

@@ -194,7 +194,7 @@ void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureF
 {
     for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = DotProduct(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = dotProduct(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 

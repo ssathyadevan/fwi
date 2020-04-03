@@ -138,7 +138,7 @@ void IntegralForwardModel::deleteKappa()
 complexDataGrid2D IntegralForwardModel::calcTotalField(
     const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
 {
-    assert(G.getGrid() == p_init.GetGrid());
+    assert(G.getGrid() == p_init.getGrid());
 
     Iter2 iter2 = _fmInput.iter2;
 
@@ -282,7 +282,7 @@ void IntegralForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSeri
 {
     for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = DotProduct(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = dotProduct(*_Kappa[i], CurrentPressureFieldSerial);
     }
 }
 

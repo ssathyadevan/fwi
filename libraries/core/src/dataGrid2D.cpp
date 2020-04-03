@@ -60,7 +60,7 @@ double dataGrid2D::summation() const
 
 double dataGrid2D::innerProduct(const dataGrid2D &rhs) const
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
 
     double sum = 0.0;
     const std::vector<double> &rhsData = rhs.getData();
@@ -73,8 +73,8 @@ double dataGrid2D::innerProduct(const dataGrid2D &rhs) const
 
 void dataGrid2D::gradient(std::vector<dataGrid2D> &gradientField) const
 {
-    const std::array<int, 2> &nx = GetGrid().getGridDimensions();
-    const std::array<double, 2> &dx = GetGrid().getCellDimensions();
+    const std::array<int, 2> &nx = getGrid().getGridDimensions();
+    const std::array<double, 2> &dx = getGrid().getCellDimensions();
 
     for(int i = 0; i < nx[1]; i++)
     {
@@ -155,7 +155,7 @@ void dataGrid2D::fromFile(const genericInput &input)
 
 void dataGrid2D::random()
 {
-    for(int i = 0; i < GetGrid().getNumberOfGridPoints(); i++)
+    for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
     {
         _data[i] = double(std::rand()) / double(RAND_MAX);
     }
@@ -163,7 +163,7 @@ void dataGrid2D::random()
 
 void dataGrid2D::randomSaurabh()
 {
-    for(int i = 0; i < GetGrid().getNumberOfGridPoints(); i++)
+    for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
     {
         int temp = rand() % 1800;
         _data[i] = (double)temp / 10000;
@@ -172,7 +172,7 @@ void dataGrid2D::randomSaurabh()
 
 void dataGrid2D::randomChild(const dataGrid2D &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution)
 {
-    for(int i = 0; i < GetGrid().getNumberOfGridPoints(); i++)
+    for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
     {
         double temp = distribution(generator);
         _data[i] = parent._data[i] + temp;
@@ -195,7 +195,7 @@ dataGrid2D &dataGrid2D::operator=(const dataGrid2D &rhs)
         throw std::logic_error("Assign operator with itself");
     }
 
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); ++i)
     {
@@ -225,7 +225,7 @@ dataGrid2D &dataGrid2D::operator=(const double value)
 
 dataGrid2D &dataGrid2D::operator+=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -255,7 +255,7 @@ dataGrid2D &dataGrid2D::operator+=(const double value)
 
 dataGrid2D &dataGrid2D::operator-=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -285,7 +285,7 @@ dataGrid2D &dataGrid2D::operator-=(const double value)
 
 dataGrid2D &dataGrid2D::operator*=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -315,13 +315,13 @@ dataGrid2D &dataGrid2D::operator*=(const double value)
 
 dataGrid2D &dataGrid2D::operator/=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
         if(rhsData[i] == 0.0)
         {
-            throw std::overflow_error("Operator devides by zero");
+            throw std::overflow_error("Operator divides by zero");
         }
 
         _data[i] /= rhsData[i];
@@ -336,7 +336,7 @@ dataGrid2D &dataGrid2D::operator/=(const std::vector<double> &data)
     {
         if(data[i] == 0.0)
         {
-            throw std::overflow_error("Operator devides by zero");
+            throw std::overflow_error("Operator divides by zero");
         }
         _data[i] /= data[i];
     }
@@ -347,7 +347,7 @@ dataGrid2D &dataGrid2D::operator/=(const double value)
 {
     if(value == 0.0)
     {
-        throw std::overflow_error("Operator devides by zero");
+        throw std::overflow_error("Operator divides by zero");
     }
 
     for(int i = 0; i < getNumberOfGridPoints(); i++)

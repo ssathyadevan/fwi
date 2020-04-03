@@ -23,7 +23,7 @@ greensRect2DCpu::~greensRect2DCpu()
 complexDataGrid2D greensRect2DCpu::contractWithField(const complexDataGrid2D &x) const
 {
     // Assure we are working on the same grid
-    assert(grid == x.GetGrid());
+    assert(grid == x.getGrid());
     complexDataGrid2D outputField(grid);
     const std::array<int, 2> &nx = grid.getGridDimensions();
     contractGreensRect2D(gVol, x, outputField, nx, 2 * nx[0] - 1);
@@ -42,7 +42,7 @@ complexDataGrid2D greensRect2DCpu::dot1(const complexDataGrid2D &dW) const
 
     const std::vector<std::complex<double>> &dWData = dW.getData();
 
-    assert(grid == dW.GetGrid());
+    assert(grid == dW.getGrid());
 
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> dW_vec, eigprod;
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> dummy;

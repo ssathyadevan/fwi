@@ -53,14 +53,14 @@ dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> 
 
             if (it1 == 0 && it == 0)
             {
-                tempRandomChi.CopyTo(chiEst);
+                tempRandomChi.copyTo(chiEst);
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
             else if (std::abs(newChiEstRes) < std::abs(chiEstRes))
             {
                 L_(linfo) << "Randomizing the temple again" ;
-                tempRandomChi.CopyTo(chiEst);
+                tempRandomChi.copyTo(chiEst);
 
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
@@ -78,6 +78,6 @@ dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> 
     file.close(); // close the residual.log file
 
     dataGrid2D result(_grid);
-    chiEst.CopyTo(result);
+    chiEst.copyTo(result);
     return result;
 }

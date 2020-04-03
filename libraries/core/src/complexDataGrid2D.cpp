@@ -6,9 +6,9 @@ complexDataGrid2D::complexDataGrid2D(const grid2D &grid_) :
 {
 }
 
-complexDataGrid2D::complexDataGrid2D(const complexDataGrid2D &rhs) : complexDataGrid2D(rhs.GetGrid())
+complexDataGrid2D::complexDataGrid2D(const complexDataGrid2D &rhs) : complexDataGrid2D(rhs.getGrid())
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); ++i)
     {
@@ -72,7 +72,7 @@ std::complex<double> complexDataGrid2D::Summation() const
 
 double complexDataGrid2D::innerProduct(const complexDataGrid2D &rhs) const
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
 
     double prod = 0.0;
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
@@ -85,7 +85,7 @@ double complexDataGrid2D::innerProduct(const complexDataGrid2D &rhs) const
 
 std::complex<double> complexDataGrid2D::dotProduct(const complexDataGrid2D &rhs) const
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
 
     std::complex<double> sum(0.0, 0.0);
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
@@ -98,7 +98,7 @@ std::complex<double> complexDataGrid2D::dotProduct(const complexDataGrid2D &rhs)
 
 std::complex<double> complexDataGrid2D::dotProduct(const dataGrid2D &rhs) const
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
 
     std::complex<double> sum(0.0, 0.0);
     const std::vector<double> &rhsData = rhs.getData();
@@ -143,7 +143,7 @@ void complexDataGrid2D::fromFile(const std::string &fileName)
 
 dataGrid2D complexDataGrid2D::getRealPart() const
 {
-    dataGrid2D result(GetGrid());
+    dataGrid2D result(getGrid());
 
     std::vector<double> realData(getNumberOfGridPoints(), 0.0);
     for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -170,7 +170,7 @@ complexDataGrid2D &complexDataGrid2D::operator=(const complexDataGrid2D &rhs)
         throw std::logic_error("Assign operator with itself");
     }
 
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); ++i)
     {
@@ -181,7 +181,7 @@ complexDataGrid2D &complexDataGrid2D::operator=(const complexDataGrid2D &rhs)
 
 complexDataGrid2D &complexDataGrid2D::operator=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); ++i)
     {
@@ -230,7 +230,7 @@ complexDataGrid2D &complexDataGrid2D::operator=(const double value)
 
 complexDataGrid2D &complexDataGrid2D::operator+=(const complexDataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -241,7 +241,7 @@ complexDataGrid2D &complexDataGrid2D::operator+=(const complexDataGrid2D &rhs)
 
 complexDataGrid2D &complexDataGrid2D::operator+=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -290,7 +290,7 @@ complexDataGrid2D &complexDataGrid2D::operator+=(const double value)
 
 complexDataGrid2D &complexDataGrid2D::operator-=(const complexDataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -301,7 +301,7 @@ complexDataGrid2D &complexDataGrid2D::operator-=(const complexDataGrid2D &rhs)
 
 complexDataGrid2D &complexDataGrid2D::operator-=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -350,7 +350,7 @@ complexDataGrid2D &complexDataGrid2D::operator-=(const double value)
 
 complexDataGrid2D &complexDataGrid2D::operator*=(const complexDataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -361,7 +361,7 @@ complexDataGrid2D &complexDataGrid2D::operator*=(const complexDataGrid2D &rhs)
 
 complexDataGrid2D &complexDataGrid2D::operator*=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
@@ -410,7 +410,7 @@ complexDataGrid2D &complexDataGrid2D::operator*=(const double value)
 
 complexDataGrid2D &complexDataGrid2D::operator/=(const complexDataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
 
     const std::vector<std::complex<double>> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -426,7 +426,7 @@ complexDataGrid2D &complexDataGrid2D::operator/=(const complexDataGrid2D &rhs)
 
 complexDataGrid2D &complexDataGrid2D::operator/=(const dataGrid2D &rhs)
 {
-    assert(GetGrid() == rhs.GetGrid());
+    assert(getGrid() == rhs.getGrid());
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {

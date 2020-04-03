@@ -27,7 +27,7 @@ public:
     void setValueAtIndex(const double value, const int index) { _data[index] = value; }
     void addValueAtIndex(const double value, const int index) { _data[index] += value; }
 
-    const grid2D &GetGrid() const { return _grid; }
+    const grid2D &getGrid() const { return _grid; }
     int getNumberOfGridPoints() const { return _grid.getNumberOfGridPoints(); }
     double getCellVolume() const { return _grid.getCellVolume(); }
 
@@ -50,7 +50,7 @@ public:
     void randomSaurabh();   // Generates random approximations of Saurabh
     void randomChild(const dataGrid2D &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
 
-    void CopyTo(dataGrid2D &dest) { dest = *this; }
+    void copyTo(dataGrid2D &dest) { dest = *this; }
 
     // Operators
     dataGrid2D &operator=(const dataGrid2D &rhs);

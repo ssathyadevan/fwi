@@ -25,7 +25,7 @@ public:
     void setValueAtIndex(const std::complex<double> value, const int index) { _data[index] = value; }
     void addValueAtIndex(const std::complex<double> value, const int index) { _data[index] += value; }
 
-    const grid2D &GetGrid() const { return _grid; }
+    const grid2D &getGrid() const { return _grid; }
     int getNumberOfGridPoints() const { return _grid.getNumberOfGridPoints(); }
     double getCellVolume() const { return _grid.getCellVolume(); }
 
@@ -87,11 +87,11 @@ public:
     complexDataGrid2D &operator/=(const double rhs);
 };
 
-inline double InnerProduct(const complexDataGrid2D &t1, const complexDataGrid2D &t2) { return t1.innerProduct(t2); }
+inline double innerProduct(const complexDataGrid2D &t1, const complexDataGrid2D &t2) { return t1.innerProduct(t2); }
 
-inline std::complex<double> DotProduct(const complexDataGrid2D &t1, const complexDataGrid2D &t2) { return t1.dotProduct(t2); }
+inline std::complex<double> dotProduct(const complexDataGrid2D &t1, const complexDataGrid2D &t2) { return t1.dotProduct(t2); }
 
-inline std::complex<double> DotProduct(const complexDataGrid2D &t1, const dataGrid2D &t2) { return t1.dotProduct(t2); }
+inline std::complex<double> dotProduct(const complexDataGrid2D &t1, const dataGrid2D &t2) { return t1.dotProduct(t2); }
 
 inline complexDataGrid2D operator-(const complexDataGrid2D &t1, const complexDataGrid2D &t2)
 {
