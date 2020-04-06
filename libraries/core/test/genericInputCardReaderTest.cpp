@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 #include <ostream>
 
+// const std::string inputPath = "./../../../parallelized-fwi/tests"; // For local use
 const std::string inputPath = "./../../../../tests";
 
 TEST(genericInputCardReaderTest, readc0Test)

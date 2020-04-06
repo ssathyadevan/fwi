@@ -23,7 +23,7 @@ void genericInputCardReader::readCard(const std::string &caseFolder)
 {
     std::string runName = getRunName(caseFolder);
 
-    static const std::string stringJsonFilePath = "/input/genericInput.json";
+    static const std::string stringJsonFilePath = "/input/GenericInput.json";
     nlohmann::json jsonFile = readFile(caseFolder + stringJsonFilePath);
 
     // Initialize genericInput
@@ -49,8 +49,11 @@ void genericInputCardReader::readCard(const std::string &caseFolder)
     readNSourcesParameter(jsonFile, jsonInput);
     readNReceiversParameter(jsonFile, jsonInput);
 
-    static const std::string parameterVerbose = "verbose";
+    static const std::string parameterVerbose = "verbosity";
     jsonInput.verbose = jsonFile[parameterVerbose];
+
+    _input = jsonInput;
+    // TODO: return jsonInput reference and set in constructor for readability
 }
 
 std::string genericInputCardReader::getRunName(const std::string &caseFolder)
@@ -74,7 +77,7 @@ std::string genericInputCardReader::getRunName(const std::string &caseFolder)
 
 void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
 {
-    static const std::string parameterC0 = "c0";
+    static const std::string parameterC0 = "c_0";
     double c0 = jsonFile[parameterC0];
 
     if(c0 <= 0)
@@ -87,7 +90,7 @@ void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, gen
 
 void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
 {
-    static const std::string parameterFreq = "freqInfo";
+    static const std::string parameterFreq = "Freq";
     static const std::string parameterFreqMin = "min";
     static const std::string parameterFreqMax = "max";
     static const std::string parameterFreqNTotal = "nTotal";
@@ -178,7 +181,7 @@ void genericInputCardReader::readGridOriginalParameter(const nlohmann::json &jso
     static const std::string parameterX = "x";
     static const std::string parameterZ = "z";
 
-    static const std::string parameterNGridOriginal = "nGridOriginal";
+    static const std::string parameterNGridOriginal = "ngrid_original";
     int nGridOriginalX = jsonFile[parameterNGridOriginal][parameterX];
     int nGridOriginalZ = jsonFile[parameterNGridOriginal][parameterZ];
 
@@ -195,7 +198,7 @@ void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, g
     static const std::string parameterX = "x";
     static const std::string parameterZ = "z";
 
-    static const std::string parameterNGrid = "nGrid";
+    static const std::string parameterNGrid = "ngrid";
 
     int nGridX = jsonFile[parameterNGrid][parameterX];
     int nGridZ = jsonFile[parameterNGrid][parameterZ];
