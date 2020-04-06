@@ -1,0 +1,12 @@
+{
+    "Iter1": {
+        "n": 2,
+        "tolerance": 1.0e-6
+    },
+    "DeltaAmplification": {
+        "start": 100.0,
+        "slope": 10.0
+    },
+    "n_max": 2,
+    "do_reg": true
+}

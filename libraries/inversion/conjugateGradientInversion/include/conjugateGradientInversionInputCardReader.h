@@ -1,18 +1,19 @@
 #pragma once
 
-#include "inputCardReader.h"
 #include "conjugateGradientInversionInput.h"
-#include <string>
+#include "inputCardReader.h"
 #include <fstream>
 #include <sstream>
+#include <string>
 
-class ConjugateGradientInversionInputCardReader : public InputCardReader
+class ConjugateGradientInversionInputCardReader : public inputCardReader
 {
-public:
+    public:
     ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
     ConjugateGradientInversionInput getInput();
-private:
-    void readCard(const std::string &caseFolder);
+
+    private:
+    void readCard(const std::string &caseFolder) override;
+    void checkInput() override;
     ConjugateGradientInversionInput _input;
 };
-

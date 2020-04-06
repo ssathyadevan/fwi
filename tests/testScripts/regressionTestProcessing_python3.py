@@ -40,7 +40,7 @@ if (new.endswith("/")):
 if (bench.endswith("/")):
 	bench = bench[:-1]
 
-inputfiles = ["ConjugateGradientInput.json", "IntegralFMInput.json", "GenericInput.json"]
+inputfiles = ["ConjugateGradientInversionInput.json", "IntegralFMInput.json", "GenericInput.json"]
 
 for i in range(0,len(inputfiles)):
     tempbench = bench +  "/input/" + inputfiles[i]
@@ -158,6 +158,7 @@ we will study them in more detail")
 print("\n************************************************************")
 print("                      GENERAL ANALYSIS")
 print("************************************************************")
+regression_test_passed = False
 
 reader_prfct_rsrvr = csv.reader(open(chi_ref_bench_csv),delimiter=',')
 dummy_variable_reader_pr = list(reader_prfct_rsrvr)
@@ -210,8 +211,8 @@ for i in range (0,prfct_rsrvr_chi_array.shape[0]):
         (new_est_chi_array[i,j] - bench_est_chi_array[i,j]) \
         / resolution_of_bench * 100
         )
-        if (abs(diff_new_and_bench[i,j]) > tolerance):
-            regression_test_passed = False
+        if (abs(diff_new_and_bench[i,j]) < tolerance):
+            regression_test_passed = True
             
 
 
@@ -311,27 +312,25 @@ print("\nMinimum deviation")
 print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
 
-if ((mse_bench > mse_new) \
-and (bench_max>new_max) \
-and (abs(bench_min) > abs(new_min))):
-    increased_precision_test = True
+if (mse_new - mse_bench < 0.0001):
+    increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
 print("************************************************************\n")
 
 def find(substr,whichin):
     from datetime import datetime
-    lines           = [x for x in open(whichin+"Process.out") if substr in x]
+    lines           = [x for x in open(whichin+"Process.log") if substr in x]
     line            = lines[0]
-    manip           = line.replace(substr,'').replace("\n",'')
-    start_or_finish = (datetime.strptime(manip,'%c'))
+    manip = line.replace(substr, '').replace("\n", '')
+    start_or_finish = (datetime.strptime(manip, "%X.%f"))
     return start_or_finish 
 
-datetime_bench_start  = find("Starting at ", bench + "/output/" +bench)
-datetime_bench_finish = find("Finished at ", bench + "/output/" +bench)
+datetime_bench_start  = find(" INFO: Starting", bench + "/output/" +bench)
+datetime_bench_finish = find(" INFO: Finished", bench + "/output/" +bench)
 bench_total_seconds   = (datetime_bench_finish - datetime_bench_start).seconds 
-datetime_new_start    = find("Starting at ", new + "/output/"+ new)
-datetime_new_finish   = find("Finished at ", new + "/output/" +new)
+datetime_new_start    = find(" INFO: Starting", new + "/output/"+ new)
+datetime_new_finish   = find(" INFO: Finished", new + "/output/" +new)
 new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds 
 
 if (bench_total_seconds > new_total_seconds):
@@ -348,7 +347,7 @@ print("************************************************************\n")
 print("Increased overall precision:  " + str(increased_precision_test_passed))
 print("Increased performance:        " + str(increased_performance_test_passed))
 
-if regression_test_passed is True:
+if (regression_test_passed is True):
     s = 'True'
 else:
     s = 'False'
@@ -357,7 +356,7 @@ f= open("RegressionTest_Passed.txt","w+")
 f.write(str(s))
 f.close()
 
-print_regression_test_passed_message(regression_test_passed)
+print_regression_test_passed_message(s)
 
 if (len(sys.argv) == 2):
     os.system("rm hiquality.*")

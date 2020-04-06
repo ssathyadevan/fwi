@@ -1,11 +1,12 @@
 #include "sources.h"
+#include "log.h"
 
-Sources::Sources(const std::array<double, 2> xMin,
+sources::sources(const std::array<double, 2> xMin,
                  const std::array<double, 2> xMax, int nSrc_) : nSrc(nSrc_), xSrc()
 {
     assert(nSrc > 1);
 
-    std::array<double, 2> dx = calculate_distance(xMin, xMax);
+    std::array<double, 2> dx = calculateDistance(xMin, xMax);
 
     for (int i = 0; i < nSrc; i++)
     {
@@ -18,7 +19,7 @@ Sources::Sources(const std::array<double, 2> xMin,
     }
 }
 
-std::array<double, 2> Sources::calculate_distance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
+std::array<double, 2> sources::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
 {
     std::array<double, 2> dx;
     for (int j = 0; j < 2; j++)
@@ -28,12 +29,11 @@ std::array<double, 2> Sources::calculate_distance(const std::array<double, 2> xM
     return dx;
 }
 
-void Sources::Print()
+void sources::Print()
 {
-    std::cout << "Total number of sources is " << nSrc << ". Positions:" << std::endl;
+    L_(linfo) << "Total number of sources is " << nSrc << ". Positions:" ;
     for (int i = 0; i < nSrc; i++)
     {
-        std::cout << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")" << std::endl;
+        L_(linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")" ;
     }
-    std::cout << std::endl;
 }

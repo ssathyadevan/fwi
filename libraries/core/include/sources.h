@@ -6,7 +6,7 @@
 #include <array>
 
 
-class Sources
+class sources
 {
 
 public:
@@ -14,13 +14,13 @@ public:
   int nSrc;
   std::vector< std::array<double, 2> > xSrc;
   // Place the sources on a linear line from xMin to xMax, including the end points
-  Sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
+  sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax,
                   int nSrc_);
 
   void Print();
 
 private:
-  std::array<double, 2> calculate_distance(const std::array<double, 2> xMin, const std::array<double, 2> xMax);
+  std::array<double, 2> calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax);
 };
 
 

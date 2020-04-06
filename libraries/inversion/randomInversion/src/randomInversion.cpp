@@ -1,25 +1,25 @@
 #include "randomInversion.h"
 #include "progressBar.h"
-RandomInversion::RandomInversion(ForwardModelInterface *forwardModel, GenericInput gInput)
-    : _forwardModel(), _riInput(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+#include "log.h"
+
+RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+    : _forwardModel(), _riInput(riInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
 {
-    RandomInversionInputCardReader RandomInversionInputCardReader(gInput.caseFolder);
     _forwardModel = forwardModel;
-    _riInput = RandomInversionInputCardReader.getInput();
 }
 
-PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<double>> &pData, GenericInput gInput)
+dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
-    ProgressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
+    progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
     double eta = 1.0 / (normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
-    PressureFieldSerial chiEst(_grid);
+    dataGrid2D chiEst(_grid);
 
-    chiEst.Zero();
+    chiEst.zero();
 
     // open the file to store the residual log
     std::ofstream file;
@@ -27,7 +27,7 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
 
     if (!file)
     {
-        std::cout << "Failed to open the file to store residuals" << std::endl;
+        L_(lerror) << "Failed to open the file to store residuals" ;
         std::exit(EXIT_FAILURE);
     }
 
@@ -45,28 +45,27 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
         //start the inner loop
         for (int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
-
-            PressureFieldSerial tempRandomChi(_grid);
-            tempRandomChi.RandomSaurabh();
+            dataGrid2D tempRandomChi(_grid);
+            tempRandomChi.randomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
             newChiEstRes = eta * newResSq;
 
             if (it1 == 0 && it == 0)
             {
-                tempRandomChi.CopyTo(chiEst);
+                tempRandomChi.copyTo(chiEst);
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
             else if (std::abs(newChiEstRes) < std::abs(chiEstRes))
             {
-                std::cout << "Randomizing the temple again" << std::endl;
-                tempRandomChi.CopyTo(chiEst);
+                L_(linfo) << "Randomizing the temple again" ;
+                tempRandomChi.copyTo(chiEst);
 
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
-            std::cout << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes << std::endl;
+            L_(linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17) << chiEstRes ;
 
             file << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
             counter++; // store the residual value in the residual log
@@ -78,7 +77,7 @@ PressureFieldSerial RandomInversion::Reconstruct(const std::vector<std::complex<
 
     file.close(); // close the residual.log file
 
-    PressureFieldSerial result(_grid);
-    chiEst.CopyTo(result);
+    dataGrid2D result(_grid);
+    chiEst.copyTo(result);
     return result;
 }

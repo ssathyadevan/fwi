@@ -3,24 +3,18 @@
 #include "finiteDifferenceForwardModelInputCardReader.h"
 #include "json.h"
 
-FiniteDifferenceForwardModelInputCardReader::FiniteDifferenceForwardModelInputCardReader(const std::string &caseFolder)
-    : InputCardReader()
+finiteDifferenceForwardModelInputCardReader::finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder) : inputCardReader()
 {
     readCard(caseFolder);
 }
 
-FiniteDifferenceForwardModelInput FiniteDifferenceForwardModelInputCardReader::getInput()
-{
-    return _input;
-}
-
-void FiniteDifferenceForwardModelInputCardReader::readCard(const std::string &caseFolder)
+void finiteDifferenceForwardModelInputCardReader::readCard(const std::string &caseFolder)
 {
     nlohmann::json j = readFile(caseFolder + "/input/FiniteDifferenceFMInput.json");
 
-    FiniteDifferenceForwardModelInput input{
-        {j["PMLWidthFactor"]["x"], j["PMLWidthFactor"]["x"]},
-        {j["SourceParameter"]["r"], j["SourceParameter"]["beta"]}};
+    finiteDifferenceForwardModelInput input{{j["PMLWidthFactor"]["x"], j["PMLWidthFactor"]["z"]}, {j["SourceParameter"]["r"], j["SourceParameter"]["beta"]}};
 
     _input = input;
 }
+
+void finiteDifferenceForwardModelInputCardReader::checkInput() {}

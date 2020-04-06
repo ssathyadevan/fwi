@@ -6,3 +6,4 @@ include_directories(../include)
 
 # Build the tests!
 build_test(TARGET FDTest SOURCE FDTest.cpp LIBRARIES finite_difference_forward_model_library)
+build_test(TARGET Helmholtz2DTest SOURCE helmholtz2dtest.cpp LIBRARIES finite_difference_forward_model_library)

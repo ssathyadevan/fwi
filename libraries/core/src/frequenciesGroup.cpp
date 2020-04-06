@@ -1,23 +1,30 @@
 #include "frequenciesGroup.h"
+#include "log.h"
 
-FrequenciesGroup::FrequenciesGroup(Freq freqStruct, double c_0_)
-    : nFreq(freqStruct.nTotal), c_0(c_0_), d_freq((freqStruct.max-freqStruct.min) / (freqStruct.nTotal - 1)), freq(), k()
+namespace fwi
 {
-    assert(nFreq > 1);
-    for (int i = 0; i < freqStruct.nTotal; i++)
+    static const double pi = std::atan(1.0) * 4.0;
+}
+frequenciesGroup::frequenciesGroup(freqInfo freqStruct, double c_0_) :
+    nFreq(freqStruct.nTotal), c0(c_0_), dFreq((freqStruct.max - freqStruct.min) / (std::max(freqStruct.nTotal, 2) - 1)), freq(), k()
+{
+    if(std::abs(fwi::pi - 3.14159) > 0.0001)
     {
-        freq.push_back(freqStruct.min + i * d_freq);
-        double omega = 2.0 * M_PI * freq[i];
-        k.push_back(omega / c_0);
+        throw std::invalid_argument("fwi::pi differs to much from the real value of pi.");
+    }
+    for(int i = 0; i < freqStruct.nTotal; i++)
+    {
+        freq.push_back(freqStruct.min + i * dFreq);
+        double omega = 2.0 * fwi::pi * freq[i];
+        k.push_back(omega / c0);
     }
 }
 
-void FrequenciesGroup::Print(int nFreqTotal)
+void frequenciesGroup::Print(int nFreqTotal)
 {
-    std::cout << "Total number of frequencies is " << nFreqTotal << ". Values:" << std::endl;
-    for (int i = 0; i < nFreqTotal; i++)
+    L_(linfo) << "Total number of frequencies is " << nFreqTotal << ". Values:";
+    for(int i = 0; i < nFreqTotal; i++)
     {
-        std::cout << "f = " << freq[i] << ", k = " << k[i] << std::endl;
+        L_(linfo) << "f = " << freq[i] << ", k = " << k[i];
     }
-    std::cout << std::endl;
 }

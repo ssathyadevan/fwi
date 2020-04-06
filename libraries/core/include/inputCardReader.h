@@ -1,20 +1,20 @@
 #pragma once
 
-#include <vector>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
 #include "json.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
-class InputCardReader
+class inputCardReader
 {
 public:
-    virtual ~InputCardReader() = default;
+    virtual ~inputCardReader() = default;
+
 protected:
     virtual void readCard(const std::string &caseFolder) = 0;
+    virtual void checkInput() = 0;   // TODO Remove. Check input directly
 
     nlohmann::json readFile(const std::string &fileName);
 };
-

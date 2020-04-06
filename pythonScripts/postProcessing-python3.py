@@ -12,16 +12,22 @@ from skimage import data, color
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
-from datetime import datetime
+from datetime import datetime, date
 # matplotlib.use('Agg')
 sys.path.insert(0, "../parallelized-fwi/pythonScripts/classes")
 from OutputLogger import OutputLogger
 
 def find(substr, whichin):
-    lines = [x for x in open(whichin+"Process.out") if substr in x]
+    lines = [x for x in open(whichin+".pythonIn") if substr in x]
     line = lines[0]
-    manip = line.replace(substr, '').replace("\n", '')
-    start_or_finish = (datetime.strptime(manip, '%c'))
+    return line.replace(substr, '').replace("\n", '')
+
+def findTime(substr, whichin):
+    lines = [x for x in open(whichin+".pythonIn") if substr in x]
+    line = lines[0]
+    time_string = line.replace(substr, '').replace("\n", '')
+    time_microseconds = 3
+    start_or_finish = datetime.fromtimestamp( float(time_string) / 10**9)
     return start_or_finish
 
 
@@ -100,9 +106,12 @@ print("The MSE (mean square error) is:       "+str(mse))
 print("The average relative error is:        "+str(avg_relative_error))
 
 # We find the execution time in the logs
-datetime_new_start = find("Starting at ", outputPath + "/output/" + runName)
-datetime_new_finish = find("Finished at ", outputPath + "/output/" + runName)
-new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
+datetime_new_start = findTime("Starting at ", outputPath + "/output/" + runName)
+datetime_new_finish = findTime("Finished at ", outputPath + "/output/" + runName)
+#new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
+new_total_seconds = find("CPU time: ", outputPath + "/output/" + runName)
+virtual_mem = find("Virtual memory: ", outputPath + "/output/" + runName)
+physical_mem = find("Physical memory: ", outputPath + "/output/" + runName)
 
 print("Execution time in seconds:            "+str(new_total_seconds))
 
@@ -149,7 +158,7 @@ plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 if not run_number:
     run_number = 0
 
-OutputLogger(run_number, datetime_new_start, datetime_new_finish, diff_chi, mse, square_mean_original)
+OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original)
 
 print("The pictures have been generated with Python")
 

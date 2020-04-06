@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-class RandomInversionInputCardReader: public InputCardReader
+class RandomInversionInputCardReader: public inputCardReader
 {
 public:
     RandomInversionInputCardReader(const std::string &caseFolder);
@@ -14,4 +14,5 @@ public:
 private:
     RandomInversionInput _input;
     void readCard(const std::string &caseFolder);
+    void checkInput();
 };

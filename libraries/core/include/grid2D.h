@@ -2,32 +2,30 @@
 
 #include <array>
 
-class Grid2D
+class grid2D
 {
+private:
+    const std::array<double, 2> _xMin;
+    const std::array<double, 2> _xMax;
+    const std::array<int, 2> _nx;
+    std::array<double, 2> _dx;
 
-    const std::array<double, 2> x_min;
-    const std::array<double, 2> x_max;
-    const std::array<int, 2> nx;
-    std::array<double, 2> dx;
+    int _nGridPoints;
+    double _cellVolume;
 
-    int nGridPoints;
-    double cellVolume;
-
-    Grid2D &operator=(const Grid2D &);
+    grid2D &operator=(const grid2D &) = delete;
 
 public:
+    grid2D(const std::array<double, 2> &x_min_, const std::array<double, 2> &x_max_, const std::array<int, 2> &nx_);
 
-    Grid2D(const std::array<double, 2> &x_min_,
-                 const std::array<double, 2> &x_max_,
-                 const std::array<int, 2> &nx_);
+    const std::array<int, 2> &getGridDimensions() const { return _nx; }
+    const std::array<double, 2> &getCellDimensions() const { return _dx; }
+    const std::array<double, 2> &getGridStart() const { return _xMin; }
+    const std::array<double, 2> &getGridEnd() const { return _xMax; }
 
-    const std::array<int, 2> &GetGridDimensions() const { return nx; }
-    const std::array<double, 2> &GetCellDimensions() const { return dx; }
-    const std::array<double, 2> &GetGridStart() const { return x_min; }
-    const std::array<double, 2> &GetGridEnd() const { return x_max; }
+    int getNumberOfGridPoints() const { return _nGridPoints; }
+    double getCellVolume() const { return _cellVolume; }
+    double getDomainArea() const { return (_xMax[0] - _xMin[0]) * (_xMax[1] - _xMin[1]); }
 
-    int GetNumberOfGridPoints() const { return nGridPoints; }
-    double GetCellVolume() const { return cellVolume; }
-    double GetDomainArea() const { return (x_max[0] - x_min[0]) * (x_max[1] - x_min[1]); }
-
+    bool operator==(const grid2D &rhs) const;
 };

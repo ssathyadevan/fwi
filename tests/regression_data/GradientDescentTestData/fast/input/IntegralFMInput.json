@@ -1,0 +1,7 @@
+{
+    "Iter2": {
+        "n": 4,
+        "tolerance": 5.0e-3,
+        "calcAlpha": false
+    }
+}

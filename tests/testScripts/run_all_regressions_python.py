@@ -69,7 +69,13 @@ for test in tests:
 
     shutil.copytree(os.path.join(FWI_SOURCE_PATH, "tests","regression_data","{}".format(test)),os.path.join(FWI_INSTALL_PATH,"test","{}".format(test))) 
     shutil.copytree(os.path.join(FWI_SOURCE_PATH, "tests","regression_data","{}".format(test),"input"), os.path.join(FWI_INSTALL_PATH,"test","{}RUN".format(test),"input"))
-    shutil.copytree(os.path.join(FWI_SOURCE_PATH, "tests","regression_data","{}".format(test),"output"), os.path.join(FWI_INSTALL_PATH,"test","{}RUN".format(test),"output"))
+
+    outputRUN_dir = os.path.join(FWI_INSTALL_PATH, "test", "{}RUN".format(test), "output/")
+    inputRUN_dir = os.path.join(FWI_INSTALL_PATH, "test", "{}RUN".format(test), "input/")
+    input_dir = os.path.join(FWI_INSTALL_PATH, "test", "{}".format(test), "input/")
+    os.mkdir(outputRUN_dir)
+
+
 
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_Process {}RUN".format(test)))

@@ -32,6 +32,15 @@ def buildAll() {
         //cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
 }
 
+def parallelAnalysis() {
+        echo 'Running parallel analysis'
+		env.MYSTAGE_NAME = 'Parallel analysis'
+		sh '''
+		cp tests/testScripts/run_analyze_parallel.py .
+		python3 run_analyze_parallel.py tests/parallelAnalyseData/default
+		'''
+}
+
 def testAll() {
 	    echo 'testing all'
     	env.MYSTAGE_NAME = 'Test'
@@ -47,8 +56,8 @@ def regressiontest() {
         echo 'Running regression tests'
 		env.MYSTAGE_NAME = 'Regression Testing'
 		sh '''
-		cp tests/testScripts/run_all_regressions_python.py .
-		python3 run_all_regressions_python.py 0	
+		cp tests/testScripts/unified_run_all_regressions_python.py .
+		python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion
 		'''
 }
 
@@ -65,6 +74,22 @@ def deploy(){
 
 }
 
+def unitTestSummary() {
+	if (currentBuild.currentResult != "FAILURE") {
+		echo 'Creating unit-test Result Summary (junit)'
+		xunit (
+			tools: [ CTest (pattern: 'build/*.xml') ])
+		junit ('build/*.xml')
+		            
+		echo 'Cleaning the workspace'
+	}
+	else {
+		echo 'Previous steps failed, so no summary of unit-test is made'	
+	}
+}
+
+
+
 def sendEmail() {
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
@@ -74,6 +99,7 @@ def sendEmail() {
                 email.sendEmailFailure()
         }
 }
+
 
 return this
 

@@ -1,7 +1,7 @@
 #pragma once
 
 
-struct GradientDescentInversionInput
+struct gradientDescentInversionInput
 {
     double gamma0;
     double x0;

@@ -1,6 +1,6 @@
 #pragma once
 
-struct deltaAmplification
+struct DeltaAmplification
 {
     double start;
     double slope;

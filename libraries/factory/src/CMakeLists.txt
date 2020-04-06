@@ -11,6 +11,7 @@ target_include_directories(factory_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY
 target_link_libraries(
     factory_library
     
+    utilities_library
     core_library
 
     integral_forward_model_library

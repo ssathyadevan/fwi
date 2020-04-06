@@ -2,64 +2,59 @@
 
 #include <cassert>
 
-#include "utilityFunctions.h"
-#include "sources.h"
-#include "receivers.h"
-#include "grid2D.h"
 #include "contraction.h"
-#include <eigen3/Eigen/Dense>
-#include <pressureFieldComplexSerial.h>
+#include "grid2D.h"
+#include "receivers.h"
+#include "sources.h"
+#include "utilityFunctions.h"
+#include <Eigen/Dense>
+#include <complexDataGrid2D.h>
 
 using namespace Eigen;
 
-class Greens_rect_2D_cpu
+class greensRect2DCpu
 {
 public:
+    greensRect2DCpu(
+        const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
 
-  Greens_rect_2D_cpu(const Grid2D &grid_,
-                     const std::function< std::complex<double>(double,double) > G_func_,
-                     const Sources &src_, const Receivers &recv_,
-                     double k_);
+    ~greensRect2DCpu();
 
-  ~Greens_rect_2D_cpu();
+    const std::complex<double> *getGreensVolume() const { return gVol; }
 
-  const std::complex<double>* GetGreensVolume() const { return G_vol; }
+    const complexDataGrid2D *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
 
-  const PressureFieldComplexSerial* GetReceiverCont(int iRecv) const { return G_recv[iRecv];}
+    complexDataGrid2D contractWithField(const complexDataGrid2D &x) const;
 
-  PressureFieldComplexSerial ContractWithField(const PressureFieldComplexSerial &x) const;
+    const grid2D &getGrid() const { return grid; }
 
-  const Grid2D &GetGrid() const { return grid; }
+    // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
+    // Equation ID: "rel:buildField"
 
-  // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
-  // Equation ID: "rel:buildField"
-
-  PressureFieldComplexSerial dot1(const PressureFieldComplexSerial &dW) const;
+    complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
 
 private:
+    void createGreensVolume();
 
-  void create_Greens_volume();
+    void createGreensVolumeAnkit();
 
-  void create_Greens_volume_ankit();
+    void createGreensRecv();
 
-  void create_Greens_recv();
+    void deleteGreensRecv();
 
-  void delete_Greens_recv();
+    std::function<std::complex<double>(double, double)> G_func;
 
-  std::function< std::complex<double>(double,double) > G_func;
+    const grid2D grid;
+    const sources src;
+    const receivers recv;
+    const double k;
 
-  const Grid2D &grid;
-  const Sources &src;
-  const Receivers &recv;
-  const double k;
+    std::complex<double> *gVol;
+    std::vector<complexDataGrid2D *> gRecv;
 
-  std::complex<double> *G_vol;
-  std::vector< PressureFieldComplexSerial *> G_recv;
+    Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
+    void setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
-  Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-
-  Greens_rect_2D_cpu(const Greens_rect_2D_cpu&) = delete;
-  Greens_rect_2D_cpu& operator=(const Greens_rect_2D_cpu&) = delete;
-
+    greensRect2DCpu(const greensRect2DCpu &) = delete;
+    greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;
 };
-
