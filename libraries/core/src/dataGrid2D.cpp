@@ -27,14 +27,6 @@ void dataGrid2D::square()
     }
 }
 
-// void dataGrid2D::getSquared()
-//{
-//    for(int i = 0; i < getNumberOfGridPoints(); i++)
-//    {
-//        _data[i] *= _data[i];
-//    }
-//}
-
 void dataGrid2D::sqrt()
 {
     for(int i = 0; i < getNumberOfGridPoints(); i++)
