@@ -242,7 +242,7 @@ void IntegralForwardModel::calculatePTot(const dataGrid2D &chiEst)
     {
         li = i * _src.nSrc;
 
-        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
+        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freqInfo";
 
         for(int j = 0; j < _src.nSrc; j++)
         {

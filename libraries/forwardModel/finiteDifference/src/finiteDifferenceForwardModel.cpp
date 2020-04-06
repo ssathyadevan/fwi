@@ -150,7 +150,7 @@ void finiteDifferenceForwardModel::calculatePTot(const dataGrid2D &chiEst)
 
         Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c0, chiEst, _fmInput);
 
-        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq" ;
+        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freqInfo" ;
 
         for (int j = 0; j < _src.nSrc; j++)
         {

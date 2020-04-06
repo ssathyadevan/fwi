@@ -5,7 +5,7 @@ namespace fwi
 {
     static const double pi = std::atan(1.0) * 4.0;
 }
-frequenciesGroup::frequenciesGroup(Freq freqStruct, double c_0_) :
+frequenciesGroup::frequenciesGroup(freqInfo freqStruct, double c_0_) :
     nFreq(freqStruct.nTotal), c0(c_0_), dFreq((freqStruct.max - freqStruct.min) / (std::max(freqStruct.nTotal, 2) - 1)), freq(), k()
 {
     if(std::abs(fwi::pi - 3.14159) > 0.0001)

@@ -128,7 +128,7 @@ void ForwardModelContainer::divideFrequencies()
         double minimumFrequencyForThread = currentMinimumFrequency;
         double maximumFrequencyForThread = minimumFrequencyForThread + (totalFrequenciesForThread - 1) * _allFrequencies.dFreq;
 
-        Freq frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
+        freqInfo frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
         frequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
 
         frequenciesForThread.Print(totalFrequenciesForThread);

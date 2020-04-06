@@ -5,7 +5,7 @@
 #include <vector>
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "freq.h"
+#include "freqInfo.h"
 
 class frequenciesGroup
 {
@@ -19,7 +19,7 @@ public:
   std::vector<double> freq;
   std::vector<double> k;
 
-  frequenciesGroup(Freq freqStruct, double c_0_);
+  frequenciesGroup(freqInfo freqStruct, double c_0_);
 
   void Print(int nFreqTotal);
 };

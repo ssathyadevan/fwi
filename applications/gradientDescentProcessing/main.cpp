@@ -1,41 +1,43 @@
 
-#include "inputCardReader.h"
-#include "genericInputCardReader.h"
-#include "utilityFunctions.h"
 #include "chiIntegerVisualisation.h"
+#include "cpuClock.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
-#include "cpuClock.h"
+#include "genericInputCardReader.h"
+#include "gradientDescentInversion.h"
+#include "gradientDescentInversionInputCardReader.h"
+#include "inputCardReader.h"
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
 #include "inversionInterface.h"
-#include "gradientDescentInversionInputCardReader.h"
-#include "gradientDescentInversion.h"
 #include "log.h"
+#include "utilityFunctions.h"
 
 void performInversion(const genericInput &gInput, const std::string &runName);
 void writePlotInput(const genericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    if(argc != 2)
     {
         L_(lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        L_(lerror) << "Make sure the input folder inside the case folder contains the files genericInput.json, ifmInput.json and GradientDescentInput.json" << std::endl;
+        L_(lerror) << "Make sure the input folder inside the case folder contains the files genericInput.json, ifmInput.json and GradientDescentInput.json"
+                   << std::endl;
 
         exit(EXIT_FAILURE);
     }
-    try{
+    try
+    {
         std::vector<std::string> arguments(argv + 1, argc + argv);
         genericInputCardReader genericReader(arguments[0]);
         genericInput gInput = genericReader.getInput();
 
-        std::string logFileName =  gInput.outputLocation + gInput.runName + "Process.log";
+        std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
 
-        if (!gInput.verbose)
+        if(!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger( logFileName.c_str(), ldebug);
+            initLogger(logFileName.c_str(), ldebug);
         }
 
         chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGrid[0]);
@@ -47,18 +49,20 @@ int main(int argc, char **argv)
         performInversion(gInput, gInput.runName);
         clock.End();
 
-        L_(linfo) << "Visualisation of the estimated temple using FWI" ;
+        L_(linfo) << "Visualisation of the estimated temple using FWI";
         chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
         createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
         std::string msg = clock.OutputString();
         writePlotInput(gInput, msg);
     }
-    catch(const std::invalid_argument& e){
+    catch(const std::invalid_argument &e)
+    {
         std::cout << "An invalid argument found!" << std::endl;
-        std::cout<< e.what() << std::endl;
+        std::cout << e.what() << std::endl;
     }
-    catch( const std::exception& e){
-        std::cout<< e.what()<< std::endl;
+    catch(const std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
     }
 
     return 0;
@@ -88,32 +92,32 @@ void performInversion(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nSources);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nReceivers);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
     frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
 
-    //read referencePressureData from a CSV file format
+    // read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
 
     std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
     CSVReader row;
 
-    if (!file.is_open())
+    if(!file.is_open())
     {
         L_(lerror) << "Could not open file at " << fileLocation;
         exit(EXIT_FAILURE);
     }
 
     int i = 0;
-    while (file >> row)
+    while(file >> row)
     {
-        if (i < magnitude)
+        if(i < magnitude)
         {
             referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
         }
@@ -129,11 +133,11 @@ void performInversion(const genericInput &gInput, const std::string &runName)
     inverse = new gradientDescentInversion(model, gradientDescentReader.getInput());
 
     //    gradientDescentInversion(forwardModelInterface *forwardModel, const genericInput &gdInput);
-    L_(linfo) << "Estimating Chi..." ;
+    L_(linfo) << "Estimating Chi...";
 
     dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
 
-    L_(linfo) << "Done, writing to file" ;
+    L_(linfo) << "Done, writing to file";
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 

@@ -1,7 +1,7 @@
 set(CPP_SOURCES_AND_H_HEADERS 
     contraction.cpp                     ../include/contraction.h
     forwardModelInterface.cpp           ../include/forwardModelInterface.h
-                                        ../include/freq.h
+        ../include/freqInfo.h
     frequenciesGroup.cpp                ../include/frequenciesGroup.h
     createChiCSV.cpp       		../include/createChiCSV.h
     greensFunctions.cpp                 ../include/greensFunctions.h
@@ -11,7 +11,6 @@ set(CPP_SOURCES_AND_H_HEADERS
     genericInputCardReader.cpp          ../include/genericInputCardReader.h
     inputCardReader.cpp                 ../include/inputCardReader.h
                                         ../include/inversionInterface.h
-                                        ../include/nSourcesReceivers.h
         complexDataGrid2D.cpp ../include/complexDataGrid2D.h
         dataGrid2D.cpp ../include/dataGrid2D.h
     receivers.cpp                       ../include/receivers.h

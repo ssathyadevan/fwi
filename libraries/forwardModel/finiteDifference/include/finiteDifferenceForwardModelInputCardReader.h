@@ -1,18 +1,18 @@
 #pragma once
 
-#include "inputCardReader.h"
 #include "finiteDifferenceForwardModelInput.h"
+#include "inputCardReader.h"
 
-#include <string>
-#include <vector>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 class finiteDifferenceForwardModelInputCardReader : public inputCardReader
 {
 public:
     finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder);
-    finiteDifferenceForwardModelInput getInput();
+    finiteDifferenceForwardModelInput getInput() { return _input; }
 
 private:
     virtual void readCard(const std::string &caseFolder);

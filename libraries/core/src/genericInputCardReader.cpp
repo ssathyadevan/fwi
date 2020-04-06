@@ -1,68 +1,235 @@
 #include "genericInputCardReader.h"
-#include <iostream>
-#include <exception>
 #include "json.h"
+#include <exception>
+#include <iostream>
+#include <string.h>
 
 genericInputCardReader::genericInputCardReader(const std::string &caseFolder_)
 {
     std::string caseFolder = caseFolder_;
-    if (caseFolder[caseFolder.size() - 1] == '/')
+    removeLastSlash(caseFolder);
+    readCard(caseFolder);
+}
+
+void genericInputCardReader::removeLastSlash(std::string &caseFolder)
+{
+    if(caseFolder[caseFolder.size() - 1] == '/')
     {
         caseFolder = caseFolder.substr(0, caseFolder.size() - 1);
     }
-
-    std::string runName = caseFolder;
-
-    const std::size_t idx = runName.find_last_of('/');
-    if (std::string::npos != idx)
-    {
-        runName = runName.substr(idx + 1);
-    }
-    if (runName == ".")
-        runName = "default";
-
-    _input.caseFolder = caseFolder;
-    _input.inputFolder = caseFolder + "/input/";
-    _input.runName = runName;
-    _input.outputLocation = caseFolder + "/output/";
-
-    readCard(caseFolder);
-    checkInput();
-}
-
-genericInput genericInputCardReader::getInput()
-{
-    return _input;
 }
 
 void genericInputCardReader::readCard(const std::string &caseFolder)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/genericInput.json");
+    std::string runName = getRunName(caseFolder);
 
-    nlohmann::json::json_pointer p_ngridx("/nGrid/x");
-    nlohmann::json::json_pointer p_ngridz("/nGrid/z");
-    nlohmann::json::json_pointer p_ngrid_original_x("/nGridOriginal/x");
-    nlohmann::json::json_pointer p_ngrid_original_z("/nGridOriginal/z");
+    static const std::string stringJsonFilePath = "/input/genericInput.json";
+    nlohmann::json jsonFile = readFile(caseFolder + stringJsonFilePath);
 
-    int n_gid_default_x = j.value(p_ngridx, 0);
-    int n_gid_default_z = j.value(p_ngridz, 0);
+    // Initialize genericInput
+    genericInput jsonInput;
+    jsonInput.caseFolder = caseFolder;
+    jsonInput.runName = runName;
+    static const std::string stringInputFolder = "/input/";
+    jsonInput.inputFolder = caseFolder + stringInputFolder;
+    static const std::string stringOutputFolder = "/output/";
+    jsonInput.outputLocation = caseFolder + stringOutputFolder;
 
-    genericInput jsonInput{
-        _input.caseFolder, _input.inputFolder, _input.outputLocation, _input.runName, j["c0"], {j["Freq"]["min"], j["Freq"]["max"], j["Freq"]["nTotal"]}, {j["reservoirTopLeft"]["x"], j["reservoirTopLeft"]["z"]}, {j["reservoirBottomRight"]["x"], j["reservoirBottomRight"]["z"]}, {j["sourcesTopLeft"]["x"], j["sourcesTopLeft"]["z"]}, {j["sourcesBottomRight"]["x"], j["sourcesBottomRight"]["z"]}, {j["receiversTopLeft"]["x"], j["receiversTopLeft"]["z"]}, {j["receiversBottomRight"]["x"], j["receiversBottomRight"]["z"]}, {j.value(p_ngrid_original_x, n_gid_default_x), j.value(p_ngrid_original_z, n_gid_default_z)}, {j["nGrid"]["x"], j["nGrid"]["z"]}, {j["nSources"], j["nReceivers"]}, j["fileName"], j["verbosity"]};
+    // Read json input file
+    static const std::string parameterFileName = "fileName";
+    jsonInput.fileName = jsonFile[parameterFileName];
 
-    _input = jsonInput;
+    readC0Parameter(jsonFile, jsonInput);
+    readFreqParameter(jsonFile, jsonInput);
+    readReservoirParameter(jsonFile, jsonInput);
+    readSourcesParameter(jsonFile, jsonInput);
+    readReceiversParameter(jsonFile, jsonInput);
+    readGridOriginalParameter(jsonFile, jsonInput);
+    readGridParameter(jsonFile, jsonInput);
+    readNSourcesParameter(jsonFile, jsonInput);
+    readNReceiversParameter(jsonFile, jsonInput);
+
+    static const std::string parameterVerbose = "verbose";
+    jsonInput.verbose = jsonFile[parameterVerbose];
 }
 
-void genericInputCardReader::checkInput()
+std::string genericInputCardReader::getRunName(const std::string &caseFolder)
 {
-    if (_input.c0 <= 0 ){throw std::invalid_argument("Invalid value for c0 in genericInput.json.");}
-    if (_input.freq.min >= _input.freq.max || _input.freq.min <= 0) {throw std::invalid_argument("Invalid ranges for frequenties in genericInput.json.");}
-    if (_input.freq.nTotal <= 1 ) {throw std::invalid_argument("Invalid number of frequenties in genericInput.json.");}
-    if (_input.reservoirTopLeftCornerInM[0] > _input.reservoirBottomRightCornerInM[0] || _input.reservoirTopLeftCornerInM[1] > _input.reservoirBottomRightCornerInM[1]) {throw std::invalid_argument("Invalid ranges for reservoir in genericInput.json.");}
-    if (_input.receiversTopLeftCornerInM[0] > _input.receiversBottomRightCornerInM[0] || _input.receiversTopLeftCornerInM[1] > _input.receiversBottomRightCornerInM[1]) {throw std::invalid_argument("Invald ranges for reseivers in genericInput.json.");}
-    if (_input.sourcesTopLeftCornerInM[0] > _input.sourcesBottomRightCornerInM[0] || _input.sourcesTopLeftCornerInM[1] > _input.sourcesBottomRightCornerInM[1]) {throw std::invalid_argument("Invalid ranges for reservoir in genericInput.json.");}
-    if (_input.nGridOriginal[0] <= 0 || _input.nGridOriginal[1] <= 0) {throw std::invalid_argument("Invalid grid_original input in genericInput.json.");}
-    if (_input.nGrid[0] < 3 || _input.nGrid[1] < 3) {throw std::invalid_argument("Invalid grid input in genericInput.json.");}
-    if (_input.nSourcesReceivers.nReceivers <= 1) {throw std::invalid_argument("Invalid number of receivers in genericInput.json.");}
-    if (_input.nSourcesReceivers.nSources <= 1) {throw std::invalid_argument("Invalid number of sources in genericInput.json.");}
+    std::string runName = caseFolder;
+
+    // Remove directory part
+    const std::size_t idx = runName.find_last_of('/');
+    if(idx != std::string::npos)
+    {
+        runName = runName.substr(idx + 1);
+    }
+
+    if(runName == ".")
+    {
+        runName = "default";
+    }
+
+    return runName;
+}
+
+void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterC0 = "c0";
+    double c0 = jsonFile[parameterC0];
+
+    if(c0 <= 0)
+    {
+        throw std::invalid_argument("Invalid value for c0 in genericInput.json.");
+    }
+
+    jsonInput.c0 = c0;
+}
+
+void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterFreq = "freqInfo";
+    static const std::string parameterFreqMin = "min";
+    static const std::string parameterFreqMax = "max";
+    static const std::string parameterFreqNTotal = "nTotal";
+
+    double min = jsonFile[parameterFreq][parameterFreqMin];
+    double max = jsonFile[parameterFreq][parameterFreqMax];
+    if(min >= max || min <= 0)
+    {
+        throw std::invalid_argument("Invalid ranges for frequenties in genericInput.json.");
+    }
+
+    int nTotal = jsonFile[parameterFreq][parameterFreqNTotal];
+    if(nTotal <= 1)
+    {
+        throw std::invalid_argument("Invalid number of frequenties in genericInput.json.");
+    }
+    jsonInput.freq = freqInfo(min, max, nTotal);
+}
+
+void genericInputCardReader::readReservoirParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterX = "x";
+    static const std::string parameterZ = "z";
+
+    static const std::string parameterReservoirTopLeft = "reservoirTopLeft";
+    double reservoirTopLeftX = jsonFile[parameterReservoirTopLeft][parameterX];
+    double reservoirTopLeftZ = jsonFile[parameterReservoirTopLeft][parameterZ];
+
+    static const std::string parameterReservoirBottomRight = "reservoirBottomRight";
+    double reservoirBottomRightX = jsonFile[parameterReservoirBottomRight][parameterX];
+    double reservoirBottomRightZ = jsonFile[parameterReservoirBottomRight][parameterZ];
+
+    if(reservoirTopLeftX > reservoirBottomRightX || reservoirTopLeftZ > reservoirBottomRightZ)
+    {
+        throw std::invalid_argument("Invalid ranges for reservoir in genericInput.json.");
+    }
+
+    jsonInput.reservoirBottomRightCornerInM = {reservoirBottomRightX, reservoirBottomRightZ};
+    jsonInput.reservoirTopLeftCornerInM = {reservoirTopLeftX, reservoirTopLeftZ};
+}
+
+void genericInputCardReader::readSourcesParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterX = "x";
+    static const std::string parameterZ = "z";
+
+    static const std::string parameterSourcesTopLeft = "sourcesTopLeft";
+    double sourcesTopLeftX = jsonFile[parameterSourcesTopLeft][parameterX];
+    double sourcesTopLeftZ = jsonFile[parameterSourcesTopLeft][parameterZ];
+
+    static const std::string parameterSourcesBottomRight = "sourcesBottomRight";
+    double sourcesBottomRightX = jsonFile[parameterSourcesBottomRight][parameterX];
+    double sourcesBottomRightZ = jsonFile[parameterSourcesBottomRight][parameterZ];
+
+    if(sourcesTopLeftX > sourcesBottomRightX || sourcesTopLeftZ > sourcesBottomRightZ)
+    {
+        throw std::invalid_argument("Invalid ranges for sources in genericInput.json.");
+    }
+
+    jsonInput.sourcesTopLeftCornerInM = {sourcesTopLeftX, sourcesTopLeftZ};
+    jsonInput.sourcesBottomRightCornerInM = {sourcesBottomRightX, sourcesBottomRightZ};
+}
+
+void genericInputCardReader::readReceiversParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterX = "x";
+    static const std::string parameterZ = "z";
+
+    static const std::string parameterReceiversTopLeft = "receiversTopLeft";
+    double receiversTopLeftX = jsonFile[parameterReceiversTopLeft][parameterX];
+    double receiversTopLeftZ = jsonFile[parameterReceiversTopLeft][parameterZ];
+
+    static const std::string parameterReceiversBottomRight = "receiversBottomRight";
+    double receiversBottomRightX = jsonFile[parameterReceiversBottomRight][parameterX];
+    double receiversBottomRightZ = jsonFile[parameterReceiversBottomRight][parameterZ];
+
+    if(receiversTopLeftX > receiversBottomRightX || receiversTopLeftZ > receiversBottomRightZ)
+    {
+        throw std::invalid_argument("Invald ranges for receivers in genericInput.json.");
+    }
+
+    jsonInput.receiversTopLeftCornerInM = {receiversTopLeftX, receiversTopLeftZ};
+    jsonInput.receiversBottomRightCornerInM = {receiversBottomRightX, receiversBottomRightZ};
+}
+
+void genericInputCardReader::readGridOriginalParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterX = "x";
+    static const std::string parameterZ = "z";
+
+    static const std::string parameterNGridOriginal = "nGridOriginal";
+    int nGridOriginalX = jsonFile[parameterNGridOriginal][parameterX];
+    int nGridOriginalZ = jsonFile[parameterNGridOriginal][parameterZ];
+
+    if(nGridOriginalX <= 0 || nGridOriginalZ <= 0)
+    {
+        throw std::invalid_argument("Invalid grid_original input in genericInput.json.");
+    }
+
+    jsonInput.nGridOriginal = {nGridOriginalX, nGridOriginalZ};
+}
+
+void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterX = "x";
+    static const std::string parameterZ = "z";
+
+    static const std::string parameterNGrid = "nGrid";
+
+    int nGridX = jsonFile[parameterNGrid][parameterX];
+    int nGridZ = jsonFile[parameterNGrid][parameterZ];
+
+    if(nGridX < 3 || nGridZ < 3)
+    {
+        throw std::invalid_argument("Invalid grid input in genericInput.json.");
+    }
+
+    jsonInput.nGrid = {nGridX, nGridZ};
+}
+
+void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterNSources = "nSources";
+    int nSources = jsonFile[parameterNSources];
+
+    if(nSources <= 1)
+    {
+        throw std::invalid_argument("Invalid number of sources (" + std::to_string(nSources) + "<= 1) in genericInput.json.");
+    }
+
+    jsonInput.nSources = nSources;
+}
+
+void genericInputCardReader::readNReceiversParameter(const nlohmann::json &jsonFile, genericInput &jsonInput)
+{
+    static const std::string parameterNReceivers = "nReceivers";
+    int nReceivers = jsonFile[parameterNReceivers];
+
+    if(nReceivers <= 1)
+    {
+        throw std::invalid_argument("Invalid number of receivers in genericInput.json.");
+    }
+
+    jsonInput.nReceivers = nReceivers;
 }

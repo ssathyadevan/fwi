@@ -81,9 +81,9 @@ void performInversion(const genericInput &gInput, const std::string &runName)
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nSources);
+    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nReceivers);
+    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
     frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
@@ -106,7 +106,10 @@ void performInversion(const genericInput &gInput, const std::string &runName)
     int i = 0;
     while(file >> row)
     {
-        if(i < magnitude) { referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())}; }
+        if(i < magnitude)
+        {
+            referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
+        }
         i++;
     }
     L_(linfo) << "Create ForwardModel";
