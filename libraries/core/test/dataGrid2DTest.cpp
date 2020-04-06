@@ -11,23 +11,23 @@ grid2D getGrid()
     return grid;
 }
 
-// Virtual overrides
-TEST(dataGrid2DTest, zeroTest)
+TEST(dataGrid2DTest, copyConstructorTest)
 {
     // Given
+    double testValue = 3.0;
     grid2D grid = getGrid();
-    dataGrid2D dg(grid);
-    dg = 1.0;
+    dataGrid2D dg1(grid);
+    dg1 = testValue;
 
     // When
-    dg.zero();
+    dataGrid2D dg2(dg1);
 
     // Then
-    const int nrOfGridPoints = dg.getNumberOfGridPoints();
-    const std::vector<double> &data = dg.getData();
+    const int nrOfGridPoints = dg2.getNumberOfGridPoints();
+    const std::vector<double> &data = dg2.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], 0.0);
+        ASSERT_DOUBLE_EQ(data[i], testValue);
     }
 }
 
