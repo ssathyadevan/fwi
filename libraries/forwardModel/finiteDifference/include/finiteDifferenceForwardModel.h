@@ -1,17 +1,16 @@
 #pragma once
 
+#include "finiteDifferenceForwardModelInput.h"
 #include "forwardModelInterface.h"
+#include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
-#include "finiteDifferenceForwardModelInput.h"
-#include "genericInput.h"
 
 class finiteDifferenceForwardModel : public forwardModelInterface
 {
-
 public:
-    finiteDifferenceForwardModel( const grid2D &grid, const sources &src, const receivers &recv,
-                    const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput );
+    finiteDifferenceForwardModel(
+        const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput);
 
     ~finiteDifferenceForwardModel();
 
@@ -19,13 +18,10 @@ public:
 
     void calculateKappa();
     virtual void calculatePTot(const dataGrid2D &chiEst);
-    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double> > &res, complexDataGrid2D &kRes);
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
     virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size);
     virtual void getResidualGradient(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
     virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
-
-
-    //void createKappaOperator(const complexDataGrid2D &CurrentPressureFieldComplexSerial, std::complex<double> *kOperator);
 
 private:
     greensRect2DCpu **_Greens;
