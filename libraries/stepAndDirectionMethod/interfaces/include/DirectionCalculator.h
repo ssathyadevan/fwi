@@ -3,11 +3,11 @@
 #include "complexDataGrid2D.h"
 #include "dataGrid2D.h"
 
-class directionCalculator
+class DirectionCalculator
 {
 public:
-    directionCalculator(const grid2D &grid);
-    virtual ~directionCalculator();
+    DirectionCalculator(const grid2D &grid, const double eta);
+    virtual ~DirectionCalculator();
 
     virtual void calculateDirection(const complexDataGrid2D &) { throw std::bad_exception(); };
     virtual void calculateDirection(const dataGrid2D &, const dataGrid2D &) { throw std::bad_exception(); };
@@ -16,5 +16,6 @@ public:
 
 protected:
     grid2D _grid;
+    double _eta;
     dataGrid2D _direction;
 };

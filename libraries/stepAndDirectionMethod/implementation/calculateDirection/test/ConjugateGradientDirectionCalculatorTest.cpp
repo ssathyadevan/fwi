@@ -1,4 +1,4 @@
-#include "conjugateGradientDirectionCalculator.h"
+#include "ConjugateGradientDirectionCalculator.h"
 #include <gtest/gtest.h>
 
 grid2D getGrid()
@@ -14,8 +14,9 @@ grid2D getGrid()
 TEST(conjugateGradientDirectionCalculatorTest, ConstructorGridTest)
 {
     grid2D grid = getGrid();
+    double eta = 1.0;
 
-    directionCalculator *directionCalulator = new conjugateGradientDirectionCalculator(grid);
+    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, eta);
     grid2D cGDirectionGrid = directionCalulator->getGrid();
 
     EXPECT_EQ(grid.getNumberOfGridPoints(), cGDirectionGrid.getNumberOfGridPoints());
@@ -36,8 +37,9 @@ TEST(conjugateGradientDirectionCalculatorTest, ConstructorGridTest)
 TEST(conjugateGradientDirectionCalculatorTest, ConstructorDirectionTest)
 {
     grid2D grid = getGrid();
+    double eta = 1.0;
 
-    directionCalculator *directionCalulator = new conjugateGradientDirectionCalculator(grid);
+    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, eta);
     dataGrid2D initializedDirection = directionCalulator->getDirection();
 
     const int nrOfGridPoints = initializedDirection.getNumberOfGridPoints();
@@ -53,9 +55,10 @@ TEST(conjugateGradientDirectionCalculatorTest, ConstructorDirectionTest)
 TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
+    double eta = 1.0;
     complexDataGrid2D residuals(grid);
 
-    directionCalculator *directionCalulator = new conjugateGradientDirectionCalculator(grid);
+    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, eta);
     dataGrid2D cGDirection(grid);
     directionCalulator->calculateDirection(residuals);
     cGDirection = directionCalulator->getDirection();
@@ -73,10 +76,11 @@ TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionExceptionTest)
 {
     grid2D grid = getGrid();
+    double eta = 1.0;
     dataGrid2D data1(grid);
     dataGrid2D data2(grid);
 
-    directionCalculator *directionCalulator = new conjugateGradientDirectionCalculator(grid);
+    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, eta);
     dataGrid2D cGDirection(grid);
     EXPECT_THROW(directionCalulator->calculateDirection(data1, data2), std::bad_exception);
 }
