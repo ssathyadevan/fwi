@@ -12,9 +12,9 @@ struct RegularisationParameters
     dataGrid2D bSquared;
     dataGrid2D gradient;
 
-    RegularisationParameters(grid2D grid) :
-        deltaSquared(0.0), errorFunctional(1.0), gradientChi(2, dataGrid2D(grid)), gradientChiNormSquared(grid), b(grid), bSquared(grid),
-        gradient(grid)
+    RegularisationParameters(const grid2D &grid_) :
+        deltaSquared(0.0), errorFunctional(1.0), gradientChi(std::vector<dataGrid2D>(2, dataGrid2D(grid_))), gradientChiNormSquared(grid_), b(grid_),
+        bSquared(grid_), gradient(grid_)
     {
     }
 };

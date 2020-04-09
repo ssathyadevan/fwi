@@ -31,6 +31,10 @@
     },
     "nSources": 17,
     "nReceivers": 17,
+    "ngrid_original": {
+        "x": 64,
+        "z": 32
+    },
     "ngrid": {
         "x": 64,
         "z": 32

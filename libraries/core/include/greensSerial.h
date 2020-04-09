@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cassert>
-
 #include "contraction.h"
 #include "grid2D.h"
 #include "receivers.h"
 #include "sources.h"
 #include "utilityFunctions.h"
 #include <Eigen/Dense>
+#include <cassert>
 #include <complexDataGrid2D.h>
 
 using namespace Eigen;

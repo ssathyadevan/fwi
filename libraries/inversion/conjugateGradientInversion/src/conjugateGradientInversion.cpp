@@ -123,8 +123,7 @@ std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInp
     return residualLogFile;
 }
 
-dataGrid2D ConjugateGradientInversion::calculateUpdateDirection(
-    std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent, double eta)
+dataGrid2D ConjugateGradientInversion::calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent, double eta)
 {
     complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
     _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
@@ -177,6 +176,7 @@ void ConjugateGradientInversion::calculateRegularisationParameters(
     RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent, double deltaAmplification)
 {
     _chiEstimate.gradient(regularisationPrevious.gradientChi);
+
     regularisationPrevious.gradientChiNormSquared = (regularisationPrevious.gradientChi[0] * regularisationPrevious.gradientChi[0]) +
                                                     (regularisationPrevious.gradientChi[1] * regularisationPrevious.gradientChi[1]);
 
@@ -226,8 +226,8 @@ dataGrid2D ConjugateGradientInversion::calculateRegularisationGradient(const Reg
     return gradientBSquaredTimesGradientChiX + gradientBSquaredTimesGradientChiZ;
 }
 
-dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray,
-    dataGrid2D &gradientCurrent, const dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent,
+    const dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
     const RegularisationParameters &regularisationPrevious, const dataGrid2D &zeta, double residualPrevious)
 {
     complexDataGrid2D kappaTimesResidual(_grid);
@@ -270,10 +270,8 @@ double ConjugateGradientInversion::calculateStepSizeRegularisation(const Regular
     std::vector<dataGrid2D> gradientZeta(2, dataGrid2D(_grid));
     zeta.gradient(gradientZeta);
 
-    dataGrid2D bGradientZetabGradientChiX =
-        (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
-    dataGrid2D bGradientZetabGradientChiZ =
-        (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
+    dataGrid2D bGradientZetabGradientChiX = (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
+    dataGrid2D bGradientZetabGradientChiZ = (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
     double b1 = 2.0 * (bGradientZetabGradientChiX.summation() + bGradientZetabGradientChiZ.summation()) * _grid.getCellVolume();
 
     dataGrid2D bTimesGradientZetaXdirection = regularisationCurrent.b * gradientZeta[0];
@@ -313,7 +311,7 @@ void ConjugateGradientInversion::calculateRegularisationErrorFunctional(
                                     (regularisationCurrent.gradientChi[1] * regularisationCurrent.gradientChi[1]);
 
     dataGrid2D integral = (gradientChiNormsquaredCurrent + regularisationPrevious.deltaSquared) /
-                                   (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
+                          (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
 
     regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
 }
