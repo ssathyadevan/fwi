@@ -1,10 +1,10 @@
 #pragma once
 
-class StepSizeInterface
+class StepSizeCalculator
 {
 public:
-    StepSizeInterface();
-    ~StepSizeInterface();
+    StepSizeCalculator();
+    ~StepSizeCalculator();
 
 protected:
     virtual double calculateStepSize() = 0;

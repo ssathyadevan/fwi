@@ -1,5 +1,5 @@
-#include "stepSizeInterface.h"
+#include "StepSizeCalculator.h"
 
-StepSizeInterface::StepSizeInterface() {}
+StepSizeCalculator::StepSizeCalculator() {}
 
-StepSizeInterface::~StepSizeInterface() {}
+StepSizeCalculator::~StepSizeCalculator() {}
