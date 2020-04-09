@@ -1,7 +1,8 @@
 #include "ConjugateGradientDirectionCalculator.h"
 
-ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(const grid2D &grid, double errorFunctionalScalingFactor) :
-    DirectionCalculator(grid, errorFunctionalScalingFactor)
+ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(
+    const grid2D &grid, double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel) :
+    DirectionCalculator(grid, errorFunctionalScalingFactor, forwardmodel)
 {
 }
 

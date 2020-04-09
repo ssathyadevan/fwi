@@ -1,7 +1,9 @@
 #include "GradientDescentDirectionCalculator.h"
 
-GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(const grid2D &grid, double errorFunctionalScalingFactor, const dataGrid2D &pdata) :
-    DirectionCalculator(grid, errorFunctionalScalingFactor), _pData(pdata)
+GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
+    const grid2D &grid, double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel, const dataGrid2D &pdata) :
+    DirectionCalculator(grid, errorFunctionalScalingFactor, forwardmodel),
+    _pData(pdata)
 {
 }
 

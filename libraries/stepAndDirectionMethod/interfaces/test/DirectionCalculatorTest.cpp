@@ -1,5 +1,6 @@
 #include "DirectionCalculator.h"
 #include "DirectionCalculatorMock.h"
+#include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
 grid2D getGrid()
@@ -12,12 +13,28 @@ grid2D getGrid()
     return grid;
 }
 
+forwardModelInterface *createForwardModelMock()
+{
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    freqInfo freq;
+    grid2D grid = getGrid();
+    sources sources(xMin, xMax, 2);
+    receivers receivers(xMin, xMax, 2);
+    frequenciesGroup frequencies(freq, 2000.0);
+
+    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    return forwardmodel;
+}
+
 TEST(DirectionCalculatorTest, ConstructorGridTest)
 {
     grid2D grid = getGrid();
+
     double errorFunctionalScalingFactor = 1.0;
 
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor);
+    forwardModelInterface *forwardmodel = createForwardModelMock();
+    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor, forwardmodel);
     grid2D mockDirectionGrid = directionCalulator->getGrid();
 
     EXPECT_EQ(grid.getNumberOfGridPoints(), mockDirectionGrid.getNumberOfGridPoints());
@@ -32,16 +49,22 @@ TEST(DirectionCalculatorTest, ConstructorGridTest)
     EXPECT_DOUBLE_EQ(grid.getGridDimensions()[0], mockDirectionGrid.getGridDimensions()[0]);
     EXPECT_DOUBLE_EQ(grid.getGridDimensions()[1], mockDirectionGrid.getGridDimensions()[1]);
 
+    delete forwardmodel;
     delete directionCalulator;
 }
 
 TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
 {
     grid2D grid = getGrid();
-    double errorFunctionalScalingFactor = 1.0;
 
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor);
+    double errorFunctionalScalingFactor = 1.0;
+    forwardModelInterface *forwardmodel = createForwardModelMock();
+
+    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor, forwardmodel);
     double mockErrorFunctionalScalingFactor = directionCalulator->getErrorFunctionalScalingFactor();
 
     EXPECT_EQ(errorFunctionalScalingFactor, mockErrorFunctionalScalingFactor);
+
+    delete forwardmodel;
+    delete directionCalulator;
 }

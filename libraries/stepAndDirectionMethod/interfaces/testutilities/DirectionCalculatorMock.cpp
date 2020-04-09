@@ -1,6 +1,9 @@
 #include "DirectionCalculatorMock.h"
 
-DirectionCalculatorMock::DirectionCalculatorMock(const grid2D &grid, double eta) : DirectionCalculator(grid, eta) {}
+DirectionCalculatorMock::DirectionCalculatorMock(const grid2D &grid, double errorFunctionalScalingfactor, forwardModelInterface *forwardmodel) :
+    DirectionCalculator(grid, errorFunctionalScalingfactor, forwardmodel)
+{
+}
 
 DirectionCalculatorMock::~DirectionCalculatorMock() {}
 
