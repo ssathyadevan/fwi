@@ -90,7 +90,7 @@ regressiontestName = "test{}".format(inversionmodel)
 
 if os.path.exists(regressiontestName):
     shutil.rmtree(regressiontestName)
-os.makedirs(regressiontestName)
+os.mkdir(regressiontestName)
 
 dir_from_which=os.path.join(FWI_SOURCE_PATH,"tests","testScripts")           
 
@@ -108,11 +108,13 @@ for test in tests:
     print("###############################################################")
 
     os.mkdir("{}RUN".format(test))
-#    print(FWI_SOURCE_PATH+ "tests/regression_data/{}".format(test))
 
     shutil.copytree(os.path.join(regression_data_folder,"{}".format(test)),os.path.join(FWI_INSTALL_PATH,regressiontestName,"{}".format(test)))
     shutil.copytree(os.path.join(regression_data_folder,"{}".format(test),"input"), os.path.join(FWI_INSTALL_PATH,regressiontestName,"{}RUN".format(test),"input"))
-    shutil.copytree(os.path.join(regression_data_folder,"{}".format(test),"output"), os.path.join(FWI_INSTALL_PATH,regressiontestName,"{}RUN".format(test),"output"))
+
+    os.mkdir(os.path.join("{}RUN".format(test),"output"))
+
+    print()
 
     if forwardmodel == "integralForwardModel":
         os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))

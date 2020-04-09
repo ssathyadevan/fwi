@@ -1,6 +1,8 @@
 #pragma once
 
 #include "forwardModelInterface.h"
+#include "freqInfo.h"
+#include "frequenciesGroup.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"

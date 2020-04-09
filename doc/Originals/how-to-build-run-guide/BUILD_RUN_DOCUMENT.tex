@@ -12,7 +12,7 @@
 \setlength\parindent{0pt}
 
 \title{BUILD-RUN-DOCUMENT}
-\author{Saurabh Sharma, Hugo Solera Licona, I\~{n}aki Martin Soroa, Noud van Herpen, \\
+\author{Valesca Peereboom, Saurabh Sharma, Hugo Solera Licona, I\~{n}aki Martin Soroa, Noud van Herpen, \\
 Chris Zevenbergen, Tianyuan Wang}
 \date{\today}
 
@@ -103,7 +103,7 @@ First we need to install Google Test using the following commands:
 %\newline
 %\texttt{source \textasciitilde/.bashrc}
 
-\subsection{Build}
+\subsection{Build}\label{subsec:BuildSection}
 To build the project, first create a folder titled \textit{build} outside the \textit{parallelized-fwi} folder. Afterwards the code is built and run. 
 NOTE: This folder should be exactly 1 level outside the parallelized-fwi folder.
 \newline
@@ -190,24 +190,43 @@ After building, the test can be ran by writing in the terminal:\\
 \newline
 
 \section{Regression Test}
-This section details the comparison of a \textit{default} run with the \textit{fast} regression data. In order to run a regression test the following steps need to be taken. First, a \textit{test} folder is created, then the contents of the regression data folder, the default folder, the input cards and the regression test python scripts are copied to this \textit{test} folder. Then finally the python scripts can be run in succession.  
+This section details the comparison between benchmark data and new data obtained from runs with the current project with the same input files. The benchmark data can be found in \textit{parallelized-fwi/tests/regression\_data}. In order to run a regression test, make sure a build folder with the name \textit{Build} exists as described in subsection~\ref{subsec:BuildSection} and the regression test python script is copied to the \textit{Home} location. The python script can be succesfully run with the following terminal commands:
 \newline
 
-\texttt{cd \textasciitilde/FWIInstall}
+\texttt{cd \~}
 \newline
-\texttt{mkdir test}
-\\
-\texttt{cp -r \textasciitilde/parallelized-fwi/tests/regression\_data/fast/ test/}
+\texttt{cp \textasciitilde/parallelized-fwi/tests/testScripts/unified\_run\_all\_regressions\_python.py ..}
 \newline
-\texttt{cp \textasciitilde/parallelized-fwi/tests/testScripts/*.py test/}
+\texttt{python3 unified\_run\_all\_regressions\_python.py 1 integralForwardModel conjugateGradientInversion}
 \newline
-\texttt{cp -r default/ test/}
-\\
-\texttt{cd test/}
-\\
-\texttt{python3 regressionTestPreProcessing\_python3.py fast default}
+
+The first argument determines the device on which the script is executed, use \textit{1} to run locally and \textit{0} to run on Jenkins. The second argument determines the forwardmodel, the two possible arguments are \textit{integralForwardModel} and \textit{finiteDifferenceForwardModel}. The third argument determines the inversion method, with the following possible arguments \textit{conjugateGradientInversion} and \textit{gradientDescentInversion}. It is also possible to only run the regression test for one specific run, for example \textit{fast}, this can be passed to the script as a fourth argument. Then the script can be executed by the following command:
 \newline
-\texttt{python3 regressionTestProcessing\_python3.py fast default}
+\texttt{python3 unified\_run\_all\_regressions\_python.py 1 integralForwardModel conjugateGradientInversion fast}.
+\newline
+
+The results are written to the \textit{FWIInstall/test} folder.
+\newline
+
+Note: when executing this python script locally, the script builds the current FWI project in the \textit{Build} folder and copies the executables into the \textit{FWIInstall} folder to make sure the executables are up-to-date.
+
+
+\section{Parallel analysis}
+MPI and openmpi are used to reduce the performance time of the applications. During the parallel analysis the \textit{default} run is executed in serial and in parallel with a specific number of threads to plot the runtime, as well as the final Root Mean Squared Error (RMSE) against the number of threads. For this, make sure that the parallel analysis python script is copied to the \textit{Home} directory. The python script can be executed with the following commands.
+\newline
+
+\texttt{cd \~}
+\newline
+\texttt{cp \textasciitilde/parallelized-fwi/tests/testScripts/run\_analyze\_parallel.py ..}
+\newline
+\texttt{python3 run\_analyze\_parallel.py \textasciitilde/parallelized-fwi/tests/parallelAnalyseData/default}
+\newline
+
+In order to execute this script, the folder location of the run with respect to the current location should be given as argument to the python script.
+\newline
+
+The results are written to the folder \textit{FWIInstall/parallelAnalysis}. This script produces two plots shown in \textit{FinalResidualDifferences.png} and \textit{AllRunTimes.png}, and two text files with the corresponding data in \textit{residualDifferences.txt} and \textit{runtimes.txt}.
+
 
 \section{Troubleshooting}
 \subsection{SSH Tunneling}
