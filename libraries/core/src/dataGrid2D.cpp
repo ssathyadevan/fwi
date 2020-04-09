@@ -61,7 +61,6 @@ double dataGrid2D::summation() const
 double dataGrid2D::innerProduct(const dataGrid2D &rhs) const
 {
     assert(getGrid() == rhs.getGrid());
-
     double sum = 0.0;
     const std::vector<double> &rhsData = rhs.getData();
     for(int i = 0; i < getNumberOfGridPoints(); i++)

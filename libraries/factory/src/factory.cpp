@@ -12,7 +12,6 @@
 #include "randomInversion.h"
 #include "randomInversionInputCardReader.h"
 #include <factory.h>
-
 #include <iostream>
 
 inversionInterface *Factory::createInversion(std::string desired_inversion, forwardModelInterface *forwardModel, const genericInput gInput)

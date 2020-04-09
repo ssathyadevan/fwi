@@ -12,6 +12,27 @@ grid2D getGrid()
     return grid;
 }
 
+TEST(complexDataGrid2DTest, copyConstructorTest)
+{
+    // Given
+    std::complex<double> testValue(3.0, 4.6);
+    grid2D grid = getGrid();
+    complexDataGrid2D cdg1(grid);
+    cdg1 = testValue;
+
+    // When
+    complexDataGrid2D cdg2(cdg1);
+
+    // Then
+    const int nrOfGridPoints = cdg2.getNumberOfGridPoints();
+    const std::vector<std::complex<double>> &data = cdg2.getData();
+    for(int i = 0; i < nrOfGridPoints; i++)
+    {
+        ASSERT_DOUBLE_EQ(data[i].real(), real(testValue));
+        ASSERT_DOUBLE_EQ(data[i].imag(), imag(testValue));
+    }
+}
+
 TEST(complexDataGrid2DTest, zeroTest)
 {
     // Given
