@@ -1,13 +1,13 @@
 This run was parametrized as follows:
 nxt   = 50
 nzt   = 25
-nxt_original   = 50
-nzt_original   = 25
+nxt_original   = 64
+nzt_original   = 32
 Timing:
-Starting at 1585552841402897289
-Finished at 1585553101338924401
-CPU time: 258.914
+Starting at 1586435143245170729
+Finished at 1586435416504963117
+CPU time: 269.898
 
 Others:
-Virtual memory: 107824
-Physical memory: 105912
+Virtual memory: 122356
+Physical memory: 106184
