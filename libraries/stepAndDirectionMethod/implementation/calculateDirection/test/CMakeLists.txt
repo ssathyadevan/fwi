@@ -6,3 +6,4 @@ include_directories(../include)
 
 # Build the tests!
 build_test(TARGET ConjugateGradientDirectionCalculatorTest SOURCE ConjugateGradientDirectionCalculatorTest.cpp LIBRARIES direction_calculator_library)
+build_test(TARGET GradientDescentDirectionCalculatorTest SOURCE GradientDescentDirectionCalculatorTest.cpp LIBRARIES direction_calculator_library)

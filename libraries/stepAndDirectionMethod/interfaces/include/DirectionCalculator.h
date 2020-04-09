@@ -6,16 +6,15 @@
 class DirectionCalculator
 {
 public:
-    DirectionCalculator(const grid2D &grid, const double eta);
+    DirectionCalculator(const grid2D &grid, const double errorFunctionalScalingFactor);
     virtual ~DirectionCalculator();
 
-    virtual void calculateDirection(const complexDataGrid2D &) { throw std::bad_exception(); };
-    virtual void calculateDirection(const dataGrid2D &, const dataGrid2D &) { throw std::bad_exception(); };
-    const dataGrid2D &getDirection() { return _direction; }
+    virtual dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) = 0;
+
     const grid2D &getGrid() { return _grid; }
+    double getErrorFunctionalScalingFactor() { return _errorFunctionalScalingFactor; }
 
 protected:
     grid2D _grid;
-    double _eta;
-    dataGrid2D _direction;
+    double _errorFunctionalScalingFactor;
 };

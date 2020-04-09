@@ -7,4 +7,5 @@ class DirectionCalculatorMock : public DirectionCalculator
 public:
     DirectionCalculatorMock(const grid2D &grid, double eta);
     virtual ~DirectionCalculatorMock();
+    dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) override;
 };

@@ -1,4 +1,4 @@
-#include "ConjugateGradientDirectionCalculator.h"
+#include "GradientDescentDirectionCalculator.h"
 #include <gtest/gtest.h>
 
 grid2D getGrid()
@@ -11,16 +11,17 @@ grid2D getGrid()
     return grid;
 }
 
-TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
+TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
-    double errorFunctionScalingFactor = 1.0;
-    dataGrid2D chi(grid);
+    double errorFunctionalScalingFactor = 1.0;
+    dataGrid2D pData(grid);
+    dataGrid2D chiEstimate(grid);
     complexDataGrid2D residuals(grid);
 
-    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, errorFunctionScalingFactor);
+    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(grid, errorFunctionalScalingFactor, pData);
     dataGrid2D cGDirection(grid);
-    cGDirection = directionCalulator->calculateDirection(chi, residuals);
+    cGDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
     const std::vector<double> &data = cGDirection.getData();

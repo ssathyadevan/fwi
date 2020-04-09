@@ -15,61 +15,33 @@ grid2D getGrid()
 TEST(DirectionCalculatorTest, ConstructorGridTest)
 {
     grid2D grid = getGrid();
-    double eta = 1.0;
+    double errorFunctionalScalingFactor = 1.0;
 
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, eta);
-    grid2D cGDirectionGrid = directionCalulator->getGrid();
+    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor);
+    grid2D mockDirectionGrid = directionCalulator->getGrid();
 
-    EXPECT_EQ(grid.getNumberOfGridPoints(), cGDirectionGrid.getNumberOfGridPoints());
-    EXPECT_DOUBLE_EQ(grid.getGridStart()[0], cGDirectionGrid.getGridStart()[0]);
-    EXPECT_DOUBLE_EQ(grid.getGridStart()[1], cGDirectionGrid.getGridStart()[1]);
-    EXPECT_DOUBLE_EQ(grid.getGridEnd()[0], cGDirectionGrid.getGridEnd()[0]);
-    EXPECT_DOUBLE_EQ(grid.getGridEnd()[1], cGDirectionGrid.getGridEnd()[1]);
-    EXPECT_DOUBLE_EQ(grid.getCellVolume(), cGDirectionGrid.getCellVolume());
-    EXPECT_DOUBLE_EQ(grid.getDomainArea(), cGDirectionGrid.getDomainArea());
-    EXPECT_DOUBLE_EQ(grid.getCellDimensions()[0], cGDirectionGrid.getCellDimensions()[0]);
-    EXPECT_DOUBLE_EQ(grid.getCellDimensions()[1], cGDirectionGrid.getCellDimensions()[1]);
-    EXPECT_DOUBLE_EQ(grid.getGridDimensions()[0], cGDirectionGrid.getGridDimensions()[0]);
-    EXPECT_DOUBLE_EQ(grid.getGridDimensions()[1], cGDirectionGrid.getGridDimensions()[1]);
-
-    delete directionCalulator;
-}
-
-TEST(DirectionCalculatorTest, ConstructorDirectionTest)
-{
-    grid2D grid = getGrid();
-    double eta = 1.0;
-
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, eta);
-    dataGrid2D initializedDirection = directionCalulator->getDirection();
-
-    const int nrOfGridPoints = initializedDirection.getNumberOfGridPoints();
-    const std::vector<double> &data = initializedDirection.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], 0.0);
-    }
+    EXPECT_EQ(grid.getNumberOfGridPoints(), mockDirectionGrid.getNumberOfGridPoints());
+    EXPECT_DOUBLE_EQ(grid.getGridStart()[0], mockDirectionGrid.getGridStart()[0]);
+    EXPECT_DOUBLE_EQ(grid.getGridStart()[1], mockDirectionGrid.getGridStart()[1]);
+    EXPECT_DOUBLE_EQ(grid.getGridEnd()[0], mockDirectionGrid.getGridEnd()[0]);
+    EXPECT_DOUBLE_EQ(grid.getGridEnd()[1], mockDirectionGrid.getGridEnd()[1]);
+    EXPECT_DOUBLE_EQ(grid.getCellVolume(), mockDirectionGrid.getCellVolume());
+    EXPECT_DOUBLE_EQ(grid.getDomainArea(), mockDirectionGrid.getDomainArea());
+    EXPECT_DOUBLE_EQ(grid.getCellDimensions()[0], mockDirectionGrid.getCellDimensions()[0]);
+    EXPECT_DOUBLE_EQ(grid.getCellDimensions()[1], mockDirectionGrid.getCellDimensions()[1]);
+    EXPECT_DOUBLE_EQ(grid.getGridDimensions()[0], mockDirectionGrid.getGridDimensions()[0]);
+    EXPECT_DOUBLE_EQ(grid.getGridDimensions()[1], mockDirectionGrid.getGridDimensions()[1]);
 
     delete directionCalulator;
 }
 
-TEST(DirectionCalculatorTest, calculateDirectionOneArgumentExceptionTest)
+TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
 {
     grid2D grid = getGrid();
-    double eta = 1.0;
-    complexDataGrid2D data1(grid);
+    double errorFunctionalScalingFactor = 1.0;
 
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, eta);
-    EXPECT_THROW(directionCalulator->calculateDirection(data1), std::bad_exception);
-}
+    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, errorFunctionalScalingFactor);
+    double mockErrorFunctionalScalingFactor = directionCalulator->getErrorFunctionalScalingFactor();
 
-TEST(DirectionCalculatorTest, calculateDirectionTwoArgumentsExceptionTest)
-{
-    grid2D grid = getGrid();
-    double eta = 1.0;
-    dataGrid2D data1(grid);
-    dataGrid2D data2(grid);
-
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(grid, eta);
-    EXPECT_THROW(directionCalulator->calculateDirection(data1, data2), std::bad_exception);
+    EXPECT_EQ(errorFunctionalScalingFactor, mockErrorFunctionalScalingFactor);
 }
