@@ -83,7 +83,7 @@ inline dataGrid2D operator+(const dataGrid2D &x, const dataGrid2D &y)
     return result;
 }
 
-inline dataGrid2D operator+(const dataGrid2D &x, const double y)
+inline dataGrid2D operator+(const dataGrid2D &x, double y)
 {
     dataGrid2D result(x);
     result += y;
@@ -104,7 +104,7 @@ inline dataGrid2D operator*(const dataGrid2D &x, const dataGrid2D &y)
     return result;
 }
 
-inline dataGrid2D operator*(const double x, const dataGrid2D &y)
+inline dataGrid2D operator*(double x, const dataGrid2D &y)
 {
     dataGrid2D result(y);
     result *= x;
