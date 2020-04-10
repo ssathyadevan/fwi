@@ -1,12 +1,17 @@
 #pragma once
 
-#include "stepSizeInterface.h"
-class FixedSizeCalculator : public StepSizeInterface
+#include "StepSizeCalculator.h"
+#include "grid2D.h"
+
+class FixedStepSizeCalculator : public StepSizeCalculator
 {
 public:
-    FixedSizeCalculator(_size);
-    ~FixedSizeCalculator();
+    FixedStepSizeCalculator(double size);
+    virtual ~FixedStepSizeCalculator();
 
-protected:
-    double calculateStepSize() override;
+    double calculateStepSize();
+    void setStepSize(double size);
+
+private:
+    double _size = 0;
 };

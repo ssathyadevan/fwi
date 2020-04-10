@@ -4,8 +4,7 @@ class StepSizeCalculator
 {
 public:
     StepSizeCalculator();
-    ~StepSizeCalculator();
+    virtual ~StepSizeCalculator();
 
-protected:
     virtual double calculateStepSize() = 0;
 };
