@@ -1,18 +1,15 @@
 #pragma once
 
 #include "forwardModelInterface.h"
+#include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
 #include "integralForwardModelInput.h"
-#include "genericInput.h"
 
 class IntegralForwardModel : public forwardModelInterface
 {
-
 public:
-
-    IntegralForwardModel( const grid2D &grid, const sources &src, const receivers &recv,
-                    const frequenciesGroup &freq, const integralForwardModelInput &fmInput );
+    IntegralForwardModel(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const integralForwardModelInput &fmInput);
 
     ~IntegralForwardModel();
 

@@ -6,6 +6,11 @@
 class StepCalculator
 {
 public:
+    double _step;
+
+    StepCalculator() { _step = 1.0; }
+    StepCalculator(double step) { _step = step; }
+
     double calculateStep(dataGrid2D chiEstimatePrevious, dataGrid2D chiEstimateCurrent, dataGrid2D directionPrevious, dataGrid2D directionCurrent)
     {
         chiEstimatePrevious.zero();
@@ -15,19 +20,16 @@ public:
         return 1.0;
     }
 };
+bool operator==(StepCalculator lhs, StepCalculator rhs) { return lhs._step == rhs._step; }
 
 class StepAndDirectionInterface
 {
 private:
     StepCalculator *_chosenStep;
     DirectionCalculator *_chosenDirection;
-    DirectionInput _directionInput;   // this struct should be a template
     forwardModelInterface *_forwardModel;
-
+    DirectionInput _directionInput;   // this struct should be a template
     const grid2D &_grid;
-    const sources &_src;
-    const receivers &_recv;
-    const frequenciesGroup _freq;
 
 public:
     StepAndDirectionInterface(
@@ -40,4 +42,10 @@ public:
     dataGrid2D calculateNextMove(dataGrid2D chiEstimate, const dataGrid2D &direction, double step);
     double functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
     double normSq(const std::vector<std::complex<double>> &pData);
+
+    StepCalculator getChosenStep() { return *_chosenStep; }
+    DirectionCalculator getChosenDirection() { return *_chosenDirection; }
+    // forwardModelInterface getForwardModel() { return *_forwardModel; }
+    DirectionInput getDirectionInput() { return _directionInput; }
+    const grid2D &getGrid() { return _grid; }
 };

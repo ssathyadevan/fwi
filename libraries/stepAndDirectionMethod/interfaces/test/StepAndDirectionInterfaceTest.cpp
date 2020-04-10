@@ -1,21 +1,9 @@
 #include "StepAndDirectionInterface.h"
 #include <gtest/gtest.h>
 
-// grid2D getGrid()
-//{
-//    std::array<double, 2> xMin = {0.0, 0.0};
-//    std::array<double, 2> xMax = {2.0, 2.0};
-//    std::array<int, 2> nX = {2, 4};
-
-//    grid2D grid(xMin, xMax, nX);
-//    return grid;
-//}
-
-// class dataGrid2D;
-
 TEST(StepAndDirectionInterfaceTest, ConstructorStepAndDirectionInterfaceTest)
 {
-    double eta = 1.0;
+    // double eta = 1.0;
     std::array<double, 2> xMin = {0, 1.0};
     std::array<double, 2> xMax = {0, 1.0};
     std::array<int, 2> nX = {1, 1};
@@ -24,19 +12,22 @@ TEST(StepAndDirectionInterfaceTest, ConstructorStepAndDirectionInterfaceTest)
     freqInfo freqStruct;   // default constructor
     double c0 = 1.0;
     grid2D grid(xMin, xMax, nX);
+    dataGrid2D dataGrid(grid);
     sources src(xMin, xMax, nSrc);
-    receivers recv(nMin, nMax, nRecv);
+    receivers recv(xMin, xMax, nRecv);
     frequenciesGroup freq(freqStruct, c0);
 
-    StepCalculator chosenStepTest;   // default constructor
+    StepCalculator chosenStepTest(2.0);   // default constructor
     DirectionCalculator *chosenDirectionTest = new ConjugateGradientDirectionCalculator(grid, eta);
-    DirectionInput directionInputTest;   // default constructor
-    forwardModelInterface forwardModelTest(grid, src, recv, freq);
+    DirectionInput directionInputTest(dataGrid);   // default constructor
+    forwardModelInterface *forwardModelTest = new ForwardModelInterfaceMock(grid, src, recv, freq);
 
     StepAndDirectionInterface SADITest(chosenStepTest, chosenDirectionTest, forwardModelTest, directionInputTest);
 
     EXPECT_EQ(SADITest.getChosenStep(), chosenStepTest);
 
+    delete chosenDirectionTest;
+    delete forwardModelTest;
     //    EXPECT_EQ(grid.getNumberOfGridPoints(), cGDirectionGrid.getNumberOfGridPoints());
     //    EXPECT_DOUBLE_EQ(grid.getGridStart()[0], cGDirectionGrid.getGridStart()[0]);
     //    EXPECT_DOUBLE_EQ(grid.getGridStart()[1], cGDirectionGrid.getGridStart()[1]);

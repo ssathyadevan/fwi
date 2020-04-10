@@ -4,8 +4,8 @@
 StepAndDirectionInterface::StepAndDirectionInterface(
     StepCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
     _chosenStep(chosenStep),
-    _chosenDirection(chosenDirection), _directionInput(directionInput), _forwardModel(), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()),
-    _recv(forwardModel->getRecv()), _freq(forwardModel->getFreq())
+    _chosenDirection(chosenDirection), _forwardModel(), _directionInput(directionInput), _grid(forwardModel->getGrid())
+
 {
     // should throw exceptions if things are initialized to NULL
     _forwardModel = forwardModel;
@@ -30,7 +30,8 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
-    _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    //    complexDataGrid2D residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
@@ -40,23 +41,18 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
 
     for(int it = 0; it < _directionInput._maxIterationsNumber; it++)
     {
-        // these are used for the direction computation
         directionPrevious = directionCurrent;
         _chosenDirection->calculateDirection(chiEstimateCurrent, directionCurrent);
         directionCurrent = _chosenDirection->getDirection();
 
-        //        directionCurrent = differential(pData, chiEstimateCurrent, _gdInput.h, eta); //this the the computation of the direction
-
         if(it > 0)
         {
             // HERE compute Step using _chosenStep
-            // direction... MIGHT NOT BE dFdx... !!!
+            // direction MIGHT NOT BE dFdx !!!
             step = _chosenStep->calculateStep(chiEstimatePrevious, chiEstimateCurrent, directionPrevious, directionCurrent);
-            // gamma = determineGamma(chiEstimatePrevious, chiEstimateCurrent, dFdxPrevious, dFdxCurrent);
         }
 
         chiEstimatePrevious = chiEstimateCurrent;
-        // this function ONLY multiplies step by direction
         chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, directionCurrent, step);
 
         fx = functionF(chiEstimateCurrent, pData, eta);
@@ -87,6 +83,7 @@ dataGrid2D StepAndDirectionInterface::calculateNextMove(dataGrid2D chiEstimate, 
 double StepAndDirectionInterface::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
+    //    complexDataGrid2D residual = _forwardModel->calculateResidual(chiEstimate, pData);
     return eta * _forwardModel->calculateResidualNormSq(residual);
 }
 
