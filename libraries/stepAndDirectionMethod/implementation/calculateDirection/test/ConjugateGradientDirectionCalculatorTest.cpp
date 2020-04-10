@@ -30,12 +30,13 @@ TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
     double errorFunctionScalingFactor = 1.0;
-    dataGrid2D chi(grid);
-    complexDataGrid2D residuals(grid);
 
     forwardModelInterface *forwardmodel = createForwardModelMock();
-    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(grid, errorFunctionScalingFactor, forwardmodel);
+    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
+
     dataGrid2D cGDirection(grid);
+    dataGrid2D chi(grid);
+    complexDataGrid2D residuals(grid);
     cGDirection = directionCalulator->calculateDirection(chi, residuals);
 
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();

@@ -31,11 +31,12 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     grid2D grid = getGrid();
     double errorFunctionalScalingFactor = 1.0;
     dataGrid2D pData(grid);
-    dataGrid2D chiEstimate(grid);
-    complexDataGrid2D residuals(grid);
 
     forwardModelInterface *forwardmodel = createForwardModelMock();
-    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(grid, errorFunctionalScalingFactor, forwardmodel, pData);
+    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, pData);
+
+    dataGrid2D chiEstimate(grid);
+    complexDataGrid2D residuals(grid);
     dataGrid2D cGDirection(grid);
     cGDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
