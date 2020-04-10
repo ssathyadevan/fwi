@@ -12,39 +12,38 @@ grid2D getGrid()
     return grid;
 }
 
-forwardModelInterface *createForwardModelMock()
+TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
 {
+    grid2D grid = getGrid();
+
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq;
-    grid2D grid = getGrid();
+    freqInfo freq(0.0, 10.0, 5);
     sources sources(xMin, xMax, 2);
     receivers receivers(xMin, xMax, 2);
     frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
-    return forwardmodel;
-}
+    forwardModelInterface *forwardmodel;
+    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
-TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
-{
-    grid2D grid = getGrid();
     double errorFunctionalScalingFactor = 1.0;
-    dataGrid2D pData(grid);
+    double derivativeStepSize = 0.1;
 
-    forwardModelInterface *forwardmodel = createForwardModelMock();
-    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, pData);
+    int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
+    std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
+    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     dataGrid2D chiEstimate(grid);
     complexDataGrid2D residuals(grid);
-    dataGrid2D cGDirection(grid);
-    cGDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
+    dataGrid2D gDDirection(grid);
+    gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
-    const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
-    const std::vector<double> &data = cGDirection.getData();
+    const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
+    const double expectedDirection = static_cast<double>(lengthOfPData);
+    const std::vector<double> &data = gDDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], 1.0);
+        ASSERT_DOUBLE_EQ(data[i], expectedDirection);
     }
 
     delete forwardmodel;
