@@ -18,7 +18,7 @@ public:
 
     void calculateKappa();
     virtual void calculatePTot(const dataGrid2D &chiEst);
-    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
+    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
     virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size);
     virtual void getResidualGradient(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes);
     virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
