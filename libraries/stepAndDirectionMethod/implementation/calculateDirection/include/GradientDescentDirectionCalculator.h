@@ -10,9 +10,10 @@ public:
     virtual ~GradientDescentDirectionCalculator();
 
     dataGrid2D calculateDirection(const dataGrid2D &chiEstimate, const complexDataGrid2D &) override;
-    double optimizationFunction() const;
 
 private:
     const std::vector<std::complex<double>> &_pData;
     const double _derivativeStepSize;
+
+    double optimizationFunction(const dataGrid2D &chiEstimatePlusH) const;
 };
