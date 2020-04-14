@@ -5,8 +5,8 @@
 class ConjugateGradientDirectionCalculator : public DirectionCalculator
 {
 public:
-    ConjugateGradientDirectionCalculator(const grid2D &grid, double eta);
+    ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel);
     virtual ~ConjugateGradientDirectionCalculator();
 
-    virtual void calculateDirection(const complexDataGrid2D &residual);
+    dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) override;
 };

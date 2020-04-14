@@ -1,11 +1,15 @@
 #include "ConjugateGradientDirectionCalculator.h"
 
-ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(const grid2D &grid, double eta) : DirectionCalculator(grid, eta) {}
+ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel) :
+    DirectionCalculator(errorFunctionalScalingFactor, forwardmodel)
+{
+}
 
 ConjugateGradientDirectionCalculator::~ConjugateGradientDirectionCalculator() {}
 
-void ConjugateGradientDirectionCalculator::calculateDirection(const complexDataGrid2D &residual)
+dataGrid2D ConjugateGradientDirectionCalculator::calculateDirection(const dataGrid2D &, const complexDataGrid2D &residual)
 {
-    (void)residual;
-    _direction = 1.0;
+    dataGrid2D direction(residual.getGrid());
+    direction = 1.0;
+    return direction;
 }

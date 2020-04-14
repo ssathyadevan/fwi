@@ -1,5 +1,11 @@
 #include "DirectionCalculator.h"
 
-DirectionCalculator::DirectionCalculator(const grid2D &grid, double eta) : _grid(grid), _eta(eta), _direction(grid) {}
+DirectionCalculator::DirectionCalculator(double errorFunctionalScalingfactor, forwardModelInterface *forwardmodel) :
+    _errorFunctionalScalingFactor(errorFunctionalScalingfactor), _forwardmodel()
+{
+    _forwardmodel = forwardmodel;
+    int nFreq = _forwardmodel->getFreq().nFreq;
+    std::cout << nFreq << std::endl;
+}
 
 DirectionCalculator::~DirectionCalculator() {}

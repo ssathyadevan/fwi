@@ -1,4 +1,5 @@
-#include "ConjugateGradientDirectionCalculator.h"
+#include "DirectionCalculator.h"
+#include "DirectionCalculatorMock.h"
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
@@ -26,25 +27,15 @@ forwardModelInterface *createForwardModelMock()
     return forwardmodel;
 }
 
-TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
+TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
 {
-    grid2D grid = getGrid();
-    double errorFunctionScalingFactor = 1.0;
-
+    double errorFunctionalScalingFactor = 1.0;
     forwardModelInterface *forwardmodel = createForwardModelMock();
-    DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
 
-    dataGrid2D cGDirection(grid);
-    dataGrid2D chi(grid);
-    complexDataGrid2D residuals(grid);
-    cGDirection = directionCalulator->calculateDirection(chi, residuals);
+    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardmodel);
+    double mockErrorFunctionalScalingFactor = directionCalulator->getErrorFunctionalScalingFactor();
 
-    const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
-    const std::vector<double> &data = cGDirection.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
-    {
-        ASSERT_DOUBLE_EQ(data[i], 1.0);
-    }
+    EXPECT_EQ(errorFunctionalScalingFactor, mockErrorFunctionalScalingFactor);
 
     delete forwardmodel;
     delete directionCalulator;

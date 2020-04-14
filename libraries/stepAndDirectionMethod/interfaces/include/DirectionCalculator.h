@@ -2,20 +2,19 @@
 
 #include "complexDataGrid2D.h"
 #include "dataGrid2D.h"
+#include "forwardModelInterface.h"
 
 class DirectionCalculator
 {
 public:
-    DirectionCalculator(const grid2D &grid, const double eta);
+    DirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel);
     virtual ~DirectionCalculator();
 
-    virtual void calculateDirection(const complexDataGrid2D &) { throw std::bad_exception(); };
-    virtual void calculateDirection(const dataGrid2D &, const dataGrid2D &) { throw std::bad_exception(); };
-    const dataGrid2D &getDirection() { return _direction; }
-    const grid2D &getGrid() { return _grid; }
+    virtual dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) = 0;
+
+    double getErrorFunctionalScalingFactor() const { return _errorFunctionalScalingFactor; }
 
 protected:
-    grid2D _grid;
-    double _eta;
-    dataGrid2D _direction;
+    const double _errorFunctionalScalingFactor;
+    forwardModelInterface *_forwardmodel;
 };

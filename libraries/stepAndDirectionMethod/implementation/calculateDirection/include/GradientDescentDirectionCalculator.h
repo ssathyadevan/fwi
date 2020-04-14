@@ -5,8 +5,15 @@
 class GradientDescentDirectionCalculator : public DirectionCalculator
 {
 public:
-    GradientDescentDirectionCalculator(const grid2D &grid, double eta);
+    GradientDescentDirectionCalculator(
+        double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel, double derivativeStepSize, const std::vector<std::complex<double>> &pData);
     virtual ~GradientDescentDirectionCalculator();
 
-    virtual void calculateDirection(const dataGrid2D &pData, const dataGrid2D &chiEsitmate);
+    dataGrid2D calculateDirection(const dataGrid2D &chiEstimate, const complexDataGrid2D &) override;
+
+private:
+    const std::vector<std::complex<double>> &_pData;
+    const double _derivativeStepSize;
+
+    double optimizationFunction(const dataGrid2D &chiEstimatePlusH) const;
 };
