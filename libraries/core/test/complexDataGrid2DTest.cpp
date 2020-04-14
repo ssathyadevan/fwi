@@ -221,7 +221,7 @@ TEST(complexDataGrid2DTest, innerProductTest)
 }
 
 // Operators
-TEST(complexDataGrid2DTest, operatorAssignPressureFieldComplexSerialExceptionTest)
+TEST(complexDataGrid2DTest, operatorAssignComplexDataGrid2DExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -234,7 +234,7 @@ TEST(complexDataGrid2DTest, operatorAssignPressureFieldComplexSerialExceptionTes
     EXPECT_THROW(cdg = cdg, std::logic_error);
 }
 
-TEST(complexDataGrid2DTest, operatorAssigncomplexDataGrid2DTest)
+TEST(complexDataGrid2DTest, operatorAssignComplexDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -262,7 +262,7 @@ TEST(complexDataGrid2DTest, operatorAssigncomplexDataGrid2DTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorAssignPressureFieldSerialTest)
+TEST(complexDataGrid2DTest, operatorAssignDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -433,7 +433,7 @@ TEST(complexDataGrid2DTest, operatorAssignDoubleTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorAddcomplexDataGrid2DTest)
+TEST(complexDataGrid2DTest, operatorAddComplexDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -460,7 +460,7 @@ TEST(complexDataGrid2DTest, operatorAddcomplexDataGrid2DTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorAddcomplexDataGrid2DTest2)
+TEST(complexDataGrid2DTest, operatorAddComplexDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -497,7 +497,7 @@ TEST(complexDataGrid2DTest, operatorAddcomplexDataGrid2DTest2)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorAddPressureFieldSerialTest)
+TEST(complexDataGrid2DTest, operatorAddDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -524,7 +524,7 @@ TEST(complexDataGrid2DTest, operatorAddPressureFieldSerialTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorAddPressureFieldSerialTest2)
+TEST(complexDataGrid2DTest, operatorAddDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -718,7 +718,7 @@ TEST(complexDataGrid2DTest, operatorAddDoubleTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorSubtractcomplexDataGrid2DTest)
+TEST(complexDataGrid2DTest, operatorSubtractComplexDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -745,7 +745,7 @@ TEST(complexDataGrid2DTest, operatorSubtractcomplexDataGrid2DTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorSubtractcomplexDataGrid2DTest2)
+TEST(complexDataGrid2DTest, operatorSubtractComplexDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -782,7 +782,7 @@ TEST(complexDataGrid2DTest, operatorSubtractcomplexDataGrid2DTest2)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorSubtractPressureFieldSerialTest)
+TEST(complexDataGrid2DTest, operatorSubtractDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -809,7 +809,7 @@ TEST(complexDataGrid2DTest, operatorSubtractPressureFieldSerialTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorSubtractPressureFieldSerialTest2)
+TEST(complexDataGrid2DTest, operatorSubtractDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -1011,7 +1011,7 @@ TEST(complexDataGrid2DTest, operatorSubtractDoubleTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorMultiplyBycomplexDataGrid2DTest)
+TEST(complexDataGrid2DTest, operatorMultiplyByComplexDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -1038,7 +1038,7 @@ TEST(complexDataGrid2DTest, operatorMultiplyBycomplexDataGrid2DTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorMultiplyBycomplexDataGrid2DTest2)
+TEST(complexDataGrid2DTest, operatorMultiplyByComplexDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -1075,7 +1075,7 @@ TEST(complexDataGrid2DTest, operatorMultiplyBycomplexDataGrid2DTest2)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorMultiplyByPressureFieldSerialTest)
+TEST(complexDataGrid2DTest, operatorMultiplyByDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -1102,7 +1102,7 @@ TEST(complexDataGrid2DTest, operatorMultiplyByPressureFieldSerialTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorMultiplyByPressureFieldSerialTest2)
+TEST(complexDataGrid2DTest, operatorMultiplyByDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -1323,7 +1323,7 @@ TEST(complexDataGrid2DTest, operatorDivideByPressureFieldComplexSerialExceptionT
     // Note: 1 / 0.0 must throw
 }
 
-TEST(complexDataGrid2DTest, operatorDivideBycomplexDataGrid2DTest)
+TEST(complexDataGrid2DTest, operatorDivideByComplexDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -1350,7 +1350,7 @@ TEST(complexDataGrid2DTest, operatorDivideBycomplexDataGrid2DTest)
     }
 }
 
-TEST(complexDataGrid2DTest, operatorDivideByPressureFieldSerialExceptionTest)
+TEST(complexDataGrid2DTest, operatorDivideByDataGrid2DExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -1370,7 +1370,7 @@ TEST(complexDataGrid2DTest, operatorDivideByPressureFieldSerialExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(complexDataGrid2DTest, operatorDivideByPressureFieldSerialTest)
+TEST(complexDataGrid2DTest, operatorDivideByDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();

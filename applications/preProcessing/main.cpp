@@ -16,18 +16,17 @@ int main(int argc, char **argv)
         genericInputCardReader genericReader(arguments[0]);
         const genericInput gInput = genericReader.getInput();
 
-        std::string logFileName = gInput.outputLocation + gInput.runName + "PreProcess.log";
+        std::string logFilePath = gInput.outputLocation + gInput.runName + "PreProcess.log";
 
         if(!gInput.verbose)
         {
-            std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger(logFileName.c_str(), ldebug);
+            std::cout << "Printing the program output into" << logFilePath << std::endl;
+            initLogger(logFilePath.c_str(), ldebug);
         }
 
         L_(linfo) << "Preprocessing the provided input to create the reference pressure-field";
 
         CpuClock clock;
-
         clock.Start();
         generateReferencePressureFieldFromChi(gInput, gInput.runName);
         clock.End();
@@ -36,10 +35,15 @@ int main(int argc, char **argv)
     {
         std::cout << "An invalid argument found!" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
     catch(const std::exception &e)
     {
+        std::cout << "An exception has been thrown:" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return 0;
@@ -49,12 +53,17 @@ void generateReferencePressureFieldFromChi(const genericInput &gInput, const std
 {
     // initialize the grid, sources, receivers, grouped frequencies
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
+
+    std::string inputFolder = gInput.inputFolder + gInput.fileName + ".txt";
     dataGrid2D chi(grid);
-    chi.fromFile(gInput);
+    chi.fromFile(inputFolder);
+
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
+
     receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
+
     frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 

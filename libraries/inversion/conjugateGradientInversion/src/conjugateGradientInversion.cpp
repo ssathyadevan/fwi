@@ -112,12 +112,13 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
 
 std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInput)
 {
+    std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
+
     std::ofstream residualLogFile;
-    residualLogFile.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
+    residualLogFile.open(filePath, std::ios::out | std::ios::trunc);
     if(!residualLogFile)
     {
-        L_(lerror) << "Failed to open the file to store residuals";
-        std::exit(EXIT_FAILURE);
+        throw std::invalid_argument("Unable to store residuals from file : " + filePath);
     }
 
     return residualLogFile;

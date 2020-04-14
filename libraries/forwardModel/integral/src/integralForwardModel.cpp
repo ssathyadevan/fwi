@@ -135,8 +135,7 @@ void IntegralForwardModel::deleteKappa()
     _Kappa = nullptr;
 }
 
-complexDataGrid2D IntegralForwardModel::calcTotalField(
-    const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
+complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
 {
     assert(G.getGrid() == p_init.getGrid());
 
@@ -242,7 +241,7 @@ void IntegralForwardModel::calculatePTot(const dataGrid2D &chiEst)
     {
         li = i * _src.nSrc;
 
-        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freqInfo";
+        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
 
         for(int j = 0; j < _src.nSrc; j++)
         {
@@ -309,7 +308,7 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
 }
 
 void IntegralForwardModel::getUpdateDirectionInformationMPI(
-        std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
+    std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
 {
     kRes.zero();
 

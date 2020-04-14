@@ -116,14 +116,13 @@ void dataGrid2D::gradient(std::vector<dataGrid2D> &gradientField) const
     }
 }
 
-void dataGrid2D::toFile(const std::string &fileName) const
+void dataGrid2D::toFile(const std::string &filePath) const
 {
     std::ofstream file;
-    file.open(fileName, std::ios::out | std::ios::trunc);
+    file.open(filePath, std::ios::out | std::ios::trunc);
     if(!file)
     {
-        L_(lerror) << "Unable to open the file in .toFile method of volField_rect_2D_cpu class " << std::endl;
-        std::exit(EXIT_FAILURE);
+        throw std::invalid_argument("Unable to write DataGrid2D to file: " + filePath);
     }
 
     for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -133,22 +132,19 @@ void dataGrid2D::toFile(const std::string &fileName) const
     file.close();
 }
 
-void dataGrid2D::fromFile(const genericInput &input)
+void dataGrid2D::fromFile(const std::string &filePath)
 {
-    std::string inputFolder = input.inputFolder;
-
-    std::ifstream file(inputFolder + input.fileName + ".txt", std::ios::in);
+    std::ifstream file(filePath, std::ios::in);
     if(!file)
     {
-        L_(lerror) << "Looking for file " << inputFolder + input.fileName + ".txt";
-        L_(lerror) << "Unable to open the file in .fromFile method of volField_rect_2D_cpu class ";
-        std::exit(EXIT_FAILURE);
+        throw std::invalid_argument("Unable to load DataGrid2D from file: " + filePath);
     }
 
     for(int i = 0; i < getNumberOfGridPoints(); i++)
     {
         file >> _data[i];
     }
+
     file.close();
 }
 

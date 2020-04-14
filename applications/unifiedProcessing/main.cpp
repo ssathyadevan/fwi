@@ -68,11 +68,15 @@ int main(int argc, char **argv)
     {
         std::cout << "An invalid argument found!" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
     catch(const std::exception &e)
     {
-        std::cout << "Another exception is found!" << std::endl;
+        std::cout << "An exception has been thrown:" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return 0;

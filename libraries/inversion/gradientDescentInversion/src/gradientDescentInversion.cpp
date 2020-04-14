@@ -13,7 +13,7 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
 {
     progressBar bar(_gdInput.iter);
 
-    std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
+    std::ofstream residualLogFile = openResidualLogFile(gInput);
 
     dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _gdInput.x0;
@@ -43,17 +43,31 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
         chiEstimatePrevious = chiEstimateCurrent;
         chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
         fx = functionF(chiEstimateCurrent, pData, eta);
-        file << std::setprecision(17) << fx << "," << counter << std::endl;
+        residualLogFile << std::setprecision(17) << fx << "," << counter << std::endl;
 
         ++counter;
         bar++;
     }
 
+    residualLogFile.close();
     return chiEstimateCurrent;
 }
 
-std::vector<double> gradientDescentInversion::differential(
-    const std::vector<std::complex<double>> &pData, dataGrid2D chiEstimate, double h, double eta)
+std::ofstream gradientDescentInversion::openResidualLogFile(genericInput &gInput)
+{
+    std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
+
+    std::ofstream residualLogFile;
+    residualLogFile.open(filePath, std::ios::out | std::ios::trunc);
+    if(!residualLogFile)
+    {
+        throw std::invalid_argument("Unable to store residuals from file : " + filePath);
+    }
+
+    return residualLogFile;
+}
+
+std::vector<double> gradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, dataGrid2D chiEstimate, double h, double eta)
 {
     const int numGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -94,8 +108,8 @@ dataGrid2D gradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, con
     return chiEstimate;
 }
 
-double gradientDescentInversion::determineGamma(const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent,
-    std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
+double gradientDescentInversion::determineGamma(
+    const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
 {
     const int nGridPoints = chiEstimateCurrent.getNumberOfGridPoints();
 
