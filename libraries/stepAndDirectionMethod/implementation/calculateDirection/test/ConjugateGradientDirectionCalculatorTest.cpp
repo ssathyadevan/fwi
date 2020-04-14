@@ -26,7 +26,7 @@ forwardModelInterface *createForwardModelMock()
     return forwardmodel;
 }
 
-TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
+TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
     double errorFunctionScalingFactor = 1.0;
@@ -36,14 +36,14 @@ TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 
     dataGrid2D cGDirection(grid);
     dataGrid2D chi(grid);
-    std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
+    std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 1.0);
     cGDirection = directionCalulator->calculateDirection(chi, residuals);
 
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
     const std::vector<double> &data = cGDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], 1.0);
+        ASSERT_DOUBLE_EQ(data[i], 0.0);
     }
 
     delete forwardmodel;

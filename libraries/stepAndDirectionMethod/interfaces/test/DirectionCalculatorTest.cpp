@@ -40,3 +40,13 @@ TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
     delete forwardmodel;
     delete directionCalulator;
 }
+
+TEST(DirectionCalculatorTest, ScalingFactorExceptionTest)
+{
+    double errorFunctionalScalingFactor = -1.0;
+    forwardModelInterface *forwardmodel = createForwardModelMock();
+
+    EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardmodel), std::invalid_argument);
+
+    delete forwardmodel;
+}
