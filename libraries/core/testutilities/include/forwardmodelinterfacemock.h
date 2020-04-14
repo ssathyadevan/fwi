@@ -17,6 +17,7 @@ public:
 
     virtual void calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData);
     virtual void calculatePTot(const dataGrid2D &chiEst) { (void)chiEst; }
+    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, complexDataGrid2D &) {}
     virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
     {
         (void)CurrentPressureFieldSerial;
