@@ -10,7 +10,7 @@ public:
     DirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel);
     virtual ~DirectionCalculator();
 
-    virtual dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) = 0;
+    virtual dataGrid2D calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &) = 0;
 
     double getErrorFunctionalScalingFactor() const { return _errorFunctionalScalingFactor; }
 

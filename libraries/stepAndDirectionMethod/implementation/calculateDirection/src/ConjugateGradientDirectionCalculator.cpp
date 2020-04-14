@@ -7,9 +7,9 @@ ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(doubl
 
 ConjugateGradientDirectionCalculator::~ConjugateGradientDirectionCalculator() {}
 
-dataGrid2D ConjugateGradientDirectionCalculator::calculateDirection(const dataGrid2D &, const complexDataGrid2D &residual)
+dataGrid2D ConjugateGradientDirectionCalculator::calculateDirection(const dataGrid2D &chi, const std::vector<std::complex<double>> &residual)
 {
-    dataGrid2D direction(residual.getGrid());
+    dataGrid2D direction(chi.getGrid());
     direction = 1.0;
     return direction;
 }

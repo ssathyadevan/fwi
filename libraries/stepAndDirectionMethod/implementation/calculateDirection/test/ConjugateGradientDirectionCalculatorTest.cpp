@@ -36,7 +36,7 @@ TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 
     dataGrid2D cGDirection(grid);
     dataGrid2D chi(grid);
-    complexDataGrid2D residuals(grid);
+    std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
     cGDirection = directionCalulator->calculateDirection(chi, residuals);
 
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
