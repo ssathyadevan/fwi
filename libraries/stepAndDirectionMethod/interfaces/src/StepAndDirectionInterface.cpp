@@ -31,7 +31,7 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
 
     _forwardModel->calculateKappa();
     //    complexDataGrid2D residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    // std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
