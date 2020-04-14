@@ -27,3 +27,7 @@ SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 
 build_test(TARGET step_and_direction_interface_test SOURCE StepAndDirectionInterfaceTest.cpp LIBRARIES step_and_direction_interface_library utilities_library direction_calculator_library  test_utils_library)
 
+
+#build_test(TARGET DirectionCalculatorTest SOURCE DirectionCalculatorTest.cpp LIBRARIES step_and_direction_interface_library test_step_and_direction_utils_library utilities_library)
+#build_test(TARGET StepSizeCalculatorTest SOURCE StepSizeCalculatorTest.cpp LIBRARIES step_and_direction_interface_library test_step_and_direction_utils_library utilities_library)
+
