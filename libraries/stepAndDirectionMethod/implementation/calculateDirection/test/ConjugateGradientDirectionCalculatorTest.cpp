@@ -26,7 +26,7 @@ forwardModelInterface *createForwardModelMock()
     return forwardmodel;
 }
 
-TEST(conjugateGradientDirectionCalculatorTest, calculateDirectionTest)
+TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
     double errorFunctionScalingFactor = 1.0;
