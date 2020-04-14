@@ -2,7 +2,7 @@
 #include "progressBar.h"
 
 StepAndDirectionInterface::StepAndDirectionInterface(
-    StepCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
+    StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
     _chosenStep(chosenStep),
     _chosenDirection(chosenDirection), _forwardModel(), _directionInput(directionInput), _grid(forwardModel->getGrid())
 
@@ -42,14 +42,14 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     for(int it = 0; it < _directionInput._maxIterationsNumber; it++)
     {
         directionPrevious = directionCurrent;
-        _chosenDirection->calculateDirection(chiEstimateCurrent, directionCurrent);
-        directionCurrent = _chosenDirection->getDirection();
+        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);   // the second input should be pData rather than directionCurrent
 
         if(it > 0)
         {
             // HERE compute Step using _chosenStep
             // direction MIGHT NOT BE dFdx !!!
-            step = _chosenStep->calculateStep(chiEstimatePrevious, chiEstimateCurrent, directionPrevious, directionCurrent);
+            step = _chosenStep->calculateStepSize();   //(chiEstimatePrevious, chiEstimateCurrent, directionPrevious, directionCurrent);
+            // need to add inputs to all types of StepSize
         }
 
         chiEstimatePrevious = chiEstimateCurrent;

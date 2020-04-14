@@ -1,31 +1,15 @@
 #pragma once
 #include "DirectionCalculator.h"
 #include "DirectionInput.h"
+#include "StepSizeCalculator.h"
 #include "forwardModelInterface.h"
 
-class StepCalculator   // to be  replaced with Alex's classes
-{
-public:
-    double _step;
-
-    StepCalculator() { _step = 1.0; }
-    StepCalculator(double step) { _step = step; }
-
-    double calculateStep(dataGrid2D chiEstimatePrevious, dataGrid2D chiEstimateCurrent, dataGrid2D directionPrevious, dataGrid2D directionCurrent)
-    {
-        chiEstimatePrevious.zero();
-        chiEstimateCurrent.zero();
-        directionPrevious.zero();
-        directionCurrent.zero();
-        return 1.0;
-    }
-};
-// bool operator==(StepCalculator lhs, StepCalculator rhs) { return lhs._step == rhs._step; }
+// bool operator==(StepSizeCalculator lhs, StepSizeCalculator rhs) { return lhs._step == rhs._step; }
 
 class StepAndDirectionInterface
 {
 private:
-    StepCalculator *_chosenStep;
+    StepSizeCalculator *_chosenStep;
     DirectionCalculator *_chosenDirection;
     forwardModelInterface *_forwardModel;
     DirectionInput _directionInput;   // this struct should/could be a template
@@ -33,7 +17,7 @@ private:
 
 public:
     StepAndDirectionInterface(
-        StepCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput);
+        StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput);
     //    ~StepAndDirectionInterface() = default;
 
     dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
@@ -43,8 +27,8 @@ public:
     double functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
     double normSq(const std::vector<std::complex<double>> &pData);
 
-    StepCalculator getChosenStep() { return *_chosenStep; }
-    DirectionCalculator getChosenDirection() { return *_chosenDirection; }
+    //   StepSizeCalculator getChosenStep() { return *_chosenStep; }
+    //   DirectionCalculator getChosenDirection() { return *_chosenDirection; }
     // forwardModelInterface getForwardModel() { return *_forwardModel; } this one gives compile error
     DirectionInput getDirectionInput() { return _directionInput; }
     const grid2D &getGrid() { return _grid; }

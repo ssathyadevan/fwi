@@ -1,5 +1,6 @@
 #include "StepAndDirectionInterface.h"
 #include "ConjugateGradientDirectionCalculator.h"
+#include "FixedStepSizeCalculator.h"
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
@@ -19,15 +20,16 @@ TEST(StepAndDirectionInterfaceTest, ConstructorStepAndDirectionInterfaceTest)
     receivers recv(xMin, xMax, nRecv);
     frequenciesGroup freq(freqStruct, c0);
 
-    StepCalculator chosenStepTest(2.0);
-    DirectionCalculator *chosenDirectionTest = new ConjugateGradientDirectionCalculator(grid, eta);
+    StepSizeCalculator *chosenStepSizeTest = new FixedStepSizeCalculator(2.0);
     DirectionInput directionInputTest(dataGrid);
     forwardModelInterface *forwardModelTest = new ForwardModelInterfaceMock(grid, src, recv, freq);
 
-    //   StepAndDirectionInterface SADITest(chosenStepTest, *chosenDirectionTest, *forwardModelTest, directionInputTest);
+    DirectionCalculator *chosenDirectionTest = new ConjugateGradientDirectionCalculator(eta, forwardModelTest);
+    //    StepAndDirectionInterface SADITest(*chosenStepSizeTest, *chosenDirectionTest, *forwardModelTest, directionInputTest);
 
     //    EXPECT_EQ(SADITest.getChosenStep(), chosenStepTest);
 
+    delete chosenStepSizeTest;
     delete chosenDirectionTest;
     delete forwardModelTest;
     //    EXPECT_EQ(grid.getNumberOfGridPoints(), cGDirectionGrid.getNumberOfGridPoints());

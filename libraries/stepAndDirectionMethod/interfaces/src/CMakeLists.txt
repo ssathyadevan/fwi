@@ -1,5 +1,4 @@
 add_library(step_and_direction_interface_library
-    StepSizeInterface.cpp                    ../include/StepSizeInterface.h
     StepAndDirectionInterface.cpp            ../include/StepAndDirectionInterface.h
     DirectionCalculator.cpp                  ../include/DirectionCalculator.h
     DirectionInput.cpp                       ../include/DirectionInput.h
