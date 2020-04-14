@@ -65,8 +65,9 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     return chiEstimateCurrent;
 }
 
-dataGrid2D StepAndDirectionInterface::calculateNextMove(dataGrid2D chiEstimate, const dataGrid2D &direction, double step)
+dataGrid2D StepAndDirectionInterface::calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step)
 {
+    dataGrid2D chiTemp = chiEstimate;
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
     std::vector<double> descentVector(nGridPoints, 0.0);
     std::vector<double> directionData = direction.getData();
@@ -75,9 +76,9 @@ dataGrid2D StepAndDirectionInterface::calculateNextMove(dataGrid2D chiEstimate, 
     {
         descentVector[i] = -1 * step * directionData[i];
     }
-    chiEstimate += descentVector;
+    chiTemp += descentVector;
 
-    return chiEstimate;
+    return chiTemp;
 }
 
 double StepAndDirectionInterface::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
