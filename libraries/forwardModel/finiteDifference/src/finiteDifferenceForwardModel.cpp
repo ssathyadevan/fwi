@@ -194,7 +194,7 @@ void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureF
     }
 }
 
-void finiteDifferenceForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
+void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
 {
     int l_i, l_j;
 

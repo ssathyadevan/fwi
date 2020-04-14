@@ -8,5 +8,5 @@ public:
     ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel);
     virtual ~ConjugateGradientDirectionCalculator();
 
-    dataGrid2D calculateDirection(const dataGrid2D &, const complexDataGrid2D &) override;
+    dataGrid2D calculateDirection(const dataGrid2D &chi, const std::vector<std::complex<double>> &residual) override;
 };

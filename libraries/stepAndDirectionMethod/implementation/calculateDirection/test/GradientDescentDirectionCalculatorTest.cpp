@@ -34,7 +34,7 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     dataGrid2D chiEstimate(grid);
-    complexDataGrid2D residuals(grid);
+    std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
     dataGrid2D gDDirection(grid);
     gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
@@ -72,7 +72,7 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     dataGrid2D chiEstimate(grid);
-    complexDataGrid2D residuals(grid);
+    std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
     dataGrid2D gDDirection(grid);
     gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 

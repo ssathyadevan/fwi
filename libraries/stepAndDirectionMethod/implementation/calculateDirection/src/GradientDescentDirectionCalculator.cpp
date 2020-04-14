@@ -9,7 +9,7 @@ GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
 
 GradientDescentDirectionCalculator::~GradientDescentDirectionCalculator() {}
 
-dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid2D &chiEstimate, const complexDataGrid2D &)
+dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &)
 {
     dataGrid2D direction(chiEstimate.getGrid());
     dataGrid2D chiEstimatePlusH(chiEstimate);

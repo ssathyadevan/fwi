@@ -9,7 +9,7 @@ public:
         double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel, double derivativeStepSize, const std::vector<std::complex<double>> &pData);
     virtual ~GradientDescentDirectionCalculator();
 
-    dataGrid2D calculateDirection(const dataGrid2D &chiEstimate, const complexDataGrid2D &) override;
+    dataGrid2D calculateDirection(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &) override;
 
 private:
     const std::vector<std::complex<double>> &_pData;

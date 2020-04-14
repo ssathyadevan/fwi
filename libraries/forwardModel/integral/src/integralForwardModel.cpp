@@ -135,8 +135,7 @@ void IntegralForwardModel::deleteKappa()
     _Kappa = nullptr;
 }
 
-complexDataGrid2D IntegralForwardModel::calcTotalField(
-    const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
+complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
 {
     assert(G.getGrid() == p_init.getGrid());
 
@@ -294,7 +293,7 @@ void IntegralForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSeri
 //    }
 //}
 
-void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
+void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
 {
     kRes.zero();
 
@@ -309,7 +308,7 @@ void IntegralForwardModel::getUpdateDirectionInformation(std::vector<std::comple
 }
 
 void IntegralForwardModel::getUpdateDirectionInformationMPI(
-        std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
+    std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
 {
     kRes.zero();
 
