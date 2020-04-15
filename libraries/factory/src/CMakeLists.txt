@@ -13,6 +13,7 @@ target_link_libraries(
     
     utilities_library
     core_library
+    step_and_direction_interface_library
 
     integral_forward_model_library
     finite_difference_forward_model_library
@@ -20,4 +21,8 @@ target_link_libraries(
     conjugate_gradient_inversion_library
     gradient_descent_inversion_library
     random_inversion_library
-    evolution_inversion_library)
+    evolution_inversion_library
+
+    direction_calculator_library
+
+    step_size_calculator_library)

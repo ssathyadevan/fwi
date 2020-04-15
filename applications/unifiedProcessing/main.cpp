@@ -136,7 +136,7 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     }
     L_(linfo) << "Create ForwardModel";
     forwardModelInterface *model;
-    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
+    model = Factory::createForwardModel(gInput.caseFolder, desired_forward_model, grid, src, recv, freq);
 
     L_(linfo) << "Create InversionModel";
     inversionInterface *inverse;
