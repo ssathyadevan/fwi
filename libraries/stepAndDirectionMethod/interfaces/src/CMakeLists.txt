@@ -1,9 +1,6 @@
 add_library(step_and_direction_interface_library
-    StepAndDirectionInterface.cpp            ../include/StepAndDirectionInterface.h
     DirectionCalculator.cpp                  ../include/DirectionCalculator.h
-    DirectionInput.cpp                       ../include/DirectionInput.h
-    StepSizeCalculator.cpp                    ../include/StepSizeCalculator.h
-    DirectionCalculator.cpp                     ../include/DirectionCalculator.h)
+    StepSizeCalculator.cpp                    ../include/StepSizeCalculator.h)
 
 
 set( LIBRARY_INCLUDE_DIRS_STEP_AND_DIRECTION_INTERFACE_INVERSION ${CMAKE_SOURCE_DIR}/libraries/stepAndDirectionMethod/interfaces/include CACHE INTERNAL "" )

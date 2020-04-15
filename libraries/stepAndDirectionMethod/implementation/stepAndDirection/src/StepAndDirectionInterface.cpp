@@ -19,8 +19,8 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
 
     double step = 0.0;
 
-    // in conjugateGradient all of these variables are initialized at every cycle of the loop, because they
-    // are also used in that inner loop, that we do not have here.
+    //    In conjugateGradient all of these variables are initialized at every cycle of the
+    //    loop, because they are also used in that inner loop, that we do not have here.
 
     double fx;
     int counter = 1;
@@ -30,7 +30,7 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
-    //    complexDataGrid2D residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+
     // std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     dataGrid2D directionCurrent(_grid);
@@ -42,11 +42,10 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     for(int it = 0; it < _directionInput._maxIterationsNumber; it++)
     {
         directionPrevious = directionCurrent;
-        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);   // the second input should be pData rather than directionCurrent
+        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
 
         if(it > 0)
         {
-            // HERE compute Step using _chosenStep
             // direction MIGHT NOT BE dFdx !!!
             step = _chosenStep->calculateStepSize();   //(chiEstimatePrevious, chiEstimateCurrent, directionPrevious, directionCurrent);
             // need to add inputs to all types of StepSize
@@ -58,7 +57,7 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
         fx = functionF(chiEstimateCurrent, pData, eta);
         file << std::setprecision(17) << fx << "," << counter << std::endl;
 
-        ++counter;   // this is always equal to it+1
+        ++counter;   // this is always equal to it+1, can replace?
         bar++;
     }
 
@@ -84,7 +83,6 @@ dataGrid2D StepAndDirectionInterface::calculateNextMove(const dataGrid2D &chiEst
 double StepAndDirectionInterface::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
-    //    complexDataGrid2D residual = _forwardModel->calculateResidual(chiEstimate, pData);
     return eta * _forwardModel->calculateResidualNormSq(residual);
 }
 
