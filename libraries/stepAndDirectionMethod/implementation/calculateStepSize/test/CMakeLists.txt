@@ -7,4 +7,4 @@ include_directories(../include)
 # Build the tests!
 build_test(TARGET FixedStepSizeCalculatorTest SOURCE FixedStepSizeCalculatorTest.cpp LIBRARIES step_size_calculator_library utilities_library)
 build_test(TARGET VariableStepSizeCalculatorTest SOURCE VariableStepSizeCalculatorTest.cpp LIBRARIES step_size_calculator_library utilities_library)
-build_test(TARGET GammaStepSizeCalculatorTest SOURCE GammaStepSizeCalculatorTest.cpp LIBRARIES step_size_calculator_library utilities_library)
+build_test(TARGET GradientDescentStepSizeCalculatorTest SOURCE GradientDescentStepSizeCalculatorTest.cpp LIBRARIES step_size_calculator_library utilities_library)

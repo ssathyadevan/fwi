@@ -1,7 +1,7 @@
-#include "StepAndDirectionInterface.h"
+#include "StepAndDirectionReconstructor.h"
 #include "progressBar.h"
 
-StepAndDirectionInterface::StepAndDirectionInterface(
+StepAndDirectionReconstructor::StepAndDirectionReconstructor(
     StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
     _chosenStep(chosenStep),
     _chosenDirection(chosenDirection), _forwardModel(), _directionInput(directionInput), _grid(forwardModel->getGrid())
@@ -11,7 +11,7 @@ StepAndDirectionInterface::StepAndDirectionInterface(
     _forwardModel = forwardModel;
 }
 
-dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_directionInput._maxIterationsNumber);
 
@@ -31,8 +31,6 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
 
     _forwardModel->calculateKappa();
 
-    // std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
 
@@ -44,6 +42,7 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
         directionPrevious = directionCurrent;
         directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
 
+        _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent);
         if(it > 0)
         {
             // direction MIGHT NOT BE dFdx !!!
@@ -64,7 +63,7 @@ dataGrid2D StepAndDirectionInterface::reconstruct(const std::vector<std::complex
     return chiEstimateCurrent;
 }
 
-dataGrid2D StepAndDirectionInterface::calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step)
+dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step)
 {
     dataGrid2D chiTemp = chiEstimate;
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
@@ -80,13 +79,13 @@ dataGrid2D StepAndDirectionInterface::calculateNextMove(const dataGrid2D &chiEst
     return chiTemp;
 }
 
-double StepAndDirectionInterface::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+double StepAndDirectionReconstructor::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
     return eta * _forwardModel->calculateResidualNormSq(residual);
 }
 
-double StepAndDirectionInterface::normSq(const std::vector<std::complex<double>> &pData)
+double StepAndDirectionReconstructor::normSq(const std::vector<std::complex<double>> &pData)
 {
     double total = 0.0;
     int nMax = pData.size();

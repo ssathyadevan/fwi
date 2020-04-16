@@ -1,10 +1,10 @@
+#include "StepAndDirectionReconstructor.h"
 #include "ConjugateGradientDirectionCalculator.h"
 #include "FixedStepSizeCalculator.h"
-#include "StepAndDirectionInterface.h"
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
-TEST(StepAndDirectionImplementationTest, ConstructorStepAndDirectionImplementationTest)
+TEST(StepAndDirectionReconstructorTest, ConstructorStepAndDirectionReconstructorTest)
 {
     double eta = 1.0;
     std::array<double, 2> xMin = {0, 1.0};
@@ -25,29 +25,29 @@ TEST(StepAndDirectionImplementationTest, ConstructorStepAndDirectionImplementati
     ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
     DirectionInput directionInputTest(dataGrid);
 
-    StepAndDirectionInterface SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
+    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
 
     StepSizeCalculator *stepSizeCheck = SADITest.getChosenStep();
-    bool stepSizeIsNotDerived = stepSizeCheck == NULL;
+    bool stepSizeIsNotDerived = dynamic_cast<FixedStepSizeCalculator *>(stepSizeCheck) == NULL;
     EXPECT_FALSE(stepSizeIsNotDerived);
 
     DirectionCalculator *directionCheck = SADITest.getChosenDirection();
-    bool directionIsNotDerived = directionCheck == NULL;
+    bool directionIsNotDerived = dynamic_cast<ConjugateGradientDirectionCalculator *>(directionCheck) == NULL;
     EXPECT_FALSE(directionIsNotDerived);
 
     forwardModelInterface *fMICheck = SADITest.getForwardModel();
-    bool fMIIsNotDerived = fMICheck == NULL;
+    bool fMIIsNotDerived = dynamic_cast<ForwardModelInterfaceMock *>(fMICheck) == NULL;
     EXPECT_FALSE(fMIIsNotDerived);
 
     EXPECT_EQ(SADITest.getDirectionInput()._startingChi.getGrid(), gridTest);
 }
 
-// TEST(StepAndDirectionImplementationTest, reconstructTest)
+// TEST(StepAndDirectionReconstructorTest, reconstructTest)
 //{
 //    // how to I test this one? It's too big and generic
 //}
 
-TEST(StepAndDirectionImplementationTest, calculateNextMoveInterfaceTest)
+TEST(StepAndDirectionReconstructorTest, calculateNextMoveInterfaceTest)
 {
     double eta = 1.0;
     std::array<double, 2> xMin = {0, 1.0};
@@ -68,7 +68,7 @@ TEST(StepAndDirectionImplementationTest, calculateNextMoveInterfaceTest)
     ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
     DirectionInput directionInputTest(dataGrid);
 
-    StepAndDirectionInterface SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
+    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
     dataGrid2D directionTest(grid);
     directionTest.zero();
     directionTest = directionTest + 1.0;
@@ -87,12 +87,12 @@ TEST(StepAndDirectionImplementationTest, calculateNextMoveInterfaceTest)
     }
 }
 
-// TEST(StepAndDirectionImplementationTest, functionFTest)
+// TEST(StepAndDirectionReconstructorTest, functionFTest)
 //{
 //    // this function simply invokes two functions from forwardModel
 //}
 
-TEST(StepAndDirectionImplementationTest, normSqTest)
+TEST(StepAndDirectionReconstructorTest, normSqTest)
 {
     double eta = 1.0;
     std::array<double, 2> xMin = {0, 1.0};
@@ -113,7 +113,7 @@ TEST(StepAndDirectionImplementationTest, normSqTest)
     ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
     DirectionInput directionInputTest(dataGrid);
 
-    StepAndDirectionInterface SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
+    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
 
     std::vector<std::complex<double>> pDataTestNull = {{0, 0}, {0, 0}, {0, 0}};
     std::vector<std::complex<double>> pDataTestReal = {{1, 0}, {1, 0}, {1, 0}};

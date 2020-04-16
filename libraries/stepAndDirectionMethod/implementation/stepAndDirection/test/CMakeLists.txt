@@ -25,7 +25,7 @@ endfunction( build_test )
 SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 # Build the tests!
 
-build_test(TARGET step_and_direction_implementation_test SOURCE StepAndDirectionImplementationTest.cpp LIBRARIES step_and_direction_implementation_library utilities_library direction_calculator_library  test_utils_library step_size_calculator_library)
+build_test(TARGET StepAndDirectionReconstructorTest SOURCE StepAndDirectionReconstructorTest.cpp LIBRARIES step_and_direction_reconstructor_library utilities_library direction_calculator_library  test_utils_library step_size_calculator_library)
 
 
 

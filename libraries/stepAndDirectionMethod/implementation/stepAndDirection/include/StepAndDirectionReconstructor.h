@@ -4,17 +4,17 @@
 #include "StepSizeCalculator.h"
 #include "forwardModelInterface.h"
 
-class StepAndDirectionInterface
+class StepAndDirectionReconstructor
 {
 private:
     StepSizeCalculator *_chosenStep;
     DirectionCalculator *_chosenDirection;
     forwardModelInterface *_forwardModel;
-    DirectionInput _directionInput;   // this struct should/could be a template
+    DirectionInput _directionInput;
     const grid2D &_grid;
 
 public:
-    StepAndDirectionInterface(
+    StepAndDirectionReconstructor(
         StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput);
 
     dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
