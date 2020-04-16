@@ -48,7 +48,7 @@ inversionInterface *Factory::createInversion(std::string desiredInversion, forwa
         return inversion;
     }
     L_(linfo) << "The Inversion method " << desiredInversion << " was not found";
-    exit(EXIT_FAILURE);
+    throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
 }
 
 forwardModelInterface *Factory::createForwardModel(const std::string caseFolder, const std::string desiredForwardModel, const grid2D &grid,
@@ -68,7 +68,7 @@ forwardModelInterface *Factory::createForwardModel(const std::string caseFolder,
         return model;
     }
     L_(linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
-    exit(EXIT_FAILURE);
+    throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
 StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFolder, const std::string desiredStepSizeMethod)
