@@ -25,6 +25,7 @@ TEST(forwardModelInterfaceTest, calculateResidualTest)
 
     // When
     dataGrid2D chiEst(grid2D);
+    chiEst = 2.0;
     std::vector<std::complex<double>> residual;
     residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
 

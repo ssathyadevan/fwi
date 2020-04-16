@@ -5,6 +5,10 @@ GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
     DirectionCalculator(errorFunctionalScalingFactor, forwardmodel),
     _pData(pData), _derivativeStepSize(derivativeStepSize)
 {
+    if(derivativeStepSize <= 0.0)
+    {
+        throw std::invalid_argument("Derivative step size is zero or negative.");
+    }
 }
 
 GradientDescentDirectionCalculator::~GradientDescentDirectionCalculator() {}
@@ -15,21 +19,26 @@ dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid
     dataGrid2D chiEstimatePlusH(chiEstimate);
     const int numberOfGridPoints = chiEstimate.getNumberOfGridPoints();
 
-    double dFdx = 0.0;
+    const double errorChi = optimizationFunction(chiEstimate);
+    double errorChiPlusH;
+    double derivative;
+
     for(int i = 0; i < numberOfGridPoints; i++)
     {
         chiEstimatePlusH.addValueAtIndex(_derivativeStepSize, i);
-        dFdx = optimizationFunction(chiEstimatePlusH);
-        direction.addValueAtIndex(dFdx, i);
+        errorChiPlusH = optimizationFunction(chiEstimatePlusH);
         chiEstimatePlusH.addValueAtIndex(-_derivativeStepSize, i);
+
+        derivative = (errorChiPlusH - errorChi) / _derivativeStepSize;
+        direction.addValueAtIndex(derivative, i);
     }
 
     return direction;
 }
 
-double GradientDescentDirectionCalculator::optimizationFunction(const dataGrid2D &chiEstimatePlusH) const
+double GradientDescentDirectionCalculator::optimizationFunction(const dataGrid2D &chiEstimate) const
 {
-    std::vector<std::complex<double>> residual = _forwardmodel->calculateResidual(chiEstimatePlusH, _pData);
-    const double dFdx = _errorFunctionalScalingFactor * _forwardmodel->calculateResidualNormSq(residual);
-    return dFdx;
+    std::vector<std::complex<double>> residual = _forwardmodel->calculateResidual(chiEstimate, _pData);
+    const double currentChiError = _errorFunctionalScalingFactor * _forwardmodel->calculateResidualNormSq(residual);
+    return currentChiError;
 }
