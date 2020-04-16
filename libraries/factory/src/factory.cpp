@@ -1,5 +1,6 @@
 #include "ConjugateGradientDirectionCalculator.h"
 #include "FixedStepSizeCalculator.h"
+#include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "evolutionInversion.h"
@@ -75,15 +76,18 @@ StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFold
     StepSizeCalculator *stepSizeCalculator;
 
     // If statement to chose the method
-    (void)desiredStepSizeMethod;
+    if(desiredStepSizeMethod == "fixedStepSize")
+    {
+        // Read and/or compute input
+        (void)caseFolder;
+        double stepSize = 1.0;
 
-    // Read and/or compute input
-    (void)caseFolder;
-    double stepSize = 1.0;
-
-    // Create step size calculator
-    stepSizeCalculator = new FixedStepSizeCalculator(stepSize);
-    return stepSizeCalculator;
+        // Create step size calculator
+        stepSizeCalculator = new FixedStepSizeCalculator(stepSize);
+        return stepSizeCalculator;
+    }
+    L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
+    throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
 DirectionCalculator *Factory::createDirectionCalculator(
@@ -94,12 +98,25 @@ DirectionCalculator *Factory::createDirectionCalculator(
     const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
 
     // If statement to chose the method
-    (void)desiredDirectionMethod;
+    if(desiredDirectionMethod == "conjugateGradientDirection")
+    {
+        // Read and/or compute input
+        (void)caseFolder;
 
-    // Read and/or compute input
-    (void)caseFolder;
+        // Create direction calculator
+        directionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
+        return directionCalculator;
+    }
+    if(desiredDirectionMethod == "gradientDescentDirection")
+    {
+        // Read and/or compute input
+        (void)caseFolder;
+        const double derivativeStepSize = 0.1;
 
-    // Create direction calculator
-    directionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
-    return directionCalculator;
+        // Create direction calculator
+        directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, derivativeStepSize, pData);
+        return directionCalculator;
+    }
+    L_(linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
+    throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
