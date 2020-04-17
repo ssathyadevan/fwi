@@ -75,12 +75,11 @@ StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFold
 {
     StepSizeCalculator *stepSizeCalculator;
 
-    // If statement to chose the method
     if(desiredStepSizeMethod == "fixedStepSize")
     {
         // Read and/or compute input
         (void)caseFolder;
-        double stepSize = 1.0;
+        const double stepSize = 1.0;
 
         // Create step size calculator
         stepSizeCalculator = new FixedStepSizeCalculator(stepSize);
@@ -93,11 +92,9 @@ StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFold
 DirectionCalculator *Factory::createDirectionCalculator(
     const std::string caseFolder, const std::string desiredDirectionMethod, forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
-    DirectionCalculator *directionCalculator;
-    // Compute error functional scaling factor
     const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
 
-    // If statement to chose the method
+    DirectionCalculator *directionCalculator;
     if(desiredDirectionMethod == "conjugateGradientDirection")
     {
         // Read and/or compute input
