@@ -97,27 +97,33 @@ TEST(factoryTest, createGradientDescenttDirectionCalculatorTest)
     forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getRecv().nRecv * forwardmodel->getFreq().nFreq;
-    const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
+    const double pDataValue = 1.0;
+    const std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
 
     DirectionCalculator *gDDirectionCalculator;
     gDDirectionCalculator = Factory::createDirectionCalculator(caseFolder, desiredStepSizeMethod, forwardmodel, pData);
 
-    const double errorFunctionScalingFactor = gDDirectionCalculator->getErrorFunctionalScalingFactor();
+    const double errorFunctionalScalingFactor = gDDirectionCalculator->getErrorFunctionalScalingFactor();
     const double expectedErrorFunctionalScalingFactor = 1.0 / (lengthOfPData);
 
-    EXPECT_EQ(errorFunctionScalingFactor, expectedErrorFunctionalScalingFactor);
+    EXPECT_EQ(errorFunctionalScalingFactor, expectedErrorFunctionalScalingFactor);
 
     dataGrid2D chiEstimate(grid);
+    const double chiEstimateValue = 2.0;
+    chiEstimate = chiEstimateValue;
+
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
     dataGrid2D gDDirection(grid);
     gDDirection = gDDirectionCalculator->calculateDirection(chiEstimate, residuals);
+    const double expectedDerivativeStepSize = 0.1;
 
     const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-    const double expectedDirection = expectedErrorFunctionalScalingFactor * static_cast<double>(lengthOfPData);
+    const double expectedDirection = (expectedDerivativeStepSize - 2 * (pDataValue - chiEstimateValue)) * (errorFunctionalScalingFactor * lengthOfPData);
     const std::vector<double> &data = gDDirection.getData();
-    for(int i = 0; i < nrOfGridPoints; i++)
+    EXPECT_NEAR(data[0], expectedDirection, 0.001);
+    for(int i = 1; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], expectedDirection);
+        ASSERT_DOUBLE_EQ(data[i], 0.0);
     }
 
     delete gDDirectionCalculator;

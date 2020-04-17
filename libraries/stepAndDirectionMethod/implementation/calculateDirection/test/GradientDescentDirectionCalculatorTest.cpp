@@ -68,8 +68,7 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
     const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-    const double expectedDirection = (derivativeStepSize * derivativeStepSize - 2 * (pDataValue - chiEstimateValue) * derivativeStepSize) *
-                                     (errorFunctionalScalingFactor * lengthOfPData) / derivativeStepSize;
+    const double expectedDirection = (derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) * (errorFunctionalScalingFactor * lengthOfPData);
     const std::vector<double> &data = gDDirection.getData();
     EXPECT_NEAR(data[0], expectedDirection, 0.001);
     for(int i = 1; i < nrOfGridPoints; i++)
@@ -111,8 +110,7 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
     const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-    const double expectedDirection = (derivativeStepSize * derivativeStepSize - 2 * (pDataValue - chiEstimateValue) * derivativeStepSize) *
-                                     (errorFunctionalScalingFactor * lengthOfPData) / derivativeStepSize;
+    const double expectedDirection = (derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) * (errorFunctionalScalingFactor * lengthOfPData);
     const std::vector<double> &data = gDDirection.getData();
 
     EXPECT_NEAR(data[0], expectedDirection, 0.001);
