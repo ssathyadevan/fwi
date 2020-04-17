@@ -30,19 +30,19 @@ TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
     DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
 
     // Compute conjugate gradient direction
-    dataGrid2D cGDirection(grid);
-    dataGrid2D chi(grid);
+    dataGrid2D conjugateGradientDirection(grid);
+    dataGrid2D chiEstimate(grid);
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 1.0);
-    cGDirection = directionCalulator->calculateDirection(chi, residuals);
+    conjugateGradientDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 
     // Compare conjugate gradient direction with expected value
-    const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
+    const int nrOfGridPoints = conjugateGradientDirection.getNumberOfGridPoints();
     const double expectedDirection = 5.0;
 
-    const std::vector<double> &cGDirectionData = cGDirection.getData();
+    const std::vector<double> &conjugateGradientDirectionData = conjugateGradientDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(cGDirectionData[i], expectedDirection);
+        ASSERT_DOUBLE_EQ(conjugateGradientDirectionData[i], expectedDirection);
     }
 
     delete forwardmodel;

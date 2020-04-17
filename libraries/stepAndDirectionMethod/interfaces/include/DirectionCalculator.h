@@ -12,7 +12,7 @@ public:
 
     /**
      * @brief calculateDirection
-     * @param chi is an dataGrid2D, pData is a vector of complex doubles (one value for each combination of sources, receivers and frequencies)
+     * @param chi is a dataGrid2D, pData is a vector of complex doubles (one value for each combination of sources, receivers and frequencies)
      * @return a datagrid2D which represents the direction
      */
     virtual dataGrid2D calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &) = 0;
