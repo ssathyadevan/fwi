@@ -14,9 +14,8 @@ grid2D getGrid()
 
 TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
+    // Create forwardmodel
     grid2D grid = getGrid();
-    double errorFunctionScalingFactor = 1.0;
-
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
     freqInfo freq;
@@ -25,18 +24,25 @@ TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
     frequenciesGroup frequencies(freq, 2000.0);
 
     forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+
+    // Create conjugate gradient direction calculator
+    const double errorFunctionScalingFactor = 1.0;
     DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
 
+    // Compute conjugate gradient direction
     dataGrid2D cGDirection(grid);
     dataGrid2D chi(grid);
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 1.0);
     cGDirection = directionCalulator->calculateDirection(chi, residuals);
 
+    // Compare conjugate gradient direction with expected value
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
-    const std::vector<double> &data = cGDirection.getData();
+    const double expectedDirection = 5.0;
+
+    const std::vector<double> &cGDirectionData = cGDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], 5.0);
+        ASSERT_DOUBLE_EQ(cGDirectionData[i], expectedDirection);
     }
 
     delete forwardmodel;
