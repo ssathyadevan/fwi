@@ -1,14 +1,16 @@
-#include "GradientDescentStepSizeCalculator.h"
+#include "BorzilaiBorweinStepSizeCalculator.h"
+// the Borzilai-Borwein is the most common choice for the step computation of the Gradient Descent algorithm,
+// see https://en.wikipedia.org/wiki/Gradient_descent
 
 // this will be gradient descent
-GradientDescentStepSizeCalculator::GradientDescentStepSizeCalculator(const grid2D chiEstimate) :
+BorzilaiBorweinStepSizeCalculator::BorzilaiBorweinStepSizeCalculator(const grid2D &chiEstimate) :
     _chiEstimatePrevious(chiEstimate), _chiEstimateCurrent(chiEstimate), _derivativePrevious(chiEstimate), _derivativeCurrent(chiEstimate)
 {
 }
 
-GradientDescentStepSizeCalculator::~GradientDescentStepSizeCalculator() {}
+BorzilaiBorweinStepSizeCalculator::~BorzilaiBorweinStepSizeCalculator() {}
 
-double GradientDescentStepSizeCalculator::calculateStepSize()
+double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
 {
     const int nGridPoints = _chiEstimateCurrent.getNumberOfGridPoints();
 
@@ -51,13 +53,14 @@ double GradientDescentStepSizeCalculator::calculateStepSize()
     return gamma;
 }
 
-void GradientDescentStepSizeCalculator::setCurrentVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent)
+void BorzilaiBorweinStepSizeCalculator::setCurrentVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent)
 {
+    // dataGrid2D = dataGrid2D only reassigns _data[], but I need the _grid to be the same for the = to take place
     _chiEstimateCurrent = chiEstimateCurrent;
     _derivativeCurrent = derivativeCurrent;
 }
 
-void GradientDescentStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent)
+void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent)
 {
     _chiEstimatePrevious = _chiEstimateCurrent;
     _derivativePrevious = _derivativeCurrent;

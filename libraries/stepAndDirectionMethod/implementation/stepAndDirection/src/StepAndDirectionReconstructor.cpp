@@ -27,19 +27,19 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     double eta = 1.0 / (normSq(pData));
     dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _directionInput._startingChi;
-    dataGrid2D chiEstimatePrevious(_grid);
+    // dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
 
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
 
-    dataGrid2D directionPrevious(_grid);
-    directionPrevious.zero();
+    // dataGrid2D directionPrevious(_grid);
+    // directionPrevious.zero();
 
     for(int it = 0; it < _directionInput._maxIterationsNumber; it++)
     {
-        directionPrevious = directionCurrent;
+        //    directionPrevious = directionCurrent;
         directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
 
         _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent);
@@ -50,7 +50,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
             // need to add inputs to all types of StepSize
         }
 
-        chiEstimatePrevious = chiEstimateCurrent;
+        //    chiEstimatePrevious = chiEstimateCurrent;
         chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, directionCurrent, step);
 
         fx = functionF(chiEstimateCurrent, pData, eta);
