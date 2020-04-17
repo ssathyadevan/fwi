@@ -5,3 +5,4 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_FACTORY} )
 include_directories(../include)
 
 # Build the tests!
+build_test(TARGET factoryTest SOURCE factoryTest.cpp LIBRARIES step_and_direction_interface_library factory_library test_utils_library)

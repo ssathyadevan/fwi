@@ -12,26 +12,19 @@ grid2D getGrid()
     return grid;
 }
 
-forwardModelInterface *createForwardModelMock()
-{
-    std::array<double, 2> xMin = {0.0, 0.0};
-    std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq;
-    grid2D grid = getGrid();
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
-
-    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
-    return forwardmodel;
-}
-
 TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     grid2D grid = getGrid();
     double errorFunctionScalingFactor = 1.0;
 
-    forwardModelInterface *forwardmodel = createForwardModelMock();
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    freqInfo freq;
+    sources sources(xMin, xMax, 2);
+    receivers receivers(xMin, xMax, 2);
+    frequenciesGroup frequencies(freq, 2000.0);
+
+    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
     DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
 
     dataGrid2D cGDirection(grid);
@@ -43,7 +36,7 @@ TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
     const std::vector<double> &data = cGDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
-        ASSERT_DOUBLE_EQ(data[i], 0.0);
+        ASSERT_DOUBLE_EQ(data[i], 5.0);
     }
 
     delete forwardmodel;
