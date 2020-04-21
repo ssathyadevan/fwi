@@ -17,64 +17,85 @@
 #include <factory.h>
 #include <iostream>
 
-inversionInterface *Factory::createInversion(std::string desiredInversion, forwardModelInterface *forwardModel, const genericInput gInput)
+Factory::Factory() : _createdInversion(), _createdForwardModel(), _createdStepSizeCalculator(), _createdDirectionCalculator() {}
+
+Factory::~Factory()
 {
-    inversionInterface *inversion;
+    if(_createdInversion != nullptr)
+    {
+        delete _createdInversion;
+    }
+
+    if(_createdForwardModel != nullptr)
+    {
+        delete _createdForwardModel;
+    }
+
+    if(_createdStepSizeCalculator != nullptr)
+    {
+        delete _createdStepSizeCalculator;
+    }
+
+    if(_createdDirectionCalculator != nullptr)
+    {
+        delete _createdDirectionCalculator;
+    }
+}
+
+inversionInterface *Factory::createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const genericInput &gInput)
+{
     if(desiredInversion == "conjugateGradientInversion")
     {
-        ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
-        inversion = new ConjugateGradientInversion(forwardModel, conjugategradientreader.getInput());
-        return inversion;
+        ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+        _createdInversion = new ConjugateGradientInversion(forwardModel, conjugateGradientReader.getInput());
+        return _createdInversion;
     }
 
     if(desiredInversion == "randomInversion")
     {
-        RandomInversionInputCardReader randomreader(gInput.caseFolder);
-        inversion = new RandomInversion(forwardModel, randomreader.getInput());
-        return inversion;
+        RandomInversionInputCardReader randomReader(gInput.caseFolder);
+        _createdInversion = new RandomInversion(forwardModel, randomReader.getInput());
+        return _createdInversion;
     }
 
     if(desiredInversion == "gradientDescentInversion")
     {
-        gradientDescentInversionInputCardReader gradientdescentreader(gInput.caseFolder);
-        inversion = new gradientDescentInversion(forwardModel, gradientdescentreader.getInput());
-        return inversion;
+        gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
+        _createdInversion = new gradientDescentInversion(forwardModel, gradientDescentReader.getInput());
+        return _createdInversion;
     }
 
     if(desiredInversion == "evolutionInversion")
     {
-        EvolutionInversionInputCardReader evolutionreader(gInput.caseFolder);
-        inversion = new EvolutionInversion(forwardModel, evolutionreader.getInput());
-        return inversion;
+        EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
+        _createdInversion = new EvolutionInversion(forwardModel, evolutionReader.getInput());
+        return _createdInversion;
     }
     L_(linfo) << "The Inversion method " << desiredInversion << " was not found";
     throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
 }
 
-forwardModelInterface *Factory::createForwardModel(const std::string caseFolder, const std::string desiredForwardModel, const grid2D &grid,
-    const sources &sources, const receivers &recveivers, const frequenciesGroup &frequencies)
+forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const grid2D &grid,
+    const sources &sources, const receivers &receivers, const frequenciesGroup &frequencies)
 {
-    forwardModelInterface *model;
     if(desiredForwardModel == "integralForwardModel")
     {
         integralForwardModelInputCardReader integralreader(caseFolder);
-        model = new IntegralForwardModel(grid, sources, recveivers, frequencies, integralreader.getInput());
-        return model;
+        _createdForwardModel = new IntegralForwardModel(grid, sources, receivers, frequencies, integralreader.getInput());
+        return _createdForwardModel;
     }
     if(desiredForwardModel == "finiteDifferenceForwardModel")
     {
         finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
-        model = new finiteDifferenceForwardModel(grid, sources, recveivers, frequencies, finitedifferencereader.getInput());
-        return model;
+        _createdForwardModel = new finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+        return _createdForwardModel;
     }
     L_(linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFolder, const std::string desiredStepSizeMethod)
+StepSizeCalculator *Factory::createStepSizeCalculator(const std::string &caseFolder, const std::string &desiredStepSizeMethod)
 {
-    StepSizeCalculator *stepSizeCalculator;
-
     if(desiredStepSizeMethod == "fixedStepSize")
     {
         // Read and/or compute input
@@ -82,27 +103,26 @@ StepSizeCalculator *Factory::createStepSizeCalculator(const std::string caseFold
         const double stepSize = 1.0;
 
         // Create step size calculator
-        stepSizeCalculator = new FixedStepSizeCalculator(stepSize);
-        return stepSizeCalculator;
+        _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSize);
+        return _createdStepSizeCalculator;
     }
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
-DirectionCalculator *Factory::createDirectionCalculator(
-    const std::string caseFolder, const std::string desiredDirectionMethod, forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
+DirectionCalculator *Factory::createDirectionCalculator(const std::string &caseFolder, const std::string &desiredDirectionMethod,
+    forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
     const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
 
-    DirectionCalculator *directionCalculator;
     if(desiredDirectionMethod == "conjugateGradientDirection")
     {
         // Read and/or compute input
         (void)caseFolder;
 
         // Create direction calculator
-        directionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
-        return directionCalculator;
+        _createdDirectionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
+        return _createdDirectionCalculator;
     }
     if(desiredDirectionMethod == "gradientDescentDirection")
     {
@@ -111,8 +131,8 @@ DirectionCalculator *Factory::createDirectionCalculator(
         const double derivativeStepSize = 0.1;
 
         // Create direction calculator
-        directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, derivativeStepSize, pData);
-        return directionCalculator;
+        _createdDirectionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, derivativeStepSize, pData);
+        return _createdDirectionCalculator;
     }
     L_(linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");

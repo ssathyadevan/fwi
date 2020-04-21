@@ -134,13 +134,16 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
         }
         i++;
     }
+
+    Factory factory;
+
     L_(linfo) << "Create ForwardModel";
     forwardModelInterface *model;
-    model = Factory::createForwardModel(gInput.caseFolder, desired_forward_model, grid, src, recv, freq);
+    model = factory.createForwardModel(gInput.caseFolder, desired_forward_model, grid, src, recv, freq);
 
     L_(linfo) << "Create InversionModel";
     inversionInterface *inverse;
-    inverse = Factory::createInversion(desired_inversion, model, gInput);
+    inverse = factory.createInversion(desired_inversion, model, gInput);
 
     L_(linfo) << "Estimating Chi...";
 
@@ -149,7 +152,4 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     L_(linfo) << "Done, writing to file";
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
-
-    delete model;
-    delete inverse;
 }

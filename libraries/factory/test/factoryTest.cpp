@@ -19,7 +19,8 @@ TEST(factoryTest, createFixedStepSizeCalculatorTest)
     const std::string caseFolder = "";
 
     StepSizeCalculator *fixedStepSizeCalculator;
-    fixedStepSizeCalculator = Factory::createStepSizeCalculator(caseFolder, desiredStepSizeMethod);
+    Factory factory;
+    fixedStepSizeCalculator = factory.createStepSizeCalculator(caseFolder, desiredStepSizeMethod);
 
     // Compute a fixed step size
     const double stepsize = fixedStepSizeCalculator->calculateStepSize();
@@ -28,7 +29,7 @@ TEST(factoryTest, createFixedStepSizeCalculatorTest)
     const double expectedStepSize = 1.0;
     EXPECT_EQ(stepsize, expectedStepSize);
 
-    delete fixedStepSizeCalculator;
+    // delete fixedStepSizeCalculator;
 }
 
 TEST(factoryTest, expectThrowStepSizeCalculatorTest)
@@ -37,7 +38,8 @@ TEST(factoryTest, expectThrowStepSizeCalculatorTest)
     const std::string desiredStepSizeMethod = "";
     const std::string caseFolder = "";
 
-    EXPECT_THROW(Factory::createStepSizeCalculator(caseFolder, desiredStepSizeMethod), std::invalid_argument);
+    Factory factory;
+    EXPECT_THROW(factory.createStepSizeCalculator(caseFolder, desiredStepSizeMethod), std::invalid_argument);
 }
 
 TEST(factoryTest, createConjugateGradientDirectionCalculatorTest)
@@ -51,17 +53,18 @@ TEST(factoryTest, createConjugateGradientDirectionCalculatorTest)
     receivers receivers(xMin, xMax, 2);
     frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    Factory factory;
+    ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
     // Create measurement data
-    const int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getRecv().nRecv * forwardmodel->getFreq().nFreq;
+    const int lengthOfPData = forwardModel.getSrc().nSrc * forwardModel.getRecv().nRecv * forwardModel.getFreq().nFreq;
     const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
     // Create a conjugate gradient descent direction calculator
     const std::string desiredStepSizeMethod = "conjugateGradientDirection";
     const std::string caseFolder = "";
     DirectionCalculator *cGDirectionCalculator;
-    cGDirectionCalculator = Factory::createDirectionCalculator(caseFolder, desiredStepSizeMethod, forwardmodel, pData);
+    cGDirectionCalculator = factory.createDirectionCalculator(caseFolder, desiredStepSizeMethod, &forwardModel, pData);
 
     // Compare error functional scaling factor with expected value
     const double errorFunctionScalingFactor = cGDirectionCalculator->getErrorFunctionalScalingFactor();
@@ -76,18 +79,15 @@ TEST(factoryTest, createConjugateGradientDirectionCalculatorTest)
     cGDirection = cGDirectionCalculator->calculateDirection(chi, residuals);
 
     // Compare conjugate gradient direction with the expected value
-    const double expectedKappaTimesresidual = 5.0;
+    const double expectedKappaTimesResidual = 5.0;
     const int nrOfGridPoints = cGDirection.getNumberOfGridPoints();
-    const double expectedDirection = expectedErrorFunctionalScalingFactor * expectedKappaTimesresidual;
+    const double expectedDirection = expectedErrorFunctionalScalingFactor * expectedKappaTimesResidual;
 
     const std::vector<double> &cGDirectionData = cGDirection.getData();
     for(int i = 0; i < nrOfGridPoints; i++)
     {
         ASSERT_DOUBLE_EQ(cGDirectionData[i], expectedDirection);
     }
-
-    delete cGDirectionCalculator;
-    delete forwardmodel;
 }
 
 TEST(factoryTest, createGradientDescenttDirectionCalculatorTest)
@@ -101,11 +101,11 @@ TEST(factoryTest, createGradientDescenttDirectionCalculatorTest)
     receivers receivers(xMin, xMax, 2);
     frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel;
-    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    Factory factory;
+    ForwardModelInterfaceMock forwardmodel(grid, sources, receivers, frequencies);
 
     // Create measurement data
-    int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getRecv().nRecv * forwardmodel->getFreq().nFreq;
+    int lengthOfPData = forwardmodel.getSrc().nSrc * forwardmodel.getRecv().nRecv * forwardmodel.getFreq().nFreq;
     const double pDataValue = 1.0;
     const std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
 
@@ -114,7 +114,7 @@ TEST(factoryTest, createGradientDescenttDirectionCalculatorTest)
     const std::string caseFolder = "";
 
     DirectionCalculator *gDDirectionCalculator;
-    gDDirectionCalculator = Factory::createDirectionCalculator(caseFolder, desiredStepSizeMethod, forwardmodel, pData);
+    gDDirectionCalculator = factory.createDirectionCalculator(caseFolder, desiredStepSizeMethod, &forwardmodel, pData);
 
     // Compare error functional scaling factor with the expected value
     const double errorFunctionalScalingFactor = gDDirectionCalculator->getErrorFunctionalScalingFactor();
@@ -143,9 +143,6 @@ TEST(factoryTest, createGradientDescenttDirectionCalculatorTest)
     {
         ASSERT_DOUBLE_EQ(gDDirectionData[i], 0.0);
     }
-
-    delete gDDirectionCalculator;
-    delete forwardmodel;
 }
 
 TEST(factoryTest, expectThrowDirectionCalculatorTest)
@@ -159,18 +156,16 @@ TEST(factoryTest, expectThrowDirectionCalculatorTest)
     receivers receivers(xMin, xMax, 2);
     frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel;
-    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    Factory factory;
+    ForwardModelInterfaceMock forwardmodel(grid, sources, receivers, frequencies);
 
     // Create measurement data
-    const int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getRecv().nRecv * forwardmodel->getFreq().nFreq;
+    const int lengthOfPData = forwardmodel.getSrc().nSrc * forwardmodel.getRecv().nRecv * forwardmodel.getFreq().nFreq;
     const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
     // Create a not existing direction calculator
     const std::string desiredStepSizeMethod = "";
     const std::string caseFolder = "";
 
-    EXPECT_THROW(Factory::createDirectionCalculator(caseFolder, desiredStepSizeMethod, forwardmodel, pData), std::invalid_argument);
-
-    delete forwardmodel;
+    EXPECT_THROW(factory.createDirectionCalculator(caseFolder, desiredStepSizeMethod, &forwardmodel, pData), std::invalid_argument);
 }
