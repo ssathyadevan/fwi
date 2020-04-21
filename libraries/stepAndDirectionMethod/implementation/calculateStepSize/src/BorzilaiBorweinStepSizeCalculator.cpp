@@ -52,7 +52,7 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
     return gamma;
 }
 
-void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, const int &)
+void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int)
 {
     _chiEstimatePrevious = _chiEstimateCurrent;
     _derivativePrevious = _derivativeCurrent;

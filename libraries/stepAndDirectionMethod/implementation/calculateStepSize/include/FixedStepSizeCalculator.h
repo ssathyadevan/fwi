@@ -10,8 +10,7 @@ public:
     virtual ~FixedStepSizeCalculator();
 
     double calculateStepSize();
-    void setStepSize(double size);
-    void updateVariables(const dataGrid2D &, const dataGrid2D &, const int &);
+    void updateVariables(const dataGrid2D &, const dataGrid2D &, int);
 
 private:
     double _size = 0;

@@ -17,5 +17,5 @@ public:
     virtual ~BorzilaiBorweinStepSizeCalculator();
 
     double calculateStepSize();
-    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, const int &);
+    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int);
 };

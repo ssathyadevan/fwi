@@ -22,18 +22,3 @@ TEST(fixedStepSizeCalculatorTest, calculateStepSizeTest)
     ASSERT_DOUBLE_EQ(stepSizeCalculate, stepSizeInput);
     delete stepSizeCalculator;
 }
-
-TEST(fixedStepSizeCalculatorTest, setStepSizeTest)
-{
-    double stepSizeInput = 1.1;
-    FixedStepSizeCalculator *stepSizeCalculator = new FixedStepSizeCalculator(stepSizeInput);
-
-    stepSizeInput = 1.2;
-    stepSizeCalculator->setStepSize(stepSizeInput);
-
-    double stepSizeCalculate;
-    stepSizeCalculate = stepSizeCalculator->calculateStepSize();
-
-    ASSERT_DOUBLE_EQ(stepSizeCalculate, stepSizeInput);
-    delete stepSizeCalculator;
-}
