@@ -32,7 +32,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     {
         directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
 
-        _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent);
+        _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent, it);
         if(it > 0)
         {
             step = _chosenStep->calculateStepSize();

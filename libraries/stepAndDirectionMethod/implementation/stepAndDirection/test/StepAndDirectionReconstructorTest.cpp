@@ -1,8 +1,8 @@
-//#include "StepAndDirectionReconstructor.h"
-//#include "FixedStepSizeCalculator.h"
-//#include "GradientDescentDirectionCalculator.h"
-//#include "forwardmodelinterfacemock.h"
-//#include <gtest/gtest.h>
+#include "StepAndDirectionReconstructor.h"
+#include "FixedStepSizeCalculator.h"
+#include "GradientDescentDirectionCalculator.h"
+#include "forwardmodelinterfacemock.h"
+#include <gtest/gtest.h>
 
 // grid2D getGrid()
 //{
