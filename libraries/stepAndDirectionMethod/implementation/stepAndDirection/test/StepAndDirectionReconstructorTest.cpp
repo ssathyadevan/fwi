@@ -1,124 +1,95 @@
-#include "StepAndDirectionReconstructor.h"
-#include "ConjugateGradientDirectionCalculator.h"
-#include "FixedStepSizeCalculator.h"
-#include "forwardmodelinterfacemock.h"
-#include <gtest/gtest.h>
+//#include "StepAndDirectionReconstructor.h"
+//#include "FixedStepSizeCalculator.h"
+//#include "GradientDescentDirectionCalculator.h"
+//#include "forwardmodelinterfacemock.h"
+//#include <gtest/gtest.h>
 
-TEST(StepAndDirectionReconstructorTest, ConstructorStepAndDirectionReconstructorTest)
-{
-    double eta = 1.0;
-    std::array<double, 2> xMin = {0, 1.0};
-    std::array<double, 2> xMax = {0, 1.0};
-    std::array<int, 2> nX = {1, 1};
-    int nSrc = 2;
-    int nRecv = 2;
-    freqInfo freqStruct;
-    double c0 = 1.0;
-    grid2D gridTest(xMin, xMax, nX);
-    dataGrid2D dataGrid(gridTest);
-    sources src(xMin, xMax, nSrc);
-    receivers recv(xMin, xMax, nRecv);
-    frequenciesGroup freq(freqStruct, c0);
-
-    FixedStepSizeCalculator chosenStepSizeTest(2.0);
-    ForwardModelInterfaceMock forwardModelTest(gridTest, src, recv, freq);
-    ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
-    DirectionInput directionInputTest(dataGrid);
-
-    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
-
-    StepSizeCalculator *stepSizeCheck = SADITest.getChosenStep();
-    bool stepSizeIsNotDerived = dynamic_cast<FixedStepSizeCalculator *>(stepSizeCheck) == NULL;
-    EXPECT_FALSE(stepSizeIsNotDerived);
-
-    DirectionCalculator *directionCheck = SADITest.getChosenDirection();
-    bool directionIsNotDerived = dynamic_cast<ConjugateGradientDirectionCalculator *>(directionCheck) == NULL;
-    EXPECT_FALSE(directionIsNotDerived);
-
-    forwardModelInterface *fMICheck = SADITest.getForwardModel();
-    bool fMIIsNotDerived = dynamic_cast<ForwardModelInterfaceMock *>(fMICheck) == NULL;
-    EXPECT_FALSE(fMIIsNotDerived);
-
-    EXPECT_EQ(SADITest.getDirectionInput()._startingChi.getGrid(), gridTest);
-}
-
-// TEST(StepAndDirectionReconstructorTest, reconstructTest)
+// grid2D getGrid()
 //{
-//    // how to I test this one? It's too big and generic
+//    std::array<double, 2> xMin = {0.0, 0.0};
+//    std::array<double, 2> xMax = {2.0, 2.0};
+//    std::array<int, 2> nX = {2, 4};
+
+//    grid2D grid(xMin, xMax, nX);
+//    return grid;
 //}
 
-TEST(StepAndDirectionReconstructorTest, calculateNextMoveInterfaceTest)
-{
-    double eta = 1.0;
-    std::array<double, 2> xMin = {0, 1.0};
-    std::array<double, 2> xMax = {0, 1.0};
-    std::array<int, 2> nX = {1, 1};
-    int nSrc = 2;
-    int nRecv = 2;
-    freqInfo freqStruct;   // default constructor
-    double c0 = 1.0;
-    grid2D grid(xMin, xMax, nX);
-    dataGrid2D dataGrid(grid);
-    sources src(xMin, xMax, nSrc);
-    receivers recv(xMin, xMax, nRecv);
-    frequenciesGroup freq(freqStruct, c0);
-
-    FixedStepSizeCalculator chosenStepSizeTest(2.0);
-    ForwardModelInterfaceMock forwardModelTest(grid, src, recv, freq);
-    ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
-    DirectionInput directionInputTest(dataGrid);
-
-    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
-    dataGrid2D directionTest(grid);
-    directionTest.zero();
-    directionTest = directionTest + 1.0;
-    dataGrid2D chiEstimateTest(grid);
-    chiEstimateTest.zero();
-    double step = 2.0;
-    dataGrid2D nextMoveTest(grid);
-    nextMoveTest.zero();
-
-    nextMoveTest = SADITest.calculateNextMove(chiEstimateTest, directionTest, step);
-    std::vector<double> nextMoveTestData = nextMoveTest.getData();
-
-    for(int i = 0; i < (int)nextMoveTestData.size(); ++i)
-    {
-        EXPECT_DOUBLE_EQ(nextMoveTestData[i], chiEstimateTest.getData()[i] - step * directionTest.getData()[i]);
-    }
-}
-
-// TEST(StepAndDirectionReconstructorTest, functionFTest)
+// genericInput getGenericInput()
 //{
-//    // this function simply invokes two functions from forwardModel
+//    genericInput gInput;
+//    gInput.c0 = 1.0;
+//    gInput.freq(0.0, 1.0, 2);
+//    gInput.reservoirTopLeftCornerInM = {0.0, 1.0};
+//    gInput.reservoirBottomRightCornerInM = {0.0, 1.0};
+//    gInput.sourcesTopLeftCornerInM = {0.0, 1.0};
+//    gInput.sourcesBottomRightCornerInM = {0.0, 1.0};
+//    gInput.receiversTopLeftCornerInM = {0.0, 1.0};
+//    gInput.receiversBottomRightCornerInM = {0.0, 1.0};
+//    gInput.nGridOriginal = {1, 1};   //??
+//    gInput.nGrid = {1, 1};           //??
+//    gInput.nSources = 2;
+//    gInput.nReceivers = 2;
+
+//    return gInput;
 //}
 
-TEST(StepAndDirectionReconstructorTest, normSqTest)
-{
-    double eta = 1.0;
-    std::array<double, 2> xMin = {0, 1.0};
-    std::array<double, 2> xMax = {0, 1.0};
-    std::array<int, 2> nX = {1, 1};
-    int nSrc = 2;
-    int nRecv = 2;
-    freqInfo freqStruct;
-    double c0 = 1.0;
-    grid2D gridTest(xMin, xMax, nX);
-    dataGrid2D dataGrid(gridTest);
-    sources src(xMin, xMax, nSrc);
-    receivers recv(xMin, xMax, nRecv);
-    frequenciesGroup freq(freqStruct, c0);
+// TEST(StepAndDirectionReconstructorTest, ReconstructTest)
+//{
+//    double eta = 1.0;
+//    std::array<double, 2> xMin = {0.0, 0.0};
+//    std::array<double, 2> xMax = {2.0, 2.0};
+//    freqInfo freq(0.0, 1.0, 2);
 
-    FixedStepSizeCalculator chosenStepSizeTest(2.0);
-    ForwardModelInterfaceMock forwardModelTest(gridTest, src, recv, freq);
-    ConjugateGradientDirectionCalculator chosenDirectionTest(eta, &forwardModelTest);
-    DirectionInput directionInputTest(dataGrid);
+//    grid2D grid = getGrid();
+//    dataGrid2D dataGrid(grid);
+//    DirectionInput directionInput(0.1, dataGrid, 5, 1.0);
 
-    StepAndDirectionReconstructor SADITest(&chosenStepSizeTest, &chosenDirectionTest, &forwardModelTest, directionInputTest);
+//    sources sources(xMin, xMax, 2);
+//    receivers receivers(xMin, xMax, 2);
+//    frequenciesGroup frequencies(freq, 2000.0);
+//    int magnitude = frequencies.nFreq * sources.nSrc * receivers.nrcv;
+//    ForwardModelInterfaceMock forwardModel(dataGrid, sources, receivers, frequencies);
 
-    std::vector<std::complex<double>> pDataTestNull = {{0, 0}, {0, 0}, {0, 0}};
-    std::vector<std::complex<double>> pDataTestReal = {{1, 0}, {1, 0}, {1, 0}};
-    std::vector<std::complex<double>> pDataTestImg = {{0, 1}, {0, 1}, {0, 1}};
-    EXPECT_DOUBLE_EQ(SADITest.normSq(pDataTestNull), 0.0);
-    EXPECT_DOUBLE_EQ(SADITest.normSq(pDataTestReal), 3.0);
-    EXPECT_DOUBLE_EQ(SADITest.normSq(pDataTestImg), 3.0);
-}
+//    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
+
+//    FixedStepSizeCalculator chosenStepSize(2.0);
+
+//    StepAndDirectionReconstructor stepAndDirectionReconstructor(&chosenStepSize, &chosenDirection, &forwardModel, directionInput);
+
+//    std::vector<std::complex<double>> pData(magnidute);
+//    // dataGrid2D dataGridOnes(grid);
+//    for(int i = 0; i < magnitude; ++i)
+//    {
+//        // dataGridOnes.setValueAtIndex(1.0, i);
+//        pData[i] = {1.0, 0.0};
+//    }
+
+//    GenericInput gInput;
+
+//    dataGrid2D ReconstructOutput = stepAndDirectionReconstructor.reconstruct(pData, gInput);
+//}
+
+// TEST(StepAndDirectionReconstructorTest, calculateNextMoveTest)
+//{
+//    double eta = 1.0;
+//    std::array<double, 2> xMin = {0.0, 0.0};
+//    std::array<double, 2> xMax = {2.0, 2.0};
+//    freqInfo freq(0.0, 10.0, 5);
+
+//    grid2D grid = getGrid();
+//    dataGrid2D dataGrid(grid);
+//    DirectionInput directionInput(0.1, dataGrid, 1, 1.0);
+
+//    sources sources(xMin, xMax, 2);
+//    receivers receivers(xMin, xMax, 2);
+//    frequenciesGroup frequencies(freq, 2000.0);
+
+//    ForwardModelInterfaceMock forwardModel(dataGrid, sources, receivers, frequencies);
+//    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
+
+//    FixedStepSizeCalculator chosenStepSize(2.0);
+
+//    StepAndDirectionReconstructor stepAndDirectionReconstructor(&chosenStepSize, &chosenDirection, &forwardModel, directionInput);
+
+//    dataGrid2D ReconstructOutput = stepAndDirectionReconstructor.reconstruct(pData, gInput);
+//}

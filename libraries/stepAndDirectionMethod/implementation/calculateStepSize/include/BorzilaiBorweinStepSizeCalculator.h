@@ -3,9 +3,6 @@
 #include "StepSizeCalculator.h"
 #include "dataGrid2D.h"
 
-// I want to build only one instance, so either I do a static initialization in the for(nIterations) loop or I build it before empty and fill it at every
-// iteration through setVariables (maybe updateVariables is better if I also want to reassign the current values to the old ones)
-
 class BorzilaiBorweinStepSizeCalculator : public StepSizeCalculator
 {
 private:
@@ -16,12 +13,9 @@ private:
     dataGrid2D _derivativeCurrent;
 
 public:
-    BorzilaiBorweinStepSizeCalculator(const grid2D &chiEstimate);
+    BorzilaiBorweinStepSizeCalculator(const grid2D &grid);
     virtual ~BorzilaiBorweinStepSizeCalculator();
 
     double calculateStepSize();
-    void setCurrentVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent);
-    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent);
-    dataGrid2D getChiEstimateCurrent() { return _chiEstimateCurrent; }
-    dataGrid2D getDerivativeCurrent() { return _derivativeCurrent; }
+    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, const int &);
 };

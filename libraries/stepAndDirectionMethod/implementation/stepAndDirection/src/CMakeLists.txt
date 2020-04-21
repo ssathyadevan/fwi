@@ -1,6 +1,6 @@
 add_library(step_and_direction_reconstructor_library
     StepAndDirectionReconstructor.cpp            ../include/StepAndDirectionReconstructor.h
-    DirectionInput.cpp                       ../include/DirectionInput.h)
+                                                 ../include/DirectionInput.h)
 
 
 set( LIBRARY_INCLUDE_DIRS_STEP_AND_DIRECTION_RECONSTRUCTOR_INVERSION ${CMAKE_SOURCE_DIR}/libraries/stepAndDirectionMethod/implementation/stepAndDirection/include CACHE INTERNAL "" )
