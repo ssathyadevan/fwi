@@ -4,10 +4,8 @@
 StepAndDirectionReconstructor::StepAndDirectionReconstructor(
     StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
     _chosenStep(chosenStep),
-    _chosenDirection(chosenDirection), _forwardModel(), _directionInput(directionInput), _grid(forwardModel->getGrid())
-
+    _chosenDirection(chosenDirection), _forwardModel(forwardModel), _directionInput(directionInput), _grid(forwardModel->getGrid())
 {
-    _forwardModel = forwardModel;
 }
 
 dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
