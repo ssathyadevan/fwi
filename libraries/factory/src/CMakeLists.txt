@@ -23,6 +23,6 @@ target_link_libraries(
     random_inversion_library
     evolution_inversion_library
 
+    step_and_direction_reconstructor_library
     direction_calculator_library
-
     step_size_calculator_library)

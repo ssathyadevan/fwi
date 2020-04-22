@@ -17,7 +17,7 @@
 #include <factory.h>
 #include <iostream>
 
-Factory::Factory() : _createdInversion(), _createdForwardModel(), _createdStepSizeCalculator(), _createdDirectionCalculator() {}
+Factory::Factory() : _createdInversion(), _createdForwardModel(), _createdStepSizeCalculator(), _createdDirectionCalculator(), _createdReconstructor() {}
 
 Factory::~Factory()
 {
@@ -39,6 +39,10 @@ Factory::~Factory()
     if(_createdDirectionCalculator != nullptr)
     {
         delete _createdDirectionCalculator;
+    }
+    if(_createdReconstructor != nullptr)
+    {
+        delete _createdReconstructor;
     }
 }
 
@@ -94,7 +98,7 @@ forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-StepSizeCalculator *Factory::createStepSizeCalculator(const std::string &caseFolder, const std::string &desiredStepSizeMethod)
+void Factory::createStepSizeCalculator(const std::string &caseFolder, const std::string &desiredStepSizeMethod)
 {
     if(desiredStepSizeMethod == "fixedStepSize")
     {
@@ -104,14 +108,14 @@ StepSizeCalculator *Factory::createStepSizeCalculator(const std::string &caseFol
 
         // Create step size calculator
         _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSize);
-        return _createdStepSizeCalculator;
+        return;
     }
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
-DirectionCalculator *Factory::createDirectionCalculator(const std::string &caseFolder, const std::string &desiredDirectionMethod,
-    forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
+void Factory::createDirectionCalculator(const std::string &caseFolder, const std::string &desiredDirectionMethod, forwardModelInterface *forwardModel,
+    const std::vector<std::complex<double>> &pData)
 {
     const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
 
@@ -122,7 +126,7 @@ DirectionCalculator *Factory::createDirectionCalculator(const std::string &caseF
 
         // Create direction calculator
         _createdDirectionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
-        return _createdDirectionCalculator;
+        return;
     }
     if(desiredDirectionMethod == "gradientDescentDirection")
     {
@@ -132,8 +136,58 @@ DirectionCalculator *Factory::createDirectionCalculator(const std::string &caseF
 
         // Create direction calculator
         _createdDirectionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, derivativeStepSize, pData);
-        return _createdDirectionCalculator;
+        return;
     }
     L_(linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
+}
+
+StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const std::string &caseFolder, forwardModelInterface *forwardModel,
+    const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData)
+{
+    checkForwardModelExistence(forwardModel);
+
+    L_(linfo) << "Create StepSizeCalculator...";
+    createStepSizeCalculator(caseFolder, desiredStepSizeMethod);
+    checkStepSizeCalculatorExistence();
+
+    L_(linfo) << "Create DirectionCalculator...";
+    createDirectionCalculator(caseFolder, desiredDirectionMethod, _createdForwardModel, pData);
+    checkDirectionCalculatorExistence();
+
+    // read input from file
+    (void)caseFolder;
+    double tolerance = 0.001;
+    dataGrid2D startingChi(forwardModel->getGrid());
+    int maxIterationNumber = 4;
+    double h = 1.0;
+    DirectionInput directionInput = {tolerance, startingChi, maxIterationNumber, h};
+
+    _createdReconstructor = new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, directionInput);
+
+    return _createdReconstructor;
+}
+
+void Factory::checkForwardModelExistence(forwardModelInterface *forwardModel)
+{
+    if(forwardModel == nullptr)
+    {
+        throw std::invalid_argument("Forwardmodel does not exists");
+    }
+}
+
+void Factory::checkStepSizeCalculatorExistence()
+{
+    if(_createdStepSizeCalculator == nullptr)
+    {
+        throw std::invalid_argument("StepSizeCalculator does not exists");
+    }
+}
+
+void Factory::checkDirectionCalculatorExistence()
+{
+    if(_createdDirectionCalculator == nullptr)
+    {
+        throw std::invalid_argument("DirectionCalculator does not exists");
+    }
 }
