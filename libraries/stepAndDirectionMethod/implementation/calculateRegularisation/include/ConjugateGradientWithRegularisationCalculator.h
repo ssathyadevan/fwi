@@ -11,12 +11,12 @@ private:
     double start;
     double slope;
 
-    const grid2D &_grid;
-    const sources &_sources;
-    const receivers &_receivers;
-    const frequenciesGroup &_frequencies;
+    //    const grid2D &_grid;
+    //    const sources &_sources;
+    //    const receivers &_receivers;
+    //    const frequenciesGroup &_frequencies;
 
-    dataGrid2D _chiEstimate;
+    //   dataGrid2D _chiEstimate;
     //    void calculateRegularisationParameters();
     //    dataGrid2D calculateUpdateRegularisationParameters();
     //    void calculateStepSizeRegularisation();
