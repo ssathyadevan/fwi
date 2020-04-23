@@ -172,7 +172,7 @@ void Factory::checkForwardModelExistence(forwardModelInterface *forwardModel)
 {
     if(forwardModel == nullptr)
     {
-        throw std::invalid_argument("Forwardmodel does not exists");
+        throw std::invalid_argument("ForwardModel does not exist");
     }
 }
 
@@ -180,7 +180,7 @@ void Factory::checkStepSizeCalculatorExistence()
 {
     if(_createdStepSizeCalculator == nullptr)
     {
-        throw std::invalid_argument("StepSizeCalculator does not exists");
+        throw std::invalid_argument("StepSizeCalculator does not exist");
     }
 }
 
@@ -188,6 +188,6 @@ void Factory::checkDirectionCalculatorExistence()
 {
     if(_createdDirectionCalculator == nullptr)
     {
-        throw std::invalid_argument("DirectionCalculator does not exists");
+        throw std::invalid_argument("DirectionCalculator does not exist");
     }
 }

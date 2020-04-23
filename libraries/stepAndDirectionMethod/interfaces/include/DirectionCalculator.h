@@ -21,5 +21,5 @@ public:
 
 protected:
     const double _errorFunctionalScalingFactor;
-    forwardModelInterface *_forwardmodel;
+    forwardModelInterface *_forwardModel;
 };

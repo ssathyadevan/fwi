@@ -1,8 +1,8 @@
 #include "GradientDescentDirectionCalculator.h"
 
 GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
-    double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel, double derivativeStepSize, const std::vector<std::complex<double>> &pData) :
-    DirectionCalculator(errorFunctionalScalingFactor, forwardmodel),
+    double errorFunctionalScalingFactor, forwardModelInterface *forwardModel, double derivativeStepSize, const std::vector<std::complex<double>> &pData) :
+    DirectionCalculator(errorFunctionalScalingFactor, forwardModel),
     _pData(pData), _derivativeStepSize(derivativeStepSize)
 {
     if(derivativeStepSize <= 0.0)
@@ -38,7 +38,7 @@ dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid
 
 double GradientDescentDirectionCalculator::optimizationFunction(const dataGrid2D &chiEstimate) const
 {
-    std::vector<std::complex<double>> residual = _forwardmodel->calculateResidual(chiEstimate, _pData);
-    const double currentChiError = _errorFunctionalScalingFactor * _forwardmodel->calculateResidualNormSq(residual);
+    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, _pData);
+    const double currentChiError = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(residual);
     return currentChiError;
 }

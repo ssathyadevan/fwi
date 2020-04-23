@@ -12,7 +12,7 @@ dataGrid2D ConjugateGradientDirectionCalculator::calculateDirection(const dataGr
     dataGrid2D direction(chi.getGrid());
     complexDataGrid2D kappaTimesResidual(chi.getGrid());
 
-    _forwardmodel->getUpdateDirectionInformation(residual, kappaTimesResidual);
+    _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
     direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
 
     return direction;
