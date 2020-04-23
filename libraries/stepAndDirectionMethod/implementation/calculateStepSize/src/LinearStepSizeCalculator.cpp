@@ -3,8 +3,13 @@
 LinearStepSizeCalculator::LinearStepSizeCalculator(double start, double slope) : _start(start), _slope(slope)
 {
     _iteration = 0;
-    // throw an exception is either start or slope are < or =0
+    if(start <= 0.0 || slope <= 0.0)
+    {
+        throw std::invalid_argument("Invalid parameters for step choice.");
+    }
 }
+
+LinearStepSizeCalculator::~LinearStepSizeCalculator() {}
 
 double LinearStepSizeCalculator::calculateStepSize()
 {
