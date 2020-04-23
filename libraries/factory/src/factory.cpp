@@ -149,11 +149,9 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
 
     L_(linfo) << "Create StepSizeCalculator...";
     createStepSizeCalculator(caseFolder, desiredStepSizeMethod);
-    checkStepSizeCalculatorExistence();
 
     L_(linfo) << "Create DirectionCalculator...";
-    createDirectionCalculator(caseFolder, desiredDirectionMethod, _createdForwardModel, pData);
-    checkDirectionCalculatorExistence();
+    createDirectionCalculator(caseFolder, desiredDirectionMethod, forwardModel, pData);
 
     // read input from file
     (void)caseFolder;
@@ -173,21 +171,5 @@ void Factory::checkForwardModelExistence(forwardModelInterface *forwardModel)
     if(forwardModel == nullptr)
     {
         throw std::invalid_argument("Forwardmodel does not exists");
-    }
-}
-
-void Factory::checkStepSizeCalculatorExistence()
-{
-    if(_createdStepSizeCalculator == nullptr)
-    {
-        throw std::invalid_argument("StepSizeCalculator does not exists");
-    }
-}
-
-void Factory::checkDirectionCalculatorExistence()
-{
-    if(_createdDirectionCalculator == nullptr)
-    {
-        throw std::invalid_argument("DirectionCalculator does not exists");
     }
 }

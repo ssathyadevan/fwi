@@ -42,11 +42,9 @@ private:
     StepAndDirectionReconstructor *_createdReconstructor;
 
     /**
-     * @brief check...Existence, make sure the pointers are no null pointers
+     * @brief checkForwardModelExistence, make sure the forwardmodel is created
      */
     void checkForwardModelExistence(forwardModelInterface *forwardModel);
-    void checkStepSizeCalculatorExistence();
-    void checkDirectionCalculatorExistence();
 
     /**
      * @brief createStepSizeCalculator, reads in parameters from file and creates the desired step size calculator.
