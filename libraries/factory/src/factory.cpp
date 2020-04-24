@@ -156,12 +156,11 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
     // read input from file
     (void)caseFolder;
     double tolerance = 0.001;
-    dataGrid2D startingChi(forwardModel->getGrid());
+    double startingChi = 1.0;
     int maxIterationNumber = 4;
-    double h = 1.0;
-    DirectionInput directionInput = {tolerance, startingChi, maxIterationNumber, h};
+    ReconstructorParameters reconstructorInput = {tolerance, startingChi, maxIterationNumber};
 
-    _createdReconstructor = new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, directionInput);
+    _createdReconstructor = new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, reconstructorInput);
 
     return _createdReconstructor;
 }

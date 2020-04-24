@@ -2,7 +2,7 @@
 #include "progressBar.h"
 
 StepAndDirectionReconstructor::StepAndDirectionReconstructor(
-    StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput) :
+    StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput) :
     _chosenStep(chosenStep),
     _chosenDirection(chosenDirection), _forwardModel(forwardModel), _directionInput(directionInput), _grid(forwardModel->getGrid())
 {
@@ -10,7 +10,7 @@ StepAndDirectionReconstructor::StepAndDirectionReconstructor(
 
 dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
-    progressBar bar(_directionInput._maxIterationsNumber);
+    progressBar bar(_directionInput.maxIterationsNumber);
 
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 
@@ -19,14 +19,14 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     double errorValue;
     double eta = _chosenDirection->getErrorFunctionalScalingFactor();
     dataGrid2D chiEstimateCurrent(_grid);
-    chiEstimateCurrent = _directionInput._startingChi;
+    chiEstimateCurrent = _directionInput.startingChi;
 
     _forwardModel->calculateKappa();
 
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
 
-    for(int it = 0; it < _directionInput._maxIterationsNumber; ++it)
+    for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
     {
         directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
 
