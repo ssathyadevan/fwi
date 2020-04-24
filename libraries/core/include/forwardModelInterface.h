@@ -54,7 +54,7 @@ public:
     }
 
     std::vector<std::complex<double>> &calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
-    double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
+    double calculateResidualNormSq(const std::vector<std::complex<double>> &residual);
 
 private:
     std::vector<std::complex<double>> _residual;

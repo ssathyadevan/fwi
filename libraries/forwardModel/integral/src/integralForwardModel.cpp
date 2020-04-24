@@ -298,12 +298,16 @@ void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::
     kRes.zero();
 
     complexDataGrid2D kDummy(_grid);
+    int nMax = _grid.getNumberOfGridPoints();
 
-    for(int i = 0; i < _freq.nFreq * _recv.nRecv * _src.nSrc; i++)
+    for(int i = 0; i < nMax; ++i)
     {
-        kDummy = *_Kappa[i];
+        //        kDummy = *_Kappa[i];
+        //        kDummy.conjugate();
+        //        kRes += kDummy * res[i];
+        kDummy = (*_Kappa[i] * res[i]);
         kDummy.conjugate();
-        kRes += kDummy * res[i];
+        kRes += kDummy;
     }
 }
 

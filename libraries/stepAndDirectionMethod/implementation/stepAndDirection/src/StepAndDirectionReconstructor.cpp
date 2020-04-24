@@ -28,7 +28,9 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
 
     for(int it = 0; it < _directionInput._maxIterationsNumber; ++it)
     {
-        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, pData);
+        std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+
+        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, residual);
 
         _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent, it);
         if(it > 0)
@@ -38,7 +40,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
 
         chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, directionCurrent, step);
 
-        errorValue = functionF(chiEstimateCurrent, pData, eta);
+        errorValue = calculateErrorValue(residual, eta);
         file << std::setprecision(17) << errorValue << "," << it + 1 << std::endl;
 
         bar++;
@@ -63,8 +65,7 @@ dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const dataGrid2D &ch
     return chiTemp;
 }
 
-double StepAndDirectionReconstructor::functionF(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta) const
+double StepAndDirectionReconstructor::calculateErrorValue(const std::vector<std::complex<double>> &residual, double eta) const
 {
-    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
     return eta * _forwardModel->calculateResidualNormSq(residual);
 }

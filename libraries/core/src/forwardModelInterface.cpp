@@ -1,36 +1,21 @@
 #include "forwardModelInterface.h"
 #include <math.h>
 
-forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv,
-                                             const frequenciesGroup &freq)
-    : /*_residual(), */_grid(grid), _src(src), _recv(recv), _freq(freq)
+forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq) :
+    /*_residual(), */ _grid(grid), _src(src), _recv(recv), _freq(freq)
 {
     _residual = std::vector<std::complex<double>>(_freq.nFreq * _src.nSrc * _recv.nRecv);
 }
 
-forwardModelInterface::~forwardModelInterface()
-{
-}
+forwardModelInterface::~forwardModelInterface() {}
 
-const grid2D &forwardModelInterface::getGrid()
-{
-    return _grid;
-}
+const grid2D &forwardModelInterface::getGrid() { return _grid; }
 
-const sources &forwardModelInterface::getSrc()
-{
-    return _src;
-}
+const sources &forwardModelInterface::getSrc() { return _src; }
 
-const receivers &forwardModelInterface::getRecv()
-{
-    return _recv;
-}
+const receivers &forwardModelInterface::getRecv() { return _recv; }
 
-const frequenciesGroup &forwardModelInterface::getFreq()
-{
-    return _freq;
-}
+const frequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
 std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
 {
@@ -38,16 +23,19 @@ std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(cons
 
     calculatePData(chiEst, pDataEst);
 
-    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
+    for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
         _residual[i] = pDataRef[i] - pDataEst[i];
-        if (isnan(std::abs(_residual[i]))) {throw std::overflow_error("Residual is not a number");}
+        if(isnan(std::abs(_residual[i])))
+        {
+            throw std::overflow_error("Residual is not a number");
+        }
     }
 
     return _residual;
 }
 
-double forwardModelInterface::calculateResidualNormSq(std::vector<std::complex<double>> &residual)
+double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
 {
     double residualSq = normSq(residual, _freq.nFreq * _src.nSrc * _recv.nRecv);
 

@@ -15,7 +15,7 @@ private:
     const grid2D &_grid;
 
     dataGrid2D calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step) const;
-    double functionF(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta) const;
+    double calculateErrorValue(const std::vector<std::complex<double>> &pData, double eta) const;
 
 public:
     StepAndDirectionReconstructor(

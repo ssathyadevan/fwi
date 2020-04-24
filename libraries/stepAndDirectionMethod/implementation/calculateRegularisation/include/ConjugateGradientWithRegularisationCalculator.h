@@ -36,7 +36,18 @@ public:
         ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData);
     virtual ~ConjugateGradientWithRegularisationCalculator();
 
-    double calculateStepSize();
-    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iterationNumber);
-    dataGrid2D calculateDirection(const dataGrid2D &gradientCurrent, const std::vector<std::complex<double>> &residual) override;
+    /**
+     * @brief calculateStepSize After computing the optimal step as described in Eq. PolakRibiereDirection of ReadMe/1_ProjectDescription, it will also invoke
+     * the whole regularisation process
+     * @return
+     */
+    double calculateStepSize() override;
+
+    /**
+     * @brief calculateDirection performs the computation described in Eq. integrandForDiscreteK of ReadMe/1_ProjectDescription
+     * @param residual
+     * @return is the direction/derivativeCurrent
+     */
+    dataGrid2D calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residual) override;
+    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iterationNumber) override;
 };
