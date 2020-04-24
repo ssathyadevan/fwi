@@ -54,7 +54,7 @@ private:
      * @param desiredStepSizeMethod is a string
      * @return StepSizecallculator
      */
-    void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod);
+    void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid);
 
     /**
      * @brief createDirectionCalculator, reads in parameter from file and creates the desired direction calculator

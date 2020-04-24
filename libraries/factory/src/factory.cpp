@@ -1,3 +1,4 @@
+#include "BorzilaiBorweinStepSizeCalculator.h"
 #include "ConjugateGradientDirectionCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
@@ -98,11 +99,16 @@ forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod)
+void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid)
 {
     if(desiredStepSizeMethod == "fixedStepSize")
     {
         _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSizeParameters.initialStepSize);
+        return;
+    }
+    if(desiredStepSizeMethod == "BorzilaiBorwein")
+    {
+        _createdStepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid);
         return;
     }
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
@@ -136,7 +142,7 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
     checkForwardModelExistence(forwardModel);
 
     L_(linfo) << "Create StepSizeCalculator...";
-    createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod);
+    createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod, forwardModel->getGrid());
 
     L_(linfo) << "Create DirectionCalculator...";
     createDirectionCalculator(stepAndDirectionInput.directionParameters, desiredDirectionMethod, forwardModel, pData);
