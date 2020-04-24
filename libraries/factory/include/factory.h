@@ -2,6 +2,7 @@
 
 #include "DirectionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
+#include "StepAndDirectionReconstructorInput.h"
 #include "StepSizeCalculator.h"
 #include "forwardModelInterface.h"
 #include "genericInput.h"
@@ -31,8 +32,9 @@ public:
      * @param pData is a vector of complex doubles, represents the measurement for each combination of sources, receivers and frequencies
      * @return
      */
-    StepAndDirectionReconstructor *createStepAndDirectionReconstructor(const std::string &caseFolder, forwardModelInterface *forwardmodel,
-        const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData);
+    StepAndDirectionReconstructor *createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
+        forwardModelInterface *forwardmodel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
+        const std::vector<std::complex<double>> &pData);
 
 private:
     inversionInterface *_createdInversion;
@@ -52,7 +54,7 @@ private:
      * @param desiredStepSizeMethod is a string
      * @return StepSizecallculator
      */
-    void createStepSizeCalculator(const std::string &caseFolder, const std::string &desiredStepSizeMethod);
+    void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod);
 
     /**
      * @brief createDirectionCalculator, reads in parameter from file and creates the desired direction calculator
@@ -62,6 +64,6 @@ private:
      * @param pData is a vector of complex doubles, represents the measurement for each combination of sources, receivers and frequencies
      * @return DirectionCalculator
      */
-    void createDirectionCalculator(const std::string &caseFolder, const std::string &desiredDirectionMethod, forwardModelInterface *forwardModel,
-        const std::vector<std::complex<double>> &pData);
+    void createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
+        forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
 };

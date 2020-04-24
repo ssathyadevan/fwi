@@ -1,5 +1,6 @@
 #include "DirectionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
+#include "StepAndDirectionReconstructorInputCardReader.h"
 #include "StepSizeCalculator.h"
 #include "chiIntegerVisualisation.h"
 #include "cpuClock.h"
@@ -146,8 +147,10 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     model = factory.createForwardModel(gInput.caseFolder, desiredForwardModel, grid, src, recv, freq);
 
     L_(linfo) << "Create StepAndDirectionReconstructor";
+    StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
+    StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
     StepAndDirectionReconstructor *reconstructor;
-    reconstructor = factory.createStepAndDirectionReconstructor(gInput.caseFolder, model, desiredStepSize, desiredDirection, referencePressureData);
+    reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, desiredStepSize, desiredDirection, referencePressureData);
 
     L_(linfo) << "Estimating Chi...";
     dataGrid2D chiEstimate = reconstructor->reconstruct(referencePressureData, gInput);

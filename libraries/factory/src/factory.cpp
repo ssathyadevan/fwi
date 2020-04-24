@@ -98,69 +98,51 @@ forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-void Factory::createStepSizeCalculator(const std::string &caseFolder, const std::string &desiredStepSizeMethod)
+void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod)
 {
     if(desiredStepSizeMethod == "fixedStepSize")
     {
-        // Read and/or compute input
-        (void)caseFolder;
-        const double stepSize = 1.0;
-
-        // Create step size calculator
-        _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSize);
+        _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSizeParameters.initialStepSize);
         return;
     }
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
-void Factory::createDirectionCalculator(const std::string &caseFolder, const std::string &desiredDirectionMethod, forwardModelInterface *forwardModel,
-    const std::vector<std::complex<double>> &pData)
+void Factory::createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
+    forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
     const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
 
     if(desiredDirectionMethod == "conjugateGradientDirection")
     {
-        // Read and/or compute input
-        (void)caseFolder;
-
-        // Create direction calculator
         _createdDirectionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
         return;
     }
     if(desiredDirectionMethod == "gradientDescentDirection")
     {
-        // Read and/or compute input
-        (void)caseFolder;
-        const double derivativeStepSize = 0.1;
-
-        // Create direction calculator
-        _createdDirectionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, derivativeStepSize, pData);
+        _createdDirectionCalculator =
+            new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
         return;
     }
     L_(linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
 
-StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const std::string &caseFolder, forwardModelInterface *forwardModel,
-    const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData)
+StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
+    forwardModelInterface *forwardModel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
+    const std::vector<std::complex<double>> &pData)
 {
     checkForwardModelExistence(forwardModel);
 
     L_(linfo) << "Create StepSizeCalculator...";
-    createStepSizeCalculator(caseFolder, desiredStepSizeMethod);
+    createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod);
 
     L_(linfo) << "Create DirectionCalculator...";
-    createDirectionCalculator(caseFolder, desiredDirectionMethod, forwardModel, pData);
+    createDirectionCalculator(stepAndDirectionInput.directionParameters, desiredDirectionMethod, forwardModel, pData);
 
-    // read input from file
-    (void)caseFolder;
-    double tolerance = 0.001;
-    double startingChi = 1.0;
-    int maxIterationNumber = 4;
-    ReconstructorParameters reconstructorInput = {tolerance, startingChi, maxIterationNumber};
-
-    _createdReconstructor = new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, reconstructorInput);
+    _createdReconstructor =
+        new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
 
     return _createdReconstructor;
 }
