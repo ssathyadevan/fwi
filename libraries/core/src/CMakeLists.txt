@@ -8,7 +8,7 @@ set(CPP_SOURCES_AND_H_HEADERS
     greensSerial.cpp                    ../include/greensSerial.h
     grid2D.cpp                          ../include/grid2D.h
                                         ../include/genericInput.h
-        ReadJsonHelper.cpp ../include/ReadJsonHelper.h
+    ReadJsonHelper.cpp                  ../include/ReadJsonHelper.h
     genericInputCardReader.cpp          ../include/genericInputCardReader.h
     inputCardReader.cpp                 ../include/inputCardReader.h
                                         ../include/inversionInterface.h

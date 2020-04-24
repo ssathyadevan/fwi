@@ -17,7 +17,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     nlohmann::json jsonFile = readFile(filePath);
 
     static const std::string parameterGamma = "toleranceOuter";
-    double toleranceOuter = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterGamma);
+    double toleranceOuter = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterGamma);
     if(toleranceOuter <= 0)
     {
         throw std::invalid_argument("Invalid outer tolerance (" + std::to_string(toleranceOuter) + " <= 0) in: " + fileName);
@@ -25,7 +25,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     input.toleranceOuter = toleranceOuter;
 
     static const std::string parameterInitialX = "nGenerations";
-    int nrOfGenerations = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterInitialX);
+    int nrOfGenerations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterInitialX);
     if(nrOfGenerations <= 0)
     {
         throw std::invalid_argument("Invalid number of generations (" + std::to_string(nrOfGenerations) + " <= 0) in: " + fileName);
@@ -33,7 +33,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     input.nGenerations = nrOfGenerations;
 
     static const std::string parameterStepSize = "nChildrenPerGeneration";
-    int nrofChildrenPerGeneration = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterStepSize);
+    int nrofChildrenPerGeneration = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterStepSize);
     if(nrofChildrenPerGeneration <= 0)
     {
         throw std::invalid_argument("Invalid number of children per generation (" + std::to_string(nrofChildrenPerGeneration) + " <= 0) in: " + fileName);

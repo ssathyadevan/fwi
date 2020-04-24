@@ -26,7 +26,7 @@ std::string inputCardReader::removeLastSlash(const std::string &caseFolderWithSl
 
 std::string inputCardReader::getRunName(const std::string &caseFolder)
 {
-    static const std::string defaultRunName = "default";
+    const std::string defaultRunName = "default";
 
     std::string runName = caseFolder;
 

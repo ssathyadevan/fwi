@@ -120,32 +120,35 @@ void dataGrid2D::toFile(const std::string &filePath) const
 {
     std::ofstream file;
     file.open(filePath, std::ios::out | std::ios::trunc);
-    if(!file)
+    if(file.is_open())
     {
-        throw std::invalid_argument("Unable to write DataGrid2D to file: " + filePath);
+        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        {
+            file << std::setprecision(17) << _data[i] << std::endl;
+        }
+        file.close();
     }
-
-    for(int i = 0; i < getNumberOfGridPoints(); i++)
+    else
     {
-        file << std::setprecision(17) << _data[i] << std::endl;
+        throw std::runtime_error("Unable to write dataGrid2D to file: " + filePath);
     }
-    file.close();
 }
 
 void dataGrid2D::fromFile(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::in);
-    if(!file)
+    if(file.is_open())
     {
-        throw std::invalid_argument("Unable to load DataGrid2D from file: " + filePath);
+        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        {
+            file >> _data[i];
+        }
+        file.close();
     }
-
-    for(int i = 0; i < getNumberOfGridPoints(); i++)
+    else
     {
-        file >> _data[i];
+        throw std::runtime_error("Unable to load dataGrid2D from file: " + filePath);
     }
-
-    file.close();
 }
 
 void dataGrid2D::random()

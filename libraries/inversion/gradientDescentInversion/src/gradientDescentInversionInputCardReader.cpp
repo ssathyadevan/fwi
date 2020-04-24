@@ -17,13 +17,13 @@ void gradientDescentInversionInputCardReader::readJsonFile(const std::string &fi
     nlohmann::json jsonFile = readFile(filePath);
 
     static const std::string parameterGamma = "gamma0";
-    input.gamma0 = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterGamma);
+    input.gamma0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterGamma);
 
     static const std::string parameterInitialX = "x0";
-    input.x0 = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterInitialX);
+    input.x0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterInitialX);
 
     static const std::string parameterStepSize = "h";
-    double stepSize = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterStepSize);
+    double stepSize = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterStepSize);
     if(stepSize <= 0)
     {
         throw std::invalid_argument("Invalid step size h (" + std::to_string(stepSize) + " <= 0) in: " + fileName);
@@ -31,7 +31,7 @@ void gradientDescentInversionInputCardReader::readJsonFile(const std::string &fi
     input.h = stepSize;
 
     static const std::string parameterIteration = "iter";
-    int nrOfIterations = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterIteration);
+    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterIteration);
     if(nrOfIterations <= 0)
     {
         throw std::invalid_argument("Invalid numer of iterations (" + std::to_string(nrOfIterations) + " <= 0) in: " + fileName);

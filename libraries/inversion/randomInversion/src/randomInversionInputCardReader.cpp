@@ -18,7 +18,7 @@ void RandomInversionInputCardReader::readJsonFile(const std::string &filePath, c
     nlohmann::json jsonFile = readFile(filePath);
 
     static const std::string parameterToleranceOuter = "toleranceOuter";
-    double toleranceOuter = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterToleranceOuter);
+    double toleranceOuter = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterToleranceOuter);
     if(toleranceOuter <= 0)
     {
         throw std::invalid_argument("Invalid outer tolerance (" + std::to_string(toleranceOuter) + " <= 0) in: " + fileName);
@@ -26,7 +26,7 @@ void RandomInversionInputCardReader::readJsonFile(const std::string &filePath, c
     input.toleranceOuter = toleranceOuter;
 
     static const std::string parameterMaxIterationsInner = "nMaxInner";
-    int maxIterationsInner = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterMaxIterationsInner);
+    int maxIterationsInner = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterMaxIterationsInner);
     if(maxIterationsInner <= 0)
     {
         throw std::invalid_argument(
@@ -35,7 +35,7 @@ void RandomInversionInputCardReader::readJsonFile(const std::string &filePath, c
     input.nMaxInner = maxIterationsInner;
 
     static const std::string parameterMaxIterationsOuter = "nMaxOuter";
-    int maxIterationsOuter = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterMaxIterationsOuter);
+    int maxIterationsOuter = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterMaxIterationsOuter);
     if(maxIterationsOuter <= 0)
     {
         throw std::invalid_argument(

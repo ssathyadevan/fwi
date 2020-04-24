@@ -20,10 +20,10 @@ void ConjugateGradientInversionInputCardReader::readJsonFile(const std::string &
     readDeltaAmplificationParameter(jsonFile, fileName, input);
 
     static const std::string parameterRegularisationEnabled = "do_reg";
-    input.doRegularisation = ReadJsonHelper::tryGetBoolParameterFromJson(jsonFile, fileName, parameterRegularisationEnabled);
+    input.doRegularisation = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, fileName, parameterRegularisationEnabled);
 
     static const std::string parameterMaxNrOfIterations = "n_max";
-    int maxNrOfIterations = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterMaxNrOfIterations);
+    int maxNrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterMaxNrOfIterations);
     if(maxNrOfIterations <= 0)
     {
         throw std::invalid_argument(
@@ -39,15 +39,15 @@ void ConjugateGradientInversionInputCardReader::readIterParameter(
     static const std::string parameterNumber = "n";
     static const std::string parameterTolerance = "tolerance";
 
-    nlohmann::json iterObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterIter);
+    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterIter);
 
-    int nrOfIterations = ReadJsonHelper::tryGetIntParameterFromJson(iterObject, fileName, parameterNumber);
+    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, fileName, parameterNumber);
     if(nrOfIterations <= 0)
     {
         throw std::invalid_argument("Invalid numer of iterations (" + std::to_string(nrOfIterations) + " <= 0) in: " + fileName);
     }
 
-    double tolerance = ReadJsonHelper::tryGetDoubleParameterFromJson(iterObject, fileName, parameterTolerance);
+    double tolerance = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, fileName, parameterTolerance);
     if(tolerance <= 0)
     {
         throw std::invalid_argument("Invalid tolerance (" + std::to_string(tolerance) + " <= 0) in: " + fileName);
@@ -62,15 +62,15 @@ void ConjugateGradientInversionInputCardReader::readDeltaAmplificationParameter(
     static const std::string parameterStart = "start";
     static const std::string parameterSlope = "slope";
 
-    nlohmann::json daObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterDeltaAmplification);
+    nlohmann::json daObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterDeltaAmplification);
 
-    double start = ReadJsonHelper::tryGetDoubleParameterFromJson(daObject, fileName, parameterStart);
+    double start = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, fileName, parameterStart);
     if(start <= 0)
     {
         throw std::invalid_argument("Invalid start step (" + std::to_string(start) + " <= 0) in: " + fileName);
     }
 
-    double slope = ReadJsonHelper::tryGetDoubleParameterFromJson(daObject, fileName, parameterSlope);
+    double slope = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, fileName, parameterSlope);
     if(slope <= 0)
     {
         throw std::invalid_argument("Invalid slope (" + std::to_string(slope) + " <= 0) in: " + fileName);

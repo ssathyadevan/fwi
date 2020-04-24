@@ -2,7 +2,7 @@
 #include "json.h"
 #include <exception>
 #include <iostream>
-#include <string.h>
+#include <string>
 
 genericInputCardReader::genericInputCardReader(const std::string &caseFolder_)
 {
@@ -44,19 +44,20 @@ void genericInputCardReader::readJsonFile(const std::string &filePath, const std
     readNReceiversParameter(jsonFile, fileName, input);
 
     static const std::string parameterFileName = "fileName";
-    input.fileName = ReadJsonHelper::tryGetStringParameterFromJson(jsonFile, fileName, parameterFileName);
+    input.fileName = ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, fileName, parameterFileName);
 
     static const std::string parameterVerbose = "verbosity";
-    input.verbose = ReadJsonHelper::tryGetBoolParameterFromJson(jsonFile, fileName, parameterVerbose);
+
+    input.verbose = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, fileName, parameterVerbose);
 }
 
 void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<double, 2> &array)
 {
     static const std::string parameterX = "x";
-    double xValue = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterX);
+    double xValue = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterX);
 
     static const std::string parameterZ = "z";
-    double zValue = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterZ);
+    double zValue = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterZ);
 
     array = {xValue, zValue};
 }
@@ -64,10 +65,10 @@ void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json
 void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<int, 2> &array)
 {
     static const std::string parameterX = "x";
-    int xValue = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterX);
+    int xValue = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterX);
 
     static const std::string parameterZ = "z";
-    int zValue = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterZ);
+    int zValue = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterZ);
 
     array = {xValue, zValue};
 }
@@ -75,7 +76,7 @@ void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json
 void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
     static const std::string parameterC0 = "c_0";
-    double c0 = ReadJsonHelper::tryGetDoubleParameterFromJson(jsonFile, fileName, parameterC0);
+    double c0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterC0);
     if(c0 <= 0)
     {
         throw std::invalid_argument("Invalid value for c0 (" + std::to_string(c0) + " <= 0) in: " + fileName);
@@ -90,17 +91,17 @@ void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile, c
     static const std::string parameterFreqMax = "max";
     static const std::string parameterFreqNTotal = "nTotal";
 
-    nlohmann::json freqJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterFreq);
+    nlohmann::json freqJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterFreq);
 
-    double min = ReadJsonHelper::tryGetDoubleParameterFromJson(freqJsonObject, fileName, parameterFreqMin);
-    double max = ReadJsonHelper::tryGetDoubleParameterFromJson(freqJsonObject, fileName, parameterFreqMax);
+    double min = ReadJsonHelper::tryGetParameterFromJson<double>(freqJsonObject, fileName, parameterFreqMin);
+    double max = ReadJsonHelper::tryGetParameterFromJson<double>(freqJsonObject, fileName, parameterFreqMax);
     if(min >= max || min <= 0)
     {
         throw std::invalid_argument(
             "Invalid ranges for frequenties (" + std::to_string(min) + " >= " + std::to_string(max) + ") (" + std::to_string(min) + " <= 0) in: " + fileName);
     }
 
-    double nTotal = ReadJsonHelper::tryGetDoubleParameterFromJson(freqJsonObject, fileName, parameterFreqNTotal);
+    double nTotal = ReadJsonHelper::tryGetParameterFromJson<double>(freqJsonObject, fileName, parameterFreqNTotal);
     if(nTotal <= 1)
     {
         throw std::invalid_argument("Invalid number of frequenties (" + parameterFreqNTotal + " <= " + std::to_string(nTotal) + ") in: " + fileName);
@@ -114,11 +115,11 @@ void genericInputCardReader::readReservoirParameter(const nlohmann::json &jsonFi
     static const std::string parameterReservoirBottomRight = "reservoirBottomRight";
 
     std::array<double, 2> topLeftArray;
-    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterReservoirTopLeft);
+    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReservoirTopLeft);
     readXZParametersFromJsonObject(topLeftJsonObject, fileName, topLeftArray);
 
     std::array<double, 2> bottemRightArray;
-    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterReservoirBottomRight);
+    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReservoirBottomRight);
     readXZParametersFromJsonObject(bottomRightJsonObject, fileName, bottemRightArray);
 
     if(topLeftArray[0] > bottemRightArray[0] || topLeftArray[1] > bottemRightArray[1])
@@ -137,11 +138,11 @@ void genericInputCardReader::readSourcesParameter(const nlohmann::json &jsonFile
     static const std::string parameterSourcesBottomRight = "sourcesBottomRight";
 
     std::array<double, 2> topLeftArray;
-    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterSourcesTopLeft);
+    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterSourcesTopLeft);
     readXZParametersFromJsonObject(topLeftJsonObject, fileName, topLeftArray);
 
     std::array<double, 2> bottemRightArray;
-    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterSourcesBottomRight);
+    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterSourcesBottomRight);
     readXZParametersFromJsonObject(bottomRightJsonObject, fileName, bottemRightArray);
 
     if(topLeftArray[0] > bottemRightArray[0] || topLeftArray[1] > bottemRightArray[1])
@@ -160,11 +161,11 @@ void genericInputCardReader::readReceiversParameter(const nlohmann::json &jsonFi
     static const std::string parameterReceiversBottomRight = "receiversBottomRight";
 
     std::array<double, 2> topLeftArray;
-    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterReceiversTopLeft);
+    nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReceiversTopLeft);
     readXZParametersFromJsonObject(topLeftJsonObject, fileName, topLeftArray);
 
     std::array<double, 2> bottemRightArray;
-    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterReceiversBottomRight);
+    nlohmann::json bottomRightJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReceiversBottomRight);
     readXZParametersFromJsonObject(bottomRightJsonObject, fileName, bottemRightArray);
 
     if(topLeftArray[0] > bottemRightArray[0] || topLeftArray[1] > bottemRightArray[1])
@@ -183,7 +184,7 @@ void genericInputCardReader::readGridOriginalParameter(const nlohmann::json &jso
     static const std::string parameterNGridOriginal = "ngrid_original";
 
     std::array<int, 2> nGridOriginalArray;
-    nlohmann::json nGridOriginalJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterNGridOriginal);
+    nlohmann::json nGridOriginalJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterNGridOriginal);
     readXZParametersFromJsonObject(nGridOriginalJsonObject, fileName, nGridOriginalArray);
 
     if(nGridOriginalArray[0] <= 0 || nGridOriginalArray[1] <= 0)
@@ -199,7 +200,7 @@ void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, c
     static const std::string parameterNGrid = "ngrid";
 
     std::array<int, 2> nGridArray;
-    nlohmann::json nGridJsonObject = ReadJsonHelper::tryGetJsonObjectParameterFromJson(jsonFile, fileName, parameterNGrid);
+    nlohmann::json nGridJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterNGrid);
     readXZParametersFromJsonObject(nGridJsonObject, fileName, nGridArray);
 
     if(nGridArray[0] < 3 || nGridArray[1] < 3)
@@ -213,7 +214,7 @@ void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, c
 void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
     static const std::string parameterNSources = "nSources";
-    int nSources = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterNSources);
+    int nSources = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterNSources);
     if(nSources <= 1)
     {
         throw std::invalid_argument("Invalid number of sources (" + std::to_string(nSources) + "<= 1) in: " + fileName);
@@ -224,7 +225,7 @@ void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFil
 void genericInputCardReader::readNReceiversParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
     static const std::string parameterNReceivers = "nReceivers";
-    int nReceivers = ReadJsonHelper::tryGetIntParameterFromJson(jsonFile, fileName, parameterNReceivers);
+    int nReceivers = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterNReceivers);
     if(nReceivers <= 1)
     {
         throw std::invalid_argument("Invalid number of receivers (" + std::to_string(nReceivers) + "<= 1) in: " + fileName);
