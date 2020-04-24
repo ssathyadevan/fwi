@@ -16,6 +16,7 @@ private:
     const frequenciesGroup _freq;
 
     dataGrid2D gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma);
+    std::ofstream openResidualLogFile(genericInput &gInput);
 
 public:
     gradientDescentInversion(forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
@@ -26,6 +27,6 @@ public:
     dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
     std::vector<double> differential(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
     double functionF(const dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta);
-    double determineGamma(const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
-        std::vector<double> dFdx);
+    double determineGamma(
+        const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdx);
 };

@@ -1,18 +1,21 @@
 #pragma once
 
-#include "inputCardReader.h"
+#include "ReadJsonHelper.h"
 #include "gradientDescentInversionInput.h"
-#include <string>
+#include "inputCardReader.h"
 #include <fstream>
 #include <sstream>
-class gradientDescentInversionInputCardReader :public inputCardReader
+#include <string>
+
+class gradientDescentInversionInputCardReader : public inputCardReader
 {
+private:
+    gradientDescentInversionInput _input;
+
+    const std::string _fileName = "GradientDescentInversionInput.json";
+    static void readJsonFile(const std::string &filePath, const std::string &fileName, gradientDescentInversionInput &input);
+
 public:
     gradientDescentInversionInputCardReader(const std::string &caseFolder);
-    gradientDescentInversionInput getInput();
-private:
-    void readCard(const std::string &caseFolder);
-    void checkInput();
-    gradientDescentInversionInput _input;
+    const gradientDescentInversionInput getInput() const { return _input; }
 };
-

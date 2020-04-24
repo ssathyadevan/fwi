@@ -283,7 +283,7 @@ TEST(dataGrid2DTest, gradientTest)
 }
 
 // Operators
-TEST(dataGrid2DTest, operatorAssignPressureFieldSerialExceptionTest)
+TEST(dataGrid2DTest, operatorAssignDataGrid2DExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -297,7 +297,7 @@ TEST(dataGrid2DTest, operatorAssignPressureFieldSerialExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(dataGrid2DTest, operatorAssigndataGrid2DTest)
+TEST(dataGrid2DTest, operatorAssignDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -395,7 +395,7 @@ TEST(dataGrid2DTest, operatorAssignDoubleVectorTest2)
     }
 }
 
-TEST(dataGrid2DTest, operatorAdddataGrid2DTest)
+TEST(dataGrid2DTest, operatorAddDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -421,7 +421,7 @@ TEST(dataGrid2DTest, operatorAdddataGrid2DTest)
     }
 }
 
-TEST(dataGrid2DTest, operatorAdddataGrid2DTest2)
+TEST(dataGrid2DTest, operatorAddDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -534,7 +534,7 @@ TEST(dataGrid2DTest, operatorAddDoubleTest)
     }
 }
 
-TEST(dataGrid2DTest, operatorSubtractdataGrid2DTest)
+TEST(dataGrid2DTest, operatorSubtractDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -560,7 +560,7 @@ TEST(dataGrid2DTest, operatorSubtractdataGrid2DTest)
     }
 }
 
-TEST(dataGrid2DTest, operatorSubtractdataGrid2DTest2)
+TEST(dataGrid2DTest, operatorSubtractDataGrid2DTest2)
 {
     // Given
     grid2D grid = getGrid();
@@ -778,7 +778,7 @@ TEST(dataGrid2DTest, operatorMultiplyByDoubleTest)
     }
 }
 
-TEST(dataGrid2DTest, operatorDivideByPressureFieldSerialExceptionTest)
+TEST(dataGrid2DTest, operatorDivideByDataGrid2DExceptionTest)
 {
     // Given
     grid2D grid = getGrid();
@@ -797,7 +797,7 @@ TEST(dataGrid2DTest, operatorDivideByPressureFieldSerialExceptionTest)
     // Note: 1 / 0.0 must throw
 }
 
-TEST(dataGrid2DTest, operatorDivideBydataGrid2DTest)
+TEST(dataGrid2DTest, operatorDivideByDataGrid2DTest)
 {
     // Given
     grid2D grid = getGrid();

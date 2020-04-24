@@ -43,14 +43,14 @@ public:
     double innerProduct(const dataGrid2D &rhs) const;
     void gradient(std::vector<dataGrid2D> &gradientField) const;
 
-    void toFile(const std::string &fileName) const;
-    void fromFile(const genericInput &input);
+    void toFile(const std::string &filePath) const;
+    void fromFile(const std::string &filePath);
+
+    void copyTo(dataGrid2D &dest) { dest = *this; }
 
     void random();          // unused?
     void randomSaurabh();   // Generates random approximations of Saurabh
     void randomChild(const dataGrid2D &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution);
-
-    void copyTo(dataGrid2D &dest) { dest = *this; }
 
     // Operators
     dataGrid2D &operator=(const dataGrid2D &rhs);

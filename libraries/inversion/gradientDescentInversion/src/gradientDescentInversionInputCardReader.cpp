@@ -1,33 +1,40 @@
-#include <iostream>
-
 #include "gradientDescentInversionInputCardReader.h"
 #include "json.h"
+#include <iostream>
 
 gradientDescentInversionInputCardReader::gradientDescentInversionInputCardReader(const std::string &caseFolder) : inputCardReader()
 {
-    readCard(caseFolder);
-    checkInput();
-}
+    const std::string stringInputFolder = "/input/";
+    std::string filePath = caseFolder + stringInputFolder + _fileName;
 
-gradientDescentInversionInput gradientDescentInversionInputCardReader::getInput() { return _input; }
-
-void gradientDescentInversionInputCardReader::readCard(const std::string &caseFolder)
-{
-    nlohmann::json j = readFile(caseFolder + "/input/GradientDescentInversionInput.json");
-
-    gradientDescentInversionInput input{j["gamma0"], j["x0"], j["h"], j["iter"]};
-
+    gradientDescentInversionInput input;
+    readJsonFile(filePath, _fileName, input);
     _input = input;
 }
 
-void gradientDescentInversionInputCardReader::checkInput()
+void gradientDescentInversionInputCardReader::readJsonFile(const std::string &filePath, const std::string &fileName, gradientDescentInversionInput &input)
 {
-    if(_input.h <= 0)
+    nlohmann::json jsonFile = readFile(filePath);
+
+    const std::string parameterGamma = "gamma0";
+    input.gamma0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterGamma);
+
+    const std::string parameterInitialX = "x0";
+    input.x0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterInitialX);
+
+    const std::string parameterStepSize = "h";
+    double stepSize = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterStepSize);
+    if(stepSize <= 0)
     {
-        throw std::invalid_argument("Invalid step size h in gradientDescentInversionInput.json");
+        throw std::invalid_argument("Invalid step size h (" + std::to_string(stepSize) + " <= 0) in: " + fileName);
     }
-    if(_input.iter <= 0)
+    input.h = stepSize;
+
+    const std::string parameterIteration = "iter";
+    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterIteration);
+    if(nrOfIterations <= 0)
     {
-        throw std::invalid_argument("Invalid numer of iterations in gradientDescentInversionInput.json");
+        throw std::invalid_argument("Invalid numer of iterations (" + std::to_string(nrOfIterations) + " <= 0) in: " + fileName);
     }
+    input.iter = nrOfIterations;
 }
