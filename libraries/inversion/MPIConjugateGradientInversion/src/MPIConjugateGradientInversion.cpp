@@ -196,17 +196,10 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     std::vector<PressureFieldSerial> gradientGregTmp(2, PressureFieldSerial(_grid));
     std::vector<PressureFieldSerial> gradientZetaTmp(2, PressureFieldSerial(_grid));
 
-    // open the file to store the residual log
-    std::ofstream file;
-    file.open(gInput.outputLocation + gInput.runName + "Residual.log", std::ios::out | std::ios::trunc);
-    if(!file)
-    {
-        L_(lerror) << "Failed to open the file to store residuals";
-        std::exit(EXIT_FAILURE);
-    }
-    int counter = 1;
+    std::ofstream residualLogFile = openResidualLogFile(gInput);
 
     // main loop//
+    int counter = 1;
     for(int it = 0; it < _cgInput.n_max; it++)
     {
         std::vector<std::complex<double>> vecResFirstIter;
@@ -262,7 +255,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
                           << res;
 
-                file << std::setprecision(17) << res << "," << counter << std::endl;
+                residualLogFile << std::setprecision(17) << res << "," << counter << std::endl;
                 counter++;   // store the residual value in the residual log
 
                 fDataOld = res;
@@ -360,7 +353,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
                           << res;
 
-                file << std::setprecision(17) << res << "," << counter << std::endl;   // store the residual value in the residual log
+                residualLogFile << std::setprecision(17) << res << "," << counter << std::endl;   // store the residual value in the residual log
                 counter++;
                 fDataOld = res;
                 vecResFirstIter.push_back(res);
@@ -387,11 +380,25 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
             // bar++;
         }   // end regularisation loop
     }
-    file.close();   // close the residual.log file
+    residualLogFile.close();   // close the residual.log file
     mpi_command = COMMAND_EXIT;
     MPI_Bcast(&mpi_command, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     PressureFieldSerial result(_grid);
     chiEst.CopyTo(result);
     return result;
+}
+
+std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInput)
+{
+    std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
+
+    std::ofstream residualLogFile;
+    residualLogFile.open(filePath, std::ios::out | std::ios::trunc);
+    if(!residualLogFile)
+    {
+        throw std::invalid_argument("Unable to store residuals from file : " + filePath);
+    }
+
+    return residualLogFile;
 }

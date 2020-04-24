@@ -36,10 +36,15 @@ int main(int argc, char **argv)
     {
         std::cout << "An invalid argument found!" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
     catch(const std::exception &e)
     {
+        std::cout << "An exception has been thrown:" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return 0;
@@ -51,24 +56,28 @@ void generateReferencePressureFieldFromChi(const genericInput &gInput, const std
     grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
     dataGrid2D chi(grid);
 
-    chi.fromFile(gInput);
+    std::string inputPath = gInput.inputFolder + gInput.fileName + ".txt";
+    chi.fromFile(inputPath);
+
     sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
+
     receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
+
     frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
-
-    // std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
     std::vector<std::complex<double>> referencePressureData(magnitude);
 
-    chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
+    std::string outputPath = gInput.outputLocation + "chi_ref_" + runName + ".txt";
+    chi.toFile(outputPath);
 
-    forwardModelInterface *model;
     finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
     finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
+
+    forwardModelInterface *model;
     model = new finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
 
     L_(linfo) << "Calculate pData (the reference pressure-field)...";
