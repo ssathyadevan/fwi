@@ -14,8 +14,8 @@ genericInputCardReader::genericInputCardReader(const std::string &caseFolder_)
 
 std::string genericInputCardReader::setFolders(const std::string &caseFolderWithSlash, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string stringInputFolder = "/input/";
-    static const std::string stringOutputFolder = "/output/";
+    const std::string stringInputFolder = "/input/";
+    const std::string stringOutputFolder = "/output/";
 
     std::string caseFolder = removeLastSlash(caseFolderWithSlash);
     std::string runName = getRunName(caseFolder);
@@ -43,20 +43,20 @@ void genericInputCardReader::readJsonFile(const std::string &filePath, const std
     readNSourcesParameter(jsonFile, fileName, input);
     readNReceiversParameter(jsonFile, fileName, input);
 
-    static const std::string parameterFileName = "fileName";
+    const std::string parameterFileName = "fileName";
     input.fileName = ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, fileName, parameterFileName);
 
-    static const std::string parameterVerbose = "verbosity";
+    const std::string parameterVerbose = "verbosity";
 
     input.verbose = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, fileName, parameterVerbose);
 }
 
 void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<double, 2> &array)
 {
-    static const std::string parameterX = "x";
+    const std::string parameterX = "x";
     double xValue = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterX);
 
-    static const std::string parameterZ = "z";
+    const std::string parameterZ = "z";
     double zValue = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterZ);
 
     array = {xValue, zValue};
@@ -64,10 +64,10 @@ void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json
 
 void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<int, 2> &array)
 {
-    static const std::string parameterX = "x";
+    const std::string parameterX = "x";
     int xValue = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterX);
 
-    static const std::string parameterZ = "z";
+    const std::string parameterZ = "z";
     int zValue = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterZ);
 
     array = {xValue, zValue};
@@ -75,7 +75,7 @@ void genericInputCardReader::readXZParametersFromJsonObject(const nlohmann::json
 
 void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterC0 = "c_0";
+    const std::string parameterC0 = "c_0";
     double c0 = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, fileName, parameterC0);
     if(c0 <= 0)
     {
@@ -86,10 +86,10 @@ void genericInputCardReader::readC0Parameter(const nlohmann::json &jsonFile, con
 
 void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterFreq = "Freq";
-    static const std::string parameterFreqMin = "min";
-    static const std::string parameterFreqMax = "max";
-    static const std::string parameterFreqNTotal = "nTotal";
+    const std::string parameterFreq = "Freq";
+    const std::string parameterFreqMin = "min";
+    const std::string parameterFreqMax = "max";
+    const std::string parameterFreqNTotal = "nTotal";
 
     nlohmann::json freqJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterFreq);
 
@@ -111,8 +111,8 @@ void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile, c
 
 void genericInputCardReader::readReservoirParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterReservoirTopLeft = "reservoirTopLeft";
-    static const std::string parameterReservoirBottomRight = "reservoirBottomRight";
+    const std::string parameterReservoirTopLeft = "reservoirTopLeft";
+    const std::string parameterReservoirBottomRight = "reservoirBottomRight";
 
     std::array<double, 2> topLeftArray;
     nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReservoirTopLeft);
@@ -134,8 +134,8 @@ void genericInputCardReader::readReservoirParameter(const nlohmann::json &jsonFi
 
 void genericInputCardReader::readSourcesParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterSourcesTopLeft = "sourcesTopLeft";
-    static const std::string parameterSourcesBottomRight = "sourcesBottomRight";
+    const std::string parameterSourcesTopLeft = "sourcesTopLeft";
+    const std::string parameterSourcesBottomRight = "sourcesBottomRight";
 
     std::array<double, 2> topLeftArray;
     nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterSourcesTopLeft);
@@ -157,8 +157,8 @@ void genericInputCardReader::readSourcesParameter(const nlohmann::json &jsonFile
 
 void genericInputCardReader::readReceiversParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterReceiversTopLeft = "receiversTopLeft";
-    static const std::string parameterReceiversBottomRight = "receiversBottomRight";
+    const std::string parameterReceiversTopLeft = "receiversTopLeft";
+    const std::string parameterReceiversBottomRight = "receiversBottomRight";
 
     std::array<double, 2> topLeftArray;
     nlohmann::json topLeftJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterReceiversTopLeft);
@@ -181,7 +181,7 @@ void genericInputCardReader::readReceiversParameter(const nlohmann::json &jsonFi
 
 void genericInputCardReader::readGridOriginalParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterNGridOriginal = "ngrid_original";
+    const std::string parameterNGridOriginal = "ngrid_original";
 
     std::array<int, 2> nGridOriginalArray;
     nlohmann::json nGridOriginalJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterNGridOriginal);
@@ -197,7 +197,7 @@ void genericInputCardReader::readGridOriginalParameter(const nlohmann::json &jso
 
 void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterNGrid = "ngrid";
+    const std::string parameterNGrid = "ngrid";
 
     std::array<int, 2> nGridArray;
     nlohmann::json nGridJsonObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterNGrid);
@@ -213,7 +213,7 @@ void genericInputCardReader::readGridParameter(const nlohmann::json &jsonFile, c
 
 void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterNSources = "nSources";
+    const std::string parameterNSources = "nSources";
     int nSources = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterNSources);
     if(nSources <= 1)
     {
@@ -224,7 +224,7 @@ void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFil
 
 void genericInputCardReader::readNReceiversParameter(const nlohmann::json &jsonFile, const std::string &fileName, genericInput &jsonInput)
 {
-    static const std::string parameterNReceivers = "nReceivers";
+    const std::string parameterNReceivers = "nReceivers";
     int nReceivers = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterNReceivers);
     if(nReceivers <= 1)
     {

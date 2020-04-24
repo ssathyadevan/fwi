@@ -4,7 +4,7 @@
 
 ConjugateGradientInversionInputCardReader::ConjugateGradientInversionInputCardReader(const std::string &caseFolder) : inputCardReader()
 {
-    static const std::string stringInputFolder = "/input/";
+    const std::string stringInputFolder = "/input/";
     std::string filePath = caseFolder + stringInputFolder + _fileName;
 
     ConjugateGradientInversionInput input;
@@ -19,10 +19,10 @@ void ConjugateGradientInversionInputCardReader::readJsonFile(const std::string &
     readIterParameter(jsonFile, fileName, input);
     readDeltaAmplificationParameter(jsonFile, fileName, input);
 
-    static const std::string parameterRegularisationEnabled = "do_reg";
+    const std::string parameterRegularisationEnabled = "do_reg";
     input.doRegularisation = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, fileName, parameterRegularisationEnabled);
 
-    static const std::string parameterMaxNrOfIterations = "n_max";
+    const std::string parameterMaxNrOfIterations = "n_max";
     int maxNrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterMaxNrOfIterations);
     if(maxNrOfIterations <= 0)
     {
@@ -35,9 +35,9 @@ void ConjugateGradientInversionInputCardReader::readJsonFile(const std::string &
 void ConjugateGradientInversionInputCardReader::readIterParameter(
     const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &input)
 {
-    static const std::string parameterIter = "Iter1";
-    static const std::string parameterNumber = "n";
-    static const std::string parameterTolerance = "tolerance";
+    const std::string parameterIter = "Iter1";
+    const std::string parameterNumber = "n";
+    const std::string parameterTolerance = "tolerance";
 
     nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterIter);
 
@@ -58,9 +58,9 @@ void ConjugateGradientInversionInputCardReader::readIterParameter(
 void ConjugateGradientInversionInputCardReader::readDeltaAmplificationParameter(
     const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &input)
 {
-    static const std::string parameterDeltaAmplification = "DeltaAmplification";
-    static const std::string parameterStart = "start";
-    static const std::string parameterSlope = "slope";
+    const std::string parameterDeltaAmplification = "DeltaAmplification";
+    const std::string parameterStart = "start";
+    const std::string parameterSlope = "slope";
 
     nlohmann::json daObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterDeltaAmplification);
 
