@@ -1,6 +1,6 @@
 #pragma once
 #include "DirectionCalculator.h"
-#include "DirectionInput.h"
+#include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
 #include "forwardModelInterface.h"
 
@@ -10,7 +10,7 @@ private:
     StepSizeCalculator *_chosenStep;
     DirectionCalculator *_chosenDirection;
     forwardModelInterface *_forwardModel;
-    const DirectionInput &_directionInput;
+    const ReconstructorParameters &_directionInput;
     /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
     const grid2D &_grid;
 
@@ -19,7 +19,7 @@ private:
 
 public:
     StepAndDirectionReconstructor(
-        StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const DirectionInput &directionInput);
+        StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput);
 
     /**
      * @brief reconstruct The main method of the class, where the chosen steps and directions are combined and the reconstruction happens

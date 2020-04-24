@@ -44,7 +44,6 @@ int main(int argc, char **argv)
         createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
         CpuClock clock;
-
         clock.Start();
         performInversion(gInput, gInput.runName);
         clock.End();
@@ -59,10 +58,15 @@ int main(int argc, char **argv)
     {
         std::cout << "An invalid argument found!" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
     catch(const std::exception &e)
     {
+        std::cout << "An exception has been thrown:" << std::endl;
         std::cout << e.what() << std::endl;
+        L_(linfo) << "Exception: " << e.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     return 0;

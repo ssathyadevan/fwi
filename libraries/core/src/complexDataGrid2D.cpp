@@ -109,36 +109,39 @@ std::complex<double> complexDataGrid2D::dotProduct(const dataGrid2D &rhs) const
     return sum;
 }
 
-void complexDataGrid2D::toFile(const std::string &fileName) const
+void complexDataGrid2D::toFile(const std::string &filePath) const
 {
     std::ofstream file;
-    file.open(fileName, std::ios::out | std::ios::trunc);
-    if(!file)
+    file.open(filePath, std::ios::out | std::ios::trunc);
+    if(file.is_open())
     {
-        L_(lerror) << "Unable to open the file in .toFile method of volComplexField_rect_2D_cpu class " << std::endl;
-        std::exit(EXIT_FAILURE);
+        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        {
+            file << std::showpos << std::setprecision(17) << "(" << real(_data[i]) << imag(_data[i]) << "j)";
+        }
+        file.close();
     }
-
-    for(int i = 0; i < getNumberOfGridPoints(); i++)
+    else
     {
-        file << std::showpos << std::setprecision(17) << "(" << real(_data[i]) << imag(_data[i]) << "j)";
+        throw std::runtime_error("Unable to write DataGrid2D to file: " + filePath);
     }
-    file.close();
 }
 
-void complexDataGrid2D::fromFile(const std::string &fileName)
+void complexDataGrid2D::fromFile(const std::string &filePath)
 {
-    std::ifstream file(fileName, std::ios::in);
-    if(!file)
+    std::ifstream file(filePath, std::ios::in);
+    if(file.is_open())
     {
-        L_(lerror) << "Unable to open the file in .fromFile method of volComplexField_rect_2D_cpu class ";
-        std::exit(EXIT_FAILURE);
+        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        {
+            file >> _data[i];
+        }
+        file.close();
     }
-    for(int i = 0; i < getNumberOfGridPoints(); i++)
+    else
     {
-        file >> _data[i];
+        throw std::runtime_error("Unable to load DataGrid2D from file: " + filePath);
     }
-    file.close();
 }
 
 dataGrid2D complexDataGrid2D::getRealPart() const
