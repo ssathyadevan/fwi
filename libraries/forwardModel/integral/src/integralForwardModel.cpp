@@ -302,12 +302,9 @@ void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::
 
     for(int i = 0; i < nMax; ++i)
     {
-        //        kDummy = *_Kappa[i];
-        //        kDummy.conjugate();
-        //        kRes += kDummy * res[i];
-        kDummy = (*_Kappa[i] * res[i]);
+        kDummy = *_Kappa[i];
         kDummy.conjugate();
-        kRes += kDummy;
+        kRes += kDummy * res[i];
     }
 }
 

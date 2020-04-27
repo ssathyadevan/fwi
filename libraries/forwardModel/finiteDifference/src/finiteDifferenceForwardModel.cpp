@@ -203,9 +203,10 @@ void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vect
 
     for(int i = 0; i < nMax; ++i)
     {
-        kDummy = (*_Kappa[i] * res[i]);
-        kDummy.conjugate();
-        kRes += kDummy;
+        kDummy = *_Kappa[i];
+        kDummy.conjugate();   // I have probably to revert this as it was before, with first the conjugate and then the multiplication for res[i], and also for
+                              // the integralForwardModel
+        kRes += kDummy * res[i];
     }
 }
 
