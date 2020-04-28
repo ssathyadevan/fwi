@@ -197,24 +197,19 @@ void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureF
 void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
 {
     int l_i, l_j;
-
     kRes.zero();
-
     complexDataGrid2D kDummy(_grid);
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
         l_i = i * _recv.nRecv * _src.nSrc;
-
         for(int j = 0; j < _recv.nRecv; j++)
         {
             l_j = j * _src.nSrc;
-
             for(int k = 0; k < _src.nSrc; k++)
             {
                 kDummy = *_Kappa[l_i + l_j + k];
                 kDummy.conjugate();
-
                 kRes += kDummy * res[l_i + l_j + k];
             }
         }

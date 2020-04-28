@@ -37,8 +37,11 @@ ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisati
 
 double ConjugateGradientWithRegularisationCalculator::calculateStepSize()
 {
-    double alphaNumerator = 0.0;
-    double alphaDenominator = 0.0;
+    double stepNumerator = 0.0;
+    double stepDenominator = 0.0;
+
+    std::vector<double> derivativeCurrentData = _derivativeCurrent.getData();
+    std::vector<double> derivativePreviousData = _derivativePrevious.getData();
 
     std::vector<std::complex<double>> kappaTimesZeta(_nGridPoints);
     (void)kappaTimesZeta;
@@ -46,26 +49,37 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSize()
     // what is const dataGrid2D &zeta? Probably _chiEstimateCurrent
     for(int i = 0; i < _nGridPoints; i++)
     {
-        // Also in need of a std::vector<std::complex<double>> &residualArray
-        //        alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
-        //        alphaDenominator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+        // by integrating the equations (integrandForDiscreteK) and (PolakRibiereDirection) with some help from wikipedia (so making clear that g(x) is the
+        // gradient/derivative, we get Also in need of a std::vector<std::complex<double>> &residualArray
+        stepNumerator += derivativeCurrentData[i] * (derivativeCurrentData[i] - derivativePreviousData[i]);
+        stepDenominator += std::pow(derivativePreviousData[i], 2);
     }
 
-    if(alphaDenominator == 0.0)
+    if(stepDenominator == 0.0)
     {
         throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero.");
     }
-    double alpha = alphaNumerator / alphaDenominator;
+    double step = stepNumerator / stepDenominator;
 
     for(int i = 0; i < _cgParametersInput._nRegularisationIterations; ++i)
     {
-        (void)alpha;
+        (void)step;
     }
 
     // applyRegularisation();
 
     // HERE INVOKE ALL THE REGULARISATION PROCESS, this will contain ALL the inner loop
     return 1.0;
+}
+
+// in the Inversion this is calculateUpdateDirection
+dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residual)
+{   // the dataGrid2D gradientCurrent is not used here, as it cannot be overwritten
+
+    complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
+    _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
+
+    return _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
 }
 
 void ConjugateGradientWithRegularisationCalculator::updateVariables(
@@ -77,16 +91,4 @@ void ConjugateGradientWithRegularisationCalculator::updateVariables(
     _derivativePrevious = _derivativeCurrent;
     _chiEstimateCurrent = chiEstimateCurrent;
     _derivativeCurrent = derivativeCurrent;
-}
-
-dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirection(
-    const dataGrid2D &gradientCurrent, const std::vector<std::complex<double>> &residual)
-{
-    complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
-    _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
-    (void)gradientCurrent;   // why this? it should be passed as const, and also in conjugateGradientInversion it doesn't seem like it is used, although it gets
-                             // overwritten and invoked by reference
-
-    return _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
-    ;
 }
