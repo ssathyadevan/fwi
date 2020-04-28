@@ -7,73 +7,69 @@ ConjugateGradientInversionInputCardReader::ConjugateGradientInversionInputCardRe
     const std::string stringInputFolder = "/input/";
     std::string filePath = caseFolder + stringInputFolder + _fileName;
 
-    ConjugateGradientInversionInput input;
-    readJsonFile(filePath, _fileName, input);
-    _input = input;
+    readJsonFile(filePath);
 }
 
-void ConjugateGradientInversionInputCardReader::readJsonFile(const std::string &filePath, const std::string &fileName, ConjugateGradientInversionInput &input)
+void ConjugateGradientInversionInputCardReader::readJsonFile(const std::string &filePath)
 {
     nlohmann::json jsonFile = readFile(filePath);
 
-    readIterParameter(jsonFile, fileName, input);
-    readDeltaAmplificationParameter(jsonFile, fileName, input);
+    readIterParameter(jsonFile);
+    readDeltaAmplificationParameter(jsonFile);
 
     const std::string parameterRegularisationEnabled = "do_reg";
-    input.doRegularisation = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, fileName, parameterRegularisationEnabled);
+    _input.doRegularisation = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, _fileName, parameterRegularisationEnabled);
 
     const std::string parameterMaxNrOfIterations = "n_max";
-    int maxNrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, fileName, parameterMaxNrOfIterations);
+    int maxNrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterMaxNrOfIterations);
     if(maxNrOfIterations <= 0)
     {
         throw std::invalid_argument(
-            "Invalid number of iterations" + parameterMaxNrOfIterations + " (" + std::to_string(maxNrOfIterations) + " <= 0) in: " + fileName);
+            "Invalid number of iterations" + parameterMaxNrOfIterations + " (" + std::to_string(maxNrOfIterations) + " <= 0) in: " + _fileName);
     }
-    input.n_max = maxNrOfIterations;
+    _input.n_max = maxNrOfIterations;
 }
 
-void ConjugateGradientInversionInputCardReader::readIterParameter(
-    const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &input)
+void ConjugateGradientInversionInputCardReader::readIterParameter(const nlohmann::json &jsonFile)
 {
     const std::string parameterIter = "Iter1";
     const std::string parameterNumber = "n";
     const std::string parameterTolerance = "tolerance";
 
-    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterIter);
+    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterIter);
 
-    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, fileName, parameterNumber);
+    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
     if(nrOfIterations <= 0)
     {
-        throw std::invalid_argument("Invalid numer of iterations (" + std::to_string(nrOfIterations) + " <= 0) in: " + fileName);
+        throw std::invalid_argument("Invalid numer of iterations (" + std::to_string(nrOfIterations) + " <= 0) in: " + _fileName);
     }
 
-    double tolerance = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, fileName, parameterTolerance);
+    double tolerance = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterTolerance);
     if(tolerance <= 0)
     {
-        throw std::invalid_argument("Invalid tolerance (" + std::to_string(tolerance) + " <= 0) in: " + fileName);
+        throw std::invalid_argument("Invalid tolerance (" + std::to_string(tolerance) + " <= 0) in: " + _fileName);
     }
-    input.iteration1 = iter1(nrOfIterations, tolerance);
+    _input.iteration1 = iter1(nrOfIterations, tolerance);
 }
 
-void ConjugateGradientInversionInputCardReader::readDeltaAmplificationParameter(
-    const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &input)
+void ConjugateGradientInversionInputCardReader::readDeltaAmplificationParameter(const nlohmann::json &jsonFile)
 {
     const std::string parameterDeltaAmplification = "DeltaAmplification";
     const std::string parameterStart = "start";
     const std::string parameterSlope = "slope";
 
-    nlohmann::json daObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, fileName, parameterDeltaAmplification);
+    nlohmann::json daObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterDeltaAmplification);
 
-    double start = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, fileName, parameterStart);
+    double start = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, _fileName, parameterStart);
     if(start <= 0)
     {
-        throw std::invalid_argument("Invalid start step (" + std::to_string(start) + " <= 0) in: " + fileName);
+        throw std::invalid_argument("Invalid start step (" + std::to_string(start) + " <= 0) in: " + _fileName);
     }
 
-    double slope = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, fileName, parameterSlope);
+    double slope = ReadJsonHelper::tryGetParameterFromJson<double>(daObject, _fileName, parameterSlope);
     if(slope <= 0)
     {
-        throw std::invalid_argument("Invalid slope (" + std::to_string(slope) + " <= 0) in: " + fileName);
+        throw std::invalid_argument("Invalid slope (" + std::to_string(slope) + " <= 0) in: " + _fileName);
     }
-    input.dAmplification = DeltaAmplification(start, slope);
+    _input.dAmplification = DeltaAmplification(start, slope);
 }

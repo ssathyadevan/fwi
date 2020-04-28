@@ -17,5 +17,5 @@ private:
     EvolutionInversionInput _input;
 
     const std::string _fileName = "EvolutionInversionInput.json";
-    static void readJsonFile(const std::string &filePath, const std::string &fileName, EvolutionInversionInput &input);
+    void readJsonFile(const std::string &filePath);
 };
