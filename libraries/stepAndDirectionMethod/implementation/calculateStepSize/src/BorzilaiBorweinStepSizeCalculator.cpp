@@ -2,8 +2,8 @@
 // the Borzilai-Borwein is the most common choice for the step computation of the Gradient Descent algorithm,
 // see https://en.wikipedia.org/wiki/Gradient_descent
 
-BorzilaiBorweinStepSizeCalculator::BorzilaiBorweinStepSizeCalculator(const grid2D &grid) :
-    _chiEstimatePrevious(grid), _chiEstimateCurrent(grid), _derivativePrevious(grid), _derivativeCurrent(grid)
+BorzilaiBorweinStepSizeCalculator::BorzilaiBorweinStepSizeCalculator(const grid2D &grid, const double initialStepSize) :
+    _chiEstimatePrevious(grid), _chiEstimateCurrent(grid), _derivativePrevious(grid), _derivativeCurrent(grid), _initialStepSize(initialStepSize), _iteration(0)
 {
 }
 
@@ -11,6 +11,10 @@ BorzilaiBorweinStepSizeCalculator::~BorzilaiBorweinStepSizeCalculator() {}
 
 double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
 {
+    if(_iteration == 0)
+    {
+        return _initialStepSize;
+    }
     const int nGridPoints = _chiEstimateCurrent.getNumberOfGridPoints();
 
     const std::vector<double> &chiDataCurrent = _chiEstimateCurrent.getData();
@@ -52,10 +56,11 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
     return gamma;
 }
 
-void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int)
+void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration)
 {
     _chiEstimatePrevious = _chiEstimateCurrent;
     _derivativePrevious = _derivativeCurrent;
     _chiEstimateCurrent = chiEstimateCurrent;
     _derivativeCurrent = derivativeCurrent;
+    _iteration = iteration;
 }

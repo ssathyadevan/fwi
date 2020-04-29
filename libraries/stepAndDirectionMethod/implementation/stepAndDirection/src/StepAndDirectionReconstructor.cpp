@@ -22,24 +22,21 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     chiEstimateCurrent = _directionInput.startingChi;
 
     _forwardModel->calculateKappa();
+    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     dataGrid2D directionCurrent(_grid);
     directionCurrent.zero();
 
     for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
     {
-        std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-
         directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, residual);
 
         _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent, it);
-        if(it > 0)
-        {
-            step = _chosenStep->calculateStepSize();
-        }
+        step = _chosenStep->calculateStepSize();
 
         chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, directionCurrent, step);
 
+        residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
         errorValue = calculateErrorValue(residual, eta);
         file << std::setprecision(17) << errorValue << "," << it + 1 << std::endl;
 

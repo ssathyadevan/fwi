@@ -108,7 +108,7 @@ void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParamet
     }
     if(desiredStepSizeMethod == "BorzilaiBorwein")
     {
-        _createdStepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid);
+        _createdStepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
         return;
     }
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
