@@ -3,8 +3,8 @@
 #include <sys/stat.h>
 
 const std::string writePath = "./../";
-const std::string testFolder = writePath + "/testInputFiles";
-const std::string inputfolder = testFolder + "/input";
+const std::string testFolder = writePath + "testInputFiles/";
+const std::string inputfolder = testFolder + "input/";
 const std::string filePath = inputfolder + "StepAndDirectionInput.json";
 
 std::string convertInputToJsonString(const StepAndDirectionReconstructorInput &input)
