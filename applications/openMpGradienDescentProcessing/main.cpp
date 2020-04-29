@@ -112,18 +112,25 @@ void performInversion(const genericInput &gInput, const std::string &runName)
         }
         i++;
     }
-    L_(linfo) << "Create ForwardModel";
+    L_(linfo) << "Create forwardModel";
+    clock_t tStartForwardModel = clock();
     ForwardModelContainer forwardmodelcontainer(gInput, "integralForwardModel", grid, src, recv, freq);
+    clock_t tEndForwardModel = clock();
+    L_(linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 
-    L_(linfo) << "Create InversionModel";
+    L_(linfo) << "Create inversionModel";
+    clock_t tStartInversion = clock();
     inversionInterface *inverse;
     inverse = new OpenMPGradientDescentInversion(gInput, forwardmodelcontainer);
+    clock_t tEndInversion = clock();
+    L_(linfo) << "Inversionmodel is created in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 
     L_(linfo) << "Estimating Chi...";
-
+    clock_t tStartEstimateChi = clock();
     dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
-
-    L_(linfo) << "Done, writing to file";
+    clock_t tEndEstimateChi = clock();
+    L_(linfo) << "Estimated Chi in " << double(tEndEstimateChi - tStartEstimateChi) / CLOCKS_PER_SEC << "seconds.";
+    L_(linfo) << "Writing to file";
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 
