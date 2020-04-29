@@ -2,11 +2,10 @@
 #include <gtest/gtest.h>
 #include <sys/stat.h>
 
-const std::string inputPath = "./../../../parallelized-fwi/tests";   // For local use
-// const std::string inputPath = "./../../../../tests";
-
 const std::string writePath = "./../";
 const std::string testFolder = writePath + "/testInputFiles";
+const std::string inputfolder = testFolder + "/input";
+const std::string filePath = inputfolder + "StepAndDirectionInput.json";
 
 std::string convertInputToJsonString(const StepAndDirectionReconstructorInput &input)
 {
@@ -24,7 +23,7 @@ std::string convertInputToJsonString(const StepAndDirectionReconstructorInput &i
     stream << "\t \"DirectionParameters\": { \n";
     stream << std::fixed << std::setprecision(2) << "\t \t \"DerivativeStepSize\": " << input.directionParameters.derivativeStepSize << "\n";
     stream << "\t }, \n";
-    stream << std::boolalpha << "\t \"DoRegularisation\": " << input.doConjugateGradientRegularisation << "\n";
+    stream << std::boolalpha << "\t \"DoConjugateGradientRegularisation\": " << input.doConjugateGradientRegularisation << "\n";
     stream << "}";
 
     return stream.str();
@@ -33,29 +32,29 @@ std::string convertInputToJsonString(const StepAndDirectionReconstructorInput &i
 void writeInputFile(const std::string &jsonInputString)
 {
     struct stat stats;
-    stat((writePath + "/testInputFiles").c_str(), &stats);
+    stat((testFolder).c_str(), &stats);
     if(!S_ISDIR(stats.st_mode))
     {
-        mkdir((writePath + "/testInputFiles").c_str(), 0777);
-        mkdir((writePath + "/testInputFiles/input").c_str(), 0777);
+        mkdir((testFolder).c_str(), 0777);
+        mkdir((inputfolder).c_str(), 0777);
     }
     std::ofstream inputFile;
-    inputFile.open(writePath + "/testInputFiles/input/StepAndDirectionInput.json");
+    inputFile.open(filePath);
     inputFile << jsonInputString << std::endl;
     inputFile.close();
 }
 
 void removeInputFile()
 {
-    if(remove((writePath + "/testInputFiles/input/StepAndDirectionInput.json").c_str()) != 0)
+    if(remove((filePath).c_str()) != 0)
     {
         perror("Error deleting StepAndDirectionInput file");
     }
-    if(rmdir((writePath + "/testInputFiles/input").c_str()) != 0)
+    if(rmdir((inputfolder).c_str()) != 0)
     {
         perror("Error deleting input directory");
     }
-    if(rmdir((writePath + "/testInputFiles").c_str()) != 0)
+    if(rmdir((testFolder).c_str()) != 0)
     {
         perror("Error deleting testInputFiles directory");
     }

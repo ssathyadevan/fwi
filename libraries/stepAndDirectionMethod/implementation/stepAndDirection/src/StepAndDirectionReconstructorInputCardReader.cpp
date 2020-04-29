@@ -20,7 +20,7 @@ void StepAndDirectionReconstructorInputCardReader::readJsonFile(const std::strin
     readStepSizeParameters(jsonFile);
     readDirectionParameters(jsonFile);
 
-    const std::string parameterDoRegularisation = "DoRegularisation";
+    const std::string parameterDoRegularisation = "DoConjugateGradientRegularisation";
     const bool doRegularisation = ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, _fileName, parameterDoRegularisation);
 
     _input.doConjugateGradientRegularisation = doRegularisation;
