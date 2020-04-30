@@ -89,6 +89,105 @@ TEST(StepAndDirectionReconstructorInputCardReaderTest, writeFileTest)
     ASSERT_EQ(readInput.directionParameters.derivativeStepSize, writeInput.directionParameters.derivativeStepSize);
 
     ASSERT_TRUE(readInput.doConjugateGradientRegularisation == writeInput.doConjugateGradientRegularisation);
+}
+
+TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidIterationTest)
+{
+    StepAndDirectionReconstructorInput writeInput;
+    ReconstructorParameters reconstructParameters(0.01, 0.5, -10);
+    StepSizeParameters stepSizeParameters(1.0, -0.01);
+    DirectionParameters directionParameters(1.0);
+
+    writeInput.reconstructorParameters = reconstructParameters;
+    writeInput.stepSizeParameters = stepSizeParameters;
+    writeInput.directionParameters = directionParameters;
+    writeInput.doConjugateGradientRegularisation = true;
+
+    std::string jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+}
+
+TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidToleranceTest)
+{
+    StepAndDirectionReconstructorInput writeInput;
+    ReconstructorParameters reconstructParameters(-0.01, 0.5, 10);
+    StepSizeParameters stepSizeParameters(1.0, -0.01);
+    DirectionParameters directionParameters(1.0);
+
+    writeInput.reconstructorParameters = reconstructParameters;
+    writeInput.stepSizeParameters = stepSizeParameters;
+    writeInput.directionParameters = directionParameters;
+    writeInput.doConjugateGradientRegularisation = true;
+
+    std::string jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+}
+
+TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidInitialStepSizeTest)
+{
+    StepAndDirectionReconstructorInput writeInput;
+    ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
+    StepSizeParameters stepSizeParameters(-1.0, -0.01);
+    DirectionParameters directionParameters(1.0);
+
+    writeInput.reconstructorParameters = reconstructParameters;
+    writeInput.stepSizeParameters = stepSizeParameters;
+    writeInput.directionParameters = directionParameters;
+    writeInput.doConjugateGradientRegularisation = true;
+
+    std::string jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+}
+
+TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidSlopeTest)
+{
+    StepAndDirectionReconstructorInput writeInput;
+    ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
+    StepSizeParameters stepSizeParameters(1.0, 0.01);
+    DirectionParameters directionParameters(1.0);
+
+    writeInput.reconstructorParameters = reconstructParameters;
+    writeInput.stepSizeParameters = stepSizeParameters;
+    writeInput.directionParameters = directionParameters;
+    writeInput.doConjugateGradientRegularisation = true;
+
+    std::string jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+
+    stepSizeParameters.slope = -0.4;
+
+    writeInput.stepSizeParameters = stepSizeParameters;
+
+    jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+}
+
+TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidDerivativeStepSizeTest)
+{
+    StepAndDirectionReconstructorInput writeInput;
+    ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
+    StepSizeParameters stepSizeParameters(1.0, -0.01);
+    DirectionParameters directionParameters(-1.0);
+
+    writeInput.reconstructorParameters = reconstructParameters;
+    writeInput.stepSizeParameters = stepSizeParameters;
+    writeInput.directionParameters = directionParameters;
+    writeInput.doConjugateGradientRegularisation = true;
+
+    std::string jsonInput = convertInputToJsonString(writeInput);
+    writeInputFile(jsonInput);
+
+    EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
 
     removeInputFile();
 }
