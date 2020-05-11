@@ -1,8 +1,7 @@
 #include "LinearStepSizeCalculator.h"
 
-LinearStepSizeCalculator::LinearStepSizeCalculator(double start, double slope) : _start(start), _slope(slope)
+LinearStepSizeCalculator::LinearStepSizeCalculator(double start, double slope) : _start(start), _slope(slope), _iteration(0)
 {
-    _iteration = 0;
     if(start <= 0.0 || slope <= 0.0)
     {
         throw std::invalid_argument("Invalid parameters for step choice.");
@@ -17,5 +16,3 @@ double LinearStepSizeCalculator::calculateStepSize()
 
     return _start / (_slope * _iteration + 1.0);   // this is an 'inverse' function, since the only parameter that gets updated is in the denominator
 }
-
-void LinearStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int iteration) { _iteration = iteration; }

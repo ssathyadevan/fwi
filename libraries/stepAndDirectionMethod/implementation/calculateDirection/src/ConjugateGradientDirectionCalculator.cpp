@@ -7,13 +7,12 @@ ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(doubl
 
 ConjugateGradientDirectionCalculator::~ConjugateGradientDirectionCalculator() {}
 
-dataGrid2D ConjugateGradientDirectionCalculator::calculateDirection(const dataGrid2D &chi, const std::vector<std::complex<double>> &residual)
+dataGrid2D &ConjugateGradientDirectionCalculator::calculateDirection(const dataGrid2D &chi, const std::vector<std::complex<double>> &residual)
 {
-    dataGrid2D direction(chi.getGrid());
     complexDataGrid2D kappaTimesResidual(chi.getGrid());
 
     _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
-    direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
+    _direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
 
-    return direction;
+    return _direction;
 }

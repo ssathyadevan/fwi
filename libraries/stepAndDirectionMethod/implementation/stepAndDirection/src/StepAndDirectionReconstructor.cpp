@@ -1,10 +1,10 @@
 #include "StepAndDirectionReconstructor.h"
 #include "progressBar.h"
 
-StepAndDirectionReconstructor::StepAndDirectionReconstructor(
-    StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput) :
-    _chosenStep(chosenStep),
-    _chosenDirection(chosenDirection), _forwardModel(forwardModel), _directionInput(directionInput), _grid(forwardModel->getGrid())
+StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
+    forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput) :
+    _desiredStep(desiredStep),
+    _desiredDirection(desiredDirection), _forwardModel(forwardModel), _directionInput(directionInput), _grid(forwardModel->getGrid())
 {
 }
 
@@ -16,32 +16,40 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
 
     double step = 0.0;
 
-    double errorValue;
-    double eta = _chosenDirection->getErrorFunctionalScalingFactor();
+    double eta = _desiredDirection->getErrorFunctionalScalingFactor();
+
     dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _directionInput.startingChi;
 
+    std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    double residualValue = calculateResidualNorm(residualVector, eta);
+
     _forwardModel->calculateKappa();
 
-    dataGrid2D directionCurrent(_grid);
-    directionCurrent.zero();
+    dataGrid2D const *directionCurrent = NULL;
+    //(_grid);
+    // directionCurrent.zero();
 
     for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
     {
-        std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+        directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
 
-        directionCurrent = _chosenDirection->calculateDirection(chiEstimateCurrent, residual);
+        _desiredStep->updateVariables(chiEstimateCurrent, *directionCurrent, it);
 
-        _chosenStep->updateVariables(chiEstimateCurrent, directionCurrent, it);
-        if(it > 0)
+        step = _desiredStep->calculateStepSize();
+
+        chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
+
+        residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+        residualValue = calculateResidualNorm(residualVector, eta);
+        file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
+
+        if(residualValue < _directionInput.tolerance)
         {
-            step = _chosenStep->calculateStepSize();
+            file << "Reconstruction terminated at iteration " << it + 1 << " because error is smaller than input tolerance " << std::setprecision(17)
+                 << _directionInput.tolerance << std::endl;
+            break;
         }
-
-        chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, directionCurrent, step);
-
-        errorValue = calculateErrorValue(residual, eta);
-        file << std::setprecision(17) << errorValue << "," << it + 1 << std::endl;
 
         bar++;
     }
@@ -57,15 +65,15 @@ dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const dataGrid2D &ch
     const std::vector<double> &directionData = direction.getData();
 
     for(int i = 0; i < nGridPoints; ++i)
-    {   // where should the -1 actually go??
-        descentVector[i] = -1 * step * directionData[i];
+    {   // make sure the DirectionCalculators have the -1 integrated
+        descentVector[i] = step * directionData[i];
     }
     chiTemp += descentVector;
 
     return chiTemp;
 }
 
-double StepAndDirectionReconstructor::calculateErrorValue(const std::vector<std::complex<double>> &residual, double eta) const
+double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
 {
-    return eta * _forwardModel->calculateResidualNormSq(residual);
+    return eta * _forwardModel->calculateResidualNormSq(residualVector);
 }

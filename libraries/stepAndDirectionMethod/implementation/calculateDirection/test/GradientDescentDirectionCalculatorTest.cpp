@@ -71,14 +71,18 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     chiEstimate = chiEstimateValue;
 
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
-    dataGrid2D gDDirection(grid);
-    gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
+
+    dataGrid2D const *gDDirection = NULL;
+    // dataGrid2D gDDirection(grid);
+    gDDirection = &directionCalulator->calculateDirection(chiEstimate, residuals);
 
     // Compare gradient descent direction with expected value
-    const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-    const double expectedDirection = (derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) * (errorFunctionalScalingFactor * lengthOfPData);
+    const int nrOfGridPoints = gDDirection->getNumberOfGridPoints();
+    const double expectedDirection =
+        -(derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
+        (errorFunctionalScalingFactor * lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
 
-    const std::vector<double> &gDDirectionData = gDDirection.getData();
+    const std::vector<double> &gDDirectionData = gDDirection->getData();
 
     EXPECT_NEAR(gDDirectionData[0], expectedDirection, 0.001);
     for(int i = 1; i < nrOfGridPoints; i++)
@@ -124,7 +128,9 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
 
     // Compare gradient descent direction with expected value
     const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-    const double expectedDirection = (derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) * (errorFunctionalScalingFactor * lengthOfPData);
+    const double expectedDirection =
+        -(derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
+        (errorFunctionalScalingFactor * lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
 
     const std::vector<double> &gDDirectionData = gDDirection.getData();
 

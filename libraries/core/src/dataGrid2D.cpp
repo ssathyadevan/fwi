@@ -1,7 +1,7 @@
 #include "dataGrid2D.h"
 #include "log.h"
 
-dataGrid2D::dataGrid2D(const grid2D &grid_) : _grid(grid_), _data(std::vector<double>(getNumberOfGridPoints(), 0.0)) {}
+dataGrid2D::dataGrid2D(const grid2D &grid) : _grid(grid), _data(std::vector<double>(getNumberOfGridPoints(), 0.0)) {}
 
 dataGrid2D::dataGrid2D(const dataGrid2D &rhs) : dataGrid2D(rhs._grid)
 {

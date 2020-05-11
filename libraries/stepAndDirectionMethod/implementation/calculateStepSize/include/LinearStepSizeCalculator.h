@@ -8,8 +8,12 @@ public:
     LinearStepSizeCalculator(double start, double slope);
     virtual ~LinearStepSizeCalculator();
 
-    double calculateStepSize();
-    void updateVariables(const dataGrid2D &, const dataGrid2D &, int iteration);
+    /**
+     * @brief calculateStepSize returns a step size decreasing from _start up to 0.0 as we perform more iterations
+     */
+    double calculateStepSize() override;
+
+    void updateVariables(const dataGrid2D &, const dataGrid2D &, int iteration) override { _iteration = iteration; }
 
 private:
     double _start;

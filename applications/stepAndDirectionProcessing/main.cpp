@@ -138,7 +138,7 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
         {
             referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
         }
-        i++;
+        ++i;
     }
     Factory factory;
 

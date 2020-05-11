@@ -7,22 +7,22 @@
 class StepAndDirectionReconstructor
 {
 private:
-    StepSizeCalculator *_chosenStep;
-    DirectionCalculator *_chosenDirection;
+    StepSizeCalculator *_desiredStep;
+    DirectionCalculator *_desiredDirection;
     forwardModelInterface *_forwardModel;
     const ReconstructorParameters &_directionInput;
     /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
     const grid2D &_grid;
 
     dataGrid2D calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step) const;
-    double calculateErrorValue(const std::vector<std::complex<double>> &pData, double eta) const;
+    double calculateResidualNorm(const std::vector<std::complex<double>> &pData, double eta) const;
 
 public:
-    StepAndDirectionReconstructor(
-        StepSizeCalculator *chosenStep, DirectionCalculator *chosenDirection, forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput);
+    StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection, forwardModelInterface *forwardModel,
+        const ReconstructorParameters &directionInput);
 
     /**
-     * @brief reconstruct The main method of the class, where the chosen steps and directions are combined and the reconstruction happens
+     * @brief reconstruct The main method of the class, where the desired steps and directions are combined and the reconstruction happens
      * @param pData (not sure, check)
      * @param gInput is the data input for the problem
      * @return

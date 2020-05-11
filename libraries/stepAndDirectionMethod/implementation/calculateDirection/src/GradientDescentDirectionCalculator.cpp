@@ -9,13 +9,14 @@ GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
     {
         throw std::invalid_argument("Derivative step size is zero or negative.");
     }
+    _direction.zero();
 }
 
 GradientDescentDirectionCalculator::~GradientDescentDirectionCalculator() {}
 
-dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &)
+dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &)
 {
-    dataGrid2D direction(chiEstimate.getGrid());
+    //   _direction.zero();
     dataGrid2D chiEstimatePlusH(chiEstimate);
     const int numberOfGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -30,10 +31,10 @@ dataGrid2D GradientDescentDirectionCalculator::calculateDirection(const dataGrid
         chiEstimatePlusH.addValueAtIndex(-_derivativeStepSize, i);
 
         derivative = (errorChiPlusH - errorChi) / _derivativeStepSize;
-        direction.addValueAtIndex(derivative, i);
+        _direction.setValueAtIndex(-derivative, i);   // the - sign means we we can sum direction = - gradient
     }
 
-    return direction;
+    return _direction;
 }
 
 double GradientDescentDirectionCalculator::optimizationFunction(const dataGrid2D &chiEstimate) const
