@@ -12,7 +12,7 @@ private:
     RandomInversionInput _input;
 
     const std::string _fileName = "RandomInversionInput.json";
-    static void readJsonFile(const std::string &filePath, const std::string &fileName, RandomInversionInput &input);
+    void readJsonFile(const std::string &filePath);
 
 public:
     RandomInversionInputCardReader(const std::string &caseFolder);

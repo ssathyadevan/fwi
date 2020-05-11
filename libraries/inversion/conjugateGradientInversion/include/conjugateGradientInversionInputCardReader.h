@@ -13,10 +13,10 @@ private:
     ConjugateGradientInversionInput _input;
 
     const std::string _fileName = "ConjugateGradientInversionInput.json";
-    static void readJsonFile(const std::string &filePath, const std::string &fileName, ConjugateGradientInversionInput &input);
+    void readJsonFile(const std::string &filePath);
 
-    static void readIterParameter(const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &jsonInput);
-    static void readDeltaAmplificationParameter(const nlohmann::json &jsonFile, const std::string &fileName, ConjugateGradientInversionInput &input);
+    void readIterParameter(const nlohmann::json &jsonFile);
+    void readDeltaAmplificationParameter(const nlohmann::json &jsonFile);
 
 public:
     ConjugateGradientInversionInputCardReader(const std::string &caseFolder);

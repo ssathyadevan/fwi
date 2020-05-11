@@ -19,9 +19,10 @@ TEST(BorzilaiBorweinStepSizeCalculatorTest, calculateStepSizeAndupdateVariablesT
     chiEstimateCurrent = 1.0;
     derivativeCurrent = 2.0;
 
+    const double initialStepSize = 0.5;
     //    BorzilaiBorweinStepSizeCalculator stepSizeCalculator(grid);
     StepSizeCalculator *stepSizeCalculator;
-    stepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid);
+    stepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, initialStepSize);
 
     stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1);
 

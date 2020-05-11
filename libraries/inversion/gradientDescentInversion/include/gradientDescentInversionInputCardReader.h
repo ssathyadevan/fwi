@@ -13,7 +13,7 @@ private:
     gradientDescentInversionInput _input;
 
     const std::string _fileName = "GradientDescentInversionInput.json";
-    static void readJsonFile(const std::string &filePath, const std::string &fileName, gradientDescentInversionInput &input);
+    void readJsonFile(const std::string &filePath);
 
 public:
     gradientDescentInversionInputCardReader(const std::string &caseFolder);

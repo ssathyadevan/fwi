@@ -25,6 +25,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     double residualValue = calculateResidualNorm(residualVector, eta);
 
     _forwardModel->calculateKappa();
+    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     dataGrid2D const *directionCurrent = NULL;
     //(_grid);
