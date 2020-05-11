@@ -274,10 +274,23 @@ print("\n\n************************************************************")
 print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
-mse_bench = (numpy.square(prfct_rsrvr_chi_array - bench_est_chi_array)).mean()
+bench_est_chi_array_diff = prfct_rsrvr_chi_array - bench_est_chi_array
+new_est_chi_array_diff = prfct_rsrvr_chi_array - new_est_chi_array
+
+mse_bench = (numpy.square(bench_est_chi_array_diff)).mean()
 print("The MSE of the benchmark calculation: "+str(mse_bench))
-mse_new = (numpy.square(prfct_rsrvr_chi_array - new_est_chi_array)).mean()
+mse_new = (numpy.square(new_est_chi_array_diff)).mean()
 print("The MSE of the new calculation:       "+str(mse_new))
+
+vaf_bench = (bench_est_chi_array_diff.mean()) / (prfct_rsrvr_chi_array.mean())
+print("The VAF of the benchmark calculation: " +str(vaf_bench))
+vaf_new = (new_est_chi_array_diff.mean()) / (prfct_rsrvr_chi_array.mean())
+print("The VAF of the new calculation: " +str(vaf_new))
+
+fit_bench = (numpy.sqrt(bench_est_chi_array_diff.mean())) / (numpy.sqrt(prfct_rsrvr_chi_array.mean()))
+print("The FIT of the benchmark calculation: " +str(fit_bench))
+fit_new = (numpy.sqrt(new_est_chi_array_diff.mean())) / (numpy.sqrt(prfct_rsrvr_chi_array.mean()))
+print("The FIT of the new calculation: " +str(fit_new))
 
 k=0
 sum_of_squares_during_loop = 0.0
@@ -361,4 +374,3 @@ print_regression_test_passed_message(s)
 if (len(sys.argv) == 2):
     os.system("rm hiquality.*")
     os.system("rm chi*hiquality*")
-
