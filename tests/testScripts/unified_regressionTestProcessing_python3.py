@@ -282,23 +282,28 @@ print("\n\n************************************************************")
 print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
-bench_est_chi_array_diff = prfct_rsrvr_chi_array - bench_est_chi_array
-new_est_chi_array_diff = prfct_rsrvr_chi_array - new_est_chi_array
+bench_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - bench_est_chi_array)
+new_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - new_est_chi_array)
+prfct_rsrvr_chi_array_squared = numpy.square(prfct_rsrvr_chi_array)
 
-mse_bench = (numpy.square(bench_est_chi_array_diff)).mean()
-print("The MSE of the benchmark calculation: "+str(mse_bench))
-mse_new = (numpy.square(new_est_chi_array_diff)).mean()
-print("The MSE of the new calculation:       "+str(mse_new))
+bench_est_chi_array_diff_mean = bench_est_chi_array_diff.mean()
+new_est_chi_array_diff_mean = new_est_chi_array_diff.mean()
+prfct_rsrvr_chi_array_mean = prfct_rsrvr_chi_array_squared.mean()
 
-vaf_bench = (bench_est_chi_array_diff.mean()) / (prfct_rsrvr_chi_array.mean())
-print("\nThe VAF of the benchmark calculation: " +str(vaf_bench * 100) + "%")
-vaf_new = (new_est_chi_array_diff.mean()) / (prfct_rsrvr_chi_array.mean())
-print("The VAF of the new calculation:       " +str(vaf_new * 100) + "%")
+mse_bench = bench_est_chi_array_diff_mean
+print("The MSE of the benchmark calculation: " + str(mse_bench))
+mse_new = new_est_chi_array_diff_mean
+print("The MSE of the new calculation:       " + str(mse_new))
 
-fit_bench = (numpy.sqrt(bench_est_chi_array_diff.mean())) / (numpy.sqrt(prfct_rsrvr_chi_array.mean()))
-print("\nThe FIT of the benchmark calculation: " +str(fit_bench * 100) + "%")
-fit_new = (numpy.sqrt(new_est_chi_array_diff.mean())) / (numpy.sqrt(prfct_rsrvr_chi_array.mean()))
-print("The FIT of the new calculation:       " +str(fit_new * 100) + "%")
+vaf_bench = ((1 - (bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("\nThe VAF of the benchmark calculation: " + str(vaf_bench) + "%")
+vaf_new = ((1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("The VAF of the new calculation:       " + str(vaf_new) + "%")
+
+fit_bench = ((1 - (numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
+fit_new = ((1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
 k=0
 sum_of_squares_during_loop = 0.0
