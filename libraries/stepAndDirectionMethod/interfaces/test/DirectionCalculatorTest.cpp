@@ -19,34 +19,54 @@ forwardModelInterface *createForwardModelMock()
     std::array<double, 2> xMax = {2.0, 2.0};
     freqInfo freq;
     grid2D grid = getGrid();
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
+    sources srcs(xMin, xMax, 2);
+    receivers rcvrs(xMin, xMax, 2);
     frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
-    return forwardmodel;
+    forwardModelInterface *forwardModel = new ForwardModelInterfaceMock(grid, srcs, rcvrs, frequencies);
+    return forwardModel;
 }
 
 TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
 {
     double errorFunctionalScalingFactor = 1.0;
-    forwardModelInterface *forwardmodel = createForwardModelMock();
 
-    DirectionCalculator *directionCalulator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardmodel);
-    double mockErrorFunctionalScalingFactor = directionCalulator->getErrorFunctionalScalingFactor();
+    grid2D grid = getGrid();
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    freqInfo freq(0.0, 10.0, 5);
+    sources sources(xMin, xMax, 2);
+    receivers receivers(xMin, xMax, 2);
+    frequenciesGroup frequencies(freq, 2000.0);
+
+    forwardModelInterface *forwardModel;
+    forwardModel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+
+    DirectionCalculator *directionCalculator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel);
+    double mockErrorFunctionalScalingFactor = directionCalculator->getErrorFunctionalScalingFactor();
 
     EXPECT_EQ(errorFunctionalScalingFactor, mockErrorFunctionalScalingFactor);
 
-    delete forwardmodel;
-    delete directionCalulator;
+    delete forwardModel;
+    delete directionCalculator;
 }
 
 TEST(DirectionCalculatorTest, ScalingFactorExceptionTest)
 {
     double errorFunctionalScalingFactor = -1.0;
-    forwardModelInterface *forwardmodel = createForwardModelMock();
 
-    EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardmodel), std::invalid_argument);
+    grid2D grid = getGrid();
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    freqInfo freq(0.0, 10.0, 5);
+    sources sources(xMin, xMax, 2);
+    receivers receivers(xMin, xMax, 2);
+    frequenciesGroup frequencies(freq, 2000.0);
 
-    delete forwardmodel;
+    forwardModelInterface *forwardModel;
+    forwardModel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+
+    EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel), std::invalid_argument);
+
+    delete forwardModel;
 }

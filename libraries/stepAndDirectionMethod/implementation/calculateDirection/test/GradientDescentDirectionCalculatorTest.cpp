@@ -63,7 +63,7 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
     const double pDataValue = 1.0;
     std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
-    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
+    DirectionCalculator *directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     // Compute gradient descent direction
     dataGrid2D chiEstimate(grid);
@@ -74,7 +74,7 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
 
     dataGrid2D const *gDDirection = NULL;
     // dataGrid2D gDDirection(grid);
-    gDDirection = &directionCalulator->calculateDirection(chiEstimate, residuals);
+    gDDirection = &directionCalculator->calculateDirection(chiEstimate, residuals);
 
     // Compare gradient descent direction with expected value
     const int nrOfGridPoints = gDDirection->getNumberOfGridPoints();
@@ -91,7 +91,7 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     }
 
     delete forwardmodel;
-    delete directionCalulator;
+    delete directionCalculator;
 }
 
 TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
@@ -115,7 +115,7 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     const int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
     const double pDataValue = 2.0;
     std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
-    DirectionCalculator *directionCalulator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
+    DirectionCalculator *directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     // Compute gradient descent direction
     dataGrid2D chiEstimate(grid);
@@ -124,7 +124,7 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
 
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
     dataGrid2D gDDirection(grid);
-    gDDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
+    gDDirection = directionCalculator->calculateDirection(chiEstimate, residuals);
 
     // Compare gradient descent direction with expected value
     const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
@@ -141,5 +141,5 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     }
 
     delete forwardmodel;
-    delete directionCalulator;
+    delete directionCalculator;
 }

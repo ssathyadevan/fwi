@@ -24,7 +24,7 @@ dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const dataGri
     double errorChiPlusH;
     double derivative;
 
-    for(int i = 0; i < numberOfGridPoints; i++)
+    for(int i = 0; i < numberOfGridPoints; ++i)
     {
         chiEstimatePlusH.addValueAtIndex(_derivativeStepSize, i);
         errorChiPlusH = optimizationFunction(chiEstimatePlusH);
