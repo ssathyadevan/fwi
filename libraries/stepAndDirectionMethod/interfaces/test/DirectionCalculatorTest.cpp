@@ -13,20 +13,6 @@ grid2D getGrid()
     return grid;
 }
 
-forwardModelInterface *createForwardModelMock()
-{
-    std::array<double, 2> xMin = {0.0, 0.0};
-    std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq;
-    grid2D grid = getGrid();
-    sources srcs(xMin, xMax, 2);
-    receivers rcvrs(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
-
-    forwardModelInterface *forwardModel = new ForwardModelInterfaceMock(grid, srcs, rcvrs, frequencies);
-    return forwardModel;
-}
-
 TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
 {
     double errorFunctionalScalingFactor = 1.0;

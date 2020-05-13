@@ -5,5 +5,5 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL} )
 include_directories(../include)
 
 # Build the tests!
-#build_test(TARGET FixedStepSizeCalculatorTest SOURCE FixedStepSizeCalculatorTest.cpp LIBRARIES step_size_calculator_library utilities_library)
+build_test(TARGET ConjugateGradientWithRegularisationCalculatorTest SOURCE ConjugateGradientWithRegularisationCalculatorTest.cpp LIBRARIES conjugate_gradient_with_regularisation_calculator_library utilities_library)
 

@@ -3,9 +3,9 @@
 ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor,
     forwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData) :
     DirectionCalculator(errorFunctionalScalingFactor, forwardModel),
-    _chiEstimatePrevious(forwardModel->getGrid()), _chiEstimateCurrent(forwardModel->getGrid()), _gradientPrevious(forwardModel->getGrid()),
-    _gradientCurrent(forwardModel->getGrid()), _pData(pData), _cgParametersInput(cgParametersInput), _grid(forwardModel->getGrid()),
-    _zetaPrevious(forwardModel->getGrid()), _zetaCurrent(forwardModel->getGrid()), _kappaTimesResidual(forwardModel->getGrid()),
+    StepSizeCalculator(), _chiEstimatePrevious(forwardModel->getGrid()), _chiEstimateCurrent(forwardModel->getGrid()),
+    _gradientPrevious(forwardModel->getGrid()), _gradientCurrent(forwardModel->getGrid()), _pData(pData), _cgParametersInput(cgParametersInput),
+    _grid(forwardModel->getGrid()), _zetaPrevious(forwardModel->getGrid()), _zetaCurrent(forwardModel->getGrid()), _kappaTimesResidual(forwardModel->getGrid()),
     _regularisationPrevious(forwardModel->getGrid()), _regularisationCurrent(forwardModel->getGrid()), _residualVector(pData)
 {
     _nTotal = forwardModel->getFreq().nFreq * forwardModel->getSrc().nSrc * forwardModel->getRecv().nRecv;
@@ -25,6 +25,7 @@ dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(co
     _gradientPrevious = _gradientCurrent;
 
     _gradientCurrent = _errorFunctionalScalingFactor * _kappaTimesResidual.getRealPart();   // eq 2.13 second part
+
     // I am outputing a &, so I need the variable to keep existing!
     _zetaCurrent = _gradientCurrent + _gamma * _zetaPrevious;
     return _zetaCurrent;
@@ -167,13 +168,6 @@ double ConjugateGradientWithRegularisationCalculator::calculateGammaPolakRibiere
 {
     double gammaNumerator = 0.0;
     double gammaDenominator = 0.0;
-    // original code (which always outputs 1.0
-    // it is also a completely wrong formula for this part of the code
-    //    for(int i = 0; i < nSignals; i++)
-    //    {
-    //        gammaNumerator += std::real(conj(_residualVector[i]) * _kappaTimesZeta[i]);
-    //        gammaDenominator += std::real(conj(_residualVector[i]) * _kappaTimesZeta[i]);
-    //    }
 
     gammaNumerator = _gradientCurrent.innerProduct(_gradientCurrent - _gradientPrevious);
     gammaDenominator = _gradientPrevious.innerProduct(_gradientPrevious);
