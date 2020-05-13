@@ -11,15 +11,15 @@ increased_precision_test_passed = False
 regression_test_passed = False
 
 def print_regression_test_passed_message(regression_passed):
-    print "\nREGRESSION TEST PASSED:       " + (str(regression_passed)).upper()
+    print("\nREGRESSION TEST PASSED:       " + (str(regression_passed)).upper())
 
-print "************************************************************"
-print "                      PARSING ANALYSIS"
-print "************************************************************\n"
+print("************************************************************")
+print("                      PARSING ANALYSIS")
+print("************************************************************\n")
 
 if ((len(sys.argv) > 3) or (len(sys.argv) < 2)):
-    print "please supply two or three arguments after python compare_tests.py\n\
-the first argument the benchmark, the second argument the new test\n"
+    print("please supply two or three arguments after python compare_tests.py\n\
+the first argument the benchmark, the second argument the new test\n")
     sys.exit()
 else: #if (sys.argv==3):
     new     = sys.argv[2]
@@ -49,36 +49,36 @@ for i in range(0,len(inputfiles)):
     new_dot_in_input_exists = os.path.isfile(tempnew)
  
     if bench_dot_in_input_exists:
-        print "Your benchmark file " + inputfiles[i] + " exists"
+        print("Your benchmark file " + inputfiles[i] + " exists")
     else:
-        print "Your benchmark " + inputfiles[i] + " does not exist"
+        print("Your benchmark " + inputfiles[i] + " does not exist")
         sys.exit()
     
     if new_dot_in_input_exists:
-        print "Your new " + inputfiles[i] + " test also exists"
+        print("Your new " + inputfiles[i] + " test also exists")
     else:
-        print ""
-        print "You lack a new " + inputfiles[i] + " test to compare"
+        print("")
+        print("You lack a new " + inputfiles[i] + " test to compare")
         sys.exit()
-    print ""
+    print("")
     
     if (filecmp.cmp(tempbench,tempnew)):
-        print "Your benchmark and test " + inputfiles[i] + " are identical,\n\
-        but your reservoirs could be different\n"
+        print("Your benchmark and test " + inputfiles[i] + " are identical,\n\
+        but your reservoirs could be different\n")
         inputfilediff = False
     else:
-        print "There is a difference between how you parametrized" + inputfiles[i] + "\n\
-                 but your reservoirs could be identical. First we see how they differ:\n"
+        print("There is a difference between how you parametrized" + inputfiles[i] + "\n\
+                 but your reservoirs could be identical. First we see how they differ:\n")
         inputfilediff = True
         text1=open(tempbench).readlines()
         text2=open(tempnew).readlines()
-        print " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-    - - - - - - - - - - - -"
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
         for line in difflib.unified_diff(text1,text2,fromfile=tempbench,tofile=tempnew):
             if (line != "\r"):
                 sys.stdout.write(line)
-        print " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
-    - - - - - - - - - - - -"
+        print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \
+    - - - - - - - - - - - -")
 
 # IMPORTANT COMMENT MELISSEN 2018 11 21
 # basically I add the following lines because the .pythonIn is by its nature...
@@ -107,12 +107,12 @@ nztbench                 = extractValueFromPythonIn(benchPyContent[2])
 nztnew                   = extractValueFromPythonIn(newPyContent[2]) 
 
 if(nxtbench != nxtnew):
-    print "Your nxt values are not identical, exiting"
-    print ""
+    print("Your nxt values are not identical, exiting")
+    print("")
     sys.exit()
 if(nztbench != nztnew):
-    print "Your nzt values are not identical, exiting"
-    print ""
+    print("Your nzt values are not identical, exiting")
+    print("")
     sys.exit()
 
 #nztbench = benchPyContent[3]
@@ -125,14 +125,14 @@ chi_ref_bench_csv = bench + "/output/" + "chi_reference_" + bench + ".csv"
 chi_ref_new_csv   = new + "/output/" + "chi_ref_bench_" + new   + ".csv"
 
 if (filecmp.cmp(chi_ref_bench_txt, chi_ref_new_txt)):
-    print "You used the same reservoir in both instances !"
+    print("You used the same reservoir in both instances !")
     rsrvrdiff = False
     regression_test_passed = True
 else:
-    print "You used different reservoirs, exiting"
+    print("You used different reservoirs, exiting")
     rsrvrdiff = True
     sys.exit()
-print ""
+print("")
 
 chi_est_bench_txt = bench + "/output/" + "chi_est_" + bench + ".txt"
 chi_est_new_txt =   new + "/output/" + "chi_est_" + new   + ".txt"
@@ -140,18 +140,18 @@ chi_est_bench_csv = bench + "/output/" + "chi_est_" + bench + ".csv"
 chi_est_new_csv =   new + "/output/" + "chi_est_" + new   + ".csv"
 
 if (filecmp.cmp(chi_est_bench_txt, chi_est_new_txt)):
-    print "It appears that you have the same output in terms of chi,\n\
+    print("It appears that you have the same output in terms of chi,\n\
 so I exit, although this part of the code is extended later \n\
-on formal grounds I will report that:"
+on formal grounds I will report that:")
     print_regression_test_passed_message(regression_test_passed)
     sys.exit()
 else:
-    print "You have different output in terms of chi,\n\
-we will study them in more detail"
+    print("You have different output in terms of chi,\n\
+we will study them in more detail")
 
-print "\n************************************************************"
-print "                      GENERAL ANALYSIS"
-print "************************************************************"
+print("\n************************************************************")
+print("                      GENERAL ANALYSIS")
+print("************************************************************")
 
 reader_prfct_rsrvr = csv.reader(open(chi_ref_bench_csv),delimiter=',')
 dummy_variable_reader_pr = list(reader_prfct_rsrvr)
@@ -163,10 +163,10 @@ numpy.max(prfct_rsrvr_chi_array) - numpy.min(prfct_rsrvr_chi_array)
 ncols = prfct_rsrvr_chi_array.shape[0]
 nrows = prfct_rsrvr_chi_array.shape[1]
 
-print "\nThe difference between the max and min value\n\
-in your INPUT reservoir chi is: " + str(resolution_of_rsrvr) 
-print "The number of columns is " + str(ncols)
-print "The number of rows is "    + str(nrows) +"\n"
+print("\nThe difference between the max and min value\n\
+in your INPUT reservoir chi is: " + str(resolution_of_rsrvr))
+print("The number of columns is " + str(ncols))
+print("The number of rows is "    + str(nrows) +"\n")
 
 read_bench_est_chi = csv.reader(open(chi_est_bench_csv),delimiter=',')
 read_new_est_chi   = csv.reader(open(chi_est_new_csv),delimiter=',')
@@ -257,15 +257,15 @@ for i in range (1,7):
 imagefilename=bench+"_"+new+"_compare.png"
 plt.savefig(imagefilename,dpi=400)
 
-print "Please look at the image file: " 
-print imagefilename
-print "for a visualization of the results and the following files"
-print numerics_filename_bench
-print numerics_filename_new
+print("Please look at the image file: ")
+print(imagefilename)
+print("for a visualization of the results and the following files")
+print(numerics_filename_bench)
+print(numerics_filename_new)
 
-print "\n\n************************************************************"
-print "                    STATISTICAL ANALYSIS"
-print "************************************************************\n"
+print("\n\n************************************************************")
+print("                    STATISTICAL ANALYSIS")
+print("************************************************************\n")
 
 bench_est_chi_array_diff = prfct_rsrvr_chi_array - bench_est_chi_array
 new_est_chi_array_diff = prfct_rsrvr_chi_array - new_est_chi_array
@@ -299,32 +299,32 @@ for i in range (0,prfct_rsrvr_chi_array.shape[0]):
 mse2 = sum_of_squares_during_loop/k
 square_mean = numpy.sqrt(square_mean_counter_during_loop/k)
 
-print "The mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean())
-print "The square mean value of chi is:      " + str(square_mean)
+print("The mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
+print("The square mean value of chi is:      " + str(square_mean))
 
-print "\nWe use the latter to determine a percentage for the MSE:"
-print "Bench: " + str(float_formatter(numpy.sqrt(mse_bench)/square_mean*100)) + "%"
-print "New:   " + str(float_formatter(numpy.sqrt(mse_new)/square_mean*100)) + "%\n"
+print("\nWe use the latter to determine a percentage for the MSE:")
+print("Bench: " + str(float_formatter(numpy.sqrt(mse_bench)/square_mean*100)) + "%")
+print("New:   " + str(float_formatter(numpy.sqrt(mse_new)/square_mean*100)) + "%\n")
 
 bench_max = numpy.max(diff_prfct_and_bench)
 new_max = numpy.max(diff_prfct_and_new)
-print "\nMaximum deviation"
-print "Bench: " + str(float_formatter(bench_max)) + "%"
-print "New:   " + str(float_formatter(new_max)) + "%\n"
+print("\nMaximum deviation")
+print("Bench: " + str(float_formatter(bench_max)) + "%")
+print("New:   " + str(float_formatter(new_max)) + "%\n")
 
 bench_min = numpy.min(diff_prfct_and_bench)
 new_min = numpy.min(diff_prfct_and_new)
-print "\nMinimum deviation"
-print "Bench: " + str(float_formatter(bench_min)) + "%"
-print "New:   " + str(float_formatter(new_min)) + "%"
+print("\nMinimum deviation")
+print("Bench: " + str(float_formatter(bench_min)) + "%")
+print("New:   " + str(float_formatter(new_min)) + "%")
 
 if ((mse_bench > mse_new) \
 and (bench_max>new_max) \
 and (abs(bench_min) > abs(new_min))):
     increased_precision_test = True
-print "\n\n************************************************************"
-print "                    PERFORMANCE ANALYSIS                          "
-print "************************************************************\n"
+print("\n\n************************************************************")
+print("                    PERFORMANCE ANALYSIS                          ")
+print("************************************************************\n")
 
 def find(substr,whichin):
     from datetime import datetime
@@ -344,16 +344,16 @@ new_total_seconds   = (datetime_new_finish - datetime_new_start).seconds
 if (bench_total_seconds > new_total_seconds):
     increased_performance_test_passed = True
 
-print "Time in seconds it took to do benchmark run: "+str(bench_total_seconds)
-print "Time in seconds it took to do new run:       "+str(new_total_seconds)
-print "Ratio of bench run time to new run time:     "+ \
-    str(float(bench_total_seconds)/float(new_total_seconds))
+print("Time in seconds it took to do benchmark run: "+str(bench_total_seconds))
+print("Time in seconds it took to do new run:       "+str(new_total_seconds))
+print("Ratio of bench run time to new run time:     "+ \
+    str(float(bench_total_seconds)/float(new_total_seconds)))
 
-print "\n\n************************************************************"
-print "                      OVERALL ANALYSIS                          "
-print "************************************************************\n"
-print "Increased overall precision:  " + str(increased_precision_test_passed)
-print "Increased performance:        " + str(increased_performance_test_passed)
+print("\n\n************************************************************")
+print("                      OVERALL ANALYSIS                          ")
+print("************************************************************\n")
+print("Increased overall precision:  " + str(increased_precision_test_passed))
+print("Increased performance:        " + str(increased_performance_test_passed))
 
 print_regression_test_passed_message(regression_test_passed)
 if (len(sys.argv) == 2):

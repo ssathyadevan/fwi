@@ -287,9 +287,9 @@ print("The MSE of the benchmark calculation: " + str(mse_bench))
 mse_new = new_est_chi_array_diff_mean
 print("The MSE of the new calculation:       " + str(mse_new))
 
-vaf_bench = (1 - (bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100
+vaf_bench = ((1 - (bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("\nThe VAF of the benchmark calculation: " + str(vaf_bench) + "%")
-vaf_new = (1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100
+vaf_new = ((1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The VAF of the new calculation:       " + str(vaf_new) + "%")
 
 fit_bench = (1 - (numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
@@ -297,40 +297,28 @@ print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
 fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
-k=0
-sum_of_squares_during_loop = 0.0
-square_mean_counter_during_loop = 0.0
-for i in range (0,prfct_rsrvr_chi_array.shape[0]):
-    for j in range(0, prfct_rsrvr_chi_array.shape[1]):
-        k+=1
-        sum_of_squares_during_loop+= \
-        numpy.square(bench_est_chi_array[i,j]-prfct_rsrvr_chi_array[i,j])
-        square_mean_counter_during_loop += \
-        numpy.square(prfct_rsrvr_chi_array[i,j])
-
-mse2 = sum_of_squares_during_loop/k
-square_mean = numpy.sqrt(square_mean_counter_during_loop/k)
-
-print("The mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
+print("\nThe mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
 print("The square mean value of chi is:      " + str(square_mean))
 
-print("\nWe use the latter to determine a percentage for the MSE:")
-print("Bench: " + str(float_formatter(numpy.sqrt(mse_bench)/square_mean*100)) + "%")
-print("New:   " + str(float_formatter(numpy.sqrt(mse_new)/square_mean*100)) + "%\n")
+# This piece of code is commented at it seems irrelevant to display.
+# It show's the maximum and minimum relative deviation of the benchmark and new estimation
+# relatively to the perfect data array.
+# Decided not to delete this, as it might be useful in the future when we know what this data represents,
+# and how to effectively use it.
+#
+# bench_max = numpy.max(diff_prfct_and_bench)
+# new_max = numpy.max(diff_prfct_and_new)
+# print("\nMaximum deviation")
+# print("Bench: " + str(float_formatter(bench_max)) + "%")
+# print("New:   " + str(float_formatter(new_max)) + "%\n")
+#
+# bench_min = numpy.min(diff_prfct_and_bench)
+# new_min = numpy.min(diff_prfct_and_new)
+# print("\nMinimum deviation")
+# print("Bench: " + str(float_formatter(bench_min)) + "%")
+# print("New:   " + str(float_formatter(new_min)) + "%")
 
-bench_max = numpy.max(diff_prfct_and_bench)
-new_max = numpy.max(diff_prfct_and_new)
-print("\nMaximum deviation")
-print("Bench: " + str(float_formatter(bench_max)) + "%")
-print("New:   " + str(float_formatter(new_max)) + "%\n")
-
-bench_min = numpy.min(diff_prfct_and_bench)
-new_min = numpy.min(diff_prfct_and_new)
-print("\nMinimum deviation")
-print("Bench: " + str(float_formatter(bench_min)) + "%")
-print("New:   " + str(float_formatter(new_min)) + "%")
-
-if (mse_new - mse_bench < 0.0001):
+if (1.001* mse_bench > mse_new):
     increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
