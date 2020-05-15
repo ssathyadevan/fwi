@@ -2,7 +2,8 @@ add_library(step_size_calculator_library
     FixedStepSizeCalculator.cpp                    ../include/FixedStepSizeCalculator.h
     VariableStepSizeCalculator.cpp                 ../include/VariableStepSizeCalculator.h
     BorzilaiBorweinStepSizeCalculator.cpp          ../include/BorzilaiBorweinStepSizeCalculator.h
-    LinearStepSizeCalculator.cpp                   ../include/LinearStepSizeCalculator.h)
+    LinearStepSizeCalculator.cpp                   ../include/LinearStepSizeCalculator.h
+    ConjugateGradientStepSizeCalculator.cpp        ../include/ConjugateGradientStepSizeCalculator.h)
 
 set( LIBRARY_INCLUDE_DIRS_CALCULATE_STEP_SIZE_INVERSION ${CMAKE_SOURCE_DIR}/libraries/stepAndDirectionMethod/implementation/calculateStepSize/include CACHE INTERNAL "" )
 target_include_directories(step_size_calculator_library PUBLIC ${LIBRARY_INCLUDE_DIRS_CALCULATE_STEP_SIZE_INVERSION})

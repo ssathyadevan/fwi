@@ -1,19 +1,19 @@
 #pragma once
 
 #include "StepSizeCalculator.h"
-#include "dataGrid2D.h"
 
 class BorzilaiBorweinStepSizeCalculator : public StepSizeCalculator
 {
 private:
-    dataGrid2D _chiEstimatePrevious;
-    dataGrid2D _chiEstimateCurrent;
+    std::vector<double> _chiEstimatePrevious;
+    std::vector<double> _chiEstimateCurrent;
 
-    dataGrid2D _derivativePrevious;
-    dataGrid2D _derivativeCurrent;
+    std::vector<double> _derivativePrevious;
+    std::vector<double> _derivativeCurrent;
 
     const double _initialStepSize;
     int _iteration;
+    int _nGridPoints;
 
 public:
     BorzilaiBorweinStepSizeCalculator(const grid2D &grid, const double initialStepSize);

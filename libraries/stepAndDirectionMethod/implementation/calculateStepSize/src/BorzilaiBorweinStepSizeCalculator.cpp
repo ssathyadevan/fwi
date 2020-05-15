@@ -3,8 +3,11 @@
 // see https://en.wikipedia.org/wiki/Gradient_descent
 
 BorzilaiBorweinStepSizeCalculator::BorzilaiBorweinStepSizeCalculator(const grid2D &grid, const double initialStepSize) :
-    _chiEstimatePrevious(grid), _chiEstimateCurrent(grid), _derivativePrevious(grid), _derivativeCurrent(grid), _initialStepSize(initialStepSize), _iteration(0)
+    _chiEstimatePrevious(grid.getNumberOfGridPoints(), 0.0), _chiEstimateCurrent(grid.getNumberOfGridPoints(), 0.0),
+    _derivativePrevious(grid.getNumberOfGridPoints(), 0.0), _derivativeCurrent(grid.getNumberOfGridPoints(), 0.0), _initialStepSize(initialStepSize),
+    _iteration(0)
 {
+    _nGridPoints = grid.getNumberOfGridPoints();
 }
 
 BorzilaiBorweinStepSizeCalculator::~BorzilaiBorweinStepSizeCalculator() {}
@@ -15,23 +18,17 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
     {
         return _initialStepSize;
     }
-    const int nGridPoints = _chiEstimateCurrent.getNumberOfGridPoints();
-
-    const std::vector<double> &chiDataCurrent = _chiEstimateCurrent.getData();
-    const std::vector<double> &chiDataPrevious = _chiEstimatePrevious.getData();
-    const std::vector<double> &derivativeCurrent = _derivativeCurrent.getData();
-    const std::vector<double> &derivativePrevious = _derivativePrevious.getData();
 
     std::vector<double> chiDataDifference(nGridPoints, 0.0);
-    for(int i = 0; i < nGridPoints; ++i)
+    for(int i = 0; i < _nGridPoints; ++i)
     {
-        chiDataDifference[i] = chiDataCurrent[i] - chiDataPrevious[i];
+        chiDataDifference[i] = _chiEstimateCurrent[i] - _chiEstimatePrevious[i];
     }
 
     std::vector<double> derivativeDifference(nGridPoints, 0.0);
-    for(int i = 0; i < nGridPoints; ++i)
+    for(int i = 0; i < _nGridPoints; ++i)
     {
-        derivativeDifference[i] = derivativeCurrent[i] - derivativePrevious[i];
+        derivativeDifference[i] = _derivativeCurrent[i] - _derivativePrevious[i];
     }
 
     double gammaNumerator = 0.0;
@@ -52,15 +49,14 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
         throw std::overflow_error("Operator divides by zero");
     }
 
-    double gamma = gammaNumerator / gammaDenominator;
-    return gamma;
+    return gammaNumerator / gammaDenominator;
 }
 
 void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration)
 {
     _chiEstimatePrevious = _chiEstimateCurrent;
     _derivativePrevious = _derivativeCurrent;
-    _chiEstimateCurrent = chiEstimateCurrent;
-    _derivativeCurrent = derivativeCurrent;
+    _chiEstimateCurrent = chiEstimateCurrent.getData();
+    _derivativeCurrent = derivativeCurrent.getData();
     _iteration = iteration;
 }

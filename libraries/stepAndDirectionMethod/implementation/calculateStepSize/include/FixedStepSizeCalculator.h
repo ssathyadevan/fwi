@@ -1,7 +1,6 @@
 #pragma once
 
 #include "StepSizeCalculator.h"
-#include "grid2D.h"
 
 class FixedStepSizeCalculator : public StepSizeCalculator
 {
