@@ -22,10 +22,9 @@ private:
     const grid2D &_grid;
     int _nTotal;   // nFreq * nSrc * nRecv
 
-    dataGrid2D _zetaPrevious;   //_zeta IS the direction!
+    dataGrid2D _zetaPrevious;
     dataGrid2D _zetaCurrent;
     complexDataGrid2D _kappaTimesResidual;
-    double _gamma;
     ConjugateGradientRegularisationParameters _regularisationPrevious;
     ConjugateGradientRegularisationParameters _regularisationCurrent;
     double _residualValueCurrent;
@@ -45,7 +44,7 @@ private:
     void updateResidual();
 
     /**
-     * @brief calculateRegularisationStep is the main function, where the inner loop acts. It is called by calculateStepSize(...)
+     * @brief calculateRegularisationStep is the main function, where the inner loop acts. It is called by calculateStepSize()
      * @return the StepSize alpha
      */
     double calculateRegularisationStep();
@@ -104,12 +103,12 @@ private:
 public:
     ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel,
         ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData);   // constructor
-    virtual ~ConjugateGradientWithRegularisationCalculator();                                                                    // destructor
+    virtual ~ConjugateGradientWithRegularisationCalculator() {}                                                                  // destructor
 
     /**
-     * @brief calculateStepSize After computing the optimal step as described in Eq. PolakRibiereDirection of ReadMe/1_ProjectDescription, it will also invoke
+     * @brief calculateStepSize After computing the optimal step as described in Eq. PolakRibiereDirection of ReadMe/1_ProjectDescription, it also invokes
      * the whole regularisation process, where _zetaCurrent, the output of calculateDirection(), is also updated
-     * @return alpha, the final optimized StepSize for the updated _zetaCurrent
+     * @return alpha, the final optimized StepSize for the internally updated _zetaCurrent
      */
     double calculateStepSize() override;
 
@@ -121,8 +120,8 @@ public:
      */
     dataGrid2D &calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector) override;
     /**
-     * @brief updateVariables only modifies _chiEstimateCur/Pr and _iterationNumber, since _gradientCur/Pr and _zetaCur/Pr are already updated in
-     * CalculateDirection
+     * @brief updateVariables only modifies _chiEstimateCur/Pr and _iterationNumber,
+     *  since _gradientCur/Pr and _zetaCur/Pr are already updated in CalculateDirection
      * @param chiEstimateCurrent
      * @param iterationNumber
      */

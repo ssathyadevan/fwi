@@ -3,6 +3,7 @@
 ForwardModelInterfaceMock::ForwardModelInterfaceMock(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq) :
     forwardModelInterface(grid, src, recv, freq)
 {
+    _kappaTimesResidualValue = 5.0;
 }
 
 void ForwardModelInterfaceMock::calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)

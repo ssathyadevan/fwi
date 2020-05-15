@@ -12,28 +12,31 @@ ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisati
     _deltaAmplification = _cgParametersInput._deltaAmplification._start;
 }
 
-// in the Inversion this method is called calculateUpdateDirection
 dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector)
 {
     _residualVector = residualVector;
-    _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 first part, stored in _kappaTimesResidual
-    _gamma = calculateGammaPolakRibiere();                                                // eq 2.14
 
     // updating what necessary
 
     _zetaPrevious = _zetaCurrent;
     _gradientPrevious = _gradientCurrent;
 
+    _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);     // eq 2.13 first part, stored in _kappaTimesResidual
     _gradientCurrent = _errorFunctionalScalingFactor * _kappaTimesResidual.getRealPart();   // eq 2.13 second part
 
+    double gamma = 0;
+    if(_iterationNumber > 0)
+    {
+        gamma = calculateGammaPolakRibiere();   // eq 2.14
+    }
     // I am outputing a &, so I need the variable to keep existing!
-    _zetaCurrent = _gradientCurrent + _gamma * _zetaPrevious;
+    _zetaCurrent = _gradientCurrent + gamma * _zetaPrevious;
     return _zetaCurrent;
 }
 
 void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber)
 {
-    // since _zetaCurrent and _gradientCurrent are already updated in calculateDirection, here I only update the remaining quantities
+    // since _zetaCurrent and _gradientCurrent are already updated in calculateDirection, here only the remaining quantities are updated
     _iterationNumber = iterationNumber;
 
     _chiEstimatePrevious = _chiEstimateCurrent;
@@ -48,8 +51,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSize()
 }
 
 double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
-{   // we will follow a pretty strict refactoring, keeping everything the same as ConjugateGradientInversion except where we find clear mistakes (see
-    // calculateGammaPolakRibiere)
+{
     _forwardModel->calculateResidual(_chiEstimateCurrent, _pData);
 
     _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
@@ -69,7 +71,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
         // update _residualVector and _residualValueCurrent
         updateResidual();
 
-        // breakout check
+        // breakout check, but this should be handled by StepAndDirectionReconstructor::reconstruct
         if((it > 0) && ((_residualValueCurrent < _cgParametersInput._tolerance) ||
                            (std::abs(_residualValuePrevious - _residualValueCurrent) < _cgParametersInput._tolerance)))
         {
@@ -82,7 +84,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
         // Save regularisation variables for next iteration
         _chiEstimateCurrent.gradient(
             _regularisationCurrent
-                .gradientChi);   // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second elemenet for dz)
+                .gradientChi);   // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
         calculateRegularisationErrorFunctional();
 
         _regularisationPrevious.deltaSquared = _regularisationCurrent.deltaSquared;
@@ -121,7 +123,7 @@ dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionRegu
             _regularisationCurrent.gradient;   // eq: 2.25 of thesis, bSquared is already included in .gradient, see calculateRegularisationGradient()
     double step = calculateGammaPolakRibiere();
 
-    return _gradientCurrent + step * _zetaCurrent;   //_zetaCurrent (= direction current)  gets this value
+    return _gradientCurrent + step * _zetaCurrent;
 }
 dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
 {
@@ -144,7 +146,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateSteeringFactor()
     double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
     double bSquaredSummed = _regularisationCurrent.bSquared.summation();
 
-    // The _deltaAmplification*0.5 part is not documented
+    // The _deltaAmplification * 0.5 part is not documented
     return _deltaAmplification * 0.5 * bTimesGradientChiNormSquared / bSquaredSummed;
 }
 

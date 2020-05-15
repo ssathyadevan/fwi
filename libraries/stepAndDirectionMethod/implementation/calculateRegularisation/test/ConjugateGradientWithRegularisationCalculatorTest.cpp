@@ -1,7 +1,9 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
-#include "finiteDifferenceForwardModel.h"
+#include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
+//#include <iomanip>
 #include <iostream>
+
 using std::cout;
 using std::endl;
 
@@ -17,67 +19,93 @@ grid2D getGrid()
 
 TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
 {
-    /*   double errorFunctionalScalingFactor = 1.0;
+    double errorFunctionalScalingFactor = 0.05;
 
-       grid2D grid = getGrid();
-       std::array<double, 2> xMin = {0.0, 0.0};
-       std::array<double, 2> xMax = {2.0, 2.0};
-       freqInfo freq(0.0, 10.0, 5);
-       sources src(xMin, xMax, 2);
-       receivers recv(xMin, xMax, 2);
-       frequenciesGroup frequencies(freq, 2000.0);
+    grid2D grid = getGrid();
+    std::array<double, 2> xMin = {0.0, 0.0};
+    std::array<double, 2> xMax = {2.0, 2.0};
+    freqInfo freq(0.0, 10.0, 5);
+    sources src(xMin, xMax, 2);
+    receivers recv(xMin, xMax, 2);
+    frequenciesGroup frequencies(freq, 2000.0);
 
-       finiteDifferenceForwardModelInput fmInput;
-       fmInput.sourceParameter.r = 4;
-       fmInput.sourceParameter.beta = 6.31;
+    ForwardModelInterfaceMock *forwardModel;
+    forwardModel = new ForwardModelInterfaceMock(grid, src, recv, frequencies);
 
-       forwardModelInterface *forwardModel;
-       forwardModel = new finiteDifferenceForwardModel(grid, src, recv, frequencies, fmInput);
+    double initialKappaTimesResidualValue = 1.0;
+    forwardModel->setKappaTimesResidualValue(initialKappaTimesResidualValue);
+    ConjugateGradientWithRegularisationParametersInput cgParametersInput;
+    cgParametersInput._deltaAmplification._start = 1.0;
+    cgParametersInput._deltaAmplification._slope = 0.0;
+    cgParametersInput._nRegularisationIterations = 0;   // not using regularisation
+    cgParametersInput._tolerance = 0.001;
 
-       ConjugateGradientWithRegularisationParametersInput cgParametersInput;
-       cgParametersInput._deltaAmplification._start = 1.0;
-       cgParametersInput._deltaAmplification._slope = 0.0;
-       cgParametersInput._nRegularisationIterations = 0;   // not using regularisation
-       cgParametersInput._tolerance = 0.001;
+    int nTotal = forwardModel->getSrc().nSrc * forwardModel->getFreq().nFreq * forwardModel->getRecv().nRecv;
+    const double pDataValue = 1.0;
+    std::vector<std::complex<double>> pData(nTotal, pDataValue);
 
-       int nTotal = forwardModel->getSrc().nSrc * forwardModel->getFreq().nFreq * forwardModel->getRecv().nRecv;
-       const double pDataValue = 1.0;
-       std::vector<std::complex<double>> pData(nTotal, pDataValue);
+    ConjugateGradientWithRegularisationCalculator cGWRCTest(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
 
-       ConjugateGradientWithRegularisationCalculator cGWRCTest(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
+    DirectionCalculator *directionCalculator;
+    directionCalculator = &cGWRCTest;
 
-       DirectionCalculator *directionCalculator;
-       directionCalculator = &cGWRCTest;
+    dataGrid2D chiEstimateCurrent(getGrid());
+    // chiEstimateCurrent.data[] =0
+    std::vector<std::complex<double>> residualVector =
+        forwardModel->calculateResidual(chiEstimateCurrent, pData);   // chiEstimateCurrent is all 0s and unused, pData is all 1s
+    dataGrid2D ignoreThis(getGrid());
+    dataGrid2D const *directionCurrent;
+    directionCurrent = &directionCalculator->calculateDirection(ignoreThis, residualVector);
 
-       dataGrid2D chiEstimateCurrent(getGrid());
-       std::vector<std::complex<double>> residualVector =
-           forwardModel->calculateResidual(chiEstimateCurrent, pData);   // chiEstimateCurrent is all 0s and unused, pData is all 1s
+    dataGrid2D directionTest(getGrid());
+    directionTest = errorFunctionalScalingFactor;
+    int nGridPoints = directionTest.getNumberOfGridPoints();
 
-       dataGrid2D const *directionCurrent;
-       directionCurrent = &directionCalculator->calculateDirection(chiEstimateCurrent, residualVector);
-       (void)directionCurrent;
-       dataGrid2D directionTest(getGrid());
-       directionTest = 1.0;
+    std::vector<double> directionCurrentData = directionCurrent->getData();
+    std::vector<double> directionTestData1 = directionTest.getData();
 
-       // for the moment I just want to see what values I am getting out, later I will create a boolean to compare the two vectors
+    // first iteration
+    EXPECT_TRUE(directionCurrentData == directionTestData1);
 
-       //    std::vector<double> directionCurrentData = directionCurrent->getData();
-       //    std::vector<double> directionTestData = directionTest.getData();
+    // second iteration
+    double step = 1.0;
+    for(int i = 0; i < nGridPoints; ++i)
+    {
+        chiEstimateCurrent.addValueAtIndex(step * directionCurrentData[i], i);
+    }
 
-       //    for(int i = 0; i < directionTest.getNumberOfGridPoints(); ++i)
-       //    {
-       //        cout << "directionCurrentData = " << directionCurrentData[i] << ", directionTestData = " << directionTestData[i] << endl;
-       //    }
+    int nextIteration = 1;
+    cGWRCTest.updateVariables(chiEstimateCurrent, ignoreThis, nextIteration);
 
-       //   ASSERT_EQ(directionCurrentData, directionTestData);
+    // updating KappaTimesResidual to simulate a change in the complexDataGrid2D** _Kappa in ForwardInterfaceMock
+    double kappaTimesResidualMultiplier = 3;
+    forwardModel->setKappaTimesResidualValue(kappaTimesResidualMultiplier * initialKappaTimesResidualValue);
 
-       delete forwardModel; */
+    residualVector = forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    // second direction computed
+    directionCurrent = &directionCalculator->calculateDirection(ignoreThis, residualVector);
+
+    directionCurrentData = directionCurrent->getData();
+    std::vector<double> directionTestData2 = directionTest.getData();
+
+    // updating directionTestData2 and computing square error
+    double squareDiffNorm = 0.0;
+    for(int i = 0; i < nGridPoints; ++i)
+    {
+        directionTestData2[i] *= kappaTimesResidualMultiplier * kappaTimesResidualMultiplier;
+
+        squareDiffNorm += std::pow(directionCurrentData[i] - directionTestData2[i], 2);
+    }
+
+    EXPECT_NEAR(squareDiffNorm, 0, 1e-10);
+
+    delete forwardModel;
 }
 
 ////////////////////////////////////////////////////////////////
-// The following test should check a whole round of the regularisation process. Making a benchmark for this part is highly time consuming and potentially
-// useless, since there are parts of the code that are not documented/explained, so our only benchmark would be the results of ConjugateGradientInversion, which
-// also has no test.
+// The following test will check if a whole round of the regularisation part, invoked by ->calculateStepSize(), works. Since there ar no existing tests for
+// ConjugateGradientInversion (and as of 15-05-'20 there is also a bug), the only way to test our method is to fix such bug in the old design, use that as
+// benchmark and compare our new results with that. The commented code is slightly obsolete, but is is possible to use the above test body as starting point.
 ////////////////////////////////////////////////////////////////
 
 // TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateStepSizeTest)
