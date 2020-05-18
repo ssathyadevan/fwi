@@ -1,5 +1,6 @@
 #include "BorzilaiBorweinStepSizeCalculator.h"
 #include "ConjugateGradientDirectionCalculator.h"
+#include "ConjugateGradientStepSizeCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"

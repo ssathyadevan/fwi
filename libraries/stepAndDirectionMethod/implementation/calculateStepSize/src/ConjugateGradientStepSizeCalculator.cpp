@@ -1,7 +1,7 @@
 #include "ConjugateGradientStepSizeCalculator.h"
 
 ConjugateGradientStepSizeCalculator::ConjugateGradientStepSizeCalculator(const grid2D &grid, const double initialStepSize) :
-    _kappaTimesZeta(grid.getNumberOfGridPoints()), _residualVector(grid.getNumberOfGridPoints()), _initialStepSize(initialStepSize)
+    _kappaTimesDirection(grid.getNumberOfGridPoints()), _residualVector(grid.getNumberOfGridPoints()), _initialStepSize(initialStepSize)
 {
     _nGridPoints = grid.getNumberOfGridPoints();
 }
@@ -12,8 +12,8 @@ double ConjugateGradientStepSizeCalculator::calculateStepSize()
     double alphaDenominator = 0.0;
     for(int i = 0; i < _nGridPoints; ++i)
     {
-        alphaNumerator += std::real(_residualVector[i] * _kappaTimesZeta[i]);
-        alphaDenominator += std::real(std::pow(_kappaTimesZeta[i], 2));
+        alphaNumerator += std::real(_residualVector[i] * _kappaTimesDirection[i]);
+        alphaDenominator += std::real(std::pow(_kappaTimesDirection[i], 2));
     }
     if(alphaDenominator == 0.0)
     {
@@ -23,9 +23,9 @@ double ConjugateGradientStepSizeCalculator::calculateStepSize()
     return alphaNumerator / alphaDenominator;
 }
 
-void ConjugateGradientStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &kappaTimesZeta,
-    const std::vector<std::complex<double>> &residualVector)
+void ConjugateGradientStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int,
+    const std::vector<std::complex<double>> &kappaTimesDirection, const std::vector<std::complex<double>> &residualVector)
 {
-    _kappaTimesZeta = kappaTimesZeta;
+    _kappaTimesDirection = kappaTimesDirection;
     _residualVector = residualVector;
 }
