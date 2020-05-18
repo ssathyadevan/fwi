@@ -19,27 +19,27 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
         return _initialStepSize;
     }
 
-    std::vector<double> chiDataDifference(nGridPoints, 0.0);
+    std::vector<double> chiDataDifference(_nGridPoints, 0.0);
     for(int i = 0; i < _nGridPoints; ++i)
     {
         chiDataDifference[i] = _chiEstimateCurrent[i] - _chiEstimatePrevious[i];
     }
 
-    std::vector<double> derivativeDifference(nGridPoints, 0.0);
+    std::vector<double> derivativeDifference(_nGridPoints, 0.0);
     for(int i = 0; i < _nGridPoints; ++i)
     {
         derivativeDifference[i] = _derivativeCurrent[i] - _derivativePrevious[i];
     }
 
     double gammaNumerator = 0.0;
-    for(int i = 0; i < nGridPoints; ++i)
+    for(int i = 0; i < _nGridPoints; ++i)
     {
         gammaNumerator += chiDataDifference[i] * derivativeDifference[i];
     }
     gammaNumerator = fabs(gammaNumerator);
 
     double gammaDenominator = 0.0;
-    for(int i = 0; i < nGridPoints; ++i)
+    for(int i = 0; i < _nGridPoints; ++i)
     {
         gammaDenominator += pow(derivativeDifference[i], 2);
     }
