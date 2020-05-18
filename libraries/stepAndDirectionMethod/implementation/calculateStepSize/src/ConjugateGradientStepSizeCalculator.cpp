@@ -1,8 +1,7 @@
 #include "ConjugateGradientStepSizeCalculator.h"
 
 ConjugateGradientStepSizeCalculator::ConjugateGradientStepSizeCalculator(const grid2D &grid, const double initialStepSize) :
-    _kappaTimesZeta(grid.getNumberOfGridPoints()), _residualVector(grid.getNumberOfGridPoints()), _zetaCurrent(grid.getNumberOfGridPoints(), 0.0),
-    _initialStepSize(initialStepSize), _iteration(0)
+    _kappaTimesZeta(grid.getNumberOfGridPoints()), _residualVector(grid.getNumberOfGridPoints()), _initialStepSize(initialStepSize)
 {
     _nGridPoints = grid.getNumberOfGridPoints();
 }
@@ -24,11 +23,9 @@ double ConjugateGradientStepSizeCalculator::calculateStepSize()
     return alphaNumerator / alphaDenominator;
 }
 
-void ConjugateGradientStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &zetaCurrent, int iteration,
-    const std::vector<std::complex<double>> &kappaTimesZeta, const std::vector<std::complex<double>> &residualVector)
+void ConjugateGradientStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &kappaTimesZeta,
+    const std::vector<std::complex<double>> &residualVector)
 {
     _kappaTimesZeta = kappaTimesZeta;
     _residualVector = residualVector;
-    _zetaCurrent = zetaCurrent.getData();
-    _iteration = iteration;
 }

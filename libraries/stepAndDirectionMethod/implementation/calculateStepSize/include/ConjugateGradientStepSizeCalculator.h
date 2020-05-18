@@ -1,6 +1,5 @@
 #pragma once
 #include "StepSizeCalculator.h"
-// this class performs the computation described in eq. 2.17 of doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-full-waveform-inversion.pdf
 
 class ConjugateGradientStepSizeCalculator : public StepSizeCalculator
 {
@@ -8,17 +7,25 @@ private:
     std::vector<std::complex<double>> _kappaTimesZeta;
     std::vector<std::complex<double>> _residualVector;
 
-    std::vector<double> _zetaCurrent;
-
-    const double _initialStepSize;   // this is never used
-    int _iteration;
+    const double _initialStepSize;
     int _nGridPoints;
 
 public:
     ConjugateGradientStepSizeCalculator(const grid2D &grid, const double initialStepSize);
     virtual ~ConjugateGradientStepSizeCalculator() {}
 
+    /**
+     * @brief calculateStepSize This method returns the computation described in eq. 2.17 of
+     * doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-full-waveform-inversion.pdf
+     * @return the step optimized for the standard conjugate gradient withouth regularisation
+     */
     double calculateStepSize();
-    void updateVariables(const dataGrid2D &, const dataGrid2D &zetaCurrent, int iteration, const std::vector<std::complex<double>> &kappaTimesZeta,
+
+    /**
+     * @brief updateVariables Updates the quantities that are needed to compute the optimized step
+     * @param kappaTimesZeta is the inner product between _kappa from the forwardModel and the computed current direction (= eta)
+     * @param residualVector is the residual of the previous iteration. For the first iteration, the initial residual is used instead.
+     */
+    void updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &kappaTimesZeta,
         const std::vector<std::complex<double>> &residualVector);
 };

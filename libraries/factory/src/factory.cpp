@@ -111,6 +111,12 @@ void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParamet
         _createdStepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
         return;
     }
+    if(desiredStepSizeMethod == "ConjugateGradient")
+    {
+        _createdStepSizeCalculator = new ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
+        return;
+    }
+
     L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
