@@ -23,7 +23,7 @@ public:
 
     /**
      * @brief reconstruct The main method of the class, where the desired steps and directions are combined and the reconstruction happens
-     * @param pData (not sure, check)
+     * @param pData is the data coming from the readings
      * @param gInput is the data input for the problem
      * @return
      */

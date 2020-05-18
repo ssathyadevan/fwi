@@ -10,4 +10,8 @@ double VariableStepSizeCalculator::calculateStepSize()
     return test;
 }
 
-void VariableStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int iteration) { _stepIterator = iteration; }
+void VariableStepSizeCalculator::updateVariables(
+    const dataGrid2D &, const dataGrid2D &, int iteration, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
+{
+    _stepIterator = iteration;
+}

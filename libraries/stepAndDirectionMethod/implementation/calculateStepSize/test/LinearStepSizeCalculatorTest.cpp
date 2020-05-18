@@ -34,10 +34,11 @@ TEST(LinearStepSizeCalculatorTest, calculateStepSizeAndupdateVariablesTest)
 {
     grid2D grid = getGrid();
     dataGrid2D dataGrid(grid);
+    std::vector<std::complex<double>> ignoreThis;
 
     LinearStepSizeCalculator stepSizeCalculator(1.0, 1.0);
 
-    stepSizeCalculator.updateVariables(dataGrid, dataGrid, 1);
+    stepSizeCalculator.updateVariables(dataGrid, dataGrid, 1, ignoreThis, ignoreThis);
 
     EXPECT_DOUBLE_EQ(stepSizeCalculator.calculateStepSize(), 0.5);
 }

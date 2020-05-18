@@ -53,9 +53,9 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     // chiEstimateCurrent.data[] =0
     std::vector<std::complex<double>> residualVector =
         forwardModel->calculateResidual(chiEstimateCurrent, pData);   // chiEstimateCurrent is all 0s and unused, pData is all 1s
-    dataGrid2D ignoreThis(getGrid());
+    dataGrid2D ignoreThisDataGrid(getGrid());
     dataGrid2D const *directionCurrent;
-    directionCurrent = &directionCalculator->calculateDirection(ignoreThis, residualVector);
+    directionCurrent = &directionCalculator->calculateDirection(ignoreThisDataGrid, residualVector);
 
     dataGrid2D directionTest(getGrid());
     directionTest = errorFunctionalScalingFactor;
@@ -73,9 +73,9 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     {
         chiEstimateCurrent.addValueAtIndex(step * directionCurrentData[i], i);
     }
-
+    std::vector<std::complex<double>> ignoreThisVector;
     int nextIteration = 1;
-    cGWRCTest.updateVariables(chiEstimateCurrent, ignoreThis, nextIteration);
+    cGWRCTest.updateVariables(chiEstimateCurrent, ignoreThisDataGrid, nextIteration, ignoreThisVector, ignoreThisVector);
 
     // updating KappaTimesResidual to simulate a change in the complexDataGrid2D** _Kappa in ForwardInterfaceMock
     double kappaTimesResidualMultiplier = 3;
@@ -83,7 +83,7 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
 
     residualVector = forwardModel->calculateResidual(chiEstimateCurrent, pData);
     // second direction computed
-    directionCurrent = &directionCalculator->calculateDirection(ignoreThis, residualVector);
+    directionCurrent = &directionCalculator->calculateDirection(ignoreThisDataGrid, residualVector);
 
     directionCurrentData = directionCurrent->getData();
     std::vector<double> directionTestData2 = directionTest.getData();

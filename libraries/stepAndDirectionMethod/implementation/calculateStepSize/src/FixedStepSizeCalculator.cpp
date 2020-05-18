@@ -6,4 +6,7 @@ FixedStepSizeCalculator::~FixedStepSizeCalculator() {}
 
 double FixedStepSizeCalculator::calculateStepSize() { return _size; }
 
-void FixedStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int) {}
+void FixedStepSizeCalculator::updateVariables(
+    const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
+{
+}

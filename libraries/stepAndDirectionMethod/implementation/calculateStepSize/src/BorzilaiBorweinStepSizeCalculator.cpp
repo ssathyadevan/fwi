@@ -52,7 +52,8 @@ double BorzilaiBorweinStepSizeCalculator::calculateStepSize()
     return gammaNumerator / gammaDenominator;
 }
 
-void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration)
+void BorzilaiBorweinStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration,
+    const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
 {
     _chiEstimatePrevious = _chiEstimateCurrent;
     _derivativePrevious = _derivativeCurrent;

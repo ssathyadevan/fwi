@@ -20,11 +20,12 @@ TEST(BorzilaiBorweinStepSizeCalculatorTest, calculateStepSizeAndupdateVariablesT
     derivativeCurrent = 2.0;
 
     const double initialStepSize = 0.5;
-    //    BorzilaiBorweinStepSizeCalculator stepSizeCalculator(grid);
+    std::vector<std::complex<double>> ignoreThis;
+
     StepSizeCalculator *stepSizeCalculator;
     stepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, initialStepSize);
 
-    stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1);
+    stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1, ignoreThis, ignoreThis);
 
     double stepSizeZero = 0.5;
     double stepSizeCalculate = stepSizeCalculator->calculateStepSize();

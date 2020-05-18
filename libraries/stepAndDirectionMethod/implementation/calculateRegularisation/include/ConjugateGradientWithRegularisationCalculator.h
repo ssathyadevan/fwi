@@ -125,5 +125,6 @@ public:
      * @param chiEstimateCurrent
      * @param iterationNumber
      */
-    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber) override;
+    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber, const std::vector<std::complex<double>> &,
+        const std::vector<std::complex<double>> &) override;
 };

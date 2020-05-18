@@ -27,14 +27,18 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     _forwardModel->calculateKappa();
 
     dataGrid2D const *directionCurrent;
-    //(_grid);
-    // directionCurrent.zero();
+
+    std::vector<std::complex<double>> kappaTimesDirection;
 
     for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
     {
         directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
 
-        _desiredStep->updateVariables(chiEstimateCurrent, *directionCurrent, it);
+        // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
+        _forwardModel->mapDomainToSignal(*directionCurrent, kappaTimesDirection);
+
+        _desiredStep->updateVariables(
+            chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
 
         step = _desiredStep->calculateStepSize();
 

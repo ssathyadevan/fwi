@@ -34,7 +34,8 @@ dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(co
     return _zetaCurrent;
 }
 
-void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber)
+void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber,
+    const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
 {
     // since _zetaCurrent and _gradientCurrent are already updated in calculateDirection, here only the remaining quantities are updated
     _iterationNumber = iterationNumber;
