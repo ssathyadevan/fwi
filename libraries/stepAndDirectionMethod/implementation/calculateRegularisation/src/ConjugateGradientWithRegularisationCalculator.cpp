@@ -5,20 +5,18 @@ ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisati
     DirectionCalculator(errorFunctionalScalingFactor, forwardModel),
     StepSizeCalculator(), _chiEstimatePrevious(forwardModel->getGrid()), _chiEstimateCurrent(forwardModel->getGrid()),
     _gradientPrevious(forwardModel->getGrid()), _gradientCurrent(forwardModel->getGrid()), _pData(pData), _cgParametersInput(cgParametersInput),
-    _grid(forwardModel->getGrid()), _zetaPrevious(forwardModel->getGrid()), _zetaCurrent(forwardModel->getGrid()), _kappaTimesResidual(forwardModel->getGrid()),
-    _regularisationPrevious(forwardModel->getGrid()), _regularisationCurrent(forwardModel->getGrid()), _residualVector(pData)
+    _grid(forwardModel->getGrid()), _directionPrevious(forwardModel->getGrid()), _directionCurrent(forwardModel->getGrid()),
+    _kappaTimesResidual(forwardModel->getGrid()), _regularisationPrevious(forwardModel->getGrid()), _regularisationCurrent(forwardModel->getGrid()),
+    _residualVector(pData)
 {
     _nTotal = forwardModel->getFreq().nFreq * forwardModel->getSrc().nSrc * forwardModel->getRecv().nRecv;
-    _deltaAmplification = _cgParametersInput._deltaAmplification._start;
 }
 
 dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector)
 {
-    _residualVector = residualVector;
-
     // updating what necessary
-
-    _zetaPrevious = _zetaCurrent;
+    _residualVector = residualVector;
+    _directionPrevious = _directionCurrent;
     _gradientPrevious = _gradientCurrent;
 
     _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);     // eq 2.13 first part, stored in _kappaTimesResidual
@@ -29,27 +27,21 @@ dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(co
     {
         gamma = calculateGammaPolakRibiere();   // eq 2.14
     }
-    // I am outputing a &, so I need the variable to keep existing!
-    _zetaCurrent = _gradientCurrent + gamma * _zetaPrevious;
-    return _zetaCurrent;
+
+    _directionCurrent = _gradientCurrent + gamma * _directionPrevious;
+    return _directionCurrent;
 }
 
 void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber,
     const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
 {
-    // since _zetaCurrent and _gradientCurrent are already updated in calculateDirection, here only the remaining quantities are updated
     _iterationNumber = iterationNumber;
 
     _chiEstimatePrevious = _chiEstimateCurrent;
     _chiEstimateCurrent = chiEstimateCurrent;
 }
 
-double ConjugateGradientWithRegularisationCalculator::calculateStepSize()
-{
-    double alpha = calculateRegularisationStep();
-
-    return alpha;
-}
+double ConjugateGradientWithRegularisationCalculator::calculateStepSize() { return calculateRegularisationStep(); }
 
 double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
 {
@@ -63,16 +55,16 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
     {
         calculateRegularisationParameters();
 
-        _zetaCurrent = calculateDirectionRegularisation();   // eq: updateDirectionsCG
+        _directionCurrent = calculateDirectionInRegularisation();   // eq: updateDirectionsCG
         alpha = calculateStepSizeRegularisation();
 
         // Update contrast-function
-        _chiEstimateCurrent += alpha * _zetaCurrent;
+        _chiEstimateCurrent += alpha * _directionCurrent;
 
         // update _residualVector and _residualValueCurrent
         updateResidual();
 
-        // breakout check, but this should be handled by StepAndDirectionReconstructor::reconstruct
+        // break check for the inner loop
         if((it > 0) && ((_residualValueCurrent < _cgParametersInput._tolerance) ||
                            (std::abs(_residualValuePrevious - _residualValueCurrent) < _cgParametersInput._tolerance)))
         {
@@ -83,9 +75,9 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
         _residualValuePrevious = _residualValueCurrent;
 
         // Save regularisation variables for next iteration
-        _chiEstimateCurrent.gradient(
-            _regularisationCurrent
-                .gradientChi);   // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
+        _chiEstimateCurrent.gradient(_regularisationCurrent.gradientChi);
+
+        // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
         calculateRegularisationErrorFunctional();
 
         _regularisationPrevious.deltaSquared = _regularisationCurrent.deltaSquared;
@@ -111,20 +103,19 @@ void ConjugateGradientWithRegularisationCalculator::calculateRegularisationParam
     _regularisationCurrent.deltaSquared = calculateSteeringFactor();   // eq. 2.23
 
     _regularisationCurrent.gradient = calculateRegularisationGradient();
-
-    //.gradientChiNormSquared, .b, .bSquared and .gradient are all in a dataGrid2d format
 }
 
-dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionRegularisation()
+dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionInRegularisation()
 {
     _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 _kappaTimesResidual updated
     _gradientCurrent =
         _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
         _residualValuePrevious *
             _regularisationCurrent.gradient;   // eq: 2.25 of thesis, bSquared is already included in .gradient, see calculateRegularisationGradient()
+
     double step = calculateGammaPolakRibiere();
 
-    return _gradientCurrent + step * _zetaCurrent;
+    return _gradientCurrent + step * _directionCurrent;
 }
 dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
 {
@@ -156,14 +147,14 @@ dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateRegularisatio
     std::vector<dataGrid2D> temporaryGradient(2, dataGrid2D(_grid));
 
     dataGrid2D bSquaredTimesGradientChiX = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[0];
-
     bSquaredTimesGradientChiX.gradient(temporaryGradient);
 
     dataGrid2D bSquaredTimesGradientChiZ = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[1];
     bSquaredTimesGradientChiZ.gradient(temporaryGradient);
-    dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
 
     dataGrid2D gradientBSquaredTimesGradientChiX = temporaryGradient[0];
+    dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
+
     return gradientBSquaredTimesGradientChiX + gradientBSquaredTimesGradientChiZ;
 }
 
@@ -190,8 +181,8 @@ void ConjugateGradientWithRegularisationCalculator::updateResidual()
 
 double ConjugateGradientWithRegularisationCalculator::calculateStepSizeRegularisation()
 {
-    std::vector<std::complex<double>> kappaTimesZeta(_nTotal);
-    _forwardModel->mapDomainToSignal(_zetaCurrent, kappaTimesZeta);
+    std::vector<std::complex<double>> kappaTimesDirection(_nTotal);
+    _forwardModel->mapDomainToSignal(_directionCurrent, kappaTimesDirection);
 
     double a0 = _residualValuePrevious;
 
@@ -200,8 +191,8 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSizeRegularis
 
     for(int i = 0; i < _nTotal; i++)
     {
-        a1 += -2.0 * _errorFunctionalScalingFactor * std::real(conj(_residualVector[i]) * kappaTimesZeta[i]);
-        a2 += _errorFunctionalScalingFactor * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
+        a1 += -2.0 * _errorFunctionalScalingFactor * std::real(conj(_residualVector[i]) * kappaTimesDirection[i]);
+        a2 += _errorFunctionalScalingFactor * std::real(conj(kappaTimesDirection[i]) * kappaTimesDirection[i]);
     }
 
     dataGrid2D bGradientChiSquaredXDirection =
@@ -213,7 +204,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSizeRegularis
                 _grid.getCellVolume();
 
     std::vector<dataGrid2D> gradientZeta(2, dataGrid2D(_grid));
-    _zetaCurrent.gradient(gradientZeta);
+    _directionCurrent.gradient(gradientZeta);
 
     dataGrid2D bGradientZetabGradientChiX = (_regularisationCurrent.b * gradientZeta[0]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[0]);
     dataGrid2D bGradientZetabGradientChiZ = (_regularisationCurrent.b * gradientZeta[1]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[1]);
@@ -225,11 +216,15 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSizeRegularis
     bTimesGradientZetaZdirection.square();
     double b2 = (bTimesGradientZetaXdirection.summation() + bTimesGradientZetaZdirection.summation()) * _grid.getCellVolume();
 
+    // Parameters for the derivative of F^tot with respect to alpha, see eq. 2.26-2.27.
+    // The final polynomial to solve is derA*x^3 + derB*x^2 + derC*x +derD = 0.
+
     double derA = 4.0 * a2 * b2;
     double derB = 3.0 * (a2 * b1 + a1 * b2);
     double derC = 2.0 * (a2 * b0 + a1 * b1 + a0 * b2);
     double derD = a1 * b0 + a0 * b1;
 
+    // returning the only real solution of derA*x^3 + derB*x^2 + derC*x +derD = 0.
     return findRealRootFromCubic(derA, derB, derC, derD);
 }
 

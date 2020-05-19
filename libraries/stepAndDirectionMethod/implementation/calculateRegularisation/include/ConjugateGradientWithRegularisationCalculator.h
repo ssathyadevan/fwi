@@ -3,6 +3,12 @@
 #include "ConjugateGradientWithRegularisationParametersInput.h"
 #include "StepAndDirectionReconstructor.h"
 
+/**
+ * @brief The ConjugateGradientWithRegularisationCalculator class inherits both from DirectionCalculator and StepSizeCalculator, so that it is possible to
+ * update _directionCurrent while computing the step stepSize. Unless specifically mentioned, we refer to
+ * doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-full-waveform-inversion.pdf for every equation
+ */
+
 class ConjugateGradientWithRegularisationCalculator : public DirectionCalculator, public StepSizeCalculator
 {
 private:
@@ -12,6 +18,7 @@ private:
 
     dataGrid2D _gradientPrevious;
     dataGrid2D _gradientCurrent;
+
     int _iterationNumber;
 
     // Direction part
@@ -22,8 +29,8 @@ private:
     const grid2D &_grid;
     int _nTotal;   // nFreq * nSrc * nRecv
 
-    dataGrid2D _zetaPrevious;
-    dataGrid2D _zetaCurrent;
+    dataGrid2D _directionPrevious;
+    dataGrid2D _directionCurrent;
     complexDataGrid2D _kappaTimesResidual;
     ConjugateGradientRegularisationParameters _regularisationPrevious;
     ConjugateGradientRegularisationParameters _regularisationCurrent;
@@ -39,39 +46,40 @@ private:
 
     /**
      * @brief updateResidual computes and updates _residualVector
-     * @return residualValue to be put in _residualValueCurrent
      */
     void updateResidual();
 
     /**
      * @brief calculateRegularisationStep is the main function, where the inner loop acts. It is called by calculateStepSize()
-     * @return the StepSize alpha
+     * @return the StepSize to be sent to StepAndDirectionReconstructor
      */
     double calculateRegularisationStep();
 
     /**
-     * @brief calculateGammaPolakRibiere computes the optimal step size according to the Polak-Ribiere formula.
+     * @brief calculateGammaPolakRibiere computes the optimal step size according to the Polak-Ribiere formula, see eq. 2.14.
      * @return the optimal stepsize without regularisation
      */
     double calculateGammaPolakRibiere();
 
     /**
-     * @brief calculateWeightingFactor computes equation 2.22 of the thesis
-     * @return the value for _regularisationCurrent.bSquared
+     * @brief calculateWeightingFactor computes equation 2.22
+     * @return the value for _regularisationCurrent.bSquared, which will be needed to approximate the regularisation cost Function in
+     * calculateStepSizeRegularisation(), see eq. 2.26-2.27
      */
     dataGrid2D calculateWeightingFactor();
 
     /**
-     * @brief calculateStepSizeRegularisation prepares the parameters for equation 2.26 (see eq. 2.27) and invokes findRealRootFromCubic
-     * @return the output of findRealRootFromCubic(...), which is the final StepSize value, to be sent to StepAndDirectionReconstructor
+     * @brief calculateStepSizeRegularisation prepares the parameters for equation 2.26 (see eq. 2.27) and invokes findRealRootFromCubic(...) to find the
+     * optimal StepSize
+     * @return the output of findRealRootFromCubic(...), which is the final StepSize value to be sent to StepAndDirectionReconstructor
      */
     double calculateStepSizeRegularisation();
 
     /**
-     * @brief calculateDirectionRegularisation updates _kappaTimesResidual and _gradientCurrent following equations 2.13 and 2.25
-     * @return the new value of _zetaCurrent
+     * @brief calculateDirectionInRegularisation updates _kappaTimesResidual and _gradientCurrent following equations 2.13 and 2.25
+     * @return the new direction
      */
-    dataGrid2D calculateDirectionRegularisation();
+    dataGrid2D calculateDirectionInRegularisation();
 
     /**
      * @brief calculateSteeringFactor is a modified version of equation 2.23
@@ -80,11 +88,11 @@ private:
     double calculateSteeringFactor();
 
     /**
-     * @brief findRealRootFromCubic applies the Cardano formula to solve third order polynomial ax^3 +bx^2 +cx +d =0
-     * @param a
-     * @param b
-     * @param c
-     * @param d
+     * @brief findRealRootFromCubic applies the Cardano formula to solve third order polynomial a*x^3 +b*x^2 +c*x +d =0
+     * @param a the cubic coefficient
+     * @param b the quadratic coefficient
+     * @param c the linear coefficient
+     * @param d the constant coefficient
      * @return  the (in this case) only real root
      */
     double findRealRootFromCubic(double a, double b, double c, double d);
@@ -95,7 +103,8 @@ private:
     void calculateRegularisationErrorFunctional();
 
     /**
-     * @brief calculateRegularisationGradient by only using _regularisationPrevious.bSquared and .gradientChi, see equation 2.24
+     * @brief calculateRegularisationGradient computes the derivative of the regularisation cost Function by only using _regularisationPrevious.bSquared and
+     * .gradientChi, see equation 2.24
      * @return updates _regularisationCurrent.gradient
      */
     dataGrid2D calculateRegularisationGradient();
@@ -106,22 +115,21 @@ public:
     virtual ~ConjugateGradientWithRegularisationCalculator() {}                                                                  // destructor
 
     /**
-     * @brief calculateStepSize After computing the optimal step as described in Eq. PolakRibiereDirection of ReadMe/1_ProjectDescription, it also invokes
-     * the whole regularisation process, where _zetaCurrent, the output of calculateDirection(), is also updated
-     * @return alpha, the final optimized StepSize for the internally updated _zetaCurrent
+     * @brief calculateStepSize Invokes the whole regularisation process, where also the direction is updated
+     * @return the final optimized StepSize for the internally updated _directionCurrent
      */
     double calculateStepSize() override;
 
     /**
-     * @brief calculateDirection performs the computation described in Eq. integrandForDiscreteK of ReadMe/1_ProjectDescription
+     * @brief calculateDirection performs the computation described in eq. 2.13
      * @param residualVector is saved into the member variable _residualVector
-     * @return is the direction = _zetaCurrent. We output a reference so that the value is updated as we perform at a later stage the regularisation process
+     * @return is_directionCurrent. We output a reference so that the value is updated as we perform at a later stage the regularisation process
      * during the call of calculateStepSize
      */
     dataGrid2D &calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector) override;
+
     /**
-     * @brief updateVariables only modifies _chiEstimateCur/Pr and _iterationNumber,
-     *  since _gradientCur/Pr and _zetaCur/Pr are already updated in CalculateDirection
+     * @brief updateVariables updates _chiEstimateCur/Pr and _iterationNumber based on the parameters
      * @param chiEstimateCurrent
      * @param iterationNumber
      */
