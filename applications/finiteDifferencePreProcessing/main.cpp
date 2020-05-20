@@ -74,17 +74,22 @@ void generateReferencePressureFieldFromChi(const genericInput &gInput, const std
     std::string outputPath = gInput.outputLocation + "chi_ref_" + runName + ".txt";
     chi.toFile(outputPath);
 
+    L_(linfo) << "Create forwardModel";
+    clock_t tStartForwardModel = clock();
+    forwardModelInterface *model;
     finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
     finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
-
-    forwardModelInterface *model;
     model = new finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
+    clock_t tEndForwardModel = clock();
+    L_(linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 
-    L_(linfo) << "Calculate pData (the reference pressure-field)...";
+    L_(linfo) << "Calculating pData (the reference pressure-field)...";
+    clock_t tStartCalculatePData = clock();
     model->calculatePTot(chi);
     model->calculateKappa();
     model->calculatePData(chi, referencePressureData);
-
+    clock_t tEndCalculatePData = clock();
+    L_(linfo) << "PData has been calculated in " << double(tEndCalculatePData - tStartCalculatePData) / CLOCKS_PER_SEC << "seconds.";
     // writing the referencePressureData to a text file in complex form
     L_(linfo) << "calculateData done";
 

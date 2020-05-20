@@ -1,0 +1,34 @@
+\documentclass{article}
+\title{How to connect to Jenkins from home}
+\input{preamble}
+\author{Alex Bijlsma}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{breakurl}
+
+\newcommand\HREF[2]{\hyper@linkurl{#2}{#1}}
+
+\begin{document}
+\sloppy
+	
+\maketitle
+
+\section{Setting up the VPN}
+In order to set connect to Jenkins from home, you have to set up a VPN to the network of ALTEN. \\Execute the following steps:
+
+\begin{enumerate}\setlength{\itemsep}{0pt}
+	\item Perform the steps in this article:\\ \burl{https://servicedesk.alten.nl/support/solutions/articles/5000062308-vpn-verbinding\\-alten-nederland-ssl-vpn-}
+	\item Open the following file as an administrator: \path{\C:\Windows\System32\drivers\etc\hosts}
+	\\Note: it is recommended to open it in an editor such as Notepad++
+	\item Add the following line at the bottom of the file:\newline \texttt{192.168.135.58 ci-full-waveform-inversion.alten.nl}
+	\item Connect to the VPN on your Windows machine by logging in with your ALTEN account.
+	\item Go to: \url{https://ci-full-waveform-inversion.alten.nl/}
+	\item Log in with the following details:\\
+	\texttt{Username: admin}\\
+	\texttt{Password: admin}\\
+\end{enumerate}
+
+\end{document}

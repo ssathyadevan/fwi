@@ -172,8 +172,7 @@ reader_prfct_rsrvr = csv.reader(open(chi_ref_bench_csv),delimiter=',')
 dummy_variable_reader_pr = list(reader_prfct_rsrvr)
 prfct_rsrvr_chi_array = numpy.array(dummy_variable_reader_pr).astype("float")
 
-resolution_of_rsrvr = \
-numpy.max(prfct_rsrvr_chi_array) - numpy.min(prfct_rsrvr_chi_array) 
+resolution_of_rsrvr = numpy.max(prfct_rsrvr_chi_array) - numpy.min(prfct_rsrvr_chi_array)
 
 ncols = prfct_rsrvr_chi_array.shape[0]
 nrows = prfct_rsrvr_chi_array.shape[1]
@@ -189,15 +188,14 @@ read_new_est_chi   = csv.reader(open(chi_est_new_csv),delimiter=',')
 dummy_variable_reader_bn = list(read_bench_est_chi)
 bench_est_chi_array = numpy.array(dummy_variable_reader_bn).astype("float")
 
-resolution_of_bench = \
-numpy.max(bench_est_chi_array) - numpy.min(bench_est_chi_array)
+resolution_of_bench = numpy.max(bench_est_chi_array) - numpy.min(bench_est_chi_array)
 
 dummy_variable_reader_nw = list(read_new_est_chi)
 new_est_chi_array = numpy.array(dummy_variable_reader_nw).astype("float")
 
 diff_prfct_and_bench = numpy.empty([ncols,nrows], dtype=float)
 diff_prfct_and_new = numpy.empty([ncols,nrows], dtype=float)
-diff_new_and_bench = numpy.empty([ncols,nrows], dtype=float)
+diff_bench_and_new = numpy.empty([ncols, nrows], dtype=float)
 
 # We introduce a function to print numbers with only 2 decimals: more pleasant
 float_formatter = lambda x : "%.2f" % x
@@ -214,24 +212,20 @@ for i in range (0,prfct_rsrvr_chi_array.shape[0]):
         (new_est_chi_array[i,j] - prfct_rsrvr_chi_array[i,j]) \
         / resolution_of_rsrvr * 100
         )
-        diff_new_and_bench[i,j] = float_formatter \
+        diff_bench_and_new[i, j] = float_formatter \
         (
         (new_est_chi_array[i,j] - bench_est_chi_array[i,j]) \
         / resolution_of_bench * 100
         )
-        if (abs(diff_new_and_bench[i,j]) > tolerance):
+        if (abs(diff_bench_and_new[i, j]) > tolerance):
             regression_test_passed = False
             
 
 
 numerics_filename_bench = "diff_chi_perfect_and_"+bench+".csv"
 numerics_filename_new = "diff_chi_perfect_and_"+new+".csv"
-numpy.savetxt(
-numerics_filename_bench,diff_prfct_and_bench,fmt='%.2f',delimiter=', '
-)
-numpy.savetxt(
-numerics_filename_new,diff_prfct_and_new,fmt='%.2f',delimiter=', '
-)
+numpy.savetxt(numerics_filename_bench,diff_prfct_and_bench,fmt='%.2f',delimiter=', ')
+numpy.savetxt(numerics_filename_new,diff_prfct_and_new,fmt='%.2f',delimiter=', ')
 
 
 matplotlib.rcParams.update({'font.size':6})
@@ -257,7 +251,7 @@ for i in range (1,7):
         plt.imshow(diff_prfct_and_new)
         plt.title("Diff. between perfect reservoir and new test")
     elif (i == 3):
-        plt.imshow(diff_new_and_bench)
+        plt.imshow(diff_bench_and_new)
         plt.title("Diff. between benchmark and new test")
     elif (i == 4):
         plt.imshow(prfct_rsrvr_chi_array)
@@ -282,43 +276,49 @@ print("\n\n************************************************************")
 print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
-mse_bench = (numpy.square(prfct_rsrvr_chi_array - bench_est_chi_array)).mean()
-print("The MSE of the benchmark calculation: "+str(mse_bench))
-mse_new = (numpy.square(prfct_rsrvr_chi_array - new_est_chi_array)).mean()
-print("The MSE of the new calculation:       "+str(mse_new))
+bench_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - bench_est_chi_array)
+new_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - new_est_chi_array)
+prfct_rsrvr_chi_array_squared = numpy.square(prfct_rsrvr_chi_array)
 
-k=0
-sum_of_squares_during_loop = 0.0
-square_mean_counter_during_loop = 0.0
-for i in range (0,prfct_rsrvr_chi_array.shape[0]):
-    for j in range(0, prfct_rsrvr_chi_array.shape[1]):
-        k+=1
-        sum_of_squares_during_loop+= \
-        numpy.square(bench_est_chi_array[i,j]-prfct_rsrvr_chi_array[i,j])
-        square_mean_counter_during_loop += \
-        numpy.square(prfct_rsrvr_chi_array[i,j])
+bench_est_chi_array_diff_mean = bench_est_chi_array_diff.mean()
+new_est_chi_array_diff_mean = new_est_chi_array_diff.mean()
+prfct_rsrvr_chi_array_mean = prfct_rsrvr_chi_array_squared.mean()
 
-mse2 = sum_of_squares_during_loop/k
-square_mean = numpy.sqrt(square_mean_counter_during_loop/k)
+mse_bench = bench_est_chi_array_diff_mean
+print("The MSE of the benchmark calculation: " + str(mse_bench))
+mse_new = new_est_chi_array_diff_mean
+print("The MSE of the new calculation:       " + str(mse_new))
 
-print("The mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
+vaf_bench = ((1 - (bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("\nThe VAF of the benchmark calculation: " + str(vaf_bench) + "%")
+vaf_new = ((1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("The VAF of the new calculation:       " + str(vaf_new) + "%")
+
+fit_bench = (1 - (numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
+fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+print("The FIT of the new calculation:       " + str(fit_new) + "%")
+
+print("\nThe mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
 print("The square mean value of chi is:      " + str(square_mean))
 
-print("\nWe use the latter to determine a percentage for the MSE:")
-print("Bench: " + str(float_formatter(numpy.sqrt(mse_bench)/square_mean*100)) + "%")
-print("New:   " + str(float_formatter(numpy.sqrt(mse_new)/square_mean*100)) + "%\n")
-
-bench_max = numpy.max(diff_prfct_and_bench)
-new_max = numpy.max(diff_prfct_and_new)
-print("\nMaximum deviation")
-print("Bench: " + str(float_formatter(bench_max)) + "%")
-print("New:   " + str(float_formatter(new_max)) + "%\n")
-
-bench_min = numpy.min(diff_prfct_and_bench)
-new_min = numpy.min(diff_prfct_and_new)
-print("\nMinimum deviation")
-print("Bench: " + str(float_formatter(bench_min)) + "%")
-print("New:   " + str(float_formatter(new_min)) + "%")
+# This piece of code is commented at it seems irrelevant to display.
+# It show's the maximum and minimum relative deviation of the benchmark and new estimation
+# relatively to the perfect data array.
+# Decided not to delete this, as it might be useful in the future when we know what this data represents,
+# and how to effectively use it.
+#
+# bench_max = numpy.max(diff_prfct_and_bench)
+# new_max = numpy.max(diff_prfct_and_new)
+# print("\nMaximum deviation")
+# print("Bench: " + str(float_formatter(bench_max)) + "%")
+# print("New:   " + str(float_formatter(new_max)) + "%\n")
+#
+# bench_min = numpy.min(diff_prfct_and_bench)
+# new_min = numpy.min(diff_prfct_and_new)
+# print("\nMinimum deviation")
+# print("Bench: " + str(float_formatter(bench_min)) + "%")
+# print("New:   " + str(float_formatter(new_min)) + "%")
 
 if (1.001* mse_bench > mse_new):
     increased_precision_test_passed = True
