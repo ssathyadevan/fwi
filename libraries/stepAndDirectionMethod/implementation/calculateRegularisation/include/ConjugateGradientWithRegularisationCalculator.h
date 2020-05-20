@@ -29,7 +29,7 @@ private:
     const grid2D &_grid;
     int _nTotal;   // nFreq * nSrc * nRecv
 
-    dataGrid2D _directionPrevious;
+    dataGrid2D _directionPrevious;   // in the documentation the direction is indicated with the greek letter Zeta
     dataGrid2D _directionCurrent;
     complexDataGrid2D _kappaTimesResidual;
     ConjugateGradientRegularisationParameters _regularisationPrevious;
@@ -45,7 +45,7 @@ private:
     void calculateRegularisationParameters();
 
     /**
-     * @brief updateResidual computes and updates _residualVector
+     * @brief updateResidual computes and updates _residualVector and _residualValueCurrent
      */
     void updateResidual();
 
@@ -64,16 +64,16 @@ private:
     /**
      * @brief calculateWeightingFactor computes equation 2.22
      * @return the value for _regularisationCurrent.bSquared, which will be needed to approximate the regularisation cost Function in
-     * calculateStepSizeRegularisation(), see eq. 2.26-2.27
+     * calculateStepSizeInRegularisation(), see eq. 2.26-2.27
      */
     dataGrid2D calculateWeightingFactor();
 
     /**
-     * @brief calculateStepSizeRegularisation prepares the parameters for equation 2.26 (see eq. 2.27) and invokes findRealRootFromCubic(...) to find the
+     * @brief calculateStepSizeInRegularisation prepares the parameters for equation 2.26 (see eq. 2.27) and invokes findRealRootFromCubic(...) to find the
      * optimal StepSize
      * @return the output of findRealRootFromCubic(...), which is the final StepSize value to be sent to StepAndDirectionReconstructor
      */
-    double calculateStepSizeRegularisation();
+    double calculateStepSizeInRegularisation();
 
     /**
      * @brief calculateDirectionInRegularisation updates _kappaTimesResidual and _gradientCurrent following equations 2.13 and 2.25

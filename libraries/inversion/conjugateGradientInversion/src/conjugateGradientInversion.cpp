@@ -146,7 +146,7 @@ double ConjugateGradientInversion::calculateStepSize(const dataGrid2D &zeta, std
     for(int i = 0; i < nSignals; i++)
     {
         alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
-        alphaDenominator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+        alphaDenominator += std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
     }
 
     if(alphaDenominator == 0.0)

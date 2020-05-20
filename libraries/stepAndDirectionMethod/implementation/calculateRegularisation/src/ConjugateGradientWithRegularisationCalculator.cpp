@@ -35,8 +35,10 @@ dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(co
 void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber,
     const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
 {
-    _iterationNumber = iterationNumber;
+    // Update relevant variables
+    // Some variables need to be updated elsewhere (e.g. calculateDirection)
 
+    _iterationNumber = iterationNumber;
     _chiEstimatePrevious = _chiEstimateCurrent;
     _chiEstimateCurrent = chiEstimateCurrent;
 }
@@ -55,8 +57,8 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
     {
         calculateRegularisationParameters();
 
-        _directionCurrent = calculateDirectionInRegularisation();   // eq: updateDirectionsCG
-        alpha = calculateStepSizeRegularisation();
+        _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
+        alpha = calculateStepSizeInRegularisation();
 
         // Update contrast-function
         _chiEstimateCurrent += alpha * _directionCurrent;
@@ -95,7 +97,8 @@ void ConjugateGradientWithRegularisationCalculator::calculateRegularisationParam
     _regularisationPrevious.gradientChiNormSquared =
         (_regularisationPrevious.gradientChi[0] * _regularisationPrevious.gradientChi[0]) +
         (_regularisationPrevious.gradientChi[1] * _regularisationPrevious.gradientChi[1]).summation();   // |dChi/dx^2 + dChi/dz^2|^2
-    _regularisationCurrent.bSquared = calculateWeightingFactor();                                        //  eq. 2.22
+
+    _regularisationCurrent.bSquared = calculateWeightingFactor();   //  eq. 2.22
 
     _regularisationCurrent.b = _regularisationCurrent.bSquared;
     _regularisationCurrent.b.sqrt();
@@ -108,10 +111,9 @@ void ConjugateGradientWithRegularisationCalculator::calculateRegularisationParam
 dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionInRegularisation()
 {
     _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 _kappaTimesResidual updated
-    _gradientCurrent =
-        _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
-        _residualValuePrevious *
-            _regularisationCurrent.gradient;   // eq: 2.25 of thesis, bSquared is already included in .gradient, see calculateRegularisationGradient()
+    _gradientCurrent = _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
+                       _residualValuePrevious *
+                           _regularisationCurrent.gradient;   // eq: 2.25, bSquared is already included in .gradient, see calculateRegularisationGradient()
 
     double step = calculateGammaPolakRibiere();
 
@@ -128,7 +130,7 @@ dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFact
 
 double ConjugateGradientWithRegularisationCalculator::calculateSteeringFactor()
 {
-    //    return _regularisationPrevious.gradientChiNormSquared / (_grid.getDomainArea()); //according to the thesis
+    //    return _regularisationPrevious.gradientChiNormSquared / (_grid.getDomainArea()); //according to documentation
 
     dataGrid2D bTimesGradientChiXSquared = _regularisationCurrent.b * _regularisationPrevious.gradientChi[0];
     bTimesGradientChiXSquared.square();
@@ -137,6 +139,11 @@ double ConjugateGradientWithRegularisationCalculator::calculateSteeringFactor()
 
     double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
     double bSquaredSummed = _regularisationCurrent.bSquared.summation();
+
+    if(bSquaredSummed == 0.0)
+    {
+        throw std::overflow_error("Attempted division by zero.");
+    }
 
     // The _deltaAmplification * 0.5 part is not documented
     return _deltaAmplification * 0.5 * bTimesGradientChiNormSquared / bSquaredSummed;
@@ -168,7 +175,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateGammaPolakRibiere
 
     if(gammaDenominator == 0.0)
     {
-        throw std::overflow_error("ConjugateGradient: the computation of alpha devides by zero.");
+        throw std::overflow_error("Attempted division by zero.");
     }
     return gammaNumerator / gammaDenominator;
 }
@@ -179,7 +186,7 @@ void ConjugateGradientWithRegularisationCalculator::updateResidual()
     _residualValueCurrent = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(_residualVector);
 }
 
-double ConjugateGradientWithRegularisationCalculator::calculateStepSizeRegularisation()
+double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()
 {
     std::vector<std::complex<double>> kappaTimesDirection(_nTotal);
     _forwardModel->mapDomainToSignal(_directionCurrent, kappaTimesDirection);

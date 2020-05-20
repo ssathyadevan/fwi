@@ -28,7 +28,7 @@ dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const dataGri
     {
         // for the i-th variable/grid point we compute the approximate derivative by computing
         // D_i F(chiEstimate) ~= (F(chiEstimate +e_i*_derivativeDiscretisationStep) - F(chiEstimate))/_derivativeDiscretisationStep.
-        // In literature the variable _derivativeDiscretisationStep is most often called 'h'.
+        // In literature the variable _derivativeDiscretisationStep is most often called 'h/H'.
         // As for 'e_i' we mean a mathematical vector pointing towards the i-th direction/variable/grid point with unitary length, so that adding it to another
         // vector only modifies the i-th entry.
         chiEstimatePlusH.addValueAtIndex(_derivativeDiscretisationStep, i);
