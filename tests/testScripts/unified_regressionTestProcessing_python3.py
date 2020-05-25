@@ -299,9 +299,6 @@ print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
 fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
-print("\nThe mean value of chi is:             " + str(prfct_rsrvr_chi_array.mean()))
-print("The square mean value of chi is:      " + str(square_mean))
-
 # This piece of code is commented at it seems irrelevant to display.
 # It show's the maximum and minimum relative deviation of the benchmark and new estimation
 # relatively to the perfect data array.
