@@ -274,6 +274,20 @@ print("\n\n************************************************************")
 print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
+def kMeanLargest(arr, k):
+    arr.sort(reverse = True)
+    for i in range(k):
+        sum += arr[i]
+    mean = sum/k
+    return mean
+
+def kMeanSmallest(arr, k):
+    arr.sort()
+    for i in range(k):
+        sum -= arr[i]
+    mean = sum/k
+    return mean
+
 bench_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - bench_est_chi_array)
 new_est_chi_array_diff = numpy.square(prfct_rsrvr_chi_array - new_est_chi_array)
 prfct_rsrvr_chi_array_squared = numpy.square(prfct_rsrvr_chi_array)
@@ -297,23 +311,19 @@ print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
 fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
-# This piece of code is commented at it seems irrelevant to display.
-# It show's the maximum and minimum relative deviation of the benchmark and new estimation
-# relatively to the perfect data array.
-# Decided not to delete this, as it might be useful in the future when we know what this data represents,
-# and how to effectively use it.
-#
-# bench_max = numpy.max(diff_prfct_and_bench)
-# new_max = numpy.max(diff_prfct_and_new)
-# print("\nMaximum deviation")
-# print("Bench: " + str(float_formatter(bench_max)) + "%")
-# print("New:   " + str(float_formatter(new_max)) + "%\n")
-#
-# bench_min = numpy.min(diff_prfct_and_bench)
-# new_min = numpy.min(diff_prfct_and_new)
-# print("\nMinimum deviation")
-# print("Bench: " + str(float_formatter(bench_min)) + "%")
-# print("New:   " + str(float_formatter(new_min)) + "%")
+bench_max = kMeanLargest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
+bench_min = kMeanSmallest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
+
+new_max = kMeanLargest(diff_prfct_and_new,int(ncols * nrows * 0.01))
+new_min = kMeanSmallest(diff_prfct_and_new,int(ncols * nrows * 0.01))
+
+print("\nMaximum deviation")
+print("Bench: " + str(float_formatter(bench_max)) + "%")
+print("New:   " + str(float_formatter(new_max)) + "%\n")
+
+print("\nMinimum deviation")
+print("Bench: " + str(float_formatter(bench_min)) + "%")
+print("New:   " + str(float_formatter(new_min)) + "%")
 
 if (1.001* mse_bench > mse_new):
     increased_precision_test_passed = True
