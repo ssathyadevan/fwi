@@ -278,16 +278,18 @@ print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
 def kMeanLargest(arr, k):
-    arr.sort(reverse = True)
+    sort_arr=sorted(arr, reverse=True)
+    sum=0.0
     for i in range(k):
-        sum += arr[i]
+        sum += sort_arr[i]
     mean = sum/k
     return mean
 
 def kMeanSmallest(arr, k):
-    arr.sort(reverse = False)
+    sort_arr=sorted(arr, reverse=False)
+    sum=0.0
     for i in range(k):
-        sum -= arr[i]
+        sum -= sort_arr[i]
     mean = sum/k
     return mean
 
@@ -309,24 +311,30 @@ print("\nThe VAF of the benchmark calculation: " + str(vaf_bench) + "%")
 vaf_new = ((1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The VAF of the new calculation:       " + str(vaf_new) + "%")
 
-fit_bench = (1 - (numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+fit_bench = ((1 - numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
-fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+fit_new = ((1 - numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
-bench_max = kMeanLargest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
-bench_min = kMeanSmallest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
+diff_prfct_and_bench_array = diff_prfct_and_bench.flatten()
+diff_prfct_and_bench_array.flatten()
+bench_max = kMeanLargest(diff_prfct_and_bench_array,int(ncols * nrows * 0.01))
+bench_min = kMeanSmallest(diff_prfct_and_bench_array,int(ncols * nrows * 0.01))
 
-new_max = kMeanLargest(diff_prfct_and_new,int(ncols * nrows * 0.01))
-new_min = kMeanSmallest(diff_prfct_and_new,int(ncols * nrows * 0.01))
+diff_prfct_and_new_array = diff_prfct_and_new.flatten()
+diff_prfct_and_new_array.flatten()
+new_max = kMeanLargest(diff_prfct_and_new_array,int(ncols * nrows * 0.01))
+new_min = kMeanSmallest(diff_prfct_and_new_array,int(ncols * nrows * 0.01))
 
 print("\nMaximum deviation")
 print("Bench: " + str(float_formatter(bench_max)) + "%")
 print("New:   " + str(float_formatter(new_max)) + "%\n")
 
+
 print("\nMinimum deviation")
 print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
+
 
 if (1.001 * mse_bench > mse_new):
     increased_precision_test_passed = True
