@@ -18,6 +18,7 @@ target_link_libraries(
     integral_forward_model_library
     finite_difference_forward_model_library
     
+    conjugate_gradient_with_regularisation_calculator_library
     conjugate_gradient_inversion_library
     gradient_descent_inversion_library
     random_inversion_library

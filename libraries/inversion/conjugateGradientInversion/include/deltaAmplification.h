@@ -1,10 +1,10 @@
 #pragma once
 
-struct DeltaAmplification
+struct cgDeltaAmplification
 {
     double start;
     double slope;
 
-    DeltaAmplification() : start(0.0), slope(0.0) {}
-    DeltaAmplification(double start_, double slope_) : start(start_), slope(slope_) {}
+    cgDeltaAmplification() : start(0.0), slope(0.0) {}
+    cgDeltaAmplification(double start_, double slope_) : start(start_), slope(slope_) {}
 };

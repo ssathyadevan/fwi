@@ -36,7 +36,7 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     ConjugateGradientWithRegularisationParametersInput cgParametersInput;
     cgParametersInput._deltaAmplification._start = 1.0;
     cgParametersInput._deltaAmplification._slope = 0.0;
-    cgParametersInput._nRegularisationIterations = 0;   // not using regularisation
+    cgParametersInput._nIterations = 0;
     cgParametersInput._tolerance = 0.001;
 
     int nTotal = forwardModel->getSrc().nSrc * forwardModel->getFreq().nFreq * forwardModel->getRecv().nRecv;

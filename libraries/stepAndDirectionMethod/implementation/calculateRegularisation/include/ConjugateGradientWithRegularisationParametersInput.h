@@ -4,6 +4,6 @@
 struct ConjugateGradientWithRegularisationParametersInput
 {
     DeltaAmplification _deltaAmplification;
-    int _nRegularisationIterations;
+    int _nIterations;
     double _tolerance;
 };

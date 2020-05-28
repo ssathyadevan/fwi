@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ConjugateGradientWithRegularisationParametersInput.h"
 #include "DirectionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
 #include "StepAndDirectionReconstructorInput.h"
@@ -57,6 +58,13 @@ private:
     void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid);
 
     /**
+     * @brief Fill in later (also fill description of 'createCombinedDirectionAndStepSize'
+     * @param fill in later
+     * @return fill in later
+     */
+
+    bool splittableInversion(const std::string inversionMethod);
+    /**
      * @brief createDirectionCalculator, reads in parameter from file and creates the desired direction calculator
      * @param caseFolder is a string, the path to input files
      * @param desiredDirectionMethod is a string
@@ -66,4 +74,14 @@ private:
      */
     void createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
         forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
+    /**
+     * @brief createCombinedDirectionAndStepSize FILL IN LATER
+     * @param errorFunctionalScalingFactor
+     * @param forwardModel
+     * @param
+     * @param pData
+     */
+    void createCombinedDirectionAndStepSize(forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
+        const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
+        const std::string &desiredCombinedDirectionAndStepSizeMethod);
 };

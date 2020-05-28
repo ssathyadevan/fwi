@@ -151,7 +151,6 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     L_(linfo) << "Create inversionModel";
     clock_t tStartInversion = clock();
     inversionInterface *inverse;
-
     inverse = factory.createInversion(desired_inversion, model, gInput);
     clock_t tEndInversion = clock();
     L_(linfo) << "Inversionmodel is created in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";

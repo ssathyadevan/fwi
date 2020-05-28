@@ -15,10 +15,8 @@ private:
     // StepSize part
     dataGrid2D _chiEstimatePrevious;
     dataGrid2D _chiEstimateCurrent;
-
     dataGrid2D _gradientPrevious;
     dataGrid2D _gradientCurrent;
-
     int _iterationNumber;
 
     // Direction part

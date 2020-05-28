@@ -53,7 +53,7 @@ double ConjugateGradientWithRegularisationCalculator::calculateRegularisationSte
 
     double alpha = 0.0;
     // regularisation loop
-    for(int it = 0; it < _cgParametersInput._nRegularisationIterations; ++it)
+    for(int it = 0; it < _cgParametersInput._nIterations; ++it)
     {
         calculateRegularisationParameters();
 

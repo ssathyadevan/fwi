@@ -71,5 +71,5 @@ void ConjugateGradientInversionInputCardReader::readDeltaAmplificationParameter(
     {
         throw std::invalid_argument("Invalid slope (" + std::to_string(slope) + " <= 0) in: " + _fileName);
     }
-    _input.dAmplification = DeltaAmplification(start, slope);
+    _input.dAmplification = cgDeltaAmplification(start, slope);
 }

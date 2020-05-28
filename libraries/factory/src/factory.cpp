@@ -1,6 +1,7 @@
 #include "BorzilaiBorweinStepSizeCalculator.h"
 #include "ConjugateGradientDirectionCalculator.h"
 #include "ConjugateGradientStepSizeCalculator.h"
+#include "ConjugateGradientWithRegularisationCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
@@ -122,6 +123,17 @@ void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParamet
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
+bool Factory::splittableInversion(const std::string inversionMethod)
+{
+    bool splittable = true;
+    if(inversionMethod == "conjugateGradientRegularisationStepSize")   // decide name
+    {
+        splittable = false;
+    }
+
+    return splittable;
+}
+
 void Factory::createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
     forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
@@ -142,17 +154,50 @@ void Factory::createDirectionCalculator(const DirectionParameters &directionPara
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
 
+void Factory::createCombinedDirectionAndStepSize(forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
+    const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
+    const std::string &desiredCombinedDirectionAndStepSizeMethod)
+{   // desiredCombinedDirectionAndStepSizeMethod is actually desiredStepSizeMethod
+    if(desiredCombinedDirectionAndStepSizeMethod == "conjugateGradientRegularisation")
+    {
+        ConjugateGradientWithRegularisationParametersInput cgParametersInput;
+        cgParametersInput._tolerance = reconstructorParameters.tolerance;
+        cgParametersInput._nIterations = reconstructorParameters.maxIterationsNumber;
+        cgParametersInput._deltaAmplification._slope = stepSizeParameters.slope;
+        cgParametersInput._deltaAmplification._start = stepSizeParameters.initialStepSize;
+
+        const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
+        ConjugateGradientWithRegularisationCalculator *OneInstance =
+            new ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
+        _createdStepSizeCalculator = OneInstance;
+        _createdDirectionCalculator = OneInstance;
+        return;
+    }
+
+    L_(linfo) << "The combined Direction and StepSize method " << desiredCombinedDirectionAndStepSizeMethod << " was not found";
+    throw std::invalid_argument("The combined Direction and StepSize method " + desiredCombinedDirectionAndStepSizeMethod + " was not found");
+}
+
 StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
     forwardModelInterface *forwardModel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
     const std::vector<std::complex<double>> &pData)
 {
     checkForwardModelExistence(forwardModel);
 
-    L_(linfo) << "Create StepSizeCalculator...";
-    createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod, forwardModel->getGrid());
+    if(splittableInversion(desiredStepSizeMethod))
+    {
+        L_(linfo) << "Create StepSizeCalculator...";
+        createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod, forwardModel->getGrid());
 
-    L_(linfo) << "Create DirectionCalculator...";
-    createDirectionCalculator(stepAndDirectionInput.directionParameters, desiredDirectionMethod, forwardModel, pData);
+        L_(linfo) << "Create DirectionCalculator...";
+        createDirectionCalculator(stepAndDirectionInput.directionParameters, desiredDirectionMethod, forwardModel, pData);
+    }
+
+    else
+    {
+        createCombinedDirectionAndStepSize(
+            forwardModel, stepAndDirectionInput.stepSizeParameters, stepAndDirectionInput.reconstructorParameters, pData, desiredStepSizeMethod);
+    }
 
     _createdReconstructor =
         new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
