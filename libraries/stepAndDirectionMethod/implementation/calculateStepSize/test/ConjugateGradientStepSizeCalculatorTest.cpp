@@ -23,29 +23,26 @@ TEST(ConjugateGradientStepSizeCalculatorTest, calculateStepSizeAndUpdateVariable
     std::vector<std::complex<double>> kappaTimesZeta(nGridPoints);
     std::vector<std::complex<double>> residualVector(nGridPoints);
 
-    StepSizeCalculator *stepSizeCalculator;
-    stepSizeCalculator = new ConjugateGradientStepSizeCalculator(grid, initialStepSize);
+    StepSizeCalculator *stepSizeCalculator = new ConjugateGradientStepSizeCalculator(grid, initialStepSize);
     double stepSizeTest = 0.0;
 
     // if kappaTimesZeta =0
     EXPECT_THROW(stepSizeTest = stepSizeCalculator->calculateStepSize(), std::overflow_error);
 
     // updating kappaTimesZeta and residualVector
-    std::complex<double> complexOne(1, 0);
-    std::complex<double> complexTwo(2, 0);
+    std::complex<double> tmpComplexOne(1, 0);
+    std::complex<double> tmpComplexTwo(2, 0);
 
     for(int i = 0; i < nGridPoints; ++i)
     {
-        kappaTimesZeta[i] += complexOne;
-        residualVector[i] += complexTwo;
+        kappaTimesZeta[i] += tmpComplexOne;
+        residualVector[i] += tmpComplexTwo;
     }
 
     stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1, kappaTimesZeta, residualVector);
 
     double stepSizeBenchmark = 2.0;
-
     stepSizeTest = stepSizeCalculator->calculateStepSize();
-
     ASSERT_DOUBLE_EQ(stepSizeTest, stepSizeBenchmark);
 
     delete stepSizeCalculator;
