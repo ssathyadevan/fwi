@@ -27,6 +27,7 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
     _chiEstimate.zero();
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
+    bool isConverged = false;
 
     // main loop//
     int counter = 1;
@@ -57,7 +58,8 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
 
         // Result + logging
         residualCurrent = errorFunctional(residualArray, pData, eta);   // eq: errorFunc
-        logResidualResults(0, it, residualCurrent, counter, residualLogFile);
+        isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
+        logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
 
         // Save variables for next iteration
         gradientPrevious = gradientCurrent;
@@ -80,7 +82,8 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
 
             // Result + logging
             residualCurrent = errorFunctional(residualArray, pData, eta);
-            logResidualResults(it1, it, residualCurrent, counter, residualLogFile);
+            isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
+            logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 
             // breakout check
             if((it1 > 0) &&
@@ -167,9 +170,10 @@ double ConjugateGradientInversion::errorFunctional(std::vector<std::complex<doub
     return residual;
 }
 
-void ConjugateGradientInversion::logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile)
+void ConjugateGradientInversion::logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile, bool isConverged)
 {
-    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual;
+    std::string convergenceMessage = isConverged ? "Converged" : "Not Converged";
+    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
     residualLogFile << std::setprecision(17) << residual << "," << counter << std::endl;
 }
 

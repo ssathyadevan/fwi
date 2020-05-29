@@ -70,7 +70,7 @@ class ConjugateGradientInversion : public inversionInterface
      * @param counter iteration number
      * @param residualLogFile file where residuals are stored separately
      */
-    void logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile);
+    void logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile, bool isConverged);
 
     /**
      * @brief calculateRegularisationParameters calculates all regularisation parameters necessary for the calculations in the current loop.
