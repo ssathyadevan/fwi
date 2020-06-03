@@ -103,9 +103,9 @@ os.chdir(os.path.join(FWI_INSTALL_PATH,regressiontestName))
 cwd = os.getcwd()
 
 for test in tests:
-    print("###############################################################")
-    print("              Regression test: {}".format(test))
-    print("###############################################################")
+    print("###############################################################", flush=True)
+    print("              Regression test: {}".format(test), flush=True)
+    print("###############################################################\n", flush=True)
 
     os.mkdir("{}RUN".format(test))
 
