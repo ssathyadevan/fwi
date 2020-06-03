@@ -27,6 +27,7 @@ class Helmholtz2D {
     ~Helmholtz2D();
     complexDataGrid2D solve(const std::array<double, 2> &source, complexDataGrid2D &pInit);
     void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx); //Temporary for testing
+    void CreateABCSecondOrderMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx);
 
 private:
     Eigen::SparseMatrix<std::complex<double>> _A;

@@ -341,6 +341,158 @@ void Helmholtz2D::CreateABCMatrix(double omega, std::array<double, 2> dx, std::v
     }
 }
 
+void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx)
+{
+    std::complex<double> val;
+    std::complex<double> tmp;
+    double nxz;
+    int index;
+    for(int i = 0; i < nx[0]; ++i)   // x index
+    {
+        for(int j = 0; j < nx[1]; ++j)   // z index
+        {
+            index = j * nx[0] + i;
+            nxz = 1.0 / _waveVelocity[index];
+            // Diagonal
+            val = -2. / (dx[0] * dx[0]) - 2. / (dx[1] * dx[1]) + omega * omega * nxz * nxz;
+            triplets.push_back(Eigen::Triplet(index, index, val));
+
+            // Non-diagonal
+            if(i != 0)
+            {
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+            }
+            if(i != nx[0] - 1)
+            {
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+            }
+            if(j != 0)
+            {
+                val = 1. / (dx[1] * dx[1]);
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+            }
+            if(j != nx[1] - 1)
+            {
+                val = 1. / (dx[1] * dx[1]);
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+            }
+
+            // ABC
+            if(j == 0)
+            {
+                tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
+
+                val = std::complex(0., 2.) * omega * nxz / dx[1] + -2. * tmp;
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[1] + dx[1]);
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+            }
+            if(j == nx[1] - 1)
+            {
+                tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
+
+                val = std::complex(0., 2.) * omega * nxz / dx[1] + -2. * tmp;
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[1] + dx[1]);
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+            }
+            if(i == 0)
+            {
+                tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
+
+                val = std::complex(0., 2.) * omega * nxz / dx[0] + -2. * tmp;
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] + dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+            }
+            if(i == nx[0] - 1)
+            {
+                tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
+
+                val = std::complex(0., 2.) * omega * nxz / dx[0] + -2. * tmp;
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] + dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+
+                val = tmp;
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+            }
+            if(i == 0 && j == 0)
+            {
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+
+                val = 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+            }
+            if(i == 0 && j == nx[1] - 1)
+            {
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + 1, val));
+
+                val = 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+
+            }
+            if(i == nx[0] - 1 && j == 0)
+            {
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] + 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+
+                val = -2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+            }
+            if(i == nx[0] - 1 && j == nx[1] - 1)
+            {
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] + 2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index, val));
+
+                val = 1. / (dx[0] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - 1, val));
+
+                val = -2. / (dx[1] * dx[0]);
+                triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+            }
+        }
+    }
+}
+
 void Helmholtz2D::buildMatrix()
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
