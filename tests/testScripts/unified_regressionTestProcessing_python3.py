@@ -221,8 +221,8 @@ for i in range(0, prfct_rsrvr_chi_array.shape[0]):
                 (new_est_chi_array[i, j] - bench_est_chi_array[i, j]) \
                 / resolution_of_bench * 100
             )
-        if (abs(diff_bench_and_new[i, j]) > tolerance):
-            regression_test_passed = False
+        #if (abs(diff_bench_and_new[i, j]) > tolerance):
+            #regression_test_passed = False
 
 numerics_filename_bench = "diff_chi_perfect_and_" + bench + ".csv"
 numerics_filename_new = "diff_chi_perfect_and_" + new + ".csv"
@@ -278,16 +278,18 @@ print("                    STATISTICAL ANALYSIS")
 print("************************************************************\n")
 
 def kMeanLargest(arr, k):
-    arr.sort(reverse = True)
+    sort_arr=sorted(arr, reverse=True)
+    sum=0.0
     for i in range(k):
-        sum += arr[i]
+        sum += sort_arr[i]
     mean = sum/k
     return mean
 
 def kMeanSmallest(arr, k):
-    arr.sort(reverse = False)
+    sort_arr=sorted(arr, reverse=False)
+    sum=0.0
     for i in range(k):
-        sum -= arr[i]
+        sum -= sort_arr[i]
     mean = sum/k
     return mean
 
@@ -309,26 +311,32 @@ print("\nThe VAF of the benchmark calculation: " + str(vaf_bench) + "%")
 vaf_new = ((1 - (new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The VAF of the new calculation:       " + str(vaf_new) + "%")
 
-fit_bench = (1 - (numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+fit_bench = ((1 - numpy.sqrt(bench_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("\nThe FIT of the benchmark calculation: " + str(fit_bench) + "%")
-fit_new = (1 - (numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
+fit_new = ((1 - numpy.sqrt(new_est_chi_array_diff_mean / prfct_rsrvr_chi_array_mean)) * 100)
 print("The FIT of the new calculation:       " + str(fit_new) + "%")
 
-bench_max = kMeanLargest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
-bench_min = kMeanSmallest(diff_prfct_and_bench,int(ncols * nrows * 0.01))
+diff_prfct_and_bench_array = diff_prfct_and_bench.flatten()
+diff_prfct_and_bench_array.flatten()
+bench_max = kMeanLargest(diff_prfct_and_bench_array,int(ncols * nrows * 0.01))
+bench_min = kMeanSmallest(diff_prfct_and_bench_array,int(ncols * nrows * 0.01))
 
-new_max = kMeanLargest(diff_prfct_and_new,int(ncols * nrows * 0.01))
-new_min = kMeanSmallest(diff_prfct_and_new,int(ncols * nrows * 0.01))
+diff_prfct_and_new_array = diff_prfct_and_new.flatten()
+diff_prfct_and_new_array.flatten()
+new_max = kMeanLargest(diff_prfct_and_new_array,int(ncols * nrows * 0.01))
+new_min = kMeanSmallest(diff_prfct_and_new_array,int(ncols * nrows * 0.01))
 
 print("\nMaximum deviation")
 print("Bench: " + str(float_formatter(bench_max)) + "%")
 print("New:   " + str(float_formatter(new_max)) + "%\n")
 
+
 print("\nMinimum deviation")
 print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
 
-if (1.001 * mse_bench > mse_new):
+
+if ((1 + tolerance) * mse_bench) > mse_new):
     increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
@@ -351,6 +359,7 @@ datetime_new_start = find(" INFO: Starting", new + "/output/" + new, "%X.%f", "l
 datetime_new_finish = find(" INFO: Finished", new + "/output/" + new, "%X.%f", "log")
 new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
 
+#1.01 specifies the factor between the runtime of the bench and new
 if (1.01 * bench_total_seconds > new_total_seconds):
     increased_performance_test_passed = True
 
@@ -364,6 +373,10 @@ print("                      OVERALL ANALYSIS                          ")
 print("************************************************************\n")
 print("Increased overall precision:  " + str(increased_precision_test_passed))
 print("Increased performance:        " + str(increased_performance_test_passed))
+
+if (increased_performance_test_passed is True):
+    if (increased_precision_test_passed is True):
+         regression_test_passed = True
 
 if (regression_test_passed is True):
     s = 'True'

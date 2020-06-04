@@ -10,6 +10,7 @@ double ConjugateGradientStepSizeCalculator::calculateStepSize()
 {
     double alphaNumerator = 0.0;
     double alphaDenominator = 0.0;
+
     for(int i = 0; i < _nGridPoints; ++i)
     {
         alphaNumerator += std::real(_residualVector[i] * _kappaTimesDirection[i]);

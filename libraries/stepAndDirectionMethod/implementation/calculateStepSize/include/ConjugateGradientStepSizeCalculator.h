@@ -17,7 +17,7 @@ public:
     /**
      * @brief calculateStepSize This method returns the computation described in eq. 2.17 of
      * doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-full-waveform-inversion.pdf
-     * @return the step optimized for the standard conjugate gradient withouth regularisation
+     * @return The new step size
      */
     double calculateStepSize();
 
