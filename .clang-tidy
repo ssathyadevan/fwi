@@ -1,6 +1,7 @@
 Checks:          'readability-identifier-naming*, modernize-use-override'
 WarningsAsErrors: ''
-HeaderFilterRegex: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
 AnalyzeTemporaryDtors: false
 
 CheckOptions:
@@ -14,6 +15,3 @@ CheckOptions:
     value:           _
   - key:             readability-identifier-naming.StructCase
     value:           CamelCase
-
-
-
