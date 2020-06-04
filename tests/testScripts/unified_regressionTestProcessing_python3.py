@@ -336,7 +336,7 @@ print("Bench: " + str(float_formatter(bench_min)) + "%")
 print("New:   " + str(float_formatter(new_min)) + "%")
 
 
-if ((1 + tolerance) * mse_bench) > mse_new):
+if ((1 + tolerance) * mse_bench > mse_new):
     increased_precision_test_passed = True
 print("\n\n************************************************************")
 print("                    PERFORMANCE ANALYSIS                          ")
