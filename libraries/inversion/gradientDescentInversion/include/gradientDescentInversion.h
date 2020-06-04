@@ -24,6 +24,8 @@ public:
     gradientDescentInversion(const gradientDescentInversion &) = delete;
     gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;
 
+    void logResidualResults(int iteration, double residual, bool isConverged);
+
     dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
     std::vector<double> differential(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
     double functionF(const dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta);

@@ -24,12 +24,13 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
     parent.randomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
-    L_(linfo) << "Parent Res | Gen | Mutation Rate" << std::endl;
+    L_(linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
     std::cerr << "\n";
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
     _forwardModel->calculateKappa();
+    bool isConverged = false;
 
     // main loop// Looping through the generations
     int counter = 1;
@@ -55,8 +56,12 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
             counter++;   // store the residual value in the residual log
             ++bar;
         }
-        L_(linfo) << std::setprecision(7) << parentResSq << "   |  " << it << " | " << mutationRate << std::endl;
-        // std::cerr << "\033[1A" << it << "/"<<  _eiInput.nGenerations << "(" << 100 * double(it)/double(_eiInput.nGenerations) << "%)        " ;
+
+        isConverged = (favouriteChildResSq < _eiInput.toleranceOuter);
+
+        std::string converganceMessage = isConverged ? "Converged" : "Not Converged";
+
+        L_(linfo) << std::setprecision(7) << parentResSq << "   |  " << it << " | " << mutationRate  << " | "  << converganceMessage << std::endl;
 
         if(favouriteChildResSq == parentResSq && preParentResSq == favouriteChildResSq)
         {
