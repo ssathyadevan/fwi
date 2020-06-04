@@ -139,8 +139,6 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
 {
     assert(G.getGrid() == p_init.getGrid());
 
-    Iter2 iter2 = _fmInput.iter2;
-
     complexDataGrid2D chi_p(_grid), chi_p_old(_grid);
     complexDataGrid2D dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
 
@@ -161,7 +159,7 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
 
     p_tot = p_init;
 
-    for(int it = 0; it < iter2.n; it++)
+    for(int it = 0; it < _fmInput.nrOfIterations; it++)
     {
         chi_p = p_tot * chi;
 
@@ -172,7 +170,7 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
 
         res = dWNorm / chi_pNorm;
 
-        if(res < iter2.tolerance && it != 0)
+        if(res < _fmInput.tolerance && it != 0)
         {
             if(true)
             {
@@ -184,7 +182,7 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
             break;
         }
 
-        if(iter2.calcAlpha)
+        if(_fmInput.calcAlpha)
         {
             phi.push_back(G.contractWithField(dW));
             f_rhs = G.contractWithField(chi * p_init);
@@ -221,9 +219,9 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
         chi_p.zero();
     }
 
-    if(res >= iter2.tolerance)
+    if(res >= _fmInput.tolerance)
     {
-        L_(linfo) << "No convergence after " << iter2.n << " iterations."
+        L_(linfo) << "No convergence after " << _fmInput.nrOfIterations << " iterations."
                   << "Res = " << res;
     }
 

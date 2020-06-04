@@ -7,27 +7,39 @@
 integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder)
     : inputCardReader()
 {
-    readCard(caseFolder);
-    checkInput();
+    const std::string stringInputFolder = "/input/";
+    std::string filePath = caseFolder + stringInputFolder + _fileName;
+    readJsonFile(filePath);
 }
 
-integralForwardModelInput integralForwardModelInputCardReader::getInput()
+void integralForwardModelInputCardReader::readJsonFile(const std::string &filePath)
 {
-    return _input;
+    nlohmann::json jsonFile = readFile(filePath);
+    readIterParameters(jsonFile);
 }
 
-void integralForwardModelInputCardReader::readCard(const std::string &caseFolder)
+void integralForwardModelInputCardReader::readIterParameters(const nlohmann::json &jsonFile)
 {
-    nlohmann::json j = readFile(caseFolder + "/input/IntegralFMInput.json");
+    const std::string parameterIter = "Iter2";
+    const std::string parameterNumber = "n";
+    const std::string parameterTolerance = "tolerance";
+    const std::string parameterCalcAlpha = "calcAlpha";
 
-    integralForwardModelInput input{
-        j["Iter2"]["n"], j["Iter2"]["tolerance"], j["Iter2"]["calcAlpha"]};
+    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterIter);
 
-    _input = input;
-}
+    int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
+    if (nrOfIterations <= 0)
+    {
+        throw std::invalid_argument("Invalid number of iterations in IntegralFMInput.json.");
+    }
 
-void integralForwardModelInputCardReader::checkInput()
-{
-    if (_input.iter2.n <= 0) {throw std::invalid_argument("Invalid number of iterations in IntegralFMInput.json.");}
-    if (_input.iter2.tolerance <= 0) {throw std::invalid_argument("Invalid tolerance in IntegralFMInput.json.");}
+    double tolerance = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterTolerance);
+    if (tolerance <= 0)
+    {
+        throw std::invalid_argument("Invalid tolerance in IntegralFMInput.json.");
+    }
+
+    bool calcAlpha = ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
+
+    _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha);
 }

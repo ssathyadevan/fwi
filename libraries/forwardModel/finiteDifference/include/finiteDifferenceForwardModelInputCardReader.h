@@ -2,6 +2,7 @@
 
 #include "finiteDifferenceForwardModelInput.h"
 #include "inputCardReader.h"
+#include "ReadJsonHelper.h"
 
 #include <fstream>
 #include <sstream>
@@ -12,10 +13,12 @@ class finiteDifferenceForwardModelInputCardReader : public inputCardReader
 {
 public:
     finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder);
-    finiteDifferenceForwardModelInput getInput() { return _input; }
+    const finiteDifferenceForwardModelInput getInput() const { return _input; }
 
 private:
-    virtual void readCard(const std::string &caseFolder);
-    void checkInput();
     finiteDifferenceForwardModelInput _input;
+    const std::string _fileName = "FiniteDifferenceFMInput.json";
+    void readJsonFile(const std::string &filePath);
+    void readPMLWidthFactorParameters(const nlohmann::json &jsonFile);
+    void readSourceParameters(const nlohmann::json &jsonFile);
 };

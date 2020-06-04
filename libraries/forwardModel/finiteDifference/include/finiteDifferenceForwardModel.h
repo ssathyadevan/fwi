@@ -28,8 +28,8 @@ private:
 
     complexDataGrid2D ***_p0;
     complexDataGrid2D **_pTot;
-    complexDataGrid2D **_Kappa;
-    finiteDifferenceForwardModelInput _fmInput;
+    complexDataGrid2D **_kappa;
+    finiteDifferenceForwardModelInput _fMInput;
 
     void createP0();
     void deleteP0();

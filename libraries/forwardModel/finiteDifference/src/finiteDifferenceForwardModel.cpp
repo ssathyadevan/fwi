@@ -4,9 +4,9 @@
 #include "log.h"
 
 finiteDifferenceForwardModel::finiteDifferenceForwardModel(
-    const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput) :
+    const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput) :
     forwardModelInterface(grid, src, recv, freq),
-    _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
+    _Greens(), _p0(), _pTot(), _kappa(), _fMInput(fMInput)
 {
     L_(linfo) << "Creating Greens function field...";
     createGreens();
@@ -27,7 +27,7 @@ finiteDifferenceForwardModel::~finiteDifferenceForwardModel()
     if(_pTot != nullptr)
         this->deletePtot();
 
-    if(_Kappa != nullptr)
+    if(_kappa != nullptr)
         this->deleteKappa();
 }
 
@@ -117,11 +117,11 @@ void finiteDifferenceForwardModel::deletePtot()
 
 void finiteDifferenceForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
 {
-    _Kappa = new complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
+    _kappa = new complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
 
     for(int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
-        _Kappa[i] = new complexDataGrid2D(_grid);
+        _kappa[i] = new complexDataGrid2D(_grid);
     }
 }
 
@@ -129,11 +129,11 @@ void finiteDifferenceForwardModel::deleteKappa()
 {
     for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        delete _Kappa[i];
+        delete _kappa[i];
     }
 
-    delete[] _Kappa;
-    _Kappa = nullptr;
+    delete[] _kappa;
+    _kappa = nullptr;
 }
 
 void finiteDifferenceForwardModel::calculatePTot(const dataGrid2D &chiEst)
@@ -147,7 +147,7 @@ void finiteDifferenceForwardModel::calculatePTot(const dataGrid2D &chiEst)
     {
         li = i * _src.nSrc;
 
-        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c0, chiEst, _fmInput);
+        Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c0, chiEst, _fMInput);
 
         L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
 
@@ -175,7 +175,7 @@ void finiteDifferenceForwardModel::calculateKappa()
 
             for(int k = 0; k < _src.nSrc; k++)
             {
-                *_Kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _src.nSrc + k]);
+                *_kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _src.nSrc + k]);
             }
         }
     }
@@ -190,7 +190,7 @@ void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureF
 {
     for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
-        kOperator[i] = dotProduct(*_Kappa[i], CurrentPressureFieldSerial);
+        kOperator[i] = dotProduct(*_kappa[i], CurrentPressureFieldSerial);
     }
 }
 
@@ -208,7 +208,7 @@ void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vect
             l_j = j * _src.nSrc;
             for(int k = 0; k < _src.nSrc; k++)
             {
-                kDummy = *_Kappa[l_i + l_j + k];
+                kDummy = *_kappa[l_i + l_j + k];
                 kDummy.conjugate();
                 kRes += kDummy * res[l_i + l_j + k];
             }
@@ -225,7 +225,7 @@ void finiteDifferenceForwardModel::getUpdateDirectionInformationMPI(
 
     for(int i = offset; i < offset + block_size; i++)
     {
-        kDummy = *_Kappa[i];
+        kDummy = *_kappa[i];
         kDummy.conjugate();
         kRes += kDummy * res[i - offset];
     }
@@ -249,7 +249,7 @@ void finiteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<
 
             for(int k = 0; k < _src.nSrc; k++)
             {
-                kDummy = *_Kappa[l_i + l_j + k];
+                kDummy = *_kappa[l_i + l_j + k];
 
                 kRes += kDummy * res[l_i + l_j + k];
             }
