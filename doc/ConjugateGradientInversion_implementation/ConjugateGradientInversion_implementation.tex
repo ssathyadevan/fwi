@@ -97,11 +97,11 @@ The main body of the text is taken from \texttt{\detokenize{.../doc/ReadMe/1_Pro
 
 There might be a discrepancy in a few variables' names, as during the refactor some have been made member variables of the class, thus obtaining a $'\_'$ character at the beginning of their names.
 
-Moreover, whenever Line numbers are mentioned, they belong to the original \textbf{conjugateGradientInversion.cpp} file.
+Moreover, whenever Line numbers are mentioned, we refer to the original \textbf{conjugateGradientInversion.cpp} file.
 
 \section{Introduction}
 Please consult  \texttt{\detokenize{.../doc/ReadMe/1_ProjectDescription.pdf}} for the full document. 
-The parts that have been added are highlighted in \textcolor{red}{red}, and appear in subsection 3.3.2.
+The parts that have been added are highlighted in \textcolor{red}{red} and appear in subsection 3.3.2.
 
 \section{The Model}
 \subsection{Physical model}
@@ -565,6 +565,11 @@ During every iteration in the \textit{main loop}, indexed by $n$, we will perfor
 \textcolor{red}{
 Since most all of the 'regularisation' part is computed within the \textit{inner loop}, it seems legit asking what is the purpose of the \textit{main loop}, which also contains operations that should be performed only once (see point 4. of above list).
 The only part that is actually unique to the \textit{main loop} is the updating of the $\delta^{ampl}_n$ parameter, used in the computation of the Steering Factor in \textbf{calculateSteeringFactor()}.
+\newline
+Moreover, as in the inner loop the direction $zeta$ is updated along with the stepSize $alpha$, it required modifications to the whole \textit{StepAndDirection} refactoring, such as creating a class that is both \textit{DirectionCalculator} and \textit{StepSizeCalculator}, thus creating an inheritance diamond issue and forcing to modify the factory for this 'unsplittable' algorithm.
+If we were however to follow the algorithm in the Thesis, it could be implemented simply as a \textit{StepSizeCalculator}, which would fit extremely well with the new design.
+Please note that currently the regularisation algorithm described in Thesis is not present anywhere in the project.
+\newline
 }
 
 \textcolor{red}{

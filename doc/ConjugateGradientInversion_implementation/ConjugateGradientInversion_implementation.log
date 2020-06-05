@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.25)  5 JUN 2020 12:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.25)  5 JUN 2020 13:50
 entering extended mode
 **./ConjugateGradientInversion_implementation.tex
 (ConjugateGradientInversion_implementation.tex
@@ -890,8 +890,7 @@ kend-pdfmode.def"
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count297
 \l__pdf_internal_box=\box83
-)
-No file ConjugateGradientInversion_implementation.aux.
+) (ConjugateGradientInversion_implementation.aux)
 \openout1 = `ConjugateGradientInversion_implementation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
@@ -910,6 +909,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 84.
 LaTeX Font Info:    ... okay on input line 84.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 84.
 LaTeX Font Info:    ... okay on input line 84.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -986,10 +986,13 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 84.
 LaTeX Info: Redefining \pageref on input line 84.
 LaTeX Info: Redefining \nameref on input line 84.
+ (ConjugateGradientInversion_implementation.out)
+(ConjugateGradientInversion_implementation.out)
 \@outlinefile=\write6
 \openout6 = `ConjugateGradientInversion_implementation.out'.
 
- ABD: EveryShipout initializing macros
+
+ABD: EveryShipout initializing macros
 LaTeX Font Info:    Trying to load font information for U+msa on input line 86.
 
 
@@ -1019,57 +1022,21 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 ) [1
 
 {C:/Users/lmorelli/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+(ConjugateGradientInversion_implementation.toc)
 \tf@toc=\write7
 \openout7 = `ConjugateGradientInversion_implementation.toc'.
 
-
-[2]
+ [2]
 Overfull \hbox (43.7423pt too wide) in paragraph at lines 92--93
 \OT1/cmtt/m/n/10 .../doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-f
 ull-waveform-inversion.pdf
  []
 
-
-LaTeX Warning: Reference `CG_solver' on page 3 undefined on input line 96.
-
-
-LaTeX Warning: Reference `eq:calculateData' on page 3 undefined on input line 1
-28.
-
-
-LaTeX Warning: Reference `eq:calculateData' on page 3 undefined on input line 1
-36.
-
 [3
 
-]
-
-LaTeX Warning: Reference `eq:GeneralGreensFunc' on page 4 undefined on input li
-ne 167.
-
-[4]
-
-LaTeX Warning: Reference `eq:splitHelmholtzU0' on page 5 undefined on input lin
-e 215.
-
-
-LaTeX Warning: Reference `eq:calculateData' on page 5 undefined on input line 2
-37.
-
-
-LaTeX Warning: Reference `eq:GeneralGreensSol' on page 5 undefined on input lin
-e 245.
-
-[5]
+] [4] [5]
 
 LaTeX Warning: Citation `Comparison' on page 6 undefined on input line 267.
-
-
-LaTeX Warning: Reference `sec:ABC' on page 1 undefined on input line 267.
-
-
-LaTeX Warning: Reference `sec:FDimplementation' on page 1 undefined on input li
-ne 267.
 
 
 LaTeX Warning: Citation `LectNotes' on page 6 undefined on input line 270.
@@ -1080,17 +1047,7 @@ LaTeX Warning: Citation `AbsorpationRates' on page 6 undefined on input line 29
 
 [6]
 
-LaTeX Warning: Reference `eqn:discret' on page 1 undefined on input line 310.
-
-
 LaTeX Warning: Citation `Erlangga2008' on page 7 undefined on input line 313.
-
-
-LaTeX Warning: Reference `eqn:discret' on page 1 undefined on input line 334.
-
-
-LaTeX Warning: Reference `eqn:PMLHelmholtz' on page 1 undefined on input line 3
-34.
 
 [7]
 Underfull \hbox (badness 10000) in paragraph at lines 350--351
@@ -1118,49 +1075,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 369--370
 LaTeX Warning: Citation `Hicks' on page 9 undefined on input line 371.
 
 
-LaTeX Warning: Reference `sec:ABC' on page 1 undefined on input line 386.
-
-
 LaTeX Warning: Citation `Hicks' on page 9 undefined on input line 388.
 
-[9] [10]
-
-LaTeX Warning: Reference `deriveerrorfunctional' on page 11 undefined on input 
-line 473.
-
-[11]
-
-LaTeX Warning: Reference `eq:modelledDataGreensConv' on page 12 undefined on in
-put line 553.
-
-
-LaTeX Warning: Reference `eq:modelledDataGreensConv' on page 12 undefined on in
-put line 555.
-
-
-LaTeX Warning: Reference `eq:residualMeasureModel' on page 12 undefined on inpu
-t line 556.
-
-
-LaTeX Warning: Reference `eq:updateDirectionsCG' on page 12 undefined on input 
-line 558.
-
-
-LaTeX Warning: Reference `eq:optimalStepSizeCG' on page 12 undefined on input l
-ine 560.
-
-
-LaTeX Warning: Reference `eq:contrastUpdate' on page 12 undefined on input line
- 561.
-
-
+[9] [10] [11]
 Overfull \hbox (70.72632pt too wide) in paragraph at lines 563--564
 \OT1/cmr/m/n/10 dex with $1 \OMS/cmsy/m/n/10  \OML/cmm/m/it/10 j < ConjugateGr
 adientWithRegularisationParametersInput:$ $[]nRegularisationIterations$
  []
 
 
-Overfull \hbox (2.71167pt too wide) in paragraph at lines 575--576
+Overfull \hbox (2.71167pt too wide) in paragraph at lines 580--581
 \OT1/cmr/m/n/10 First, we com-pute the Reg-u-lar-i-sa-tion Pa-ram-e-ters $\OML/
 cmm/m/it/10 b[]\OT1/cmr/m/n/10 ([]\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )$[][][], $
 \OML/cmm/m/it/10 []$ \OT1/cmr/m/n/10 and $[]\OML/cmm/m/it/10 regularisationCur
@@ -1168,65 +1092,36 @@ rent:gradient$
  []
 
 [12]
-
-LaTeX Warning: Reference `eq:errorFuncRegulSteering' on page 13 undefined on in
-put line 600.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--602
+Underfull \hbox (badness 10000) in paragraph at lines 605--607
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 613--615
+Underfull \hbox (badness 10000) in paragraph at lines 618--620
 
  []
 
 
-LaTeX Warning: Reference `eq:integrandForDiscreteK' on page 13 undefined on inp
-ut line 629.
-
-
-Overfull \hbox (6.48102pt too wide) in paragraph at lines 629--629
+Overfull \hbox (6.48102pt too wide) in paragraph at lines 634--634
 \OT1/cmr/m/n/10 with $[]\OML/cmm/m/it/10 regularisation[] \OT1/cmr/m/n/10 = []\
 OML/cmm/m/it/10 regularisationPrevious$\OT1/cmr/m/n/10 , $[]\OML/cmm/m/it/10 re
 gularisation[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 regularisationCurrent$
  []
 
 [13]
-Overfull \hbox (10.9962pt too wide) in paragraph at lines 629--631
+Overfull \hbox (10.9962pt too wide) in paragraph at lines 634--636
 \OT1/cmr/m/n/10 where $\OML/cmm/m/it/10 cellVolume$ \OT1/cmr/m/n/10 rep-re-sent
 s the vol-ume of a dis-creti-sa-tion cell com-ing from $[]\OML/cmm/m/it/10 grid
 :getCellVolume\OT1/cmr/m/n/10 ()$.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 629--631
+Underfull \hbox (badness 10000) in paragraph at lines 634--636
 
  []
 
 
-LaTeX Warning: Reference `eq:calculateRegularisationGradient' on page 14 undefi
-ned on input line 644.
-
-
-LaTeX Warning: Reference `eq:PolakRibiereDirection' on page 14 undefined on inp
-ut line 644.
-
-
-LaTeX Warning: Reference `eq:updateDirectionsCG' on page 14 undefined on input 
-line 644.
-
-
-LaTeX Warning: Reference `totalcostprefactors' on page 14 undefined on input li
-ne 659.
-
-
-LaTeX Warning: Reference `eq:errorFuncFourthOrder' on page 14 undefined on inpu
-t line 670.
-
-
-Overfull \hbox (52.52248pt too wide) in paragraph at lines 670--671
+Overfull \hbox (52.52248pt too wide) in paragraph at lines 675--676
 \OT1/cmr/m/n/10 There is an-other Bug (Line 99, just no-ticed), where a func-ti
 on that should up-date the $[]\OML/cmm/m/it/10 regularisationCurrent$
  []
@@ -1234,57 +1129,37 @@ on that should up-date the $[]\OML/cmm/m/it/10 regularisationCurrent$
 [14] [15]
 
 LaTeX Warning: Citation `AbsorpationRates' on page 16 undefined on input line 7
-44.
+49.
 
 
 LaTeX Warning: Citation `SecondOrderCorner' on page 16 undefined on input line 
-750.
+755.
 
 
-LaTeX Warning: Reference `eqn:SecondOrderABC' on page 1 undefined on input line
- 759.
-
-
-LaTeX Warning: Reference `eqn:discret' on page 1 undefined on input line 767.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 767--768
+Underfull \hbox (badness 10000) in paragraph at lines 772--773
 
  []
 
-
-LaTeX Warning: Reference `eqn:discret' on page 1 undefined on input line 769.
-
 [16] [17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 785.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 785.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 790.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 790.
  (ConjugateGradientInversion_implementation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 785.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 785.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 790.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 790.
+Package rerunfilecheck Info: File `ConjugateGradientInversion_implementation.ou
+t' has not changed.
+(rerunfilecheck)             Checksum: 5CEADC617FE9A21E66FE1FD8555F1EFB;1837.
 
-
-Package rerunfilecheck Warning: File `ConjugateGradientInversion_implementation
-.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `ConjugateGradientInversion_implemen
-tation.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  5CEADC617FE9A21E66FE1FD8555F1EFB;1837.
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 785.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 790.
  ) 
 Here is how much of TeX's memory you used:
- 23165 strings out of 480930
- 467518 string characters out of 2898354
- 769897 words of memory out of 3000000
- 38408 multiletter control sequences out of 15000+200000
+ 23200 strings out of 480930
+ 468736 string characters out of 2898354
+ 775013 words of memory out of 3000000
+ 38435 multiletter control sequences out of 15000+200000
  544267 words of font info for 75 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,13n,81p,727b,404s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1322,10 +1197,10 @@ i/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/latxfont/lasy10
 .pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
 sfonts/symbols/msbm10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/
 fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on ConjugateGradientInversion_implementation.pdf (17 pages, 3932
-78 bytes).
+Output written on ConjugateGradientInversion_implementation.pdf (17 pages, 4120
+75 bytes).
 PDF statistics:
- 367 PDF objects out of 1000 (max. 8388607)
+ 498 PDF objects out of 1000 (max. 8388607)
  153 named destinations out of 1000 (max. 500000)
- 13 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 213 words of extra memory for PDF output out of 10000 (max. 10000000)
 

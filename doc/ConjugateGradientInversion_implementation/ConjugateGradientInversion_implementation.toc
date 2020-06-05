@@ -17,7 +17,7 @@
 \contentsline {subsection}{\numberline {3.3}Solver and Noise}{10}{subsection.3.3}%
 \contentsline {subsubsection}{\numberline {3.3.1}The Conjugate Gradient (CG) Scheme}{10}{subsubsection.3.3.1}%
 \contentsline {subsubsection}{\numberline {3.3.2}Multiplicative Regularisation}{12}{subsubsection.3.3.2}%
-\contentsline {paragraph}{\numberline {3.3.2.1}Inner Loop}{12}{paragraph.3.3.2.1}%
+\contentsline {paragraph}{\numberline {3.3.2.1}Inner Loop}{13}{paragraph.3.3.2.1}%
 \contentsline {section}{\numberline {A}Appendices}{15}{appendix.A}%
 \contentsline {subsection}{\numberline {A.1}Derivation of the functional derivative of the error functional}{15}{subsection.A.1}%
 \contentsline {subsection}{\numberline {A.2}Prefactors of the Total Cost Equation}{15}{subsection.A.2}%
