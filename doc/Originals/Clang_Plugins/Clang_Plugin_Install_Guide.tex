@@ -110,41 +110,61 @@ Run the following command in your Linux terminal: \texttt{sudo apt install clang
 \includegraphics[width=0.6 \textwidth]{clang-tidy3.png}
 \end{figure}
 
-\item Having done this, go to \textbf{Tools} $\rightarrow$ \textbf{Options}
+
+\item In the options, go to \textbf{Analyzer} and to the \textbf{Clang Tools} tab.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.6 \textwidth]{clang-tidy3.png}
+\includegraphics[width=0.6 \textwidth]{clang-tidy4.png}
 \end{figure}
 
-\item In the options, go to \textbf{C++} and go to the \textbf{Code Model}. Next click on \textbf{Manage} next to the
-\textbf{Diagnostic Configuration}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.85 \textwidth]{clang-tidy4.png}
-\end{figure}
-
-\item Select \textbf{Clang-only checks for almost everything [built-in]} and press \textbf{Copy} to be able to customize it
-and give it a suitable name.
+\item Next select Diagnostic Configuration by clicking on \textbf{Default Clang-Tidy and Clazy Checks} option.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7 \textwidth]{clang-tidy5.png}
 \end{figure}
 
-\item Select your own diagnostic configuration, go to the tab \textbf{Clang-Tidy}, select \textbf{Use .clang-tidy config
+\item Select \textbf{Default Clang-Tidy and Clazy checks} and press \textbf{Copy} to be able to customize it
+and give it a suitable name.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6 \textwidth]{clang-tidy6.png}
+\end{figure}
+
+\item Select your own diagnostic configuration, go to the tab \textbf{Clang-Tidy Checks}, select \textbf{Use .clang-tidy config
 file} in the drop-down and click \textbf{OK}.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.55 \textwidth]{clang-tidy6.png}
+\includegraphics[width=0.6 \textwidth]{clang-tidy7.png}
 \end{figure}
 
 \newpage
 
-\item Lastly, select the newly created diagnostic configuration in the dropdown and click \textbf{OK}. Since the .clang-tidy file is already set up in the git-folder, the IDE should start giving warnings when naming conventions are not met.
+\item Lastly, select the newly created diagnostic configuration in \textbf{Projects} $\rightarrow$ \textbf{Clang Tools} tab and click on \textbf{Default Clang-Tidy and Clazy checks} diagnostic configuration. Since the .clang-tidy file is already set up in the git-folder, the IDE should give warnings according to the style specified in the .clang-tidy file.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.85 \textwidth]{clang-tidy7.png}
+\includegraphics[width=0.65 \textwidth]{clang-tidy8.png}
+\end{figure}
+
+\item In order to run the style analysis one should select a project file and use a right mouse button click to activate the context menu. By selecting \textbf{Analyze current file} option the style checks can activated.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.65 \textwidth]{clang-tidy9.png}
+\end{figure}
+
+\newpage
+\item An alternative way to run the checks on multiple files is to go to \textbf{Analyze} $\rightarrow$ \textbf{Clang-Tidy and Clazy}.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6 \textwidth]{clang-tidy10.png}
+\end{figure}
+
+\item And make a final selection of the files which should be checked.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6 \textwidth]{clang-tidy11.png}
 \end{figure}
 \end{enumerate}
+
 
 \textbf{Note}: It could take a while before the clang-tidy has parsed the project and starts giving warnings.
 
