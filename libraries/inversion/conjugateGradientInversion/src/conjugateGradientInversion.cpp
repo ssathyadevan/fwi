@@ -99,7 +99,7 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
 
             // Save regularisation variables for next iteration
             _chiEstimate.gradient(regularisationCurrent.gradientChi);
-            calculateRegularisationErrorFunctional(regularisationPrevious, regularisationPrevious);
+            calculateRegularisationErrorFunctional(regularisationPrevious, regularisationCurrent);
 
             regularisationPrevious.deltaSquared = regularisationCurrent.deltaSquared;
             regularisationPrevious.bSquared = regularisationCurrent.bSquared;

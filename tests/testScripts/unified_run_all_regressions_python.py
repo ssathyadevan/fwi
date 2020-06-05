@@ -143,7 +143,7 @@ for test in tests:
     f.write("Passed {} unit test: ".format(test))
     f.close()
 
-    os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
+    os.system("pytest python_unittest.py --junitxml={}results.xml".format(test))
     os.system("python3 read_pytest.py")
     os.remove(destdir2)
 
