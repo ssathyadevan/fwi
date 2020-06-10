@@ -45,15 +45,10 @@ double forwardModelInterface::calculateResidualNormSq(const std::vector<std::com
 double forwardModelInterface::calculateCost(
     std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
-    enum CostFunction
-    {
-        leastSquares
-    };
-
-    CostFunction cost = leastSquares;
+    costFunction = leastSquares;
     double c;
 
-    switch(cost)
+    switch(costFunction)
     {
         case leastSquares: c = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
         default: std::cout << "Invalid cost function selected." << std::endl;

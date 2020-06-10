@@ -33,6 +33,12 @@ public:
     const receivers &getRecv();
     const frequenciesGroup &getFreq();
 
+    enum CostFunction
+    {
+        leastSquares
+    };
+    CostFunction costFunction;
+
     virtual void calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
     virtual void calculatePTot(const dataGrid2D &chiEst) = 0;
     virtual void mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
