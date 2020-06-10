@@ -57,7 +57,7 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
         _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
         // Result + logging
-        residualCurrent = errorFunctional(residualArray, pData, eta);   // eq: errorFunc
+        residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);   // eq: errorFunc
         isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
         logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -81,7 +81,7 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
             _chiEstimate += alpha * zeta;
 
             // Result + logging
-            residualCurrent = errorFunctional(residualArray, pData, eta);
+            residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
             isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
             logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -161,19 +161,11 @@ double ConjugateGradientInversion::calculateStepSize(const dataGrid2D &zeta, std
     return alpha;
 }
 
-double ConjugateGradientInversion::errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta)
-{
-    residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
-    double residualNormSquared = _forwardModel->calculateResidualNormSq(residualArray);
-    double residual = eta * residualNormSquared;
-
-    return residual;
-}
-
 void ConjugateGradientInversion::logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile, bool isConverged)
 {
     std::string convergenceMessage = isConverged ? "Converged" : "Not Converged";
-    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
+    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual
+              << "\t" << convergenceMessage;
     residualLogFile << std::setprecision(17) << residual << "," << counter << std::endl;
 }
 

@@ -42,7 +42,7 @@ public:
         L_(lerror) << "This ForwardModel is not compatible with the Inversion model";
         exit(EXIT_FAILURE);
     }
-    virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, complexDataGrid2D &)
+    virtual void getUpdateDirectionInformation(std::vector<std::complex<double>> &, complexDataGrid2D &)
     {
         L_(lerror) << "This ForwardModel is not compatible with the Inversion model";
         exit(EXIT_FAILURE);
@@ -54,7 +54,8 @@ public:
     }
 
     std::vector<std::complex<double>> &calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
-    double calculateResidualNormSq(const std::vector<std::complex<double>> &residual);
+    double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
+    double calculateCost(std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
 
 private:
     std::vector<std::complex<double>> _residual;

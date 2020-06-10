@@ -1,7 +1,7 @@
 #include "gradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
-#include "progressBar.h"
 #include "log.h"
+#include "progressBar.h"
 
 gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput) :
     _forwardModel(), _gdInput(gdInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()),
@@ -21,6 +21,7 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
 
     _forwardModel->calculateKappa();
     _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
 
     std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
     std::vector<double> dFdxPrevious;
@@ -31,10 +32,11 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
     double eta = 1.0 / (normSq(pData, nTotal));
     double gamma = _gdInput.gamma0;   // First iteration
+
     for(int it1 = 0; it1 < _gdInput.iter; it1++)
     {
         dFdxPrevious = dFdxCurrent;
-        dFdxCurrent = differential(pData, chiEstimateCurrent, _gdInput.h, eta);
+        dFdxCurrent = differential(residual, chiEstimateCurrent, pData, eta, _gdInput.h);
 
         if(it1 > 0)
         {
@@ -43,7 +45,7 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
 
         chiEstimatePrevious = chiEstimateCurrent;
         chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-        fx = functionF(chiEstimateCurrent, pData, eta);
+        fx = _forwardModel->calculateCost(residual, chiEstimateCurrent, pData, eta);
         isConverged = (fx < _gdInput.h);
         logResidualResults(counter, fx, isConverged);
         residualLogFile << std::setprecision(17) << fx << "," << counter << std::endl;
@@ -70,11 +72,12 @@ std::ofstream gradientDescentInversion::openResidualLogFile(genericInput &gInput
     return residualLogFile;
 }
 
-std::vector<double> gradientDescentInversion::differential(const std::vector<std::complex<double>> &pData, dataGrid2D chiEstimate, double h, double eta)
+std::vector<double> gradientDescentInversion::differential(
+    std::vector<std::complex<double>> &residual, dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
 {
     const int numGridPoints = chiEstimate.getNumberOfGridPoints();
 
-    double fx = functionF(chiEstimate, pData, eta);
+    double fx = _forwardModel->calculateCost(residual, chiEstimate, pData, eta);
 
     double fxPlusH;
     dataGrid2D chiEstimatePlusH(chiEstimate);
@@ -82,19 +85,13 @@ std::vector<double> gradientDescentInversion::differential(const std::vector<std
     for(int i = 0; i < numGridPoints; ++i)
     {
         chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-        fxPlusH = functionF(chiEstimatePlusH, pData, eta);
+        fxPlusH = _forwardModel->calculateCost(residual, chiEstimatePlusH, pData, eta);
         chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 
         dFdx[i] = (fxPlusH - fx) / h;
     }
 
     return dFdx;
-}
-
-double gradientDescentInversion::functionF(const dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
-{
-    std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, pData);
-    return eta * _forwardModel->calculateResidualNormSq(residual);
 }
 
 dataGrid2D gradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma)
@@ -114,7 +111,7 @@ dataGrid2D gradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, con
 void gradientDescentInversion::logResidualResults(int iteration, double residual, bool isConverged)
 {
     std::string convergenceMessage = isConverged ? "Converged" : "Not Converged";
-    L_(linfo) << "Iteration:" << iteration <<  "\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
+    L_(linfo) << "Iteration:" << iteration << "\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
 }
 
 double gradientDescentInversion::determineGamma(

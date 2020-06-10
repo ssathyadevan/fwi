@@ -27,8 +27,8 @@ public:
     void logResidualResults(int iteration, double residual, bool isConverged);
 
     dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
-    std::vector<double> differential(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
-    double functionF(const dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta);
+    std::vector<double> differential(
+        std::vector<std::complex<double>> &residual, dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
     double determineGamma(
         const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdx);
 };

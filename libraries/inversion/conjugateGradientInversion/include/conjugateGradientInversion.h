@@ -18,8 +18,8 @@
 
 class ConjugateGradientInversion : public inversionInterface
 {
-    private:
-        forwardModelInterface *_forwardModel;
+private:
+    forwardModelInterface *_forwardModel;
     ConjugateGradientInversionInput _cgInput;
 
     const grid2D &_grid;
@@ -52,15 +52,6 @@ class ConjugateGradientInversion : public inversionInterface
      * @return double alpha, the optimum step size
      */
     double calculateStepSize(const dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray);
-
-    /**
-     * @brief errorFunctional calculates the residual according to equation eq: errorFunc(README)
-     * @param residualArray contains the residual for each combination of sources receivers and frequencies.
-     * @param pData Complex vector with the real measured data
-     * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
-     * @return double residual, the scaled and averaged residual over all sources/frequences/receivers
-     */
-    double errorFunctional(std::vector<std::complex<double>> &residualArray, const std::vector<std::complex<double>> &pData, double eta);
 
     /**
      * @brief logResidualResults saves the residuals in the logfile and in a separate file with iteration number for clarity.
@@ -138,8 +129,7 @@ class ConjugateGradientInversion : public inversionInterface
      * @return double alpha, the optimal stepsize
      */
     double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
-        const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious,
-        const dataGrid2D &zeta);
+        const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const dataGrid2D &zeta);
 
     /**
      * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -160,7 +150,7 @@ class ConjugateGradientInversion : public inversionInterface
      */
     void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
-    public:
+public:
     ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
     ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
     ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
