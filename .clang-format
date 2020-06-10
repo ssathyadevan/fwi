@@ -13,7 +13,7 @@ AlwaysBreakTemplateDeclarations: 'false'
 BinPackArguments: 'true'
 BinPackParameters: 'true'
 BreakBeforeBraces: Allman
-BreakConstructorInitializers: AfterColon
+BreakConstructorInitializers: BeforeComma
 BreakStringLiterals: 'true'
 ColumnLimit: '160'
 CompactNamespaces: 'false'
