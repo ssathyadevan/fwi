@@ -5,8 +5,8 @@ namespace fwi
 {
     static const double pi = std::atan(1.0) * 4.0;
 }
-Helmholtz2D::Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const dataGrid2D &chi,
-    const finiteDifferenceForwardModelInput &fmInput) :
+Helmholtz2D::Helmholtz2D(
+    const grid2D &grid, const double freq, const sources &src, const double c0, const dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput) :
     _A(),
     _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
@@ -341,7 +341,8 @@ void Helmholtz2D::CreateABCMatrix(double omega, std::array<double, 2> dx, std::v
     }
 }
 
-void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx)
+void Helmholtz2D::CreateABCSecondOrderMatrix(
+    double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx)
 {
     std::complex<double> val;
     std::complex<double> tmp;
@@ -387,7 +388,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2>
                 val = std::complex(0., 2.) * omega * nxz / dx[1] + -2. * tmp;
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
-                val = 1. / (dx[1] + dx[1]);
+                val = 1. / (dx[1] * dx[1]);
                 triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
 
                 val = tmp;
@@ -403,7 +404,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2>
                 val = std::complex(0., 2.) * omega * nxz / dx[1] + -2. * tmp;
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
-                val = 1. / (dx[1] + dx[1]);
+                val = 1. / (dx[1] * dx[1]);
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
 
                 val = tmp;
@@ -419,7 +420,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2>
                 val = std::complex(0., 2.) * omega * nxz / dx[0] + -2. * tmp;
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
-                val = 1. / (dx[0] + dx[0]);
+                val = 1. / (dx[0] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index + 1, val));
 
                 val = tmp;
@@ -435,7 +436,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2>
                 val = std::complex(0., 2.) * omega * nxz / dx[0] + -2. * tmp;
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
-                val = 1. / (dx[0] + dx[0]);
+                val = 1. / (dx[0] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - 1, val));
 
                 val = tmp;
@@ -465,7 +466,6 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(double omega, std::array<double, 2>
 
                 val = 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
-
             }
             if(i == nx[0] - 1 && j == 0)
             {
