@@ -12,6 +12,7 @@ gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwar
 
 dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
+    progressBar bar(_gdInput.iter);
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
     dataGrid2D chiEstimateCurrent(_grid);
@@ -48,6 +49,7 @@ dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<
         residualLogFile << std::setprecision(17) << fx << "," << counter << std::endl;
 
         ++counter;
+        bar++;
     }
 
     residualLogFile.close();
