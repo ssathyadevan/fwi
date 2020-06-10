@@ -381,7 +381,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
             }
 
             // ABC
-            if(j == 0)
+            if(j == 0)   // top
             {
                 tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
@@ -397,7 +397,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = tmp;
                 triplets.push_back(Eigen::Triplet(index, index - 1, val));
             }
-            if(j == nx[1] - 1)
+            if(j == nx[1] - 1)   // bottom
             {
                 tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
@@ -413,7 +413,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = tmp;
                 triplets.push_back(Eigen::Triplet(index, index - 1, val));
             }
-            if(i == 0)
+            if(i == 0)   // left
             {
                 tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -429,7 +429,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = tmp;
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
             }
-            if(i == nx[0] - 1)
+            if(i == nx[0] - 1)   // right
             {
                 tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -445,7 +445,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = tmp;
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
             }
-            if(i == 0 && j == 0)
+            if(i == 0 && j == 0)   // top left
             {
                 val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index, val));
@@ -456,7 +456,7 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
             }
-            if(i == 0 && j == nx[1] - 1)
+            if(i == 0 && j == nx[1] - 1)   // bottom left
             {
                 val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index, val));
@@ -467,26 +467,26 @@ void Helmholtz2D::CreateABCSecondOrderMatrix(
                 val = 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
             }
-            if(i == nx[0] - 1 && j == 0)
+            if(i == nx[0] - 1 && j == 0)   // top right
             {
-                val = (std::complex(0., 3.) * omega * nxz) / dx[0] + 2. / (dx[1] * dx[0]);
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
                 val = 1. / (dx[0] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - 1, val));
 
-                val = -2. / (dx[1] * dx[0]);
+                val = 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
             }
-            if(i == nx[0] - 1 && j == nx[1] - 1)
+            if(i == nx[0] - 1 && j == nx[1] - 1)   // bottom right
             {
-                val = (std::complex(0., 3.) * omega * nxz) / dx[0] + 2. / (dx[1] * dx[0]);
+                val = (std::complex(0., 3.) * omega * nxz) / dx[0] - 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index, val));
 
                 val = 1. / (dx[0] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - 1, val));
 
-                val = -2. / (dx[1] * dx[0]);
+                val = 2. / (dx[1] * dx[0]);
                 triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
             }
         }
