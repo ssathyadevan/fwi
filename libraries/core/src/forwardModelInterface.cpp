@@ -45,6 +45,12 @@ double forwardModelInterface::calculateResidualNormSq(const std::vector<std::com
 double forwardModelInterface::calculateCost(
     std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
+    return calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta);
+}
+
+double forwardModelInterface::calculateLeastSquaresCost(
+    std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+{
     residualArray = calculateResidual(chiEstimate, pData);
     double residualNormSquared = calculateResidualNormSq(residualArray);
     double residual = eta * residualNormSquared;

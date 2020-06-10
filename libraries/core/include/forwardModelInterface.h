@@ -56,6 +56,8 @@ public:
     std::vector<std::complex<double>> &calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSq(std::vector<std::complex<double>> &residual);
     double calculateCost(std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
+    double calculateLeastSquaresCost(
+        std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
 
 private:
     std::vector<std::complex<double>> _residual;
