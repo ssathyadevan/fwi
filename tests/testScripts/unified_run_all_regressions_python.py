@@ -146,7 +146,7 @@ for test in tests:
     if sys.argv[1]=='0': 
         os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
     else:
-        os.system("pytest python_unittest.py --junitxml={}results.xml".format(test))
+        os.system("pytest-3 python_unittest.py --junitxml={}results.xml".format(test))
     
     os.system("python3 read_pytest.py")
     os.remove(destdir2)
