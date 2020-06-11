@@ -45,7 +45,7 @@ private:
     StepAndDirectionReconstructor *_createdReconstructor;
 
     /**
-     * @brief checkForwardModelExistence, make sure the forwardmodel is created
+     * @brief checkForwardModelExistence, makes sure the forwardmodel is created
      */
     void checkForwardModelExistence(forwardModelInterface *forwardModel);
 
@@ -58,9 +58,9 @@ private:
     void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid);
 
     /**
-     * @brief Fill in later (also fill description of 'createCombinedDirectionAndStepSize'
-     * @param fill in later
-     * @return fill in later
+     * @brief splittableInversion, checks whether we can have two different objects for the DirectionCalculator and StepSizeCalculator or not
+     * @param the name of the StepSize method (between StepSizeCalculators and DirectionCalculators, the former are more delicate)
+     * @return a boolean containing the possibility to have split objects
      */
 
     bool splittableInversion(const std::string inversionMethod);
@@ -75,11 +75,13 @@ private:
     void createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
         forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
     /**
-     * @brief createCombinedDirectionAndStepSize FILL IN LATER
-     * @param errorFunctionalScalingFactor
+     * @brief createCombinedDirectionAndStepSize, in case we cannot split our StepSizeCalculator and DirectionCalculator, here we create only one object and we
+     * point both related pointers of StepAndDirectionReconstructor to it.
      * @param forwardModel
-     * @param
-     * @param pData
+     * @param stepSizeParameters, a struct containing some parameters used to tweak the descent algorithm
+     * @param reconstructorParameters, a struct containing some parameters related to the desired performances for the descent algorithm
+     * @param pData, the data we want to simulate
+     * @param desiredCombinedDirectionAndStepSizeMethod, the actual descent algorithm we want to implement
      */
     void createCombinedDirectionAndStepSize(forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
         const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
