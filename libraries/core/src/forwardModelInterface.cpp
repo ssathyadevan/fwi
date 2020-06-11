@@ -1,8 +1,11 @@
 #include "forwardModelInterface.h"
 #include <math.h>
 
-forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq) :
-    /*_residual(), */ _grid(grid), _src(src), _recv(recv), _freq(freq)
+forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq)
+    : /*_residual(), */ _grid(grid)
+    , _src(src)
+    , _recv(recv)
+    , _freq(freq)
 {
     _residual = std::vector<std::complex<double>>(_freq.nFreq * _src.nSrc * _recv.nRecv);
 }
@@ -46,15 +49,15 @@ double forwardModelInterface::calculateCost(
     std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     costFunction = leastSquares;
-    double c;
+    double cost;
 
     switch(costFunction)
     {
-        case leastSquares: c = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
+        case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
         default: std::cout << "Invalid cost function selected." << std::endl;
     }
 
-    return c;
+    return cost;
 }
 
 double forwardModelInterface::calculateLeastSquaresCost(
