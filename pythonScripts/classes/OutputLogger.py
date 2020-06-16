@@ -4,7 +4,8 @@ from datetime import datetime
 import numpy as np
 
 class OutputLogger(object):
-    def __init__(self, run_num, t_in, t_out, t_exec, virtual_mem, physical_mem, diff_chi, mse, square_mean):
+    def __init__(self, run_num, t_in, t_out, t_exec, virtual_mem, physical_mem, diff_chi, mse, square_mean, input_parameters = {}):
+        self.input_parameters = input_parameters
         self.log = dict(
             forward_model = str,
             inversion_method = str,
@@ -56,6 +57,7 @@ class OutputLogger(object):
         os.remove("memory_specs")
 
     def get_description(self, run_num):
+        path = ''
         if os.path.isfile("../parallelized-fwi/results/description" + str(run_num) + ".txt"):
             with open("../parallelized-fwi/results/description" + str(run_num) + ".txt", 'r') as in_file:
                 self.log["inversion_method"] = in_file.readline()[:-1]
@@ -63,6 +65,11 @@ class OutputLogger(object):
                 path = in_file.readline()[:-1]
                 self.log["description"] = in_file.readline()
             os.remove("../parallelized-fwi/results/description" + str(run_num) + ".txt")
+        else:
+            self.log["inversion_method"] = self.input_parameters["inversion_method"]
+            self.log["forward_model"] = self.input_parameters["forward_model"]
+            self.log["description"] = 'None'
+            path = self.input_parameters["output"].rstrip("/")
         return path
 
     def get_input(self, path):

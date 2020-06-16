@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
 from datetime import datetime, date
-# matplotlib.use('Agg')
+import argparse
+
 sys.path.insert(0, "../parallelized-fwi/pythonScripts/classes")
 from OutputLogger import OutputLogger
 
@@ -31,9 +32,24 @@ def findTime(substr, whichin):
     return start_or_finish
 
 
+# Configure the argument parser
+argumentParser = argparse.ArgumentParser()
+
+argumentParser.add_argument("-o", "--output", type=str, required=True,
+    help="Path to output directory.")
+argumentParser.add_argument("-i", "--inversion_method", type=str, required=True,
+    help="Inversion method.")
+argumentParser.add_argument("-f", "--forward_model", type=str, required=True,
+    help="Forward model method.")
+argumentParser.add_argument("-r", "--run_number", type=int, required=False,
+    default=0, help="Run number (default: 0)")
+
+# Parse the argumets
+arguments = vars(argumentParser.parse_args())
+
 # Enter here the name of the case folder you want to post process
-outputPath = sys.argv[1]
-run_number = sys.argv[2]
+outputPath = arguments['output']
+run_number = arguments['run_number']
 
 g = open(outputPath + "/output/lastRunName.txt", "r")
 contents = g.readlines()
@@ -155,10 +171,7 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
-if not run_number:
-    run_number = 0
-
-OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original)
+OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original, arguments)
 
 print("The pictures have been generated with Python")
 

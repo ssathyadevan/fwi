@@ -73,10 +73,8 @@ if sys.platform.startswith('linux'):
         print(ind_run[5], ':')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')
         os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
-        check = os.system('python3 postProcessing-python3.py ' + ind_run[5] + ' ' + str(ind_run[6]))
+        check = os.system('python3 postProcessing-python3.py ' + "-o " + ind_run[5] + " -i " + str(ind_run[0]) + ' -f ' + str(ind_run[1]) + ' -r ' + str(ind_run[6]))
         checking_for_errors(check, current_directory)
-        # os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/default/output')
-        # os.system('eog defaultResult.png')
     
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('rm -r temp')
