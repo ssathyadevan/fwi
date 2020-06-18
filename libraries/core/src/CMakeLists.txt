@@ -15,7 +15,7 @@ set(CPP_SOURCES_AND_H_HEADERS
 add_library(core_library ${CPP_SOURCES_AND_H_HEADERS})
 
 set( LIBRARY_INCLUDE_DIRS_CORE ${CMAKE_SOURCE_DIR}/libraries/core/include CACHE INTERNAL "" )
-target_include_directories(core_library PUBLIC ${LIBRARY_INCLUDE_DIRS_CORE} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
+target_include_directories(core_library PUBLIC ${LIBRARY_INCLUDE_DIRS_CORE} ${CMAKE_SOURCE_DIR}/libraries/io/include)
 
 target_link_libraries(core_library Eigen3::Eigen utilities_library)
 target_link_libraries(core_library test_utils_library)

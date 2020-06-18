@@ -3,6 +3,7 @@
 #include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
 #include "forwardModelInterface.h"
+#include "genericInput.h"
 
 class StepAndDirectionReconstructor
 {
