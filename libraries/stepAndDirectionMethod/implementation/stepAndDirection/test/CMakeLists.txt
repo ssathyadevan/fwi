@@ -4,7 +4,7 @@ include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories(../include)
 include_directories(../testutilities/include)
 include_directories(../../tests)
-
+include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include)
 
 
 # Template function for building a test

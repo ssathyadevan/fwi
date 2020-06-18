@@ -6,7 +6,7 @@ add_library(factory_library
     factory.cpp ../include/factory.h)
 
 set( LIBRARY_INCLUDE_DIRS_FACTORY ${CMAKE_SOURCE_DIR}/libraries/factory/include CACHE INTERNAL "" )
-target_include_directories(factory_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY})
+target_include_directories(factory_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include)
 
 target_link_libraries(
     factory_library

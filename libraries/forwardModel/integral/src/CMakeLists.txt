@@ -4,6 +4,6 @@ add_library(integral_forward_model_library
     integralForwardModelInputCardReader.cpp     ../include/integralForwardModelInputCardReader.h)
 
 set( LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARD_MODEL ${CMAKE_SOURCE_DIR}/libraries/forwardModel/integral/include CACHE INTERNAL "" )
-target_include_directories(integral_forward_model_library PUBLIC ${LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARD_MODEL} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
+target_include_directories(integral_forward_model_library PUBLIC ${LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARD_MODEL} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include)
 
 target_link_libraries(integral_forward_model_library core_library utilities_library)

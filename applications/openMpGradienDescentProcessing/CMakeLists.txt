@@ -1,5 +1,6 @@
 add_executable( FWI_OpenMPGradienDescentProcess main.cpp )
 
+target_include_directories(FWI_OpenMPGradienDescentProcess PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include)
 target_link_libraries( FWI_OpenMPGradienDescentProcess
 
     integral_forward_model_library

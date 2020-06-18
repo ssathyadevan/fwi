@@ -6,7 +6,7 @@ add_library(forwardModelContainer_library
     forwardModelContainer.cpp ../include/forwardModelContainer.h)
 
 set( LIBRARY_INCLUDE_DIRS_FACTORY ${CMAKE_SOURCE_DIR}/libraries/forwardModelContainer/include CACHE INTERNAL "" )
-target_include_directories(forwardModelContainer_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY})
+target_include_directories(forwardModelContainer_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include)##change later
 
 target_link_libraries(
     forwardModelContainer_library
