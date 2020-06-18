@@ -7,6 +7,6 @@ add_library(finite_difference_forward_model_library
                                                         ../include/inputStructs.h)
 
 set( LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL ${CMAKE_SOURCE_DIR}/libraries/forwardModel/finiteDifference/include CACHE INTERNAL "" )
-target_include_directories(finite_difference_forward_model_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL})
-
+target_include_directories(finite_difference_forward_model_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL} ${CMAKE_SOURCE_DIR}/libraries/io/include)
+target_include_directories(finite_difference_forward_model_library PUBLIC ${CMAKE_SOURCE_DIR}/libraries/utilities/include) ##remove later
 target_link_libraries(finite_difference_forward_model_library core_library utilities_library)

@@ -4,7 +4,7 @@ add_library(gradient_descent_inversion_library
     gradientDescentInversionInputCardReader.cpp     ../include/gradientDescentInversionInputCardReader.h)
 
 set( LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION ${CMAKE_SOURCE_DIR}/libraries/inversion/gradientDescentInversion/include CACHE INTERNAL "" )
-target_include_directories(gradient_descent_inversion_library PUBLIC ${LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION})
+target_include_directories(gradient_descent_inversion_library PUBLIC ${LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
 
 target_link_libraries(
     gradient_descent_inversion_library

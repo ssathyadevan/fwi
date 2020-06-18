@@ -2,7 +2,6 @@
 
 #include "finiteDifferenceForwardModelInput.h"
 #include "forwardModelInterface.h"
-#include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
 

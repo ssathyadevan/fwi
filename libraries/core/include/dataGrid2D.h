@@ -1,6 +1,5 @@
 #pragma once
 
-#include "genericInput.h"
 #include "grid2D.h"
 #include <array>
 #include <cassert>
