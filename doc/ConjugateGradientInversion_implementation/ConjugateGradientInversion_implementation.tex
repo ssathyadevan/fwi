@@ -424,7 +424,7 @@ The error functional is equal to
 \tag*{\texttt{errorFunc}}
 \end{align}
 
-withp	
+with	
 
 \begin{align} \label{eq:errorFuncSubEtaInv} \eta^{-1} = \int | p_\text{data}(\xr,
 \xs, \omega) |^2 \df{\xs} \df{\xr} \df{\omega}, \\
@@ -715,7 +715,7 @@ By comparing the default regression tests with the ones obtained after removing 
 A combination of removing the $cellVolume$ multiplication in \eqref{eq:RegPrevious.Freg} and eliminating the influence of $\delta^{ampl}$ (by setting $\delta^{ampl}_{start}=2$, $\delta^{ampl}_{slope}=0.01$) worsened the overall performance, except for the \textit{smallgrid} test, where we actually reached a VAF value of $14\%$ and a FIT value of $7\%$.
 
 If we instead run the regression tests without $cellVolume$ together with $n_{max} =25$, $j_{max} =2$ (for a total of 50 steps) we find that every single test has improved precision and slight faster processing.
-This combination is also more precise than the benchmark simulations in 6 tests out of 8 (exculding \textit{small grid} and \textit{High quality}, where the values are however comparable).
+This combination is also more precise than the benchmark simulations in 6 tests out of 8 (excluding \textit{small grid} and \textit{High quality}, where the values are however comparable).
 
 \subparagraph*{$\mathcal{K}_\chi$ computation in \textit{forwardModel}}
 We mentioned that no $\chi$ is present in the actual computation. Trying to change this part requires a lot of modifications to the \textit{forwardModel} classes, and tests regarding this point have not been carried on yet. 
