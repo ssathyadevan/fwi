@@ -2,10 +2,7 @@
 include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories(../include)
-include_directories(../testutilities)
-include_directories(../testutilities/include)
-include_directories(../../tests)
-
+include_directories(../../utilities/include)
 
 # Template function for building a test
 function( build_test )
@@ -25,7 +22,7 @@ endfunction( build_test )
 SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 
 # Build the tests!
-build_test(TARGET genericInputCardReaderTest SOURCE genericInputCardReaderTest.cpp LIBRARIES core_library)
+build_test(TARGET genericInputCardReaderTest SOURCE genericInputCardReaderTest.cpp LIBRARIES io_library)
 
 
 

@@ -2,6 +2,8 @@
 include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories(../include)
 include_directories(../testutilities/include)
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/io/include)
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 
 # Template function for building a test
 function( build_test )

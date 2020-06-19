@@ -2,10 +2,9 @@
 include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories( ${CMAKE_SOURCE_DIR}/libraries/io/include )
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/utilities/include )
 include_directories(../include)
-include_directories(../testutilities)
-include_directories(../testutilities/include)
-include_directories(../../tests)
+#include_directories(../../tests)
 
 
 # Template function for building a test

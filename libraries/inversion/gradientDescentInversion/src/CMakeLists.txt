@@ -8,6 +8,5 @@ target_include_directories(gradient_descent_inversion_library PUBLIC ${LIBRARY_I
 
 target_link_libraries(
     gradient_descent_inversion_library
-    utilities_library
     core_library
     integral_forward_model_library)
