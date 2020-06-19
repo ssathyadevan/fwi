@@ -54,22 +54,22 @@
 \newcommand{\imag}[1]{\text{Im}\left\{ #1 \right\}}
 \newcommand{\commentstm}[1]{\textcolor{blue}{\textbf{STM:\ #1}}}
 \newcommand{\commentstmtwo}[1]{\textcolor{purple}{\textbf{STM:\ #1}}}
-\newcommand{\newstm}[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand{\newstm}[1]{{\textbf{#1}}}
 \newcommand{\newstmtwo}[1]{\textcolor{orange}{\textbf{#1}}}
 \newcommand{\oldstm}[1]{\sout{#1}}
 \newcommand{\oldstmtwo}[1]{\xout{#1}}
 \newcommand{\eqlabelsigi}[1]{\label{eq:#1}  \tag*{\texttt{#1}}}
 \newcommand{\brok}{\textcolor{ForestGreen}{\textit{\textbf{OK for Bernhard}}}}
 \newcommand{\apok}{\textcolor{ForestGreen}{\textit{\textbf{OK for Andr\'{e}}}}}
-\newcommand{\brnok}{\textcolor{red}{\textit{\textbf{NOT OK for Bernhard}}}}
-\newcommand{\apnok}{\textcolor{red}{\textit{\textbf{NOT OK for Andr\'{e}}}}}
+\newcommand{\brnok}{{\textit{\textbf{NOT OK for Bernhard}}}}
+\newcommand{\apnok}{{\textit{\textbf{NOT OK for Andr\'{e}}}}}
 
 \newcommand{\commentbr}[1]{\textcolor{orange}{\textbf{BR:\ #1}}}
 
 
-\newcommand{\xs}{\mathbf{x}_\text{s}}
-\newcommand{\xr}{\mathbf{x}_\text{r}}
-\newcommand{\x}{\mathbf{x}}
+\newcommand{\xs}{\vec{x}_\text{s}}
+\newcommand{\xr}{\vec{x}_\text{r}}
+\newcommand{\x}{\vec{x}}
 \newcommand{\n}{\mathbf{n}}
 \newcommand{\s}{\mathbf{s}}
 
@@ -91,9 +91,9 @@ Morelli, L.}
 \section{Preface}
 Here we will describe the current implementation of ConjugateGradientInversion and its refactored version ConjugateGradientWithRegularisationCalculator, highlighting the differences between the documentation ( \texttt{\detokenize{.../doc/ReadMe/1_ProjectDescription.pdf}} and \newline \texttt{\detokenize{.../doc/BackGroundInfo/phd-Peter-Haffinger-seismic-broadband-full-waveform-inversion.pdf}} ) and the code.
 
-Throughout this document, we will refer as the PhD thesis from Peter Haffinger simply as 'Thesis'.
+Throughout this document, we will refer to the PhD thesis from Peter Haffinger simply as 'Thesis'.
 
-The main body of the text is taken from \texttt{\detokenize{.../doc/ReadMe/1_ProjectDescription.pdf}}, and only subsection \ref{CG_solver} will be modified.
+The main body of the text is taken from \texttt{\detokenize{.../doc/ReadMe/1_ProjectDescription.pdf}}, and mostly subsection \ref{CG_solver} will be modified (some pieces have been added to the other sections for clarification).
 
 There might be a discrepancy in a few variables' names, as during the refactor some have been made member variables of the class, thus obtaining a $'\_'$ character at the beginning of their names.
 
@@ -101,7 +101,7 @@ Moreover, whenever Line numbers are mentioned, we refer to the original \textbf{
 
 \section{Introduction}
 Please consult  \texttt{\detokenize{.../doc/ReadMe/1_ProjectDescription.pdf}} for the full document. 
-The parts that have been added are highlighted in \textcolor{red}{red} and appear in subsection 3.3.2.
+The only section that has been modified \textbf{subsection 3.3.2}, while we added \textbf{Section 4: Conclusions} to summarize the findings of this document.
 
 \section{The Model}
 \subsection{Physical model}
@@ -119,10 +119,10 @@ in a background medium:
 
 \begin{align}
 \label{eq:calculateData}
-p_\text{data}(\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega) = \int
+p_\text{data}(\vec{x_\text{r}},\vec{x_\text{s}},\omega) = \int
 \mathcal{G}(\xr, \x, \omega) p_\text{tot}(\x, \xs, \omega) \chi(\x)
 \df{\x}\\
-\tag*{\texttt{eq:calculateData, see include/inversion.h\footnotemark}}
+\tag*{\texttt{eq:calculateData, see ConjugateGradientInversion.h\footnotemark}}
 \end{align}\footnotetext{``eq:'' denotes equations that are implemented in the code, ``step:'' denotes equations we present to understand the flow of this manual. Inside the code, the implementation of these equations is marked with such symbols. There, ``rel:'' means that an equation is related to the ``eq'', similar to the use of ``step'' here.}
 
 Reading from right to left, equation \ref{eq:calculateData} can be understood as
@@ -149,37 +149,69 @@ Measured seismic data always contains some form of noise, so the
 inversion process is required to be regularised. Therefore, we extend
 the conjugate gradient scheme so as to include a multiplicative regularisation factor.
 
+\subsubsection{Helmholtz equation}
+The simplest model we can use is the acoustic Helmholtz equation. We
+use a scalar pressure field $u(\vec{x})$ and the domain is modeled
+using $\chi(\vec{x})$. It is called the contrast function and can be
+directly related to the wave speed at that point in the domain.
+Mathematically the equation has the form:
+
+\begin{align} \label{eq:generalHelmholtzFunc}
+\nabla^2 u(\vec{x}) + k(\vec{x})^2 u(\vec{x}) =
+-f(\vec{x})\\
+\tag*{\texttt{step:generalHelmholtzFunc}}
+\end{align}
+
+The wave number $k$ is given by $k = \frac{\omega}{c}$ where $\omega$
+is the angular frequency and c the
+acoustic wave velocity in m/s of the true medium.
+We split the pressure field into $u(\vec{x}) = u_0(\vec{x}) +
+u_{\text{ind}}(\vec{x})$, where $u_0(\vec{x})$ is defined as the
+field given by the background velocity and external sources,
+
+\begin{align} \label{eq:splitHelmholtzU0}
+\nabla^2 u_0(\vec{x}) + k_0^2 u_0(\vec{x}) = -f(\vec{x})\\
+\tag*{\texttt{step:splitHelmholtzU0}} \\
+\label{eq:splitHelmholtzUind}
+\nabla^2 u_\text{ind}(\vec{x}) + k_0^2 u_\text{ind}(\vec{x}) =
+-f_\text{ind}(\vec{x}),\\
+\tag*{\texttt{step:splitHelmholtzUind}}
+\end{align}
+
+with $f_\text{ind}(\vec{x}) = k_0^2 \chi(\vec{x}) u_0(\vec{x})$
+the induced source term.
+
+
 \subsubsection{The Green's function}
 A Green's function is the impulse response of an inhomogeneous linear
 differential equation defined on a domain, with specified initial
 conditions or boundary conditions.
-The Green's function of this equation is defined as the solution
-$\mathcal{G}(\mathbf{x}, \mathbf{y})$, of the equation
+The Green's function of equation \eqref{eq:generalHelmholtzFunc} is defined as the solution $\mathcal{G}(\vec{x}, \vec{y})$ of the equation
 
 \begin{align}
 \label{eq:GeneralGreensFunc}
-[ \nabla^2 \mathcal{G}(\mathbf{x}, \mathbf{y}) + k_0^2
-\mathcal{G}(\mathbf{x}, \mathbf{y}) = -\delta(\mathbf{x} -
-\mathbf{y}). ]\\
+ \nabla^2 \mathcal{G}(\vec{x}, \vec{y}) + k_0^2
+\mathcal{G}(\vec{x}, \vec{y}) = -\delta(\vec{x} -\vec{y}), \\
 \tag*{\texttt{step:GeneralGreensFunc}}
 \end{align}
-
-The solution to (\ref{eq:GeneralGreensFunc}) is then given by
+with $\delta(\vec{x} - \vec{y})$ being the Dirac's delta.
+The solution to the Helmholtz equation \eqref{eq:generalHelmholtzFunc} is then given by
 
 \begin{align} \label{eq:GeneralGreensSol}
-[ u_\text{ind}(\mathbf{x}) =
-\int_{\mathbf{y} \in \mathbb{R}^n} \mathcal{G}(\mathbf{x}, \mathbf{y})
-f_\text{ind}(\mathbf{y}) \df{\mathbf{y}}.\\
+ u(\vec{x}) =
+\int_{\vec{y} \in \mathbb{R}^2} \mathcal{G}(\vec{x}, \vec{y})
+f(\vec{y}) \df{\vec{y}}\\
 \tag*{\texttt{step:GeneralGreensSol}}
 \end{align}
 
-The interesting cases are the 2D and 3D case. We will focus on the 2D case. The Green's function is then
-given by
+The Green's function is in general very complicated and rarely explicit. 
+In this case however it can be expressed as
 
-\begin{align} \label{eq:GreensFunc2d}[ \mathcal{G}(\mathbf{x}, \mathbf{y}) =
-\frac{\imath}{4} H_0^{(1)}(k_0 \|\mathbf{x} - \mathbf{y}\|) =
--\frac{1}{4} Y_0(k_0 \|\mathbf{x} - \mathbf{y}\|) + \frac{\imath}{4}
-J_0(k_0 \|\mathbf{x} - \mathbf{y}\|).  ]\\
+\begin{align} \label{eq:GreensFunc2d}
+ \mathcal{G}(\vec{x}, \vec{y}) =
+\frac{i}{4} H_0^{(1)}(k_0 \|\vec{x} - \vec{y}\|) =
+-\frac{1}{4} Y_0(k_0 \|\vec{x} - \vec{y}\|) + \frac{i}{4}
+J_0(k_0 \|\vec{x} - \vec{y}\|) \\
 \tag*{\texttt{eq:GreensFunc2d, see greensFunctions.h}}
 \end{align}
 
@@ -187,47 +219,13 @@ In the above equation, the $H_0$ , $J_0$ and $Y_0$ are defined as the
 Henkel's functions and can be further researched at :
 \url{http://amcm.pcz.pl/get.php?article=2012_1/art_06.pdf}
 
-\subsubsection{Helmholtz equation}
-The simplest model we can use is the acoustic Helmholtz equation. We
-use a scalar pressure field $u(\mathbf{x})$ and the domain is modeled
-using $\chi(\mathbf{x})$. and is called the contrast and can be
-directly related to the wave speed at that point in the domain.
-Mathematically the equation has the form:
 
-\begin{align} \label{eq:generalHelmholtzFunc}
-\nabla^2 u(\mathbf{x}) + k(\mathbf{x})^2 u(\mathbf{x}) =
--f_{\text{ext}}(\mathbf{x}).\\
-\tag*{\texttt{step:generalHelmholtzFunc}}
-\end{align}
-
-The wave number $k$ is given by $k = \frac{\omega}{c}$ where $\omega$
-is the angular frequency and c the
-acoustic wave velocity in m/s of the true medium.
-We split the pressure field into $u(\mathbf{x}) = u_0(\mathbf{x}) +
-u_{\text{ind}}(\mathbf{x})$, where $u_0(\mathbf{x})$ is defined as the
-field given by the background velocity and external sources,
-
-\begin{align} \label{eq:splitHelmholtzU0}
-\nabla^2 u_0(\mathbf{x}) + k_0^2 u_0(\mathbf{x}) = -f_{\text{ext}}(\mathbf{x}).\\
-\tag*{\texttt{step:splitHelmholtzU0}}
-\end{align}
-
-Substituting in (\ref{eq:splitHelmholtzU0}) results in
-
-\begin{align} \label{eq:splitHelmholtzUind}
-\nabla^2 u_\text{ind}(\mathbf{x}) + k_0^2 u_\text{ind}(\mathbf{x}) =
--f_\text{ind}(\mathbf{x}),\\
-\tag*{\texttt{step:splitHelmholtzUind}}
-\end{align}
-
-with $f_\text{ind}(\mathbf{x}) = k_0^2 \chi(\mathbf{x}) u(\mathbf{x})$
-the induced source term.
 
 \subsubsection{The Contrast function}
 The contrast function is defined as:
 
-\begin{align} \label{eq:contrastFunc}\chi(\mathbf{x}) = 1 -
-\left(\frac{c0(\vec{x})}{c(\vec{x})} \right)^2.\\
+\begin{align} \label{eq:contrastFunc}\chi(\vec{x}) = 1 -
+\left(\frac{c_0(\vec{x})}{c(\vec{x})} \right)^2.\\
 \tag*{\texttt{step:contrastFunc}}
 \end{align}
 
@@ -241,7 +239,7 @@ and the measured seismic data.
 
 Notice that the contrast is generally unknown, and will be
 approximated using an iterative scheme. During each step the induced
-source is considered constant and known so we basically solve the same
+source is considered constant and known so we solve the same
 equation as (\ref{eq:GeneralGreensSol}) each step.
 
 \subsection{Finite Difference Approach}
@@ -264,7 +262,7 @@ where $u_{i,j}=u(x_i,z_j)$. Boundary conditions are required to minimize reflect
 	\item Use Perfectly Matching Layers (PML), which is basically a more sophisticated version of the first option.
 \end{enumerate}
 
-The problem with the first option is that $\alpha$ needs tweaking based on $\omega$. ABC can only prevent some reflections since they are bad at preventing reflections from waves traveling almost tangential to the boundary. Therefore, PML seems to be the best option \cite{Comparison}. Both the first order ABC and PML are implemented. Second order ABC are not implemented.\footnote{For the theory, see \cref{sec:ABC}.} The user can choose which approach to use by adjusting input card parameters (see \cref{sec:FDimplementation} for more information). In practice, ABC perform better than PML. Implementing second order ABC may perform even better.
+The problem with the first option is that $\alpha$ needs tweaking based on $\omega$. ABC can only prevent some reflections since they are bad at preventing reflections from waves traveling almost tangential to the boundary. Therefore, PML seems to be the best option \cite{Comparison}. Both the first order ABC and PML are implemented. Second order ABC have been recently implemented.\footnote{For the theory, see \cref{sec:ABC}.} The user can choose which approach to use by adjusting input card parameters. In practice, ABC perform better than PML. Second order ABC should prove to perform even better.
 
 \subsubsection{First Order ABC}
 ABC can be used to (partially) prevent reflections. First we assume that the index of refraction $n(\x)\equiv C_1$ close to the boundary for some $C_1\in \mathbb{R}$. The main idea of ABC is that close to the boundary the solution to the full problem can be approximated by a plane wave that propagates in a direction normal to the boundary \cite{LectNotes}, i.e.
@@ -365,30 +363,30 @@ where $I_0(y)$ denotes the Bessel function of the first kind. The parameters $\b
 
 For both source implementations the original domain is enlarged so that it includes all the sources. Note that for $r>0$ addition grid points are required to ensure the whole source is included in the domain.
 
-\subsubsection{Input Card Parameters} \label{sec:FDimplementation}
-Finite difference forward model has its own input card containing four parameters. First the PMLWidthFactor, which determines the width of the PML by multiplying this factor in the $x$ and $z$ direction by the wavelength of the background subsurface. Setting this parameter equal to $0.0$ in both directions entails that ABC are used instead of PML, which is the default setting because in practice ABC performs better than PML.\\
-
-The SourceParameter determines the half-width $r$ (which is a natural number) and shape $\beta$ for the sine source implementation as given in the section above and \cite{Hicks}. By default the parameters are set to $r=4$ and $\beta=6.31$ for the reason given in previous section. When setting $r=0$, the point source implementation will be used.
-
-\subsubsection{Python Scripts}
-Python scripts were written for prototyping purposes. The \texttt{Helmholtz.py} script is a script in which one can compare the exact solution to the (first and second order) ABC and PML on a homogeneous background. The \texttt{HelmholtzPMLWholeGrid.py} contains a PML implementation that also enlarges the grid to include sources outside the grid. Note that both scripts use coordinate systems different from the C++ implementation. These scripts can be extended to test out, for example, a method for extracting $p_{\text{data}}$ (see next section). 
-
-\subsubsection{Notes and Future Work}
-Some notes:
-
-\begin{itemize}
-	\item For the best accuracy, one would need at least $5$ and ideally around $10$ grid points per wavelength. For this reason, higher frequencies tend to lead to worse results (given a fixed grid size).
-\end{itemize}
-
-There is still work that can be done to improve or expand the finite difference forward model. 
-
-\begin{enumerate}
-	\item Second order ABC can be implemented, which are expected to improve the results (see Python script and \cref{sec:ABC}).
-	\item Currently the domain is always enlarged so it includes all the source. In a finite difference context this is necessary for computing the pressure field. Perhaps it is possible to find a method to project the effect of the source on the boundary of the subsurface domain, and use that as a boundary condition to solve the pressure field.
-	\item Extraction of $p_{\text{data}}$ can be implemented by implementing the receivers via the method given in \cite{Hicks}. This would also require the receivers to always be included in the domain, just as the sources are now always included.
-	\item Currently, methods which are required by the Conjugate Gradient inversion model are implemented in the forward model. If an inversion model which does not directly require these methods is implemented, the forward model can be simplified even further (although it then would no longer work with the CG inversion model). After all, the forward model is only there to provide $p_{\text{tot}}$ and $p_{\text{data}}$.
-	\item A different method to solve the system of linear equations can be implemented decrease the execution time. Currently, the $LU$-decomposition is used to solve the system. Faster methods could be explored. One possibility would be to use the same $LU$-decomposition, but permute the matrix before factorization to reduce its bandwidth.
-\end{enumerate}
+%\subsubsection{Input Card Parameters} \label{sec:FDimplementation}
+%Finite difference forward model has its own input card containing four parameters. First the PMLWidthFactor, which determines the width of the PML by multiplying this factor in the $x$ and $z$ direction by the wavelength of the background subsurface. Setting this parameter equal to $0.0$ in both directions entails that ABC are used instead of PML, which is the default setting because in practice ABC performs better than PML.\\
+%
+%The SourceParameter determines the half-width $r$ (which is a natural number) and shape $\beta$ for the sine source implementation as given in the section above and \cite{Hicks}. By default the parameters are set to $r=4$ and $\beta=6.31$ for the reason given in previous section. When setting $r=0$, the point source implementation will be used.
+%
+%\subsubsection{Python Scripts}
+%Python scripts were written for prototyping purposes. The \texttt{Helmholtz.py} script is a script in which one can compare the exact solution to the (first and second order) ABC and PML on a homogeneous background. The \texttt{HelmholtzPMLWholeGrid.py} contains a PML implementation that also enlarges the grid to include sources outside the grid. Note that both scripts use coordinate systems different from the C++ implementation. These scripts can be extended to test out, for example, a method for extracting $p_{\text{data}}$ (see next section). 
+%
+%\subsubsection{Notes and Future Work}
+%Some notes:
+%
+%\begin{itemize}
+%	\item For the best accuracy, one would need at least $5$ and ideally around $10$ grid points per wavelength. For this reason, higher frequencies tend to lead to worse results (given a fixed grid size).
+%\end{itemize}
+%
+%There is still work that can be done to improve or expand the finite difference forward model. 
+%
+%\begin{enumerate}
+%	\item Second order ABC can be implemented, which are expected to improve the results (see Python script and \cref{sec:ABC}).
+%	\item Currently the domain is always enlarged so it includes all the source. In a finite difference context this is necessary for computing the pressure field. Perhaps it is possible to find a method to project the effect of the source on the boundary of the subsurface domain, and use that as a boundary condition to solve the pressure field.
+%	\item Extraction of $p_{\text{data}}$ can be implemented by implementing the receivers via the method given in \cite{Hicks}. This would also require the receivers to always be included in the domain, just as the sources are now always included.
+%	\item Currently, methods which are required by the Conjugate Gradient inversion model are implemented in the forward model. If an inversion model which does not directly require these methods is implemented, the forward model can be simplified even further (although it then would no longer work with the CG inversion model). After all, the forward model is only there to provide $p_{\text{tot}}$ and $p_{\text{data}}$.
+%	\item A different method to solve the system of linear equations can be implemented decrease the execution time. Currently, the $LU$-decomposition is used to solve the system. Faster methods could be explored. One possibility would be to use the same $LU$-decomposition, but permute the matrix before factorization to reduce its bandwidth.
+%\end{enumerate}
 
 
 \subsection{Solver and Noise}
@@ -421,12 +419,12 @@ by Haffinger (Haffinger, Ph.D. thesis 2013, TU Delft) for consistency.
 The error functional is equal to
 
 \begin{align} \label{eq:errorFunc} F(\chi) = \eta \int |r(\xr, \xs,
-\omega)|^2 \df{\mathbf{x}_\text{s}} \df{\xr}
+\omega)|^2 \df{\vec{x}_\text{s}} \df{\xr}
 \df{\omega},\\
 \tag*{\texttt{errorFunc}}
 \end{align}
 
-withp	
+with	
 
 \begin{align} \label{eq:errorFuncSubEtaInv} \eta^{-1} = \int | p_\text{data}(\xr,
 \xs, \omega) |^2 \df{\xs} \df{\xr} \df{\omega}, \\
@@ -440,7 +438,6 @@ We want to find a sequence of contrast functions,
 $\chi^{(n)}(\vec{x}), n = 1,2,...,$ in which error functional
 decreases with increasing iterations. Therefore, after each iteration
 the contrast function is updated as:
-
 \begin{align} \label{eq:contrastUpdate} \chi^{(n)}(\vec{x}) =
 \chi^{(n-1)}(\vec{x}) + \alpha_n\zeta_n(\vec{x})\\
 \tag*{\texttt{contrastUpdate}}
@@ -448,10 +445,8 @@ the contrast function is updated as:
 
 Here, the step size of the update is determined by the parameter
 $\alpha_n$ while the update directions are conjugate gradient
-directions given by
-
-\begin{align} \label{eq:updateDirectionsCG}\zeta_1(\vec{x}) = g_1(\vec{x})
-,\zeta_n(\vec{x}) = g_n(\vec{x}) + \gamma_n\zeta_{n-1}(\vec{x})\\
+directions given by (with $\zeta$ being the greek letter $zeta$)
+\begin{align} \label{eq:updateDirectionsCG}\zeta_1(\vec{x}) = g_1(\vec{x}), \qquad \zeta_n(\vec{x}) = g_n(\vec{x}) + \gamma_n\zeta_{n-1}(\vec{x})\\
 \tag*{\texttt{updateDirectionsCG}}
 \end{align}
 
@@ -460,9 +455,9 @@ the error functional is equal to
 %\begin{subequations}
 \begin{align}
 \label{eq:functionalDerWRTD}
-\partder{F(\mathbf{\chi}, \mathbf{d})}{\mathbf{\chi}} & =
-\lim_{\epsilon \rightarrow 0} \frac{F(\mathbf{\chi} + \epsilon
-\mathbf{d}) - F(\mathbf{\chi})}{\epsilon} \\
+\partder{F(\mathbf{\chi})}{\mathbf{d}} & =
+\lim_{\varepsilon \rightarrow 0} \frac{F(\mathbf{\chi} + \varepsilon
+\mathbf{d}) - F(\mathbf{\chi})}{\varepsilon} \\
 \tag*{\texttt{functionalDerWRTD}}
 & = -2 \eta \int \real{\left[\mathcal{K}_\mathbf{d} \right](\xr, \xs,
 \omega)^{\dagger} r (\xr, \xs, \omega)} \df{\xs} \df{\xr} \df{\omega}
@@ -500,18 +495,18 @@ functional equation, by setting the derivative equal to zero.
 Consequently the optimal step size becomes:
 
 \begin{align} \label{eq:optimalStepSizeCG} \alpha_n = \frac {\real {\int \int
-\int r^{\star}_{n-1}(\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega)[\mathcal{K}
-\zeta_n](\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega)d\vec{x_s}d\vec{x_r}d\omega}}{\int
+\int r^{\star}_{n-1}( \vec{x_r},\vec{x_s},\omega)[\mathcal{K}
+\zeta_n](\vec{x_r},\vec{x_s},\omega)d\vec{x_s}d\vec{x_r}d\omega}}{\int
 \int \int \mid[\mathcal{K}
-\zeta_n](\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega) \mid^2
+\zeta_n](\vec{x_r},\vec{x_s},\omega) \mid^2
 d\vec{x_s}d\vec{x_r}d\omega}\\
 \tag*{\texttt{optimalStepSizeCG}}
 \end{align}
 
 To initialise the conjugate gradient scheme, we assume, $\chi^0
 (\vec{x}) = 0$, leading to
-$r_0(\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega) =
-p_{data}(\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega)$.
+$r_0(\vec{x_\text{r}},\vec{x_\text{s}},\omega) =
+p_{data}(\vec{x_\text{r}},\vec{x_\text{s}},\omega)$.
 Therefore, we find the gradient as :
 
 \begin{align} \label{eq:gradientFunc} g_1(\vec{x}) = \eta
@@ -522,10 +517,10 @@ Therefore, we find the gradient as :
 and we get the first update parameter as :
 
 \begin{align} \label{eq:firstStepSize} \alpha_1 = \frac {\real {\int \int
-\int p^{\star}_\text{data}(\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega)[\mathcal{K}
-g_1](\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega)d\vec{x_s}d\vec{x_r}d\omega}}{\int
+\int p^{\star}_\text{data}(\vec{x_\text{r}},\vec{x_\text{s}},\omega)[\mathcal{K}
+g_1](\vec{x_\text{r}},\vec{x_\text{s}},\omega)d\vec{x_s}d\vec{x_r}d\omega}}{\int
 \int \int \mid[\mathcal{K}
-g_1](\mathbf{x_\text{r}},\mathbf{x_\text{s}},\omega) \mid^2
+g_1](\vec{x_\text{r}},\vec{x_\text{s}},\omega) \mid^2
 d\vec{x_s}d\vec{x_r}d\omega}\\
 \tag*{\texttt{firstStepSize}}
 \end{align}
@@ -546,23 +541,24 @@ $\mathcal{F}^{reg}$:
 \mathcal{F}^{data}_n \mathcal{F}^{reg}_n.\\
 \tag*{\texttt{errorFuncRegul}}
 \end{align}
+A first remark is that in the implemented code it is absolutely not clear which variables refer to $\mathcal{F}^{data}$ and which to $\mathcal{F}^{reg}$.
 
-\textcolor{red}{The structure of the algorithm is going to be heaviliy modified.
+{The structure of the algorithm is going to be heaviliy modified.
 During every iteration in the \textit{main loop}, indexed by $n$, we will perform the following operations:}
 \begin{enumerate}
 \item (Line 39) using the most recent approximation of $\chi_{est} $ (for $n=0$ we have $\chi_{est} \equiv 0$), we update $[\mathcal{K}_\chi]$ following eq. \eqref{eq:modelledDataGreensConv}. 
-\textcolor{red}{During this operation what is computed is actually eq. \eqref{eq:modelledDataGreensConv} assuming $\chi \equiv 1$. When invoking $\_forwardModel\rightarrow calculateKappa()$ there are no mentions of $\chi$, but uniquely to $\mathcal{G}$ and $p^{tot}$.
+{During this operation what is computed is actually eq. \eqref{eq:modelledDataGreensConv} assuming $\chi \equiv 1$. When invoking $\_forwardModel\rightarrow calculateKappa()$ there are no mentions of $\chi$, but uniquely to $\mathcal{G}$ and $p^{tot}$.
 }
 \item (Line 40) Update the residual $r_n$ following eq. \eqref{eq:residualMeasureModel}.
-\textcolor{red}{\item (Line 43) Update the undocumented parameter $\delta^{ampl}_n = \frac{\delta^{ampl}_{start}}{(n  \delta^{ampl}_{slope}) +1}$.}
-\item (Line 52) update $\zeta_n$ according to eq. \eqref{eq:updateDirectionsCG}. 
-\textcolor{red}{This way of updating the direction (which is actually called $g$ in the documents) is valid only for the first iteration ever of the algorithm, although here it is clearly applied $n$ times.}
+{\item (Line 43) Update the undocumented parameter $\delta^{ampl}_n = \frac{\delta^{ampl}_{start}}{(n \ \delta^{ampl}_{slope}) +1}$.}
+\item (Line 52) update $\zeta_n$ according to eq. \eqref{eq:updateDirectionsCG}. At the moment the default values are $\delta^{ampl}_{start} =100$, $\delta^{ampl}_{slope} =10$.
+{This way of updating the direction (which actually corresponds to $g_n$ in this document) is valid only for the first iteration ever of the algorithm, although here it is clearly applied $n$ times.}
 \item (Line 53)  $\alpha_n$ is updated according to eq. \eqref{eq:optimalStepSizeCG} (no regularisation so far).
 \item (Line 56) We update $\chi_n$ according to eq. \eqref{eq:contrastUpdate}.
 \item (Line 59) We update the residual array and its squared norm using the new $\chi_n$.
-\textcolor{red}{\item (Lines 70-106) We enter in an undocumented \textit{inner loop} indexed by $it1$, but that we will index with $1\leq j <  ConjugateGradientWithRegularisationParametersInput.$ $ \_nRegularisationIterations$ for conciseness.}
+{\item (Lines 70-106) We enter in an undocumented \textit{inner loop} indexed by $it1$, but that we will index with $1\leq j <  ConjugateGradientWithRegularisationParametersInput.$ $ \_nRegularisationIterations$ for conciseness.}
 \end{enumerate}
-\textcolor{red}{
+{
 Since most all of the 'regularisation' part is computed within the \textit{inner loop}, it seems legit asking what is the purpose of the \textit{main loop}, which also contains operations that should be performed only once (see point 4. of above list).
 The only part that is actually unique to the \textit{main loop} is the updating of the $\delta^{ampl}_n$ parameter, used in the computation of the Steering Factor in \textbf{calculateSteeringFactor()}.
 \newline
@@ -572,14 +568,14 @@ Please note that currently the regularisation algorithm described in Thesis is n
 \newline
 }
 
-\textcolor{red}{
+{
 \paragraph{Inner Loop}
 Once we are inside the inner loop indexed by $j$, we actually take over the enumeration of most quantities already introduced in the \textit{main loop} such as $\chi_{est}, \alpha, \zeta$ and more. Also this mixture of indexing, which is mathematically speaking bad practice, seems to point to the fact that the \textit{main loop} should not in fact exist.
 \newline
 First, we compute the Regularisation Parameters $b^2_j(\vec{x})$\footnote{please note that $b_j$ is actually a function and not a scalar.}, $\delta^2_j$  and $\_regularisationCurrent.gradient$ by invoking the method \textbf{calculateRegularisationParameters() (Line 72)}:
 }
 
-The following weighting function is used \textcolor{red}{(via \textbf{calculateWeightingFactor()})}:
+The following weighting function is used {(via \textbf{calculateWeightingFactor()})}:
 
 \begin{align} \label{eq:errorFuncRegulWeighting} b_j^{2}(\vec{x}) = (\int_{\vec{x}}
 d\vec{x})^{-1} (\mid\nabla\chi_{j-1}(\vec{x})\mid^2 + \delta_{j-1}^2)^{-1}.\\
@@ -587,17 +583,17 @@ d\vec{x})^{-1} (\mid\nabla\chi_{j-1}(\vec{x})\mid^2 + \delta_{j-1}^2)^{-1}.\\
 \end{align}
 
 In the above equation, the $\delta_{j}^2$ is the steering factor and
-\textcolor{red}{should} be defined as:
+{should} be defined as:
 
 \begin{align} \label{eq:errorFuncRegulSteering} \delta_{j}^2 = (\int_{\vec{x}}
 d\vec{x})^{-1} \int_{\vec{x}} \mid\nabla\chi_{j-1}(\vec{x})\mid^2 d\vec{x},\\
 \tag*{\texttt{errorFuncRegulSteering}}
 \end{align}
-\textcolor{red}{while in fact is (questionably) computed in \textbf{calculateSteeringFactor()} as:
+{while in fact is (questionably) computed in \textbf{calculateSteeringFactor()} as:
 \begin{align}  \delta_j^2 = \frac{1}{2} \delta^{ampl}_n \frac{\int_{(x,z) = \vec{x}}\left(((b_j(\vec{x}) \partial_x \chi_{j-1}(\vec{x}))^2  + (b_j(\vec{x}) \partial_z \chi_{j-1}(\vec{x}))^2\right) d \vec{x}}{\int_{\vec{x}}b_j^2(\vec{x}) d \vec{x}}.
 \end{align}
 Bringing together the $b_j^2(\vec{x})$ in the upper integral, we obtain
-\begin{align}
+\begin{align} \label{eq:errorFuncRegulSteeringWrong}
 \delta_{j}^2 = \frac{1}{2} \delta^{ampl}_n \left(\int_{\vec{x}}
 b_j^2(\vec{x})d\vec{x}\right)^{-1} \int_{\vec{x}} b_j^2(\vec{x}) \mid\nabla\chi_{j-1}(\vec{x})\mid^2 d\vec{x},
 \end{align}
@@ -605,10 +601,10 @@ which vaguely resembles eq. \eqref{eq:errorFuncRegulSteering}.
 }
 \newline
 
-\textcolor{red}{
+{
 Observe that here the parameter $\delta^{ampl}_n$ keeps the $n$ index.
 }
-\textcolor{red}{The last variable that is going to be updated by \textbf{calculateRegularisationParameters()} is $\_regularisationCurrent.gradient$, by invoking \textbf{calculateRegularisationGradient()}:
+{The last variable that is going to be updated by \textbf{calculateRegularisationParameters()} is $\_regularisationCurrent.gradient$, by invoking \textbf{calculateRegularisationGradient()}:
 \begin{align} 
 \label{eq:calculateRegularisationGradient}
 \_regularisationCurrent.gradient = \partial_x (b^2_{j-1} (\vec{x}) \partial_x \chi_{j-1} (\vec{x}) ) + \partial_z (b^2_{j-1} (\vec{x}) \partial_z \chi_{j-1} (\vec{x}) ).
@@ -618,61 +614,136 @@ Moreover, calling a variable $gradient$ without mentioning it is multiplied by $
 }
 \newline
 
-\textcolor{red}{
+{
 We then proceed to update $\zeta_j$ by computing $g_j$ according to eq. \eqref{eq:integrandForDiscreteK} in the method \textbf{calculateUpdateDirectionRegularisation()}, in which also $gradientCurrent = gradient_j$ gets updated as 
 \begin{align}
 \_gradient_j = &\eta (\_regularisation_{j-1}.errorFunctional)\real{[\mathcal{K}^\star\mathbf{r}_{n-1}]}(\vec{x}) + \\
 &+ (||r_{j-1}||^2)( \_regularisation_j.gradient),
 \end{align}
 with $\_regularisation_{j-1} =\_regularisationPrevious$,  $\_regularisation_{j} =\_regularisationCurrent$ and\footnote{the variables $\_regularisationPrevious$ and $\_regularisationCurrent$ are declared in the first part of the \textit{main loop} and the method \textbf{calculateRegularisationErrorFunctional()} is called only at the end of the \textit{inner loop}, which means that every time we start the \textit{inner loop} the quantity $\_regularisationPrevious.errorFunctional$ is reinitialized as a \textit{double  0.0}.}
-\begin{align}
+\begin{align} \label{eq:RegPrevious.Freg}
 \_regularisation_{j-1}.errorFunctional =  (\int_{\vec{x}} d\vec{x})^{-1} \int_{\vec{x}} \left(\frac{(|\nabla \chi_j\vec{x}|^2 +\delta^2_{j-1})}{(|\nabla \chi_{j-1}\vec{x}|^2 +\delta^2_{j-1})}  d\vec{x}\right) (cellVolume), \\
 \tag*{( calculateRegularisationErrorFunctional() )}
 \end{align}
 where $cellVolume$ represents the volume of a discretisation cell coming from $\_grid.getCellVolume()$.
-Observe how the formula for $errorFunctional_{(j)} $ resembles eq. (2.21) from Thesis for the computation of $F^{reg}_n$, although the \textit{.summation()} operation is done on the whole fraction at once rather than for numerator and denominator separately.
-}
+Besides the multiplication for this $cellVolume$ term, it perfectly matches eq, (2.21) from Thesis.
 \newline
 
-\textcolor{red}{
+{
 We now compute new direction $\zeta_j$ by invoking the method \textbf{calculateUpdateDirectionRegularisation()}, which computes $g_j(\vec{x})$ by means of
 \begin{align}
 gradient_j =& \eta  (\_regularisation_{j-1}.errorFunctional) \ \real{[\mathcal{K}^\star\mathbf{r}_{n-1}]} \\
  &+ (residual_{j-1})( \_regularisation_j.gradient),
 \end{align}
-which is claimed to be representing eq. (2.25) from Thesis. 
-The first term on the right hand side of the above equation matches, 
-while in the second term we see that $residual_{j-1} = residualPrevious = ||r_{j-1}||^2$ is linearly dependent to $F ^{data}$ in eq. $(2.8)$ from Thesis. 
-Regarding the $ \_regularisation_j.gradient$, we can see that in eq. \eqref{eq:calculateRegularisationGradient} this variable more or less contains a $b_{j-1}^2$ term, although inside of a compositve derivative.
+which represents eq. (2.25) from Thesis. 
+The first term on the right hand side of the above equation is easily recognizable, while in the second term we see that $residual_{j-1} = residualPrevious = ||r_{j-1}||^2$ is linearly dependent to $F ^{data}$ in eq. $(2.8)$ from Thesis. 
+Regarding the $ \_regularisation_j.gradient$, it corresponds to the term described in equation (2.24) from Thesis, although its name is fairly misleading (it is actually a gradient, but it is not specified of what).
 \newline
 Once we have obtained $gradient_j= gradientCurrent$, we compute $\gamma_j$ using the Polak-Ribiere formula \eqref{eq:PolakRibiereDirection} and we obtain the new $\zeta_j$ following eq. \eqref{eq:updateDirectionsCG}.
 }
 \newline
-\textcolor{red}{
+{
 We then invoke \textbf{calculateStepSizeRegularisation()} where the parameters $\mathcal{A}_0$, $\mathcal{A}_1$, $\mathcal{A}_2$, $\mathcal{B}_0$, $\mathcal{B}_1$ and $\mathcal{B}_2$ that represent the coefficients of the Taylor expansion for $\mathcal{F}^{data}_j$ (the $\mathcal{A}$'s) and $\mathcal{F}^{reg}_j$ (the $\mathcal{B}$'s) are computed.
 }
 
 The new total cost functional then becomes a product of two second order polynomials:
 
-\begin{align} \label{eq:errorFuncFourthOrder} \mathcal{F}^{tot}_{\textcolor{red}{j}} \textcolor{red}{(\alpha_j)} =
-(\mathcal{A}_2\alpha^{2}_{\textcolor{red}{j}} + \mathcal{A}_1\alpha_{\textcolor{red}{j}}
-+\mathcal{A}_0)(\mathcal{B}_2\alpha^{2}_{\textcolor{red}{j}} + \mathcal{B}_1\alpha_{\textcolor{red}{j}} +
+\begin{align} \label{eq:errorFuncFourthOrder} \mathcal{F}^{tot}_{{j}} {(\alpha_j)} =
+(\mathcal{A}_2\alpha^{2}_{{j}} + \mathcal{A}_1\alpha_{{j}}
++\mathcal{A}_0)(\mathcal{B}_2\alpha^{2}_{{j}} + \mathcal{B}_1\alpha_{{j}} +
 \mathcal{B}_0)\\
 \tag*{\texttt{errorFuncFourthOrder}}
 \end{align}
 
-with the constants A\textsubscript{0}, ..., A\textsubscript{2}, B\textsubscript{2} in appendix \ref{totalcostprefactors}.
+with the constants $\mathcal{A}_i$, $\mathcal{B}_i$ as in appendix \ref{totalcostprefactors}.
 
-
-\textcolor{red}{
-Finally, we find the minimum of eq. \eqref{eq:errorFuncFourthOrder} by computing $\partial_\alpha \mathcal{F}^{tot}_{\textcolor{red}{j}}$ =0, which is computed by finding a real root using the procedure described in subsection (3.8.2) of \textit{Abramowitz, M., and Stegun, I. A., 1970} from Thesis' bibliography).
+Finally, we find the minimum of eq. \eqref{eq:errorFuncFourthOrder} by computing
+\begin{align}
+ \partial_\alpha \mathcal{F}^{tot}_{{j}}(\alpha) = 4\alpha^3 (\mathcal{A}_2 \mathcal{B}_2)+3\alpha^2(\mathcal{A}_2\mathcal{B}_1 + \mathcal{A}_1\mathcal{B}_2) + 2\alpha (\mathcal{A}_2\mathcal{B}_0 + \mathcal{A}_1\mathcal{B}_1 +\mathcal{A}_0\mathcal{B}_2) + \mathcal{A}_1\mathcal{B}_0 +\mathcal{A}_1\mathcal{B}_1=0, 
+\end{align} 
+ which is computed by finding a real root using the procedure described in subsection (3.8.2) of \textit{Abramowitz, M., and Stegun, I. A., 1970} from Thesis' bibliography).
 It is not clear how we are sure that we find the 'correct' real root, as this polynomial could very well possess three distinct real roots.
 Moreover, the operations have been unnecessarily modified (although obtaining the expected final value), resulting in arbitrary variables' names (very unclear) and sign and constant multiplications that have no reasons to be. 
+A simple fix to this issue could be checking whether the other two roots are also real (easily doable with the implemented computation), and in that case return all three of them, so that afterwards the one actually minimizing eq. \eqref{eq:errorFuncFourthOrder} can be picked.
 \newline
 The new $chiEstimate$ is finally updated by means of $chiEstimate += alpha * zeta$ (Line 79), followed by an update of $residualCurrent$ (containing the square norm of the $residual$, Line 82) and $\_regularisationCurrent.gradientChi$ (Line 98).
 \newline
-There is another Bug (Line 99, just noticed), where a function that should update the $\_regularisationCurrent$ and $\_regularisationPrevious$ is actually invoked with two instances of $\_regularisationPrevious$, thus destroying any hope of validity of the algorithm.
-}
+
+
+
+\textcolor{red}{
+\paragraph{Unvalidated parts and regression tests}}
+
+A first tentative way to justify the presence of the unexpected computations in the code is to study how their presence/absence/variation affects the performances of the regression tests.
+
+The paremeters for the \textbf{conjugateGradientInversion} that we will focus on are (together with their \textit{default} values):
+\begin{enumerate}
+\item the range of the outer loop (indicated by $Iter1.n$) $n_{max}=10$ and of the inner loop (indicated by $n\_max$) $j_{max}=5$,
+\item the $\delta^{ampl}$ parameters ($\delta^{ampl}_{start} =100.0$, $\delta^{ampl}_{slope} =10.0$),
+\item The presence of $b_j^2(\vec{x})$ in eq. \eqref{eq:errorFuncRegulSteeringWrong},
+\item the presence of the multiplicative $cellVolume$ in eq. \eqref{eq:RegPrevious.Freg}.
+\end{enumerate}
+There is an outdated \textit{bool $do\_reg$} that was used to indicate whether or not we wanted the regularisation process.
+Now a $j_{max}=0$ is used instead.
+
+
+\subparagraph*{Presence of inner loop}
+Many hints inside of the code show that the outer loop should be run only once, thus making it redundant in the first place. 
+A set of regression tests ran with $n_{max}=1$, $j_{max}=33$ brought to a computational time in line with the default, but on average worse precision.
+\newline 
+
+However, when running a test with $n_{max}=50$, $j_{max}=0$ (and in particular no regularisation), we find on average much better results for the regression tests. 
+The computational time improves, and the precision too (except for \textit{smallgrid} and \textit{layers}, where it performs much worse).
+Increasing $n_{max}$ to $55$ brings to comparable running time and slightly improved precision (except for \textit{smallgrid} and \textit{layers} where it actually worsens even more).
+
+\subparagraph*{$\delta^{ampl}$ parameters}
+Comparing equations \eqref{eq:errorFuncRegulSteering} and \eqref{eq:errorFuncRegulSteeringWrong}, a regression test was tried with parameters $2.0$ and $0.1$ (they cannot be chosen $\leq 0$). 
+Unfortunately, most of the regression tests showed worsened performances in precision and/or time.
+
+
+\subparagraph*{Presence of $b_j^2(\vec{x})$ in eq. \eqref{eq:errorFuncRegulSteeringWrong}}
+such a modification of the metric could in some cases improve stability, but only when replacing some metric that could have values close to $0$ or $\infty$ with something more regular. 
+In this case, the constant function $1$ was substituted.
+A comparison of regression tests while removing the $b^2_j$ from eq. \eqref{eq:errorFuncRegulSteeringWrong} against the default version (both with default parameters) brought to an overall worsening of performance when removing the $b^2_j$ parameters.
+
+
+
+\subparagraph*{\textit{cellVolume} in \eqref{eq:RegPrevious.Freg}}
+By comparing the default regression tests with the ones obtained after removing the term $cellVolume$ from eq. \eqref{eq:RegPrevious.Freg} we observe an overall increase in precision (slight decrease in \textit{manyfreq} and \textit{highquality}), especially in the \textit{smallgrid} test, where we finally manage to obtain a positive value for the VAF and FIT coefficients ($3\%$ and $1.7\%$ respectively, compared to the benchmark $-7\%$ and $-3\%$)\footnote{these parameters are actually defined as the maximum between 0 and the outcome of some operations, but we have kept negative values to monitor these poorly performing cases.}.
+\newline
+
+A combination of removing the $cellVolume$ multiplication in \eqref{eq:RegPrevious.Freg} and eliminating the influence of $\delta^{ampl}$ (by setting $\delta^{ampl}_{start}=2$, $\delta^{ampl}_{slope}=0.01$) worsened the overall performance, except for the \textit{smallgrid} test, where we actually reached a VAF value of $14\%$ and a FIT value of $7\%$.
+
+If we instead run the regression tests without $cellVolume$ together with $n_{max} =25$, $j_{max} =2$ (for a total of 50 steps) we find that every single test has improved precision and slight faster processing.
+This combination is also more precise than the benchmark simulations in 6 tests out of 8 (excluding \textit{small grid} and \textit{High quality}, where the values are however comparable).
+
+\subparagraph*{$\mathcal{K}_\chi$ computation in \textit{forwardModel}}
+We mentioned that no $\chi$ is present in the actual computation. Trying to change this part requires a lot of modifications to the \textit{forwardModel} classes, and tests regarding this point have not been carried on yet. 
+
+\textcolor{red}
+{\section{Conclusions}}
+While researching the origin of the undocumented parts of the code I realized that these parts have been implemented since a long time, since the beginning of the git tree. 
+
+The presence of these not validated part might be a trial and error procedure to improve the performances of the inversion process, but this is not clear.
+
+%The inner loop has been there since commit '45d3308' from 29/12/2016, while the first instance of any $delta\_amplification$ is commit '3ea4ba0b' from 09/11/2018.
+%There are a few other incongruencies as well that I still have not tracked down (see for example eq. \eqref{eq:errorFuncRegulSteering} vs eq. \eqref{eq:errorFuncRegulSteeringWrong}) .
+
+%I could not recover any document pertaining to these modifications, although I believe some should have existed at the time, but not in the repository.
+
+
+This makes the validation of the implemented code extremely hard, since there is no mathematical proof that those undocumented parts improve the performances, either in speed or precision.
+
+During the upcoming Validation Epics, User Stories should be added to understand the presence of these terms, and either justify them or remove them.
+
+Moreover, due to the presence of the double loop in \textbf{conjugateGradientInversion.cpp}, its only possible refactoring in the new 'StepAndDirection' style created an inheritance diamond problem, also forcing to create a customized method in the factory.
+
+An implementation of the Conjugate Gradient with Regularisation algorithm that follows the existing documentation could be implemented simply as a 'StepSizeCalculator', which would satisfy the very reason behind the refactoring, that is splitting 'Directions' from 'StepSizes'. 
+The extimated time to create such new class would approximately be a couple of days, as most of the code can be recycled.
+Note that at the moment there is no test for the 'StepSize' part.
+
+A validated version of this algorithm could also bring more meaning to regression tests and in future to performance comparing of different algorithms.
+
 
 \appendix
 \section{Appendices}
@@ -718,23 +789,23 @@ There is another Bug (Line 99, just noticed), where a function that should updat
 
 \begin{align} \label{eq:totalCostA1} \mathcal{A}_1 = -2 \eta \real{\int
 \int \int r^{\star}_{n-1} \mid \mathcal{K} \zeta_n \mid
-d\vec{x_s}d\vec{x_r}d\omega} , \hat{E}\\
+d\vec{x_s}d\vec{x_r}d\omega} , \\
 \tag*{\texttt{totalCostA1}}
 \end{align}
 
 \begin{align} \label{eq:totalCostA0} \mathcal{A}_0 = \eta \int \int \int
 \mid r_{n-1} \mid^2 d\vec{x_s}d\vec{x_r}d\omega =
-\mathcal{F}^{data}_{n-1} , \hat{E}\\
+\mathcal{F}^{data}_{n-1} , \\
 \tag*{\texttt{totalCostA0}}
  \end{align}
 
 \begin{align} \label{eq:totalCostB2} \mathcal{B}_2 = \mid \mid b_n \nabla
-\zeta_n \mid \mid^{2}_D , \hat{E}\\
+\zeta_n \mid \mid^{2}_D ,\\
 \tag*{\texttt{totalCostB2}}
 \end{align}
 
 \begin{align} \label{eq:totalCostB1} \mathcal{B}_1 = 2 < b_n
-\nabla\chi^{n-1}, b_n \nabla \zeta_n >_D, \hat{E}\\
+\nabla\chi^{n-1}, b_n \nabla \zeta_n >_D, \\
 \tag*{\texttt{totalCostB1}}
 \end{align}
 
@@ -786,5 +857,51 @@ At the top right corner, with $\hat{\s}=[1,-1]^\top$, the following discretizati
 &\leadsto& \frac{u_{i+1,j}-u_{i-1,j}}{2h_x}-\frac{u_{i,j+1}-u_{i,j}}{h_z}-\frac{3}{2}i\omega n_{ij}u_{ij}=0\\
 &\implies& u_{i,j+1} = (3h_xi\omega n_{i,j}-2\frac{h_x}{h_z})u_{i,j}+u_{i-1,j}+2\frac{h_x}{h_z}u_{i,j+1}=0
 \end{eqnarray}
+
+
+
+\begin{thebibliography}{9}
+
+ \bibitem{LectNotes}
+Olof Runborg,
+Numerical Solutions of Differential Equation -- Lecture Notes,
+2012.
+
+
+\bibitem{SecondOrderCorner}
+	Alain Bamberger, Patrick Joly and Jean E. Roberts,
+Second-Order Absorbing Boundary Conditions for the Wave Equation: A Solution for the Corner Problem,
+
+
+\bibitem{AbsorpationRates}
+Bjorn Engquist and Andrew Majda,
+Absorbing boundary conditions for the numerical simulation of waves,
+1977.
+
+
+\bibitem{Erlangga2008}
+Yogi A. Erlangga,
+Advances in Iterative Methods and Preconditioners for the Helmholtz Equation,
+2008.
+
+
+\bibitem{Comparison},
+Yingjie Gao, Hanjie Song, Jinhai Zhang and Zhenxing Yao,
+Comparison of artificial absorbing boundaries for acoustic wave equation modelling,
+2017.
+
+\bibitem{FWIbook}
+Andreas Fichtner, 
+Full Seismic Waveform Modelling and Inversion,
+2011.
+
+
+\bibitem{Hicks}
+J. Hicks, Graham,
+Arbitrary source and receiver positioning in finite-difference schemes using Kaiser windowed sinc function,
+2002.
+
+
+\end{thebibliography}
 
 \end{document}

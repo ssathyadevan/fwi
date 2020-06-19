@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.25)  5 JUN 2020 13:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.5.25)  18 JUN 2020 16:47
 entering extended mode
 **./ConjugateGradientInversion_implementation.tex
 (ConjugateGradientInversion_implementation.tex
@@ -1034,173 +1034,165 @@ ull-waveform-inversion.pdf
 
 [3
 
-] [4] [5]
-
-LaTeX Warning: Citation `Comparison' on page 6 undefined on input line 267.
-
-
-LaTeX Warning: Citation `LectNotes' on page 6 undefined on input line 270.
-
-
-LaTeX Warning: Citation `AbsorpationRates' on page 6 undefined on input line 29
-1.
-
-[6]
-
-LaTeX Warning: Citation `Erlangga2008' on page 7 undefined on input line 313.
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 350--351
+] [4] [5] [6] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 348--349
 
  []
 
 
-LaTeX Warning: Citation `Hicks' on page 8 undefined on input line 352.
-
-
-LaTeX Warning: Citation `Hicks' on page 8 undefined on input line 364.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 364--365
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 369--370
-
- []
-
-[8]
-
-LaTeX Warning: Citation `Hicks' on page 9 undefined on input line 371.
-
-
-LaTeX Warning: Citation `Hicks' on page 9 undefined on input line 388.
-
-[9] [10] [11]
-Overfull \hbox (70.72632pt too wide) in paragraph at lines 563--564
+[8] [9] [10]
+Overfull \hbox (70.72632pt too wide) in paragraph at lines 559--560
 \OT1/cmr/m/n/10 dex with $1 \OMS/cmsy/m/n/10  \OML/cmm/m/it/10 j < ConjugateGr
 adientWithRegularisationParametersInput:$ $[]nRegularisationIterations$
  []
 
 
-Overfull \hbox (2.71167pt too wide) in paragraph at lines 580--581
+Underfull \hbox (badness 10000) in paragraph at lines 562--570
+
+ []
+
+
+Overfull \hbox (2.71167pt too wide) in paragraph at lines 573--577
 \OT1/cmr/m/n/10 First, we com-pute the Reg-u-lar-i-sa-tion Pa-ram-e-ters $\OML/
 cmm/m/it/10 b[]\OT1/cmr/m/n/10 ([]\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )$[][][], $
 \OML/cmm/m/it/10 []$ \OT1/cmr/m/n/10 and $[]\OML/cmm/m/it/10 regularisationCur
 rent:gradient$
  []
 
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 605--607
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 599--603
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 618--620
+Underfull \hbox (badness 10000) in paragraph at lines 611--616
 
  []
 
 
-Overfull \hbox (6.48102pt too wide) in paragraph at lines 634--634
+Overfull \hbox (6.48102pt too wide) in paragraph at lines 622--624
 \OT1/cmr/m/n/10 with $[]\OML/cmm/m/it/10 regularisation[] \OT1/cmr/m/n/10 = []\
 OML/cmm/m/it/10 regularisationPrevious$\OT1/cmr/m/n/10 , $[]\OML/cmm/m/it/10 re
 gularisation[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 regularisationCurrent$
  []
 
-[13]
-Overfull \hbox (10.9962pt too wide) in paragraph at lines 634--636
+
+Overfull \hbox (10.9962pt too wide) in paragraph at lines 627--631
 \OT1/cmr/m/n/10 where $\OML/cmm/m/it/10 cellVolume$ \OT1/cmr/m/n/10 rep-re-sent
 s the vol-ume of a dis-creti-sa-tion cell com-ing from $[]\OML/cmm/m/it/10 grid
 :getCellVolume\OT1/cmr/m/n/10 ()$.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--636
+Underfull \hbox (badness 10000) in paragraph at lines 627--631
+
+ []
+
+[12]
+Overfull \hbox (3.27956pt too wide) in paragraph at lines 637--648
+\OT1/cmr/m/n/10 tion is eas-ily rec-og-niz-able, while in the sec-ond term we s
+ee that $\OML/cmm/m/it/10 residual[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 residua
+lPrevious \OT1/cmr/m/n/10 =
+ []
+
+
+Overfull \hbox (33.44783pt too wide) in paragraph at lines 637--648
+\OMS/cmsy/m/n/10 jj\OML/cmm/m/it/10 r[]\OMS/cmsy/m/n/10 jj[]$ \OT1/cmr/m/n/10 i
+s lin-early de-pen-dent to $\OML/cmm/m/it/10 F[]$ \OT1/cmr/m/n/10 in eq. $(2\OM
+L/cmm/m/it/10 :\OT1/cmr/m/n/10 8)$ from The-sis. Re-gard-ing the $[]\OML/cmm/m/
+it/10 regularisation[]:gradient$\OT1/cmr/m/n/10 ,
+ []
+
+
+Overfull \hbox (0.44286pt too wide) detected at line 663
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--671
+
+ []
+
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 691--694
 
  []
 
 
-Overfull \hbox (52.52248pt too wide) in paragraph at lines 675--676
-\OT1/cmr/m/n/10 There is an-other Bug (Line 99, just no-ticed), where a func-ti
-on that should up-date the $[]\OML/cmm/m/it/10 regularisationCurrent$
- []
-
-[14] [15]
-
-LaTeX Warning: Citation `AbsorpationRates' on page 16 undefined on input line 7
-49.
-
-
-LaTeX Warning: Citation `SecondOrderCorner' on page 16 undefined on input line 
-755.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 772--773
+Underfull \hbox (badness 10000) in paragraph at lines 712--714
 
  []
 
-[16] [17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 790.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 790.
+[14] [15] [16]
+Underfull \hbox (badness 10000) in paragraph at lines 843--844
+
+ []
+
+[17] [18]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 907.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 907.
  (ConjugateGradientInversion_implementation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 790.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 790.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 907.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 907.
 Package rerunfilecheck Info: File `ConjugateGradientInversion_implementation.ou
 t' has not changed.
-(rerunfilecheck)             Checksum: 5CEADC617FE9A21E66FE1FD8555F1EFB;1837.
+(rerunfilecheck)             Checksum: 7E9CECCFD689BBB89B1AAFB6904285AC;1648.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 907.
+ )
+(\end occurred inside a group at level 1)
 
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 790.
- ) 
+### simple group (level 1) entered at line 617 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 23200 strings out of 480930
- 468736 string characters out of 2898354
- 775013 words of memory out of 3000000
- 38435 multiletter control sequences out of 15000+200000
- 544267 words of font info for 75 fonts, out of 3000000 for 9000
+ 23217 strings out of 480930
+ 468824 string characters out of 2898354
+ 774284 words of memory out of 3000000
+ 38443 multiletter control sequences out of 15000+200000
+ 544989 words of font info for 77 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 64i,13n,81p,727b,404s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C:\Users\lmorelli\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi6
-00\tcrm1000.pk><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmbx10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/lmorelli/AppData/Local
-/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/lmorell
-i/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx8.pfb><C
-:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmex10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmmi10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/lmorelli/AppData/Local/P
-rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/lmorelli/
-AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/
-Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmmi8.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmr10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/lmorelli/AppData/Local/Progr
-ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/lmorelli/AppD
-ata/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users
-/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6
-.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmr7.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmr8.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/lmorelli/AppData/Loc
-al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/lmore
-lli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+ 64i,15n,81p,709b,537s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmbx10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/lmorelli/AppData/Loca
+l/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/lmorel
+li/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx8.pfb><
+C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmbxti10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/typ
+e1/public/amsfonts/cm/cmex10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/lmorelli/AppData/Loc
+al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/lmore
+lli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb>
 <C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmsy8.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmti10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmti8.pfb><C:/Users/lmorelli/AppData/Local/
-Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/lmorell
-i/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/latxfont/lasy10
-.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/am
-sfonts/symbols/msbm10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/
-fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on ConjugateGradientInversion_implementation.pdf (17 pages, 4120
-75 bytes).
+s/cm/cmmi7.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmmi8.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/lmorelli/AppData/Local/P
+rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/lmorelli/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/
+Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmr5.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmr6.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/lmorelli/AppData/Local/Programs
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/lmorelli/AppData/
+Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/l
+morelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.
+pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmsy7.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmsy8.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/lmorelli/AppData/Lo
+cal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti8.pfb><C:/Users/lmor
+elli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pf
+b><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/latxfont/lasy10.pfb><C:/Users/lmorelli/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/lmorelli/AppData/Local/P
+rograms/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on ConjugateGradientInversion_implementation.pdf (18 pages, 4305
+95 bytes).
 PDF statistics:
- 498 PDF objects out of 1000 (max. 8388607)
- 153 named destinations out of 1000 (max. 500000)
- 213 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 517 PDF objects out of 1000 (max. 8388607)
+ 161 named destinations out of 1000 (max. 500000)
+ 197 words of extra memory for PDF output out of 10000 (max. 10000000)
 
