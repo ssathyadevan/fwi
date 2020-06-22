@@ -10,7 +10,7 @@ public:
 
     double calculateStepSize();
     void updateVariables(
-        const dataGrid2D &, const dataGrid2D &, int iteration, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
+        const core::dataGrid2D &, const core::dataGrid2D &, int iteration, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
 
 private:
     int _stepIterator = 0;   // If this calculator is used multiple times, reset this iterator.

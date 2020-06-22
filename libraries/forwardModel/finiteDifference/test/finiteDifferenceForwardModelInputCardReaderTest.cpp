@@ -1,5 +1,5 @@
-#include "finiteDifferenceForwardModel.h"
 #include "finiteDifferenceForwardModelInputCardReader.h"
+#include "finiteDifferenceForwardModel.h"
 #include <gtest/gtest.h>
 
 // const std::string inputPath = "./../../../parallelized-fwi/tests"; // For local use

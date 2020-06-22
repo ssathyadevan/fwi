@@ -12,13 +12,13 @@ private:
     ForwardModelContainer &_forwardModelsParallel;
     gradientDescentInversionInput _gdInput;
 
-    const grid2D &_grid;
-    const sources &_src;
-    const receivers &_recv;
-    const frequenciesGroup &_freq;
+    const core::grid2D &_grid;
+    const core::sources &_src;
+    const core::receivers &_recv;
+    const core::frequenciesGroup &_freq;
 
-    dataGrid2D gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma);
-    std::vector<double> differentialParallel(const std::vector<std::complex<double>> &pData, dataGrid2D xi, double dxi, double eta);
+    core::dataGrid2D gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma);
+    std::vector<double> differentialParallel(const std::vector<std::complex<double>> &pData, core::dataGrid2D xi, double dxi, double eta);
     std::ofstream openResidualLogFile(genericInput &gInput);
 
 public:
@@ -27,9 +27,9 @@ public:
     OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion &) = delete;
     OpenMPGradientDescentInversion &operator=(const OpenMPGradientDescentInversion &) = delete;
 
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 
-    double functionFParallel(const dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta);
+    double functionFParallel(const core::dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(
-        const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent);
+        const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent);
 };

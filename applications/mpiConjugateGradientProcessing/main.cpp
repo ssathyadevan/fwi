@@ -113,7 +113,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 {
     //CpuClockMPI a;
 
-    // initialize the grid, sources, receivers, grouped frequencies
+    // initialize the grid sources receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
     src.Print();

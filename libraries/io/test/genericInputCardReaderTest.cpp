@@ -20,8 +20,8 @@ TEST(genericInputCardReaderTest, readFreqTest)
 {
     // Given
     genericInputCardReader reader(inputPath);
-    freqInfo expectedFreq = {10, 40, 15};
-    freqInfo actualFreq = reader.getInput().freq;
+    core::freqInfo expectedFreq = {10, 40, 15};
+    core::freqInfo actualFreq = reader.getInput().freq;
 
     // Then
     EXPECT_NEAR(actualFreq.min, expectedFreq.min, 0.0001);

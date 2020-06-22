@@ -51,20 +51,20 @@ int main(int argc, char **argv)
 
 void generateReferencePressureFieldFromChi(const genericInput &gInput, const std::string &runName)
 {
-    // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
+    // initialize the grid sources receivers, grouped frequencies
+    core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
 
     std::string inputFolder = gInput.inputFolder + gInput.fileName + ".txt";
-    dataGrid2D chi(grid);
+    core::dataGrid2D chi(grid);
     chi.fromFile(inputFolder);
 
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
 
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
 
-    frequenciesGroup freqg(gInput.freq, gInput.c0);
+    core::frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;

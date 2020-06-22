@@ -10,12 +10,12 @@ private:
     forwardModelInterface *_forwardModel;
     gradientDescentInversionInput _gdInput;
 
-    const grid2D &_grid;
-    const sources &_src;
-    const receivers &_recv;
-    const frequenciesGroup _freq;
+    const core::grid2D &_grid;
+    const core::sources &_src;
+    const core::receivers &_recv;
+    const core::frequenciesGroup _freq;
 
-    dataGrid2D gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma);
+    core::dataGrid2D gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma);
     std::ofstream openResidualLogFile(genericInput &gInput);
 
 public:
@@ -26,9 +26,9 @@ public:
 
     void logResidualResults(int iteration, double residual, bool isConverged);
 
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
     std::vector<double> differential(
-        std::vector<std::complex<double>> &residual, dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
+        std::vector<std::complex<double>> &residual, core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
     double determineGamma(
-        const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdx);
+        const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdx);
 };

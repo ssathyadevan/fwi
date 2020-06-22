@@ -12,7 +12,7 @@ ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisati
     _nTotal = forwardModel->getFreq().nFreq * forwardModel->getSrc().nSrc * forwardModel->getRecv().nRecv;
 }
 
-dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector)
+core::dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(const core::dataGrid2D &, const std::vector<std::complex<double>> &residualVector)
 {
     // updating what necessary
     _residualVector = residualVector;
@@ -32,7 +32,7 @@ dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(co
     return _directionCurrent;
 }
 
-void ConjugateGradientWithRegularisationCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber,
+void ConjugateGradientWithRegularisationCalculator::updateVariables(const core::dataGrid2D &chiEstimateCurrent, const core::dataGrid2D &, int iterationNumber,
     const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &)
 {
     // Update relevant variables
@@ -108,7 +108,7 @@ void ConjugateGradientWithRegularisationCalculator::calculateRegularisationParam
     _regularisationCurrent.gradient = calculateRegularisationGradient();
 }
 
-dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionInRegularisation()
+core::dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionInRegularisation()
 {
     _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 _kappaTimesResidual updated
     _gradientCurrent = _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
@@ -119,9 +119,9 @@ dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateDirectionInRe
 
     return _gradientCurrent + step * _directionCurrent;
 }
-dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
+core::dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
 {
-    dataGrid2D bSquared(_grid);
+    core::dataGrid2D bSquared(_grid);
     bSquared = _regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared;
     bSquared.reciprocal();
     bSquared *= (1.0 / (_grid.getDomainArea()));
@@ -132,9 +132,9 @@ double ConjugateGradientWithRegularisationCalculator::calculateSteeringFactor()
 {
     //    return _regularisationPrevious.gradientChiNormSquared / (_grid.getDomainArea()); //according to documentation
 
-    dataGrid2D bTimesGradientChiXSquared = _regularisationCurrent.b * _regularisationPrevious.gradientChi[0];
+    core::dataGrid2D bTimesGradientChiXSquared = _regularisationCurrent.b * _regularisationPrevious.gradientChi[0];
     bTimesGradientChiXSquared.square();
-    dataGrid2D bTimesGradientChiZSquared = _regularisationCurrent.b * _regularisationPrevious.gradientChi[1];
+    core::dataGrid2D bTimesGradientChiZSquared = _regularisationCurrent.b * _regularisationPrevious.gradientChi[1];
     bTimesGradientChiZSquared.square();
 
     double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
@@ -149,18 +149,18 @@ double ConjugateGradientWithRegularisationCalculator::calculateSteeringFactor()
     return _deltaAmplification * 0.5 * bTimesGradientChiNormSquared / bSquaredSummed;
 }
 
-dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateRegularisationGradient()
+core::dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateRegularisationGradient()
 {
-    std::vector<dataGrid2D> temporaryGradient(2, dataGrid2D(_grid));
+    std::vector<core::dataGrid2D> temporaryGradient(2, core::dataGrid2D(_grid));
 
-    dataGrid2D bSquaredTimesGradientChiX = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[0];
+    core::dataGrid2D bSquaredTimesGradientChiX = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[0];
     bSquaredTimesGradientChiX.gradient(temporaryGradient);
 
-    dataGrid2D bSquaredTimesGradientChiZ = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[1];
+    core::dataGrid2D bSquaredTimesGradientChiZ = _regularisationPrevious.bSquared * _regularisationPrevious.gradientChi[1];
     bSquaredTimesGradientChiZ.gradient(temporaryGradient);
 
-    dataGrid2D gradientBSquaredTimesGradientChiX = temporaryGradient[0];
-    dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
+    core::dataGrid2D gradientBSquaredTimesGradientChiX = temporaryGradient[0];
+    core::dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
 
     return gradientBSquaredTimesGradientChiX + gradientBSquaredTimesGradientChiZ;
 }
@@ -202,23 +202,23 @@ double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegular
         a2 += _errorFunctionalScalingFactor * std::real(conj(kappaTimesDirection[i]) * kappaTimesDirection[i]);
     }
 
-    dataGrid2D bGradientChiSquaredXDirection =
+    core::dataGrid2D bGradientChiSquaredXDirection =
         (_regularisationCurrent.b * _regularisationPrevious.gradientChi[0]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[0]);
-    dataGrid2D bGradientChiSquaredZDirection =
+    core::dataGrid2D bGradientChiSquaredZDirection =
         (_regularisationCurrent.b * _regularisationPrevious.gradientChi[1]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[1]);
     double b0 = ((bGradientChiSquaredXDirection.summation() + bGradientChiSquaredZDirection.summation()) +
                     _regularisationPrevious.deltaSquared * _regularisationCurrent.bSquared.summation()) *
                 _grid.getCellVolume();
 
-    std::vector<dataGrid2D> gradientZeta(2, dataGrid2D(_grid));
+    std::vector<core::dataGrid2D> gradientZeta(2, core::dataGrid2D(_grid));
     _directionCurrent.gradient(gradientZeta);
 
-    dataGrid2D bGradientZetabGradientChiX = (_regularisationCurrent.b * gradientZeta[0]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[0]);
-    dataGrid2D bGradientZetabGradientChiZ = (_regularisationCurrent.b * gradientZeta[1]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[1]);
+    core::dataGrid2D bGradientZetabGradientChiX = (_regularisationCurrent.b * gradientZeta[0]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[0]);
+    core::dataGrid2D bGradientZetabGradientChiZ = (_regularisationCurrent.b * gradientZeta[1]) * (_regularisationCurrent.b * _regularisationPrevious.gradientChi[1]);
     double b1 = 2.0 * (bGradientZetabGradientChiX.summation() + bGradientZetabGradientChiZ.summation()) * _grid.getCellVolume();
 
-    dataGrid2D bTimesGradientZetaXdirection = _regularisationCurrent.b * gradientZeta[0];
-    dataGrid2D bTimesGradientZetaZdirection = _regularisationCurrent.b * gradientZeta[1];
+    core::dataGrid2D bTimesGradientZetaXdirection = _regularisationCurrent.b * gradientZeta[0];
+    core::dataGrid2D bTimesGradientZetaZdirection = _regularisationCurrent.b * gradientZeta[1];
     bTimesGradientZetaXdirection.square();
     bTimesGradientZetaZdirection.square();
     double b2 = (bTimesGradientZetaXdirection.summation() + bTimesGradientZetaZdirection.summation()) * _grid.getCellVolume();
@@ -252,11 +252,11 @@ double ConjugateGradientWithRegularisationCalculator::findRealRootFromCubic(doub
 
 void ConjugateGradientWithRegularisationCalculator::calculateRegularisationErrorFunctional()
 {
-    dataGrid2D gradientChiNormsquaredCurrent(_grid);
+    core::dataGrid2D gradientChiNormsquaredCurrent(_grid);
     gradientChiNormsquaredCurrent = (_regularisationCurrent.gradientChi[0] * _regularisationCurrent.gradientChi[0]) +
                                     (_regularisationCurrent.gradientChi[1] * _regularisationCurrent.gradientChi[1]);
 
-    dataGrid2D integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
+    core::dataGrid2D integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
                           (_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared);
 
     _regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();

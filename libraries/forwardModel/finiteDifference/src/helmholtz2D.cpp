@@ -6,7 +6,7 @@ namespace fwi
     static const double pi = std::atan(1.0) * 4.0;
 }
 Helmholtz2D::Helmholtz2D(
-    const grid2D &grid, const double freq, const sources &src, const double c0, const dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput) :
+    const core::grid2D &grid, const double freq, const core::sources &src, const double c0, const core::dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput) :
     _A(),
     _b(), _oldgrid(grid), _newgrid(), _PMLwidth(), _freq(freq), _c0(c0), _waveVelocity(), _solver(), _srcInput(fmInput.sourceParameter)
 {
@@ -28,7 +28,7 @@ Helmholtz2D::Helmholtz2D(
     // r == 0 uses the Point source implemtation (see BuildVector)
     double r = static_cast<double>(fmInput.sourceParameter.r);
 
-    // sources can be outside imaging domain. Area that we solve for needs to include all sources
+    // core::sources can be outside imaging domain. Area that we solve for needs to include all core::sources
     double extraWidthLeft = 0.0;
     double extraWidthRight = 0.0;
     double extraHeightBottom = 0.0;
@@ -99,7 +99,7 @@ Helmholtz2D::Helmholtz2D(
 
 Helmholtz2D::~Helmholtz2D() { delete _newgrid; }
 
-void Helmholtz2D::updateChi(const dataGrid2D &chi)
+void Helmholtz2D::updateChi(const core::dataGrid2D &chi)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.getGridDimensions();
@@ -125,7 +125,7 @@ void Helmholtz2D::updateChi(const dataGrid2D &chi)
     }
 }
 
-complexDataGrid2D Helmholtz2D::solve(const std::array<double, 2> &source, complexDataGrid2D &pInit)
+core::complexDataGrid2D Helmholtz2D::solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit)
 {
     std::array<int, 2> nx = _newgrid->GetGridDimensions();
     std::array<int, 2> oldnx = _oldgrid.getGridDimensions();

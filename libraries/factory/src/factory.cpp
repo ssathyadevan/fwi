@@ -20,7 +20,14 @@
 #include <factory.h>
 #include <iostream>
 
-Factory::Factory() : _createdInversion(), _createdForwardModel(), _createdStepSizeCalculator(), _createdDirectionCalculator(), _createdReconstructor() {}
+Factory::Factory()
+    : _createdInversion()
+    , _createdForwardModel()
+    , _createdStepSizeCalculator()
+    , _createdDirectionCalculator()
+    , _createdReconstructor()
+{
+}
 
 Factory::~Factory()
 {
@@ -82,8 +89,8 @@ inversionInterface *Factory::createInversion(const std::string &desiredInversion
     throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
 }
 
-forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const grid2D &grid,
-    const sources &sources, const receivers &receivers, const frequenciesGroup &frequencies)
+forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
+    const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
 {
     if(desiredForwardModel == "integralForwardModel")
     {
@@ -101,7 +108,7 @@ forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid)
+void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const core::grid2D &grid)
 {
     if(desiredStepSizeMethod == "fixedStepSize")
     {

@@ -11,14 +11,19 @@
 #define TAG_RESARRAY 2
 #define TAG_RESULT 3
 
-ConjugateGradientInversion::ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput) :
-    _forwardModel(), _cgInput(invInput), _grid(forwardModel->getGrid()), _sources(forwardModel->getSrc()), _receivers(forwardModel->getRecv()),
-    _frequencies(forwardModel->getFreq()), _chiEstimate(_grid)
+ConjugateGradientInversion::ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+    : _forwardModel()
+    , _cgInput(invInput)
+    , _grid(forwardModel->getGrid())
+    , _sources(forwardModel->getSrc())
+    , _receivers(forwardModel->getRecv())
+    , _frequencies(forwardModel->getFreq())
+    , _chiEstimate(_grid)
 {
     _forwardModel = forwardModel;
 }
 
-dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
@@ -34,7 +39,7 @@ dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::comple
     for(int it = 0; it < _cgInput.n_max; it++)
     {
         // Initialize conjugate gradient parameters
-        dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
+        core::dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
         double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
 
         _forwardModel->calculateKappa();
@@ -127,16 +132,17 @@ std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInp
     return residualLogFile;
 }
 
-dataGrid2D ConjugateGradientInversion::calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent, double eta)
+core::dataGrid2D ConjugateGradientInversion::calculateUpdateDirection(
+    std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent, double eta)
 {
-    complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
+    core::complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
     _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
     gradientCurrent = eta * kappaTimesResidual.getRealPart();
 
     return gradientCurrent;
 }
 
-double ConjugateGradientInversion::calculateStepSize(const dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray)
+double ConjugateGradientInversion::calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray)
 {
     double alphaNumerator = 0.0;
     double alphaDenominator = 0.0;
@@ -185,9 +191,9 @@ void ConjugateGradientInversion::calculateRegularisationParameters(
     regularisationCurrent.gradient = calculateRegularisationGradient(regularisationPrevious);
 }
 
-dataGrid2D ConjugateGradientInversion::calculateWeightingFactor(const RegularisationParameters &regularisationPrevious)
+core::dataGrid2D ConjugateGradientInversion::calculateWeightingFactor(const RegularisationParameters &regularisationPrevious)
 {
-    dataGrid2D bSquared(_grid);
+    core::dataGrid2D bSquared(_grid);
     bSquared = regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared;
     bSquared.reciprocal();
     bSquared *= (1.0 / (_grid.getDomainArea()));
@@ -197,9 +203,9 @@ dataGrid2D ConjugateGradientInversion::calculateWeightingFactor(const Regularisa
 double ConjugateGradientInversion::calculateSteeringFactor(
     const RegularisationParameters &regularisationPrevious, const RegularisationParameters &regularisationCurrent, double deltaAmplification)
 {
-    dataGrid2D bTimesGradientChiXSquared = regularisationCurrent.b * regularisationPrevious.gradientChi[0];
+    core::dataGrid2D bTimesGradientChiXSquared = regularisationCurrent.b * regularisationPrevious.gradientChi[0];
     bTimesGradientChiXSquared.square();
-    dataGrid2D bTimesGradientChiZSquared = regularisationCurrent.b * regularisationPrevious.gradientChi[1];
+    core::dataGrid2D bTimesGradientChiZSquared = regularisationCurrent.b * regularisationPrevious.gradientChi[1];
     bTimesGradientChiZSquared.square();
 
     double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
@@ -208,26 +214,26 @@ double ConjugateGradientInversion::calculateSteeringFactor(
     return deltaAmplification * 0.5 * bTimesGradientChiNormSquared / bSquaredSummed;
 }
 
-dataGrid2D ConjugateGradientInversion::calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious)
+core::dataGrid2D ConjugateGradientInversion::calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious)
 {
-    std::vector<dataGrid2D> temporaryGradient(2, dataGrid2D(_grid));
+    std::vector<core::dataGrid2D> temporaryGradient(2, core::dataGrid2D(_grid));
 
-    dataGrid2D bSquaredTimesGradientChiX = regularisationPrevious.bSquared * regularisationPrevious.gradientChi[0];
+    core::dataGrid2D bSquaredTimesGradientChiX = regularisationPrevious.bSquared * regularisationPrevious.gradientChi[0];
     bSquaredTimesGradientChiX.gradient(temporaryGradient);
-    dataGrid2D gradientBSquaredTimesGradientChiX = temporaryGradient[0];
+    core::dataGrid2D gradientBSquaredTimesGradientChiX = temporaryGradient[0];
 
-    dataGrid2D bSquaredTimesGradientChiZ = regularisationPrevious.bSquared * regularisationPrevious.gradientChi[1];
+    core::dataGrid2D bSquaredTimesGradientChiZ = regularisationPrevious.bSquared * regularisationPrevious.gradientChi[1];
     bSquaredTimesGradientChiZ.gradient(temporaryGradient);
-    dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
+    core::dataGrid2D gradientBSquaredTimesGradientChiZ = temporaryGradient[1];
 
     return gradientBSquaredTimesGradientChiX + gradientBSquaredTimesGradientChiZ;
 }
 
-dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent,
-    const dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-    const RegularisationParameters &regularisationPrevious, const dataGrid2D &zeta, double residualPrevious)
+core::dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray,
+    core::dataGrid2D &gradientCurrent, const core::dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+    const RegularisationParameters &regularisationPrevious, const core::dataGrid2D &zeta, double residualPrevious)
 {
-    complexDataGrid2D kappaTimesResidual(_grid);
+    core::complexDataGrid2D kappaTimesResidual(_grid);
     kappaTimesResidual.zero();
     _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
     gradientCurrent = eta * regularisationPrevious.errorFunctional * kappaTimesResidual.getRealPart() +
@@ -240,7 +246,7 @@ dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(st
 
 double ConjugateGradientInversion::calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious,
     RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta,
-    const double fDataPrevious, const dataGrid2D &zeta)
+    const double fDataPrevious, const core::dataGrid2D &zeta)
 {
     std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
     _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
@@ -256,23 +262,25 @@ double ConjugateGradientInversion::calculateStepSizeRegularisation(const Regular
         a2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
     }
 
-    dataGrid2D bGradientChiSquaredXDirection =
+    core::dataGrid2D bGradientChiSquaredXDirection =
         (regularisationCurrent.b * regularisationPrevious.gradientChi[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
-    dataGrid2D bGradientChiSquaredZDirection =
+    core::dataGrid2D bGradientChiSquaredZDirection =
         (regularisationCurrent.b * regularisationPrevious.gradientChi[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
     double b0 = ((bGradientChiSquaredXDirection.summation() + bGradientChiSquaredZDirection.summation()) +
                     regularisationPrevious.deltaSquared * regularisationCurrent.bSquared.summation()) *
                 _grid.getCellVolume();
 
-    std::vector<dataGrid2D> gradientZeta(2, dataGrid2D(_grid));
+    std::vector<core::dataGrid2D> gradientZeta(2, core::dataGrid2D(_grid));
     zeta.gradient(gradientZeta);
 
-    dataGrid2D bGradientZetabGradientChiX = (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
-    dataGrid2D bGradientZetabGradientChiZ = (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
+    core::dataGrid2D bGradientZetabGradientChiX =
+        (regularisationCurrent.b * gradientZeta[0]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[0]);
+    core::dataGrid2D bGradientZetabGradientChiZ =
+        (regularisationCurrent.b * gradientZeta[1]) * (regularisationCurrent.b * regularisationPrevious.gradientChi[1]);
     double b1 = 2.0 * (bGradientZetabGradientChiX.summation() + bGradientZetabGradientChiZ.summation()) * _grid.getCellVolume();
 
-    dataGrid2D bTimesGradientZetaXdirection = regularisationCurrent.b * gradientZeta[0];
-    dataGrid2D bTimesGradientZetaZdirection = regularisationCurrent.b * gradientZeta[1];
+    core::dataGrid2D bTimesGradientZetaXdirection = regularisationCurrent.b * gradientZeta[0];
+    core::dataGrid2D bTimesGradientZetaZdirection = regularisationCurrent.b * gradientZeta[1];
     bTimesGradientZetaXdirection.square();
     bTimesGradientZetaZdirection.square();
     double b2 = (bTimesGradientZetaXdirection.summation() + bTimesGradientZetaZdirection.summation()) * _grid.getCellVolume();
@@ -303,12 +311,12 @@ double ConjugateGradientInversion::findRealRootFromCubic(double a, double b, dou
 void ConjugateGradientInversion::calculateRegularisationErrorFunctional(
     RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent)
 {
-    dataGrid2D gradientChiNormsquaredCurrent(_grid);
+    core::dataGrid2D gradientChiNormsquaredCurrent(_grid);
     gradientChiNormsquaredCurrent = (regularisationCurrent.gradientChi[0] * regularisationCurrent.gradientChi[0]) +
                                     (regularisationCurrent.gradientChi[1] * regularisationCurrent.gradientChi[1]);
 
-    dataGrid2D integral = (gradientChiNormsquaredCurrent + regularisationPrevious.deltaSquared) /
-                          (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
+    core::dataGrid2D integral = (gradientChiNormsquaredCurrent + regularisationPrevious.deltaSquared) /
+                                (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
 
     regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
 }

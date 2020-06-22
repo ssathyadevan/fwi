@@ -3,10 +3,14 @@
 #include "helmholtz2D.h"
 #include "log.h"
 
-finiteDifferenceForwardModel::finiteDifferenceForwardModel(
-    const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput) :
-    forwardModelInterface(grid, src, recv, freq),
-    _Greens(), _p0(), _pTot(), _kappa(), _fMInput(fMInput)
+finiteDifferenceForwardModel::finiteDifferenceForwardModel(const core::grid2D &grid, const core::sources &src, const core::receivers &recv,
+    const core::frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
+    : forwardModelInterface(grid, src, recv, freq)
+    , _Greens()
+    , _p0()
+    , _pTot()
+    , _kappa()
+    , _fMInput(fMInput)
 {
     L_(linfo) << "Creating Greens function field...";
     createGreens();
@@ -36,15 +40,15 @@ void finiteDifferenceForwardModel::createP0()
     assert(_Greens != nullptr);
     assert(_p0 == nullptr);
 
-    _p0 = new complexDataGrid2D **[_freq.nFreq];
+    _p0 = new core::complexDataGrid2D **[_freq.nFreq];
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
-        _p0[i] = new complexDataGrid2D *[_src.nSrc];
+        _p0[i] = new core::complexDataGrid2D *[_src.nSrc];
 
         for(int j = 0; j < _src.nSrc; j++)
         {
-            _p0[i][j] = new complexDataGrid2D(_grid);
+            _p0[i][j] = new core::complexDataGrid2D(_grid);
             *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
         }
     }
@@ -68,11 +72,11 @@ void finiteDifferenceForwardModel::deleteP0()
 
 void finiteDifferenceForwardModel::createGreens()
 {
-    _Greens = new greensRect2DCpu *[_freq.nFreq];
+    _Greens = new core::greensRect2DCpu *[_freq.nFreq];
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
-        _Greens[i] = new greensRect2DCpu(_grid, greensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
+        _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
     }
 }
 
@@ -87,9 +91,9 @@ void finiteDifferenceForwardModel::deleteGreens()
     _Greens = nullptr;
 }
 
-void finiteDifferenceForwardModel::createPTot(const frequenciesGroup &freq, const sources &src)
+void finiteDifferenceForwardModel::createPTot(const core::frequenciesGroup &freq, const core::sources &src)
 {
-    _pTot = new complexDataGrid2D *[freq.nFreq * src.nSrc];
+    _pTot = new core::complexDataGrid2D *[freq.nFreq * src.nSrc];
 
     int li;
 
@@ -99,7 +103,7 @@ void finiteDifferenceForwardModel::createPTot(const frequenciesGroup &freq, cons
 
         for(int j = 0; j < src.nSrc; j++)
         {
-            _pTot[li + j] = new complexDataGrid2D(*_p0[i][j]);
+            _pTot[li + j] = new core::complexDataGrid2D(*_p0[i][j]);
         }
     }
 }
@@ -115,13 +119,13 @@ void finiteDifferenceForwardModel::deletePtot()
     _pTot = nullptr;
 }
 
-void finiteDifferenceForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
+void finiteDifferenceForwardModel::createKappa(const core::frequenciesGroup &freq, const core::sources &src, const core::receivers &recv)
 {
-    _kappa = new complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
+    _kappa = new core::complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
 
     for(int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
-        _kappa[i] = new complexDataGrid2D(_grid);
+        _kappa[i] = new core::complexDataGrid2D(_grid);
     }
 }
 
@@ -136,7 +140,7 @@ void finiteDifferenceForwardModel::deleteKappa()
     _kappa = nullptr;
 }
 
-void finiteDifferenceForwardModel::calculatePTot(const dataGrid2D &chiEst)
+void finiteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
 {
     assert(_Greens != nullptr);
     assert(_p0 != nullptr);
@@ -159,7 +163,10 @@ void finiteDifferenceForwardModel::calculatePTot(const dataGrid2D &chiEst)
     }
 }
 
-void finiteDifferenceForwardModel::calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator) { applyKappa(chiEst, kOperator); }
+void finiteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator)
+{
+    applyKappa(chiEst, kOperator);
+}
 
 void finiteDifferenceForwardModel::calculateKappa()
 {
@@ -181,12 +188,12 @@ void finiteDifferenceForwardModel::calculateKappa()
     }
 }
 
-void finiteDifferenceForwardModel::mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+void finiteDifferenceForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(CurrentPressureFieldSerial, kOperator);
 }
 
-void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+void finiteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -194,11 +201,11 @@ void finiteDifferenceForwardModel::applyKappa(const dataGrid2D &CurrentPressureF
     }
 }
 
-void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
+void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
 {
     int l_i, l_j;
     kRes.zero();
-    complexDataGrid2D kDummy(_grid);
+    core::complexDataGrid2D kDummy(_grid);
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
@@ -217,11 +224,11 @@ void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vect
 }
 
 void finiteDifferenceForwardModel::getUpdateDirectionInformationMPI(
-    std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
+    std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
 {
     kRes.zero();
 
-    complexDataGrid2D kDummy(_grid);
+    core::complexDataGrid2D kDummy(_grid);
 
     for(int i = offset; i < offset + block_size; i++)
     {
@@ -231,13 +238,13 @@ void finiteDifferenceForwardModel::getUpdateDirectionInformationMPI(
     }
 }
 
-void finiteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
+void finiteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
 {
     int l_i, l_j;
 
     kRes.zero();
 
-    complexDataGrid2D kDummy(_grid);
+    core::complexDataGrid2D kDummy(_grid);
 
     for(int i = 0; i < _freq.nFreq; i++)
     {

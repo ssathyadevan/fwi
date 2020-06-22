@@ -106,13 +106,13 @@ void writePlotInput(const genericInput &gInput, std::string msg)
 void performInversion(const genericInput &gInput, const std::string &runName, const std::string desiredStepSize, const std::string desiredDirection,
     const std::string desiredForwardModel)
 {
-    // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    // initialize the grid sources receivers, grouped frequencies
+    core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
-    frequenciesGroup freq(gInput.freq, gInput.c0);
+    core::frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -153,7 +153,7 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, desiredStepSize, desiredDirection, referencePressureData);
 
     L_(linfo) << "Estimating Chi...";
-    dataGrid2D chiEstimate = reconstructor->reconstruct(referencePressureData, gInput);
+    core::dataGrid2D chiEstimate = reconstructor->reconstruct(referencePressureData, gInput);
 
     L_(linfo) << "Done, writing to file";
 

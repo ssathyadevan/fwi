@@ -2,10 +2,14 @@
 #include "integralForwardModelInputCardReader.h"
 #include "log.h"
 
-IntegralForwardModel::IntegralForwardModel(
-    const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq, const integralForwardModelInput &fmInput) :
-    forwardModelInterface(grid, src, recv, freq),
-    _Greens(), _p0(), _pTot(), _Kappa(), _fmInput(fmInput)
+IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq,
+    const integralForwardModelInput &fmInput)
+    : forwardModelInterface(grid, src, recv, freq)
+    , _Greens()
+    , _p0()
+    , _pTot()
+    , _Kappa()
+    , _fmInput(fmInput)
 {
     L_(linfo) << "Creating Greens function field...";
     createGreens();
@@ -35,15 +39,15 @@ void IntegralForwardModel::createP0()
     assert(_Greens != nullptr);
     assert(_p0 == nullptr);
 
-    _p0 = new complexDataGrid2D **[_freq.nFreq];
+    _p0 = new core::complexDataGrid2D **[_freq.nFreq];
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
-        _p0[i] = new complexDataGrid2D *[_src.nSrc];
+        _p0[i] = new core::complexDataGrid2D *[_src.nSrc];
 
         for(int j = 0; j < _src.nSrc; j++)
         {
-            _p0[i][j] = new complexDataGrid2D(_grid);
+            _p0[i][j] = new core::complexDataGrid2D(_grid);
             *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
         }
     }
@@ -67,11 +71,11 @@ void IntegralForwardModel::deleteP0()
 
 void IntegralForwardModel::createGreens()
 {
-    _Greens = new greensRect2DCpu *[_freq.nFreq];
+    _Greens = new core::greensRect2DCpu *[_freq.nFreq];
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
-        _Greens[i] = new greensRect2DCpu(_grid, greensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
+        _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _src, _recv, _freq.k[i]);
     }
 }
 
@@ -86,9 +90,9 @@ void IntegralForwardModel::deleteGreens()
     _Greens = nullptr;
 }
 
-void IntegralForwardModel::createPTot(const frequenciesGroup &freq, const sources &src)
+void IntegralForwardModel::createPTot(const core::frequenciesGroup &freq, const core::sources &src)
 {
-    _pTot = new complexDataGrid2D *[freq.nFreq * src.nSrc];
+    _pTot = new core::complexDataGrid2D *[freq.nFreq * src.nSrc];
 
     int li;
 
@@ -98,7 +102,7 @@ void IntegralForwardModel::createPTot(const frequenciesGroup &freq, const source
 
         for(int j = 0; j < src.nSrc; j++)
         {
-            _pTot[li + j] = new complexDataGrid2D(*_p0[i][j]);
+            _pTot[li + j] = new core::complexDataGrid2D(*_p0[i][j]);
         }
     }
 }
@@ -114,13 +118,13 @@ void IntegralForwardModel::deletePtot()
     _pTot = nullptr;
 }
 
-void IntegralForwardModel::createKappa(const frequenciesGroup &freq, const sources &src, const receivers &recv)
+void IntegralForwardModel::createKappa(const core::frequenciesGroup &freq, const core::sources &src, const core::receivers &recv)
 {
-    _Kappa = new complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
+    _Kappa = new core::complexDataGrid2D *[freq.nFreq * src.nSrc * recv.nRecv];
 
     for(int i = 0; i < freq.nFreq * src.nSrc * recv.nRecv; i++)
     {
-        _Kappa[i] = new complexDataGrid2D(_grid);
+        _Kappa[i] = new core::complexDataGrid2D(_grid);
     }
 }
 
@@ -135,16 +139,16 @@ void IntegralForwardModel::deleteKappa()
     _Kappa = nullptr;
 }
 
-complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G, const dataGrid2D &chi, const complexDataGrid2D &p_init)
+core::complexDataGrid2D IntegralForwardModel::calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D &chi, const core::complexDataGrid2D &p_init)
 {
     assert(G.getGrid() == p_init.getGrid());
 
-    complexDataGrid2D chi_p(_grid), chi_p_old(_grid);
-    complexDataGrid2D dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
+    core::complexDataGrid2D chi_p(_grid), chi_p_old(_grid);
+    core::complexDataGrid2D dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
 
     int n_cell = _grid.getNumberOfGridPoints();
 
-    std::vector<complexDataGrid2D> phi;
+    std::vector<core::complexDataGrid2D> phi;
     Matrix<std::complex<double>, Dynamic, Dynamic, ColMajor> matA;
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> b_f_rhs;
     Matrix<std::complex<double>, Dynamic, 1, ColMajor> alpha;
@@ -228,7 +232,7 @@ complexDataGrid2D IntegralForwardModel::calcTotalField(const greensRect2DCpu &G,
     return p_tot;
 }
 
-void IntegralForwardModel::calculatePTot(const dataGrid2D &chiEst)
+void IntegralForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
 {
     assert(_Greens != nullptr);
     assert(_p0 != nullptr);
@@ -248,7 +252,7 @@ void IntegralForwardModel::calculatePTot(const dataGrid2D &chiEst)
     }
 }
 
-void IntegralForwardModel::calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator) { applyKappa(chiEst, kOperator); }
+void IntegralForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator) { applyKappa(chiEst, kOperator); }
 
 void IntegralForwardModel::calculateKappa()
 {
@@ -270,12 +274,12 @@ void IntegralForwardModel::calculateKappa()
     }
 }
 
-void IntegralForwardModel::mapDomainToSignal(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+void IntegralForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     applyKappa(CurrentPressureFieldSerial, kOperator);
 }
 
-void IntegralForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+void IntegralForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
     {
@@ -283,7 +287,7 @@ void IntegralForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSeri
     }
 }
 
-// void IntegralForwardModel::createKappaOperator(const complexDataGrid2D &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
+// void IntegralForwardModel::createKappaOperator(const core::complexDataGrid2D &CurrentPressureFieldComplexSerial, std::complex<double>* kOperator)
 //{
 //    for (int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
 //    {
@@ -291,11 +295,11 @@ void IntegralForwardModel::applyKappa(const dataGrid2D &CurrentPressureFieldSeri
 //    }
 //}
 
-void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, complexDataGrid2D &kRes)
+void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
 {
     int l_i, l_j;
     kRes.zero();
-    complexDataGrid2D kDummy(_grid);
+    core::complexDataGrid2D kDummy(_grid);
 
     for(int i = 0; i < _freq.nFreq; i++)
     {
@@ -314,11 +318,11 @@ void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::
 }
 
 void IntegralForwardModel::getUpdateDirectionInformationMPI(
-    std::vector<std::complex<double>> &res, complexDataGrid2D &kRes, const int offset, const int block_size)
+    std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
 {
     kRes.zero();
 
-    complexDataGrid2D kDummy(_grid);
+    core::complexDataGrid2D kDummy(_grid);
 
     for(int i = offset; i < offset + block_size; i++)
     {

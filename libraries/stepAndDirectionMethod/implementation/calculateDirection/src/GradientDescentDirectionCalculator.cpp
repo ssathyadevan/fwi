@@ -14,10 +14,10 @@ GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
 
 GradientDescentDirectionCalculator::~GradientDescentDirectionCalculator() {}
 
-dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &)
+core::dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &)
 {
     //   _direction.zero();
-    dataGrid2D chiEstimatePlusH(chiEstimate);
+    core::dataGrid2D chiEstimatePlusH(chiEstimate);
     const int numberOfGridPoints = chiEstimate.getNumberOfGridPoints();
 
     const double errorChi = optimizationFunction(chiEstimate);
@@ -42,7 +42,7 @@ dataGrid2D &GradientDescentDirectionCalculator::calculateDirection(const dataGri
     return _direction;
 }
 
-double GradientDescentDirectionCalculator::optimizationFunction(const dataGrid2D &chiEstimate) const
+double GradientDescentDirectionCalculator::optimizationFunction(const core::dataGrid2D &chiEstimate) const
 {
     std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, _pData);
     const double currentChiError = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(residual);

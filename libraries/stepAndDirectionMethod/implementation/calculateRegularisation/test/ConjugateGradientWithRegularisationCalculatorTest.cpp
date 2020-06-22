@@ -6,12 +6,12 @@
 using std::cout;
 using std::endl;
 
-grid2D getGrid()
+core::grid2D getGrid()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
     std::array<int, 2> nX = {2, 5};
-    grid2D grid(xMin, xMax, nX);
+    core::grid2D grid(xMin, xMax, nX);
 
     return grid;
 }
@@ -20,13 +20,13 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
 {
     double errorFunctionalScalingFactor = 0.05;
 
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq(0.0, 10.0, 5);
-    sources src(xMin, xMax, 2);
-    receivers recv(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
+    core::freqInfo freq(0.0, 10.0, 5);
+    core::sources src(xMin, xMax, 2);
+    core::receivers recv(xMin, xMax, 2);
+    core::frequenciesGroup frequencies(freq, 2000.0);
 
     ForwardModelInterfaceMock *forwardModel;
     forwardModel = new ForwardModelInterfaceMock(grid, src, recv, frequencies);
@@ -48,15 +48,15 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     DirectionCalculator *directionCalculator;
     directionCalculator = &cGWRCTest;
 
-    dataGrid2D chiEstimateCurrent(getGrid());
+    core::dataGrid2D chiEstimateCurrent(getGrid());
     // chiEstimateCurrent.data[] =0
     std::vector<std::complex<double>> residualVector =
         forwardModel->calculateResidual(chiEstimateCurrent, pData);   // chiEstimateCurrent is all 0s and unused, pData is all 1s
-    dataGrid2D mockDataGrid(getGrid());
-    dataGrid2D const *directionCurrent;
+    core::dataGrid2D mockDataGrid(getGrid());
+    core::dataGrid2D const *directionCurrent;
     directionCurrent = &directionCalculator->calculateDirection(mockDataGrid, residualVector);
 
-    dataGrid2D directionTest(getGrid());
+    core::dataGrid2D directionTest(getGrid());
     directionTest = errorFunctionalScalingFactor;
     int nGridPoints = directionTest.getNumberOfGridPoints();
 
@@ -76,7 +76,7 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     int nextIteration = 1;
     cGWRCTest.updateVariables(chiEstimateCurrent, mockDataGrid, nextIteration, mockVector, mockVector);
 
-    // updating KappaTimesResidual to simulate a change in the complexDataGrid2D** _Kappa in ForwardInterfaceMock
+    // updating KappaTimesResidual to simulate a change in the core::complexDataGrid2D** _Kappa in ForwardInterfaceMock
     double kappaTimesResidualMultiplier = 3;
     forwardModel->setKappaTimesResidualValue(kappaTimesResidualMultiplier * initialKappaTimesResidualValue);
 

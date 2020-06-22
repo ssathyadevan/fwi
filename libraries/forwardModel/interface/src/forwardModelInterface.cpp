@@ -1,7 +1,8 @@
 #include "forwardModelInterface.h"
 #include <math.h>
 
-forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq)
+forwardModelInterface::forwardModelInterface(
+    const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq)
     : /*_residual(), */ _grid(grid)
     , _src(src)
     , _recv(recv)
@@ -12,15 +13,15 @@ forwardModelInterface::forwardModelInterface(const grid2D &grid, const sources &
 
 forwardModelInterface::~forwardModelInterface() {}
 
-const grid2D &forwardModelInterface::getGrid() { return _grid; }
+const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
 
-const sources &forwardModelInterface::getSrc() { return _src; }
+const core::sources &forwardModelInterface::getSrc() { return _src; }
 
-const receivers &forwardModelInterface::getRecv() { return _recv; }
+const core::receivers &forwardModelInterface::getRecv() { return _recv; }
 
-const frequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
+const core::frequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
-std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(const dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
+std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
 {
     std::vector<std::complex<double>> pDataEst(_freq.nFreq * _recv.nRecv * _src.nSrc);
 
@@ -46,7 +47,7 @@ double forwardModelInterface::calculateResidualNormSq(const std::vector<std::com
 }
 
 double forwardModelInterface::calculateCost(
-    std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+    std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     costFunction = leastSquares;
     double cost;
@@ -61,7 +62,7 @@ double forwardModelInterface::calculateCost(
 }
 
 double forwardModelInterface::calculateLeastSquaresCost(
-    std::vector<std::complex<double>> &residualArray, dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+    std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
 {
     residualArray = calculateResidual(chiEstimate, pData);
     double residualNormSquared = calculateResidualNormSq(residualArray);

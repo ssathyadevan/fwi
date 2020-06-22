@@ -9,11 +9,16 @@
 
 #include <iostream>
 
-ForwardModelContainer::ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const grid2D &grid,
-    const sources &sources, const receivers &receivers, const frequenciesGroup &frequencies) :
-    _forwardmodels(),
-    _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads())), _numberOfSources(sources.nSrc), _numberOfReceivers(receivers.nRecv),
-    _numberOfFrequenciesPerThread(_numberOfThreads, 0), _residuals(), _frequenciesVector(), _allFrequencies(frequencies)
+ForwardModelContainer::ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid,
+    const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
+    : _forwardmodels()
+    , _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads()))
+    , _numberOfSources(sources.nSrc)
+    , _numberOfReceivers(receivers.nRecv)
+    , _numberOfFrequenciesPerThread(_numberOfThreads, 0)
+    , _residuals()
+    , _frequenciesVector()
+    , _allFrequencies(frequencies)
 {
     L_(linfo) << "Container uses " << _numberOfThreads << " threads for parallelization.";
     divideFrequencies();
@@ -28,8 +33,8 @@ ForwardModelContainer::~ForwardModelContainer()
     }
 }
 
-void ForwardModelContainer::createForwardModels(
-    const genericInput &gInput, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources, const receivers &receivers)
+void ForwardModelContainer::createForwardModels(const genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid,
+    const core::sources &sources, const core::receivers &receivers)
 {
     if(desiredForwardModel == "integralForwardModel")
     {
@@ -79,7 +84,7 @@ int ForwardModelContainer::computeThreadOffset()
 }
 
 std::vector<std::complex<double>> &ForwardModelContainer::calculateResidualParallel(
-    const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
+    const core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
 {
     std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
     omp_set_num_threads(_numberOfThreads);
@@ -124,12 +129,15 @@ void ForwardModelContainer::divideFrequencies()
     {
         int totalFrequenciesForThread = static_cast<int>(std::floor(_allFrequencies.nFreq * 1.0 / (_numberOfThreads * 1.0)));
 
-        if(threadNumber < _allFrequencies.nFreq % _numberOfThreads) { totalFrequenciesForThread += 1; }
+        if(threadNumber < _allFrequencies.nFreq % _numberOfThreads)
+        {
+            totalFrequenciesForThread += 1;
+        }
         double minimumFrequencyForThread = currentMinimumFrequency;
         double maximumFrequencyForThread = minimumFrequencyForThread + (totalFrequenciesForThread - 1) * _allFrequencies.dFreq;
 
-        freqInfo frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
-        frequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
+        core::freqInfo frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
+        core::frequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
 
         frequenciesForThread.Print(totalFrequenciesForThread);
         _frequenciesVector.push_back(frequenciesForThread);

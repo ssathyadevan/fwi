@@ -9,7 +9,7 @@ public:
     virtual ~FixedStepSizeCalculator();
 
     double calculateStepSize();
-    void updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
+    void updateVariables(const core::dataGrid2D &, const core::dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
 
 private:
     double _size = 0;

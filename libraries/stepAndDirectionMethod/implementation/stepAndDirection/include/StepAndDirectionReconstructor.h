@@ -13,9 +13,9 @@ private:
     forwardModelInterface *_forwardModel;
     const ReconstructorParameters &_directionInput;
     /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
-    const grid2D &_grid;
+    const core::grid2D &_grid;
 
-    dataGrid2D calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step) const;
+    core::dataGrid2D calculateNextMove(const core::dataGrid2D &chiEstimate, const core::dataGrid2D &direction, double step) const;
     double calculateResidualNorm(const std::vector<std::complex<double>> &pData, double eta) const;
 
 public:
@@ -28,5 +28,5 @@ public:
      * @param gInput is the data input for the problem
      * @return
      */
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 };

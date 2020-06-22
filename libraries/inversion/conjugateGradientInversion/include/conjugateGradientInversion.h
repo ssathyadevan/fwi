@@ -12,7 +12,7 @@
 
 /**
  * @brief The ConjugateGradientInversion class uses the conjugate gradient method, as described in the README and the thesis by Peter Haffinger,
- * to iteratively estimate the underlying structure using pressure data measured by the receivers and a forward model, which is able to convert
+ * to iteratively estimate the underlying structure using pressure data measured by the core::receivers and a forward model, which is able to convert
  * an estimated structure to simulated pressure data.
  */
 
@@ -22,12 +22,12 @@ private:
     forwardModelInterface *_forwardModel;
     ConjugateGradientInversionInput _cgInput;
 
-    const grid2D &_grid;
-    const sources &_sources;
-    const receivers &_receivers;
-    const frequenciesGroup &_frequencies;
+    const core::grid2D &_grid;
+    const core::sources &_sources;
+    const core::receivers &_receivers;
+    const core::frequenciesGroup &_frequencies;
 
-    dataGrid2D _chiEstimate;
+    core::dataGrid2D _chiEstimate;
 
     /**
      * @brief ConjugateGradientInversion::OpenResidualLogFile Opens a logfile in which the residuals can be stored.
@@ -41,9 +41,9 @@ private:
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @param gradientCurrent is the gradient, determined using the conjugate-gradient method
      * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
-     * @return dataGrid2D zeta is the update direction for each value in the contrast function
+     * @return core::dataGrid2D zeta is the update direction for each value in the contrast function
      */
-    dataGrid2D calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent, double eta);
+    core::dataGrid2D calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent, double eta);
 
     /**
      * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -51,7 +51,7 @@ private:
      * @param residualArray contains the residual for each combination of sources receivers and frequencies.
      * @return double alpha, the optimum step size
      */
-    double calculateStepSize(const dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray);
+    double calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray);
 
     /**
      * @brief logResidualResults saves the residuals in the logfile and in a separate file with iteration number for clarity.
@@ -88,16 +88,16 @@ private:
     /**
      * @brief calculateWeightingFactor uses eq. 2.22 from the thesis to calculate the weighting factor
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return dataGrid2D deltaSquared, the weighting factor.
+     * @return core::dataGrid2D deltaSquared, the weighting factor.
      */
-    dataGrid2D calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
+    core::dataGrid2D calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateRegularisationGradient uses equation 2.25 from the thesis to calculate the regularisation gradient
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
-     * @return dataGrid2D the regularisation gradient
+     * @return core::dataGrid2D the regularisation gradient
      */
-    dataGrid2D calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
+    core::dataGrid2D calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
 
     /**
      * @brief calculateUpdateDirection_regularisation uses multiplicative regularisation parameters to calculate an update direction (zeta) which leads to
@@ -110,11 +110,11 @@ private:
      * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
      * @param zeta is the previous update direction for each value in the contrast function
      * @param residualPrevious scaled and averaged error of the previous loop
-     * @return dataGrid2D zeta
+     * @return core::dataGrid2D zeta
      */
-    dataGrid2D calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, dataGrid2D &gradientCurrent,
-        const dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-        const RegularisationParameters &regularisationPrevious, const dataGrid2D &zeta, double residualPrevious);
+    core::dataGrid2D calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent,
+        const core::dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+        const RegularisationParameters &regularisationPrevious, const core::dataGrid2D &zeta, double residualPrevious);
 
     /**
      * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect to
@@ -129,7 +129,7 @@ private:
      * @return double alpha, the optimal stepsize
      */
     double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
-        const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const dataGrid2D &zeta);
+        const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const core::dataGrid2D &zeta);
 
     /**
      * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -160,7 +160,7 @@ public:
      * underlying structure of the earth, using the conjugate gradient method.
      * @param pData Complex vector with the real measured data
      * @param gInput Struct containing general model parameters
-     * @return dataGrid2D _chiEstimate, the optimized estimation for the contrast function.
+     * @return core::dataGrid2D _chiEstimate, the optimized estimation for the contrast function.
      */
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
 };

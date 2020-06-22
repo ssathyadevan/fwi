@@ -8,7 +8,7 @@ StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator 
 {
 }
 
-dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_directionInput.maxIterationsNumber);
 
@@ -18,7 +18,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
 
     double eta = _desiredDirection->getErrorFunctionalScalingFactor();
 
-    dataGrid2D chiEstimateCurrent(_grid);
+    core::dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _directionInput.startingChi;
 
     std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
@@ -26,7 +26,7 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
 
     _forwardModel->calculateKappa();
 
-    dataGrid2D const *directionCurrent;
+    core::dataGrid2D const *directionCurrent;
 
     std::vector<std::complex<double>> kappaTimesDirection;
 
@@ -61,9 +61,9 @@ dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::com
     return chiEstimateCurrent;
 }
 
-dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const dataGrid2D &chiEstimate, const dataGrid2D &direction, double step) const
+core::dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const core::dataGrid2D &chiEstimate, const core::dataGrid2D &direction, double step) const
 {
-    dataGrid2D chiTemp = chiEstimate;
+    core::dataGrid2D chiTemp = chiEstimate;
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
     std::vector<double> descentVector(nGridPoints, 0.0);
     const std::vector<double> &directionData = direction.getData();

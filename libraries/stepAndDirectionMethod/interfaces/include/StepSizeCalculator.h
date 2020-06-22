@@ -9,5 +9,5 @@ public:
 
     virtual double calculateStepSize() = 0;
     virtual void updateVariables(
-        const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &) = 0;
+        const core::dataGrid2D &, const core::dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &) = 0;
 };

@@ -14,7 +14,7 @@ public:
     double calculateStepSize() override;
 
     void updateVariables(
-        const dataGrid2D &, const dataGrid2D &, int iteration, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &) override
+        const core::dataGrid2D &, const core::dataGrid2D &, int iteration, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &) override
     {
         _iteration = iteration;
     }

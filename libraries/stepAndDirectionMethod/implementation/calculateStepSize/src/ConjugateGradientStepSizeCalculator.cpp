@@ -1,6 +1,6 @@
 #include "ConjugateGradientStepSizeCalculator.h"
 
-ConjugateGradientStepSizeCalculator::ConjugateGradientStepSizeCalculator(const grid2D &grid, const double initialStepSize) :
+ConjugateGradientStepSizeCalculator::ConjugateGradientStepSizeCalculator(const core::grid2D &grid, const double initialStepSize) :
     _kappaTimesDirection(grid.getNumberOfGridPoints()), _residualVector(grid.getNumberOfGridPoints()), _initialStepSize(initialStepSize)
 {
     _nGridPoints = grid.getNumberOfGridPoints();
@@ -24,7 +24,7 @@ double ConjugateGradientStepSizeCalculator::calculateStepSize()
     return alphaNumerator / alphaDenominator;
 }
 
-void ConjugateGradientStepSizeCalculator::updateVariables(const dataGrid2D &, const dataGrid2D &, int,
+void ConjugateGradientStepSizeCalculator::updateVariables(const core::dataGrid2D &, const core::dataGrid2D &, int,
     const std::vector<std::complex<double>> &kappaTimesDirection, const std::vector<std::complex<double>> &residualVector)
 {
     _kappaTimesDirection = kappaTimesDirection;

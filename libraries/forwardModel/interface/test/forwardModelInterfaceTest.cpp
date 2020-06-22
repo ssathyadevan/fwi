@@ -1,11 +1,11 @@
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
-const grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
-const sources src({0.0, 0.0}, {2.0, 2.0}, 8);
-const receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
-const freqInfo freq = {10, 40, 15};
-const frequenciesGroup freqGroup(freq, 1.0);
+const core::grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
+const core::sources src({0.0, 0.0}, {2.0, 2.0}, 8);
+const core::receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
+const core::freqInfo freq = {10, 40, 15};
+const core::frequenciesGroup freqGroup(freq, 1.0);
 
 TEST(forwardModelInterfaceTest, constructorTest)
 {
@@ -24,7 +24,7 @@ TEST(forwardModelInterfaceTest, calculateResidualTest)
     }
 
     // When
-    dataGrid2D chiEst(grid2D);
+    core::dataGrid2D chiEst(grid2D);
     chiEst = 2.0;
     std::vector<std::complex<double>> residual;
     residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
@@ -51,7 +51,7 @@ TEST(forwardModelInterfaceTest, calculateResidualNormSqTest)
     {
         element = 1;
     }
-    dataGrid2D chiEst(grid2D);
+    core::dataGrid2D chiEst(grid2D);
     std::vector<std::complex<double>> residual;
 
     // When

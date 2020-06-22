@@ -11,7 +11,7 @@ private:
     int _nGridPoints;
 
 public:
-    ConjugateGradientStepSizeCalculator(const grid2D &grid, const double initialStepSize);
+    ConjugateGradientStepSizeCalculator(const core::grid2D &grid, const double initialStepSize);
     virtual ~ConjugateGradientStepSizeCalculator() {}
 
     /**
@@ -26,6 +26,6 @@ public:
      * @param kappaTimesDirection is the inner product between _kappa from the forwardModel and the computed current direction (= eta)
      * @param residualVector is the residual of the previous iteration. For the first iteration, the initial residual is used instead.
      */
-    void updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &kappaTimesDirection,
+    void updateVariables(const core::dataGrid2D &, const core::dataGrid2D &, int, const std::vector<std::complex<double>> &kappaTimesDirection,
         const std::vector<std::complex<double>> &residualVector);
 };

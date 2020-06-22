@@ -1,12 +1,12 @@
 #include "forwardmodelinterfacemock.h"
 
-ForwardModelInterfaceMock::ForwardModelInterfaceMock(const grid2D &grid, const sources &src, const receivers &recv, const frequenciesGroup &freq) :
+ForwardModelInterfaceMock::ForwardModelInterfaceMock(const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq) :
     forwardModelInterface(grid, src, recv, freq)
 {
     _kappaTimesResidualValue = 5.0;
 }
 
-void ForwardModelInterfaceMock::calculatePData(const dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
+void ForwardModelInterfaceMock::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
 {
     const std::vector<double> &chiData = chiEst.getData();
     const double newValue = chiData[0];

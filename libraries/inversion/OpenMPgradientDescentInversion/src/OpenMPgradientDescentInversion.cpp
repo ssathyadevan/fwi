@@ -13,15 +13,15 @@ OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const genericInpu
     _gdInput = GradientDescentInversionReader.getInput();
 }
 
-dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_gdInput.iter);
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
-    dataGrid2D chiEstimateCurrent(_grid);
+    core::dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _gdInput.x0;
-    dataGrid2D chiEstimatePrevious(_grid);
+    core::dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModelsParallel.calculateKappaParallel();
 
@@ -70,12 +70,12 @@ std::ofstream OpenMPGradientDescentInversion::openResidualLogFile(genericInput &
     return residualLogFile;
 }
 
-double OpenMPGradientDescentInversion::functionFParallel(const dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta)
+double OpenMPGradientDescentInversion::functionFParallel(const core::dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta)
 {
     return eta * _forwardModelsParallel.calculateResidualNormSqParallel(_forwardModelsParallel.calculateResidualParallel(xi, pData));
 }
 
-dataGrid2D OpenMPGradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma)
+core::dataGrid2D OpenMPGradientDescentInversion::gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma)
 {
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -90,13 +90,13 @@ dataGrid2D OpenMPGradientDescentInversion::gradientDescent(dataGrid2D chiEstimat
 }
 
 std::vector<double> OpenMPGradientDescentInversion::differentialParallel(
-    const std::vector<std::complex<double>> &pData, dataGrid2D chiEstimate, double h, double eta)
+    const std::vector<std::complex<double>> &pData, core::dataGrid2D chiEstimate, double h, double eta)
 {
     int numGridPoints = chiEstimate.getNumberOfGridPoints();
     double FxPlusH;
     std::vector<double> dFdx(numGridPoints);
     double Fx = functionFParallel(chiEstimate, pData, eta);
-    dataGrid2D chiEstimatePlusH = chiEstimate;
+    core::dataGrid2D chiEstimatePlusH = chiEstimate;
 
     for(int i = 0; i != numGridPoints; ++i)
     {
@@ -109,7 +109,7 @@ std::vector<double> OpenMPGradientDescentInversion::differentialParallel(
 }
 
 double OpenMPGradientDescentInversion::determineGamma(
-    const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
+    const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
 {
     const int nGridPoints = chiEstimateCurrent.getNumberOfGridPoints();
 

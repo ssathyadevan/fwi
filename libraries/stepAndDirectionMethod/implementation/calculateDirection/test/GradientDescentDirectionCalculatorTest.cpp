@@ -2,26 +2,26 @@
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
-grid2D getGrid()
+core::grid2D getGrid()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
     std::array<int, 2> nX = {2, 4};
 
-    grid2D grid(xMin, xMax, nX);
+    core::grid2D grid(xMin, xMax, nX);
     return grid;
 }
 
 TEST(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTest)
 {
     // Create forward model
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq(0.0, 10.0, 5);
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
+    core::freqInfo freq(0.0, 10.0, 5);
+    core::sources sources(xMin, xMax, 2);
+    core::receivers receivers(xMin, xMax, 2);
+    core::frequenciesGroup frequencies(freq, 2000.0);
 
     forwardModelInterface *forwardmodel;
     forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
@@ -45,13 +45,13 @@ TEST(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTe
 TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
 {
     // Create forwardmodel
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq(0.0, 10.0, 5);
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
+    core::freqInfo freq(0.0, 10.0, 5);
+    core::sources sources(xMin, xMax, 2);
+    core::receivers receivers(xMin, xMax, 2);
+    core::frequenciesGroup frequencies(freq, 2000.0);
 
     forwardModelInterface *forwardmodel;
     forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
@@ -66,14 +66,14 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     DirectionCalculator *directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     // Compute gradient descent direction
-    dataGrid2D chiEstimate(grid);
+    core::dataGrid2D chiEstimate(grid);
     const double chiEstimateValue = 2.0;
     chiEstimate = chiEstimateValue;
 
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
 
-    dataGrid2D const *gDDirection = NULL;
-    // dataGrid2D gDDirection(grid);
+    core::dataGrid2D const *gDDirection = NULL;
+    // core::dataGrid2D gDDirection(grid);
     gDDirection = &directionCalculator->calculateDirection(chiEstimate, residuals);
 
     // Compare gradient descent direction with expected value
@@ -97,13 +97,13 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
 TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
 {
     // Create forwardmodel
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq(0.0, 10.0, 5);
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
+    core::freqInfo freq(0.0, 10.0, 5);
+    core::sources sources(xMin, xMax, 2);
+    core::receivers receivers(xMin, xMax, 2);
+    core::frequenciesGroup frequencies(freq, 2000.0);
 
     forwardModelInterface *forwardmodel;
     forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
@@ -118,12 +118,12 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     DirectionCalculator *directionCalculator = new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
 
     // Compute gradient descent direction
-    dataGrid2D chiEstimate(grid);
+    core::dataGrid2D chiEstimate(grid);
     const double chiEstimateValue = 0.0;
     chiEstimate = chiEstimateValue;
 
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 0.0);
-    dataGrid2D gDDirection(grid);
+    core::dataGrid2D gDDirection(grid);
     gDDirection = directionCalculator->calculateDirection(chiEstimate, residuals);
 
     // Compare gradient descent direction with expected value

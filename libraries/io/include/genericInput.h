@@ -11,7 +11,7 @@ struct genericInput
     std::string runName;
     std::string fileName;
     double c0;
-    freqInfo freq;
+    core::freqInfo freq;
     std::array<double, 2> reservoirTopLeftCornerInM;
     std::array<double, 2> reservoirBottomRightCornerInM;
     std::array<double, 2> sourcesTopLeftCornerInM;

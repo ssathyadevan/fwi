@@ -2,26 +2,26 @@
 #include "forwardmodelinterfacemock.h"
 #include <gtest/gtest.h>
 
-grid2D getGrid()
+core::grid2D getGrid()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
     std::array<int, 2> nX = {2, 4};
 
-    grid2D grid(xMin, xMax, nX);
+    core::grid2D grid(xMin, xMax, nX);
     return grid;
 }
 
 TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
 {
     // Create forwardmodel
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
-    freqInfo freq;
-    sources sources(xMin, xMax, 2);
-    receivers receivers(xMin, xMax, 2);
-    frequenciesGroup frequencies(freq, 2000.0);
+    core::freqInfo freq;
+    core::sources sources(xMin, xMax, 2);
+    core::receivers receivers(xMin, xMax, 2);
+    core::frequenciesGroup frequencies(freq, 2000.0);
 
     forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
@@ -30,8 +30,8 @@ TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
     DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
 
     // Compute conjugate gradient direction
-    dataGrid2D conjugateGradientDirection(grid);
-    dataGrid2D chiEstimate(grid);
+    core::dataGrid2D conjugateGradientDirection(grid);
+    core::dataGrid2D chiEstimate(grid);
     std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 1.0);
     conjugateGradientDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
 

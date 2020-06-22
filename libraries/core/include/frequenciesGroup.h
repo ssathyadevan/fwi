@@ -4,22 +4,24 @@
 #include <iostream>
 #include <vector>
 #define _USE_MATH_DEFINES
-#include <cmath>
 #include "freqInfo.h"
+#include <cmath>
 
-class frequenciesGroup
+namespace core
 {
-    frequenciesGroup operator=(const frequenciesGroup &) = delete;
+    class frequenciesGroup
+    {
+        frequenciesGroup operator=(const frequenciesGroup &) = delete;
 
-public:
+    public:
+        const int nFreq;
+        const double c0;
+        const double dFreq;
+        std::vector<double> freq;
+        std::vector<double> k;
 
-  const int nFreq;
-  const double c0;
-  const double dFreq;
-  std::vector<double> freq;
-  std::vector<double> k;
+        frequenciesGroup(freqInfo freqStruct, double c_0_);
 
-  frequenciesGroup(freqInfo freqStruct, double c_0_);
-
-  void Print(int nFreqTotal);
-};
+        void Print(int nFreqTotal);
+    };
+}   // namespace core

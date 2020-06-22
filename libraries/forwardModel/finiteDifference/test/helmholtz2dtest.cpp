@@ -15,13 +15,13 @@ TEST(helmholtz2dTest, CreateABCMatrixTest)
     std::array<double, 2> SrcMax = {2.0, -2.0};
     int nSrc = 2;
 
-    grid2D grid = grid2D(x_min, x_max, n_x);
+    core::grid2D grid = core::grid2D(x_min, x_max, n_x);
 
     double freq = 20.0;
     double c_0 = 2000.0;
-    sources src(SrcMin, SrcMax, nSrc);
+    core::sources src(SrcMin, SrcMax, nSrc);
 
-    dataGrid2D chiEst(grid);
+    core::dataGrid2D chiEst(grid);
     chiEst.random();
 
     finiteDifferenceForwardModelInput fmInput;
@@ -60,13 +60,13 @@ TEST(helmholtz2dTest, CreateABCSecondOrderMatrixTest)
     std::array<double, 2> SrcMax = {2.0, -2.0};
     int nSrc = 2;
 
-    grid2D grid = grid2D(x_min, x_max, n_x);
+    core::grid2D grid = core::grid2D(x_min, x_max, n_x);
 
     double freq = 20.0;
     double c_0 = 2000.0;
-    sources src(SrcMin, SrcMax, nSrc);
+    core::sources src(SrcMin, SrcMax, nSrc);
 
-    dataGrid2D chiEst(grid);
+    core::dataGrid2D chiEst(grid);
     chiEst.random();
 
     finiteDifferenceForwardModelInput fmInput;

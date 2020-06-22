@@ -20,8 +20,8 @@ public:
     ~Factory();
 
     inversionInterface *createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const genericInput &gInput);
-    forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources,
-        const receivers &receivers, const frequenciesGroup &frequencies);
+    forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
+        const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies);
 
     /**
      * @brief createStepAndDirectionReconstructor, creates stepSizeCalculator and directionCalculator
@@ -55,7 +55,7 @@ private:
      * @param desiredStepSizeMethod is a string
      * @return StepSizecallculator
      */
-    void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const grid2D &grid);
+    void createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const core::grid2D &grid);
 
     /**
      * @brief splittableInversion, checks whether we can have two different objects for the DirectionCalculator and StepSizeCalculator or not

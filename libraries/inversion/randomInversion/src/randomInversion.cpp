@@ -9,7 +9,7 @@ RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const Rand
     _forwardModel = forwardModel;
 }
 
-dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
@@ -19,7 +19,7 @@ dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> 
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
-    dataGrid2D chiEst(_grid);
+    core::dataGrid2D chiEst(_grid);
 
     _forwardModel->calculateKappa();
 
@@ -35,7 +35,7 @@ dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> 
         // start the inner loop
         for(int it1 = 0; it1 < _riInput.nMaxInner; it1++)
         {
-            dataGrid2D tempRandomChi(_grid);
+            core::dataGrid2D tempRandomChi(_grid);
             tempRandomChi.randomSaurabh();
 
             newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
@@ -68,7 +68,7 @@ dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> 
 
     residualLogFile.close();   // close the residual.log file
 
-    dataGrid2D result(chiEst);
+    core::dataGrid2D result(chiEst);
     chiEst.copyTo(result);
     return result;
 }

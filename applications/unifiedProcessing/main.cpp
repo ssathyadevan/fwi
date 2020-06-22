@@ -104,13 +104,13 @@ void writePlotInput(const genericInput &gInput, std::string msg)
 
 void performInversion(const genericInput &gInput, const std::string &runName, const std::string desired_inversion, const std::string desired_forward_model)
 {
-    // initialize the grid, sources, receivers, grouped frequencies
-    grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    // initialize the grid sources receivers, grouped frequencies
+    core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
-    receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
-    frequenciesGroup freq(gInput.freq, gInput.c0);
+    core::frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -157,7 +157,7 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
 
     L_(linfo) << "Estimating Chi...";
     clock_t tStartEstimateChi = clock();
-    dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
+    core::dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
     clock_t tEndEstimateChi = clock();
     L_(linfo) << "Estimated Chi in " << double(tEndEstimateChi - tStartEstimateChi) / CLOCKS_PER_SEC << "seconds.";
     L_(linfo) << "Writing to file";

@@ -1,22 +1,22 @@
 #include "ConjugateGradientStepSizeCalculator.h"
 #include <gtest/gtest.h>
 
-grid2D getGrid()
+core::grid2D getGrid()
 {
     std::array<double, 2> xMin = {0.0, 0.0};
     std::array<double, 2> xMax = {2.0, 2.0};
     std::array<int, 2> nX = {2, 5};
-    grid2D grid(xMin, xMax, nX);
+    core::grid2D grid(xMin, xMax, nX);
 
     return grid;
 }
 
 TEST(ConjugateGradientStepSizeCalculatorTest, calculateStepSizeAndUpdateVariables)
 {
-    grid2D grid = getGrid();
+    core::grid2D grid = getGrid();
     double nGridPoints = grid.getNumberOfGridPoints();
-    dataGrid2D chiEstimateCurrent(grid);
-    dataGrid2D derivativeCurrent(grid);
+    core::dataGrid2D chiEstimateCurrent(grid);
+    core::dataGrid2D derivativeCurrent(grid);
 
     const double initialStepSize = 0.5;
 

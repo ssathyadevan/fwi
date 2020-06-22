@@ -7,32 +7,32 @@
 
 class ForwardModelContainer
 {
-    public:
-    ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources,
-        const receivers &receivers, const frequenciesGroup &frequencies);
+public:
+    ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
+        const core::receivers &receivers, const core::frequenciesGroup &frequencies);
     ~ForwardModelContainer();
 
-    void createForwardModels(
-        const genericInput &gInput, const std::string &desiredForwardModel, const grid2D &grid, const sources &sources, const receivers &receivers);
+    void createForwardModels(const genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
+        const core::receivers &receivers);
 
     void calculateKappaParallel();
-    std::vector<std::complex<double>> &calculateResidualParallel(const dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef);
+    std::vector<std::complex<double>> &calculateResidualParallel(const core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef);
     double calculateResidualNormSqParallel(const std::vector<std::complex<double>> &residual);
 
-    const frequenciesGroup &getFrequencies() const { return _allFrequencies; }
-    const grid2D &getGrid() const { return _forwardmodels[0]->getGrid(); }
-    const sources &getSources() const { return _forwardmodels[0]->getSrc(); }
-    const receivers &getReceivers() const { return _forwardmodels[0]->getRecv(); }
+    const core::frequenciesGroup &getFrequencies() const { return _allFrequencies; }
+    const core::grid2D &getGrid() const { return _forwardmodels[0]->getGrid(); }
+    const core::sources &getSources() const { return _forwardmodels[0]->getSrc(); }
+    const core::receivers &getReceivers() const { return _forwardmodels[0]->getRecv(); }
 
-    private:
+private:
     std::vector<forwardModelInterface *> _forwardmodels;
     const int _numberOfThreads;
     const int _numberOfSources;
     const int _numberOfReceivers;
     std::vector<int> _numberOfFrequenciesPerThread;
     std::vector<std::complex<double>> _residuals;
-    std::vector<frequenciesGroup> _frequenciesVector;
-    frequenciesGroup _allFrequencies;
+    std::vector<core::frequenciesGroup> _frequenciesVector;
+    core::frequenciesGroup _allFrequencies;
 
     void divideFrequencies();
     int computeThreadOffset();

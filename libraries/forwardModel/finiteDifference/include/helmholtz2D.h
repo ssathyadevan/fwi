@@ -23,16 +23,16 @@
 
 class Helmholtz2D {
   public:
-    explicit Helmholtz2D(const grid2D &grid, const double freq, const sources &src, const double c0, const dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput);
+    explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &src, const double c0, const core::dataGrid2D &chi, const finiteDifferenceForwardModelInput &fmInput);
     ~Helmholtz2D();
-    complexDataGrid2D solve(const std::array<double, 2> &source, complexDataGrid2D &pInit);
+    core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);
     void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx); //Temporary for testing
     void CreateABCSecondOrderMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>>& triplets, std::array<int, 2> nx);
 
 private:
     Eigen::SparseMatrix<std::complex<double>> _A;
     Eigen::VectorXcd _b;
-    const grid2D _oldgrid;
+    const core::grid2D _oldgrid;
     FiniteDifferenceGrid2D *_newgrid;
     std::array<int, 2> _PMLwidth;
     std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
@@ -45,6 +45,6 @@ private:
 
     void buildMatrix();
     void buildVector(const std::array<double, 2> &source);
-    void updateChi(const dataGrid2D &chi);
+    void updateChi(const core::dataGrid2D &chi);
     void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx, std::array<double, 2> xMin);
 };

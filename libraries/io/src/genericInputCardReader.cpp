@@ -133,7 +133,7 @@ void genericInputCardReader::readFreqParameter(const nlohmann::json &jsonFile)
     {
         throw std::invalid_argument("Invalid number of frequenties (" + parameterFreqNTotal + " <= " + std::to_string(nTotal) + ") in: " + _fileName);
     }
-    _input.freq = freqInfo(min, max, nTotal);
+    _input.freq = core::freqInfo(min, max, nTotal);
 }
 
 void genericInputCardReader::readReservoirParameter(const nlohmann::json &jsonFile)
@@ -204,7 +204,7 @@ void genericInputCardReader::readNSourcesParameter(const nlohmann::json &jsonFil
     int nSources = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterNSources);
     if(nSources <= 1)
     {
-        throw std::invalid_argument("Invalid number of sources (" + std::to_string(nSources) + "<= 1) in: " + _fileName);
+        throw std::invalid_argument("Invalid number of core::sources (" + std::to_string(nSources) + "<= 1) in: " + _fileName);
     }
     _input.nSources = nSources;
 }
@@ -215,7 +215,7 @@ void genericInputCardReader::readNReceiversParameter(const nlohmann::json &jsonF
     int nReceivers = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterNReceivers);
     if(nReceivers <= 1)
     {
-        throw std::invalid_argument("Invalid number of receivers (" + std::to_string(nReceivers) + "<= 1) in: " + _fileName);
+        throw std::invalid_argument("Invalid number of core::receivers (" + std::to_string(nReceivers) + "<= 1) in: " + _fileName);
     }
     _input.nReceivers = nReceivers;
 }

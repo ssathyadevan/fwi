@@ -9,7 +9,7 @@ EvolutionInversion::EvolutionInversion(forwardModelInterface *forwardModel, cons
     _forwardModel = forwardModel;
 }
 
-dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
 
@@ -20,7 +20,7 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
     std::normal_distribution<double> distribution(0.0, mutationRate);
 
     // Create initial guess, generation 0, Adam
-    dataGrid2D parent(_grid);
+    core::dataGrid2D parent(_grid);
     parent.randomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
@@ -36,13 +36,13 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
     int counter = 1;
     for(int it = 0; it < _eiInput.nGenerations; it++)
     {
-        dataGrid2D favouriteChild(_grid);   // This is the best child so far
+        core::dataGrid2D favouriteChild(_grid);   // This is the best child so far
         parent.copyTo(favouriteChild);      // The first favourite child is a clone of the parent
         favouriteChildResSq = parentResSq;
         // start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
         for(int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
         {
-            dataGrid2D child(_grid);
+            core::dataGrid2D child(_grid);
             child.randomChild(parent, generator, distribution);
             childResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(child, pData));
 
@@ -75,7 +75,7 @@ dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double
 
     residualLogFile.close();   // close the residual.log file
 
-    dataGrid2D result(_grid);
+    core::dataGrid2D result(_grid);
     parent.copyTo(result);
     return result;
 }

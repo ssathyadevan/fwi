@@ -7,4 +7,4 @@ DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfa
 
 DirectionCalculatorMock::~DirectionCalculatorMock() {}
 
-dataGrid2D &DirectionCalculatorMock::calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &) { return _direction; }
+core::dataGrid2D &DirectionCalculatorMock::calculateDirection(const core::dataGrid2D &, const std::vector<std::complex<double>> &) { return _direction; }

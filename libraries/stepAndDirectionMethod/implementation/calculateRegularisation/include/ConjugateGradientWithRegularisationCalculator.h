@@ -13,10 +13,10 @@ class ConjugateGradientWithRegularisationCalculator : public DirectionCalculator
 {
 private:
     // StepSize part
-    dataGrid2D _chiEstimatePrevious;
-    dataGrid2D _chiEstimateCurrent;
-    dataGrid2D _gradientPrevious;
-    dataGrid2D _gradientCurrent;
+    core::dataGrid2D _chiEstimatePrevious;
+    core::dataGrid2D _chiEstimateCurrent;
+    core::dataGrid2D _gradientPrevious;
+    core::dataGrid2D _gradientCurrent;
     int _iterationNumber;
 
     // Direction part
@@ -24,12 +24,12 @@ private:
 
     // Inversion part
     ConjugateGradientWithRegularisationParametersInput _cgParametersInput;
-    const grid2D &_grid;
+    const core::grid2D &_grid;
     int _nTotal;   // nFreq * nSrc * nRecv
 
-    dataGrid2D _directionPrevious;   // in the documentation the direction is indicated with the greek letter Zeta
-    dataGrid2D _directionCurrent;
-    complexDataGrid2D _kappaTimesResidual;
+    core::dataGrid2D _directionPrevious;   // in the documentation the direction is indicated with the greek letter Zeta
+    core::dataGrid2D _directionCurrent;
+    core::complexDataGrid2D _kappaTimesResidual;
     ConjugateGradientRegularisationParameters _regularisationPrevious;
     ConjugateGradientRegularisationParameters _regularisationCurrent;
     double _residualValueCurrent;
@@ -64,7 +64,7 @@ private:
      * @return the value for _regularisationCurrent.bSquared, which will be needed to approximate the regularisation cost Function in
      * calculateStepSizeInRegularisation(), see eq. 2.26-2.27
      */
-    dataGrid2D calculateWeightingFactor();
+    core::dataGrid2D calculateWeightingFactor();
 
     /**
      * @brief calculateStepSizeInRegularisation prepares the parameters for equation 2.26 (see eq. 2.27) and invokes findRealRootFromCubic(...) to find the
@@ -77,7 +77,7 @@ private:
      * @brief calculateDirectionInRegularisation updates _kappaTimesResidual and _gradientCurrent following equations 2.13 and 2.25
      * @return the new direction
      */
-    dataGrid2D calculateDirectionInRegularisation();
+    core::dataGrid2D calculateDirectionInRegularisation();
 
     /**
      * @brief calculateSteeringFactor is a modified version of equation 2.23
@@ -105,7 +105,7 @@ private:
      * .gradientChi, see equation 2.24
      * @return updates _regularisationCurrent.gradient
      */
-    dataGrid2D calculateRegularisationGradient();
+    core::dataGrid2D calculateRegularisationGradient();
 
 public:
     ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel,
@@ -124,13 +124,13 @@ public:
      * @return is_directionCurrent. We output a reference so that the value is updated as we perform at a later stage the regularisation process
      * during the call of calculateStepSize
      */
-    dataGrid2D &calculateDirection(const dataGrid2D &, const std::vector<std::complex<double>> &residualVector) override;
+    core::dataGrid2D &calculateDirection(const core::dataGrid2D &, const std::vector<std::complex<double>> &residualVector) override;
 
     /**
      * @brief updateVariables updates _chiEstimateCur/Pr and _iterationNumber based on the parameters
      * @param chiEstimateCurrent
      * @param iterationNumber
      */
-    void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &, int iterationNumber, const std::vector<std::complex<double>> &,
+    void updateVariables(const core::dataGrid2D &chiEstimateCurrent, const core::dataGrid2D &, int iterationNumber, const std::vector<std::complex<double>> &,
         const std::vector<std::complex<double>> &) override;
 };

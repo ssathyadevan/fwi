@@ -11,49 +11,52 @@
 
 using namespace Eigen;
 
-class greensRect2DCpu
+namespace core
 {
-public:
-    greensRect2DCpu(
-        const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
+    class greensRect2DCpu
+    {
+    public:
+        greensRect2DCpu(
+            const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
 
-    ~greensRect2DCpu();
+        ~greensRect2DCpu();
 
-    const std::complex<double> *getGreensVolume() const { return gVol; }
+        const std::complex<double> *getGreensVolume() const { return gVol; }
 
-    const complexDataGrid2D *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
+        const complexDataGrid2D *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
 
-    complexDataGrid2D contractWithField(const complexDataGrid2D &x) const;
+        complexDataGrid2D contractWithField(const complexDataGrid2D &x) const;
 
-    const grid2D &getGrid() const { return grid; }
+        const grid2D &getGrid() const { return grid; }
 
-    // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
-    // Equation ID: "rel:buildField"
+        // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
+        // Equation ID: "rel:buildField"
 
-    complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
+        complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
 
-private:
-    void createGreensVolume();
+    private:
+        void createGreensVolume();
 
-    void createGreensVolumeAnkit();
+        void createGreensVolumeAnkit();
 
-    void createGreensRecv();
+        void createGreensRecv();
 
-    void deleteGreensRecv();
+        void deleteGreensRecv();
 
-    std::function<std::complex<double>(double, double)> G_func;
+        std::function<std::complex<double>(double, double)> G_func;
 
-    const grid2D grid;
-    const sources src;
-    const receivers recv;
-    const double k;
+        const grid2D grid;
+        const sources src;
+        const receivers recv;
+        const double k;
 
-    std::complex<double> *gVol;
-    std::vector<complexDataGrid2D *> gRecv;
+        std::complex<double> *gVol;
+        std::vector<complexDataGrid2D *> gRecv;
 
-    Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-    void setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
+        Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
+        void setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
-    greensRect2DCpu(const greensRect2DCpu &) = delete;
-    greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;
-};
+        greensRect2DCpu(const greensRect2DCpu &) = delete;
+        greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;
+    };
+}   // namespace core

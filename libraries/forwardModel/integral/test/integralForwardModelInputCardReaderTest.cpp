@@ -1,5 +1,5 @@
-#include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
+#include "integralForwardModel.h"
 #include <gtest/gtest.h>
 
 // const std::string inputPath = "./../../../parallelized-fwi/tests";   // For local use

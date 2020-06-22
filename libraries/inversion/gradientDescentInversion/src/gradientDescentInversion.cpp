@@ -10,14 +10,14 @@ gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwar
     _forwardModel = forwardModel;
 }
 
-dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
 {
     progressBar bar(_gdInput.iter);
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
-    dataGrid2D chiEstimateCurrent(_grid);
+    core::dataGrid2D chiEstimateCurrent(_grid);
     chiEstimateCurrent = _gdInput.x0;
-    dataGrid2D chiEstimatePrevious(_grid);
+    core::dataGrid2D chiEstimatePrevious(_grid);
 
     _forwardModel->calculateKappa();
     _forwardModel->calculateResidual(chiEstimateCurrent, pData);
@@ -73,14 +73,14 @@ std::ofstream gradientDescentInversion::openResidualLogFile(genericInput &gInput
 }
 
 std::vector<double> gradientDescentInversion::differential(
-    std::vector<std::complex<double>> &residual, dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
+    std::vector<std::complex<double>> &residual, core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
 {
     const int numGridPoints = chiEstimate.getNumberOfGridPoints();
 
     double fx = _forwardModel->calculateCost(residual, chiEstimate, pData, eta);
 
     double fxPlusH;
-    dataGrid2D chiEstimatePlusH(chiEstimate);
+    core::dataGrid2D chiEstimatePlusH(chiEstimate);
     std::vector<double> dFdx(numGridPoints, 0.0);
     for(int i = 0; i < numGridPoints; ++i)
     {
@@ -94,7 +94,7 @@ std::vector<double> gradientDescentInversion::differential(
     return dFdx;
 }
 
-dataGrid2D gradientDescentInversion::gradientDescent(dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma)
+core::dataGrid2D gradientDescentInversion::gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma)
 {
     const int nGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -115,7 +115,7 @@ void gradientDescentInversion::logResidualResults(int iteration, double residual
 }
 
 double gradientDescentInversion::determineGamma(
-    const dataGrid2D chiEstimatePrevious, const dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
+    const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
 {
     const int nGridPoints = chiEstimateCurrent.getNumberOfGridPoints();
 
