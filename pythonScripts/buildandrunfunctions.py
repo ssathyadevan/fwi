@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import numpy as np
+from pathlib import Path
 
 def checking_for_errors(err, current_directory):
     if err != 0:
@@ -40,16 +41,27 @@ def print_run(running_table):
                 fm += a
         print(row_format.format(inv_method, fm, *ind_run[2:-2]))
 
+def write_description(name, inversion, forward_model, output_dir, comment = 'None'):    
+    with open(name, "w+") as description_file:
+       description_file.write(inversion + '\n')
+       description_file.write(forward_model  + '\n')
+       description_file.write(output_dir  + '\n')
+       description_file.write(comment)
+
 def enter_description(current_directory, table):
     description = input('Please enter a description of the run or press enter: \n')
     if not os.path.isdir(current_directory + '/results'):
         os.mkdir(current_directory + '/results')
     os.chdir(current_directory + '/results')
-    with open("description" + str(table[6]) + ".txt", "w+") as in_file:
-        in_file.write(table[0] + '\n')
-        in_file.write(table[1] + '\n')
-        in_file.write(table[5] + '\n')
-        in_file.write(description)
+    
+    # Store run parameters of the algorithm to a temporary description file
+    run_number = str(table[6])
+    filename = Path().absolute().joinpath("description" + run_number + ".txt")    
+    write_description(name = filename,
+                      inversion = table[0], 
+                      forward_model = table[1],
+                      output_dir = table[5],
+                      comment = description)          
 
 def ask_options(running_table, current_directory):
     answer = '10'
