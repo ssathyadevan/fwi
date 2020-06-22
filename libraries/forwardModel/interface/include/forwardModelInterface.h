@@ -45,17 +45,17 @@ public:
 
     virtual void calculateKappa()
     {
-        L_(lerror) << "This ForwardModel is not compatible with the Inversion model";
+        L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
         exit(EXIT_FAILURE);
     }
     virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &)
     {
-        L_(lerror) << "This ForwardModel is not compatible with the Inversion model";
+        L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
         exit(EXIT_FAILURE);
     }
     virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int)
     {
-        L_(lerror) << "This ForwardModel is not compatible with the Inversion model";
+        L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
         exit(EXIT_FAILURE);
     }
 

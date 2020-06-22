@@ -11,9 +11,9 @@ IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core:
     , _Kappa()
     , _fmInput(fmInput)
 {
-    L_(linfo) << "Creating Greens function field...";
+    L_(io::linfo) << "Creating Greens function field...";
     createGreens();
-    L_(linfo) << "Creating p0...";
+    L_(io::linfo) << "Creating p0...";
     createP0();
     createPTot(freq, src);
     createKappa(freq, src, recv);
@@ -180,7 +180,7 @@ core::complexDataGrid2D IntegralForwardModel::calcTotalField(const core::greensR
             {
                 std::string itstring = std::to_string(it);
                 std::string line_to_print = "Convergence after " + itstring + "iterations";
-                L_(linfo) << line_to_print;
+                L_(io::linfo) << line_to_print;
             }
 
             break;
@@ -225,7 +225,7 @@ core::complexDataGrid2D IntegralForwardModel::calcTotalField(const core::greensR
 
     if(res >= _fmInput.tolerance)
     {
-        L_(linfo) << "No convergence after " << _fmInput.nrOfIterations << " iterations."
+        L_(io::linfo) << "No convergence after " << _fmInput.nrOfIterations << " iterations."
                   << "Res = " << res;
     }
 
@@ -243,7 +243,7 @@ void IntegralForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
     {
         li = i * _src.nSrc;
 
-        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
+        L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
 
         for(int j = 0; j < _src.nSrc; j++)
         {

@@ -12,9 +12,9 @@ finiteDifferenceForwardModel::finiteDifferenceForwardModel(const core::grid2D &g
     , _kappa()
     , _fMInput(fMInput)
 {
-    L_(linfo) << "Creating Greens function field...";
+    L_(io::linfo) << "Creating Greens function field...";
     createGreens();
-    L_(linfo) << "Creating p0...";
+    L_(io::linfo) << "Creating p0...";
     createP0();
     createPTot(freq, src);
     createKappa(freq, src, recv);
@@ -153,11 +153,11 @@ void finiteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
 
         Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _src, _freq.c0, chiEst, _fMInput);
 
-        L_(linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
+        L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
 
         for(int j = 0; j < _src.nSrc; j++)
         {
-            L_(linfo) << "Solving p_tot for source: (" << _src.xSrc[j][0] << "," << _src.xSrc[j][1] << ")";
+            L_(io::linfo) << "Solving p_tot for source: (" << _src.xSrc[j][0] << "," << _src.xSrc[j][1] << ")";
             *_pTot[li + j] = helmholtzFreq.solve(_src.xSrc[j], *_pTot[li + j]);
         }
     }

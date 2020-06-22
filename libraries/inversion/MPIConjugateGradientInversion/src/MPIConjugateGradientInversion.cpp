@@ -83,7 +83,7 @@ void MPIConjugateGradientInversion::ReconstructSlave()
             {
                 for(unsigned i = 0; i < resArray.size(); i++)
                 {
-                    L_(lerror) << i << "  " << resArray[i].real() << "  " << resArray[i].imag();
+                    L_(io::lerror) << i << "  " << resArray[i].real() << "  " << resArray[i].imag();
                 }
                 once++;
             }
@@ -137,7 +137,7 @@ PressureFieldSerial *MPIConjugateGradientInversion::getUpdateDirectionInformatio
     {
         for(unsigned i = 0; i < resArray.size(); i++)
         {
-            L_(lerror) << i << "  " << resArray[i].real() << "  " << resArray[i].imag();
+            L_(io::lerror) << i << "  " << resArray[i].real() << "  " << resArray[i].imag();
         }
         once++;
     }
@@ -252,7 +252,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
                 res = eta * resSq;
 
-                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
+                L_(io::linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
                           << res;
 
                 residualLogFile << std::setprecision(17) << res << "," << counter << std::endl;
@@ -350,7 +350,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 resSq = _forwardModel->calculateResidualNormSq(resArray);
                 res = eta * resSq;
 
-                L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
+                L_(io::linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17)
                           << res;
 
                 residualLogFile << std::setprecision(17) << res << "," << counter << std::endl;   // store the residual value in the residual log
@@ -389,7 +389,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     return result;
 }
 
-std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream ConjugateGradientInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 

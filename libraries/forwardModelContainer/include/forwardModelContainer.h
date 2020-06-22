@@ -8,11 +8,11 @@
 class ForwardModelContainer
 {
 public:
-    ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
+    ForwardModelContainer(const io::genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
         const core::receivers &receivers, const core::frequenciesGroup &frequencies);
     ~ForwardModelContainer();
 
-    void createForwardModels(const genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
+    void createForwardModels(const io::genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid, const core::sources &sources,
         const core::receivers &receivers);
 
     void calculateKappaParallel();

@@ -5,7 +5,7 @@
 #include <omp.h>
 #include <sstream>
 
-OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const genericInput &gInput, ForwardModelContainer &forwardmodels) :
+OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const io::genericInput &gInput, ForwardModelContainer &forwardmodels) :
     _forwardModelsParallel(forwardmodels), _gdInput(), _grid(forwardmodels.getGrid()), _src(forwardmodels.getSources()), _recv(forwardmodels.getReceivers()),
     _freq(forwardmodels.getFrequencies())
 {
@@ -13,9 +13,9 @@ OpenMPGradientDescentInversion::OpenMPGradientDescentInversion(const genericInpu
     _gdInput = GradientDescentInversionReader.getInput();
 }
 
-core::dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar bar(_gdInput.iter);
+    io::progressBar bar(_gdInput.iter);
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
@@ -56,7 +56,7 @@ core::dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<s
     return chiEstimateCurrent;
 }
 
-std::ofstream OpenMPGradientDescentInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream OpenMPGradientDescentInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 

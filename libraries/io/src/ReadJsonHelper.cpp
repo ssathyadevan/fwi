@@ -4,10 +4,13 @@
 #include <iostream>
 #include <string.h>
 
-void ReadJsonHelper::verifyJsonFileContainsParameter(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName)
+namespace io
 {
-    if(!jsonFile.contains(parameterName))
+    void ReadJsonHelper::verifyJsonFileContainsParameter(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName)
     {
-        throw std::invalid_argument("Argument " + parameterName + " is missing in: " + filePath);
+        if(!jsonFile.contains(parameterName))
+        {
+            throw std::invalid_argument("Argument " + parameterName + " is missing in: " + filePath);
+        }
     }
-}
+}   // namespace io

@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-class EvolutionInversionInputCardReader : public inputCardReader
+class EvolutionInversionInputCardReader : public io::inputCardReader
 {
 public:
     EvolutionInversionInputCardReader(const std::string &caseFolder);

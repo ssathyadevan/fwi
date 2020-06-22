@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-ForwardModelContainer::ForwardModelContainer(const genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid,
+ForwardModelContainer::ForwardModelContainer(const io::genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid,
     const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
     : _forwardmodels()
     , _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads()))
@@ -20,7 +20,7 @@ ForwardModelContainer::ForwardModelContainer(const genericInput &genericInput, c
     , _frequenciesVector()
     , _allFrequencies(frequencies)
 {
-    L_(linfo) << "Container uses " << _numberOfThreads << " threads for parallelization.";
+    L_(io::linfo) << "Container uses " << _numberOfThreads << " threads for parallelization.";
     divideFrequencies();
     createForwardModels(genericInput, desiredForwardModel, grid, sources, receivers);
 }
@@ -33,7 +33,7 @@ ForwardModelContainer::~ForwardModelContainer()
     }
 }
 
-void ForwardModelContainer::createForwardModels(const genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid,
+void ForwardModelContainer::createForwardModels(const io::genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid,
     const core::sources &sources, const core::receivers &receivers)
 {
     if(desiredForwardModel == "integralForwardModel")
@@ -57,7 +57,7 @@ void ForwardModelContainer::createForwardModels(const genericInput &gInput, cons
     }
     else
     {
-        L_(linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
+        L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
         exit(EXIT_FAILURE);
     }
 }

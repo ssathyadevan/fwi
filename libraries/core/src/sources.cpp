@@ -34,10 +34,10 @@ namespace core
 
     void sources::Print()
     {
-        L_(linfo) << "Total number of sources is " << nSrc << ". Positions:";
+        L_(io::linfo) << "Total number of sources is " << nSrc << ". Positions:";
         for(int i = 0; i < nSrc; i++)
         {
-            L_(linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")";
+            L_(io::linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")";
         }
     }
 }   // namespace core

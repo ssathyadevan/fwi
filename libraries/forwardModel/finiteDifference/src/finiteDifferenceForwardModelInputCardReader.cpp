@@ -4,7 +4,7 @@
 #include "json.h"
 
 finiteDifferenceForwardModelInputCardReader::finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder)
-    : inputCardReader()
+    : io::inputCardReader()
 {
     const std::string stringInputFolder = "/input/";
     std::string filePath = caseFolder + stringInputFolder + _fileName;
@@ -23,10 +23,10 @@ void finiteDifferenceForwardModelInputCardReader::readPMLWidthFactorParameters(c
     const std::string parameterPMLWidthFactor = "PMLWidthFactor";
     const std::string parameterX = "x";
     const std::string parameterZ = "z";
-    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterPMLWidthFactor);
+    nlohmann::json iterObject = io::ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterPMLWidthFactor);
 
-    double x = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterX);
-    double z = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterZ);
+    double x = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterX);
+    double z = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterZ);
 
     _input.pmlWidthFactor = PMLWidthFactor(x, z);
 }
@@ -37,10 +37,10 @@ void finiteDifferenceForwardModelInputCardReader::readSourceParameters(const nlo
     const std::string parameterHalfWidth = "r";
     const std::string parameterShape = "beta";
 
-    nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterSource);
+    nlohmann::json iterObject = io::ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterSource);
 
-    double halfWidth = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterHalfWidth);
-    double shape = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterShape);
+    double halfWidth = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterHalfWidth);
+    double shape = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterShape);
 
     _input.sourceParameter = SourceParameter(halfWidth, shape);
 }

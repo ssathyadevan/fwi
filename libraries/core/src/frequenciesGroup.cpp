@@ -29,10 +29,10 @@ namespace core
 
     void frequenciesGroup::Print(int nFreqTotal)
     {
-        L_(linfo) << "Total number of frequencies is " << nFreqTotal << ". Values:";
+        L_(io::linfo) << "Total number of frequencies is " << nFreqTotal << ". Values:";
         for(int i = 0; i < nFreqTotal; i++)
         {
-            L_(linfo) << "f = " << freq[i] << ", k = " << k[i];
+            L_(io::linfo) << "f = " << freq[i] << ", k = " << k[i];
         }
     }
 }   // namespace core

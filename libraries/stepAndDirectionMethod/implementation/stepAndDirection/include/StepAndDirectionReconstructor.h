@@ -28,5 +28,5 @@ public:
      * @param gInput is the data input for the problem
      * @return
      */
-    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 };

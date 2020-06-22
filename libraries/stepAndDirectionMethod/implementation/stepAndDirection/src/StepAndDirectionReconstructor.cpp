@@ -8,9 +8,9 @@ StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator 
 {
 }
 
-core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar bar(_directionInput.maxIterationsNumber);
+    io::progressBar bar(_directionInput.maxIterationsNumber);
 
     std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 

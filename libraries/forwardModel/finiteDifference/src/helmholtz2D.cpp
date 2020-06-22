@@ -136,7 +136,7 @@ core::complexDataGrid2D Helmholtz2D::solve(const std::array<double, 2> &source, 
     Eigen::VectorXcd result = _solver.solve(_b);
     if(_solver.info() != Eigen::Success)
     {
-        L_(lerror) << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage();
+        L_(io::lerror) << "Solver failed!" << _solver.info() << " " << _solver.lastErrorMessage();
         exit(EXIT_FAILURE);
     }
 
@@ -520,7 +520,7 @@ void Helmholtz2D::buildMatrix()
     _solver.factorize(_A);
     if(_solver.info() != Eigen::Success)
     {
-        L_(lerror) << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage();
+        L_(io::lerror) << "LU Factorization failed!: " << _solver.info() << " " << _solver.lastErrorMessage();
         exit(EXIT_FAILURE);
     }
 }

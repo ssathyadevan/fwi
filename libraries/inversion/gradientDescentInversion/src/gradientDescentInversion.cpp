@@ -10,9 +10,9 @@ gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwar
     _forwardModel = forwardModel;
 }
 
-core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar bar(_gdInput.iter);
+    io::progressBar bar(_gdInput.iter);
     std::ofstream residualLogFile = openResidualLogFile(gInput);
 
     core::dataGrid2D chiEstimateCurrent(_grid);
@@ -58,7 +58,7 @@ core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::co
     return chiEstimateCurrent;
 }
 
-std::ofstream gradientDescentInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream gradientDescentInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 
@@ -111,7 +111,7 @@ core::dataGrid2D gradientDescentInversion::gradientDescent(core::dataGrid2D chiE
 void gradientDescentInversion::logResidualResults(int iteration, double residual, bool isConverged)
 {
     std::string convergenceMessage = isConverged ? "Converged" : "Not Converged";
-    L_(linfo) << "Iteration:" << iteration << "\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
+    L_(io::linfo) << "Iteration:" << iteration << "\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
 }
 
 double gradientDescentInversion::determineGamma(

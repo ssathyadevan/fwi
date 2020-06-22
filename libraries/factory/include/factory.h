@@ -19,7 +19,7 @@ public:
     Factory();
     ~Factory();
 
-    inversionInterface *createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const genericInput &gInput);
+    inversionInterface *createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const io::genericInput &gInput);
     forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
         const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies);
 

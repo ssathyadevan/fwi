@@ -24,20 +24,20 @@ void CpuClockMPI::Start()
 {
     t_start = MPI_Wtime();
     start = std::chrono::system_clock::now();
-    L_(linfo) << "Starting";
+    L_(io::linfo) << "Starting";
 }
 
 void CpuClockMPI::End()
 {
     t_end = MPI_Wtime();
     finish = std::chrono::system_clock::now();
-    L_(linfo) << "Finished";
+    L_(io::linfo) << "Finished";
 }
 
 std::string CpuClockMPI::OutputString()
 {
-    L_(linfo) << "CPU time: " << (double(t_end - t_start)) << " seconds" ;
-    L_(linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000) << "seconds"; //nanosec / 10^9 = sec
+    L_(io::linfo) << "CPU time: " << (double(t_end - t_start)) << " seconds" ;
+    L_(io::linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000) << "seconds"; //nanosec / 10^9 = sec
     long virtual_mem, physical_mem;
     MemoryUse(virtual_mem, physical_mem);
     std::stringstream ss;

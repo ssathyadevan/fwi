@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-class RandomInversionInputCardReader : public inputCardReader
+class RandomInversionInputCardReader : public io::inputCardReader
 {
 private:
     RandomInversionInput _input;

@@ -14,9 +14,9 @@
 //    return grid;
 //}
 
-// genericInput getGenericInput()
+// io::genericInput getGenericInput()
 //{
-//    genericInput gInput;
+//    io::genericInput gInput;
 //    gInput.c0 = 1.0;
 //    gInput.freq(0.0, 1.0, 2);
 //    gInput.reservoirTopLeftCornerInM = {0.0, 1.0};

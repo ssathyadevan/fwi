@@ -7,7 +7,7 @@
 #include "integralForwardModelInput.h"
 #include "ReadJsonHelper.h"
 
-class integralForwardModelInputCardReader : public inputCardReader
+class integralForwardModelInputCardReader : public io::inputCardReader
 {
 public:
     integralForwardModelInputCardReader(const std::string &caseFolder);

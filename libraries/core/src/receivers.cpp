@@ -34,10 +34,10 @@ namespace core
 
     void receivers::Print()
     {
-        L_(linfo) << "Total number is receivers is " << nRecv << ". Positions:";
+        L_(io::linfo) << "Total number is receivers is " << nRecv << ". Positions:";
         for(int i = 0; i < nRecv; i++)
         {
-            L_(linfo) << "x = (" << xRecv[i][0] << ", " << xRecv[i][1] << ")";
+            L_(io::linfo) << "x = (" << xRecv[i][0] << ", " << xRecv[i][1] << ")";
         }
     }
 }   // namespace core

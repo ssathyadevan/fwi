@@ -19,15 +19,15 @@ private:
 
     core::dataGrid2D gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma);
     std::vector<double> differentialParallel(const std::vector<std::complex<double>> &pData, core::dataGrid2D xi, double dxi, double eta);
-    std::ofstream openResidualLogFile(genericInput &gInput);
+    std::ofstream openResidualLogFile(io::genericInput &gInput);
 
 public:
-    OpenMPGradientDescentInversion(const genericInput &gdInput, ForwardModelContainer &forwardmodels);
+    OpenMPGradientDescentInversion(const io::genericInput &gdInput, ForwardModelContainer &forwardmodels);
 
     OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion &) = delete;
     OpenMPGradientDescentInversion &operator=(const OpenMPGradientDescentInversion &) = delete;
 
-    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
     double functionFParallel(const core::dataGrid2D &xi, const std::vector<std::complex<double>> &pData, double eta);
     double determineGamma(

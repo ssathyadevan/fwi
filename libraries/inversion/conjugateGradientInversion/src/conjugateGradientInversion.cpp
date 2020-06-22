@@ -23,9 +23,9 @@ ConjugateGradientInversion::ConjugateGradientInversion(forwardModelInterface *fo
     _forwardModel = forwardModel;
 }
 
-core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
+    io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _frequencies.nFreq * _sources.nSrc * _receivers.nRecv;
     const double eta = 1.0 / (normSq(pData, nTotal));   // Scaling factor
@@ -118,7 +118,7 @@ core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::
     return _chiEstimate;
 }
 
-std::ofstream ConjugateGradientInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream ConjugateGradientInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 
@@ -170,7 +170,7 @@ double ConjugateGradientInversion::calculateStepSize(const core::dataGrid2D &zet
 void ConjugateGradientInversion::logResidualResults(int it1, int it, double residual, int counter, std::ofstream &residualLogFile, bool isConverged)
 {
     std::string convergenceMessage = isConverged ? "Converged" : "Not Converged";
-    L_(linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual
+    L_(io::linfo) << it1 + 1 << "/" << _cgInput.iteration1.n << "\t (" << it + 1 << "/" << _cgInput.n_max << ")\t res: " << std::setprecision(17) << residual
               << "\t" << convergenceMessage;
     residualLogFile << std::setprecision(17) << residual << "," << counter << std::endl;
 }

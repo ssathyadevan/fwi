@@ -14,7 +14,7 @@ public:
     RandomInversion(const RandomInversion &) = delete;
     RandomInversion &operator=(const RandomInversion &) = delete;
 
-    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
 private:
     forwardModelInterface *_forwardModel;
@@ -25,5 +25,5 @@ private:
     const core::receivers &_recv;
     const core::frequenciesGroup &_freq;
 
-    std::ofstream openResidualLogFile(genericInput &gInput);
+    std::ofstream openResidualLogFile(io::genericInput &gInput);
 };

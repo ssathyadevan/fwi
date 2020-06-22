@@ -56,7 +56,7 @@ Factory::~Factory()
     }
 }
 
-inversionInterface *Factory::createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const genericInput &gInput)
+inversionInterface *Factory::createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const io::genericInput &gInput)
 {
     if(desiredInversion == "conjugateGradientInversion")
     {
@@ -85,7 +85,7 @@ inversionInterface *Factory::createInversion(const std::string &desiredInversion
         _createdInversion = new EvolutionInversion(forwardModel, evolutionReader.getInput());
         return _createdInversion;
     }
-    L_(linfo) << "The Inversion method " << desiredInversion << " was not found";
+    L_(io::linfo) << "The Inversion method " << desiredInversion << " was not found";
     throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
 }
 
@@ -104,7 +104,7 @@ forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder
         _createdForwardModel = new finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
         return _createdForwardModel;
     }
-    L_(linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
+    L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
@@ -126,7 +126,7 @@ void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParamet
         return;
     }
 
-    L_(linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
+    L_(io::linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
     throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
 }
 
@@ -157,7 +157,7 @@ void Factory::createDirectionCalculator(const DirectionParameters &directionPara
             new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
         return;
     }
-    L_(linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
+    L_(io::linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
 
@@ -181,7 +181,7 @@ void Factory::createCombinedDirectionAndStepSize(forwardModelInterface *forwardM
         return;
     }
 
-    L_(linfo) << "The combined Direction and StepSize method " << desiredCombinedDirectionAndStepSizeMethod << " was not found";
+    L_(io::linfo) << "The combined Direction and StepSize method " << desiredCombinedDirectionAndStepSizeMethod << " was not found";
     throw std::invalid_argument("The combined Direction and StepSize method " + desiredCombinedDirectionAndStepSizeMethod + " was not found");
 }
 
@@ -193,10 +193,10 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
 
     if(splittableInversion(desiredStepSizeMethod))
     {
-        L_(linfo) << "Create StepSizeCalculator...";
+        L_(io::linfo) << "Create StepSizeCalculator...";
         createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod, forwardModel->getGrid());
 
-        L_(linfo) << "Create DirectionCalculator...";
+        L_(io::linfo) << "Create DirectionCalculator...";
         createDirectionCalculator(stepAndDirectionInput.directionParameters, desiredDirectionMethod, forwardModel, pData);
     }
 

@@ -13,22 +13,22 @@
 #include "utilityFunctions.h"
 #include <string>
 
-void performInversion(const genericInput &gInput, const std::string &runName, const std::string desiredStepSize, const std::string desiredDirection,
+void performInversion(const io::genericInput &gInput, const std::string &runName, const std::string desiredStepSize, const std::string desiredDirection,
     const std::string desired_forward_model);
-void writePlotInput(const genericInput &gInput, std::string msg);
+void writePlotInput(const io::genericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
     if(argc != 5)
     {
-        L_(linfo) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        L_(linfo) << "Make sure the input folder inside the case folder contains the files genericInput.json, FMInput.json and CGInput.json" << std::endl;
+        L_(io::linfo) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        L_(io::linfo) << "Make sure the input folder inside the case folder contains the files genericInput.json, FMInput.json and CGInput.json" << std::endl;
 
-        L_(linfo) << std::endl << "Please specify the desired inversion method" << std::endl;
-        L_(linfo) << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
+        L_(io::linfo) << std::endl << "Please specify the desired inversion method" << std::endl;
+        L_(io::linfo) << "Make sure the inversion method has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
 
-        L_(linfo) << std::endl << "Please specify the desired forward model" << std::endl;
-        L_(linfo) << "Make sure the forward model has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
+        L_(io::linfo) << std::endl << "Please specify the desired forward model" << std::endl;
+        L_(io::linfo) << "Make sure the forward model has been added as indicated in how_to_add_an_inversion_method.pdf" << std::endl;
 
         exit(EXIT_FAILURE);
     }
@@ -36,8 +36,8 @@ int main(int argc, char **argv)
     try
     {
         std::vector<std::string> arguments(argv + 1, argc + argv);
-        genericInputCardReader genericReader(arguments[0]);
-        genericInput gInput = genericReader.getInput();
+        io::genericInputCardReader genericReader(arguments[0]);
+        io::genericInput gInput = genericReader.getInput();
         std::string desiredStepSize = arguments[1];
         std::string desiredDirection = arguments[2];
         std::string desiredForwardModel = arguments[3];
@@ -47,12 +47,12 @@ int main(int argc, char **argv)
         if(!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger(logFileName.c_str(), ldebug);
+            initLogger(logFileName.c_str(), io::ldebug);
         }
 
-        L_(linfo) << "Test";
+        L_(io::linfo) << "Test";
 
-        chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
+        io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
         createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
         CpuClock clock;
@@ -61,13 +61,13 @@ int main(int argc, char **argv)
         performInversion(gInput, gInput.runName, desiredStepSize, desiredDirection, desiredForwardModel);
         clock.End();
 
-        L_(linfo) << "Visualisation of the estimated temple using FWI";
-        chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
+        L_(io::linfo) << "Visualisation of the estimated temple using FWI";
+        io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
         createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
         std::string msg = clock.OutputString();
         writePlotInput(gInput, msg);
-        endLogger();
+        io::endLogger();
     }
     catch(const std::invalid_argument &e)
     {
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void writePlotInput(const genericInput &gInput, std::string msg)
+void writePlotInput(const io::genericInput &gInput, std::string msg)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -103,7 +103,7 @@ void writePlotInput(const genericInput &gInput, std::string msg)
     lastrun.close();
 }
 
-void performInversion(const genericInput &gInput, const std::string &runName, const std::string desiredStepSize, const std::string desiredDirection,
+void performInversion(const io::genericInput &gInput, const std::string &runName, const std::string desiredStepSize, const std::string desiredDirection,
     const std::string desiredForwardModel)
 {
     // initialize the grid sources receivers, grouped frequencies
@@ -122,16 +122,16 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
 
     std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
-    CSVReader row;
+    io::CSVReader row;
 
     if(!file.is_open())
     {
-        L_(linfo) << "Could not open file at " << fileLocation;
+        L_(io::linfo) << "Could not open file at " << fileLocation;
         exit(EXIT_FAILURE);
     }
 
     int i = 0;
-    L_(linfo) << "Read reference data" << fileLocation;
+    L_(io::linfo) << "Read reference data" << fileLocation;
     while(file >> row)
     {
         if(i < magnitude)
@@ -142,20 +142,20 @@ void performInversion(const genericInput &gInput, const std::string &runName, co
     }
     Factory factory;
 
-    L_(linfo) << "Create ForwardModel";
+    L_(io::linfo) << "Create ForwardModel";
     forwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, desiredForwardModel, grid, src, recv, freq);
 
-    L_(linfo) << "Create StepAndDirectionReconstructor";
+    L_(io::linfo) << "Create StepAndDirectionReconstructor";
     StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
     StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
     StepAndDirectionReconstructor *reconstructor;
     reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, desiredStepSize, desiredDirection, referencePressureData);
 
-    L_(linfo) << "Estimating Chi...";
+    L_(io::linfo) << "Estimating Chi...";
     core::dataGrid2D chiEstimate = reconstructor->reconstruct(referencePressureData, gInput);
 
-    L_(linfo) << "Done, writing to file";
+    L_(io::linfo) << "Done, writing to file";
 
     chiEstimate.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 }

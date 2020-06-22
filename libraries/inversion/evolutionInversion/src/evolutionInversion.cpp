@@ -9,9 +9,9 @@ EvolutionInversion::EvolutionInversion(forwardModelInterface *forwardModel, cons
     _forwardModel = forwardModel;
 }
 
-core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
+    io::progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
 
     double favouriteChildResSq, childResSq, preParentResSq;
     double mutationRate = 0.05;
@@ -24,7 +24,7 @@ core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<
     parent.randomSaurabh();
     double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
     preParentResSq = parentResSq;
-    L_(linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
+    L_(io::linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
     std::cerr << "\n";
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);
@@ -61,7 +61,7 @@ core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<
 
         std::string converganceMessage = isConverged ? "Converged" : "Not Converged";
 
-        L_(linfo) << std::setprecision(7) << parentResSq << "   |  " << it << " | " << mutationRate  << " | "  << converganceMessage << std::endl;
+        L_(io::linfo) << std::setprecision(7) << parentResSq << "   |  " << it << " | " << mutationRate  << " | "  << converganceMessage << std::endl;
 
         if(favouriteChildResSq == parentResSq && preParentResSq == favouriteChildResSq)
         {
@@ -80,7 +80,7 @@ core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<
     return result;
 }
 
-std::ofstream EvolutionInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream EvolutionInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 

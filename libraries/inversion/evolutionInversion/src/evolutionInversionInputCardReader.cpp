@@ -2,7 +2,7 @@
 #include "json.h"
 #include <iostream>
 
-EvolutionInversionInputCardReader::EvolutionInversionInputCardReader(const std::string &caseFolder) : inputCardReader()
+EvolutionInversionInputCardReader::EvolutionInversionInputCardReader(const std::string &caseFolder) : io::inputCardReader()
 {
     static const std::string stringInputFolder = "/input/";
     std::string filePath = caseFolder + stringInputFolder + _fileName;
@@ -15,7 +15,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     nlohmann::json jsonFile = readFile(filePath);
 
     static const std::string parameterGamma = "toleranceOuter";
-    double toleranceOuter = ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, _fileName, parameterGamma);
+    double toleranceOuter = io::ReadJsonHelper::tryGetParameterFromJson<double>(jsonFile, _fileName, parameterGamma);
     if(toleranceOuter <= 0)
     {
         throw std::invalid_argument("Invalid outer tolerance (" + std::to_string(toleranceOuter) + " <= 0) in: " + _fileName);
@@ -23,7 +23,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     _input.toleranceOuter = toleranceOuter;
 
     static const std::string parameterInitialX = "nGenerations";
-    int nrOfGenerations = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterInitialX);
+    int nrOfGenerations = io::ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterInitialX);
     if(nrOfGenerations <= 0)
     {
         throw std::invalid_argument("Invalid number of generations (" + std::to_string(nrOfGenerations) + " <= 0) in: " + _fileName);
@@ -31,7 +31,7 @@ void EvolutionInversionInputCardReader::readJsonFile(const std::string &filePath
     _input.nGenerations = nrOfGenerations;
 
     static const std::string parameterStepSize = "nChildrenPerGeneration";
-    int nrofChildrenPerGeneration = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterStepSize);
+    int nrofChildrenPerGeneration = io::ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterStepSize);
     if(nrofChildrenPerGeneration <= 0)
     {
         throw std::invalid_argument("Invalid number of children per generation (" + std::to_string(nrofChildrenPerGeneration) + " <= 0) in: " + _fileName);

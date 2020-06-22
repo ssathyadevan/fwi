@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-class ConjugateGradientInversionInputCardReader : public inputCardReader
+class ConjugateGradientInversionInputCardReader : public io::inputCardReader
 {
 private:
     ConjugateGradientInversionInput _input;

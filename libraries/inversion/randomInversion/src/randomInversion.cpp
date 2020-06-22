@@ -9,9 +9,9 @@ RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const Rand
     _forwardModel = forwardModel;
 }
 
-core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput)
+core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
 {
-    progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
+    io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
     double eta = 1.0 / (normSq(pData, nTotal));
@@ -49,13 +49,13 @@ core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<dou
             }
             else if(std::abs(newChiEstRes) < std::abs(chiEstRes))
             {
-                L_(linfo) << "Randomizing the temple again";
+                L_(io::linfo) << "Randomizing the temple again";
                 tempRandomChi.copyTo(chiEst);
 
                 resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
                 chiEstRes = eta * resSq;
             }
-            L_(linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17)
+            L_(io::linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter << ")\t res: " << std::setprecision(17)
                       << chiEstRes;
 
             residualLogFile << std::setprecision(17) << chiEstRes << "," << counter << std::endl;
@@ -73,7 +73,7 @@ core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<dou
     return result;
 }
 
-std::ofstream RandomInversion::openResidualLogFile(genericInput &gInput)
+std::ofstream RandomInversion::openResidualLogFile(io::genericInput &gInput)
 {
     std::string filePath = gInput.outputLocation + gInput.runName + "Residual" + ".log";
 

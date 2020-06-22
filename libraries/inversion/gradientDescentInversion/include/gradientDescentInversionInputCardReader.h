@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-class gradientDescentInversionInputCardReader : public inputCardReader
+class gradientDescentInversionInputCardReader : public io::inputCardReader
 {
 private:
     gradientDescentInversionInput _input;

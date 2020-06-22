@@ -22,7 +22,7 @@ private:
 
     double calculateAlpha(PressureFieldSerial &zeta, std::vector<std::complex<double>> &residuals);
     PressureFieldSerial *getUpdateDirectionInformation(std::vector<std::complex<double>> resArray, const int mpi_size);
-    std::ofstream openResidualLogFile(genericInput &gInput);
+    std::ofstream openResidualLogFile(io::genericInput &gInput);
 
 public:
     MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const MPIConjugateGradientInversionInput &cgInput);

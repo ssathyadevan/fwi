@@ -34,7 +34,7 @@ private:
      * @param gInput is the general input of the model, containing the outputlocation and runName.
      * @return std::ofstream residualLogFile in which the residuals can be stored.
      */
-    std::ofstream openResidualLogFile(genericInput &gInput);
+    std::ofstream openResidualLogFile(io::genericInput &gInput);
 
     /**
      * @brief calculateUpdateDirection uses eq: updateDirectionsCG from the README to determine the update-direction of each gridpoint of the contrast function
@@ -162,5 +162,5 @@ public:
      * @param gInput Struct containing general model parameters
      * @return core::dataGrid2D _chiEstimate, the optimized estimation for the contrast function.
      */
-    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+    core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 };

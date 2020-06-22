@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-class StepAndDirectionReconstructorInputCardReader : public inputCardReader
+class StepAndDirectionReconstructorInputCardReader : public io::inputCardReader
 {
 public:
     StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder);

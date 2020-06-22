@@ -7,13 +7,16 @@
 #include <string>
 #include <vector>
 
-class inputCardReader
+namespace io
 {
-public:
-    virtual ~inputCardReader() = default;
+    class inputCardReader
+    {
+    public:
+        virtual ~inputCardReader() = default;
 
-protected:
-    static nlohmann::json readFile(const std::string &fileName);
-    static std::string removeLastSlash(const std::string &caseFolderWithSlash);
-    static std::string getRunName(const std::string &caseFolder);
-};
+    protected:
+        static nlohmann::json readFile(const std::string &fileName);
+        static std::string removeLastSlash(const std::string &caseFolderWithSlash);
+        static std::string getRunName(const std::string &caseFolder);
+    };
+}   // namespace io
