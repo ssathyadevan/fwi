@@ -73,9 +73,8 @@ if sys.platform.startswith('linux'):
         print(ind_run[5], ':')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')
         os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
-        # Using os.system('...{var1}...{var2}...{var3}...'.format(var1='...', var2='...', var3='...')) is a bit more readable. You create the string once and substitute all variables into it instead of adding multiple small strings together.
-        # Try not to mix " " and ' ' unless you need to escape the one or the other.
-        check = os.system('python3 postProcessing-python3.py ' + "-o " + ind_run[5] + " -i " + str(ind_run[0]) + ' -f ' + str(ind_run[1]) + ' -r ' + str(ind_run[6]))
+        command_line = "python3 postProcessing-python3.py -o {} -i {} -f {} -r {}".format(ind_run[5], ind_run[0], ind_run[1], ind_run[6])
+        check = os.system(command_line)
         checking_for_errors(check, current_directory)
     
     os.chdir(current_directory + '/inputFiles/default/input/')

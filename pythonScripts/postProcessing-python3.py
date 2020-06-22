@@ -45,7 +45,6 @@ forwardModels = ["integralForwardModel", "finiteDifferenceForwardModel"]
 # Input arguments
 argumentParser.add_argument("-o", "--output", type=str, required=True,
     help="Path to output directory.")
-# If we have a default for the forward model why not also a default for the inversion method? I think CG is the most stable/used method at the moment.
 argumentParser.add_argument("-i", "--inversion_method", type=str, required=True,
     choices=inversionMethods, help="Select inversion method. Allowed methods are "
     + ', '.join(inversionMethods), metavar="", default="conjugateGradientInversion")
