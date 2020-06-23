@@ -16,4 +16,3 @@ set( LIBRARY_INCLUDE_DIRS_CORE ${CMAKE_SOURCE_DIR}/libraries/core/include CACHE 
 target_include_directories(core_library PUBLIC ${LIBRARY_INCLUDE_DIRS_CORE} PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
 
 target_link_libraries(core_library Eigen3::Eigen)
-##target_link_libraries(core_library test_utils_library)
