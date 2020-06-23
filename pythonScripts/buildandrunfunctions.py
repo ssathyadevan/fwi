@@ -4,6 +4,20 @@ import json
 import numpy as np
 from pathlib import Path
 
+def run_postprocessing(parameters, directory):
+    print('Now post processing')
+    for parameter in parameters:
+        output = parameter[5]
+        inversion_method = parameter[0]
+        forward_model = parameter[1]
+        run_number = parameter[6]
+        print(output, ':')
+        os.chdir(directory[:directory.rfind('/')] + '/FWIInstall')
+        os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
+        command_line = "python3 postProcessing-python3.py -o {} -i {} -f {} -r {}".format(output, inversion_method, forward_model, run_number)
+        check = os.system(command_line)
+        checking_for_errors(check, directory)
+
 def checking_for_errors(err, current_directory):
     if err != 0:
         print('An error was found, we will not continue with the Build and Run script')

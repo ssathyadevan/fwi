@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 import os
 import sys
-import json
-from pythonScripts.buildandrunfunctions import *
+
+from pythonScripts.buildandrunfunctions import (set_jsons_todefault,
+                                                enter_description,
+                                                change_json,
+                                                checking_for_errors,
+                                                print_run,
+                                                ask_options,
+                                                install_gtest,
+                                                run_postprocessing)
 
 if sys.platform.startswith('linux'):
     mpi = (os.path.exists('/usr/bin/mpicxx') and os.path.exists('/usr/bin/mpiexec'))
@@ -77,16 +84,7 @@ if sys.platform.startswith('linux'):
                 check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
         checking_for_errors(check, current_directory)
 
+    run_postprocessing(parameters = running_table, directory = current_directory)
 
-
-    print('Now post processing')
-    for ind_run in running_table:
-        print(ind_run[5], ':')
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall')
-        os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
-        command_line = "python3 postProcessing-python3.py -o {} -i {} -f {} -r {}".format(ind_run[5], ind_run[0], ind_run[1], ind_run[6])
-        check = os.system(command_line)        
-        checking_for_errors(check, current_directory)
-    
     os.chdir(current_directory + '/inputFiles/default/input/')
     os.system('rm -r temp')

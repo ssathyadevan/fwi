@@ -19,4 +19,4 @@ if sys.platform.startswith('linux'):
     checking_for_errors(check, current_directory)
     check = os.system('sudo make install')
     checking_for_errors(check, current_directory)
-        
+
