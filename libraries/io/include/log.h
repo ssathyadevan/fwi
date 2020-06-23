@@ -112,6 +112,7 @@ namespace io
         fprintf(pStream, "%s", msg.c_str());
         fflush(pStream);
     }
+}   // namespace io
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #if defined(BUILDING_FILELOG_DLL)
@@ -125,10 +126,13 @@ namespace io
 #define FILELOG_DECLSPEC
 #endif   // _WIN32
 
+namespace io
+{
     class FILELOG_DECLSPEC FILELog : public Log<Output2FILE>
     {
     };
     // typedef Log<Output2FILE> FILELog;
+}   // namespace io
 
 #ifndef FILELOG_MAX_LEVEL
 #define FILELOG_MAX_LEVEL ldebug4
@@ -154,6 +158,8 @@ namespace io
 
 #include <windows.h>
 
+namespace io
+{
     inline std::string NowTime()
     {
         const int MAX_LEN = 200;
@@ -166,11 +172,13 @@ namespace io
         std::sprintf(result, "%s.%03ld", buffer, (long)(GetTickCount() - first) % 1000);
         return result;
     }
-
+}   // namespace io
 #else   // WIN32
 
 #include <sys/time.h>
 
+namespace io
+{
     inline std::string NowTime()
     {
         char buffer[11];
@@ -184,9 +192,11 @@ namespace io
         std::sprintf(result, "%s.%03ld", buffer, (long)tv.tv_usec / 1000);
         return result;
     }
-
+}   // namespace io
 #endif   // WIN32
 
+namespace io
+{
     inline void initLogger(const char *file, TLogLevel level)
     {
         FILELog::ReportingLevel() = level;
