@@ -37,8 +37,8 @@ int main(int argc, char **argv)
         MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
         MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
         std::vector<std::string> arguments(argv + 1, argc + argv);
-        GenericInputCardReader genericReader(arguments[0]);
-        GenericInput gInput = genericReader.getInput();
+        io::GenericInputCardReader genericReader(arguments[0]);
+        io::GenericInput gInput = genericReader.getInput();
         std::string desired_forward_model = arguments[1];
 
         std::string logFileName;
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         { //MASTER THREAD
             std::cerr << "MPI initialized with " << mpi_size << " threads." << std::endl;
             io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
-            create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+            io::create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
             clock.Start();
         }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
             L_(io::linfo) << "Visualisation of the estimated temple using FWI" ;
             io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-            create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+            io::create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
             std::string msg = clock.OutputString();
             writePlotInput(gInput, msg);
@@ -150,8 +150,8 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
     ForwardModelInterface *model;
     model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
-    MPIConjugateGradientInversion *inverse;
-    MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
+    inversionMethods::MPIConjugateGradientInversion *inverse;
+    inversionMethods::MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
     inverse = new MPIConjugateGradientInversion(model, mpiconjugategradientreader.getInput());
 
     if (mpi_rank == 0)

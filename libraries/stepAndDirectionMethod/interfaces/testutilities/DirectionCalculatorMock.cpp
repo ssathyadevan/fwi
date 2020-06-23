@@ -1,10 +1,13 @@
 #include "DirectionCalculatorMock.h"
 
-DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel) :
-    DirectionCalculator(errorFunctionalScalingfactor, forwardModel)
+namespace inversionMethods
 {
-}
+    DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel)
+        : DirectionCalculator(errorFunctionalScalingfactor, forwardModel)
+    {
+    }
 
-DirectionCalculatorMock::~DirectionCalculatorMock() {}
+    DirectionCalculatorMock::~DirectionCalculatorMock() {}
 
-core::dataGrid2D &DirectionCalculatorMock::calculateDirection(const core::dataGrid2D &, const std::vector<std::complex<double>> &) { return _direction; }
+    core::dataGrid2D &DirectionCalculatorMock::calculateDirection(const core::dataGrid2D &, const std::vector<std::complex<double>> &) { return _direction; }
+}   // namespace inversionMethods

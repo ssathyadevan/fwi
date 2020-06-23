@@ -1,18 +1,24 @@
 #include "LinearStepSizeCalculator.h"
 
-LinearStepSizeCalculator::LinearStepSizeCalculator(double start, double slope) : _start(start), _slope(slope), _iteration(0)
+namespace inversionMethods
 {
-    if(start <= 0.0 || slope <= 0.0)
+    LinearStepSizeCalculator::LinearStepSizeCalculator(double start, double slope)
+        : _start(start)
+        , _slope(slope)
+        , _iteration(0)
     {
-        throw std::invalid_argument("Invalid parameters for step choice.");
+        if(start <= 0.0 || slope <= 0.0)
+        {
+            throw std::invalid_argument("Invalid parameters for step choice.");
+        }
     }
-}
 
-LinearStepSizeCalculator::~LinearStepSizeCalculator() {}
+    LinearStepSizeCalculator::~LinearStepSizeCalculator() {}
 
-double LinearStepSizeCalculator::calculateStepSize()
-{
-    //    return _start + _iteration * _slope; //this is a linear function
+    double LinearStepSizeCalculator::calculateStepSize()
+    {
+        //    return _start + _iteration * _slope; //this is a linear function
 
-    return _start / (_slope * _iteration + 1.0);   // this is an 'inverse' function, since the only parameter that gets updated is in the denominator
-}
+        return _start / (_slope * _iteration + 1.0);   // this is an 'inverse' function, since the only parameter that gets updated is in the denominator
+    }
+}   // namespace inversionMethods

@@ -7,15 +7,18 @@
 #include <sstream>
 #include <string>
 
-class EvolutionInversionInputCardReader : public io::inputCardReader
+namespace inversionMethods
 {
-public:
-    EvolutionInversionInputCardReader(const std::string &caseFolder);
-    const EvolutionInversionInput getInput() const { return _input; }
+    class EvolutionInversionInputCardReader : public io::inputCardReader
+    {
+    public:
+        EvolutionInversionInputCardReader(const std::string &caseFolder);
+        const EvolutionInversionInput getInput() const { return _input; }
 
-private:
-    EvolutionInversionInput _input;
+    private:
+        EvolutionInversionInput _input;
 
-    const std::string _fileName = "EvolutionInversionInput.json";
-    void readJsonFile(const std::string &filePath);
-};
+        const std::string _fileName = "EvolutionInversionInput.json";
+        void readJsonFile(const std::string &filePath);
+    };
+}   // namespace inversionMethods

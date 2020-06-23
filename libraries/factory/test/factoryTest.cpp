@@ -12,7 +12,7 @@ core::grid2D getGrid()
     return grid;
 }
 
-StepAndDirectionReconstructorInput getStepAndDirectionInput()
+inversionMethods::StepAndDirectionReconstructorInput getStepAndDirectionInput()
 {
     double tolerance = 0.01;
     double startChi = 0.0;
@@ -24,7 +24,8 @@ StepAndDirectionReconstructorInput getStepAndDirectionInput()
     double derivativeStepSize = 1.0;
 
     bool doRegression = false;
-    return StepAndDirectionReconstructorInput{{tolerance, startChi, maxIterations}, {initStepiSze, slope}, {derivativeStepSize}, doRegression};
+    return inversionMethods::StepAndDirectionReconstructorInput{
+        {tolerance, startChi, maxIterations}, {initStepiSze, slope}, {derivativeStepSize}, doRegression};
 }
 
 TEST(factoryTest, expectThrowMissingForwardModelTest)
@@ -46,7 +47,7 @@ TEST(factoryTest, expectThrowMissingForwardModelTest)
     const int lengthOfPData = sources.nSrc * receivers.nRecv * frequencies.nFreq;
     const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
-    StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
     Factory factory;
     EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),
@@ -74,10 +75,10 @@ TEST(factoryTest, createFixedStepSizeConjugateGradientMethodTest)
     const int lengthOfPData = forwardModel.getSrc().nSrc * forwardModel.getRecv().nRecv * forwardModel.getFreq().nFreq;
     const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
-    StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
     Factory factory;
-    StepAndDirectionReconstructor *reconstructor;
+    inversionMethods::StepAndDirectionReconstructor *reconstructor;
     reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData);
     EXPECT_FALSE(reconstructor == nullptr);
 }
@@ -103,7 +104,7 @@ TEST(factoryTest, expectThrowStepSizeCalculatorTest)
     const int lengthOfPData = forwardModel.getSrc().nSrc * forwardModel.getRecv().nRecv * forwardModel.getFreq().nFreq;
     const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
-    StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
     Factory factory;
     EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),
@@ -131,10 +132,10 @@ TEST(factoryTest, createFixedStepSizeGradientDescentMethodTest)
     const std::string desiredStepSizeMethod = "fixedStepSize";
     const std::string desiredDirectionMethod = "gradientDescentDirection";
 
-    StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
     Factory factory;
-    StepAndDirectionReconstructor *reconstructor;
+    inversionMethods::StepAndDirectionReconstructor *reconstructor;
     reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData);
     EXPECT_FALSE(reconstructor == nullptr);
 }
@@ -161,7 +162,7 @@ TEST(factoryTest, expectThrowDirectionCalculatorTest)
     const std::string desiredStepSizeMethod = "fixedStepSize";
     const std::string desiredDirectionMethod = "";
 
-    StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
     Factory factory;
     EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),

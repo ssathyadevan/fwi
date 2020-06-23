@@ -120,8 +120,8 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     L_(io::linfo) << "Create inversionModel";
     clock_t tStartInversion = clock();
-    inversionInterface *inverse;
-    inverse = new OpenMPGradientDescentInversion(gInput, forwardmodelcontainer);
+    inversionMethods::inversionInterface *inverse;
+    inverse = new inversionMethods::OpenMPGradientDescentInversion(gInput, forwardmodelcontainer);
     clock_t tEndInversion = clock();
     L_(io::linfo) << "Inversionmodel is created in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 

@@ -147,9 +147,9 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
     model = factory.createForwardModel(gInput.caseFolder, desiredForwardModel, grid, src, recv, freq);
 
     L_(io::linfo) << "Create StepAndDirectionReconstructor";
-    StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
-    StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
-    StepAndDirectionReconstructor *reconstructor;
+    inversionMethods::StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
+    inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
+    inversionMethods::StepAndDirectionReconstructor *reconstructor;
     reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, desiredStepSize, desiredDirection, referencePressureData);
 
     L_(io::linfo) << "Estimating Chi...";

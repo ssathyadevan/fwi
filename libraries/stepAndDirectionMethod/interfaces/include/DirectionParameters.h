@@ -1,10 +1,19 @@
 #pragma once
 
-struct DirectionParameters
+namespace inversionMethods
 {
-public:
-    double derivativeStepSize;
+    struct DirectionParameters
+    {
+    public:
+        double derivativeStepSize;
 
-    DirectionParameters() : derivativeStepSize(0.0) {}
-    DirectionParameters(double derivativeStepSize_) : derivativeStepSize(derivativeStepSize_) {}
-};
+        DirectionParameters()
+            : derivativeStepSize(0.0)
+        {
+        }
+        DirectionParameters(double derivativeStepSize_)
+            : derivativeStepSize(derivativeStepSize_)
+        {
+        }
+    };
+}   // namespace inversionMethods

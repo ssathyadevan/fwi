@@ -1,12 +1,23 @@
 #pragma once
 #include "dataGrid2D.h"
 
-struct StepSizeParameters
+namespace inversionMethods
 {
-public:
-    double initialStepSize;
-    double slope;
+    struct StepSizeParameters
+    {
+    public:
+        double initialStepSize;
+        double slope;
 
-    StepSizeParameters() : initialStepSize(0.0), slope(0.0) {}
-    StepSizeParameters(double initialStepSize_, double slope_) : initialStepSize(initialStepSize_), slope(slope_) {}
-};
+        StepSizeParameters()
+            : initialStepSize(0.0)
+            , slope(0.0)
+        {
+        }
+        StepSizeParameters(double initialStepSize_, double slope_)
+            : initialStepSize(initialStepSize_)
+            , slope(slope_)
+        {
+        }
+    };
+}   // namespace inversionMethods

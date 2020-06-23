@@ -56,34 +56,34 @@ Factory::~Factory()
     }
 }
 
-inversionInterface *Factory::createInversion(
+inversionMethods::inversionInterface *Factory::createInversion(
     const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput)
 {
     if(desiredInversion == "conjugateGradientInversion")
     {
-        ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
-        _createdInversion = new ConjugateGradientInversion(forwardModel, conjugateGradientReader.getInput());
+        inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+        _createdInversion = new inversionMethods::ConjugateGradientInversion(forwardModel, conjugateGradientReader.getInput());
         return _createdInversion;
     }
 
     if(desiredInversion == "randomInversion")
     {
-        RandomInversionInputCardReader randomReader(gInput.caseFolder);
-        _createdInversion = new RandomInversion(forwardModel, randomReader.getInput());
+        inversionMethods::RandomInversionInputCardReader randomReader(gInput.caseFolder);
+        _createdInversion = new inversionMethods::RandomInversion(forwardModel, randomReader.getInput());
         return _createdInversion;
     }
 
     if(desiredInversion == "gradientDescentInversion")
     {
-        gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
-        _createdInversion = new gradientDescentInversion(forwardModel, gradientDescentReader.getInput());
+        inversionMethods::gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
+        _createdInversion = new inversionMethods::gradientDescentInversion(forwardModel, gradientDescentReader.getInput());
         return _createdInversion;
     }
 
     if(desiredInversion == "evolutionInversion")
     {
-        EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
-        _createdInversion = new EvolutionInversion(forwardModel, evolutionReader.getInput());
+        inversionMethods::EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
+        _createdInversion = new inversionMethods::EvolutionInversion(forwardModel, evolutionReader.getInput());
         return _createdInversion;
     }
     L_(io::linfo) << "The Inversion method " << desiredInversion << " was not found";
@@ -109,21 +109,22 @@ forwardModels::forwardModelInterface *Factory::createForwardModel(const std::str
     throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
 }
 
-void Factory::createStepSizeCalculator(const StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const core::grid2D &grid)
+void Factory::createStepSizeCalculator(
+    const inversionMethods::StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const core::grid2D &grid)
 {
     if(desiredStepSizeMethod == "fixedStepSize")
     {
-        _createdStepSizeCalculator = new FixedStepSizeCalculator(stepSizeParameters.initialStepSize);
+        _createdStepSizeCalculator = new inversionMethods::FixedStepSizeCalculator(stepSizeParameters.initialStepSize);
         return;
     }
     if(desiredStepSizeMethod == "BorzilaiBorwein")
     {
-        _createdStepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
+        _createdStepSizeCalculator = new inversionMethods::BorzilaiBorweinStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
         return;
     }
     if(desiredStepSizeMethod == "ConjugateGradient")
     {
-        _createdStepSizeCalculator = new ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
+        _createdStepSizeCalculator = new inversionMethods::ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
         return;
     }
 
@@ -142,41 +143,41 @@ bool Factory::splittableInversion(const std::string inversionMethod)
     return splittable;
 }
 
-void Factory::createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
+void Factory::createDirectionCalculator(const inversionMethods::DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
     forwardModels::forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
     const double errorFunctionalScalingFactor = 1.0 / (forwardModels::normSq(pData, pData.size()));
 
     if(desiredDirectionMethod == "conjugateGradientDirection")
     {
-        _createdDirectionCalculator = new ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
+        _createdDirectionCalculator = new inversionMethods::ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
         return;
     }
     if(desiredDirectionMethod == "gradientDescentDirection")
     {
         _createdDirectionCalculator =
-            new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
+            new inversionMethods::GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
         return;
     }
     L_(io::linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
 
-void Factory::createCombinedDirectionAndStepSize(forwardModels::forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
-    const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
-    const std::string &desiredCombinedDirectionAndStepSizeMethod)
+void Factory::createCombinedDirectionAndStepSize(forwardModels::forwardModelInterface *forwardModel,
+    const inversionMethods::StepSizeParameters &stepSizeParameters, const inversionMethods::ReconstructorParameters &reconstructorParameters,
+    const std::vector<std::complex<double>> &pData, const std::string &desiredCombinedDirectionAndStepSizeMethod)
 {   // desiredCombinedDirectionAndStepSizeMethod is actually desiredStepSizeMethod
     if(desiredCombinedDirectionAndStepSizeMethod == "conjugateGradientRegularisation")
     {
-        ConjugateGradientWithRegularisationParametersInput cgParametersInput;
+        inversionMethods::ConjugateGradientWithRegularisationParametersInput cgParametersInput;
         cgParametersInput._tolerance = reconstructorParameters.tolerance;
         cgParametersInput._nIterations = reconstructorParameters.maxIterationsNumber;
         cgParametersInput._deltaAmplification._slope = stepSizeParameters.slope;
         cgParametersInput._deltaAmplification._start = stepSizeParameters.initialStepSize;
 
         const double errorFunctionalScalingFactor = 1.0 / (forwardModels::normSq(pData, pData.size()));
-        ConjugateGradientWithRegularisationCalculator *OneInstance =
-            new ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
+        inversionMethods::ConjugateGradientWithRegularisationCalculator *OneInstance =
+            new inversionMethods::ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
         _createdStepSizeCalculator = OneInstance;
         _createdDirectionCalculator = OneInstance;
         return;
@@ -186,9 +187,9 @@ void Factory::createCombinedDirectionAndStepSize(forwardModels::forwardModelInte
     throw std::invalid_argument("The combined Direction and StepSize method " + desiredCombinedDirectionAndStepSizeMethod + " was not found");
 }
 
-StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
-    forwardModels::forwardModelInterface *forwardModel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
-    const std::vector<std::complex<double>> &pData)
+inversionMethods::StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(
+    const inversionMethods::StepAndDirectionReconstructorInput &stepAndDirectionInput, forwardModels::forwardModelInterface *forwardModel,
+    const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData)
 {
     checkForwardModelExistence(forwardModel);
 
@@ -207,8 +208,8 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
             forwardModel, stepAndDirectionInput.stepSizeParameters, stepAndDirectionInput.reconstructorParameters, pData, desiredStepSizeMethod);
     }
 
-    _createdReconstructor =
-        new StepAndDirectionReconstructor(_createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
+    _createdReconstructor = new inversionMethods::StepAndDirectionReconstructor(
+        _createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
 
     return _createdReconstructor;
 }

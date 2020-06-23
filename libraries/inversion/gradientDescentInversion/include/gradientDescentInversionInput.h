@@ -1,10 +1,12 @@
 #pragma once
 
-
-struct gradientDescentInversionInput
+namespace inversionMethods
 {
-    double gamma0;
-    double x0;
-    double h;
-    int iter;
-};
+    struct gradientDescentInversionInput
+    {
+        double gamma0;
+        double x0;
+        double h;
+        int iter;
+    };
+}   // namespace inversionMethods

@@ -1,18 +1,22 @@
 #include "ConjugateGradientDirectionCalculator.h"
 
-ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardmodel) :
-    DirectionCalculator(errorFunctionalScalingFactor, forwardmodel)
+namespace inversionMethods
 {
-}
+    ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(
+        double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardmodel)
+        : DirectionCalculator(errorFunctionalScalingFactor, forwardmodel)
+    {
+    }
 
-ConjugateGradientDirectionCalculator::~ConjugateGradientDirectionCalculator() {}
+    ConjugateGradientDirectionCalculator::~ConjugateGradientDirectionCalculator() {}
 
-core::dataGrid2D &ConjugateGradientDirectionCalculator::calculateDirection(const core::dataGrid2D &chi, const std::vector<std::complex<double>> &residual)
-{
-    core::complexDataGrid2D kappaTimesResidual(chi.getGrid());
+    core::dataGrid2D &ConjugateGradientDirectionCalculator::calculateDirection(const core::dataGrid2D &chi, const std::vector<std::complex<double>> &residual)
+    {
+        core::complexDataGrid2D kappaTimesResidual(chi.getGrid());
 
-    _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
-    _direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
+        _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
+        _direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
 
-    return _direction;
-}
+        return _direction;
+    }
+}   // namespace inversionMethods

@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     {
         L_(io::lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
         L_(io::lerror) << "Make sure the input folder inside the case folder contains the files genericInput.json, FMInput.json and RandomInversionInput.json"
-                   << std::endl;
+                       << std::endl;
 
         exit(EXIT_FAILURE);
     }
@@ -130,9 +130,9 @@ void performInversion(const io::genericInput &gInput)
 
     L_(io::linfo) << "Create inversionModel";
     clock_t tStartInversion = clock();
-    inversionInterface *inverse;
-    RandomInversionInputCardReader randomreader(gInput.caseFolder);
-    inverse = new RandomInversion(model, randomreader.getInput());
+    inversionMethods::inversionInterface *inverse;
+    inversionMethods::RandomInversionInputCardReader randomreader(gInput.caseFolder);
+    inverse = new inversionMethods::RandomInversion(model, randomreader.getInput());
     clock_t tEndInversion = clock();
     L_(io::linfo) << "Inversionmodel is created in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 

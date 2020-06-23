@@ -1,8 +1,11 @@
 #pragma once
 
-struct EvolutionInversionInput
+namespace inversionMethods
 {
-    double toleranceOuter;
-    int nGenerations;
-    int nChildrenPerGeneration;
-};
+    struct EvolutionInversionInput
+    {
+        double toleranceOuter;
+        int nGenerations;
+        int nChildrenPerGeneration;
+    };
+}   // namespace inversionMethods

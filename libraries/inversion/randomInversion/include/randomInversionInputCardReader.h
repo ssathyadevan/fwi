@@ -6,15 +6,18 @@
 #include <sstream>
 #include <string>
 
-class RandomInversionInputCardReader : public io::inputCardReader
+namespace inversionMethods
 {
-private:
-    RandomInversionInput _input;
+    class RandomInversionInputCardReader : public io::inputCardReader
+    {
+    private:
+        RandomInversionInput _input;
 
-    const std::string _fileName = "RandomInversionInput.json";
-    void readJsonFile(const std::string &filePath);
+        const std::string _fileName = "RandomInversionInput.json";
+        void readJsonFile(const std::string &filePath);
 
-public:
-    RandomInversionInputCardReader(const std::string &caseFolder);
-    const RandomInversionInput getInput() const { return _input; }
-};
+    public:
+        RandomInversionInputCardReader(const std::string &caseFolder);
+        const RandomInversionInput getInput() const { return _input; }
+    };
+}   // namespace inversionMethods

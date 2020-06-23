@@ -1,8 +1,11 @@
 #pragma once
 
-struct RandomInversionInput
+namespace inversionMethods
 {
-    double toleranceOuter;
-    int nMaxOuter;
-    int nMaxInner;
-};
+    struct RandomInversionInput
+    {
+        double toleranceOuter;
+        int nMaxOuter;
+        int nMaxInner;
+    };
+}   // namespace inversionMethods

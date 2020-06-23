@@ -130,9 +130,9 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     L_(io::linfo) << "Execute inversion";
     clock_t tStartInversion = clock();
-    inversionInterface *inverse;
-    ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
-    inverse = new ConjugateGradientInversion(model, conjugategradientreader.getInput());
+    inversionMethods::inversionInterface *inverse;
+    inversionMethods::ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
+    inverse = new inversionMethods::ConjugateGradientInversion(model, conjugategradientreader.getInput());
     clock_t tEndInversion = clock();
     L_(io::linfo) << "Inversion is executed in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 

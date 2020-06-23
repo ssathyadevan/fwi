@@ -1,9 +1,12 @@
 #pragma once
 #include "DeltaAmplification.h"
 
-struct ConjugateGradientWithRegularisationParametersInput
+namespace inversionMethods
 {
-    DeltaAmplification _deltaAmplification;
-    int _nIterations;
-    double _tolerance;
-};
+    struct ConjugateGradientWithRegularisationParametersInput
+    {
+        DeltaAmplification _deltaAmplification;
+        int _nIterations;
+        double _tolerance;
+    };
+}   // namespace inversionMethods

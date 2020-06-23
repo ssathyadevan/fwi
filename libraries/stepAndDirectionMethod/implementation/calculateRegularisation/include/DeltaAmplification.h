@@ -1,8 +1,10 @@
 #pragma once
 
-struct DeltaAmplification
+namespace inversionMethods
 {
-    double _start;
-    double _slope;
-};
-
+    struct DeltaAmplification
+    {
+        double _start;
+        double _slope;
+    };
+}   // namespace inversionMethods
