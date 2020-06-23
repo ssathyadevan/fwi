@@ -547,8 +547,6 @@ A first remark is that in the implemented code it is absolutely not clear which 
 During every iteration in the \textit{main loop}, indexed by $n$, we will perform the following operations:}
 \begin{enumerate}
 \item (Line 39) using the most recent approximation of $\chi_{est} $ (for $n=0$ we have $\chi_{est} \equiv 0$), we update $[\mathcal{K}_\chi]$ following eq. \eqref{eq:modelledDataGreensConv}. 
-{During this operation what is computed is actually eq. \eqref{eq:modelledDataGreensConv} assuming $\chi \equiv 1$. When invoking $\_forwardModel\rightarrow calculateKappa()$ there are no mentions of $\chi$, but uniquely to $\mathcal{G}$ and $p^{tot}$.
-}
 \item (Line 40) Update the residual $r_n$ following eq. \eqref{eq:residualMeasureModel}.
 {\item (Line 43) Update the undocumented parameter $\delta^{ampl}_n = \frac{\delta^{ampl}_{start}}{(n \ \delta^{ampl}_{slope}) +1}$.}
 \item (Line 52) update $\zeta_n$ according to eq. \eqref{eq:updateDirectionsCG}. At the moment the default values are $\delta^{ampl}_{start} =100$, $\delta^{ampl}_{slope} =10$.
@@ -717,20 +715,12 @@ A combination of removing the $cellVolume$ multiplication in \eqref{eq:RegPrevio
 If we instead run the regression tests without $cellVolume$ together with $n_{max} =25$, $j_{max} =2$ (for a total of 50 steps) we find that every single test has improved precision and slight faster processing.
 This combination is also more precise than the benchmark simulations in 6 tests out of 8 (excluding \textit{small grid} and \textit{High quality}, where the values are however comparable).
 
-\subparagraph*{$\mathcal{K}_\chi$ computation in \textit{forwardModel}}
-We mentioned that no $\chi$ is present in the actual computation. Trying to change this part requires a lot of modifications to the \textit{forwardModel} classes, and tests regarding this point have not been carried on yet. 
 
 \textcolor{red}
 {\section{Conclusions}}
 While researching the origin of the undocumented parts of the code I realized that these parts have been implemented since a long time, since the beginning of the git tree. 
 
-The presence of these not validated part might be a trial and error procedure to improve the performances of the inversion process, but this is not clear.
-
-%The inner loop has been there since commit '45d3308' from 29/12/2016, while the first instance of any $delta\_amplification$ is commit '3ea4ba0b' from 09/11/2018.
-%There are a few other incongruencies as well that I still have not tracked down (see for example eq. \eqref{eq:errorFuncRegulSteering} vs eq. \eqref{eq:errorFuncRegulSteeringWrong}) .
-
-%I could not recover any document pertaining to these modifications, although I believe some should have existed at the time, but not in the repository.
-
+The presence of these not validated parts might be a trial and error procedure to improve the performances of the inversion process, but this is not clear.
 
 This makes the validation of the implemented code extremely hard, since there is no mathematical proof that those undocumented parts improve the performances, either in speed or precision.
 
@@ -742,7 +732,7 @@ An implementation of the Conjugate Gradient with Regularisation algorithm that f
 The extimated time to create such new class would approximately be a couple of days, as most of the code can be recycled.
 Note that at the moment there is no test for the 'StepSize' part.
 
-A validated version of this algorithm could also bring more meaning to regression tests and in future to performance comparing of different algorithms.
+A validated version of this algorithm could also bring more meaning to regression tests and in future to performance comparison of different algorithms.
 
 
 \appendix
