@@ -6,22 +6,25 @@
 #include <sstream>
 #include <string>
 
-namespace inversionMethods
+namespace fwi
 {
-    class StepAndDirectionReconstructorInputCardReader : public io::inputCardReader
+    namespace inversionMethods
     {
-    public:
-        StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder);
-        const StepAndDirectionReconstructorInput getInput() const { return _input; }
+        class StepAndDirectionReconstructorInputCardReader : public io::inputCardReader
+        {
+        public:
+            StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder);
+            const StepAndDirectionReconstructorInput getInput() const { return _input; }
 
-    private:
-        const std::string _fileName = "StepAndDirectionInput.json";
-        void readJsonFile(const std::string &filePath);
+        private:
+            const std::string _fileName = "StepAndDirectionInput.json";
+            void readJsonFile(const std::string &filePath);
 
-        void readReconstructorParameters(const nlohmann::json &jsonFile);
-        void readStepSizeParameters(const nlohmann::json &jsonFile);
-        void readDirectionParameters(const nlohmann::json &jsonFile);
+            void readReconstructorParameters(const nlohmann::json &jsonFile);
+            void readStepSizeParameters(const nlohmann::json &jsonFile);
+            void readDirectionParameters(const nlohmann::json &jsonFile);
 
-        StepAndDirectionReconstructorInput _input;
-    };
-}   // namespace inversionMethods
+            StepAndDirectionReconstructorInput _input;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

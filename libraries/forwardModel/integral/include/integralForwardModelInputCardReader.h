@@ -7,18 +7,21 @@
 #include <string>
 #include <vector>
 
-namespace forwardModels
+namespace fwi
 {
-    class integralForwardModelInputCardReader : public io::inputCardReader
+    namespace forwardModels
     {
-    public:
-        integralForwardModelInputCardReader(const std::string &caseFolder);
-        const integralForwardModelInput getInput() const { return _input; }
+        class integralForwardModelInputCardReader : public io::inputCardReader
+        {
+        public:
+            integralForwardModelInputCardReader(const std::string &caseFolder);
+            const integralForwardModelInput getInput() const { return _input; }
 
-    private:
-        const std::string _fileName = "IntegralFMInput.json";
-        integralForwardModelInput _input;
-        void readJsonFile(const std::string &filePath);
-        void readIterParameters(const nlohmann::json &jsonFile);
-    };
-}   // namespace forwardModels
+        private:
+            const std::string _fileName = "IntegralFMInput.json";
+            integralForwardModelInput _input;
+            void readJsonFile(const std::string &filePath);
+            void readIterParameters(const nlohmann::json &jsonFile);
+        };
+    }   // namespace forwardModels
+}   // namespace fwi

@@ -3,14 +3,17 @@
 #include "dataGrid2D.h"
 #include <complex>
 
-namespace inversionMethods
+namespace fwi
 {
-    class inversionInterface
+    namespace inversionMethods
     {
-    public:
-        inversionInterface() {}
-        virtual ~inversionInterface() = default;
+        class inversionInterface
+        {
+        public:
+            inversionInterface() {}
+            virtual ~inversionInterface() = default;
 
-        virtual core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &p_data, io::genericInput input) = 0;
-    };
-}   // namespace inversionMethods
+            virtual core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &p_data, io::genericInput input) = 0;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

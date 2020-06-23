@@ -8,31 +8,34 @@
 #include <unistd.h>      //STDOUT_FILENO
 #endif
 
-namespace io
+namespace fwi
 {
-    class progressBar
+    namespace io
     {
-    private:
-        int _total;
-        int _counter;
-        int _terminalWidth;
-        int findTerminalSize();
-        void hideCursor();
-        void showCursor();
+        class progressBar
+        {
+        private:
+            int _total;
+            int _counter;
+            int _terminalWidth;
+            int findTerminalSize();
+            void hideCursor();
+            void showCursor();
 
-    public:
-        ~progressBar();
-        progressBar(const int total = 100, const int counter = 0);
-        void setCounter(const int counter);
-        void setTerminalWidth(const int width);
-        void setTotal(const int total);
-        int getCounter() const;
-        int getTotal() const;
-        void print() const;
-        void initBar() const;
-        progressBar &operator++();
-        progressBar &operator++(int);
-        progressBar &operator--();
-        progressBar &operator--(int);
-    };
-}   // namespace io
+        public:
+            ~progressBar();
+            progressBar(const int total = 100, const int counter = 0);
+            void setCounter(const int counter);
+            void setTerminalWidth(const int width);
+            void setTotal(const int total);
+            int getCounter() const;
+            int getTotal() const;
+            void print() const;
+            void initBar() const;
+            progressBar &operator++();
+            progressBar &operator++(int);
+            progressBar &operator--();
+            progressBar &operator--(int);
+        };
+    }   // namespace io
+}   // namespace fwi

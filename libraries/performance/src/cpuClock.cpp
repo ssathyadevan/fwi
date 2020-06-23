@@ -45,66 +45,69 @@ namespace
 
 }   // namespace
 
-namespace performance
+namespace fwi
 {
-    CpuClock::CpuClock() {}
-    CpuClock::~CpuClock() {}
-
-    void CpuClock::Start()
+    namespace performance
     {
-        start = std::chrono::system_clock::now();
-        L_(io::linfo) << "Starting";
-        long dummy;
-        MemoryUse(dummy, dummy);
-        t_start = clock();
-    }
+        CpuClock::CpuClock() {}
+        CpuClock::~CpuClock() {}
 
-    void CpuClock::End()
-    {
-        finish = std::chrono::system_clock::now();
-        L_(io::linfo) << "Finished";
-        long dummy;
-        MemoryUse(dummy, dummy);
-        t_end = clock();
-    }
+        void CpuClock::Start()
+        {
+            start = std::chrono::system_clock::now();
+            L_(io::linfo) << "Starting";
+            long dummy;
+            MemoryUse(dummy, dummy);
+            t_start = clock();
+        }
 
-    std::string CpuClock::OutputString()
-    {
-        L_(io::linfo) << "CPU time: " << (double(t_end - t_start)) / CLOCKS_PER_SEC << " seconds";
-        L_(io::linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000)
-                      << "seconds";   // nanosec / 10^9 = sec
-        long virtual_mem, physical_mem;
-        MemoryUse(virtual_mem, physical_mem);
-        std::stringstream ss;
-        ss << "Timing:" << std::endl;
-        ss << "Starting at " << start.time_since_epoch().count() << std::endl;
-        ss << "Finished at " << finish.time_since_epoch().count() << std::endl;
-        ss << "CPU time: " << (double(t_end - t_start)) / CLOCKS_PER_SEC << std::endl;
-        ss << std::endl << "Others:" << std::endl;
-        ss << "Virtual memory: " << virtual_mem << std::endl;
-        ss << "Physical memory: " << physical_mem << std::endl;
+        void CpuClock::End()
+        {
+            finish = std::chrono::system_clock::now();
+            L_(io::linfo) << "Finished";
+            long dummy;
+            MemoryUse(dummy, dummy);
+            t_end = clock();
+        }
 
-        return ss.str();
-    }
+        std::string CpuClock::OutputString()
+        {
+            L_(io::linfo) << "CPU time: " << (double(t_end - t_start)) / CLOCKS_PER_SEC << " seconds";
+            L_(io::linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000)
+                          << "seconds";   // nanosec / 10^9 = sec
+            long virtual_mem, physical_mem;
+            MemoryUse(virtual_mem, physical_mem);
+            std::stringstream ss;
+            ss << "Timing:" << std::endl;
+            ss << "Starting at " << start.time_since_epoch().count() << std::endl;
+            ss << "Finished at " << finish.time_since_epoch().count() << std::endl;
+            ss << "CPU time: " << (double(t_end - t_start)) / CLOCKS_PER_SEC << std::endl;
+            ss << std::endl << "Others:" << std::endl;
+            ss << "Virtual memory: " << virtual_mem << std::endl;
+            ss << "Physical memory: " << physical_mem << std::endl;
 
-    void CpuClock::MemoryUse(long &virtual_mem, long &physical_mem)
-    {
+            return ss.str();
+        }
+
+        void CpuClock::MemoryUse(long &virtual_mem, long &physical_mem)
+        {
 #if __unix__
-        virtual_mem = getValue("VmSize:");
-        physical_mem = getValue("VmRSS:");
+            virtual_mem = getValue("VmSize:");
+            physical_mem = getValue("VmRSS:");
 #else
-        // PROCESS_MEMORY_COUNTERS_EX pmc;
-        // GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-        // SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-        // SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
-        // virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
-        // physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
-        virtual_mem = 0;
-        physical_mem = 0;
+            // PROCESS_MEMORY_COUNTERS_EX pmc;
+            // GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+            // SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
+            // SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+            // virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
+            // physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
+            virtual_mem = 0;
+            physical_mem = 0;
 #endif
-        L_(io::ldebug) << "Virtual memory used: " << virtual_mem << " kB";
-        L_(io::ldebug) << "Physical memory used: " << physical_mem << " kB";
-        return;
-    }
+            L_(io::ldebug) << "Virtual memory used: " << virtual_mem << " kB";
+            L_(io::ldebug) << "Physical memory used: " << physical_mem << " kB";
+            return;
+        }
 
-}   // namespace performance
+    }   // namespace performance
+}   // namespace fwi

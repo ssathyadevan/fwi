@@ -1,364 +1,367 @@
 #include "dataGrid2D.h"
 #include "log.h"
 
-namespace core
+namespace fwi
 {
-    dataGrid2D::dataGrid2D(const grid2D &grid)
-        : _grid(grid)
-        , _data(std::vector<double>(getNumberOfGridPoints(), 0.0))
+    namespace core
     {
-    }
-
-    dataGrid2D::dataGrid2D(const dataGrid2D &rhs)
-        : dataGrid2D(rhs._grid)
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); ++i)
+        dataGrid2D::dataGrid2D(const grid2D &grid)
+            : _grid(grid)
+            , _data(std::vector<double>(getNumberOfGridPoints(), 0.0))
         {
-            _data[i] = rhs._data[i];
         }
-    }
 
-    void dataGrid2D::zero()
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); ++i)
+        dataGrid2D::dataGrid2D(const dataGrid2D &rhs)
+            : dataGrid2D(rhs._grid)
         {
-            _data[i] = 0;
-        }
-    }
-
-    void dataGrid2D::square()
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            _data[i] *= _data[i];
-        }
-    }
-
-    void dataGrid2D::sqrt()
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            _data[i] = std::sqrt(_data[i]);
-        }
-    }
-
-    void dataGrid2D::reciprocal()
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            if(_data[i] == 0.0)
+            for(int i = 0; i < getNumberOfGridPoints(); ++i)
             {
-                throw std::overflow_error("reciprocal devides by zero");
-            }
-
-            _data[i] = 1.0 / _data[i];
-        }
-    }
-
-    double dataGrid2D::summation() const
-    {
-        double result = 0.0;
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            result += _data[i];
-        }
-        return result;
-    }
-
-    double dataGrid2D::innerProduct(const dataGrid2D &rhs) const
-    {
-        assert(getGrid() == rhs.getGrid());
-        double sum = 0.0;
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            sum += _data[i] * rhsData[i];
-        }
-        return sum;
-    }
-
-    void dataGrid2D::gradient(std::vector<dataGrid2D> &gradientField) const
-    {
-        const std::array<int, 2> &nx = getGrid().getGridDimensions();
-        const std::array<double, 2> &dx = getGrid().getCellDimensions();
-
-        for(int i = 0; i < nx[1]; i++)
-        {
-            for(int j = 0; j < nx[0]; j++)
-            {
-                int index = i * nx[0] + j;
-
-                // direction 1 dx
-                double gradientDx;
-                if(j == 0)
-                {
-                    gradientDx = (_data[i * nx[0] + j + 2] - 4 * _data[i * nx[0] + j + 1] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[0]);
-                }
-                else if(j == nx[0] - 1)
-                {
-                    gradientDx = (_data[i * nx[0] + j - 2] - 4 * _data[i * nx[0] + j - 1] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[0]);
-                }
-                else
-                {
-                    gradientDx = (_data[i * nx[0] + j + 1] - _data[i * nx[0] + j - 1]) / (2.0 * dx[0]);
-                }
-                gradientField[0].setValueAtIndex(gradientDx, index);
-
-                // direction 2 dz
-                double gradientDz;
-                if(i == 0)
-                {
-                    gradientDz = (_data[(i + 2) * nx[0] + j] - 4 * _data[(i + 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[1]);
-                }
-                else if(i == nx[1] - 1)
-                {
-                    gradientDz = (_data[(i - 2) * nx[0] + j] - 4 * _data[(i - 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[1]);
-                }
-                else
-                {
-                    gradientDz = (_data[(i + 1) * nx[0] + j] - _data[(i - 1) * nx[0] + j]) / (2.0 * dx[1]);
-                }
-                gradientField[1].setValueAtIndex(gradientDz, index);
+                _data[i] = rhs._data[i];
             }
         }
-    }
 
-    void dataGrid2D::toFile(const std::string &filePath) const
-    {
-        std::ofstream file;
-        file.open(filePath, std::ios::out | std::ios::trunc);
-        if(file.is_open())
+        void dataGrid2D::zero()
+        {
+            for(int i = 0; i < getNumberOfGridPoints(); ++i)
+            {
+                _data[i] = 0;
+            }
+        }
+
+        void dataGrid2D::square()
         {
             for(int i = 0; i < getNumberOfGridPoints(); i++)
             {
-                file << std::setprecision(17) << _data[i] << std::endl;
+                _data[i] *= _data[i];
             }
-            file.close();
         }
-        else
-        {
-            throw std::runtime_error("Unable to write dataGrid2D to file: " + filePath);
-        }
-    }
 
-    void dataGrid2D::fromFile(const std::string &filePath)
-    {
-        std::ifstream file(filePath, std::ios::in);
-        if(file.is_open())
+        void dataGrid2D::sqrt()
         {
             for(int i = 0; i < getNumberOfGridPoints(); i++)
             {
-                file >> _data[i];
+                _data[i] = std::sqrt(_data[i]);
             }
-            file.close();
         }
-        else
-        {
-            throw std::runtime_error("Unable to load dataGrid2D from file: " + filePath);
-        }
-    }
 
-    void dataGrid2D::random()
-    {
-        for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
+        void dataGrid2D::reciprocal()
         {
-            _data[i] = double(std::rand()) / double(RAND_MAX);
-        }
-    }
-
-    void dataGrid2D::randomSaurabh()
-    {
-        for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
-        {
-            int temp = rand() % 1800;
-            _data[i] = (double)temp / 10000;
-        }
-    }
-
-    void dataGrid2D::randomChild(const dataGrid2D &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution)
-    {
-        for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
-        {
-            double temp = distribution(generator);
-            _data[i] = parent._data[i] + temp;
-            if(_data[i] > 0.18)
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
             {
-                _data[i] -= 0.18;   // If larger than 0.18, loops back from 0
+                if(_data[i] == 0.0)
+                {
+                    throw std::overflow_error("reciprocal devides by zero");
+                }
+
+                _data[i] = 1.0 / _data[i];
             }
-            if(_data[i] < 0.00)
+        }
+
+        double dataGrid2D::summation() const
+        {
+            double result = 0.0;
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
             {
-                _data[i] += 0.18;   // If negative, loops back from 0.18
+                result += _data[i];
+            }
+            return result;
+        }
+
+        double dataGrid2D::innerProduct(const dataGrid2D &rhs) const
+        {
+            assert(getGrid() == rhs.getGrid());
+            double sum = 0.0;
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                sum += _data[i] * rhsData[i];
+            }
+            return sum;
+        }
+
+        void dataGrid2D::gradient(std::vector<dataGrid2D> &gradientField) const
+        {
+            const std::array<int, 2> &nx = getGrid().getGridDimensions();
+            const std::array<double, 2> &dx = getGrid().getCellDimensions();
+
+            for(int i = 0; i < nx[1]; i++)
+            {
+                for(int j = 0; j < nx[0]; j++)
+                {
+                    int index = i * nx[0] + j;
+
+                    // direction 1 dx
+                    double gradientDx;
+                    if(j == 0)
+                    {
+                        gradientDx = (_data[i * nx[0] + j + 2] - 4 * _data[i * nx[0] + j + 1] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[0]);
+                    }
+                    else if(j == nx[0] - 1)
+                    {
+                        gradientDx = (_data[i * nx[0] + j - 2] - 4 * _data[i * nx[0] + j - 1] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[0]);
+                    }
+                    else
+                    {
+                        gradientDx = (_data[i * nx[0] + j + 1] - _data[i * nx[0] + j - 1]) / (2.0 * dx[0]);
+                    }
+                    gradientField[0].setValueAtIndex(gradientDx, index);
+
+                    // direction 2 dz
+                    double gradientDz;
+                    if(i == 0)
+                    {
+                        gradientDz = (_data[(i + 2) * nx[0] + j] - 4 * _data[(i + 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[1]);
+                    }
+                    else if(i == nx[1] - 1)
+                    {
+                        gradientDz = (_data[(i - 2) * nx[0] + j] - 4 * _data[(i - 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[1]);
+                    }
+                    else
+                    {
+                        gradientDz = (_data[(i + 1) * nx[0] + j] - _data[(i - 1) * nx[0] + j]) / (2.0 * dx[1]);
+                    }
+                    gradientField[1].setValueAtIndex(gradientDz, index);
+                }
             }
         }
-    }
 
-    // Operators
-    dataGrid2D &dataGrid2D::operator=(const dataGrid2D &rhs)
-    {
-        if(this == &rhs)
+        void dataGrid2D::toFile(const std::string &filePath) const
         {
-            throw std::logic_error("Assign operator with itself");
+            std::ofstream file;
+            file.open(filePath, std::ios::out | std::ios::trunc);
+            if(file.is_open())
+            {
+                for(int i = 0; i < getNumberOfGridPoints(); i++)
+                {
+                    file << std::setprecision(17) << _data[i] << std::endl;
+                }
+                file.close();
+            }
+            else
+            {
+                throw std::runtime_error("Unable to write dataGrid2D to file: " + filePath);
+            }
         }
 
-        assert(getGrid() == rhs.getGrid());
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); ++i)
+        void dataGrid2D::fromFile(const std::string &filePath)
         {
-            _data[i] = rhsData[i];
+            std::ifstream file(filePath, std::ios::in);
+            if(file.is_open())
+            {
+                for(int i = 0; i < getNumberOfGridPoints(); i++)
+                {
+                    file >> _data[i];
+                }
+                file.close();
+            }
+            else
+            {
+                throw std::runtime_error("Unable to load dataGrid2D from file: " + filePath);
+            }
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator=(const std::vector<double> &data)
-    {
-        assert(getNumberOfGridPoints() == (int)data.size());
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        void dataGrid2D::random()
         {
-            _data[i] = data[i];
+            for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
+            {
+                _data[i] = double(std::rand()) / double(RAND_MAX);
+            }
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator=(const double value)
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        void dataGrid2D::randomSaurabh()
         {
-            _data[i] = value;
+            for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
+            {
+                int temp = rand() % 1800;
+                _data[i] = (double)temp / 10000;
+            }
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator+=(const dataGrid2D &rhs)
-    {
-        assert(getGrid() == rhs.getGrid());
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        void dataGrid2D::randomChild(const dataGrid2D &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution)
         {
-            _data[i] += rhsData[i];
+            for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
+            {
+                double temp = distribution(generator);
+                _data[i] = parent._data[i] + temp;
+                if(_data[i] > 0.18)
+                {
+                    _data[i] -= 0.18;   // If larger than 0.18, loops back from 0
+                }
+                if(_data[i] < 0.00)
+                {
+                    _data[i] += 0.18;   // If negative, loops back from 0.18
+                }
+            }
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator+=(const std::vector<double> &data)
-    {
-        assert(getNumberOfGridPoints() == (int)data.size());
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        // Operators
+        dataGrid2D &dataGrid2D::operator=(const dataGrid2D &rhs)
         {
-            _data[i] += data[i];
+            if(this == &rhs)
+            {
+                throw std::logic_error("Assign operator with itself");
+            }
+
+            assert(getGrid() == rhs.getGrid());
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); ++i)
+            {
+                _data[i] = rhsData[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator+=(const double value)
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator=(const std::vector<double> &data)
         {
-            _data[i] += value;
+            assert(getNumberOfGridPoints() == (int)data.size());
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] = data[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator-=(const dataGrid2D &rhs)
-    {
-        assert(getGrid() == rhs.getGrid());
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator=(const double value)
         {
-            _data[i] -= rhsData[i];
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] = value;
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator-=(const std::vector<double> &data)
-    {
-        assert(getNumberOfGridPoints() == (int)data.size());
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator+=(const dataGrid2D &rhs)
         {
-            _data[i] -= data[i];
+            assert(getGrid() == rhs.getGrid());
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] += rhsData[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator-=(const double value)
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator+=(const std::vector<double> &data)
         {
-            _data[i] -= value;
+            assert(getNumberOfGridPoints() == (int)data.size());
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] += data[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator*=(const dataGrid2D &rhs)
-    {
-        assert(getGrid() == rhs.getGrid());
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator+=(const double value)
         {
-            _data[i] *= rhsData[i];
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] += value;
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator*=(const std::vector<double> &data)
-    {
-        assert(getNumberOfGridPoints() == (int)data.size());
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator-=(const dataGrid2D &rhs)
         {
-            _data[i] *= data[i];
+            assert(getGrid() == rhs.getGrid());
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] -= rhsData[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator*=(const double value)
-    {
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator-=(const std::vector<double> &data)
         {
-            _data[i] *= value;
+            assert(getNumberOfGridPoints() == (int)data.size());
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] -= data[i];
+            }
+            return *this;
         }
-        return *this;
-    }
 
-    dataGrid2D &dataGrid2D::operator/=(const dataGrid2D &rhs)
-    {
-        assert(getGrid() == rhs.getGrid());
-        const std::vector<double> &rhsData = rhs.getData();
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
+        dataGrid2D &dataGrid2D::operator-=(const double value)
         {
-            if(rhsData[i] == 0.0)
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] -= value;
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator*=(const dataGrid2D &rhs)
+        {
+            assert(getGrid() == rhs.getGrid());
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] *= rhsData[i];
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator*=(const std::vector<double> &data)
+        {
+            assert(getNumberOfGridPoints() == (int)data.size());
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] *= data[i];
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator*=(const double value)
+        {
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                _data[i] *= value;
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator/=(const dataGrid2D &rhs)
+        {
+            assert(getGrid() == rhs.getGrid());
+            const std::vector<double> &rhsData = rhs.getData();
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                if(rhsData[i] == 0.0)
+                {
+                    throw std::overflow_error("Operator divides by zero");
+                }
+
+                _data[i] /= rhsData[i];
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator/=(const std::vector<double> &data)
+        {
+            assert(getNumberOfGridPoints() == (int)data.size());
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
+            {
+                if(data[i] == 0.0)
+                {
+                    throw std::overflow_error("Operator divides by zero");
+                }
+                _data[i] /= data[i];
+            }
+            return *this;
+        }
+
+        dataGrid2D &dataGrid2D::operator/=(const double value)
+        {
+            if(value == 0.0)
             {
                 throw std::overflow_error("Operator divides by zero");
             }
 
-            _data[i] /= rhsData[i];
-        }
-        return *this;
-    }
-
-    dataGrid2D &dataGrid2D::operator/=(const std::vector<double> &data)
-    {
-        assert(getNumberOfGridPoints() == (int)data.size());
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            if(data[i] == 0.0)
+            for(int i = 0; i < getNumberOfGridPoints(); i++)
             {
-                throw std::overflow_error("Operator divides by zero");
+                _data[i] /= value;
             }
-            _data[i] /= data[i];
+            return *this;
         }
-        return *this;
-    }
-
-    dataGrid2D &dataGrid2D::operator/=(const double value)
-    {
-        if(value == 0.0)
-        {
-            throw std::overflow_error("Operator divides by zero");
-        }
-
-        for(int i = 0; i < getNumberOfGridPoints(); i++)
-        {
-            _data[i] /= value;
-        }
-        return *this;
-    }
-}   // namespace core
+    }   // namespace core
+}   // namespace fwi

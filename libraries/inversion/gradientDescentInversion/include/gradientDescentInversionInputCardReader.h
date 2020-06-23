@@ -7,18 +7,21 @@
 #include <sstream>
 #include <string>
 
-namespace inversionMethods
+namespace fwi
 {
-    class gradientDescentInversionInputCardReader : public io::inputCardReader
+    namespace inversionMethods
     {
-    private:
-        gradientDescentInversionInput _input;
+        class gradientDescentInversionInputCardReader : public io::inputCardReader
+        {
+        private:
+            gradientDescentInversionInput _input;
 
-        const std::string _fileName = "GradientDescentInversionInput.json";
-        void readJsonFile(const std::string &filePath);
+            const std::string _fileName = "GradientDescentInversionInput.json";
+            void readJsonFile(const std::string &filePath);
 
-    public:
-        gradientDescentInversionInputCardReader(const std::string &caseFolder);
-        const gradientDescentInversionInput getInput() const { return _input; }
-    };
-}   // namespace inversionMethods
+        public:
+            gradientDescentInversionInputCardReader(const std::string &caseFolder);
+            const gradientDescentInversionInput getInput() const { return _input; }
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

@@ -4,22 +4,25 @@
 #include <string>
 #include <vector>
 
-namespace io
+namespace fwi
 {
-    class CSVReader
+    namespace io
     {
-    public:
-        std::string const &operator[](std::size_t index) const;
-        std::size_t size() const;
-        void readNextRow(std::istream &str);
+        class CSVReader
+        {
+        public:
+            std::string const &operator[](std::size_t index) const;
+            std::size_t size() const;
+            void readNextRow(std::istream &str);
 
-    private:
-        std::vector<std::string> m_data;
-    };
+        private:
+            std::vector<std::string> m_data;
+        };
 
-    inline std::istream &operator>>(std::istream &str, CSVReader &data)
-    {
-        data.readNextRow(str);
-        return str;
-    }
-}   // namespace io
+        inline std::istream &operator>>(std::istream &str, CSVReader &data)
+        {
+            data.readNextRow(str);
+            return str;
+        }
+    }   // namespace io
+}   // namespace fwi

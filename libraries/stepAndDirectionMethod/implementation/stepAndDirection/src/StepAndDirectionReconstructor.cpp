@@ -1,89 +1,93 @@
 #include "StepAndDirectionReconstructor.h"
 #include "progressBar.h"
 
-namespace inversionMethods
+namespace fwi
 {
-    StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-        forwardModels::forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput)
-        : _desiredStep(desiredStep)
-        , _desiredDirection(desiredDirection)
-        , _forwardModel(forwardModel)
-        , _directionInput(directionInput)
-        , _grid(forwardModel->getGrid())
+    namespace inversionMethods
     {
-    }
-
-    core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
-    {
-        io::progressBar bar(_directionInput.maxIterationsNumber);
-
-        std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
-
-        double step = 0.0;
-
-        double eta = _desiredDirection->getErrorFunctionalScalingFactor();
-
-        core::dataGrid2D chiEstimateCurrent(_grid);
-        chiEstimateCurrent = _directionInput.startingChi;
-
-        std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-        double residualValue = calculateResidualNorm(residualVector, eta);
-
-        _forwardModel->calculateKappa();
-
-        core::dataGrid2D const *directionCurrent;
-
-        std::vector<std::complex<double>> kappaTimesDirection;
-
-        for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
+        StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
+            forwardModels::forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput)
+            : _desiredStep(desiredStep)
+            , _desiredDirection(desiredDirection)
+            , _forwardModel(forwardModel)
+            , _directionInput(directionInput)
+            , _grid(forwardModel->getGrid())
         {
-            directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
+        }
 
-            // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
-            _forwardModel->mapDomainToSignal(*directionCurrent, kappaTimesDirection);
+        core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
+        {
+            io::progressBar bar(_directionInput.maxIterationsNumber);
 
-            _desiredStep->updateVariables(
-                chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
+            std::ofstream file(gInput.outputLocation + gInput.runName + "Residual.log");
 
-            step = _desiredStep->calculateStepSize();
+            double step = 0.0;
 
-            chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
+            double eta = _desiredDirection->getErrorFunctionalScalingFactor();
 
-            residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-            residualValue = calculateResidualNorm(residualVector, eta);
-            file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
+            core::dataGrid2D chiEstimateCurrent(_grid);
+            chiEstimateCurrent = _directionInput.startingChi;
 
-            if(residualValue < _directionInput.tolerance)
+            std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+            double residualValue = calculateResidualNorm(residualVector, eta);
+
+            _forwardModel->calculateKappa();
+
+            core::dataGrid2D const *directionCurrent;
+
+            std::vector<std::complex<double>> kappaTimesDirection;
+
+            for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
             {
-                file << "Reconstruction terminated at iteration " << it + 1 << " because error is smaller than input tolerance " << std::setprecision(17)
-                     << _directionInput.tolerance << std::endl;
-                break;
+                directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
+
+                // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
+                _forwardModel->mapDomainToSignal(*directionCurrent, kappaTimesDirection);
+
+                _desiredStep->updateVariables(
+                    chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
+
+                step = _desiredStep->calculateStepSize();
+
+                chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
+
+                residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+                residualValue = calculateResidualNorm(residualVector, eta);
+                file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
+
+                if(residualValue < _directionInput.tolerance)
+                {
+                    file << "Reconstruction terminated at iteration " << it + 1 << " because error is smaller than input tolerance " << std::setprecision(17)
+                         << _directionInput.tolerance << std::endl;
+                    break;
+                }
+
+                bar++;
             }
 
-            bar++;
+            return chiEstimateCurrent;
         }
 
-        return chiEstimateCurrent;
-    }
+        core::dataGrid2D StepAndDirectionReconstructor::calculateNextMove(
+            const core::dataGrid2D &chiEstimate, const core::dataGrid2D &direction, double step) const
+        {
+            core::dataGrid2D chiTemp = chiEstimate;
+            const int nGridPoints = chiEstimate.getNumberOfGridPoints();
+            std::vector<double> descentVector(nGridPoints, 0.0);
+            const std::vector<double> &directionData = direction.getData();
 
-    core::dataGrid2D StepAndDirectionReconstructor::calculateNextMove(const core::dataGrid2D &chiEstimate, const core::dataGrid2D &direction, double step) const
-    {
-        core::dataGrid2D chiTemp = chiEstimate;
-        const int nGridPoints = chiEstimate.getNumberOfGridPoints();
-        std::vector<double> descentVector(nGridPoints, 0.0);
-        const std::vector<double> &directionData = direction.getData();
+            for(int i = 0; i < nGridPoints; ++i)
+            {   // make sure the DirectionCalculators have the -1 integrated
+                descentVector[i] = step * directionData[i];
+            }
+            chiTemp += descentVector;
 
-        for(int i = 0; i < nGridPoints; ++i)
-        {   // make sure the DirectionCalculators have the -1 integrated
-            descentVector[i] = step * directionData[i];
+            return chiTemp;
         }
-        chiTemp += descentVector;
 
-        return chiTemp;
-    }
-
-    double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
-    {
-        return eta * _forwardModel->calculateResidualNormSq(residualVector);
-    }
-}   // namespace inversionMethods
+        double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
+        {
+            return eta * _forwardModel->calculateResidualNormSq(residualVector);
+        }
+    }   // namespace inversionMethods
+}   // namespace fwi

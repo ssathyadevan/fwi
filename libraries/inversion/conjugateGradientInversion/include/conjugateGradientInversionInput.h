@@ -3,13 +3,16 @@
 #include "deltaAmplification.h"
 #include "iter1.h"
 
-namespace inversionMethods
+namespace fwi
 {
-    struct ConjugateGradientInversionInput
+    namespace inversionMethods
     {
-        iter1 iteration1;
-        cgDeltaAmplification dAmplification;
-        bool doRegularisation;
-        int n_max;
-    };
-}   // namespace inversionMethods
+        struct ConjugateGradientInversionInput
+        {
+            iter1 iteration1;
+            cgDeltaAmplification dAmplification;
+            bool doRegularisation;
+            int n_max;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

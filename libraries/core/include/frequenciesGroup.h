@@ -7,21 +7,24 @@
 #include "freqInfo.h"
 #include <cmath>
 
-namespace core
+namespace fwi
 {
-    class frequenciesGroup
+    namespace core
     {
-        frequenciesGroup operator=(const frequenciesGroup &) = delete;
+        class frequenciesGroup
+        {
+            frequenciesGroup operator=(const frequenciesGroup &) = delete;
 
-    public:
-        const int nFreq;
-        const double c0;
-        const double dFreq;
-        std::vector<double> freq;
-        std::vector<double> k;
+        public:
+            const int nFreq;
+            const double c0;
+            const double dFreq;
+            std::vector<double> freq;
+            std::vector<double> k;
 
-        frequenciesGroup(freqInfo freqStruct, double c_0_);
+            frequenciesGroup(freqInfo freqStruct, double c_0_);
 
-        void Print(int nFreqTotal);
-    };
-}   // namespace core
+            void Print(int nFreqTotal);
+        };
+    }   // namespace core
+}   // namespace fwi

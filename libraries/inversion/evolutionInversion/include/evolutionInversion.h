@@ -7,27 +7,30 @@
 #include "inversionInterface.h"
 #include "progressBar.h"
 
-namespace inversionMethods
+namespace fwi
 {
-    class EvolutionInversion : public inversionInterface
+    namespace inversionMethods
     {
-    public:
-        EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
+        class EvolutionInversion : public inversionInterface
+        {
+        public:
+            EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
-        EvolutionInversion(const EvolutionInversion &) = delete;
-        EvolutionInversion &operator=(const EvolutionInversion &) = delete;
+            EvolutionInversion(const EvolutionInversion &) = delete;
+            EvolutionInversion &operator=(const EvolutionInversion &) = delete;
 
-        core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
+            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
-    private:
-        forwardModels::forwardModelInterface *_forwardModel;
-        EvolutionInversionInput _eiInput;
+        private:
+            forwardModels::forwardModelInterface *_forwardModel;
+            EvolutionInversionInput _eiInput;
 
-        const core::grid2D &_grid;
-        const core::sources &_src;
-        const core::receivers &_recv;
-        const core::frequenciesGroup &_freq;
+            const core::grid2D &_grid;
+            const core::sources &_src;
+            const core::receivers &_recv;
+            const core::frequenciesGroup &_freq;
 
-        std::ofstream openResidualLogFile(io::genericInput &gInput);
-    };
-}   // namespace inversionMethods
+            std::ofstream openResidualLogFile(io::genericInput &gInput);
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

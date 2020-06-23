@@ -6,18 +6,21 @@
 #include <string>
 #include <vector>
 
-namespace utilities
+namespace fwi
 {
-    inline double dist(double x, double z) { return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5); }
-
-    inline std::vector<std::string> returnInputDirectory(int c, char **v = NULL)
+    namespace utilities
     {
-        if(c < 2)
+        inline double dist(double x, double z) { return std::pow(std::pow(z, 2.0) + std::pow(x, 2.0), 0.5); }
+
+        inline std::vector<std::string> returnInputDirectory(int c, char **v = NULL)
         {
-            std::vector<std::string> arguments = {"./"};
+            if(c < 2)
+            {
+                std::vector<std::string> arguments = {"./"};
+                return arguments;
+            }
+            std::vector<std::string> arguments(v + 1, c + v);
             return arguments;
         }
-        std::vector<std::string> arguments(v + 1, c + v);
-        return arguments;
-    }
-}   // namespace utilities
+    }   // namespace utilities
+}   // namespace fwi

@@ -11,36 +11,36 @@
 #include "log.h"
 #include "utilityFunctions.h"
 
-void performInversion(const io::genericInput &gInput, const std::string &runName);
-void writePlotInput(const io::genericInput &gInput, std::string msg);
+void performInversion(const fwi::io::genericInput &gInput, const std::string &runName);
+void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char **argv)
 {
     try
     {
-        std::vector<std::string> arguments = utilities::returnInputDirectory(argc, argv);
-        io::genericInputCardReader genericReader(arguments[0]);
-        io::genericInput gInput = genericReader.getInput();
+        std::vector<std::string> arguments = fwi::utilities::returnInputDirectory(argc, argv);
+        fwi::io::genericInputCardReader genericReader(arguments[0]);
+        fwi::io::genericInput gInput = genericReader.getInput();
 
         std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
 
         if(!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger(logFileName.c_str(), io::ldebug);
+            initLogger(logFileName.c_str(), fwi::io::ldebug);
         }
 
-        io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGrid[0]);
+        fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGrid[0]);
         createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-        performance::CpuClock clock;
+        fwi::performance::CpuClock clock;
 
         clock.Start();
         performInversion(gInput, gInput.runName);
         clock.End();
 
-        L_(io::linfo) << "Visualisation of the estimated temple using FWI";
-        io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
+        L_(fwi::io::linfo) << "Visualisation of the estimated temple using FWI";
+        fwi::io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
         createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
         std::string msg = clock.OutputString();
@@ -50,21 +50,21 @@ int main(int argc, char **argv)
     {
         std::cout << "An invalid argument found!" << std::endl;
         std::cout << e.what() << std::endl;
-        L_(io::linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
+        L_(fwi::io::linfo) << "Invalid Argument Exception: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
     catch(const std::exception &e)
     {
         std::cout << "An exception has been thrown:" << std::endl;
         std::cout << e.what() << std::endl;
-        L_(io::linfo) << "Exception: " << e.what() << std::endl;
+        L_(fwi::io::linfo) << "Exception: " << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
     return 0;
 }
 
-void writePlotInput(const io::genericInput &gInput, std::string msg)
+void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
 {
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream outputfwi;
@@ -84,15 +84,15 @@ void writePlotInput(const io::genericInput &gInput, std::string msg)
     lastrun.close();
 }
 
-void performInversion(const io::genericInput &gInput, const std::string &runName)
+void performInversion(const fwi::io::genericInput &gInput, const std::string &runName)
 {
     // initialize the grid sources receivers, grouped frequencies
-    core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    fwi::core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     src.Print();
-    core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    fwi::core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     recv.Print();
-    core::frequenciesGroup freq(gInput.freq, gInput.c0);
+    fwi::core::frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
@@ -102,11 +102,11 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
-    io::CSVReader row;
+    fwi::io::CSVReader row;
 
     if(!file.is_open())
     {
-        L_(io::lerror) << "Could not open file at " << fileLocation;
+        L_(fwi::io::lerror) << "Could not open file at " << fileLocation;
         exit(EXIT_FAILURE);
     }
 
@@ -120,28 +120,28 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
         i++;
     }
 
-    L_(io::linfo) << "Create forwardModel";
+    L_(fwi::io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModels::forwardModelInterface *model;
-    forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
-    model = new forwardModels::finiteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
+    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+    model = new fwi::forwardModels::finiteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
     clock_t tEndForwardModel = clock();
-    L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
+    L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 
-    L_(io::linfo) << "Execute inversion";
+    L_(fwi::io::linfo) << "Execute inversion";
     clock_t tStartInversion = clock();
-    inversionMethods::inversionInterface *inverse;
-    inversionMethods::ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
-    inverse = new inversionMethods::ConjugateGradientInversion(model, conjugategradientreader.getInput());
+    fwi::inversionMethods::inversionInterface *inverse;
+    fwi::inversionMethods::ConjugateGradientInversionInputCardReader conjugategradientreader(gInput.caseFolder);
+    inverse = new fwi::inversionMethods::ConjugateGradientInversion(model, conjugategradientreader.getInput());
     clock_t tEndInversion = clock();
-    L_(io::linfo) << "Inversion is executed in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
+    L_(fwi::io::linfo) << "Inversion is executed in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 
-    L_(io::linfo) << "Estimating Chi...";
+    L_(fwi::io::linfo) << "Estimating Chi...";
     clock_t tStartEstimateChi = clock();
-    core::dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
+    fwi::core::dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);
     clock_t tEndEstimateChi = clock();
-    L_(io::linfo) << "Estimated Chi in " << double(tEndEstimateChi - tStartEstimateChi) / CLOCKS_PER_SEC << "seconds.";
-    L_(io::linfo) << "Writing to file";
+    L_(fwi::io::linfo) << "Estimated Chi in " << double(tEndEstimateChi - tStartEstimateChi) / CLOCKS_PER_SEC << "seconds.";
+    L_(fwi::io::linfo) << "Writing to file";
 
     chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
 

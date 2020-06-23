@@ -11,10 +11,14 @@
 #include <complex>
 #include <functional>
 
-namespace core
+namespace fwi
 {
-    void createGreensRect2D(std::complex<double> *G, const std::array<double, 2> &dx, const std::array<int, 2> &nx,
-        std::function<std::complex<double>(double, double)> gFunc, double k);
+    namespace core
+    {
+        void createGreensRect2D(std::complex<double> *G, const std::array<double, 2> &dx, const std::array<int, 2> &nx,
+            std::function<std::complex<double>(double, double)> gFunc, double k);
 
-    void contractGreensRect2D(const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG);
-}   // namespace core
+        void contractGreensRect2D(
+            const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG);
+    }   // namespace core
+}   // namespace fwi

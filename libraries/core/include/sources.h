@@ -5,19 +5,22 @@
 #include <iostream>
 #include <vector>
 
-namespace core
+namespace fwi
 {
-    class sources
+    namespace core
     {
-    public:
-        int nSrc;
-        std::vector<std::array<double, 2>> xSrc;
-        // Place the sources on a linear line from xMin to xMax, including the end points
-        sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_);
+        class sources
+        {
+        public:
+            int nSrc;
+            std::vector<std::array<double, 2>> xSrc;
+            // Place the sources on a linear line from xMin to xMax, including the end points
+            sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_);
 
-        void Print();
+            void Print();
 
-    private:
-        std::array<double, 2> calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax);
-    };
-}   // namespace core
+        private:
+            std::array<double, 2> calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax);
+        };
+    }   // namespace core
+}   // namespace fwi

@@ -7,21 +7,24 @@
 #include <sstream>
 #include <string>
 
-namespace inversionMethods
+namespace fwi
 {
-    class ConjugateGradientInversionInputCardReader : public io::inputCardReader
+    namespace inversionMethods
     {
-    private:
-        ConjugateGradientInversionInput _input;
+        class ConjugateGradientInversionInputCardReader : public io::inputCardReader
+        {
+        private:
+            ConjugateGradientInversionInput _input;
 
-        const std::string _fileName = "ConjugateGradientInversionInput.json";
-        void readJsonFile(const std::string &filePath);
+            const std::string _fileName = "ConjugateGradientInversionInput.json";
+            void readJsonFile(const std::string &filePath);
 
-        void readIterParameter(const nlohmann::json &jsonFile);
-        void readDeltaAmplificationParameter(const nlohmann::json &jsonFile);
+            void readIterParameter(const nlohmann::json &jsonFile);
+            void readDeltaAmplificationParameter(const nlohmann::json &jsonFile);
 
-    public:
-        ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
-        const ConjugateGradientInversionInput getInput() const { return _input; }
-    };
-}   // namespace inversionMethods
+        public:
+            ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
+            const ConjugateGradientInversionInput getInput() const { return _input; }
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

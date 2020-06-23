@@ -1,43 +1,46 @@
 #include "sources.h"
 #include "log.h"
 
-namespace core
+namespace fwi
 {
-    sources::sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_)
-        : nSrc(nSrc_)
-        , xSrc()
+    namespace core
     {
-        assert(nSrc > 1);
-
-        std::array<double, 2> dx = calculateDistance(xMin, xMax);
-
-        for(int i = 0; i < nSrc; i++)
+        sources::sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_)
+            : nSrc(nSrc_)
+            , xSrc()
         {
-            std::array<double, 2> src;
+            assert(nSrc > 1);
+
+            std::array<double, 2> dx = calculateDistance(xMin, xMax);
+
+            for(int i = 0; i < nSrc; i++)
+            {
+                std::array<double, 2> src;
+                for(int j = 0; j < 2; j++)
+                {
+                    src[j] = xMin[j] + i * dx[j];
+                }
+                xSrc.push_back(src);
+            }
+        }
+
+        std::array<double, 2> sources::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
+        {
+            std::array<double, 2> dx;
             for(int j = 0; j < 2; j++)
             {
-                src[j] = xMin[j] + i * dx[j];
+                dx[j] = (xMax[j] - xMin[j]) / (nSrc - 1);
             }
-            xSrc.push_back(src);
+            return dx;
         }
-    }
 
-    std::array<double, 2> sources::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
-    {
-        std::array<double, 2> dx;
-        for(int j = 0; j < 2; j++)
+        void sources::Print()
         {
-            dx[j] = (xMax[j] - xMin[j]) / (nSrc - 1);
+            L_(io::linfo) << "Total number of sources is " << nSrc << ". Positions:";
+            for(int i = 0; i < nSrc; i++)
+            {
+                L_(io::linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")";
+            }
         }
-        return dx;
-    }
-
-    void sources::Print()
-    {
-        L_(io::linfo) << "Total number of sources is " << nSrc << ". Positions:";
-        for(int i = 0; i < nSrc; i++)
-        {
-            L_(io::linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")";
-        }
-    }
-}   // namespace core
+    }   // namespace core
+}   // namespace fwi

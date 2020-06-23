@@ -1,19 +1,22 @@
 #pragma once
 
-namespace inversionMethods
+namespace fwi
 {
-    struct DirectionParameters
+    namespace inversionMethods
     {
-    public:
-        double derivativeStepSize;
+        struct DirectionParameters
+        {
+        public:
+            double derivativeStepSize;
 
-        DirectionParameters()
-            : derivativeStepSize(0.0)
-        {
-        }
-        DirectionParameters(double derivativeStepSize_)
-            : derivativeStepSize(derivativeStepSize_)
-        {
-        }
-    };
-}   // namespace inversionMethods
+            DirectionParameters()
+                : derivativeStepSize(0.0)
+            {
+            }
+            DirectionParameters(double derivativeStepSize_)
+                : derivativeStepSize(derivativeStepSize_)
+            {
+            }
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

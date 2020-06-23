@@ -4,16 +4,19 @@
 #include <string>
 #include <vector>
 
-namespace io
+namespace fwi
 {
-    class ReadJsonHelper
+    namespace io
     {
-    public:
-        static void verifyJsonFileContainsParameter(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName);
-        template<typename T> static T tryGetParameterFromJson(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName)
+        class ReadJsonHelper
         {
-            verifyJsonFileContainsParameter(jsonFile, filePath, parameterName);
-            return jsonFile[parameterName];
-        }
-    };
-}   // namespace io
+        public:
+            static void verifyJsonFileContainsParameter(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName);
+            template<typename T> static T tryGetParameterFromJson(const nlohmann::json &jsonFile, const std::string &filePath, const std::string &parameterName)
+            {
+                verifyJsonFileContainsParameter(jsonFile, filePath, parameterName);
+                return jsonFile[parameterName];
+            }
+        };
+    }   // namespace io
+}   // namespace fwi

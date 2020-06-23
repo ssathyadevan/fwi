@@ -1,8 +1,11 @@
 #include "StepSizeCalculator.h"
 
-namespace inversionMethods
+namespace fwi
 {
-    StepSizeCalculator::StepSizeCalculator() {}
+    namespace inversionMethods
+    {
+        StepSizeCalculator::StepSizeCalculator() {}
 
-    StepSizeCalculator::~StepSizeCalculator() {}
-}   // namespace inversionMethods
+        StepSizeCalculator::~StepSizeCalculator() {}
+    }   // namespace inversionMethods
+}   // namespace fwi

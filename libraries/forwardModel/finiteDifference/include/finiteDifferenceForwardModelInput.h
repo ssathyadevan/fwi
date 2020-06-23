@@ -2,12 +2,15 @@
 
 #include "inputStructs.h"
 
-namespace forwardModels
+namespace fwi
 {
-    struct finiteDifferenceForwardModelInput
+    namespace forwardModels
     {
-        // For more info on input parameters, see the doc/README file
-        PMLWidthFactor pmlWidthFactor;
-        SourceParameter sourceParameter;
-    };
-}   // namespace forwardModels
+        struct finiteDifferenceForwardModelInput
+        {
+            // For more info on input parameters, see the doc/README file
+            PMLWidthFactor pmlWidthFactor;
+            SourceParameter sourceParameter;
+        };
+    }   // namespace forwardModels
+}   // namespace fwi
