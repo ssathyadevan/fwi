@@ -2,7 +2,7 @@
 #include "log.h"
 #include "progressBar.h"
 
-EvolutionInversion::EvolutionInversion(forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput) :
+EvolutionInversion::EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput) :
     _forwardModel(), _eiInput(eiInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()),
     _freq(forwardModel->getFreq())
 {

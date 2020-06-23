@@ -30,7 +30,7 @@ StepAndDirectionReconstructorInput getStepAndDirectionInput()
 TEST(factoryTest, expectThrowMissingForwardModelTest)
 {
     // Create null pointer to forwardmodel
-    forwardModelInterface *forwardModel = nullptr;
+    forwardModels::forwardModelInterface *forwardModel = nullptr;
 
     // Create a fixed step size with conjugate gradient method
     const std::string desiredStepSizeMethod = "fixedStepSize";
@@ -64,7 +64,7 @@ TEST(factoryTest, createFixedStepSizeConjugateGradientMethodTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+    forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
     // Create a fixed step size with conjugate gradient method
     const std::string desiredStepSizeMethod = "fixedStepSize";
@@ -93,7 +93,7 @@ TEST(factoryTest, expectThrowStepSizeCalculatorTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+    forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
     // Create a not existing step size calculator
     const std::string desiredStepSizeMethod = "";
@@ -121,7 +121,7 @@ TEST(factoryTest, createFixedStepSizeGradientDescentMethodTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+    forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
     // Create measurement data
     const int lengthOfPData = forwardModel.getSrc().nSrc * forwardModel.getRecv().nRecv * forwardModel.getFreq().nFreq;
@@ -150,7 +150,7 @@ TEST(factoryTest, expectThrowDirectionCalculatorTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+    forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
     // Create measurement data
     const int lengthOfPData = forwardModel.getSrc().nSrc * forwardModel.getRecv().nRecv * forwardModel.getFreq().nFreq;

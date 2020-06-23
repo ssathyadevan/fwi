@@ -48,7 +48,7 @@
 //    core::receivers core::receivers(xMin, xMax, 2);
 //    core::frequenciesGroup frequencies(freq, 2000.0);
 //    int magnitude = frequencies.nFreq * core::sources.nSrc * core::receivers.nrcv;
-//    ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
+//    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
 
 //    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
 
@@ -84,7 +84,7 @@
 //    core::receivers core::receivers(xMin, xMax, 2);
 //    core::frequenciesGroup frequencies(freq, 2000.0);
 
-//    ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
+//    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
 //    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
 
 //    FixedStepSizeCalculator chosenStepSize(2.0);

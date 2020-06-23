@@ -31,7 +31,7 @@ core::dataGrid2D OpenMPGradientDescentInversion::reconstruct(const std::vector<s
     double fx;
     int counter = 1;
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    double eta = 1.0 / (normSq(pData, nTotal));
+    double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
     double gamma = _gdInput.gamma0;   // First iteration
     for(int it1 = 0; it1 < _gdInput.iter; it1++)
     {

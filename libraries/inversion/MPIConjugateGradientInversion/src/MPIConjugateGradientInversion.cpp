@@ -182,7 +182,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     // bar.setTerminalWidth(80);
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
 
-    double eta = 1.0 / (normSq(pData, nTotal));   // scaling factor eq 2.10 in thesis
+    double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // scaling factor eq 2.10 in thesis
     double gamma, alpha, resSq, res = 0;
 
     std::array<double, 2> alphaDiv;

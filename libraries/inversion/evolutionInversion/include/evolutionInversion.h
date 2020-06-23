@@ -10,7 +10,7 @@
 class EvolutionInversion : public inversionInterface
 {
 public:
-    EvolutionInversion(forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
+    EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
     EvolutionInversion(const EvolutionInversion &) = delete;
     EvolutionInversion &operator=(const EvolutionInversion &) = delete;
@@ -18,7 +18,7 @@ public:
     core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
 private:
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     EvolutionInversionInput _eiInput;
 
     const core::grid2D &_grid;

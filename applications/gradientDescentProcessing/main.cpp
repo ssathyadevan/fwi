@@ -130,9 +130,9 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     L_(io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModelInterface *model;
-    integralForwardModelInputCardReader integralReader(gInput.caseFolder);
-    model = new IntegralForwardModel(grid, src, recv, freq, integralReader.getInput());
+    forwardModels::forwardModelInterface *model;
+    forwardModels::integralForwardModelInputCardReader integralReader(gInput.caseFolder);
+    model = new forwardModels::IntegralForwardModel(grid, src, recv, freq, integralReader.getInput());
     clock_t tEndForwardModel = clock();
     L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 
@@ -144,7 +144,7 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
     clock_t tEndInversion = clock();
     L_(io::linfo) << "Inversionmodel is created in " << double(tEndInversion - tStartInversion) / CLOCKS_PER_SEC << "seconds.";
 
-    //    gradientDescentInversion(forwardModelInterface *forwardModel, const io::genericInput &gdInput);
+    //    gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gdInput);
     L_(io::linfo) << "Estimating Chi...";
     clock_t tStartEstimateChi = clock();
     core::dataGrid2D chi_est = inverse->reconstruct(referencePressureData, gInput);

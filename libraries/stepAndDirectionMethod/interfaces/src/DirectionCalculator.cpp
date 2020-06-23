@@ -1,6 +1,6 @@
 #include "DirectionCalculator.h"
 
-DirectionCalculator::DirectionCalculator(double errorFunctionalScalingfactor, forwardModelInterface *forwardModel) :
+DirectionCalculator::DirectionCalculator(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel) :
     _errorFunctionalScalingFactor(errorFunctionalScalingfactor), _forwardModel(), _direction(forwardModel->getGrid())
 {
     if(errorFunctionalScalingfactor < 0.0)

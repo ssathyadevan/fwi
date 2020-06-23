@@ -25,7 +25,7 @@ public:
     const core::receivers &getReceivers() const { return _forwardmodels[0]->getRecv(); }
 
 private:
-    std::vector<forwardModelInterface *> _forwardmodels;
+    std::vector<forwardModels::forwardModelInterface *> _forwardmodels;
     const int _numberOfThreads;
     const int _numberOfSources;
     const int _numberOfReceivers;

@@ -1,7 +1,7 @@
 #include "GradientDescentDirectionCalculator.h"
 
 GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(
-    double errorFunctionalScalingFactor, forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData) :
+    double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData) :
     DirectionCalculator(errorFunctionalScalingFactor, forwardModel),
     _pData(pData), _derivativeDiscretisationStep(discretisationStep)
 {

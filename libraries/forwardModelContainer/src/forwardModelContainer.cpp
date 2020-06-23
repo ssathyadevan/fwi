@@ -38,20 +38,21 @@ void ForwardModelContainer::createForwardModels(const io::genericInput &gInput, 
 {
     if(desiredForwardModel == "integralForwardModel")
     {
-        integralForwardModelInputCardReader integralreader(gInput.caseFolder);
+        forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            forwardModelInterface *model = new IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
+            forwardModels::forwardModelInterface *model =
+                new forwardModels::IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
             _forwardmodels.push_back(model);
         }
     }
     else if(desiredForwardModel == "finiteDifferenceForwardModel")
     {
-        finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+        forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            forwardModelInterface *model =
-                new finiteDifferenceForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
+            forwardModels::forwardModelInterface *model =
+                new forwardModels::finiteDifferenceForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
             _forwardmodels.push_back(model);
         }
     }

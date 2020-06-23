@@ -23,7 +23,7 @@ TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     // Create conjugate gradient direction calculator
     const double errorFunctionScalingFactor = 1.0;

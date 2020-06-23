@@ -19,7 +19,7 @@
 class ConjugateGradientInversion : public inversionInterface
 {
 private:
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     ConjugateGradientInversionInput _cgInput;
 
     const core::grid2D &_grid;
@@ -151,7 +151,7 @@ private:
     void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
 public:
-    ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
+    ConjugateGradientInversion(forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
     ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
     ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
 

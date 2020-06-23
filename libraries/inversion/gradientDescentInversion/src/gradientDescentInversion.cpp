@@ -3,7 +3,7 @@
 #include "log.h"
 #include "progressBar.h"
 
-gradientDescentInversion::gradientDescentInversion(forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput) :
+gradientDescentInversion::gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput) :
     _forwardModel(), _gdInput(gdInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()),
     _freq(forwardModel->getFreq())
 {
@@ -30,7 +30,7 @@ core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::co
     bool isConverged = false;
     int counter = 1;
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    double eta = 1.0 / (normSq(pData, nTotal));
+    double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
     double gamma = _gdInput.gamma0;   // First iteration
 
     for(int it1 = 0; it1 < _gdInput.iter; it1++)

@@ -7,7 +7,7 @@
 class DirectionCalculator
 {
 public:
-    DirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel);
+    DirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel);
     virtual ~DirectionCalculator();
 
     /**
@@ -21,6 +21,6 @@ public:
 
 protected:
     const double _errorFunctionalScalingFactor;   // = eta
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     core::dataGrid2D _direction;
 };

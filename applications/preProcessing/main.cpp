@@ -74,9 +74,9 @@ void generateReferencePressureFieldFromChi(const io::genericInput &gInput, const
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    forwardModelInterface *model;
-    integralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
+    forwardModels::forwardModelInterface *model;
+    forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    model = new forwardModels::IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
 
     L_(io::linfo) << "Calculate pData (the reference pressure-field)...";
     model->calculatePTot(chi);

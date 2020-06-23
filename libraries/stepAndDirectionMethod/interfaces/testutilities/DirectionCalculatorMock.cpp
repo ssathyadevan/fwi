@@ -1,6 +1,6 @@
 #include "DirectionCalculatorMock.h"
 
-DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModelInterface *forwardModel) :
+DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel) :
     DirectionCalculator(errorFunctionalScalingfactor, forwardModel)
 {
 }

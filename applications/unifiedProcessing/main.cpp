@@ -143,7 +143,7 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     L_(io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModelInterface *model;
+    forwardModels::forwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, desired_forward_model, grid, src, recv, freq);
     clock_t tEndForwardModel = clock();
     L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";

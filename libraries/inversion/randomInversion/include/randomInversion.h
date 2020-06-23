@@ -9,7 +9,7 @@
 class RandomInversion : public inversionInterface
 {
 public:
-    RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput &riInput);
+    RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput);
 
     RandomInversion(const RandomInversion &) = delete;
     RandomInversion &operator=(const RandomInversion &) = delete;
@@ -17,7 +17,7 @@ public:
     core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
 private:
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     RandomInversionInput _riInput;
 
     const core::grid2D &_grid;

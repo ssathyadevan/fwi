@@ -76,10 +76,10 @@ void generateReferencePressureFieldFromChi(const io::genericInput &gInput, const
 
     L_(io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModelInterface *model;
-    finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
-    finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
-    model = new finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
+    forwardModels::forwardModelInterface *model;
+    forwardModels::finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
+    forwardModels::finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
+    model = new forwardModels::finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
     clock_t tEndForwardModel = clock();
     L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

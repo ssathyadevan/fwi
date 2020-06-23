@@ -25,8 +25,8 @@ TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardModel;
-    forwardModel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardModel;
+    forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     DirectionCalculator *directionCalculator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel);
     double mockErrorFunctionalScalingFactor = directionCalculator->getErrorFunctionalScalingFactor();
@@ -49,8 +49,8 @@ TEST(DirectionCalculatorTest, ScalingFactorExceptionTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardModel;
-    forwardModel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardModel;
+    forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel), std::invalid_argument);
 

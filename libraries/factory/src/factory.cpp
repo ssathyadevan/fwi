@@ -56,7 +56,8 @@ Factory::~Factory()
     }
 }
 
-inversionInterface *Factory::createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const io::genericInput &gInput)
+inversionInterface *Factory::createInversion(
+    const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput)
 {
     if(desiredInversion == "conjugateGradientInversion")
     {
@@ -89,19 +90,19 @@ inversionInterface *Factory::createInversion(const std::string &desiredInversion
     throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
 }
 
-forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
-    const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
+forwardModels::forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
+    const core::grid2D &grid, const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
 {
     if(desiredForwardModel == "integralForwardModel")
     {
-        integralForwardModelInputCardReader integralreader(caseFolder);
-        _createdForwardModel = new IntegralForwardModel(grid, sources, receivers, frequencies, integralreader.getInput());
+        forwardModels::integralForwardModelInputCardReader integralreader(caseFolder);
+        _createdForwardModel = new forwardModels::IntegralForwardModel(grid, sources, receivers, frequencies, integralreader.getInput());
         return _createdForwardModel;
     }
     if(desiredForwardModel == "finiteDifferenceForwardModel")
     {
-        finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
-        _createdForwardModel = new finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+        forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
+        _createdForwardModel = new forwardModels::finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
         return _createdForwardModel;
     }
     L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
@@ -142,9 +143,9 @@ bool Factory::splittableInversion(const std::string inversionMethod)
 }
 
 void Factory::createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
-    forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
+    forwardModels::forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
 {
-    const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
+    const double errorFunctionalScalingFactor = 1.0 / (forwardModels::normSq(pData, pData.size()));
 
     if(desiredDirectionMethod == "conjugateGradientDirection")
     {
@@ -161,7 +162,7 @@ void Factory::createDirectionCalculator(const DirectionParameters &directionPara
     throw std::invalid_argument("The Direction method " + desiredDirectionMethod + " was not found");
 }
 
-void Factory::createCombinedDirectionAndStepSize(forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
+void Factory::createCombinedDirectionAndStepSize(forwardModels::forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
     const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
     const std::string &desiredCombinedDirectionAndStepSizeMethod)
 {   // desiredCombinedDirectionAndStepSizeMethod is actually desiredStepSizeMethod
@@ -173,7 +174,7 @@ void Factory::createCombinedDirectionAndStepSize(forwardModelInterface *forwardM
         cgParametersInput._deltaAmplification._slope = stepSizeParameters.slope;
         cgParametersInput._deltaAmplification._start = stepSizeParameters.initialStepSize;
 
-        const double errorFunctionalScalingFactor = 1.0 / (normSq(pData, pData.size()));
+        const double errorFunctionalScalingFactor = 1.0 / (forwardModels::normSq(pData, pData.size()));
         ConjugateGradientWithRegularisationCalculator *OneInstance =
             new ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
         _createdStepSizeCalculator = OneInstance;
@@ -186,7 +187,7 @@ void Factory::createCombinedDirectionAndStepSize(forwardModelInterface *forwardM
 }
 
 StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
-    forwardModelInterface *forwardModel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
+    forwardModels::forwardModelInterface *forwardModel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
     const std::vector<std::complex<double>> &pData)
 {
     checkForwardModelExistence(forwardModel);
@@ -212,7 +213,7 @@ StepAndDirectionReconstructor *Factory::createStepAndDirectionReconstructor(cons
     return _createdReconstructor;
 }
 
-void Factory::checkForwardModelExistence(forwardModelInterface *forwardModel)
+void Factory::checkForwardModelExistence(forwardModels::forwardModelInterface *forwardModel)
 {
     if(forwardModel == nullptr)
     {

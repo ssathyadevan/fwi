@@ -143,7 +143,7 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
     Factory factory;
 
     L_(io::linfo) << "Create ForwardModel";
-    forwardModelInterface *model;
+    forwardModels::forwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, desiredForwardModel, grid, src, recv, freq);
 
     L_(io::linfo) << "Create StepAndDirectionReconstructor";

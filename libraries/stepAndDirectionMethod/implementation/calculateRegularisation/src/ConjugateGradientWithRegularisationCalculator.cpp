@@ -1,7 +1,7 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
 
 ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor,
-    forwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData) :
+    forwardModels::forwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData) :
     DirectionCalculator(errorFunctionalScalingFactor, forwardModel),
     StepSizeCalculator(), _chiEstimatePrevious(forwardModel->getGrid()), _chiEstimateCurrent(forwardModel->getGrid()),
     _gradientPrevious(forwardModel->getGrid()), _gradientCurrent(forwardModel->getGrid()), _pData(pData), _cgParametersInput(cgParametersInput),

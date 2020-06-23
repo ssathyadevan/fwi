@@ -122,9 +122,9 @@ void performInversion(const io::genericInput &gInput, const std::string &runName
 
     L_(io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModelInterface *model;
-    finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
-    model = new finiteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
+    forwardModels::forwardModelInterface *model;
+    forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+    model = new forwardModels::finiteDifferenceForwardModel(grid, src, recv, freq, finitedifferencereader.getInput());
     clock_t tEndForwardModel = clock();
     L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

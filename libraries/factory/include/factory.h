@@ -19,8 +19,8 @@ public:
     Factory();
     ~Factory();
 
-    inversionInterface *createInversion(const std::string &desiredInversion, forwardModelInterface *forwardModel, const io::genericInput &gInput);
-    forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
+    inversionInterface *createInversion(const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput);
+    forwardModels::forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel, const core::grid2D &grid,
         const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies);
 
     /**
@@ -34,12 +34,12 @@ public:
      * @return
      */
     StepAndDirectionReconstructor *createStepAndDirectionReconstructor(const StepAndDirectionReconstructorInput &stepAndDirectionInput,
-        forwardModelInterface *forwardmodel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
+        forwardModels::forwardModelInterface *forwardmodel, const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod,
         const std::vector<std::complex<double>> &pData);
 
 private:
     inversionInterface *_createdInversion;
-    forwardModelInterface *_createdForwardModel;
+    forwardModels::forwardModelInterface *_createdForwardModel;
     StepSizeCalculator *_createdStepSizeCalculator;
     DirectionCalculator *_createdDirectionCalculator;
     StepAndDirectionReconstructor *_createdReconstructor;
@@ -47,7 +47,7 @@ private:
     /**
      * @brief checkForwardModelExistence, makes sure the forwardmodel is created
      */
-    void checkForwardModelExistence(forwardModelInterface *forwardModel);
+    void checkForwardModelExistence(forwardModels::forwardModelInterface *forwardModel);
 
     /**
      * @brief createStepSizeCalculator, reads in parameters from file and creates the desired step size calculator.
@@ -73,7 +73,7 @@ private:
      * @return DirectionCalculator
      */
     void createDirectionCalculator(const DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
-        forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
+        forwardModels::forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
     /**
      * @brief createCombinedDirectionAndStepSize, in case we cannot split our StepSizeCalculator and DirectionCalculator, here we create only one object and we
      * point both related pointers of StepAndDirectionReconstructor to it.
@@ -83,7 +83,7 @@ private:
      * @param pData, the data we want to simulate
      * @param desiredCombinedDirectionAndStepSizeMethod, the actual descent algorithm we want to implement
      */
-    void createCombinedDirectionAndStepSize(forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
+    void createCombinedDirectionAndStepSize(forwardModels::forwardModelInterface *forwardModel, const StepSizeParameters &stepSizeParameters,
         const ReconstructorParameters &reconstructorParameters, const std::vector<std::complex<double>> &pData,
         const std::string &desiredCombinedDirectionAndStepSizeMethod);
 };

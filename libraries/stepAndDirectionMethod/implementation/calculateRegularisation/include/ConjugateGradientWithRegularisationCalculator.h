@@ -108,7 +108,7 @@ private:
     core::dataGrid2D calculateRegularisationGradient();
 
 public:
-    ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardModel,
+    ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel,
         ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData);   // constructor
     virtual ~ConjugateGradientWithRegularisationCalculator() {}                                                                  // destructor
 

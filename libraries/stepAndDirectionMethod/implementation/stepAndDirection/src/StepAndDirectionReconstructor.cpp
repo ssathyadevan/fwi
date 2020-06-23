@@ -2,7 +2,7 @@
 #include "progressBar.h"
 
 StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-    forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput) :
+    forwardModels::forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput) :
     _desiredStep(desiredStep),
     _desiredDirection(desiredDirection), _forwardModel(forwardModel), _directionInput(directionInput), _grid(forwardModel->getGrid())
 {

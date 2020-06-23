@@ -6,7 +6,7 @@ class GradientDescentDirectionCalculator : public DirectionCalculator
 {
 public:
     GradientDescentDirectionCalculator(
-        double errorFunctionalScalingFactor, forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData);
+        double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData);
     virtual ~GradientDescentDirectionCalculator();
 
     /**

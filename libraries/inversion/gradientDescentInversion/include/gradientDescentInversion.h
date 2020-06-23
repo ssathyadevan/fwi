@@ -7,7 +7,7 @@
 class gradientDescentInversion : public inversionInterface
 {
 private:
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     gradientDescentInversionInput _gdInput;
 
     const core::grid2D &_grid;
@@ -19,7 +19,7 @@ private:
     std::ofstream openResidualLogFile(io::genericInput &gInput);
 
 public:
-    gradientDescentInversion(forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
+    gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
 
     gradientDescentInversion(const gradientDescentInversion &) = delete;
     gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;

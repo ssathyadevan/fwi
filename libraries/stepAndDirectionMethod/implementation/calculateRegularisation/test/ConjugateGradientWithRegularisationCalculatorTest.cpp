@@ -28,8 +28,8 @@ TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
     core::receivers recv(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    ForwardModelInterfaceMock *forwardModel;
-    forwardModel = new ForwardModelInterfaceMock(grid, src, recv, frequencies);
+    forwardModels::ForwardModelInterfaceMock *forwardModel;
+    forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, src, recv, frequencies);
 
     double initialKappaTimesResidualValue = 1.0;
     forwardModel->setKappaTimesResidualValue(initialKappaTimesResidualValue);

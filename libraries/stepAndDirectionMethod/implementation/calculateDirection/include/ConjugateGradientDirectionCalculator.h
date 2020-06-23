@@ -5,7 +5,7 @@
 class ConjugateGradientDirectionCalculator : public DirectionCalculator
 {
 public:
-    ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel);
+    ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardmodel);
     virtual ~ConjugateGradientDirectionCalculator();
 
     /**

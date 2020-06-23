@@ -11,7 +11,7 @@
 #define TAG_RESARRAY 2
 #define TAG_RESULT 3
 
-ConjugateGradientInversion::ConjugateGradientInversion(forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+ConjugateGradientInversion::ConjugateGradientInversion(forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
     : _forwardModel()
     , _cgInput(invInput)
     , _grid(forwardModel->getGrid())
@@ -28,7 +28,7 @@ core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::
     io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
     const int nTotal = _frequencies.nFreq * _sources.nSrc * _receivers.nRecv;
-    const double eta = 1.0 / (normSq(pData, nTotal));   // Scaling factor
+    const double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // Scaling factor
     _chiEstimate.zero();
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);

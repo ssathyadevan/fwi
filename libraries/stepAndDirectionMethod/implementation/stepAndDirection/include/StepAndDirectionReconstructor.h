@@ -10,7 +10,7 @@ class StepAndDirectionReconstructor
 private:
     StepSizeCalculator *_desiredStep;
     DirectionCalculator *_desiredDirection;
-    forwardModelInterface *_forwardModel;
+    forwardModels::forwardModelInterface *_forwardModel;
     const ReconstructorParameters &_directionInput;
     /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
     const core::grid2D &_grid;
@@ -19,7 +19,7 @@ private:
     double calculateResidualNorm(const std::vector<std::complex<double>> &pData, double eta) const;
 
 public:
-    StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection, forwardModelInterface *forwardModel,
+    StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection, forwardModels::forwardModelInterface *forwardModel,
         const ReconstructorParameters &directionInput);
 
     /**

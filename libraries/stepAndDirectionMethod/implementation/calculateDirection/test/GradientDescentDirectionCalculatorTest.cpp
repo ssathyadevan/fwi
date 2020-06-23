@@ -23,8 +23,8 @@ TEST(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTe
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel;
-    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardmodel;
+    forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     // Create a gradient descent calculator with derivative step size zero
     double errorFunctionalScalingFactor = 1.0;
@@ -53,8 +53,8 @@ TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel;
-    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardmodel;
+    forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     // Create gradient descent calculator
     double errorFunctionalScalingFactor = 1.0;
@@ -105,8 +105,8 @@ TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
     core::receivers receivers(xMin, xMax, 2);
     core::frequenciesGroup frequencies(freq, 2000.0);
 
-    forwardModelInterface *forwardmodel;
-    forwardmodel = new ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+    forwardModels::forwardModelInterface *forwardmodel;
+    forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
 
     // Create gradient descent direction calculator
     const double errorFunctionalScalingFactor = 1.0;

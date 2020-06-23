@@ -2,7 +2,7 @@
 #include "log.h"
 #include "progressBar.h"
 
-RandomInversion::RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput &riInput) :
+RandomInversion::RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput) :
     _forwardModel(), _riInput(riInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()),
     _freq(forwardModel->getFreq())
 {
@@ -14,7 +14,7 @@ core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<dou
     io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
     const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
-    double eta = 1.0 / (normSq(pData, nTotal));
+    double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
     double resSq, chiEstRes, newResSq, newChiEstRes;
 
     std::ofstream residualLogFile = openResidualLogFile(gInput);

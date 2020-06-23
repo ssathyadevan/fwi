@@ -122,9 +122,9 @@ void performInversion(const io::genericInput &gInput)
 
     L_(io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    forwardModelInterface *model;
-    integralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
+    forwardModels::forwardModelInterface *model;
+    forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
+    model = new forwardModels::IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
     clock_t tEndForwardModel = clock();
     L_(io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

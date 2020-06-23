@@ -1,6 +1,6 @@
 #include "ConjugateGradientDirectionCalculator.h"
 
-ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModelInterface *forwardmodel) :
+ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardmodel) :
     DirectionCalculator(errorFunctionalScalingFactor, forwardmodel)
 {
 }
