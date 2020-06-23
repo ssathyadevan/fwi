@@ -48,7 +48,7 @@ int main(int argc, char **argv)
         if (!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger( logFileName.c_str(), fwi::fwi::io::ldebug);
+            fwi::io::initLogger( logFileName.c_str(), fwi::fwi::io::ldebug);
         }
 
         if (mpi_rank == 0)

@@ -37,11 +37,11 @@ int main(int argc, char **argv)
         if(!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger(logFileName.c_str(), fwi::io::ldebug);
+            fwi::io::initLogger(logFileName.c_str(), fwi::io::ldebug);
         }
 
         fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGrid[0]);
-        createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+        fwi::io::createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
         fwi::performance::CpuClock clock;
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
         L_(fwi::io::linfo) << "Visualisation of the estimated temple using FWI";
         fwi::io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
-        createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+        fwi::io::createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
         std::string msg = clock.OutputString();
         writePlotInput(gInput, msg);

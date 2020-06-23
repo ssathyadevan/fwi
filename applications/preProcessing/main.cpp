@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         if(!gInput.verbose)
         {
             std::cout << "Printing the program output into" << logFilePath << std::endl;
-            initLogger(logFilePath.c_str(), fwi::io::ldebug);
+            fwi::io::initLogger(logFilePath.c_str(), fwi::io::ldebug);
         }
 
         L_(fwi::io::linfo) << "Preprocessing the provided input to create the reference pressure-field";
