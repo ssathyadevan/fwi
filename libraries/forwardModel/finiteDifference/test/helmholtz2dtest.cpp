@@ -3,10 +3,7 @@
 
 namespace forwardModels
 {
-    namespace fwi
-    {
-        static const double pi = std::atan(1.0) * 4.0;
-    }
+    static const double pi = std::atan(1.0) * 4.0;
 
     TEST(helmholtz2dTest, CreateABCMatrixTest)
     {
@@ -41,7 +38,7 @@ namespace forwardModels
         dx[0] = (x_max[0] - x_min[0]) / static_cast<double>(n_x[0] - 1);
         dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(n_x[1] - 1);
 
-        double omega = freq * 2.0 * fwi::pi;
+        double omega = freq * 2.0 * pi;
         std::vector<Eigen::Triplet<std::complex<double>>> triplets;
         triplets.reserve(5 * n_x[0] * n_x[1]);   // Naive upper bound for nnz's
 
@@ -83,7 +80,7 @@ namespace forwardModels
         dx[0] = (x_max[0] - x_min[0]) / static_cast<double>(n_x[0] - 1);
         dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(n_x[1] - 1);
 
-        double omega = freq * 2.0 * fwi::pi;
+        double omega = freq * 2.0 * pi;
         std::vector<Eigen::Triplet<std::complex<double>>> triplets;
         triplets.reserve(5 * n_x[0] * n_x[1]);   // Naive upper bound for nnz's
 

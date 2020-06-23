@@ -2,10 +2,7 @@
 
 namespace core
 {
-    namespace fwi
-    {
-        static const double pi = std::atan(1.0) * 4.0;
-    }
+    const double pi = std::atan(1.0) * 4.0;
 
     namespace greensFunctions
     {
@@ -42,7 +39,7 @@ namespace core
             double value = 0.0;
             if(r != 0.0)
             {
-                value = 0.25 / (r * fwi::pi) * std::cos(k * r) * k *
+                value = 0.25 / (r * pi) * std::cos(k * r) * k *
                         k;   // Babak 2018 10 25: Equation ID "GreensFunc2d": real pardouble of Greens function from a 3D Helmhotz equation.
             }
             return value;
@@ -53,7 +50,7 @@ namespace core
             double value = 0.0;
             if(r != 0.0)
             {
-                value = 0.25 / (r * fwi::pi) * std::sin(k * r) * k *
+                value = 0.25 / (r * pi) * std::sin(k * r) * k *
                         k;   // Babak 2018 10 25: Equation ID "GreensFunc2d": imnaginary pardouble of Greens function from a 3D Helmhotz equation
             }
             return value;

@@ -3,10 +3,8 @@
 
 namespace forwardModels
 {
-    namespace fwi
-    {
-        static const double pi = std::atan(1.0) * 4.0;
-    }
+    static const double pi = std::atan(1.0) * 4.0;
+
     Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &src, const double c0, const core::dataGrid2D &chi,
         const finiteDifferenceForwardModelInput &fmInput)
         : _A()
@@ -509,7 +507,7 @@ namespace forwardModels
         std::array<int, 2> nx = _newgrid->GetGridDimensions();
         std::array<double, 2> dx = _newgrid->GetMeshSize();
         std::array<double, 2> xMin = _newgrid->GetGridStart();
-        double omega = _freq * 2.0 * fwi::pi;
+        double omega = _freq * 2.0 * pi;
 
         // Build matrix from new elements
         std::vector<Eigen::Triplet<std::complex<double>>> triplets;
@@ -579,7 +577,7 @@ namespace forwardModels
                         // Sine source function
                         if(nxdist > 0.0)
                         {
-                            fx = Wx * sin(fwi::pi * nxdist) / (dx[0] * fwi::pi * nxdist);
+                            fx = Wx * sin(pi * nxdist) / (dx[0] * pi * nxdist);
                         }
                         else
                         {
@@ -588,7 +586,7 @@ namespace forwardModels
 
                         if(nzdist > 0.0)
                         {
-                            fz = Wz * sin(fwi::pi * nzdist) / (dx[1] * fwi::pi * nzdist);
+                            fz = Wz * sin(pi * nzdist) / (dx[1] * pi * nzdist);
                         }
                         else
                         {

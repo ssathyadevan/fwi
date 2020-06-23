@@ -3,10 +3,7 @@
 
 namespace core
 {
-    namespace fwi
-    {
-        static const double pi = std::atan(1.0) * 4.0;
-    }
+    static const double pi = std::atan(1.0) * 4.0;
 
     frequenciesGroup::frequenciesGroup(freqInfo freqStruct, double c_0_)
         : nFreq(freqStruct.nTotal)
@@ -15,14 +12,14 @@ namespace core
         , freq()
         , k()
     {
-        if(std::abs(fwi::pi - 3.14159) > 0.0001)
+        if(std::abs(pi - 3.14159) > 0.0001)
         {
-            throw std::invalid_argument("fwi::pi differs to much from the real value of pi.");
+            throw std::invalid_argument("pi differs to much from the real value of pi.");
         }
         for(int i = 0; i < freqStruct.nTotal; i++)
         {
             freq.push_back(freqStruct.min + i * dFreq);
-            double omega = 2.0 * fwi::pi * freq[i];
+            double omega = 2.0 * pi * freq[i];
             k.push_back(omega / c0);
         }
     }
