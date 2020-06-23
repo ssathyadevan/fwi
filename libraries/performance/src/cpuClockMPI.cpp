@@ -14,9 +14,39 @@
     #include "psapi.h"
 #endif
 
-long parseLine(char* line);
-int getValue(const char* item);
+namespace
+{
+	long parseLine(char* line){
+    // This assumes that a digit will be found and the line ends in " Kb".
+    int i = strlen(line);
+    const char* p = line;
+    while (*p <'0' || *p > '9') p++;
+    line[i-3] = '\0';
+    i = atoi(p);
+    return i;
+}
 
+int getValue(const char* item){ //Note: this value is in KB!
+    FILE* file = fopen("/proc/self/status", "r");
+    int result = -1;
+    char line[128];
+
+    while (fgets(line, 128, file) != NULL){
+        if (strncmp(line, item, 6) == 0){
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
+}
+
+	
+} // namespace
+
+namespace performance
+{
+	
 CpuClockMPI::CpuClockMPI() {}
 CpuClockMPI::~CpuClockMPI() {}
 
@@ -69,32 +99,8 @@ void CpuClockMPI::MemoryUse(long& virtual_mem, long& physical_mem){
     return;
 }
 
-long parseLine(char* line){
-    // This assumes that a digit will be found and the line ends in " Kb".
-    int i = strlen(line);
-    const char* p = line;
-    while (*p <'0' || *p > '9') p++;
-    line[i-3] = '\0';
-    i = atoi(p);
-    return i;
-}
-
-int getValue(const char* item){ //Note: this value is in KB!
-    FILE* file = fopen("/proc/self/status", "r");
-    int result = -1;
-    char line[128];
-
-    while (fgets(line, 128, file) != NULL){
-        if (strncmp(line, item, 6) == 0){
-            result = parseLine(line);
-            break;
-        }
-    }
-    fclose(file);
-    return result;
-}
-
 void CpuClockMPI::DebugPrint(std::string msg)
 {
     std::cerr << msg << "CPU time: " << t_end - t_start << " seconds" << std::endl;
 }
+} // namespace performance

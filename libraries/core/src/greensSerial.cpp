@@ -135,7 +135,7 @@ namespace core
             for(int j = -nx[0] + 1; j <= nx[0] - 1; j++)
             {
                 double x = j * dx[0];
-                double r = dist(z, x);
+                double r = utilities::dist(z, x);
                 std::complex<double> val = G_func(k, r);
                 gVol[(nx[1] + i - 1) * (2 * nx[0] - 1) + (nx[0] + j - 1)] = val * vol;
             }
@@ -157,7 +157,7 @@ namespace core
         {
             double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
             complexDataGrid2D G_x(grid);
-            setGreensFunction(G_x, [this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, dist(x - p2_x, y - p2_z)); });
+            setGreensFunction(G_x, [this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, utilities::dist(x - p2_x, y - p2_z)); });
 
             for(int j = 0; j < nx * nz; j++)
             {
@@ -176,7 +176,8 @@ namespace core
             double z_recv = recv.xRecv[i][1];
             complexDataGrid2D *G_bound = new complexDataGrid2D(grid);
 
-            setGreensFunction(*G_bound, [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, dist(x - x_recv, z - z_recv)); });
+            setGreensFunction(
+                *G_bound, [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, utilities::dist(x - x_recv, z - z_recv)); });
 
             gRecv.push_back(G_bound);
         }

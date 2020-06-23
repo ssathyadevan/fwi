@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 {
     try
     {
-        std::vector<std::string> arguments = returnInputDirectory(argc, argv);
+        std::vector<std::string> arguments = utilities::returnInputDirectory(argc, argv);
         io::genericInputCardReader genericReader(arguments[0]);
         const io::genericInput gInput = genericReader.getInput();
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
         L_(io::linfo) << "Preprocessing the provided input to create the reference pressure-field";
 
-        CpuClock clock;
+        performance::CpuClock clock;
         clock.Start();
         generateReferencePressureFieldFromChi(gInput, gInput.runName);
         clock.End();

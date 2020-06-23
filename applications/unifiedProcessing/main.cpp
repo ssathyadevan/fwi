@@ -50,7 +50,7 @@ int main(int argc, char **argv)
         io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
         createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-        CpuClock clock;
+        performance::CpuClock clock;
 
         clock.Start();
         performInversion(gInput, gInput.runName, desired_inversion, desired_forward_model);

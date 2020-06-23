@@ -14,7 +14,7 @@ namespace core
             for(int j = -nx[0] + 1; j <= nx[0] - 1; j++)
             {
                 double x = j * dx[0];
-                double r = dist(z, x);
+                double r = utilities::dist(z, x);
                 G[(nx[1] + i - 1) * 2 * nx[0] + (nx[0] + j - 1)] = gFunc(k, r) * vol;
             }
         }
