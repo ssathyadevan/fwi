@@ -29,8 +29,8 @@ namespace fwi
             const std::string parameterCalcAlpha = "calcAlpha";
 
             nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterIter);
-            int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
 
+            int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
             if(nrOfIterations <= 0)
             {
                 throw std::invalid_argument("Invalid number of iterations in IntegralFMInput.json.");
@@ -43,14 +43,18 @@ namespace fwi
             }
 
             bool calcAlpha = ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
+
             CostFunction costFunction = readCostFunctionParameters(iterObject);
+
             _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha, costFunction);
         }
 
         CostFunction integralForwardModelInputCardReader::readCostFunctionParameters(nlohmann::json &iterObject)
         {
             const std::string parameterCostFunction = "CostFunction";
+
             std::string costFunctionInput = ReadJsonHelper::tryGetParameterFromJson<std::string>(iterObject, _fileName, parameterCostFunction);
+
             std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
             CostFunction costFunction = costFunctionStringMap.at(costFunctionInput);
 
