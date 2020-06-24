@@ -4,7 +4,6 @@ add_library(finite_difference_forward_model_library
     finiteDifferenceForwardModelInputCardReader.cpp     ../include/finiteDifferenceForwardModelInputCardReader.h
     finiteDifferenceGrid2D.cpp                          ../include/finiteDifferenceGrid2D.h
     helmholtz2D.cpp                                     ../include/helmholtz2D.h
-                                                        ../include/inputStructs.h
                                                         ../include/pmlWidthFactor.h
                                                         ../include/sourceParameter.h)
 
