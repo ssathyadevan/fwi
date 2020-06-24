@@ -1,13 +1,14 @@
+#include <iostream>
+
 #include "integralForwardModelInputCardReader.h"
 #include "json.h"
-#include <iostream>
 
 namespace fwi
 {
     namespace forwardModels
     {
         integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder)
-            : io::inputCardReader()
+            : inputCardReader()
         {
             const std::string stringInputFolder = "/input/";
             std::string filePath = caseFolder + stringInputFolder + _fileName;
@@ -27,23 +28,33 @@ namespace fwi
             const std::string parameterTolerance = "tolerance";
             const std::string parameterCalcAlpha = "calcAlpha";
 
-            nlohmann::json iterObject = io::ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterIter);
+            nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterIter);
+            int nrOfIterations = ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
 
-            int nrOfIterations = io::ReadJsonHelper::tryGetParameterFromJson<int>(iterObject, _fileName, parameterNumber);
             if(nrOfIterations <= 0)
             {
                 throw std::invalid_argument("Invalid number of iterations in IntegralFMInput.json.");
             }
 
-            double tolerance = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterTolerance);
+            double tolerance = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterTolerance);
             if(tolerance <= 0)
             {
                 throw std::invalid_argument("Invalid tolerance in IntegralFMInput.json.");
             }
 
-            bool calcAlpha = io::ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
+            bool calcAlpha = ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
+            CostFunction costFunction = readCostFunctionParameters(iterObject);
+            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha, costFunction);
+        }
 
-            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha);
+        CostFunction integralForwardModelInputCardReader::readCostFunctionParameters(nlohmann::json &iterObject)
+        {
+            const std::string parameterCostFunction = "CostFunction";
+            std::string costFunctionInput = ReadJsonHelper::tryGetParameterFromJson<std::string>(iterObject, _fileName, parameterCostFunction);
+            std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
+            CostFunction costFunction = costFunctionStringMap.at(costFunctionInput);
+
+            return costFunction;
         }
     }   // namespace forwardModels
 }   // namespace fwi
