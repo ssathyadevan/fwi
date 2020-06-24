@@ -2,6 +2,7 @@
     "Iter2": {
         "n": 15,
         "tolerance": 5.0e-5,
-        "calcAlpha": false
+        "calcAlpha": false,
+        "CostFunction": "leastSquares"
     }
 }
