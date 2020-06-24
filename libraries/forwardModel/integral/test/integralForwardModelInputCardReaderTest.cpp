@@ -16,6 +16,7 @@ namespace fwi
             EXPECT_EQ(15, input.nrOfIterations);
             EXPECT_EQ(5.0e-5, input.tolerance);
             ASSERT_FALSE(input.calcAlpha);
+            EXPECT_EQ(leastSquares, input.costFunction);
         }
     }   // namespace forwardModels
 }   // namespace fwi
