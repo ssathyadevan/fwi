@@ -21,7 +21,7 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 Cpp11BracedListStyle: 'true'
 DerivePointerAlignment: 'false'
 DisableFormat: 'false'
-FixNamespaceComments: 'false'
+FixNamespaceComments: 'true'
 IndentCaseLabels: 'true'
 IndentPPDirectives: None
 IndentWidth: '4'

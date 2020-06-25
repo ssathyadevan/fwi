@@ -1,8 +1,13 @@
 #pragma once
 
-struct DeltaAmplification
+namespace fwi
 {
-    double _start;
-    double _slope;
-};
-
+    namespace inversionMethods
+    {
+        struct DeltaAmplification
+        {
+            double _start;
+            double _slope;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

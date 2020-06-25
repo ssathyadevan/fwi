@@ -7,24 +7,30 @@
 #include "inversionInterface.h"
 #include "progressBar.h"
 
-class EvolutionInversion : public inversionInterface
+namespace fwi
 {
-public:
-    EvolutionInversion(forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
+    namespace inversionMethods
+    {
+        class EvolutionInversion : public inversionInterface
+        {
+        public:
+            EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
-    EvolutionInversion(const EvolutionInversion &) = delete;
-    EvolutionInversion &operator=(const EvolutionInversion &) = delete;
+            EvolutionInversion(const EvolutionInversion &) = delete;
+            EvolutionInversion &operator=(const EvolutionInversion &) = delete;
 
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
-private:
-    forwardModelInterface *_forwardModel;
-    EvolutionInversionInput _eiInput;
+        private:
+            forwardModels::forwardModelInterface *_forwardModel;
+            EvolutionInversionInput _eiInput;
 
-    const grid2D &_grid;
-    const sources &_src;
-    const receivers &_recv;
-    const frequenciesGroup &_freq;
+            const core::grid2D &_grid;
+            const core::sources &_src;
+            const core::receivers &_recv;
+            const core::frequenciesGroup &_freq;
 
-    std::ofstream openResidualLogFile(genericInput &gInput);
-};
+            std::ofstream openResidualLogFile(io::genericInput &gInput);
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

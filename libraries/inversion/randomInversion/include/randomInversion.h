@@ -6,24 +6,30 @@
 #include "randomInversionInput.h"
 #include "randomInversionInputCardReader.h"
 
-class RandomInversion : public inversionInterface
+namespace fwi
 {
-public:
-    RandomInversion(forwardModelInterface *forwardModel, const RandomInversionInput &riInput);
+    namespace inversionMethods
+    {
+        class RandomInversion : public inversionInterface
+        {
+        public:
+            RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput);
 
-    RandomInversion(const RandomInversion &) = delete;
-    RandomInversion &operator=(const RandomInversion &) = delete;
+            RandomInversion(const RandomInversion &) = delete;
+            RandomInversion &operator=(const RandomInversion &) = delete;
 
-    dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, genericInput gInput);
+            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
-private:
-    forwardModelInterface *_forwardModel;
-    RandomInversionInput _riInput;
+        private:
+            forwardModels::forwardModelInterface *_forwardModel;
+            RandomInversionInput _riInput;
 
-    const grid2D &_grid;
-    const sources &_src;
-    const receivers &_recv;
-    const frequenciesGroup &_freq;
+            const core::grid2D &_grid;
+            const core::sources &_src;
+            const core::receivers &_recv;
+            const core::frequenciesGroup &_freq;
 
-    std::ofstream openResidualLogFile(genericInput &gInput);
-};
+            std::ofstream openResidualLogFile(io::genericInput &gInput);
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

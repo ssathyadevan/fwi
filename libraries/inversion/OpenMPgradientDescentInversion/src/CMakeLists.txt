@@ -7,7 +7,6 @@ target_include_directories(OpenMP_gradient_descent_inversion_library PUBLIC ${LI
 target_link_libraries(
     OpenMP_gradient_descent_inversion_library
     gradient_descent_inversion_library
-    utilities_library
     core_library
     integral_forward_model_library
     forwardModelContainer_library)

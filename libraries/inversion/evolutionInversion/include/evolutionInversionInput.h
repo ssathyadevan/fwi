@@ -1,8 +1,14 @@
 #pragma once
 
-struct EvolutionInversionInput
+namespace fwi
 {
-    double toleranceOuter;
-    int nGenerations;
-    int nChildrenPerGeneration;
-};
+    namespace inversionMethods
+    {
+        struct EvolutionInversionInput
+        {
+            double toleranceOuter;
+            int nGenerations;
+            int nChildrenPerGeneration;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

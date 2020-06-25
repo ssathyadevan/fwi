@@ -1,14 +1,22 @@
 #include "DirectionCalculator.h"
 
-DirectionCalculator::DirectionCalculator(double errorFunctionalScalingfactor, forwardModelInterface *forwardModel) :
-    _errorFunctionalScalingFactor(errorFunctionalScalingfactor), _forwardModel(), _direction(forwardModel->getGrid())
+namespace fwi
 {
-    if(errorFunctionalScalingfactor < 0.0)
+    namespace inversionMethods
     {
-        throw std::invalid_argument("Error functional scaling factor is negative");
-    }
-    _forwardModel = forwardModel;
-    _direction.zero();
-}
+        DirectionCalculator::DirectionCalculator(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel)
+            : _errorFunctionalScalingFactor(errorFunctionalScalingfactor)
+            , _forwardModel()
+            , _direction(forwardModel->getGrid())
+        {
+            if(errorFunctionalScalingfactor < 0.0)
+            {
+                throw std::invalid_argument("Error functional scaling factor is negative");
+            }
+            _forwardModel = forwardModel;
+            _direction.zero();
+        }
 
-DirectionCalculator::~DirectionCalculator() {}
+        DirectionCalculator::~DirectionCalculator() {}
+    }   // namespace inversionMethods
+}   // namespace fwi

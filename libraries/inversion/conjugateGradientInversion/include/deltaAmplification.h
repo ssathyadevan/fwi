@@ -1,10 +1,24 @@
 #pragma once
 
-struct cgDeltaAmplification
+namespace fwi
 {
-    double start;
-    double slope;
+    namespace inversionMethods
+    {
+        struct cgDeltaAmplification
+        {
+            double start;
+            double slope;
 
-    cgDeltaAmplification() : start(0.0), slope(0.0) {}
-    cgDeltaAmplification(double start_, double slope_) : start(start_), slope(slope_) {}
-};
+            cgDeltaAmplification()
+                : start(0.0)
+                , slope(0.0)
+            {
+            }
+            cgDeltaAmplification(double start_, double slope_)
+                : start(start_)
+                , slope(slope_)
+            {
+            }
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

@@ -11,21 +11,27 @@
 #include <cmath>
 #include <complex>
 
-namespace greensFunctions
+namespace fwi
 {
-float Helmholtz2DReal(float k, float r);
+    namespace core
+    {
+        namespace greensFunctions
+        {
+            float Helmholtz2DReal(float k, float r);
 
-float Helmholtz2DImag(float k, float r);
+            float Helmholtz2DImag(float k, float r);
 
-double Helmholtz2DReal(double k, double r);
+            double Helmholtz2DReal(double k, double r);
 
-double Helmholtz2DImag(double k, double r);
+            double Helmholtz2DImag(double k, double r);
 
-std::complex<double> Helmholtz2D(double k, double r);
+            std::complex<double> Helmholtz2D(double k, double r);
 
-double Helmholtz3DReal(double k, double r);
+            double Helmholtz3DReal(double k, double r);
 
-double Helmholtz3DImag(double k, double r);
+            double Helmholtz3DImag(double k, double r);
 
-std::complex<double>  Helmholtz3D(double k, double r);
-}
+            std::complex<double> Helmholtz3D(double k, double r);
+        }   // namespace greensFunctions
+    }       // namespace core
+}   // namespace fwi

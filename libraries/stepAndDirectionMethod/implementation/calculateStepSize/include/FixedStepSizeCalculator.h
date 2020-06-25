@@ -2,15 +2,22 @@
 
 #include "StepSizeCalculator.h"
 
-class FixedStepSizeCalculator : public StepSizeCalculator
+namespace fwi
 {
-public:
-    FixedStepSizeCalculator(double size);
-    virtual ~FixedStepSizeCalculator();
+    namespace inversionMethods
+    {
+        class FixedStepSizeCalculator : public StepSizeCalculator
+        {
+        public:
+            FixedStepSizeCalculator(double size);
+            virtual ~FixedStepSizeCalculator();
 
-    double calculateStepSize();
-    void updateVariables(const dataGrid2D &, const dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
+            double calculateStepSize();
+            void updateVariables(
+                const core::dataGrid2D &, const core::dataGrid2D &, int, const std::vector<std::complex<double>> &, const std::vector<std::complex<double>> &);
 
-private:
-    double _size = 0;
-};
+        private:
+            double _size = 0;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi

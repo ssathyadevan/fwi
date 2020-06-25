@@ -21,10 +21,10 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
     {
-        L_(lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
-        L_(lerror) << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
+        L_(fwi::fwi::io::lerror) << "Please give the case folder as argument. The case folder should contain an input and output folder." << std::endl;
+        L_(fwi::fwi::io::lerror) << "Make sure the input folder inside the case folder contains the files GenericInput.json, FMInput.json and CGInput.json" << std::endl;
 
-        L_(lerror) << "Please give the forward model as argument." << std::endl;
+        L_(fwi::fwi::io::lerror) << "Please give the forward model as argument." << std::endl;
         exit(EXIT_FAILURE);
     }
     try{
@@ -37,8 +37,8 @@ int main(int argc, char **argv)
         MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
         MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
         std::vector<std::string> arguments(argv + 1, argc + argv);
-        GenericInputCardReader genericReader(arguments[0]);
-        GenericInput gInput = genericReader.getInput();
+        fwi::fwi::io::GenericInputCardReader genericReader(arguments[0]);
+        fwi::fwi::io::GenericInput gInput = genericReader.getInput();
         std::string desired_forward_model = arguments[1];
 
         std::string logFileName;
@@ -48,14 +48,14 @@ int main(int argc, char **argv)
         if (!gInput.verbose)
         {
             std::cout << "Printing the program output onto a file named: " << logFileName << " in the output folder" << std::endl;
-            initLogger( logFileName.c_str(), ldebug);
+            fwi::io::initLogger( logFileName.c_str(), fwi::fwi::io::ldebug);
         }
 
         if (mpi_rank == 0)
         { //MASTER THREAD
             std::cerr << "MPI initialized with " << mpi_size << " threads." << std::endl;
-            chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
-            create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+            fwi::fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.ngrid_original[0]);
+            fwi::fwi::io::create_csv_files_for_chi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
             clock.Start();
         }
 
@@ -65,9 +65,9 @@ int main(int argc, char **argv)
         { //MASTER THREAD
             clock.End();
 
-            L_(linfo) << "Visualisation of the estimated temple using FWI" ;
-            chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
-            create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+            L_(fwi::fwi::io::linfo) << "Visualisation of the estimated temple using FWI" ;
+            fwi::fwi::io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.ngrid[0]);
+            fwi::fwi::io::create_csv_files_for_chi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
             std::string msg = clock.OutputString();
             writePlotInput(gInput, msg);
@@ -113,7 +113,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 {
     //CpuClockMPI a;
 
-    // initialize the grid, sources, receivers, grouped frequencies
+    // initialize the grid sources receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
     Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
     src.Print();
@@ -129,11 +129,11 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     { //MASTER
         std::string fileLocation = gInput.outputLocation + runName + "InvertedChiToPressure.txt";
         std::ifstream file(fileLocation);
-        CSVReader row;
+        fwi::fwi::io::CSVReader row;
 
         if (!file.is_open())
         {
-            L_(lerror) << "Could not open file at " << fileLocation;
+            L_(fwi::fwi::io::lerror) << "Could not open file at " << fileLocation;
             exit(EXIT_FAILURE);
         }
 
@@ -150,17 +150,17 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
     ForwardModelInterface *model;
     model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
-    MPIConjugateGradientInversion *inverse;
-    MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
+    fwi::inversionMethods::MPIConjugateGradientInversion *inverse;
+    fwi::inversionMethods::MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
     inverse = new MPIConjugateGradientInversion(model, mpiconjugategradientreader.getInput());
 
     if (mpi_rank == 0)
     {
-        L_(linfo) << "Estimating Chi..." ;
+        L_(fwi::fwi::io::linfo) << "Estimating Chi..." ;
 
         PressureFieldSerial chi_est = inverse->Reconstruct(referencePressureData, gInput);
 
-        L_(linfo) << "Done, writing to file" ;
+        L_(fwi::fwi::io::linfo) << "Done, writing to file" ;
 
         chi_est.toFile(gInput.outputLocation + "chi_est_" + runName + ".txt");
     }

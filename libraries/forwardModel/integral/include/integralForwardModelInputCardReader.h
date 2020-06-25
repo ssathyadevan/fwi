@@ -1,21 +1,27 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <fstream>
-#include <sstream>
+#include "ReadJsonHelper.h"
 #include "inputCardReader.h"
 #include "integralForwardModelInput.h"
-#include "ReadJsonHelper.h"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
-class integralForwardModelInputCardReader : public inputCardReader
+namespace fwi
 {
-public:
-    integralForwardModelInputCardReader(const std::string &caseFolder);
-    const integralForwardModelInput getInput() const { return _input; }
+    namespace forwardModels
+    {
+        class integralForwardModelInputCardReader : public io::inputCardReader
+        {
+        public:
+            integralForwardModelInputCardReader(const std::string &caseFolder);
+            const integralForwardModelInput getInput() const { return _input; }
 
-private:
-    const std::string _fileName = "IntegralFMInput.json";
-    integralForwardModelInput _input;
-    void readJsonFile(const std::string &filePath);
-    void readIterParameters(const nlohmann::json &jsonFile);
-};
+        private:
+            const std::string _fileName = "IntegralFMInput.json";
+            integralForwardModelInput _input;
+            void readJsonFile(const std::string &filePath);
+            void readIterParameters(const nlohmann::json &jsonFile);
+        };
+    }   // namespace forwardModels
+}   // namespace fwi

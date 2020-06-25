@@ -3,11 +3,17 @@
 #include "ReconstructorParameters.h"
 #include "StepSizeParameters.h"
 
-struct StepAndDirectionReconstructorInput
+namespace fwi
 {
-public:
-    ReconstructorParameters reconstructorParameters;
-    StepSizeParameters stepSizeParameters;
-    DirectionParameters directionParameters;
-    bool doConjugateGradientRegularisation;
-};
+    namespace inversionMethods
+    {
+        struct StepAndDirectionReconstructorInput
+        {
+        public:
+            ReconstructorParameters reconstructorParameters;
+            StepSizeParameters stepSizeParameters;
+            DirectionParameters directionParameters;
+            bool doConjugateGradientRegularisation;
+        };
+    }   // namespace inversionMethods
+}   // namespace fwi
