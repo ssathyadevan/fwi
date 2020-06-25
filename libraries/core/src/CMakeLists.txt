@@ -8,7 +8,8 @@ set(CPP_SOURCES_AND_H_HEADERS
     complexDataGrid2D.cpp               ../include/complexDataGrid2D.h
     dataGrid2D.cpp                      ../include/dataGrid2D.h
     receivers.cpp                       ../include/receivers.h
-    sources.cpp                         ../include/sources.h)
+    sources.cpp                         ../include/sources.h
+                                        ../include/costFunction.h)
 
 add_library(core_library ${CPP_SOURCES_AND_H_HEADERS})
 
