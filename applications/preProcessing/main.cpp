@@ -1,10 +1,9 @@
-#include "genericInputCardReader.h"
-#include "utilityFunctions.h"
-//#include "forwardModel.h" // can be removed
 #include "cpuClock.h"
+#include "genericInputCardReader.h"
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
 #include "log.h"
+#include "utilityFunctions.h"
 
 void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, const std::string &runName);
 

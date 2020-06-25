@@ -2,7 +2,6 @@ add_executable( FWI_OpenMPGradienDescentProcess main.cpp )
 
 target_include_directories(FWI_OpenMPGradienDescentProcess PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/performance/include)
 target_link_libraries( FWI_OpenMPGradienDescentProcess integral_forward_model_library finite_difference_forward_model_library OpenMP_gradient_descent_inversion_library io_library performance_library)
-#reformatted
     
 
 install( TARGETS FWI_OpenMPGradienDescentProcess DESTINATION bin)
