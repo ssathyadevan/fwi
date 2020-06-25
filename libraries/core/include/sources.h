@@ -12,10 +12,10 @@ namespace fwi
         class sources
         {
         public:
-            int nSrc;
+            int count;
             std::vector<std::array<double, 2>> xSrc;
             // Place the sources on a linear line from xMin to xMax, including the end points
-            sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_);
+            sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_);
 
             void Print();
 

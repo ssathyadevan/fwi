@@ -13,15 +13,15 @@ namespace fwi
             std::array<double, 2> x_max = {2.0, 2.0};
             std::array<int, 2> n_x = {2, 4};
 
-            std::array<double, 2> SrcMin = {0.0, -2.0};
-            std::array<double, 2> SrcMax = {2.0, -2.0};
-            int nSrc = 2;
+            std::array<double, 2> sourceMin = {0.0, -2.0};
+            std::array<double, 2> sourceMax = {2.0, -2.0};
+            int count = 2;
 
             core::grid2D grid = core::grid2D(x_min, x_max, n_x);
 
             double freq = 20.0;
             double c_0 = 2000.0;
-            core::sources src(SrcMin, SrcMax, nSrc);
+            core::sources source(sourceMin, sourceMax, count);
 
             core::dataGrid2D chiEst(grid);
             chiEst.random();
@@ -35,7 +35,7 @@ namespace fwi
             fmInput.pmlWidthFactor = pmlWidthfactor;
             fmInput.sourceParameter = sourceParameter;
 
-            Helmholtz2D helmholtzFreq(grid, freq, src, c_0, chiEst, fmInput);
+            Helmholtz2D helmholtzFreq(grid, freq, source, c_0, chiEst, fmInput);
             std::array<double, 2> dx;
             dx[0] = (x_max[0] - x_min[0]) / static_cast<double>(n_x[0] - 1);
             dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(n_x[1] - 1);
@@ -55,15 +55,15 @@ namespace fwi
             std::array<double, 2> x_max = {2.0, 2.0};
             std::array<int, 2> n_x = {2, 4};
 
-            std::array<double, 2> SrcMin = {0.0, -2.0};
-            std::array<double, 2> SrcMax = {2.0, -2.0};
-            int nSrc = 2;
+            std::array<double, 2> sourceMin = {0.0, -2.0};
+            std::array<double, 2> sourceMax = {2.0, -2.0};
+            int count = 2;
 
             core::grid2D grid = core::grid2D(x_min, x_max, n_x);
 
             double freq = 20.0;
             double c_0 = 2000.0;
-            core::sources src(SrcMin, SrcMax, nSrc);
+            core::sources source(sourceMin, sourceMax, count);
 
             core::dataGrid2D chiEst(grid);
             chiEst.random();
@@ -77,7 +77,7 @@ namespace fwi
             fmInput.pmlWidthFactor = pmlWidthfactor;
             fmInput.sourceParameter = sourceParameter;
 
-            Helmholtz2D helmholtzFreq(grid, freq, src, c_0, chiEst, fmInput);
+            Helmholtz2D helmholtzFreq(grid, freq, source, c_0, chiEst, fmInput);
             std::array<double, 2> dx;
             dx[0] = (x_max[0] - x_min[0]) / static_cast<double>(n_x[0] - 1);
             dx[1] = (x_max[1] - x_min[1]) / static_cast<double>(n_x[1] - 1);

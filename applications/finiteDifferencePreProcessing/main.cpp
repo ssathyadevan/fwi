@@ -58,16 +58,16 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     std::string inputPath = gInput.inputFolder + gInput.fileName + ".txt";
     chi.fromFile(inputPath);
 
-    fwi::core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
-    src.Print();
+    fwi::core::sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    source.Print();
 
-    fwi::core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
-    recv.Print();
+    fwi::core::receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    receiver.Print();
 
     fwi::core::frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
+    int magnitude = freqg.nFreq * source.count * receiver.count;
     std::vector<std::complex<double>> referencePressureData(magnitude);
 
     std::string outputPath = gInput.outputLocation + "chi_ref_" + runName + ".txt";
@@ -78,7 +78,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     fwi::forwardModels::forwardModelInterface *model;
     fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
     fwi::forwardModels::finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
-    model = new fwi::forwardModels::finiteDifferenceForwardModel(grid, src, recv, freqg, fmInput);
+    model = new fwi::forwardModels::finiteDifferenceForwardModel(grid, source, receiver, freqg, fmInput);
     clock_t tEndForwardModel = clock();
     L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

@@ -82,14 +82,14 @@ void performInversion(const fwi::io::genericInput &gInput, const std::string &ru
 {
     // initialize the grid sources receivers, grouped frequencies
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    fwi::core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
-    src.Print();
-    fwi::core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
-    recv.Print();
+    fwi::core::sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    source.Print();
+    fwi::core::receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    receiver.Print();
     fwi::core::frequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
-    int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
+    int magnitude = freq.nFreq * source.count * receiver.count;
 
     // read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
@@ -115,7 +115,7 @@ void performInversion(const fwi::io::genericInput &gInput, const std::string &ru
     }
     L_(fwi::io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    fwi::ForwardModelContainer forwardmodelcontainer(gInput, "integralForwardModel", grid, src, recv, freq);
+    fwi::ForwardModelContainer forwardmodelcontainer(gInput, "integralForwardModel", grid, source, receiver, freq);
     clock_t tEndForwardModel = clock();
     L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

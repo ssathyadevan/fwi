@@ -5,22 +5,22 @@ namespace fwi
 {
     namespace core
     {
-        receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_)
-            : nRecv(nRecv_)
+        receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_)
+            : count(count_)
             , xRecv()
         {
-            assert(nRecv > 1);
+            assert(count > 1);
 
             std::array<double, 2> dx = calculateDistance(xMin, xMax);
 
-            for(int i = 0; i < nRecv; i++)
+            for(int i = 0; i < count; i++)
             {
-                std::array<double, 2> recv;
+                std::array<double, 2> receiverArray;
                 for(int j = 0; j < 2; j++)
                 {
-                    recv[j] = xMin[j] + i * dx[j];
+                    receiverArray[j] = xMin[j] + i * dx[j];
                 }
-                xRecv.push_back(recv);
+                xRecv.push_back(receiverArray);
             }
         }
 
@@ -29,15 +29,15 @@ namespace fwi
             std::array<double, 2> dx;
             for(int j = 0; j < 2; j++)
             {
-                dx[j] = (xMax[j] - xMin[j]) / (nRecv - 1);
+                dx[j] = (xMax[j] - xMin[j]) / (count - 1);
             }
             return dx;
         }
 
         void receivers::Print()
         {
-            L_(io::linfo) << "Total number is receivers is " << nRecv << ". Positions:";
-            for(int i = 0; i < nRecv; i++)
+            L_(io::linfo) << "Total number is receivers is " << count << ". Positions:";
+            for(int i = 0; i < count; i++)
             {
                 L_(io::linfo) << "x = (" << xRecv[i][0] << ", " << xRecv[i][1] << ")";
             }

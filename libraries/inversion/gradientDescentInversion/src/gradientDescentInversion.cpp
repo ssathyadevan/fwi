@@ -11,8 +11,8 @@ namespace fwi
             : _forwardModel()
             , _gdInput(gdInput)
             , _grid(forwardModel->getGrid())
-            , _src(forwardModel->getSrc())
-            , _recv(forwardModel->getRecv())
+            , _source(forwardModel->getSrc())
+            , _receiver(forwardModel->getRecv())
             , _freq(forwardModel->getFreq())
         {
             _forwardModel = forwardModel;
@@ -37,7 +37,7 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
+            const int nTotal = _freq.nFreq * _source.count * _receiver.count;
             double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
             double gamma = _gdInput.gamma0;   // First iteration
 

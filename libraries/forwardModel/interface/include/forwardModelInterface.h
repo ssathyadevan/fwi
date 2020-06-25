@@ -27,7 +27,7 @@ namespace fwi
         class forwardModelInterface
         {
         public:
-            forwardModelInterface(const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq);
+            forwardModelInterface(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq);
 
             virtual ~forwardModelInterface();
 
@@ -74,8 +74,8 @@ namespace fwi
 
         protected:
             const core::grid2D &_grid;
-            const core::sources &_src;
-            const core::receivers &_recv;
+            const core::sources &_source;
+            const core::receivers &_receiver;
             const core::frequenciesGroup &_freq;
         };
     }   // namespace forwardModels

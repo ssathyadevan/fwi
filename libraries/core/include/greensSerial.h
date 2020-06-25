@@ -19,7 +19,7 @@ namespace fwi
         {
         public:
             greensRect2DCpu(
-                const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
+                const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &source_, const receivers &receiver_, double k_);
 
             ~greensRect2DCpu();
 
@@ -48,8 +48,8 @@ namespace fwi
             std::function<std::complex<double>(double, double)> G_func;
 
             const grid2D grid;
-            const sources src;
-            const receivers recv;
+            const sources source;
+            const receivers receiver;
             const double k;
 
             std::complex<double> *gVol;

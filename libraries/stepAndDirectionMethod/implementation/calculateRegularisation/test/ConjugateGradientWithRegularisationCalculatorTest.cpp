@@ -28,12 +28,12 @@ namespace fwi
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {2.0, 2.0};
             core::freqInfo freq(0.0, 10.0, 5);
-            core::sources src(xMin, xMax, 2);
-            core::receivers recv(xMin, xMax, 2);
+            core::sources source(xMin, xMax, 2);
+            core::receivers receiver(xMin, xMax, 2);
             core::frequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::ForwardModelInterfaceMock *forwardModel;
-            forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, src, recv, frequencies);
+            forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, source, receiver, frequencies);
 
             double initialKappaTimesResidualValue = 1.0;
             forwardModel->setKappaTimesResidualValue(initialKappaTimesResidualValue);
@@ -43,7 +43,7 @@ namespace fwi
             cgParametersInput._nIterations = 0;
             cgParametersInput._tolerance = 0.001;
 
-            int nTotal = forwardModel->getSrc().nSrc * forwardModel->getFreq().nFreq * forwardModel->getRecv().nRecv;
+            int nTotal = forwardModel->getSrc().count * forwardModel->getFreq().nFreq * forwardModel->getRecv().count;
             const double pDataValue = 1.0;
             std::vector<std::complex<double>> pData(nTotal, pDataValue);
 

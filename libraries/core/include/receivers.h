@@ -15,10 +15,10 @@ namespace fwi
             receivers &operator=(const receivers &) = delete;
 
         public:
-            const int nRecv;
+            const int count;
             std::vector<std::array<double, 2>> xRecv;
 
-            receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nRecv_);
+            receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_);
 
             void Print();
 

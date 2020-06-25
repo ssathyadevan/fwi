@@ -32,7 +32,7 @@ namespace fwi
         {
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
-            const int nTotal = _frequencies.nFreq * _sources.nSrc * _receivers.nRecv;
+            const int nTotal = _frequencies.nFreq * _sources.count * _receivers.count;
             const double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // Scaling factor
             _chiEstimate.zero();
 
@@ -152,9 +152,9 @@ namespace fwi
             double alphaNumerator = 0.0;
             double alphaDenominator = 0.0;
 
-            int nSignals = _frequencies.nFreq * _sources.nSrc * _receivers.nRecv;
+            int nSignals = _frequencies.nFreq * _sources.count * _receivers.count;
 
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
+            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.count * _receivers.count);
             _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
 
             for(int i = 0; i < nSignals; i++)
@@ -254,7 +254,7 @@ namespace fwi
             RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta,
             const double fDataPrevious, const core::dataGrid2D &zeta)
         {
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.nSrc * _receivers.nRecv);
+            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.nFreq * _sources.count * _receivers.count);
             _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
 
             double a0 = fDataPrevious;

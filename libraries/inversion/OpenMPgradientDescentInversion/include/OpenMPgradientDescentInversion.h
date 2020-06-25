@@ -17,8 +17,8 @@ namespace fwi
             gradientDescentInversionInput _gdInput;
 
             const core::grid2D &_grid;
-            const core::sources &_src;
-            const core::receivers &_recv;
+            const core::sources &_source;
+            const core::receivers &_receiver;
             const core::frequenciesGroup &_freq;
 
             core::dataGrid2D gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, double gamma);

@@ -13,7 +13,7 @@ namespace fwi
         class IntegralForwardModel : public forwardModelInterface
         {
         public:
-            IntegralForwardModel(const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq,
+            IntegralForwardModel(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq,
                 const integralForwardModelInput &fmInput);
 
             ~IntegralForwardModel();
@@ -39,7 +39,7 @@ namespace fwi
             void createP0();
             void deleteP0();
 
-            void createPTot(const core::frequenciesGroup &freq, const core::sources &src);
+            void createPTot(const core::frequenciesGroup &freq, const core::sources &source);
 
             void createGreens();
             void deleteGreens();
@@ -49,7 +49,7 @@ namespace fwi
             core::complexDataGrid2D calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D &chiEst, const core::complexDataGrid2D &Pinit);
 
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
-            void createKappa(const core::frequenciesGroup &freq, const core::sources &src, const core::receivers &recv);
+            void createKappa(const core::frequenciesGroup &freq, const core::sources &source, const core::receivers &receiver);
             void deleteKappa();
         };
 

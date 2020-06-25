@@ -98,10 +98,10 @@ void performInversion(const fwi::io::genericInput &gInput)
 {
     // initialize the grid sources receivers, grouped frequencies
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    fwi::core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
-    src.Print();
-    fwi::core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
-    recv.Print();
+    fwi::core::sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    source.Print();
+    fwi::core::receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    receiver.Print();
     fwi::core::frequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
@@ -125,7 +125,7 @@ void performInversion(const fwi::io::genericInput &gInput)
     clock_t tStartForwardModel = clock();
     fwi::forwardModels::forwardModelInterface *model;
     fwi::forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new fwi::forwardModels::IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
+    model = new fwi::forwardModels::IntegralForwardModel(grid, source, receiver, freqg, integralreader.getInput());
     clock_t tEndForwardModel = clock();
     L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";
 

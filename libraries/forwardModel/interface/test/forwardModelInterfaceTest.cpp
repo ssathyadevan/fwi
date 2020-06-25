@@ -6,22 +6,22 @@ namespace fwi
     namespace forwardModels
     {
         const core::grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
-        const core::sources src({0.0, 0.0}, {2.0, 2.0}, 8);
-        const core::receivers recv({0.0, 0.0}, {2.0, 2.0}, 8);
+        const core::sources source({0.0, 0.0}, {2.0, 2.0}, 8);
+        const core::receivers receiver({0.0, 0.0}, {2.0, 2.0}, 8);
         const core::freqInfo freq = {10, 40, 15};
         const core::frequenciesGroup freqGroup(freq, 1.0);
 
         TEST(forwardModelInterfaceTest, constructorTest)
         {
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqGroup);
+            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
             EXPECT_TRUE(grid2D == forwardModelInterfaceMock.getGrid());
         }
 
         TEST(forwardModelInterfaceTest, calculateResidualTest)
         {
             // Given
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqGroup);
-            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * recv.nRecv * src.nSrc);
+            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
+            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
                 element = 1.5;
@@ -34,7 +34,7 @@ namespace fwi
             residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
 
             // Then
-            std::vector<std::complex<double>> expectedResidual(freqGroup.nFreq * recv.nRecv * src.nSrc);
+            std::vector<std::complex<double>> expectedResidual(freqGroup.nFreq * receiver.count * source.count);
             for(std::complex<double> &element : expectedResidual)
             {
                 element = -0.5;
@@ -49,8 +49,8 @@ namespace fwi
         TEST(forwardModelInterfaceTest, calculateResidualNormSqTest)
         {
             // Given
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, src, recv, freqGroup);
-            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * recv.nRecv * src.nSrc);
+            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
+            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
                 element = 1;

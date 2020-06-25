@@ -34,7 +34,7 @@ namespace fwi
             double errorFunctionalScalingFactor = 1.0;
             double derivativeStepSize = 0.0;
 
-            int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
+            int lengthOfPData = forwardmodel->getSrc().count * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().count;
             const double pDataValue = 1.0;
             std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
             EXPECT_THROW(GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData), std::invalid_argument);
@@ -64,7 +64,7 @@ namespace fwi
             double errorFunctionalScalingFactor = 1.0;
             double derivativeStepSize = 0.1;
 
-            int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
+            int lengthOfPData = forwardmodel->getSrc().count * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().count;
             const double pDataValue = 1.0;
             std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
             DirectionCalculator *directionCalculator =
@@ -117,7 +117,7 @@ namespace fwi
             const double errorFunctionalScalingFactor = 1.0;
             const double derivativeStepSize = 1.0;
 
-            const int lengthOfPData = forwardmodel->getSrc().nSrc * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().nRecv;
+            const int lengthOfPData = forwardmodel->getSrc().count * forwardmodel->getFreq().nFreq * forwardmodel->getRecv().count;
             const double pDataValue = 2.0;
             std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
             DirectionCalculator *directionCalculator =
