@@ -1,6 +1,6 @@
 #include "genericInputCardReader.h"
 #include "utilityFunctions.h"
-//#include "forwardModel.h"
+//#include "forwardModel.h" // can be removed
 #include "cpuClock.h"
 #include "finiteDifferenceForwardModel.h"
 #include "finiteDifferenceForwardModelInputCardReader.h"
