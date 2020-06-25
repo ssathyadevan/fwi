@@ -42,9 +42,9 @@ namespace fwi
         std::array<double, 2> xMin = {0.0, 0.0};
         std::array<double, 2> xMax = {2.0, 2.0};
         core::freqInfo freq(1.0, 2.0, 2);
-        core::sources sources(xMin, xMax, 2);
-        core::receivers receivers(xMin, xMax, 2);
-        core::frequenciesGroup frequencies(freq, 2000.0);
+        core::Sources sources(xMin, xMax, 2);
+        core::Receivers receivers(xMin, xMax, 2);
+        core::FrequenciesGroup frequencies(freq, 2000.0);
         // Create measurement data
         const int lengthOfPData = sources.count * receivers.count * frequencies.nFreq;
         const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
@@ -63,9 +63,9 @@ namespace fwi
         std::array<double, 2> xMax = {2.0, 2.0};
         core::freqInfo freq(1.0, 2.0, 2);
         core::grid2D grid = getGrid();
-        core::sources sources(xMin, xMax, 2);
-        core::receivers receivers(xMin, xMax, 2);
-        core::frequenciesGroup frequencies(freq, 2000.0);
+        core::Sources sources(xMin, xMax, 2);
+        core::Receivers receivers(xMin, xMax, 2);
+        core::FrequenciesGroup frequencies(freq, 2000.0);
 
         forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
@@ -92,9 +92,9 @@ namespace fwi
         std::array<double, 2> xMax = {2.0, 2.0};
         core::freqInfo freq(1.0, 2.0, 2);
         core::grid2D grid = getGrid();
-        core::sources sources(xMin, xMax, 2);
-        core::receivers receivers(xMin, xMax, 2);
-        core::frequenciesGroup frequencies(freq, 2000.0);
+        core::Sources sources(xMin, xMax, 2);
+        core::Receivers receivers(xMin, xMax, 2);
+        core::FrequenciesGroup frequencies(freq, 2000.0);
 
         forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
@@ -120,9 +120,9 @@ namespace fwi
         std::array<double, 2> xMax = {2.0, 2.0};
         core::freqInfo freq(1.0, 2.0, 2);
         core::grid2D grid = getGrid();
-        core::sources sources(xMin, xMax, 2);
-        core::receivers receivers(xMin, xMax, 2);
-        core::frequenciesGroup frequencies(freq, 2000.0);
+        core::Sources sources(xMin, xMax, 2);
+        core::Receivers receivers(xMin, xMax, 2);
+        core::FrequenciesGroup frequencies(freq, 2000.0);
 
         forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
@@ -149,9 +149,9 @@ namespace fwi
         std::array<double, 2> xMax = {2.0, 2.0};
         core::freqInfo freq(1.0, 2.0, 2);
         core::grid2D grid = getGrid();
-        core::sources sources(xMin, xMax, 2);
-        core::receivers receivers(xMin, xMax, 2);
-        core::frequenciesGroup frequencies(freq, 2000.0);
+        core::Sources sources(xMin, xMax, 2);
+        core::Receivers receivers(xMin, xMax, 2);
+        core::FrequenciesGroup frequencies(freq, 2000.0);
 
         forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 

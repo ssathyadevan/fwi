@@ -6,17 +6,17 @@ namespace fwi
 {
     namespace core
     {
-        receivers InitializeReceivers()
+        Receivers InitializeReceivers()
         {
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {10.0, 10.0};
-            receivers receivers(xMin, xMax, 11);
+            Receivers receivers(xMin, xMax, 11);
             return receivers;
         }
 
         TEST(ReceiversTest, ConstructorTest)
         {
-            receivers receivers = InitializeReceivers();
+            Receivers receivers = InitializeReceivers();
 
             double dx = 1.0;
             double iteration_counter = 0.0;
@@ -31,14 +31,14 @@ namespace fwi
 
         TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
         {
-            receivers receivers = InitializeReceivers();
+            Receivers receivers = InitializeReceivers();
 
             EXPECT_EQ(receivers.xRecv.size(), 11);
         }
 
         TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
         {
-            receivers receivers = InitializeReceivers();
+            Receivers receivers = InitializeReceivers();
 
             std::array<double, 11> expectedXPositions = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0};
 

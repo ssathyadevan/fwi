@@ -6,8 +6,8 @@ namespace fwi
 {
     namespace forwardModels
     {
-        IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver,
-            const core::frequenciesGroup &freq, const integralForwardModelInput &fmInput)
+        IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            const core::FrequenciesGroup &freq, const integralForwardModelInput &fmInput)
             : forwardModelInterface(grid, source, receiver, freq)
             , _Greens()
             , _p0()
@@ -94,7 +94,7 @@ namespace fwi
             _Greens = nullptr;
         }
 
-        void IntegralForwardModel::createPTot(const core::frequenciesGroup &freq, const core::sources &source)
+        void IntegralForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
             _pTot = new core::complexDataGrid2D *[freq.nFreq * source.count];
 
@@ -122,7 +122,7 @@ namespace fwi
             _pTot = nullptr;
         }
 
-        void IntegralForwardModel::createKappa(const core::frequenciesGroup &freq, const core::sources &source, const core::receivers &receiver)
+        void IntegralForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
             _Kappa = new core::complexDataGrid2D *[freq.nFreq * source.count * receiver.count];
 

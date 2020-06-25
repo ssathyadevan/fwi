@@ -12,7 +12,7 @@
 namespace fwi
 {
     ForwardModelContainer::ForwardModelContainer(const io::genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid,
-        const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
+        const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies)
         : _forwardmodels()
         , _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads()))
         , _numberOfSources(sources.count)
@@ -36,7 +36,7 @@ namespace fwi
     }
 
     void ForwardModelContainer::createForwardModels(const io::genericInput &gInput, const std::string &desiredForwardModel, const core::grid2D &grid,
-        const core::sources &sources, const core::receivers &receivers)
+        const core::Sources &sources, const core::Receivers &receivers)
     {
         if(desiredForwardModel == "integralForwardModel")
         {
@@ -140,7 +140,7 @@ namespace fwi
             double maximumFrequencyForThread = minimumFrequencyForThread + (totalFrequenciesForThread - 1) * _allFrequencies.dFreq;
 
             core::freqInfo frequencyStruct = {minimumFrequencyForThread, maximumFrequencyForThread, totalFrequenciesForThread};
-            core::frequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
+            core::FrequenciesGroup frequenciesForThread(frequencyStruct, _allFrequencies.c0);
 
             frequenciesForThread.Print(totalFrequenciesForThread);
             _frequenciesVector.push_back(frequenciesForThread);

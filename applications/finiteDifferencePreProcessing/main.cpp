@@ -58,13 +58,13 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     std::string inputPath = gInput.inputFolder + gInput.fileName + ".txt";
     chi.fromFile(inputPath);
 
-    fwi::core::sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     source.Print();
 
-    fwi::core::receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     receiver.Print();
 
-    fwi::core::frequenciesGroup freqg(gInput.freq, gInput.c0);
+    fwi::core::FrequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
     int magnitude = freqg.nFreq * source.count * receiver.count;

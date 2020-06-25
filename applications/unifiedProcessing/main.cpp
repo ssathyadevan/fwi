@@ -109,11 +109,11 @@ void performInversion(
 {
     // initialize the grid sources receivers, grouped frequencies
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-    fwi::core::sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     source.Print();
-    fwi::core::receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     receiver.Print();
-    fwi::core::frequenciesGroup freq(gInput.freq, gInput.c0);
+    fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
     int magnitude = freq.nFreq * source.count * receiver.count;

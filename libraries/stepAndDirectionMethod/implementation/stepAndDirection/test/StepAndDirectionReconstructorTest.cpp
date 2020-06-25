@@ -25,10 +25,10 @@ namespace fwi
         //    gInput.freq(0.0, 1.0, 2);
         //    gInput.reservoirTopLeftCornerInM = {0.0, 1.0};
         //    gInput.reservoirBottomRightCornerInM = {0.0, 1.0};
-        //    gInput.core::sourcesTopLeftCornerInM = {0.0, 1.0};
-        //    gInput.core::sourcesBottomRightCornerInM = {0.0, 1.0};
-        //    gInput.core::receiversTopLeftCornerInM = {0.0, 1.0};
-        //    gInput.core::receiversBottomRightCornerInM = {0.0, 1.0};
+        //    gInput.core::SourcesTopLeftCornerInM = {0.0, 1.0};
+        //    gInput.core::SourcesBottomRightCornerInM = {0.0, 1.0};
+        //    gInput.core::ReceiversTopLeftCornerInM = {0.0, 1.0};
+        //    gInput.core::ReceiversBottomRightCornerInM = {0.0, 1.0};
         //    gInput.nGridOriginal = {1, 1};   //??
         //    gInput.nGrid = {1, 1};           //??
         //    gInput.nSources = 2;
@@ -48,11 +48,11 @@ namespace fwi
         //    core::dataGrid2D dataGrid(grid);
         //    DirectionInput directionInput(0.1, dataGrid, 5, 1.0);
 
-        //    core::sources core::sources(xMin, xMax, 2);
-        //    core::receivers core::receivers(xMin, xMax, 2);
-        //    core::frequenciesGroup frequencies(freq, 2000.0);
-        //    int magnitude = frequencies.nFreq * core::sources.count * core::receivers.nrcv;
-        //    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
+        //    core::Sources core::Sources(xMin, xMax, 2);
+        //    core::Receivers core::Receivers(xMin, xMax, 2);
+        //    core::FrequenciesGroup frequencies(freq, 2000.0);
+        //    int magnitude = frequencies.nFreq * core::Sources.count * core::Receivers.nrcv;
+        //    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::Sources, core::Receivers, frequencies);
 
         //    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
 
@@ -84,11 +84,11 @@ namespace fwi
         //    core::dataGrid2D dataGrid(grid);
         //    DirectionInput directionInput(0.1, dataGrid, 1, 1.0);
 
-        //    core::sources core::sources(xMin, xMax, 2);
-        //    core::receivers core::receivers(xMin, xMax, 2);
-        //    core::frequenciesGroup frequencies(freq, 2000.0);
+        //    core::Sources core::Sources(xMin, xMax, 2);
+        //    core::Receivers core::Receivers(xMin, xMax, 2);
+        //    core::FrequenciesGroup frequencies(freq, 2000.0);
 
-        //    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::sources, core::receivers, frequencies);
+        //    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::Sources, core::Receivers, frequencies);
         //    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);
 
         //    FixedStepSizeCalculator chosenStepSize(2.0);

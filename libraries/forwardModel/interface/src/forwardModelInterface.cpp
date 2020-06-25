@@ -6,7 +6,7 @@ namespace fwi
     namespace forwardModels
     {
         forwardModelInterface::forwardModelInterface(
-            const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq)
+            const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
             : /*_residual(), */ _grid(grid)
             , _source(source)
             , _receiver(receiver)
@@ -19,11 +19,11 @@ namespace fwi
 
         const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
 
-        const core::sources &forwardModelInterface::getSrc() { return _source; }
+        const core::Sources &forwardModelInterface::getSrc() { return _source; }
 
-        const core::receivers &forwardModelInterface::getRecv() { return _receiver; }
+        const core::Receivers &forwardModelInterface::getRecv() { return _receiver; }
 
-        const core::frequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
+        const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
         std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)

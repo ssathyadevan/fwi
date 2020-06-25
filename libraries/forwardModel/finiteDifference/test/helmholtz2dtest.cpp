@@ -21,7 +21,7 @@ namespace fwi
 
             double freq = 20.0;
             double c_0 = 2000.0;
-            core::sources source(sourceMin, sourceMax, count);
+            core::Sources source(sourceMin, sourceMax, count);
 
             core::dataGrid2D chiEst(grid);
             chiEst.random();
@@ -63,7 +63,7 @@ namespace fwi
 
             double freq = 20.0;
             double c_0 = 2000.0;
-            core::sources source(sourceMin, sourceMax, count);
+            core::Sources source(sourceMin, sourceMax, count);
 
             core::dataGrid2D chiEst(grid);
             chiEst.random();

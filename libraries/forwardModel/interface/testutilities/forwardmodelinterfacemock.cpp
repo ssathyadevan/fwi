@@ -5,7 +5,7 @@ namespace fwi
     namespace forwardModels
     {
         ForwardModelInterfaceMock::ForwardModelInterfaceMock(
-            const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq)
+            const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
             : forwardModelInterface(grid, source, receiver, freq)
         {
             _kappaTimesResidualValue = 5.0;

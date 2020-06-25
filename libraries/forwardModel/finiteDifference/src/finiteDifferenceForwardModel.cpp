@@ -7,8 +7,8 @@ namespace fwi
 {
     namespace forwardModels
     {
-        finiteDifferenceForwardModel::finiteDifferenceForwardModel(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver,
-            const core::frequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
+        finiteDifferenceForwardModel::finiteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
             : forwardModelInterface(grid, source, receiver, freq)
             , _Greens()
             , _p0()
@@ -95,7 +95,7 @@ namespace fwi
             _Greens = nullptr;
         }
 
-        void finiteDifferenceForwardModel::createPTot(const core::frequenciesGroup &freq, const core::sources &source)
+        void finiteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
             _pTot = new core::complexDataGrid2D *[freq.nFreq * source.count];
 
@@ -123,7 +123,7 @@ namespace fwi
             _pTot = nullptr;
         }
 
-        void finiteDifferenceForwardModel::createKappa(const core::frequenciesGroup &freq, const core::sources &source, const core::receivers &receiver)
+        void finiteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
             _kappa = new core::complexDataGrid2D *[freq.nFreq * source.count * receiver.count];
 

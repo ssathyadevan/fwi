@@ -5,7 +5,7 @@ namespace fwi
 {
     namespace core
     {
-        sources::sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_)
+        Sources::Sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_)
             : count(count_)
             , xSrc()
         {
@@ -24,7 +24,7 @@ namespace fwi
             }
         }
 
-        std::array<double, 2> sources::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
+        std::array<double, 2> Sources::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
         {
             std::array<double, 2> dx;
             for(int j = 0; j < 2; j++)
@@ -34,9 +34,9 @@ namespace fwi
             return dx;
         }
 
-        void sources::Print()
+        void Sources::Print()
         {
-            L_(io::linfo) << "Total number of sources is " << count << ". Positions:";
+            L_(io::linfo) << "Total number of Sources is " << count << ". Positions:";
             for(int i = 0; i < count; i++)
             {
                 L_(io::linfo) << "x = (" << xSrc[i][0] << ", " << xSrc[i][1] << ")";

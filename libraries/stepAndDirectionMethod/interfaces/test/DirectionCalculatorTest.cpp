@@ -25,9 +25,9 @@ namespace fwi
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {2.0, 2.0};
             core::freqInfo freq(0.0, 10.0, 5);
-            core::sources sources(xMin, xMax, 2);
-            core::receivers receivers(xMin, xMax, 2);
-            core::frequenciesGroup frequencies(freq, 2000.0);
+            core::Sources sources(xMin, xMax, 2);
+            core::Receivers receivers(xMin, xMax, 2);
+            core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardModel;
             forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
@@ -49,9 +49,9 @@ namespace fwi
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {2.0, 2.0};
             core::freqInfo freq(0.0, 10.0, 5);
-            core::sources sources(xMin, xMax, 2);
-            core::receivers receivers(xMin, xMax, 2);
-            core::frequenciesGroup frequencies(freq, 2000.0);
+            core::Sources sources(xMin, xMax, 2);
+            core::Receivers receivers(xMin, xMax, 2);
+            core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardModel;
             forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);

@@ -6,10 +6,10 @@ namespace fwi
     namespace forwardModels
     {
         const core::grid2D grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
-        const core::sources source({0.0, 0.0}, {2.0, 2.0}, 8);
-        const core::receivers receiver({0.0, 0.0}, {2.0, 2.0}, 8);
+        const core::Sources source({0.0, 0.0}, {2.0, 2.0}, 8);
+        const core::Receivers receiver({0.0, 0.0}, {2.0, 2.0}, 8);
         const core::freqInfo freq = {10, 40, 15};
-        const core::frequenciesGroup freqGroup(freq, 1.0);
+        const core::FrequenciesGroup freqGroup(freq, 1.0);
 
         TEST(forwardModelInterfaceTest, constructorTest)
         {

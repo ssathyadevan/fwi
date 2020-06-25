@@ -10,15 +10,15 @@ namespace fwi
 {
     namespace core
     {
-        class receivers
+        class Receivers
         {
-            receivers &operator=(const receivers &) = delete;
+            Receivers &operator=(const Receivers &) = delete;
 
         public:
             const int count;
             std::vector<std::array<double, 2>> xRecv;
 
-            receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_);
+            Receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_);
 
             void Print();
 

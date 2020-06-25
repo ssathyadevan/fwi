@@ -15,7 +15,7 @@ namespace fwi
             double _kappaTimesResidualValue;
 
         public:
-            ForwardModelInterfaceMock(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq);
+            ForwardModelInterfaceMock(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq);
 
             ~ForwardModelInterfaceMock() {}
             void calculateKappa() {}

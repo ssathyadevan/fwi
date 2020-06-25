@@ -93,7 +93,7 @@ namespace fwi
     }
 
     forwardModels::forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
-        const core::grid2D &grid, const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies)
+        const core::grid2D &grid, const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies)
     {
         if(desiredForwardModel == "integralForwardModel")
         {

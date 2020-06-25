@@ -25,9 +25,9 @@ namespace fwi
             RandomInversionInput _riInput;
 
             const core::grid2D &_grid;
-            const core::sources &_source;
-            const core::receivers &_receiver;
-            const core::frequenciesGroup &_freq;
+            const core::Sources &_source;
+            const core::Receivers &_receiver;
+            const core::FrequenciesGroup &_freq;
 
             std::ofstream openResidualLogFile(io::genericInput &gInput);
         };

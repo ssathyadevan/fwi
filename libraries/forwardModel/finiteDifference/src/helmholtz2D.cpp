@@ -7,7 +7,7 @@ namespace fwi
     {
         static const double pi = std::atan(1.0) * 4.0;
 
-        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &source, const double c0, const core::dataGrid2D &chi,
+        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
             const finiteDifferenceForwardModelInput &fmInput)
             : _A()
             , _b()
@@ -38,7 +38,7 @@ namespace fwi
             // r == 0 uses the Point source implemtation (see BuildVector)
             double r = static_cast<double>(fmInput.sourceParameter.r);
 
-            // core::sources can be outside imaging domain. Area that we solve for needs to include all core::sources
+            // core::Sources can be outside imaging domain. Area that we solve for needs to include all core::Sources
             double extraWidthLeft = 0.0;
             double extraWidthRight = 0.0;
             double extraHeightBottom = 0.0;

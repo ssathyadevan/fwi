@@ -11,9 +11,9 @@ namespace fwi
 {
     namespace core
     {
-        class frequenciesGroup
+        class FrequenciesGroup
         {
-            frequenciesGroup operator=(const frequenciesGroup &) = delete;
+            FrequenciesGroup operator=(const FrequenciesGroup &) = delete;
 
         public:
             const int nFreq;
@@ -22,7 +22,7 @@ namespace fwi
             std::vector<double> freq;
             std::vector<double> k;
 
-            frequenciesGroup(freqInfo freqStruct, double c_0_);
+            FrequenciesGroup(freqInfo freqStruct, double c_0_);
 
             void Print(int nFreqTotal);
         };

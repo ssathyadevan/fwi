@@ -24,7 +24,7 @@ namespace fwi
         inversionMethods::inversionInterface *createInversion(
             const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput);
         forwardModels::forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
-            const core::grid2D &grid, const core::sources &sources, const core::receivers &receivers, const core::frequenciesGroup &frequencies);
+            const core::grid2D &grid, const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies);
 
         /**
          * @brief createStepAndDirectionReconstructor, creates stepSizeCalculator and directionCalculator

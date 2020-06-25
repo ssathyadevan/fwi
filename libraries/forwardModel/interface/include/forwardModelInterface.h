@@ -27,14 +27,14 @@ namespace fwi
         class forwardModelInterface
         {
         public:
-            forwardModelInterface(const core::grid2D &grid, const core::sources &source, const core::receivers &receiver, const core::frequenciesGroup &freq);
+            forwardModelInterface(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq);
 
             virtual ~forwardModelInterface();
 
             const core::grid2D &getGrid();
-            const core::sources &getSrc();
-            const core::receivers &getRecv();
-            const core::frequenciesGroup &getFreq();
+            const core::Sources &getSrc();
+            const core::Receivers &getRecv();
+            const core::FrequenciesGroup &getFreq();
 
             enum CostFunction
             {
@@ -74,9 +74,9 @@ namespace fwi
 
         protected:
             const core::grid2D &_grid;
-            const core::sources &_source;
-            const core::receivers &_receiver;
-            const core::frequenciesGroup &_freq;
+            const core::Sources &_source;
+            const core::Receivers &_receiver;
+            const core::FrequenciesGroup &_freq;
         };
     }   // namespace forwardModels
 }   // namespace fwi

@@ -16,7 +16,7 @@ namespace fwi
     {
         /**
          * @brief The ConjugateGradientInversion class uses the conjugate gradient method, as described in the README and the thesis by Peter Haffinger,
-         * to iteratively estimate the underlying structure using pressure data measured by the core::receivers and a forward model, which is able to convert
+         * to iteratively estimate the underlying structure using pressure data measured by the core::Receivers and a forward model, which is able to convert
          * an estimated structure to simulated pressure data.
          */
 
@@ -27,9 +27,9 @@ namespace fwi
             ConjugateGradientInversionInput _cgInput;
 
             const core::grid2D &_grid;
-            const core::sources &_sources;
-            const core::receivers &_receivers;
-            const core::frequenciesGroup &_frequencies;
+            const core::Sources &_sources;
+            const core::Receivers &_receivers;
+            const core::FrequenciesGroup &_frequencies;
 
             core::dataGrid2D _chiEstimate;
 

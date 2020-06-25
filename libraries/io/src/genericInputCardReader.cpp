@@ -208,7 +208,7 @@ namespace fwi
             int nSources = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterNSources);
             if(nSources <= 1)
             {
-                throw std::invalid_argument("Invalid number of core::sources (" + std::to_string(nSources) + "<= 1) in: " + _fileName);
+                throw std::invalid_argument("Invalid number of core::Sources (" + std::to_string(nSources) + "<= 1) in: " + _fileName);
             }
             _input.nSources = nSources;
         }
@@ -219,7 +219,7 @@ namespace fwi
             int nReceivers = ReadJsonHelper::tryGetParameterFromJson<int>(jsonFile, _fileName, parameterNReceivers);
             if(nReceivers <= 1)
             {
-                throw std::invalid_argument("Invalid number of core::receivers (" + std::to_string(nReceivers) + "<= 1) in: " + _fileName);
+                throw std::invalid_argument("Invalid number of core::Receivers (" + std::to_string(nReceivers) + "<= 1) in: " + _fileName);
             }
             _input.nReceivers = nReceivers;
         }

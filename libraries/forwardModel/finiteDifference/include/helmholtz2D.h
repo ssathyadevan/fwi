@@ -28,7 +28,7 @@ namespace fwi
         class Helmholtz2D
         {
         public:
-            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &source, const double c0, const core::dataGrid2D &chi,
+            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
                 const finiteDifferenceForwardModelInput &fmInput);
             ~Helmholtz2D();
             core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);

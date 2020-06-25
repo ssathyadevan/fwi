@@ -5,7 +5,7 @@ namespace fwi
 {
     namespace core
     {
-        receivers::receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_)
+        Receivers::Receivers(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_)
             : count(count_)
             , xRecv()
         {
@@ -24,7 +24,7 @@ namespace fwi
             }
         }
 
-        std::array<double, 2> receivers::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
+        std::array<double, 2> Receivers::calculateDistance(const std::array<double, 2> xMin, const std::array<double, 2> xMax)
         {
             std::array<double, 2> dx;
             for(int j = 0; j < 2; j++)
@@ -34,9 +34,9 @@ namespace fwi
             return dx;
         }
 
-        void receivers::Print()
+        void Receivers::Print()
         {
-            L_(io::linfo) << "Total number is receivers is " << count << ". Positions:";
+            L_(io::linfo) << "Total number is Receivers is " << count << ". Positions:";
             for(int i = 0; i < count; i++)
             {
                 L_(io::linfo) << "x = (" << xRecv[i][0] << ", " << xRecv[i][1] << ")";

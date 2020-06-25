@@ -16,7 +16,7 @@ namespace fwi
 
             /**
              * @brief calculateDirection
-             * @param chi is a core::dataGrid2D, pData is a vector of complex doubles (one value for each combination of core::sources, core::receivers and
+             * @param chi is a core::dataGrid2D, pData is a vector of complex doubles (one value for each combination of core::Sources, core::Receivers and
              * frequencies)
              * @return a datacore::grid2D which represents the direction
              */
