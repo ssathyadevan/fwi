@@ -1,5 +1,6 @@
 #pragma once
 
+<<<<<<< HEAD
 namespace fwi
 {
     namespace forwardModels
@@ -22,3 +23,21 @@ namespace fwi
         };
     }   // namespace forwardModels
 }   // namespace fwi
+=======
+struct PMLWidthFactor
+{
+    double x;
+    double z;
+
+    PMLWidthFactor()
+        : x(0.0)
+        , z(0.0)
+    {
+    }
+    PMLWidthFactor(int x_, double z_)
+        : x(x_)
+        , z(z_)
+    {
+    }
+};
+>>>>>>> Enforce one struct per file
