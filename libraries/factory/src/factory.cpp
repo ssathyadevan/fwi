@@ -2,6 +2,7 @@
 #include "ConjugateGradientDirectionCalculator.h"
 #include "ConjugateGradientStepSizeCalculator.h"
 #include "ConjugateGradientWithRegularisationCalculator.h"
+#include "DummyStepSizeCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
@@ -127,6 +128,11 @@ namespace fwi
         if(desiredStepSizeMethod == "ConjugateGradientStepSize")
         {
             _createdStepSizeCalculator = new inversionMethods::ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
+            return;
+        }
+        if(desiredStepSizeMethod == "DummyStepSize")   // DummyStepSize, update with your own.
+        {
+            _createdStepSizeCalculator = new DummyStepSizeCalculator();
             return;
         }
 
