@@ -29,10 +29,8 @@ namespace fwi
             const std::string parameterX = "x";
             const std::string parameterZ = "z";
             nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterPMLWidthFactor);
-
             double x = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterX);
             double z = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterZ);
-
             _input.pmlWidthFactor = PMLWidthFactor(x, z);
         }
 
@@ -41,12 +39,9 @@ namespace fwi
             const std::string parameterSource = "SourceParameter";
             const std::string parameterHalfWidth = "r";
             const std::string parameterShape = "beta";
-
             nlohmann::json iterObject = ReadJsonHelper::tryGetParameterFromJson<nlohmann::json>(jsonFile, _fileName, parameterSource);
-
             double halfWidth = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterHalfWidth);
             double shape = ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterShape);
-
             _input.sourceParameter = SourceParameter(halfWidth, shape);
         }
 
@@ -54,9 +49,7 @@ namespace fwi
         {
             const std::string parameterCostFunction = "CostFunction";
             std::string costFunctionString = ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterCostFunction);
-
             std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
-
             _input.costFunction = costFunctionStringMap.at(costFunctionString);
         }
     }   // namespace forwardModels
