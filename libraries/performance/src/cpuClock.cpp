@@ -11,8 +11,16 @@
 #include "windows.h"
 #endif
 
+
 namespace
 {
+
+#if __unix__
+	bool makeUnixSpecificCall = true;
+#else
+	bool makeUnixSpecificCall = false;	
+#endif
+
     long parseLine(char *line)
     {
         // This assumes that a digit will be found and the line ends in " Kb".
@@ -44,6 +52,7 @@ namespace
     }
 
 }   // namespace
+
 
 namespace fwi
 {
@@ -91,19 +100,14 @@ namespace fwi
 
         void CpuClock::MemoryUse(long &virtual_mem, long &physical_mem)
         {
-#if __unix__
-            virtual_mem = getValue("VmSize:");
-            physical_mem = getValue("VmRSS:");
-#else
-            // PROCESS_MEMORY_COUNTERS_EX pmc;
-            // GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-            // SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-            // SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
-            // virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
-            // physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
-            virtual_mem = 0;
+			virtual_mem = 0;
             physical_mem = 0;
-#endif
+			if(makeUnixSpecificCall)
+			{
+			    virtual_mem = getValue("VmSize:");
+				physical_mem = getValue("VmRSS:");	
+			}
+
             L_(io::ldebug) << "Virtual memory used: " << virtual_mem << " kB";
             L_(io::ldebug) << "Physical memory used: " << physical_mem << " kB";
             return;

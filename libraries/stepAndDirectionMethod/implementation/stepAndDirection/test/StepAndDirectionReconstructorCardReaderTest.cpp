@@ -39,8 +39,8 @@ namespace fwi
             stat((testFolder).c_str(), &stats);
             if(!S_ISDIR(stats.st_mode))
             {
-                mkdir((testFolder).c_str(), 0777);
-                mkdir((inputfolder).c_str(), 0777);
+                mkdir((testFolder).c_str());
+                mkdir((inputfolder).c_str());
             }
             std::ofstream inputFile;
             inputFile.open(filePath);
