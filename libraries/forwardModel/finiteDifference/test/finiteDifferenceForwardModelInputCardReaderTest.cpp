@@ -17,7 +17,9 @@ namespace fwi
 
             EXPECT_EQ(4, input.sourceParameter.r);
             EXPECT_EQ(6.31, input.sourceParameter.beta);
+
             EXPECT_EQ(leastSquares, input.costFunction);
+            EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
     }   // namespace forwardModels
 }   // namespace fwi

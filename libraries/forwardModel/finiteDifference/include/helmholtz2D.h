@@ -51,7 +51,7 @@ namespace fwi
             Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
             const SourceParameter _sourceInput;
 
-            void buildMatrix();
+            void buildMatrix(BoundaryConditionType boundaryCondition);
             void buildVector(const std::array<double, 2> &source);
             void updateChi(const core::dataGrid2D &chi);
             void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx,
