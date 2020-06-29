@@ -16,7 +16,7 @@ namespace fwi
             FrequenciesGroup operator=(const FrequenciesGroup &) = delete;
 
         public:
-            const int nFreq;
+            const int nFreq;   // Review: make uniform with the other variables named 'count'
             const double c0;
             const double dFreq;
             std::vector<double> freq;

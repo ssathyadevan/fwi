@@ -18,9 +18,9 @@ namespace fwi
         forwardModelInterface::~forwardModelInterface() {}
 
         const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
-
+        // Review: usually the get functions follow literally the name of the variables. Update to getSource
         const core::Sources &forwardModelInterface::getSrc() { return _source; }
-
+        // Review: update to getReceiver
         const core::Receivers &forwardModelInterface::getRecv() { return _receiver; }
 
         const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
