@@ -23,9 +23,10 @@ public:
      * @param derivativeCurrent is the current derivative of the cost function computed in chiEstimateCurrent
      * @param iteration is the number of iterations done so far
      * @param kappaTimesDirection in the documentation represents the quantity Kappa times Chi
+     * @param residualVector is the vector containing the residual between the original solution and the approximated one.
      */
     void updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration,
-        const std::vector<std::complex<double>> &kappaTimesDirection, const std::vector<std::complex<double>> &);
+        const std::vector<std::complex<double>> &kappaTimesDirection, const std::vector<std::complex<double>> &residualVector);
 
 private:
     double _dummyStepSize;
