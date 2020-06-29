@@ -6,6 +6,7 @@ class DummyStepSizeCalculator : public StepSizeCalculator
 {
 public:
     DummyStepSizeCalculator();
+    DummyStepSizeCalculator(double dummyStepSize);
     virtual ~DummyStepSizeCalculator();
 
     double calculateStepSize();

@@ -5,6 +5,11 @@ DummyStepSizeCalculator::DummyStepSizeCalculator()
 {
 }
 
+DummyStepSizeCalculator::DummyStepSizeCalculator(double dummyStepSize)
+    : _dummyStepSize(dummyStepSize)
+{
+}
+
 DummyStepSizeCalculator::~DummyStepSizeCalculator() {}
 
 double DummyStepSizeCalculator::calculateStepSize()
