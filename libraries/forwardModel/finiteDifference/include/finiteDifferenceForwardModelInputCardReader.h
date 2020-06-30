@@ -13,7 +13,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class finiteDifferenceForwardModelInputCardReader : public inputCardReader
+        class finiteDifferenceForwardModelInputCardReader : public io::inputCardReader
         {
         public:
             finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder);

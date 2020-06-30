@@ -11,7 +11,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class integralForwardModelInputCardReader : public inputCardReader
+        class integralForwardModelInputCardReader : public io::inputCardReader
         {
         public:
             integralForwardModelInputCardReader(const std::string &caseFolder);

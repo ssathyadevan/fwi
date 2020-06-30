@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inputCardReader.h"
+#include "costFunction.h"
 
 namespace fwi
 {

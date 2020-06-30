@@ -1,6 +1,7 @@
 #pragma once
 
 #include "complexDataGrid2D.h"
+#include "costFunction.h"
 #include "dataGrid2D.h"
 #include "frequenciesGroup.h"
 #include "grid2D.h"
@@ -36,10 +37,6 @@ namespace fwi
             const core::Receivers &getReceiver();
             const core::FrequenciesGroup &getFreq();
 
-            enum CostFunction
-            {
-                leastSquares
-            };
             CostFunction costFunction;
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
