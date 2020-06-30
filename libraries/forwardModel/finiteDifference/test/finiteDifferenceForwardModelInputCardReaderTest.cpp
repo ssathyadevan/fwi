@@ -6,8 +6,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        // const std::string inputPath = "./../../../parallelized-fwi/tests"; // For local use
-        const std::string inputPath = "./../../../../../tests";
+        const std::string inputPath = std::string(FWI_PROJECT_DIR) + "/tests";
 
         TEST(finiteDifferenceForwardModelInputCardReaderTest, ValidInputTest)
         {

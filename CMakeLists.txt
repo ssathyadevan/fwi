@@ -36,6 +36,10 @@ else(MPI_FOUND)
     set(CMAKE_CXX_COMPILER /usr/bin/g++)
 endif(MPI_FOUND)
 endif( )
+
+# Set project path define
+add_definitions(-DFWI_PROJECT_DIR="${CMAKE_SOURCE_DIR}")
+
 # Setup consistent and strict warning flags across compilers
 if ( MSVC )
     # Disable some of the security warnings
