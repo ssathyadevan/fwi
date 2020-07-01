@@ -7,7 +7,7 @@ namespace fwi
     namespace forwardModels
     {
         const std::string validInputPath = std::string(FWI_PROJECT_DIR) + "/tests";
-        TEST(integralForwardModelInputCardReaderTest, getInput_ValidInput)
+        TEST(integralForwardModelInputCardReaderTest, constructor_ValidInput)
         {
             integralForwardModelInputCardReader integralForwardModelReader(validInputPath);
             integralForwardModelInput input = integralForwardModelReader.getInput();
@@ -19,7 +19,7 @@ namespace fwi
         }
 
         const std::string invalidInputPath = std::string(FWI_PROJECT_DIR) + "/tests/invalidInput";
-        TEST(integralForwardModelInputCardReaderTest, getInput_InvalidInput_ExceptionsThrown)
+        TEST(integralForwardModelInputCardReaderTest, constructor_InvalidInput_ExceptionsThrown)
         {   // Only the first invalid input is checked out of two
             EXPECT_THROW(integralForwardModelInputCardReader integralForwardModelReader(invalidInputPath), std::invalid_argument);
         }

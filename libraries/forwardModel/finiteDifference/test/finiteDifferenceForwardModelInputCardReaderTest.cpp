@@ -8,7 +8,7 @@ namespace fwi
     {
         const std::string inputPath = std::string(FWI_PROJECT_DIR) + "/tests";
 
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, ValidInputTest)
+        TEST(finiteDifferenceForwardModelInputCardReaderTest, constructor_ValidInput)
         {
             finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(inputPath);
             finiteDifferenceForwardModelInput input = finiteDifferenceReader.getInput();
@@ -20,6 +20,12 @@ namespace fwi
 
             EXPECT_EQ(leastSquares, input.costFunction);
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
+        }
+
+        const std::string invalidInputPath = std::string(FWI_PROJECT_DIR) + "/tests/invalidInput";
+        TEST(finiteDifferenceForwardModelInputCardReaderTest, construtor_InvalidInput_ExceptionsThrown)
+        {   // Only tests that the variable "beta" is missing
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(invalidInputPath), std::invalid_argument);
         }
     }   // namespace forwardModels
 }   // namespace fwi
