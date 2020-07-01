@@ -66,7 +66,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     fwi::core::FrequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = freqg.nFreq * source.count * receiver.count;
+    int magnitude = freqg.count * source.count * receiver.count;
 
     // std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
     std::vector<std::complex<double>> referencePressureData(magnitude);

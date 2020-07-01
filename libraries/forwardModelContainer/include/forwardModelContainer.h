@@ -23,8 +23,8 @@ namespace fwi
 
         const core::FrequenciesGroup &getFrequencies() const { return _allFrequencies; }
         const core::grid2D &getGrid() const { return _forwardmodels[0]->getGrid(); }
-        const core::Sources &getSources() const { return _forwardmodels[0]->getSrc(); }
-        const core::Receivers &getReceivers() const { return _forwardmodels[0]->getRecv(); }
+        const core::Sources &getSources() const { return _forwardmodels[0]->getSource(); }
+        const core::Receivers &getReceivers() const { return _forwardmodels[0]->getReceiver(); }
 
     private:
         std::vector<forwardModels::forwardModelInterface *> _forwardmodels;

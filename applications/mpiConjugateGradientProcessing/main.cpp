@@ -122,7 +122,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     FrequenciesGroup freq(gInput.freq, gInput.c_0);
     freq.Print(gInput.freq.nTotal);
 
-    int magnitude = freq.nFreq * source.count * receiver.count;
+    int magnitude = freq.count * source.count * receiver.count;
     //read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
     if (mpi_rank == 0)

@@ -21,7 +21,7 @@ namespace fwi
         {
             // Given
             ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
-            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * receiver.count * source.count);
+            std::vector<std::complex<double>> pDataRef(freqGroup.count * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
                 element = 1.5;
@@ -34,7 +34,7 @@ namespace fwi
             residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
 
             // Then
-            std::vector<std::complex<double>> expectedResidual(freqGroup.nFreq * receiver.count * source.count);
+            std::vector<std::complex<double>> expectedResidual(freqGroup.count * receiver.count * source.count);
             for(std::complex<double> &element : expectedResidual)
             {
                 element = -0.5;
@@ -50,7 +50,7 @@ namespace fwi
         {
             // Given
             ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
-            std::vector<std::complex<double>> pDataRef(freqGroup.nFreq * receiver.count * source.count);
+            std::vector<std::complex<double>> pDataRef(freqGroup.count * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
                 element = 1;

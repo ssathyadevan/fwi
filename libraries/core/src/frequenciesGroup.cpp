@@ -8,7 +8,7 @@ namespace fwi
         static const double pi = std::atan(1.0) * 4.0;
 
         FrequenciesGroup::FrequenciesGroup(freqInfo freqStruct, double c_0_)
-            : nFreq(freqStruct.nTotal)
+            : count(freqStruct.nTotal)
             , c0(c_0_)
             , dFreq((freqStruct.max - freqStruct.min) / (std::max(freqStruct.nTotal, 2) - 1))
             , freq()

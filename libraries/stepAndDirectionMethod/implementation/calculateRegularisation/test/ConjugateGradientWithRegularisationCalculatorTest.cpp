@@ -43,7 +43,7 @@ namespace fwi
             cgParametersInput._nIterations = 0;
             cgParametersInput._tolerance = 0.001;
 
-            int nTotal = forwardModel->getSrc().count * forwardModel->getFreq().nFreq * forwardModel->getRecv().count;
+            int nTotal = forwardModel->getSource().count * forwardModel->getFreq().count * forwardModel->getReceiver().count;
             const double pDataValue = 1.0;
             std::vector<std::complex<double>> pData(nTotal, pDataValue);
 

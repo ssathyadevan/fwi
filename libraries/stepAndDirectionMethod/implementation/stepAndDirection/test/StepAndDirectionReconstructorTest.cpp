@@ -51,7 +51,7 @@ namespace fwi
         //    core::Sources core::Sources(xMin, xMax, 2);
         //    core::Receivers core::Receivers(xMin, xMax, 2);
         //    core::FrequenciesGroup frequencies(freq, 2000.0);
-        //    int magnitude = frequencies.nFreq * core::Sources.count * core::Receivers.nrcv;
+        //    int magnitude = frequencies.count * core::Sources.count * core::Receivers.nrcv;
         //    forwardModels::ForwardModelInterfaceMock forwardModel(dataGrid, core::Sources, core::Receivers, frequencies);
 
         //    GradientDescentDirectionCalculator chosenDirection(eta, &forwardModelTest);

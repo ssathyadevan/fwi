@@ -14,7 +14,7 @@ namespace fwi
     ForwardModelContainer::ForwardModelContainer(const io::genericInput &genericInput, const std::string &desiredForwardModel, const core::grid2D &grid,
         const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies)
         : _forwardmodels()
-        , _numberOfThreads(std::min(frequencies.nFreq, omp_get_max_threads()))
+        , _numberOfThreads(std::min(frequencies.count, omp_get_max_threads()))
         , _numberOfSources(sources.count)
         , _numberOfReceivers(receivers.count)
         , _numberOfFrequenciesPerThread(_numberOfThreads, 0)
@@ -89,7 +89,7 @@ namespace fwi
     std::vector<std::complex<double>> &ForwardModelContainer::calculateResidualParallel(
         const core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pDataRef)
     {
-        std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.nFreq);
+        std::vector<std::complex<double>> allResiduals(_numberOfReceivers * _numberOfSources * _allFrequencies.count);
         omp_set_num_threads(_numberOfThreads);
 #pragma omp parallel
         {
@@ -130,9 +130,9 @@ namespace fwi
         double currentMinimumFrequency = _allFrequencies.freq[0];
         for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
         {
-            int totalFrequenciesForThread = static_cast<int>(std::floor(_allFrequencies.nFreq * 1.0 / (_numberOfThreads * 1.0)));
+            int totalFrequenciesForThread = static_cast<int>(std::floor(_allFrequencies.count * 1.0 / (_numberOfThreads * 1.0)));
 
-            if(threadNumber < _allFrequencies.nFreq % _numberOfThreads)
+            if(threadNumber < _allFrequencies.count % _numberOfThreads)
             {
                 totalFrequenciesForThread += 1;
             }

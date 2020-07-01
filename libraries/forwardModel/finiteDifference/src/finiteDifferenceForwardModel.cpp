@@ -44,9 +44,9 @@ namespace fwi
             assert(_Greens != nullptr);
             assert(_p0 == nullptr);
 
-            _p0 = new core::complexDataGrid2D **[_freq.nFreq];
+            _p0 = new core::complexDataGrid2D **[_freq.count];
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 _p0[i] = new core::complexDataGrid2D *[_source.count];
 
@@ -60,7 +60,7 @@ namespace fwi
 
         void finiteDifferenceForwardModel::deleteP0()
         {
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 for(int j = 0; j < _source.count; j++)
                 {
@@ -76,9 +76,9 @@ namespace fwi
 
         void finiteDifferenceForwardModel::createGreens()
         {
-            _Greens = new core::greensRect2DCpu *[_freq.nFreq];
+            _Greens = new core::greensRect2DCpu *[_freq.count];
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]);
             }
@@ -86,7 +86,7 @@ namespace fwi
 
         void finiteDifferenceForwardModel::deleteGreens()
         {
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 delete _Greens[i];
             }
@@ -97,11 +97,11 @@ namespace fwi
 
         void finiteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            _pTot = new core::complexDataGrid2D *[freq.nFreq * source.count];
+            _pTot = new core::complexDataGrid2D *[freq.count * source.count];
 
             int li;
 
-            for(int i = 0; i < freq.nFreq; i++)
+            for(int i = 0; i < freq.count; i++)
             {
                 li = i * source.count;
 
@@ -114,7 +114,7 @@ namespace fwi
 
         void finiteDifferenceForwardModel::deletePtot()
         {
-            for(int i = 0; i < _freq.nFreq * _source.count; i++)
+            for(int i = 0; i < _freq.count * _source.count; i++)
             {
                 delete _pTot[i];
             }
@@ -125,9 +125,9 @@ namespace fwi
 
         void finiteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
-            _kappa = new core::complexDataGrid2D *[freq.nFreq * source.count * receiver.count];
+            _kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
 
-            for(int i = 0; i < freq.nFreq * source.count * receiver.count; i++)
+            for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
                 _kappa[i] = new core::complexDataGrid2D(_grid);
             }
@@ -135,7 +135,7 @@ namespace fwi
 
         void finiteDifferenceForwardModel::deleteKappa()
         {
-            for(int i = 0; i < _freq.nFreq * _source.count * _receiver.count; i++)
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
                 delete _kappa[i];
             }
@@ -151,13 +151,13 @@ namespace fwi
 
             int li;
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 li = i * _source.count;
 
                 Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _source, _freq.c0, chiEst, _fMInput);
 
-                L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.nFreq << "freq";
+                L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.count << "freq";
 
                 for(int j = 0; j < _source.count; j++)
                 {
@@ -176,7 +176,7 @@ namespace fwi
         {
             int li, lj;
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 li = i * _receiver.count * _source.count;
 
@@ -199,7 +199,7 @@ namespace fwi
 
         void finiteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
         {
-            for(int i = 0; i < _freq.nFreq * _source.count * _receiver.count; i++)
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
                 kOperator[i] = dotProduct(*_kappa[i], CurrentPressureFieldSerial);
             }
@@ -211,7 +211,7 @@ namespace fwi
             kRes.zero();
             core::complexDataGrid2D kDummy(_grid);
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 l_i = i * _receiver.count * _source.count;
                 for(int j = 0; j < _receiver.count; j++)
@@ -250,7 +250,7 @@ namespace fwi
 
             core::complexDataGrid2D kDummy(_grid);
 
-            for(int i = 0; i < _freq.nFreq; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 l_i = i * _receiver.count * _source.count;
 

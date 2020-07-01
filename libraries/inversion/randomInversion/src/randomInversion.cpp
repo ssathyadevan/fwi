@@ -10,8 +10,8 @@ namespace fwi
             : _forwardModel()
             , _riInput(riInput)
             , _grid(forwardModel->getGrid())
-            , _source(forwardModel->getSrc())
-            , _receiver(forwardModel->getRecv())
+            , _source(forwardModel->getSource())
+            , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
             _forwardModel = forwardModel;
@@ -21,7 +21,7 @@ namespace fwi
         {
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
-            const int nTotal = _freq.nFreq * _source.count * _receiver.count;
+            const int nTotal = _freq.count * _source.count * _receiver.count;
             double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
             double resSq, chiEstRes, newResSq, newChiEstRes;
 

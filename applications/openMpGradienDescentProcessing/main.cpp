@@ -89,7 +89,7 @@ void performInversion(const fwi::io::genericInput &gInput, const std::string &ru
     fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
     freq.Print(gInput.freq.nTotal);
 
-    int magnitude = freq.nFreq * source.count * receiver.count;
+    int magnitude = freq.count * source.count * receiver.count;
 
     // read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);

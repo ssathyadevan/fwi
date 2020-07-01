@@ -12,27 +12,27 @@ namespace fwi
             , _receiver(receiver)
             , _freq(freq)
         {
-            _residual = std::vector<std::complex<double>>(_freq.nFreq * _source.count * _receiver.count);
+            _residual = std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count);
         }
 
         forwardModelInterface::~forwardModelInterface() {}
 
         const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
-        // Review: usually the get functions follow literally the name of the variables. Update to getSource
-        const core::Sources &forwardModelInterface::getSrc() { return _source; }
-        // Review: update to getReceiver
-        const core::Receivers &forwardModelInterface::getRecv() { return _receiver; }
+
+        const core::Sources &forwardModelInterface::getSource() { return _source; }
+
+        const core::Receivers &forwardModelInterface::getReceiver() { return _receiver; }
 
         const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
         std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
-            std::vector<std::complex<double>> pDataEst(_freq.nFreq * _receiver.count * _source.count);
+            std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
 
             calculatePData(chiEst, pDataEst);
 
-            for(int i = 0; i < _freq.nFreq * _source.count * _receiver.count; i++)
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
                 _residual[i] = pDataRef[i] - pDataEst[i];
                 if(isnan(std::abs(_residual[i])))
@@ -46,7 +46,7 @@ namespace fwi
 
         double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
         {
-            double residualSq = normSq(residual, _freq.nFreq * _source.count * _receiver.count);
+            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
 
             return residualSq;
         }

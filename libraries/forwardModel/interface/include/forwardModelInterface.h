@@ -32,8 +32,8 @@ namespace fwi
             virtual ~forwardModelInterface();
 
             const core::grid2D &getGrid();
-            const core::Sources &getSrc();
-            const core::Receivers &getRecv();
+            const core::Sources &getSource();
+            const core::Receivers &getReceiver();
             const core::FrequenciesGroup &getFreq();
 
             enum CostFunction
