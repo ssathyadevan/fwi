@@ -13,6 +13,8 @@ venv/*
 results/*
 .idea/
 .vscode/
+Build/
+FWIInstall/
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.fdb_latexmk
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.fls
 doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.log
