@@ -114,17 +114,17 @@ namespace fwi
     void Factory::createStepSizeCalculator(
         const inversionMethods::StepSizeParameters &stepSizeParameters, const std::string &desiredStepSizeMethod, const core::grid2D &grid)
     {
-        if(desiredStepSizeMethod == "fixedStepSize")
+        if(desiredStepSizeMethod == "FixedStepSize")
         {
             _createdStepSizeCalculator = new inversionMethods::FixedStepSizeCalculator(stepSizeParameters.initialStepSize);
             return;
         }
-        if(desiredStepSizeMethod == "BorzilaiBorwein")
+        if(desiredStepSizeMethod == "BorzilaiBorweinStepSize")
         {
             _createdStepSizeCalculator = new inversionMethods::BorzilaiBorweinStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
             return;
         }
-        if(desiredStepSizeMethod == "ConjugateGradient")
+        if(desiredStepSizeMethod == "ConjugateGradientStepSize")
         {
             _createdStepSizeCalculator = new inversionMethods::ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
             return;
@@ -137,7 +137,7 @@ namespace fwi
     bool Factory::splittableInversion(const std::string inversionMethod)
     {
         bool splittable = true;
-        if(inversionMethod == "conjugateGradientRegularisationStepSize")   // decide name
+        if(inversionMethod == "ConjugateGradientRegularisationStepSize")   
         {
             splittable = false;
         }
@@ -150,12 +150,12 @@ namespace fwi
     {
         const double errorFunctionalScalingFactor = 1.0 / (forwardModels::normSq(pData, pData.size()));
 
-        if(desiredDirectionMethod == "conjugateGradientDirection")
+        if(desiredDirectionMethod == "ConjugateGradientDirection")
         {
             _createdDirectionCalculator = new inversionMethods::ConjugateGradientDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
             return;
         }
-        if(desiredDirectionMethod == "gradientDescentDirection")
+        if(desiredDirectionMethod == "GradientDescentDirection")
         {
             _createdDirectionCalculator = new inversionMethods::GradientDescentDirectionCalculator(
                 errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
@@ -169,7 +169,7 @@ namespace fwi
         const inversionMethods::StepSizeParameters &stepSizeParameters, const inversionMethods::ReconstructorParameters &reconstructorParameters,
         const std::vector<std::complex<double>> &pData, const std::string &desiredCombinedDirectionAndStepSizeMethod)
     {   // desiredCombinedDirectionAndStepSizeMethod is actually desiredStepSizeMethod
-        if(desiredCombinedDirectionAndStepSizeMethod == "conjugateGradientRegularisation")
+        if(desiredCombinedDirectionAndStepSizeMethod == "ConjugateGradientRegularisationStepSize")
         {
             inversionMethods::ConjugateGradientWithRegularisationParametersInput cgParametersInput;
             cgParametersInput._tolerance = reconstructorParameters.tolerance;

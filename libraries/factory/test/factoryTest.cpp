@@ -36,8 +36,8 @@ namespace fwi
         forwardModels::forwardModelInterface *forwardModel = nullptr;
 
         // Create a fixed step size with conjugate gradient method
-        const std::string desiredStepSizeMethod = "fixedStepSize";
-        const std::string desiredDirectionMethod = "conjugateGradientDirection";
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
         std::array<double, 2> xMin = {0.0, 0.0};
         std::array<double, 2> xMax = {2.0, 2.0};
@@ -70,8 +70,8 @@ namespace fwi
         forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
 
         // Create a fixed step size with conjugate gradient method
-        const std::string desiredStepSizeMethod = "fixedStepSize";
-        const std::string desiredDirectionMethod = "conjugateGradientDirection";
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
         // Create measurement data
         const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
@@ -100,7 +100,7 @@ namespace fwi
 
         // Create a not existing step size calculator
         const std::string desiredStepSizeMethod = "";
-        const std::string desiredDirectionMethod = "conjugateGradientDirection";
+        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
         // Create measurement data
         const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
@@ -131,8 +131,8 @@ namespace fwi
         const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
         // Create a fixed step with conjugate gradient descent method
-        const std::string desiredStepSizeMethod = "fixedStepSize";
-        const std::string desiredDirectionMethod = "gradientDescentDirection";
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "GradientDescentDirection";
 
         inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
 
@@ -161,7 +161,7 @@ namespace fwi
         const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
 
         // Create a not existing direction calculator
-        const std::string desiredStepSizeMethod = "fixedStepSize";
+        const std::string desiredStepSizeMethod = "FixedStepSize";
         const std::string desiredDirectionMethod = "";
 
         inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
