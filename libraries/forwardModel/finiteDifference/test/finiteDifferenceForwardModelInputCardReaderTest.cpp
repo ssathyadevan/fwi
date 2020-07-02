@@ -6,11 +6,6 @@ namespace fwi
 {
     namespace forwardModels
     {
-        //    const std::string writePath = "./../";
-        //    const std::string testFolder = writePath + "testInputFiles/";
-        //    const std::string inputFolder = testFolder + "input/";
-        //    const std::string filePath = inputFolder + "StepAndDirectionInput.json";
-
         const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
         const std::string testFolder = initialPath + "FiniteDifferenceFMInputCardReaderTests/";
         const std::string inputFolder = testFolder + "input/";
