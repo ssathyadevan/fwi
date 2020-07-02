@@ -14,6 +14,7 @@ DummyStepSizeCalculator::~DummyStepSizeCalculator() {}
 
 double DummyStepSizeCalculator::calculateStepSize()
 {
+    // Review: why not simply do: 'return _dummyStepSize' here?
     double alpha = _dummyStepSize;
     return alpha;
 }
