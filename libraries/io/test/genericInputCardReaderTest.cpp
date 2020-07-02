@@ -8,12 +8,12 @@ namespace fwi
 {
     namespace io
     {
-        const std::string inputPath = std::string(FWI_PROJECT_DIR) + "/tests";
+        const std::string validInputPath = std::string(FWI_PROJECT_DIR) + "/tests";
 
         TEST(genericInputCardReaderTest, readc0Test)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
 
             // Then
             EXPECT_NEAR(reader.getInput().c0, 2000.0, 0.0001);
@@ -22,7 +22,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readFreqTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             core::freqInfo expectedFreq = {10, 40, 15};
             core::freqInfo actualFreq = reader.getInput().freq;
 
@@ -35,7 +35,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readReservoirTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             std::array<double, 2> expectedTopLeft{-300.0, 0.0};
             std::array<double, 2> expectedBottomRight{300.0, 300.0};
 
@@ -53,7 +53,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readSources)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
 
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
@@ -72,7 +72,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readReceivers)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
 
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
@@ -91,7 +91,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readnSourcesAndReceiversTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             int expectednsources = 17;
             int expectednreceivers = 17;
 
@@ -102,7 +102,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readnGridTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             std::array<int, 2> expectedngrid{64, 32};
 
             // Then
@@ -113,7 +113,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readnGridOriginalTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             std::array<int, 2> expectedngrid{64, 32};
 
             // Then
@@ -124,7 +124,7 @@ namespace fwi
         TEST(genericInputCardReaderTest, readVerbosityTest)
         {
             // Given
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             bool expectedVerbosity = false;
 
             EXPECT_EQ(expectedVerbosity, reader.getInput().verbose);
@@ -132,9 +132,17 @@ namespace fwi
 
         TEST(genericInputCardReaderTest, readFileNameTest)
         {
-            genericInputCardReader reader(inputPath);
+            genericInputCardReader reader(validInputPath);
             std::string expectedFileName = "temple";
             EXPECT_EQ(expectedFileName, reader.getInput().fileName);
         }
+
+        const std::string invalidInputPath = std::string(FWI_PROJECT_DIR) + "/tests/invalidInput";
+        TEST(genericInputCardReaderTest, invalidInputTest)
+        {
+            // this only tests that nSources cannot be <=1
+            EXPECT_THROW(genericInputCardReader reader(invalidInputPath), std::invalid_argument);
+        }
+
     }   // namespace io
 }   // namespace fwi
