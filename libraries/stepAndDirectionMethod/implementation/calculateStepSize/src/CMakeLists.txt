@@ -3,9 +3,8 @@ add_library(step_size_calculator_library
     BorzilaiBorweinStepSizeCalculator.cpp          ../include/BorzilaiBorweinStepSizeCalculator.h
     LinearStepSizeCalculator.cpp                   ../include/LinearStepSizeCalculator.h
     ConjugateGradientStepSizeCalculator.cpp        ../include/ConjugateGradientStepSizeCalculator.h
-    # Review: Please align ..'/include/DummyStepSizeCalculator.h' with the above lines:
-    # Review: that's more readable that way
-    DummyStepSizeCalculator.cpp                 ../include/DummyStepSizeCalculator.h
+    DummyStepSizeCalculator.cpp                    ../include/DummyStepSizeCalculator.h
+# uncomment the following line and update it with your chosen name	
 #    YourOwnStepSizeCalculator.cpp                 ../include/YourOwnStepSizeCalculator.h
 )
 

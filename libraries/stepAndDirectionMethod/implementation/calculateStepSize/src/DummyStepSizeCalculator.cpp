@@ -14,9 +14,7 @@ DummyStepSizeCalculator::~DummyStepSizeCalculator() {}
 
 double DummyStepSizeCalculator::calculateStepSize()
 {
-    // Review: why not simply do: 'return _dummyStepSize' here?
-    double alpha = _dummyStepSize;
-    return alpha;
+    return _dummyStepSize;
 }
 
 void DummyStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration,
