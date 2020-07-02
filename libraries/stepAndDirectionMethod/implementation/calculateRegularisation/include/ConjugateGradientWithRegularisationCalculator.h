@@ -28,7 +28,7 @@ namespace fwi
             // Inversion part
             ConjugateGradientWithRegularisationParametersInput _cgParametersInput;
             const core::grid2D &_grid;
-            int _nTotal;   // nFreq * nSrc * nRecv
+            int _nTotal;   // nFreq * source.count * receiver.count
 
             core::dataGrid2D _directionPrevious;   // in the documentation the direction is indicated with the greek letter Zeta
             core::dataGrid2D _directionCurrent;

@@ -6,33 +6,33 @@ namespace fwi
     namespace forwardModels
     {
         forwardModelInterface::forwardModelInterface(
-            const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq)
+            const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
             : /*_residual(), */ _grid(grid)
-            , _src(src)
-            , _recv(recv)
+            , _source(source)
+            , _receiver(receiver)
             , _freq(freq)
         {
-            _residual = std::vector<std::complex<double>>(_freq.nFreq * _src.nSrc * _recv.nRecv);
+            _residual = std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count);
         }
 
         forwardModelInterface::~forwardModelInterface() {}
 
         const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
 
-        const core::sources &forwardModelInterface::getSrc() { return _src; }
+        const core::Sources &forwardModelInterface::getSource() { return _source; }
 
-        const core::receivers &forwardModelInterface::getRecv() { return _recv; }
+        const core::Receivers &forwardModelInterface::getReceiver() { return _receiver; }
 
-        const core::frequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
+        const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
         std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
-            std::vector<std::complex<double>> pDataEst(_freq.nFreq * _recv.nRecv * _src.nSrc);
+            std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
 
             calculatePData(chiEst, pDataEst);
 
-            for(int i = 0; i < _freq.nFreq * _src.nSrc * _recv.nRecv; i++)
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
                 _residual[i] = pDataRef[i] - pDataEst[i];
                 if(isnan(std::abs(_residual[i])))
@@ -46,7 +46,7 @@ namespace fwi
 
         double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
         {
-            double residualSq = normSq(residual, _freq.nFreq * _src.nSrc * _recv.nRecv);
+            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
 
             return residualSq;
         }

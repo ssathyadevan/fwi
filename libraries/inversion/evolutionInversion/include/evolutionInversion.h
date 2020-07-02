@@ -26,9 +26,9 @@ namespace fwi
             EvolutionInversionInput _eiInput;
 
             const core::grid2D &_grid;
-            const core::sources &_src;
-            const core::receivers &_recv;
-            const core::frequenciesGroup &_freq;
+            const core::Sources &_source;
+            const core::Receivers &_receiver;
+            const core::FrequenciesGroup &_freq;
 
             std::ofstream openResidualLogFile(io::genericInput &gInput);
         };

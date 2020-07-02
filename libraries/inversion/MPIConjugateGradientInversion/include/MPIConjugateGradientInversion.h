@@ -15,8 +15,8 @@ private:
     MPIConjugateGradientInversionInput _cgInput;
 
     const Grid2D &_grid;
-    const Sources &_src;
-    const Receivers &_recv;
+    const Sources &_source;
+    const Receivers &_receiver;
     const FrequenciesGroup &_freq;
     double _previousLowPoint = std::numeric_limits<double>::max();
 

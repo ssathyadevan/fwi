@@ -17,7 +17,7 @@ namespace fwi
              * @brief calculateDirection for gradient descent method, computes the first derivative at every grid point taken singularly by means of adding the
              * shift _derivativeDiscretisationStep to one grid point, computing the derivative for that shift and then shift back to the original grid value.
              * @param chi is a core::dataGrid2D
-             * @param residual is a vector of complex doubles (one value for each combination of core::sources, core::receivers and frequencies)
+             * @param residual is a vector of complex doubles (one value for each combination of core::Sources, core::Receivers and frequencies)
              * @return a core::dataGrid2D which represents the direction to follow
              */
             core::dataGrid2D &calculateDirection(const core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &) override;

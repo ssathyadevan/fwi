@@ -28,7 +28,7 @@ namespace fwi
         class Helmholtz2D
         {
         public:
-            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &src, const double c0, const core::dataGrid2D &chi,
+            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
                 const finiteDifferenceForwardModelInput &fmInput);
             ~Helmholtz2D();
             core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);
@@ -49,7 +49,7 @@ namespace fwi
             const double _c0;
             std::vector<double> _waveVelocity;
             Eigen::SparseLU<Eigen::SparseMatrix<std::complex<double>>, Eigen::NaturalOrdering<int>> _solver;
-            const SourceParameter _srcInput;
+            const SourceParameter _sourceInput;
 
             void buildMatrix();
             void buildVector(const std::array<double, 2> &source);

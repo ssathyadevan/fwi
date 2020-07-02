@@ -14320,7 +14320,7 @@ class basic_json
     @brief move constructor
 
     Move constructor. Constructs a JSON value with the contents of the given
-    value @a other using move semantics. It "steals" the recore::sources from @a
+    value @a other using move semantics. It "steals" the recore::Sources from @a
     other and leaves it as JSON null value.
 
     @param[in,out] other  value to move to this object

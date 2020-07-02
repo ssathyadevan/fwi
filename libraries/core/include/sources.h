@@ -9,13 +9,13 @@ namespace fwi
 {
     namespace core
     {
-        class sources
+        class Sources
         {
         public:
-            int nSrc;
+            int count;
             std::vector<std::array<double, 2>> xSrc;
-            // Place the sources on a linear line from xMin to xMax, including the end points
-            sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int nSrc_);
+            // Place the Sources on a linear line from xMin to xMax, including the end points
+            Sources(const std::array<double, 2> xMin, const std::array<double, 2> xMax, int count_);
 
             void Print();
 

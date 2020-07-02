@@ -57,16 +57,16 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     fwi::core::dataGrid2D chi(grid);
     chi.fromFile(inputFolder);
 
-    fwi::core::sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
-    src.Print();
+    fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    source.Print();
 
-    fwi::core::receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
-    recv.Print();
+    fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    receiver.Print();
 
-    fwi::core::frequenciesGroup freqg(gInput.freq, gInput.c0);
+    fwi::core::FrequenciesGroup freqg(gInput.freq, gInput.c0);
     freqg.Print(gInput.freq.nTotal);
 
-    int magnitude = freqg.nFreq * src.nSrc * recv.nRecv;
+    int magnitude = freqg.count * source.count * receiver.count;
 
     // std::complex<double>* referencePressureData = new std::complex<double>[magnitude];
     std::vector<std::complex<double>> referencePressureData(magnitude);
@@ -75,7 +75,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
 
     fwi::forwardModels::forwardModelInterface *model;
     fwi::forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
-    model = new fwi::forwardModels::IntegralForwardModel(grid, src, recv, freqg, integralreader.getInput());
+    model = new fwi::forwardModels::IntegralForwardModel(grid, source, receiver, freqg, integralreader.getInput());
 
     L_(fwi::io::linfo) << "Calculate pData (the reference pressure-field)...";
     model->calculatePTot(chi);

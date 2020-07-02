@@ -10,8 +10,8 @@ namespace fwi
             : _forwardModel()
             , _eiInput(eiInput)
             , _grid(forwardModel->getGrid())
-            , _src(forwardModel->getSrc())
-            , _recv(forwardModel->getRecv())
+            , _source(forwardModel->getSource())
+            , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
             _forwardModel = forwardModel;

@@ -7,11 +7,11 @@ namespace fwi
     namespace core
     {
         greensRect2DCpu::greensRect2DCpu(
-            const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_)
+            const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const Sources &source_, const Receivers &receiver_, double k_)
             : G_func(gFunc)
             , grid(grid_)
-            , src(src_)
-            , recv(recv_)
+            , source(source_)
+            , receiver(receiver_)
             , k(k_)
             , gVol()
             , gRecv()
@@ -173,14 +173,14 @@ namespace fwi
         {
             double vol = grid.getCellVolume();
             complexDataGrid2D G_bound_cpu(grid);
-            for(int i = 0; i < recv.nRecv; i++)
+            for(int i = 0; i < receiver.count; i++)
             {
-                double x_recv = recv.xRecv[i][0];
-                double z_recv = recv.xRecv[i][1];
+                double x_receiver = receiver.xRecv[i][0];
+                double z_receiver = receiver.xRecv[i][1];
                 complexDataGrid2D *G_bound = new complexDataGrid2D(grid);
 
-                setGreensFunction(
-                    *G_bound, [this, vol, x_recv, z_recv](const double x, const double z) { return vol * G_func(k, utilities::dist(x - x_recv, z - z_recv)); });
+                setGreensFunction(*G_bound, [this, vol, x_receiver, z_receiver](
+                                                const double x, const double z) { return vol * G_func(k, utilities::dist(x - x_receiver, z - z_receiver)); });
 
                 gRecv.push_back(G_bound);
             }
@@ -188,7 +188,7 @@ namespace fwi
 
         void greensRect2DCpu::deleteGreensRecv()
         {
-            for(int i = 0; i < recv.nRecv; i++)
+            for(int i = 0; i < receiver.count; i++)
             {
                 delete gRecv[i];
             }

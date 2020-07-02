@@ -7,7 +7,7 @@ namespace fwi
     {
         static const double pi = std::atan(1.0) * 4.0;
 
-        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::sources &src, const double c0, const core::dataGrid2D &chi,
+        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
             const finiteDifferenceForwardModelInput &fmInput)
             : _A()
             , _b()
@@ -18,7 +18,7 @@ namespace fwi
             , _c0(c0)
             , _waveVelocity()
             , _solver()
-            , _srcInput(fmInput.sourceParameter)
+            , _sourceInput(fmInput.sourceParameter)
         {
             double waveLength = _c0 / freq;
 
@@ -38,38 +38,38 @@ namespace fwi
             // r == 0 uses the Point source implemtation (see BuildVector)
             double r = static_cast<double>(fmInput.sourceParameter.r);
 
-            // core::sources can be outside imaging domain. Area that we solve for needs to include all core::sources
+            // core::Sources can be outside imaging domain. Area that we solve for needs to include all core::Sources
             double extraWidthLeft = 0.0;
             double extraWidthRight = 0.0;
             double extraHeightBottom = 0.0;
             double extraHeightTop = 0.0;
 
-            const std::array<double, 2> srcXmax = *max_element(
-                src.xSrc.begin(), src.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[0] < rhs[0]; });
-            const std::array<double, 2> srcXmin = *min_element(
-                src.xSrc.begin(), src.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[0] < rhs[0]; });
+            const std::array<double, 2> sourceXmax = *max_element(
+                source.xSrc.begin(), source.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[0] < rhs[0]; });
+            const std::array<double, 2> sourceXmin = *min_element(
+                source.xSrc.begin(), source.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[0] < rhs[0]; });
 
-            const std::array<double, 2> srcZmax = *max_element(
-                src.xSrc.begin(), src.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[1] < rhs[1]; });
-            const std::array<double, 2> srcZmin = *min_element(
-                src.xSrc.begin(), src.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[1] < rhs[1]; });
+            const std::array<double, 2> sourceZmax = *max_element(
+                source.xSrc.begin(), source.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[1] < rhs[1]; });
+            const std::array<double, 2> sourceZmin = *min_element(
+                source.xSrc.begin(), source.xSrc.end(), [](const std::array<double, 2> &lhs, const std::array<double, 2> &rhs) { return lhs[1] < rhs[1]; });
 
-            if(xMin[0] - srcXmin[0] + dx[0] * r > extraWidthLeft)
+            if(xMin[0] - sourceXmin[0] + dx[0] * r > extraWidthLeft)
             {
-                extraWidthLeft = xMin[0] - srcXmin[0] + dx[0] * r;
+                extraWidthLeft = xMin[0] - sourceXmin[0] + dx[0] * r;
             }
-            if(srcXmax[0] - xMax[0] + dx[0] * r > extraWidthRight)
+            if(sourceXmax[0] - xMax[0] + dx[0] * r > extraWidthRight)
             {
-                extraWidthRight = srcXmax[0] - xMax[0] + dx[0] * r;
+                extraWidthRight = sourceXmax[0] - xMax[0] + dx[0] * r;
             }
 
-            if(xMin[1] - srcZmax[1] + dx[1] * r > extraHeightTop)
+            if(xMin[1] - sourceZmax[1] + dx[1] * r > extraHeightTop)
             {
-                extraHeightTop = xMin[1] - srcZmax[1] + dx[1] * r;
+                extraHeightTop = xMin[1] - sourceZmax[1] + dx[1] * r;
             }
-            if(srcZmin[1] - xMax[1] + dx[1] * r > extraHeightBottom)
+            if(sourceZmin[1] - xMax[1] + dx[1] * r > extraHeightBottom)
             {
-                extraHeightBottom = srcZmin[1] - xMax[1] + dx[1] * r;
+                extraHeightBottom = sourceZmin[1] - xMax[1] + dx[1] * r;
             }
 
             int extraGridPointsLeft = static_cast<int>(std::ceil(extraWidthLeft / dx[0]));
@@ -545,7 +545,7 @@ namespace fwi
             // Reset vector to zero
             _b.setZero(nx[0] * nx[1]);
 
-            if(_srcInput.r == 0)
+            if(_sourceInput.r == 0)
             {
                 // Add point source to the nearest grid point
                 std::array<double, 2> originalxMin = _oldgrid.getGridStart();
@@ -559,7 +559,7 @@ namespace fwi
                  * NOTE: This requires r extra grid points added around each source and hence a larger grid */
                 double xi, zj, nxdist, nzdist, Wx, fx, Wz, fz;
                 int index;
-                double r = static_cast<double>(_srcInput.r);
+                double r = static_cast<double>(_sourceInput.r);
 
                 for(int i = 0; i < nx[0]; ++i)
                 {
@@ -573,8 +573,8 @@ namespace fwi
 
                         if(nxdist < r && nzdist < r)
                         {
-                            Wx = std::cyl_bessel_i(0., _srcInput.beta * sqrt(1. - (nxdist * nxdist) / (r * r))) / std::cyl_bessel_i(0., _srcInput.beta);
-                            Wz = std::cyl_bessel_i(0., _srcInput.beta * sqrt(1. - (nzdist * nzdist) / (r * r))) / std::cyl_bessel_i(0., _srcInput.beta);
+                            Wx = std::cyl_bessel_i(0., _sourceInput.beta * sqrt(1. - (nxdist * nxdist) / (r * r))) / std::cyl_bessel_i(0., _sourceInput.beta);
+                            Wz = std::cyl_bessel_i(0., _sourceInput.beta * sqrt(1. - (nzdist * nzdist) / (r * r))) / std::cyl_bessel_i(0., _sourceInput.beta);
 
                             // Sine source function
                             if(nxdist > 0.0)

@@ -12,7 +12,7 @@ namespace fwi
         class finiteDifferenceForwardModel : public forwardModelInterface
         {
         public:
-            finiteDifferenceForwardModel(const core::grid2D &grid, const core::sources &src, const core::receivers &recv, const core::frequenciesGroup &freq,
+            finiteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
                 const finiteDifferenceForwardModelInput &fmInput);
 
             ~finiteDifferenceForwardModel();
@@ -38,7 +38,7 @@ namespace fwi
             void createP0();
             void deleteP0();
 
-            void createPTot(const core::frequenciesGroup &freq, const core::sources &src);
+            void createPTot(const core::FrequenciesGroup &freq, const core::Sources &source);
 
             void createGreens();
             void deleteGreens();
@@ -48,7 +48,7 @@ namespace fwi
             core::complexDataGrid2D calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D &chiEst, const core::complexDataGrid2D &Pinit);
 
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
-            void createKappa(const core::frequenciesGroup &freq, const core::sources &src, const core::receivers &recv);
+            void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
         };
 

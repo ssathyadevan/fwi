@@ -13,7 +13,7 @@
 
 int once = 0;
 MPIConjugateGradientInversion::MPIConjugateGradientInversion(ForwardModelInterface *forwardModel, const MPIConjugateGradientInversionInput &cgInput) :
-    _forwardModel(), _cgInput(cgInput), _grid(forwardModel->getGrid()), _src(forwardModel->getSrc()), _recv(forwardModel->getRecv()),
+    _forwardModel(), _cgInput(cgInput), _grid(forwardModel->getGrid()), _source(forwardModel->getSource()), _receiver(forwardModel->getReceiver()),
     _freq(forwardModel->getFreq())
 {
     _forwardModel = forwardModel;
@@ -38,9 +38,9 @@ double MPIConjugateGradientInversion::findRealRootFromCubic(double a, double b, 
 double MPIConjugateGradientInversion::calculateAlpha(PressureFieldSerial &zeta, std::vector<std::complex<double>> &residuals)
 {
     double alphaDiv[2] = {0.0, 0.0};
-    int nSignals = _freq.nFreq * _src.nSrc * _recv.nRecv;
+    int nSignals = _freq.count * _source.count * _receiver.count;
 
-    std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
+    std::vector<std::complex<double>> zetaTemp(_freq.count * _source.count * _receiver.count);
     _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
     for(int i = 0; i < nSignals; i++)
@@ -67,7 +67,7 @@ void MPIConjugateGradientInversion::ReconstructSlave()
         MPI_Bcast(&mpi_command, 1, MPI_INT, 0, MPI_COMM_WORLD);   // receive command
         if(mpi_command == COMMAND_GETUPDATEDIRECTION)
         {
-            int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
+            int block_size = (_source.count * _receiver.count * _freq.count) / mpi_size;
             int array_size = block_size * 2;
             int offset = block_size * (mpi_rank - 1);
             double *deconstructedResArray = new double[array_size];
@@ -111,7 +111,7 @@ PressureFieldSerial *MPIConjugateGradientInversion::getUpdateDirectionInformatio
 
     int deconstructed_array_size = resArray.size() * 2;
     double *deconstructedResArray = new double[deconstructed_array_size];
-    int block_size = (_src.nSrc * _recv.nRecv * _freq.nFreq) / mpi_size;
+    int block_size = (_source.count * _receiver.count * _freq.count) / mpi_size;
     int partial_array_size = block_size * 2;
     L_(lwarning) << "In thread " << 0 << " array_size: " << partial_array_size << " block_size " << block_size;
     L_(lwarning) << "Original resArray size " << resArray.size();
@@ -149,13 +149,13 @@ PressureFieldSerial *MPIConjugateGradientInversion::getUpdateDirectionInformatio
     double *result_data = result->GetDataPtr();
 
     double **partialResult = new double *[mpi_size - 1];
-    MPI_Request *recv_req = new MPI_Request[mpi_size - 1];
+    MPI_Request *receiver_req = new MPI_Request[mpi_size - 1];
     for(int i = 0; i < mpi_size - 1; i++)
     {
         partialResult[i] = new double[result->GetNumberOfGridPoints()];
-        MPI_Irecv(partialResult[i], result->GetNumberOfGridPoints(), MPI_DOUBLE, i + 1, TAG_RESULT, MPI_COMM_WORLD, recv_req + i);   // receive resArray
+        MPI_Ireceiver(partialResult[i], result->GetNumberOfGridPoints(), MPI_DOUBLE, i + 1, TAG_RESULT, MPI_COMM_WORLD, receiver_req + i);   // receive resArray
     }
-    MPI_Waitall(mpi_size - 1, recv_req, MPI_STATUSES_IGNORE);
+    MPI_Waitall(mpi_size - 1, receiver_req, MPI_STATUSES_IGNORE);
 
     for(int j = 0; j < mpi_size - 1; j++)
     {
@@ -180,7 +180,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
     // ProgressBar bar(_cgInput.n_max * _cgInput.iteration1.n);
     // bar.setTerminalWidth(80);
-    const int nTotal = _freq.nFreq * _src.nSrc * _recv.nRecv;
+    const int nTotal = _freq.count * _source.count * _receiver.count;
 
     double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // scaling factor eq 2.10 in thesis
     double gamma, alpha, resSq, res = 0;
@@ -229,7 +229,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
                 alphaDiv[0] = double(0.0);
                 alphaDiv[1] = double(0.0);
 
-                std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
+                std::vector<std::complex<double>> zetaTemp(_freq.count * _source.count * _receiver.count);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                 for(int i = 0; i < nTotal; i++)
@@ -312,7 +312,7 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
 
                 std::array<double, 2> A = {0.0, 0.0};
 
-                std::vector<std::complex<double>> zetaTemp(_freq.nFreq * _src.nSrc * _recv.nRecv);
+                std::vector<std::complex<double>> zetaTemp(_freq.count * _source.count * _receiver.count);
                 _forwardModel->mapDomainToSignal(zeta, zetaTemp);
 
                 for(int i = 0; i < nTotal; i++)

@@ -16,10 +16,10 @@ namespace fwi
             std::function<std::complex<double>(double, double)> func = [](double a, double b) { return std::complex<double>(a, b); };   // y = a + bi
 
             x_max = {2.0, 0.0};
-            sources sources(x_min, x_max, 3);
+            Sources sources(x_min, x_max, 3);
 
             x_max = {2.0, 0.0};
-            receivers receivers(x_min, x_max, 3);
+            Receivers receivers(x_min, x_max, 3);
 
             double k = 1;
 

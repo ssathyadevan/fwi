@@ -115,14 +115,14 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
 
     // initialize the grid sources receivers, grouped frequencies
     Grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.ngrid);
-    Sources src(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
-    src.Print();
-    Receivers recv(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
-    recv.Print();
+    Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSourcesReceivers.nsources);
+    source.Print();
+    Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nSourcesReceivers.nreceivers);
+    receiver.Print();
     FrequenciesGroup freq(gInput.freq, gInput.c_0);
     freq.Print(gInput.freq.nTotal);
 
-    int magnitude = freq.nFreq * src.nSrc * recv.nRecv;
+    int magnitude = freq.count * source.count * receiver.count;
     //read referencePressureData from a CSV file format
     std::vector<std::complex<double>> referencePressureData(magnitude);
     if (mpi_rank == 0)
@@ -149,7 +149,7 @@ void performInversion(const GenericInput &gInput, const std::string &runName, co
     }
 
     ForwardModelInterface *model;
-    model = Factory::createForwardModel(gInput, desired_forward_model, grid, src, recv, freq);
+    model = Factory::createForwardModel(gInput, desired_forward_model, grid, source, receiver, freq);
     fwi::inversionMethods::MPIConjugateGradientInversion *inverse;
     fwi::inversionMethods::MPIConjugateGradientInversionInputCardReader mpiconjugategradientreader(gInput.caseFolder);
     inverse = new MPIConjugateGradientInversion(model, mpiconjugategradientreader.getInput());

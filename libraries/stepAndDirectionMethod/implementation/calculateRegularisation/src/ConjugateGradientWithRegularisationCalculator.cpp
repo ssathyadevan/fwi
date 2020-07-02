@@ -23,7 +23,7 @@ namespace fwi
             , _regularisationCurrent(forwardModel->getGrid())
             , _residualVector(pData)
         {
-            _nTotal = forwardModel->getFreq().nFreq * forwardModel->getSrc().nSrc * forwardModel->getRecv().nRecv;
+            _nTotal = forwardModel->getFreq().count * forwardModel->getSource().count * forwardModel->getReceiver().count;
         }
 
         core::dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(

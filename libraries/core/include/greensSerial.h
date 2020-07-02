@@ -19,7 +19,7 @@ namespace fwi
         {
         public:
             greensRect2DCpu(
-                const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const sources &src_, const receivers &recv_, double k_);
+                const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const Sources &source_, const Receivers &receiver_, double k_);
 
             ~greensRect2DCpu();
 
@@ -31,7 +31,7 @@ namespace fwi
 
             const grid2D &getGrid() const { return grid; }
 
-            // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
+            // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast Sources dW
             // Equation ID: "rel:buildField"
 
             complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
@@ -48,8 +48,8 @@ namespace fwi
             std::function<std::complex<double>(double, double)> G_func;
 
             const grid2D grid;
-            const sources src;
-            const receivers recv;
+            const Sources source;
+            const Receivers receiver;
             const double k;
 
             std::complex<double> *gVol;
