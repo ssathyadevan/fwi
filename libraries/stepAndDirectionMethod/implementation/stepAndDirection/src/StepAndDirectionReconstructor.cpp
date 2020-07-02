@@ -35,7 +35,7 @@ namespace fwi
 
             core::dataGrid2D const *directionCurrent;
 
-            int kappaTimesDirectionSize = _forwardModel->getFreq().nFreq * _forwardModel->getSrc().nSrc * _forwardModel->getRecv().nRecv;
+            int kappaTimesDirectionSize = _forwardModel->getFreq().count * _forwardModel->getSource().count * _forwardModel->getReceiver().count;
             std::vector<std::complex<double>> kappaTimesDirection(kappaTimesDirectionSize);
 
             for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
