@@ -1,88 +1,101 @@
 #include "finiteDifferenceForwardModelInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
+#include <filesystem>
 #include <gtest/gtest.h>
 
 namespace fwi
 {
     namespace forwardModels
     {
-        const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
-        const std::string testFolder = initialPath + "FiniteDifferenceFMInputCardReaderTests/";
-        const std::string inputFolder = testFolder + "input/";
-        const std::string filePath = inputFolder + "FiniteDifferenceFMInput.json";
-
-        std::string convertInputToJsonString(
-            const finiteDifferenceForwardModelInput &input, const bool addX, const bool addZ, const bool addR, const bool addBeta)
+        class finiteDifferenceForwardModelInputCardReaderTest : public ::testing::Test
         {
-            std::stringstream stream;
-            stream << "{ \n";
-            stream << "\t \"PMLWidthFactor\": { \n";
-            if(addX)
+        protected:
+            const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
+            const std::string testFolder = initialPath + "FiniteDifferenceFMInputCardReaderTests/";
+            const std::string inputFolder = testFolder + "input/";
+            const std::string filePath = inputFolder + "FiniteDifferenceFMInput.json";
+
+            void SetUp() override
             {
-                stream << std::fixed << std::setprecision(2) << "\t \t \"x\": " << input.pmlWidthFactor.x;
+                if(!std::filesystem::exists(testFolder))
+                {
+                    std::filesystem::create_directory(testFolder);
+                }
+
+                if(!std::filesystem::exists(inputFolder))
+                {
+                    std::filesystem::create_directory(inputFolder);
+                }
+            }
+
+            void TearDown() override
+            {
+                if(std::filesystem::exists(filePath))
+                {
+                    std::filesystem::remove(filePath);
+                }
+
+                if(std::filesystem::exists(inputFolder))
+                {
+                    std::filesystem::remove(inputFolder);
+                }
+
+                if(std::filesystem::exists(testFolder))
+                {
+                    std::filesystem::remove(testFolder);
+                }
+            }
+
+            std::string convertInputToJsonString(
+                const finiteDifferenceForwardModelInput &input, const bool addX, const bool addZ, const bool addR, const bool addBeta)
+            {
+                std::stringstream stream;
+                stream << "{ \n";
+                stream << "\t \"PMLWidthFactor\": { \n";
+                if(addX)
+                {
+                    stream << std::fixed << std::setprecision(2) << "\t \t \"x\": " << input.pmlWidthFactor.x;
+                    if(addZ)
+                    {
+                        stream << ", ";
+                    }
+                    stream << "\n ";
+                }
                 if(addZ)
                 {
-                    stream << ", ";
+                    stream << std::fixed << std::setprecision(2) << "\t \t \"z\": " << input.pmlWidthFactor.z << " \n";
                 }
-                stream << "\n ";
-            }
-            if(addZ)
-            {
-                stream << std::fixed << std::setprecision(2) << "\t \t \"z\": " << input.pmlWidthFactor.z << " \n";
-            }
-            stream << "\t }, \n";
-            stream << "\t \"SourceParameter\": { \n";
-            if(addR)
-            {
-                stream << std::fixed << std::setprecision(2) << "\t \t \"r\": " << input.sourceParameter.r;
+                stream << "\t }, \n";
+                stream << "\t \"SourceParameter\": { \n";
+                if(addR)
+                {
+                    stream << std::fixed << std::setprecision(2) << "\t \t \"r\": " << input.sourceParameter.r;
+                    if(addBeta)
+                    {
+                        stream << ", ";
+                    }
+                    stream << "\n ";
+                }
                 if(addBeta)
                 {
-                    stream << ", ";
+                    stream << std::fixed << std::setprecision(2) << "\t \t \"beta\": " << input.sourceParameter.beta << "\n";
                 }
-                stream << "\n ";
-            }
-            if(addBeta)
-            {
-                stream << std::fixed << std::setprecision(2) << "\t \t \"beta\": " << input.sourceParameter.beta << "\n";
-            }
-            stream << "\t } \n";
-            stream << "}";
+                stream << "\t } \n";
+                stream << "}";
 
-            return stream.str();
-        }
+                return stream.str();
+            }
 
-        void writeInputFile(const std::string &jsonInputString)
-        {
-            struct stat stats;
-            stat((testFolder).c_str(), &stats);
-            if(!S_ISDIR(stats.st_mode))
+            void writeInputFile(const std::string &jsonInputString)
             {
-                mkdir((testFolder).c_str(), 0777);
-                mkdir((inputFolder).c_str(), 0777);
+                std::ofstream inputFile;
+                inputFile.open(filePath);
+                inputFile << jsonInputString << std::endl;
+                inputFile.close();
             }
-            std::ofstream inputFile;
-            inputFile.open(filePath);
-            inputFile << jsonInputString << std::endl;
-            inputFile.close();
-        }
+        };
 
-        void removeInputFile()
-        {
-            if(remove((filePath).c_str()) != 0)
-            {
-                perror("Error deleting finiteDifferenceFMInput file");
-            }
-            if(rmdir((inputFolder).c_str()) != 0)
-            {
-                perror("Error deleting input directory");
-            }
-            if(rmdir((testFolder).c_str()) != 0)
-            {
-                perror("Error deleting testInputFiles directory");
-            }
-        }
-
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, constructor_ValidInput)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_ValidInput)
         {
             finiteDifferenceForwardModelInput writeInput;
             PMLWidthFactor pmlWidthFactor(0.0, 0.0);
@@ -107,7 +120,7 @@ namespace fwi
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingXVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingXVariable_ExceptionsThrown)
         {
             finiteDifferenceForwardModelInput writeInput;
             PMLWidthFactor pmlWidthFactor(0.0, 0.0);
@@ -121,7 +134,7 @@ namespace fwi
 
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
         }
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZVariable_ExceptionsThrown)
         {
             finiteDifferenceForwardModelInput writeInput;
             PMLWidthFactor pmlWidthFactor(0.0, 0.0);
@@ -136,7 +149,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
         }
 
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingRVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingRVariable_ExceptionsThrown)
         {
             finiteDifferenceForwardModelInput writeInput;
             PMLWidthFactor pmlWidthFactor(0.0, 0.0);
@@ -151,7 +164,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
         }
 
-        TEST(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBetaVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBetaVariable_ExceptionsThrown)
         {
             finiteDifferenceForwardModelInput writeInput;
             PMLWidthFactor pmlWidthFactor(0.0, 0.0);
@@ -164,8 +177,6 @@ namespace fwi
             writeInputFile(jsonInput);
 
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
-
-            removeInputFile();
         }
     }   // namespace forwardModels
 }   // namespace fwi
