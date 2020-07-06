@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "integralForwardModelInputCardReader.h"
 #include "json.h"
-#include <iostream>
 
 namespace fwi
 {
@@ -43,7 +44,30 @@ namespace fwi
 
             bool calcAlpha = io::ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
 
-            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha);
+            CostFunction costFunction = readCostFunctionParameters(iterObject);
+
+            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha, costFunction);
+        }
+
+        CostFunction integralForwardModelInputCardReader::readCostFunctionParameters(nlohmann::json &iterObject)
+        {
+            const std::string parameterCostFunction = "CostFunction";
+
+            std::string costFunctionInput = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(iterObject, _fileName, parameterCostFunction);
+
+            std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
+
+            CostFunction costFunction;
+            try
+            {
+                costFunction = costFunctionStringMap.at(costFunctionInput);
+            }
+            catch(const std::out_of_range &e)
+            {
+                throw std::runtime_error("Invalid cost function in input file for integral forward model.");
+            }
+
+            return costFunction;
         }
     }   // namespace forwardModels
 }   // namespace fwi

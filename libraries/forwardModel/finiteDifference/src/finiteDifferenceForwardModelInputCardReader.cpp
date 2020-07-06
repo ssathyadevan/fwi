@@ -20,6 +20,7 @@ namespace fwi
             nlohmann::json jsonFile = readFile(filePath);
             readPMLWidthFactorParameters(jsonFile);
             readSourceParameters(jsonFile);
+            readCostFunctionParameters(jsonFile);
         }
 
         void finiteDifferenceForwardModelInputCardReader::readPMLWidthFactorParameters(const nlohmann::json &jsonFile)
@@ -47,6 +48,22 @@ namespace fwi
             double shape = io::ReadJsonHelper::tryGetParameterFromJson<double>(iterObject, _fileName, parameterShape);
 
             _input.sourceParameter = SourceParameter(halfWidth, shape);
+        }
+
+        void finiteDifferenceForwardModelInputCardReader::readCostFunctionParameters(const nlohmann::json &jsonFile)
+        {
+            const std::string parameterCostFunction = "CostFunction";
+            std::string costFunctionString = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterCostFunction);
+            std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
+
+            try
+            {
+                _input.costFunction = costFunctionStringMap.at(costFunctionString);
+            }
+            catch(const std::out_of_range &e)
+            {
+                throw std::runtime_error("Invalid cost function in input file for finite-difference forward model.");
+            }
         }
     }   // namespace forwardModels
 }   // namespace fwi

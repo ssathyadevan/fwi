@@ -25,6 +25,7 @@ namespace fwi
             void readJsonFile(const std::string &filePath);
             void readPMLWidthFactorParameters(const nlohmann::json &jsonFile);
             void readSourceParameters(const nlohmann::json &jsonFile);
+            void readCostFunctionParameters(const nlohmann::json &jsonFile);
         };
     }   // namespace forwardModels
 }   // namespace fwi
