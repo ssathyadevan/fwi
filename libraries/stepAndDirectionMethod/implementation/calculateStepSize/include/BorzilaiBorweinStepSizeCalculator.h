@@ -1,5 +1,4 @@
 #pragma once
-
 #include "StepSizeCalculator.h"
 
 namespace fwi

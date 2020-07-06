@@ -132,7 +132,7 @@ namespace fwi
         }
         if(desiredStepSizeMethod == "DummyStepSize")   // DummyStepSize, update with your own.
         {
-            _createdStepSizeCalculator = new DummyStepSizeCalculator();
+            _createdStepSizeCalculator = new inversionMethods::DummyStepSizeCalculator();
             return;
         }
 

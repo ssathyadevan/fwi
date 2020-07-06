@@ -24,12 +24,12 @@ namespace fwi
             derivativeCurrent = 2.0;
 
             const double initialStepSize = 0.5;
-            std::vector<std::complex<double>> ignoreThis;
+            std::vector<std::complex<double>> nullVector;
 
             StepSizeCalculator *stepSizeCalculator;
             stepSizeCalculator = new BorzilaiBorweinStepSizeCalculator(grid, initialStepSize);
 
-            stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1, ignoreThis, ignoreThis);
+            stepSizeCalculator->updateVariables(chiEstimateCurrent, derivativeCurrent, 1, nullVector, nullVector);
 
             double stepSizeZero = 0.5;
             double stepSizeCalculate = stepSizeCalculator->calculateStepSize();
