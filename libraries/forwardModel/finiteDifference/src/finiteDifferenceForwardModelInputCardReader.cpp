@@ -55,7 +55,15 @@ namespace fwi
             const std::string parameterCostFunction = "CostFunction";
             std::string costFunctionString = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterCostFunction);
             std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
-            _input.costFunction = costFunctionStringMap.at(costFunctionString);
+
+            try
+            {
+                _input.costFunction = costFunctionStringMap.at(costFunctionString);
+            }
+            catch(const std::out_of_range &e)
+            {
+                throw std::runtime_error("Invalid cost function in input file for finite-difference forward model.");
+            }
         }
     }   // namespace forwardModels
 }   // namespace fwi

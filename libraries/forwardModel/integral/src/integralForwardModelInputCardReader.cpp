@@ -56,7 +56,16 @@ namespace fwi
             std::string costFunctionInput = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(iterObject, _fileName, parameterCostFunction);
 
             std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
-            CostFunction costFunction = costFunctionStringMap.at(costFunctionInput);
+
+            CostFunction costFunction;
+            try
+            {
+                costFunction = costFunctionStringMap.at(costFunctionInput);
+            }
+            catch(const std::out_of_range &e)
+            {
+                throw std::runtime_error("Invalid cost function in input file for integral forward model.");
+            }
 
             return costFunction;
         }
