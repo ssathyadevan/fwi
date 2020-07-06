@@ -2,6 +2,7 @@
 #include "ConjugateGradientDirectionCalculator.h"
 #include "ConjugateGradientStepSizeCalculator.h"
 #include "ConjugateGradientWithRegularisationCalculator.h"
+#include "DummyStepSizeCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
@@ -129,6 +130,11 @@ namespace fwi
             _createdStepSizeCalculator = new inversionMethods::ConjugateGradientStepSizeCalculator(grid, stepSizeParameters.initialStepSize);
             return;
         }
+        if(desiredStepSizeMethod == "DummyStepSize")   // DummyStepSize, update with your own.
+        {
+            _createdStepSizeCalculator = new inversionMethods::DummyStepSizeCalculator();
+            return;
+        }
 
         L_(io::linfo) << "The Step size method " << desiredStepSizeMethod << " was not found";
         throw std::invalid_argument("The Step size method " + desiredStepSizeMethod + " was not found");
@@ -137,7 +143,7 @@ namespace fwi
     bool Factory::splittableInversion(const std::string inversionMethod)
     {
         bool splittable = true;
-        if(inversionMethod == "ConjugateGradientRegularisationStepSize")   
+        if(inversionMethod == "ConjugateGradientRegularisationStepSize")
         {
             splittable = false;
         }

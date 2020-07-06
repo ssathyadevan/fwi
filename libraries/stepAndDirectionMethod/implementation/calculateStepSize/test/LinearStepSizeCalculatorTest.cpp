@@ -38,11 +38,11 @@ namespace fwi
         {
             core::grid2D grid = getGrid();
             core::dataGrid2D dataGrid(grid);
-            std::vector<std::complex<double>> ignoreThis;
+            std::vector<std::complex<double>> nullVector;
 
             LinearStepSizeCalculator stepSizeCalculator(1.0, 1.0);
 
-            stepSizeCalculator.updateVariables(dataGrid, dataGrid, 1, ignoreThis, ignoreThis);
+            stepSizeCalculator.updateVariables(dataGrid, dataGrid, 1, nullVector, nullVector);
 
             EXPECT_DOUBLE_EQ(stepSizeCalculator.calculateStepSize(), 0.5);
         }
