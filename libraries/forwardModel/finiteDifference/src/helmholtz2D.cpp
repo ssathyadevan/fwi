@@ -22,6 +22,8 @@ namespace fwi
         {
             double waveLength = _c0 / freq;
 
+            BoundaryConditionType boundaryCondition = fmInput.boundaryConditionType;
+
             // calculating the width of the perfectly matching layer. (rounded up)
             std::array<double, 2> dx;
             std::array<int, 2> oldnx = grid.getGridDimensions();
@@ -104,7 +106,7 @@ namespace fwi
             _newgrid = new FiniteDifferenceGrid2D(xMin, xMax, nx);
 
             updateChi(chi);
-            buildMatrix();
+            buildMatrix(boundaryCondition);
         }
 
         Helmholtz2D::~Helmholtz2D() { delete _newgrid; }
@@ -504,7 +506,7 @@ namespace fwi
             }
         }
 
-        void Helmholtz2D::buildMatrix()
+        void Helmholtz2D::buildMatrix(BoundaryConditionType boundaryCondition)
         {
             std::array<int, 2> nx = _newgrid->GetGridDimensions();
             std::array<double, 2> dx = _newgrid->GetMeshSize();
@@ -515,13 +517,19 @@ namespace fwi
             std::vector<Eigen::Triplet<std::complex<double>>> triplets;
             triplets.reserve(5 * nx[0] * nx[1]);   // Naive upper bound for nnz's
 
-            if(_PMLwidth[0] == 0 && _PMLwidth[1] == 0)   // 1st Order ABC
+            switch (boundaryCondition)
             {
-                CreateABCMatrix(omega, dx, triplets, nx);
-            }
-            else   // PML
-            {
+                case PML:
                 CreatePMLMatrix(triplets, nx, omega, dx, xMin);
+                break;
+
+                case FirstOrderABC:
+                CreateABCMatrix(omega, dx, triplets, nx);
+                break;
+
+                case SecondOrderABC:
+                CreateABCSecondOrderMatrix(omega, dx, triplets, nx);
+                break;
             }
 
             _A.setFromTriplets(triplets.begin(), triplets.end());

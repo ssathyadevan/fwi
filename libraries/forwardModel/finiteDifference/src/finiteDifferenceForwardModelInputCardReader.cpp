@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 
 #include "finiteDifferenceForwardModelInputCardReader.h"
 #include "json.h"
@@ -21,6 +22,7 @@ namespace fwi
             readPMLWidthFactorParameters(jsonFile);
             readSourceParameters(jsonFile);
             readCostFunctionParameters(jsonFile);
+            readBoundaryConditionType(jsonFile);
         }
 
         void finiteDifferenceForwardModelInputCardReader::readPMLWidthFactorParameters(const nlohmann::json &jsonFile)
@@ -63,6 +65,27 @@ namespace fwi
             catch(const std::out_of_range &e)
             {
                 throw std::runtime_error("Invalid cost function in input file for finite-difference forward model.");
+            }
+         }
+
+        void finiteDifferenceForwardModelInputCardReader::readBoundaryConditionType(const nlohmann::json &jsonFile)
+        {
+            const std::string boundaryConditionTypeArgument = "boundaryConditionType";
+            std::string boundaryConditionType = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, boundaryConditionTypeArgument);
+
+            std::map<std::string, BoundaryConditionType> boundaryConditionTypeMap
+            {
+                std::make_pair("PML", BoundaryConditionType::PML),
+                std::make_pair("FirstOrderABC", BoundaryConditionType::FirstOrderABC),
+                std::make_pair("SecondOrderABC", BoundaryConditionType::SecondOrderABC)
+            };
+
+            try
+            {
+                _input.boundaryConditionType = boundaryConditionTypeMap.at(boundaryConditionType);
+            } catch (std::exception &e)
+            {
+                throw std::invalid_argument("Inavlid input boundary condition in  " + _fileName + ". The supported types are PML, FirstOrderABC and SecondOrderABC");
             }
         }
     }   // namespace forwardModels
