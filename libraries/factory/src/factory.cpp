@@ -143,7 +143,7 @@ namespace fwi
     bool Factory::splittableInversion(const std::string inversionMethod)
     {
         bool splittable = true;
-        if(inversionMethod == "ConjugateGradientRegularisationStepSize")   
+        if(inversionMethod == "ConjugateGradientRegularisationStepSize")
         {
             splittable = false;
         }

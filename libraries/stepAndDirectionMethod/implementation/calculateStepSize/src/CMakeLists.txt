@@ -5,7 +5,7 @@ add_library(step_size_calculator_library
     ConjugateGradientStepSizeCalculator.cpp        ../include/ConjugateGradientStepSizeCalculator.h
     DummyStepSizeCalculator.cpp                    ../include/DummyStepSizeCalculator.h
 # uncomment the following line and update it with your chosen name	
-#    YourOwnStepSizeCalculator.cpp                 ../include/YourOwnStepSizeCalculator.h
+#    YourOwnStepSizeCalculator.cpp                  ../include/YourOwnStepSizeCalculator.h
 )
 
 set( LIBRARY_INCLUDE_DIRS_CALCULATE_STEP_SIZE_INVERSION ${CMAKE_SOURCE_DIR}/libraries/stepAndDirectionMethod/implementation/calculateStepSize/include CACHE INTERNAL "" )

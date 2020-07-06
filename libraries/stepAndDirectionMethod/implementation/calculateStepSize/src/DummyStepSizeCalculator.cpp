@@ -12,10 +12,7 @@ DummyStepSizeCalculator::DummyStepSizeCalculator(double dummyStepSize)
 
 DummyStepSizeCalculator::~DummyStepSizeCalculator() {}
 
-double DummyStepSizeCalculator::calculateStepSize()
-{
-    return _dummyStepSize;
-}
+double DummyStepSizeCalculator::calculateStepSize() { return _dummyStepSize; }
 
 void DummyStepSizeCalculator::updateVariables(const dataGrid2D &chiEstimateCurrent, const dataGrid2D &derivativeCurrent, int iteration,
     const std::vector<std::complex<double>> &kappaTimesDirection, const std::vector<std::complex<double>> &residualVector)
