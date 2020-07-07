@@ -13,6 +13,7 @@ namespace fwi
             , _chiEstimateCurrent(forwardModel->getGrid())
             , _gradientPrevious(forwardModel->getGrid())
             , _gradientCurrent(forwardModel->getGrid())
+            , _iterationNumber(0)
             , _pData(pData)
             , _cgParametersInput(cgParametersInput)
             , _grid(forwardModel->getGrid())
