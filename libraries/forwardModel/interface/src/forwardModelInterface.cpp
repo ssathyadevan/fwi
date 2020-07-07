@@ -54,10 +54,9 @@ namespace fwi
         double forwardModelInterface::calculateCost(
             std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
         {
-            costFunction = leastSquares;
-            double cost;
+            double cost = 0.0;
 
-            switch(costFunction)
+            switch(_costFunction)
             {
                 case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
                 default: std::cout << "Invalid cost function selected." << std::endl;
