@@ -1,6 +1,6 @@
 #include "finiteDifferenceForwardModelInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
-#include <filesystem>
+#include <experimental/filesystem>
 #include <gtest/gtest.h>
 #include <map>
 
@@ -8,6 +8,8 @@ namespace fwi
 {
     namespace forwardModels
     {
+        namespace fs = std::experimental::filesystem;
+
         class finiteDifferenceForwardModelInputCardReaderTest : public ::testing::Test
         {
         protected:
@@ -20,32 +22,32 @@ namespace fwi
 
             void SetUp() override
             {
-                if(!std::filesystem::exists(testFolder))
+                if(!fs::exists(testFolder))
                 {
-                    std::filesystem::create_directory(testFolder);
+                    fs::create_directory(testFolder);
                 }
 
-                if(!std::filesystem::exists(inputFolder))
+                if(!fs::exists(inputFolder))
                 {
-                    std::filesystem::create_directory(inputFolder);
+                    fs::create_directory(inputFolder);
                 }
             }
 
             void TearDown() override
             {
-                if(std::filesystem::exists(filePath))
+                if(fs::exists(filePath))
                 {
-                    std::filesystem::remove(filePath);
+                    fs::remove(filePath);
                 }
 
-                if(std::filesystem::exists(inputFolder))
+                if(fs::exists(inputFolder))
                 {
-                    std::filesystem::remove(inputFolder);
+                    fs::remove(inputFolder);
                 }
 
-                if(std::filesystem::exists(testFolder))
+                if(fs::exists(testFolder))
                 {
-                    std::filesystem::remove(testFolder);
+                    fs::remove(testFolder);
                 }
             };
 
