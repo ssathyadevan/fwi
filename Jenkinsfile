@@ -80,18 +80,19 @@ pipeline {
 						agent {
 							label 'Windows'
 						}
-                        environment { 
-                            workspace = "C:\\BuildFolder\\workspace"
-                        }
+
 						stages {
 							stage( 'Building in Windows' ){
 								 steps {
-								 	 deleteDir()
-									 checkout scm
-									 script {
-										echo "Building on windows"
-										bat(script:'mkdir build \n cd build \n cmake -G "MinGW Makefiles" .. \n mingw32-make.exe')
-									 }
+									ws("C:\\BuildFolder\\workspace") {
+										deleteDir()
+										checkout scm
+										script {
+											echo "Building on windows"
+											bat(script:'mkdir build \n cd build \n cmake -G "MinGW Makefiles" .. \n mingw32-make.exe')
+										}
+									}
+
 								}
 							}
 
