@@ -88,7 +88,7 @@ pipeline {
 									 checkout scm
 									 script {
 										echo "Building on windows"
-										bat(script:'mkdir C:\BuildFolder\build \n xcopy /s ${workspace} C:\BuildFolder \n cd C:\BuildFolder\build \n cmake -G "MinGW Makefiles" .. \n mingw32-make.exe')
+										bat(script:'mkdir C:\\BuildFolder\\build \n xcopy /s ${workspace} C:\\BuildFolder \n cd C:\\BuildFolder\\build \n cmake -G "MinGW Makefiles" .. \n mingw32-make.exe')
 									 }
 								}
 							}
