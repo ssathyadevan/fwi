@@ -85,6 +85,7 @@ pipeline {
 							stage( 'Building in Windows' ){
 								 steps {
 									 script {
+										bat(script:'cmake')
 										echo "Building on windows"
 									 }
 								}
