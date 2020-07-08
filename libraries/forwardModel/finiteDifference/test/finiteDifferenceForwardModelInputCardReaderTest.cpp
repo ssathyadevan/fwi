@@ -22,6 +22,16 @@ namespace fwi
 
             void SetUp() override
             {
+#ifdef _WIN32
+                if(!PathFileExistsA(testFolder))
+                {
+                    mkdir((testFolder).c_str());
+                }
+                if(!PathFileExistsA(inputFolder))
+                {
+                    mkdir((inputFolder).c_str());
+                }
+#elif defined __linux__
                 if(!fs::exists(testFolder))
                 {
                     fs::create_directory(testFolder);
@@ -31,10 +41,26 @@ namespace fwi
                 {
                     fs::create_directory(inputFolder);
                 }
+#endif
             }
 
             void TearDown() override
             {
+#ifdef _WIN32
+                if(PathFileExistsA(filePath))
+                {
+                    DeleteFileA((filePath).c_str());
+                }
+                if(PathFileExistsA(inputFolder))
+                {
+                    DeleteFileA((inputFolder).c_str());
+                }
+                if(PathFileExistsA(testFolder))
+                {
+                    DeleteFileA((testFolder).c_str());
+                }
+#elif defined __linux__
+
                 if(fs::exists(filePath))
                 {
                     fs::remove(filePath);
@@ -49,7 +75,8 @@ namespace fwi
                 {
                     fs::remove(testFolder);
                 }
-            };
+#endif
+            }
 
             std::string generateJsonWithInputParameters(const Parameters &pmlWidth, const Parameters &source)
             {
@@ -60,7 +87,7 @@ namespace fwi
                 addToJson("SourceParameter", source, s);
                 s << "}";
                 return s.str();
-            };
+            }
 
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
