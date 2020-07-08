@@ -1,6 +1,6 @@
 #include "finiteDifferenceForwardModelInputCardReader.h"
 #include "finiteDifferenceForwardModel.h"
-#include <experimental/filesystem>
+
 #include <gtest/gtest.h>
 #include <map>
 
@@ -8,8 +8,6 @@ namespace fwi
 {
     namespace forwardModels
     {
-        namespace fs = std::experimental::filesystem;
-
         class finiteDifferenceForwardModelInputCardReaderTest : public ::testing::Test
         {
         protected:
@@ -22,60 +20,40 @@ namespace fwi
 
             void SetUp() override
             {
-#ifdef _WIN32
-                if(!PathFileExistsA(testFolder))
+                struct stat stats;
+                stat((testFolder).c_str(), &stats);
+                if(!S_ISDIR(stats.st_mode))
                 {
+#if __unix__
+                    mkdir((testFolder).c_str(), 0777);
+#else
                     mkdir((testFolder).c_str());
-                }
-                if(!PathFileExistsA(inputFolder))
-                {
-                    mkdir((inputFolder).c_str());
-                }
-#elif defined __linux__
-                if(!fs::exists(testFolder))
-                {
-                    fs::create_directory(testFolder);
-                }
-
-                if(!fs::exists(inputFolder))
-                {
-                    fs::create_directory(inputFolder);
-                }
 #endif
+                }
+                stat((inputFolder).c_str(), &stats);
+                if(!S_ISDIR(stats.st_mode))
+                {
+#if __unix__
+                    mkdir((inputFolder).c_str(), 0777);
+#else
+                    mkdir((inputFolder).c_str());
+#endif
+                }
             }
-
             void TearDown() override
             {
-#ifdef _WIN32
-                if(PathFileExistsA(filePath))
+                if(remove((filePath).c_str()) != 0)
                 {
-                    DeleteFileA((filePath).c_str());
+                    perror("Error deleting finiteDifferenceFMInput file");
                 }
-                if(PathFileExistsA(inputFolder))
+                if(rmdir((inputFolder).c_str()) != 0)
                 {
-                    DeleteFileA((inputFolder).c_str());
+                    perror("Error deleting input directory");
                 }
-                if(PathFileExistsA(testFolder))
+                if(rmdir((testFolder).c_str()) != 0)
                 {
-                    DeleteFileA((testFolder).c_str());
+                    perror("Error deleting testInputFiles directory");
                 }
-#elif defined __linux__
-
-                if(fs::exists(filePath))
-                {
-                    fs::remove(filePath);
-                }
-
-                if(fs::exists(inputFolder))
-                {
-                    fs::remove(inputFolder);
-                }
-
-                if(fs::exists(testFolder))
-                {
-                    fs::remove(testFolder);
-                }
-#endif
             }
 
             std::string generateJsonWithInputParameters(const Parameters &pmlWidth, const Parameters &source)
