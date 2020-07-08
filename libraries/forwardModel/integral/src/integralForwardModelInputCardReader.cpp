@@ -7,8 +7,9 @@ namespace fwi
 {
     namespace forwardModels
     {
-        integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder)
+        integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder, const std::string &filename)
             : io::inputCardReader()
+            , _fileName(filename)
         {
             const std::string stringInputFolder = "/input/";
             std::string filePath = caseFolder + stringInputFolder + _fileName;

@@ -13,46 +13,16 @@ namespace fwi
         protected:
             using Parameters = std::map<std::string, std::string>;
 
-            const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
-            const std::string testFolder = initialPath + "FiniteDifferenceFMInputCardReaderTests/";
+            const std::string testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
             const std::string inputFolder = testFolder + "input/";
-            const std::string filePath = inputFolder + "FiniteDifferenceFMInput.json";
+            const std::string filename = "FiniteDifferenceFMInputTest.json";
+            const std::string filePath = inputFolder + filename;
 
-            void SetUp() override
-            {
-                struct stat stats;
-                stat((testFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((testFolder).c_str(), 0777);
-#else
-                    mkdir((testFolder).c_str());
-#endif
-                }
-                stat((inputFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((inputFolder).c_str(), 0777);
-#else
-                    mkdir((inputFolder).c_str());
-#endif
-                }
-            }
             void TearDown() override
             {
                 if(remove((filePath).c_str()) != 0)
                 {
                     perror("Error deleting finiteDifferenceFMInput file");
-                }
-                if(rmdir((inputFolder).c_str()) != 0)
-                {
-                    perror("Error deleting input directory");
-                }
-                if(rmdir((testFolder).c_str()) != 0)
-                {
-                    perror("Error deleting testInputFiles directory");
                 }
             }
 
@@ -102,7 +72,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act
-            finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder);
+            finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename);
             finiteDifferenceForwardModelInput input = finiteDifferenceReader.getInput();
 
             // Assert
@@ -125,7 +95,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZVariable_ExceptionsThrown)
@@ -138,7 +108,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingRVariable_ExceptionsThrown)
@@ -151,7 +121,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBetaVariable_ExceptionsThrown)
@@ -164,7 +134,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
         }
     }   // namespace forwardModels
 }   // namespace fwi

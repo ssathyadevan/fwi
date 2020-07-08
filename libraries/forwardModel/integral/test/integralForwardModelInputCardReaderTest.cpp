@@ -15,46 +15,17 @@ namespace fwi
         protected:
             using Parameters = std::map<std::string, std::string>;
 
-            const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
-            const std::string testFolder = initialPath + "IntegralFMInputCardReaderTests/";
+            const std::string testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
             const std::string inputFolder = testFolder + "input/";
-            const std::string filePath = inputFolder + "IntegralFMInput.json";
+            const std::string filename = "IntegralFMInputTest.json";
+            const std::string filePath = inputFolder + filename;
 
-            void SetUp() override
-            {
-                struct stat stats;
-                stat((testFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((testFolder).c_str(), 0777);
-#else
-                    mkdir((testFolder).c_str());
-#endif
-                }
-                stat((inputFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((inputFolder).c_str(), 0777);
-#else
-                    mkdir((inputFolder).c_str());
-#endif
-                }
-            }
+            void SetUp() override {}
             void TearDown() override
             {
                 if(remove((filePath).c_str()) != 0)
                 {
                     perror("Error deleting integralFMInput file");
-                }
-                if(rmdir((inputFolder).c_str()) != 0)
-                {
-                    perror("Error deleting input directory");
-                }
-                if(rmdir((testFolder).c_str()) != 0)
-                {
-                    perror("Error deleting testInputFiles directory");
                 }
             }
 
@@ -101,11 +72,10 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act
-            integralForwardModelInputCardReader integralReader(testFolder);
+            integralForwardModelInputCardReader integralReader(testFolder, filename);
             integralForwardModelInput input = integralReader.getInput();
 
             // Assert
-
             EXPECT_EQ(15, input.nrOfIterations);
             ASSERT_DOUBLE_EQ(5.0e-5, input.tolerance);
             ASSERT_FALSE(input.calcAlpha);
@@ -121,7 +91,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(integralForwardModelInputCardReaderTest, constructor_invalidToleranceValue_ExceptionThrown)
@@ -133,7 +103,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(integralForwardModelInputCardReaderTest, constructor_missingNVariable_ExceptionThrown)
@@ -145,7 +115,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(integralForwardModelInputCardReaderTest, constructor_missingToleranceVariable_ExceptionThrown)
@@ -157,7 +127,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(integralForwardModelInputCardReaderTest, constructor_missingCalcAlphaVariable_ExceptionThrown)
@@ -169,7 +139,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
         }
 
     }   // namespace forwardModels

@@ -16,12 +16,12 @@ namespace fwi
         class finiteDifferenceForwardModelInputCardReader : public io::inputCardReader
         {
         public:
-            finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder);
+            finiteDifferenceForwardModelInputCardReader(const std::string &caseFolder, const std::string &filename = "FiniteDifferenceFMInput.json");
             const finiteDifferenceForwardModelInput getInput() const { return _input; }
 
         private:
             finiteDifferenceForwardModelInput _input;
-            const std::string _fileName = "FiniteDifferenceFMInput.json";
+            const std::string _fileName;
             void readJsonFile(const std::string &filePath);
             void readPMLWidthFactorParameters(const nlohmann::json &jsonFile);
             void readSourceParameters(const nlohmann::json &jsonFile);
