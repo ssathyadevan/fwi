@@ -13,11 +13,11 @@ namespace fwi
         class StepAndDirectionReconstructorInputCardReader : public io::inputCardReader
         {
         public:
-            StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder);
+            StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder, const std::string &filename = "StepAndDirectionInput.json");
             const StepAndDirectionReconstructorInput getInput() const { return _input; }
 
         private:
-            const std::string _fileName = "StepAndDirectionInput.json";
+            const std::string _fileName;
             void readJsonFile(const std::string &filePath);
 
             void readReconstructorParameters(const nlohmann::json &jsonFile);

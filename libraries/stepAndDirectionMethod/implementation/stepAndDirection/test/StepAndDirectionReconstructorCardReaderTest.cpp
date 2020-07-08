@@ -11,46 +11,18 @@ namespace fwi
         protected:
             using Parameters = std::map<std::string, std::string>;
 
-            const std::string initialPath = std::string(FWI_PROJECT_DIR) + "/tests/";
-            const std::string testFolder = initialPath + "StepAndDirectionReconstructorInputCardReaderTests/";
+            const std::string testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
             const std::string inputFolder = testFolder + "input/";
-            const std::string filePath = inputFolder + "StepAndDirectionInput.json";
+            const std::string filename = "StepAndDirectionInputTest.json";
+            const std::string filePath = inputFolder + filename;
 
-            void SetUp() override
-            {
-                struct stat stats;
-                stat((testFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((testFolder).c_str(), 0777);
-#else
-                    mkdir((testFolder).c_str());
-#endif
-                }
-                stat((inputFolder).c_str(), &stats);
-                if(!S_ISDIR(stats.st_mode))
-                {
-#if __unix__
-                    mkdir((inputFolder).c_str(), 0777);
-#else
-                    mkdir((inputFolder).c_str());
-#endif
-                }
-            }
+            void SetUp() override {}
+
             void TearDown() override
             {
                 if(remove((filePath).c_str()) != 0)
                 {
                     perror("Error deleting StepAndDirectionInput file");
-                }
-                if(rmdir((inputFolder).c_str()) != 0)
-                {
-                    perror("Error deleting input directory");
-                }
-                if(rmdir((testFolder).c_str()) != 0)
-                {
-                    perror("Error deleting testInputFiles directory");
                 }
             }
 
@@ -110,7 +82,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act
-            StepAndDirectionReconstructorInputCardReader StepAndDirectionReader(testFolder);
+            StepAndDirectionReconstructorInputCardReader StepAndDirectionReader(testFolder, filename);
             StepAndDirectionReconstructorInput input = StepAndDirectionReader.getInput();
 
             // Assert
@@ -138,7 +110,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingTolerance_ExpectThrow)
@@ -153,7 +125,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingInitialChi_ExpectThrow)
@@ -168,7 +140,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, InvalidMaxIterationNumber_ExpectThrow)
@@ -183,7 +155,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingMaxIterationNumber_ExpectThrow)
@@ -198,7 +170,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, InvalidInitialStepSize_ExpectThrow)
@@ -213,7 +185,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingInitialStepSize_ExpectThrow)
@@ -228,7 +200,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, InvalidSlope_ExpectThrow)
@@ -243,7 +215,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingSlope_ExpectThrow)
@@ -258,7 +230,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, InvalidDerivativeStepSize_ExpectThrow)
@@ -273,7 +245,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingDerivativeStepSize_ExpectThrow)
@@ -288,7 +260,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, MissingDoConjugateGradientRegularisation_ExpectThrow)
@@ -303,7 +275,7 @@ namespace fwi
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder, filename), std::invalid_argument);
         }
 
     }   // namespace inversionMethods
