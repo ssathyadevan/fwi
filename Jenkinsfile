@@ -74,6 +74,17 @@ pipeline {
 								}
 								 
 						}
+						post {
+							always {
+								script {
+								   functions.unitTestSummary()
+								}
+								echo 'Sending email'
+								script {
+									functions.sendEmail()
+								}						
+							}
+						}
 					}
 
 					stage('Connecting to Windows Agent') {
@@ -98,9 +109,11 @@ pipeline {
 
 							stage('Testing in Windows') {
 								 steps {
-									 script {
-										echo "Testing on windows"
-										bat(script:"cd build \n cd tests \n ctest ")
+								 	ws("C:\\BuildFolder\\workspace") {
+										script {
+											echo "Testing on windows"
+											bat(script:"cd build \n cd tests \n ctest ")
+										}
 									 }
 								}
 							}
@@ -115,16 +128,4 @@ pipeline {
 				 }
 			}
 	}	
-	
-    post {
-        always {
-			/*script {
-			   functions.unitTestSummary()
-			}*/
-			echo 'Sending email'
-			script {
-				functions.sendEmail()
-			}						
-        }
-    }
 }
