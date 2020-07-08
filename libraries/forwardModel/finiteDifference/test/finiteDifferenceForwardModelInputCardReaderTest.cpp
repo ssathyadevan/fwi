@@ -106,8 +106,8 @@ namespace fwi
             finiteDifferenceForwardModelInput input = finiteDifferenceReader.getInput();
 
             // Assert
-            EXPECT_EQ(0.0, input.pmlWidthFactor.x);
-            EXPECT_EQ(0.0, input.pmlWidthFactor.z);
+            ASSERT_DOUBLE_EQ(0.0, input.pmlWidthFactor.x);
+            ASSERT_DOUBLE_EQ(0.0, input.pmlWidthFactor.z);
 
             EXPECT_EQ(4, input.sourceParameter.r);
             EXPECT_EQ(6.31, input.sourceParameter.beta);
