@@ -6,17 +6,17 @@ import sys, os, shutil
 #	This script should be in the directory $HOMEPATH (to run it locally),
 #       together with folders parallelized-fwi and FWIInstall, 
 #       When running from terminal, type python3 unified_run_all_regressions_python.py, followed by 1 to run it locally
-#       or 0 to run on Jenkins, forwardmodel (integralForwardModel or finiteDifferenceForwardModel) and inversion model (conjugateGradientInversion or gradientDescentInversion)
+#       or 0 to run on Jenkins, forwardmodel (IntegralForwardModel or FiniteDifferenceForwardModel) and inversion model (ConjugateGradientInversion or GradientDescentInversion)
 #       If you want to run one single regression test, add the name of the
-#       testcase you want. For example: "python3 run_all_regressions_python.py 1 integralForwardModel conjugateGradientInversion fast" will run locally only the
+#       testcase you want. For example: "python3 run_all_regressions_python.py 1 IntegralForwardModel ConjugateGradientInversion fast" will run locally only the
 #       regression for the testcase "fast"
 
 cwd = os.getcwd()
 ft=cwd
 
 if len(sys.argv) < 4 or len(sys.argv) > 5:
-    print("Please enter 1 for running locally or 0 for running on Jenkins, forwardmodel (integralForwardModel or finiteDifferenceForwardModel) "
-          "and inversion model (conjugateGradientInversion or gradientDescentInversion)")
+    print("Please enter 1 for running locally or 0 for running on Jenkins, forwardmodel (IntegralForwardModel or FiniteDifferenceForwardModel) "
+          "and inversion model (ConjugateGradientInversion or GradientDescentInversion)")
     sys.exit(1)
 
 if sys.argv[1]=='1':
@@ -49,22 +49,22 @@ else:
     print("Please input 1 for running locally or 0 for running on Jenkins")
     sys.exit(1)
 
-if sys.argv[2] == "integralForwardModel":
-    forwardmodel = "integralForwardModel"
-elif sys.argv[2] == "finiteDifferenceForwardModel":
-    forwardmodel = "finiteDifferenceForwardModel"
+if sys.argv[2] == "IntegralForwardModel":
+    forwardmodel = "IntegralForwardModel"
+elif sys.argv[2] == "FiniteDifferenceForwardModel":
+    forwardmodel = "FiniteDifferenceForwardModel"
 else:
-    print("Forward model in not recognized")
+    print("Forward model is not recognized")
     sys.exit(1)
 
-if sys.argv[3] == "conjugateGradientInversion":
-    inversionmodel = "conjugateGradientInversion"
+if sys.argv[3] == "ConjugateGradientInversion":
+    inversionmodel = "ConjugateGradientInversion"
     regression_data_folder = os.path.join(FWI_SOURCE_PATH,"tests","regression_data", "ConjugateGradientTestData")
-elif sys.argv[3] == "gradientDescentInversion":
-    inversionmodel = "gradientDescentInversion"
+elif sys.argv[3] == "GradientDescentInversion":
+    inversionmodel = "GradientDescentInversion"
     regression_data_folder = os.path.join(FWI_SOURCE_PATH, "tests", "regression_data", "GradientDescentTestData")
 else:
-    print("Inversion model in not recognized")
+    print("Inversion model is not recognized")
     sys.exit(1)
 
 print("\nRun Regression test with forwardmodel {} and inversionmodel {}".format(forwardmodel, inversionmodel))
@@ -116,9 +116,9 @@ for test in tests:
 
     print()
 
-    if forwardmodel == "integralForwardModel":
+    if forwardmodel == "IntegralForwardModel":
         os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
-    elif forwardmodel == "finiteDifferenceForwardModel":
+    elif forwardmodel == "FiniteDifferenceForwardModel":
         os.system(os.path.join(FWI_INSTALL_PATH, "bin", "FWI_PreProcess_Finite_Difference {}RUN".format(test)))
     else:
         print("Forward model is not recognized")

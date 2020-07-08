@@ -17,7 +17,7 @@ if sys.platform.startswith('linux'):
     os.chdir('libraries/inversion/')
     available_methods = os.popen('ls -d */').read().split('\n')
 
-    running_table = [['conjugateGradientInversion', 'integralForwardModel', 'Default', 'temple', '64x32', 'default', 0]]
+    running_table = [['ConjugateGradientInversion', 'IntegralForwardModel', 'Default', 'temple', '64x32', 'default', 0]]
     set_jsons_todefault(current_directory)
     os.chdir(current_directory + '/inputFiles/default/input/')
     if not os.path.isdir('temp'):
@@ -53,12 +53,12 @@ if sys.platform.startswith('linux'):
         checking_for_errors(check, current_directory)
         os.system('rm -r temp')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
-        if ind_run[1] == 'integralForwardModel':
+        if ind_run[1] == 'IntegralForwardModel':
             check = os.system('./FWI_PreProcess ../' + ind_run[5])
-        elif ind_run[1] == 'finiteDifferenceForwardModel':
+        elif ind_run[1] == 'FiniteDifferenceForwardModel':
             check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
         else:
-            print('there is something wrong with the ForwardModel you choose. The preprocessing was done with integralForwardModel')
+            print('there is something wrong with the ForwardModel you choose. The preprocessing was done with IntegralForwardModel')
             check = os.system('./FWI_PreProcess ../' + ind_run[5])
         checking_for_errors(check, current_directory)
         if ind_run[0] != "MPIConjugateGradientInversion":
