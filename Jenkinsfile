@@ -84,9 +84,11 @@ pipeline {
 						stages {
 							stage( 'Building in Windows' ){
 								 steps {
+								 	 deleteDir()
+									 checkout scm
 									 script {
-										bat(script:'cmake')
 										echo "Building on windows"
+										bat(script:'mkdir build \n cd build \n cmake -G "MinGW Makefiles" .. \n mingw32-make.exe')
 									 }
 								}
 							}
@@ -95,6 +97,7 @@ pipeline {
 								 steps {
 									 script {
 										echo "Testing on windows"
+										bat(script:"cd build \n cd tests \n ctest ")
 									 }
 								}
 							}
@@ -112,9 +115,9 @@ pipeline {
 	
     post {
         always {
-			script {
+			/*script {
 			   functions.unitTestSummary()
-			}
+			}*/
 			echo 'Sending email'
 			script {
 				functions.sendEmail()
