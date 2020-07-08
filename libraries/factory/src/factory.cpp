@@ -62,28 +62,28 @@ namespace fwi
     inversionMethods::inversionInterface *Factory::createInversion(
         const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput)
     {
-        if(desiredInversion == "conjugateGradientInversion")
+        if(desiredInversion == "ConjugateGradientInversion")
         {
             inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::ConjugateGradientInversion(forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
 
-        if(desiredInversion == "randomInversion")
+        if(desiredInversion == "RandomInversion")
         {
             inversionMethods::RandomInversionInputCardReader randomReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::RandomInversion(forwardModel, randomReader.getInput());
             return _createdInversion;
         }
 
-        if(desiredInversion == "gradientDescentInversion")
+        if(desiredInversion == "GradientDescentInversion")
         {
             inversionMethods::gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::gradientDescentInversion(forwardModel, gradientDescentReader.getInput());
             return _createdInversion;
         }
 
-        if(desiredInversion == "evolutionInversion")
+        if(desiredInversion == "EvolutionInversion")
         {
             inversionMethods::EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::EvolutionInversion(forwardModel, evolutionReader.getInput());
@@ -96,13 +96,13 @@ namespace fwi
     forwardModels::forwardModelInterface *Factory::createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
         const core::grid2D &grid, const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies)
     {
-        if(desiredForwardModel == "integralForwardModel")
+        if(desiredForwardModel == "IntegralForwardModel")
         {
             forwardModels::integralForwardModelInputCardReader integralreader(caseFolder);
             _createdForwardModel = new forwardModels::IntegralForwardModel(grid, sources, receivers, frequencies, integralreader.getInput());
             return _createdForwardModel;
         }
-        if(desiredForwardModel == "finiteDifferenceForwardModel")
+        if(desiredForwardModel == "FiniteDifferenceForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel = new forwardModels::finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
