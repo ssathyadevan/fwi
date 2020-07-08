@@ -2,7 +2,9 @@
 def functions
 
 pipeline {
-    agent master
+	agent {
+		label 'master'
+	}
     stages {
 		stage('Starting Pipeline'){
 			options {
