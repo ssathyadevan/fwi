@@ -100,7 +100,7 @@ pipeline {
 										checkout scm
 										script {
 											echo "Building on windows"
-											bat(script:'mkdir build \n cd build \n cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release \n mingw32-make.exe')
+											bat(script:'mkdir build \n cd build \n cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release \n ninja')
 										}
 									}
 
