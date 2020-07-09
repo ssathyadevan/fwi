@@ -13,13 +13,13 @@ namespace fwi
         class genericInputCardReader : public inputCardReader
         {
         public:
-            genericInputCardReader(const std::string &caseFolder);
+            genericInputCardReader(const std::string &caseFolder, const std::string &filename = "GenericInput.json");
             genericInput getInput() const { return _input; }
 
         private:
             genericInput _input;
 
-            const std::string _fileName = "GenericInput.json";
+            const std::string _fileName;
             std::string setFolders(const std::string &caseFolderWithSlash);
             void readJsonFile(const std::string &filePath);
 

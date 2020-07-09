@@ -8,7 +8,8 @@ namespace fwi
 {
     namespace io
     {
-        genericInputCardReader::genericInputCardReader(const std::string &caseFolder)
+        genericInputCardReader::genericInputCardReader(const std::string &caseFolder, const std::string &filename)
+            : _fileName(filename)
         {
             std::string filePath = setFolders(caseFolder);
             readJsonFile(filePath);
