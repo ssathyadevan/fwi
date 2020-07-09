@@ -142,5 +142,86 @@ namespace fwi
             // Assert
             EXPECT_EQ(true, input.doRegularisation);
         }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1N_ExceptionsThrown)
+        {
+            // Arrange
+            _groupParameters.at("Iter1").at("n") = "-1";
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1Tolerance_ExceptionsThrown)
+        {
+            // Arrange
+            _groupParameters.at("Iter1").at("tolerance") = "-1";
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeNmax_ExceptionsThrown)
+        {
+            // Arrange
+            _singleParameters.at("n_max") = "-1";
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingIter1_ExceptionsThrown)
+        {
+            // Arrange
+            _groupParameters.erase("Iter1");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDeltaAmplification_ExceptionsThrown)
+        {
+            // Arrange
+            _groupParameters.erase("DeltaAmplification");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingNmax_ExceptionsThrown)
+        {
+            // Arrange
+            _singleParameters.erase("n_max");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDoRegularisation_ExceptionsThrown)
+        {
+            // Arrange
+            _singleParameters.erase("do_reg");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
+        }
     }   // namespace inversionMethods
 }   // namespace fwi
