@@ -1,6 +1,5 @@
 #include "integralForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
-#include <experimental/filesystem>
 #include <gtest/gtest.h>
 #include <map>
 
@@ -8,8 +7,6 @@ namespace fwi
 {
     namespace forwardModels
     {
-        namespace fs = std::experimental::filesystem;
-
         class integralForwardModelInputCardReaderTest : public ::testing::Test
         {
         protected:

@@ -16,14 +16,14 @@ namespace fwi
         private:
             ConjugateGradientInversionInput _input;
 
-            const std::string _fileName = "ConjugateGradientInversionInput.json";
+            const std::string _fileName;
             void readJsonFile(const std::string &filePath);
 
             void readIterParameter(const nlohmann::json &jsonFile);
             void readDeltaAmplificationParameter(const nlohmann::json &jsonFile);
 
         public:
-            ConjugateGradientInversionInputCardReader(const std::string &caseFolder);
+            ConjugateGradientInversionInputCardReader(const std::string &caseFolder, const std::string &filename = "ConjugateGradientInversionInput.json");
             const ConjugateGradientInversionInput getInput() const { return _input; }
         };
     }   // namespace inversionMethods

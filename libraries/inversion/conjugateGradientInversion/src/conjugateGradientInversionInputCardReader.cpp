@@ -6,8 +6,9 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        ConjugateGradientInversionInputCardReader::ConjugateGradientInversionInputCardReader(const std::string &caseFolder)
+        ConjugateGradientInversionInputCardReader::ConjugateGradientInversionInputCardReader(const std::string &caseFolder, const std::string &filename)
             : io::inputCardReader()
+            , _fileName(filename)
         {
             const std::string stringInputFolder = "/input/";
             std::string filePath = caseFolder + stringInputFolder + _fileName;
