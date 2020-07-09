@@ -11,28 +11,45 @@ namespace fwi
         {
         protected:
             using Parameters = std::map<std::string, std::string>;
+            using ParametersCollection = std::map<std::string, Parameters>;
 
-            const std::string testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
-            const std::string inputFolder = testFolder + "input/";
-            const std::string filename = "IntegralFMInputTest.json";
-            const std::string filePath = inputFolder + filename;
+            const std::string _testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
+            const std::string _inputFolder = _testFolder + "input/";
+            const std::string _filename = "IntegralFMInputTest.json";
+            const std::string _filepath = _inputFolder + _filename;
 
-            void SetUp() override {}
+            ParametersCollection _parameters{{"Iter2", {{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}}}};
+
+            std::string _jsonInput;
+
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_parameters); }
             void TearDown() override
             {
-                if(remove((filePath).c_str()) != 0)
+                if(remove((_filepath).c_str()) != 0)
                 {
                     perror("Error deleting integralFMInput file");
                 }
             }
 
-            std::string generateJsonWithInputParameters(const Parameters &iter2)
+            std::string generateJsonWithInputParameters(const ParametersCollection &parameters)
             {
-                std::stringstream s;
-                s << "{\n";
-                addToJson("Iter2", iter2, s);
-                s << "}";
-                return s.str();
+                std::stringstream stream;
+                stream << "{\n";
+
+                if(!parameters.empty())
+                {
+                    for(const auto &param : parameters)
+                    {
+                        addToJson(param.first, param.second, stream);
+                        if(&param != &*parameters.rbegin())
+                        {
+                            stream << ",";
+                        }
+                        stream << "\n";
+                    }
+                }
+                stream << "}";
+                return stream.str();
             }
 
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
@@ -54,22 +71,19 @@ namespace fwi
             void writeInputFile(const std::string &jsonInputString) const
             {
                 std::ofstream inputFile;
-                inputFile.open(filePath);
+                inputFile.open(_filepath);
                 inputFile << jsonInputString << std::endl;
                 inputFile.close();
             }
         };
 
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_ValidInput)
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_ValidInput_Iter1)
         {
             // Arrange
-            Parameters iter2{{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}};
-
-            auto jsonInput = generateJsonWithInputParameters(iter2);
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
-            integralForwardModelInputCardReader integralReader(testFolder, filename);
+            integralForwardModelInputCardReader integralReader(_testFolder, _filename);
             integralForwardModelInput input = integralReader.getInput();
 
             // Assert
@@ -79,65 +93,59 @@ namespace fwi
             EXPECT_EQ(leastSquares, input.costFunction);
         }
 
-        TEST_F(integralForwardModelInputCardReaderTest, constructorInvalidNValue_ExceptionThrown)
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_ZeroN_ExceptionThrown)
         {
             // Arrange
-            Parameters iter2{{"n", "0"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}};
+            _parameters.at("Iter2").at("n") = "0";
+            _jsonInput = generateJsonWithInputParameters(_parameters);
+            writeInputFile(_jsonInput);
 
-            auto jsonInput = generateJsonWithInputParameters(iter2);
+            // Act & Assert
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_NegativeTolerance_ExceptionThrown)
+        {
+            // Arrange
+            _parameters.at("Iter2").at("tolerance") = "-1.0";
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_invalidToleranceValue_ExceptionThrown)
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_MissingN_ExceptionThrown)
         {
             // Arrange
-            Parameters iter2{{"n", "5"}, {"tolerance", "-1.0"}, {"calcAlpha", "false"}};
-
-            auto jsonInput = generateJsonWithInputParameters(iter2);
+            _parameters.at("Iter2").erase("n");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_missingNVariable_ExceptionThrown)
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_MissingTolerance_ExceptionThrown)
         {
             // Arrange
-            Parameters iter2{{"tolerance", "5.0e-5"}, {"calcAlpha", "false"}};
-
-            auto jsonInput = generateJsonWithInputParameters(iter2);
+            _parameters.at("Iter2").erase("tolerance");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
-
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_missingToleranceVariable_ExceptionThrown)
-        {
-            // Arrange
-            Parameters iter2{{"n", "5"}, {"calcAlpha", "false"}};
-
-            auto jsonInput = generateJsonWithInputParameters(iter2);
-            writeInputFile(jsonInput);
-
-            // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
-        }
-
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_missingCalcAlphaVariable_ExceptionThrown)
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_MissingCalcAlpha_ExceptionThrown)
         {
             // Arrange
             Parameters iter2{{"n", "5"}, {"tolerance", "5.0e-5"}};
-
-            auto jsonInput = generateJsonWithInputParameters(iter2);
+            _parameters.at("Iter2").erase("calcAlpha");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
-
     }   // namespace forwardModels
 }   // namespace fwi
