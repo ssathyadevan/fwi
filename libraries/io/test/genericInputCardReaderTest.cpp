@@ -27,9 +27,9 @@ namespace fwi
 
             Parameters singleParameters{{"c_0", "2000.0"}, {"verbosity", "false"}, {"nSources", "17"}, {"nReceivers", "17"}, {"fileName", "\"temple\""}};
 
-            std::string jsonInput;
+            std::string _jsonInput;
 
-            void SetUp() override { jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters); }
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters); }
 
             void TearDown() override
             {
@@ -39,11 +39,11 @@ namespace fwi
                 }
             }
 
-            void writeInputFile(const std::string &jsonInputString) const
+            void writeInputFile(const std::string &_jsonInputString) const
             {
                 std::ofstream inputFile;
                 inputFile.open(_filePath);
-                inputFile << jsonInputString << std::endl;
+                inputFile << _jsonInputString << std::endl;
                 inputFile.close();
             }
 
@@ -98,7 +98,7 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_ValidInput_c0)
         {
             // Arrange
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -111,7 +111,7 @@ namespace fwi
         {
             // Arrange
             core::freqInfo expectedFreq = {10, 40, 15};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -128,7 +128,7 @@ namespace fwi
             // Arrange
             std::array<double, 2> expectedTopLeft{-300.0, 0.0};
             std::array<double, 2> expectedBottomRight{300.0, 300.0};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -148,7 +148,7 @@ namespace fwi
             // Arrange
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -168,7 +168,7 @@ namespace fwi
             // Arrange
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -188,7 +188,7 @@ namespace fwi
             // Arrange
             int expectedNumberOfSources = 17;
             int expectedNumberOfReceivers = 17;
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -202,7 +202,7 @@ namespace fwi
         {
             // Arrange
             std::array<int, 2> expectedNumberOfGridPoints{64, 32};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -216,7 +216,7 @@ namespace fwi
         {
             // Arrange
             std::array<int, 2> expectedNumberOfOriginalGridPoints{64, 32};
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -230,7 +230,7 @@ namespace fwi
         {
             // Arrange
             bool expectedVerbosity = false;
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -243,7 +243,7 @@ namespace fwi
         {
             // Arrange
             std::string expectedFilename = "temple";
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
             genericInputCardReader reader(_testFolder, _filename);
@@ -252,13 +252,49 @@ namespace fwi
             EXPECT_EQ(reader.getInput().fileName, expectedFilename);
         }
 
+        TEST_F(genericInputCardReaderTest, constructor_NegativeC0_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.at("c_0") = "-10.0";
+
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfSources_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.at("nSources") = "-1";
+
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfReceivers_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.at("nReceivers") = "-1";
+
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
         TEST_F(genericInputCardReaderTest, constructor_MissingC0_ExceptionsThrown)
         {
             // Arrange
             singleParameters.erase("c_0");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -269,8 +305,8 @@ namespace fwi
             // Arrange
             singleParameters.erase("verbosity");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -281,8 +317,8 @@ namespace fwi
             // Arrange
             singleParameters.erase("nSources");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -293,8 +329,8 @@ namespace fwi
             // Arrange
             singleParameters.erase("nReceivers");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -305,8 +341,8 @@ namespace fwi
             // Arrange
             singleParameters.erase("fileName");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -317,8 +353,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("Freq");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -329,8 +365,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("reservoirTopLeft");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -341,8 +377,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("reservoirBottomRight");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -353,8 +389,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("sourcesTopLeft");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -365,8 +401,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("sourcesBottomRight");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -377,8 +413,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("receiversTopLeft");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -389,8 +425,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("receiversBottomRight");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -401,8 +437,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("ngrid_original");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
@@ -413,8 +449,8 @@ namespace fwi
             // Arrange
             groupParameters.erase("ngrid");
 
-            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
-            writeInputFile(jsonInput);
+            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(_jsonInput);
 
             // Act & Assert
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
