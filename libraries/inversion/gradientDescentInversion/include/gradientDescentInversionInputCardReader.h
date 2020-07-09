@@ -16,11 +16,11 @@ namespace fwi
         private:
             gradientDescentInversionInput _input;
 
-            const std::string _fileName = "GradientDescentInversionInput.json";
+            const std::string _fileName;
             void readJsonFile(const std::string &filePath);
 
         public:
-            gradientDescentInversionInputCardReader(const std::string &caseFolder);
+            gradientDescentInversionInputCardReader(const std::string &caseFolder, const std::string &filename = "GradientDescentInversionInput.json");
             const gradientDescentInversionInput getInput() const { return _input; }
         };
     }   // namespace inversionMethods
