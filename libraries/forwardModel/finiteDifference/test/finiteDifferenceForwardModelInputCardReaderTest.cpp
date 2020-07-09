@@ -12,29 +12,46 @@ namespace fwi
         {
         protected:
             using Parameters = std::map<std::string, std::string>;
+            using ParametersCollection = std::map<std::string, Parameters>;
 
-            const std::string testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
-            const std::string inputFolder = testFolder + "input/";
-            const std::string filename = "FiniteDifferenceFMInputTest.json";
-            const std::string filePath = inputFolder + filename;
+            const std::string _testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
+            const std::string _inputFolder = _testFolder + "input/";
+            const std::string _filename = "FiniteDifferenceFMInputTest.json";
+            const std::string _filepath = _inputFolder + _filename;
+
+            ParametersCollection _parameters{{"PMLWidthFactor", {{"x", "0.0"}, {"z", "0.0"}}}, {"SourceParameter", {{"r", "4"}, {"beta", "6.31"}}}};
+
+            std::string _jsonInput;
+
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_parameters); }
 
             void TearDown() override
             {
-                if(remove((filePath).c_str()) != 0)
+                if(remove((_filepath).c_str()) != 0)
                 {
                     perror("Error deleting finiteDifferenceFMInput file");
                 }
             }
 
-            std::string generateJsonWithInputParameters(const Parameters &pmlWidth, const Parameters &source)
+            std::string generateJsonWithInputParameters(const ParametersCollection &parameters)
             {
-                std::stringstream s;
-                s << "{\n";
-                addToJson("PMLWidthFactor", pmlWidth, s);
-                s << ",\n";
-                addToJson("SourceParameter", source, s);
-                s << "}";
-                return s.str();
+                std::stringstream stream;
+                stream << "{\n";
+
+                if(!parameters.empty())
+                {
+                    for(const auto &param : parameters)
+                    {
+                        addToJson(param.first, param.second, stream);
+                        if(&param != &*parameters.rbegin())
+                        {
+                            stream << ",";
+                        }
+                        stream << "\n";
+                    }
+                }
+                stream << "}";
+                return stream.str();
             }
 
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
@@ -56,7 +73,7 @@ namespace fwi
             void writeInputFile(const std::string &jsonInputString) const
             {
                 std::ofstream inputFile;
-                inputFile.open(filePath);
+                inputFile.open(_filepath);
                 inputFile << jsonInputString << std::endl;
                 inputFile.close();
             }
@@ -65,14 +82,10 @@ namespace fwi
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_ValidInput)
         {
             // Arrange
-            Parameters pmlWidth{{"x", "0.0"}, {"z", "0.0"}};
-            Parameters sources{{"r", "4"}, {"beta", "6.31"}};
-
-            auto jsonInput = generateJsonWithInputParameters(pmlWidth, sources);
-            writeInputFile(jsonInput);
+            writeInputFile(_jsonInput);
 
             // Act
-            finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename);
+            finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename);
             finiteDifferenceForwardModelInput input = finiteDifferenceReader.getInput();
 
             // Assert
@@ -86,55 +99,48 @@ namespace fwi
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingXVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionsThrown)
         {
             // Arrange
-            Parameters pmlWidthWithoutX{{"z", "0.0"}};
-            Parameters sources{{"r", "4"}, {"beta", "6.31"}};
-            auto jsonInput = generateJsonWithInputParameters(pmlWidthWithoutX, sources);
+            _parameters.at("PMLWidthFactor").erase("x");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionsThrown)
         {
             // Arrange
-            Parameters pmlWidthWithoutZ{{"x", "1.0"}};
-            Parameters sources{{"r", "999"}, {"beta", "999"}};
-
-            auto jsonInput = generateJsonWithInputParameters(pmlWidthWithoutZ, sources);
+            _parameters.at("PMLWidthFactor").erase("z");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingRVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionsThrown)
         {
             // Arrange
-            Parameters pmlWidth{{"x", "1.0"}, {"z", "3.4"}};
-            Parameters sourcesWithoutR{{"beta", "999"}};
-
-            auto jsonInput = generateJsonWithInputParameters(pmlWidth, sourcesWithoutR);
+            _parameters.at("SourceParameter").erase("r");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBetaVariable_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionsThrown)
         {
             // Arrange
-            Parameters pmlWidth{{"x", "1.0"}, {"z", "3.4"}};
-            Parameters sourcesWithoutBeta{{"r", "999"}};
-
-            auto jsonInput = generateJsonWithInputParameters(pmlWidth, sourcesWithoutBeta);
+            _parameters.at("SourceParameter").erase("r");
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(testFolder, filename), std::invalid_argument);
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
     }   // namespace forwardModels
 }   // namespace fwi
