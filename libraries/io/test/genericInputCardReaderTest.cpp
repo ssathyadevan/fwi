@@ -256,6 +256,163 @@ namespace fwi
         {
             // Arrange
             singleParameters.erase("c_0");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingVerbosity_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.erase("verbosity");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfSources_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.erase("nSources");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfReceivers_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.erase("nReceivers");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingFilename_ExceptionsThrown)
+        {
+            // Arrange
+            singleParameters.erase("fileName");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingFreq_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("Freq");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirTopLeft_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("reservoirTopLeft");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirBottomRight_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("reservoirBottomRight");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesTopLeft_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("sourcesTopLeft");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesBottomRight_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("sourcesBottomRight");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversTopLeft_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("receiversTopLeft");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversBottomRight_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("receiversBottomRight");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingNgridOrinal_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("ngrid_original");
+
+            jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingNgrid_ExceptionsThrown)
+        {
+            // Arrange
+            groupParameters.erase("ngrid");
+
             jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
             writeInputFile(jsonInput);
 
