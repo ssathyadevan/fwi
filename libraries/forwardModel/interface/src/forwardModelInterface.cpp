@@ -25,6 +25,8 @@ namespace fwi
 
         const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
+        CostFunction forwardModelInterface::getCostFunction() { return _costFunction; }
+
         std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
