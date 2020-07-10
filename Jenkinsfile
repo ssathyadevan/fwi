@@ -89,7 +89,7 @@ pipeline {
 									ws("C:\\BuildFolder\\workspace") {
 										script {
 											echo "Building on windows"
-											bat(script:'mkdir build \n cd build \n cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..\n ninja install')
+											bat(script:'mkdir build \n cd build \n cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..\n ninja install')
 										}
 									}
 
@@ -110,7 +110,7 @@ pipeline {
 									ws("C:\\BuildFolder\\workspace") {
 										script{
 											echo "Running regression tests on windows"
-											bat(script:'copy tests/testScripts/unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+											bat(script:'copy ${WORKSPACE}\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
 										}
 									}
 								}
