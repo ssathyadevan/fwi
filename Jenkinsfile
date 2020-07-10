@@ -18,7 +18,7 @@ pipeline {
 							}
 						}
 						stages{
-								stage('Preparing'){
+								stage('Preparing Ubuntu Workspce'){
 										steps {
 												deleteDir()
 												checkout scm
@@ -28,51 +28,35 @@ pipeline {
 												}
 										}
 								}
-								stage('Build'){
+								stage('Building on Ubuntu'){
 										steps{
 												script{
 														functions.buildAll()
 												}
 										}
 								}
-						/*stage('parallelAnalysis'){
-							steps{
-								script{
-									functions.parallelAnalysis()
-								}
-							}		
-						}*/
-
-								stage('Test') {
+								stage('Testing on Ubuntu') {
 										steps{
 												script{
 														functions.testAll()
 												}
 										}
 								}
-
-								stage('RegressionTesting'){
+								stage('Regression Testing on Ubuntu'){
 										steps{
 												script{
 														functions.regressiontest()
 												}
 										}
-								}
-							   
-								stage('Deploy') {
-								/* when {
-										beforeAgent true
-										branch 'master'
-										} */
-										// use the above code chunk to deploy only for a certain branch if needed
+								}   
+								stage('Deploying on Ubuntu') {
 									   steps{
 												script {
 														functions.deploy()
 
 												}
 										}
-								}
-								 
+								}	 
 						}
 						post {
 							always {
@@ -86,18 +70,23 @@ pipeline {
 							}
 						}
 					}
-
 					stage('Connecting to Windows Agent') {
 						agent {
 							label 'Windows'
 						}
-
 						stages {
-							stage( 'Building in Windows' ){
+							stage( 'Preparing Windows Workspce' ){
 								 steps {
 									ws("C:\\BuildFolder\\workspace") {
+										echo "Preparing windows workspace"
 										deleteDir()
 										checkout scm
+									}
+								}
+							}
+							stage( 'Building on Windows' ){
+								 steps {
+									ws("C:\\BuildFolder\\workspace") {
 										script {
 											echo "Building on windows"
 											bat(script:'mkdir build \n cd build \n cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release \n ninja')
@@ -106,8 +95,7 @@ pipeline {
 
 								}
 							}
-
-							stage('Testing in Windows') {
+							stage('Testing on Windows') {
 								 steps {
 								 	ws("C:\\BuildFolder\\workspace") {
 										script {
@@ -117,14 +105,7 @@ pipeline {
 									 }
 								}
 							}
-
-							stage('Deploying in Windows') {
-								steps {
-									echo 'Deploying on windows....'
-								}
-							}
 						}
-						
 						post {
 							always {
 								echo 'Sending email'
