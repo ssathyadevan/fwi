@@ -50,15 +50,15 @@ pipeline {
 												}
 										}
 								}
-
+/*
 								stage('RegressionTesting'){
 										steps{
-												/*script{
+												script{
 														functions.regressiontest()
-												}*/
+												}
 										}
 								}
-							   
+	*/						   
 								stage('Deploy') {
 								/* when {
 										beforeAgent true
