@@ -10,3 +10,4 @@ include_directories( ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 
 #Build the tests!
 build_test(TARGET integralForwardModelInputCardReaderTest SOURCE integralForwardModelInputCardReaderTest.cpp LIBRARIES integral_forward_model_library io_library)
+build_test(TARGET integralForwardModelTest SOURCE integralForwardModelTest.cpp LIBRARIES integral_forward_model_library io_library)
