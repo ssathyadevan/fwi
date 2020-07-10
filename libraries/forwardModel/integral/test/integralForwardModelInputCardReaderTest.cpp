@@ -18,7 +18,7 @@ namespace fwi
             const std::string _filename = "IntegralFMInputTest.json";
             const std::string _filepath = _inputFolder + _filename;
 
-            ParametersCollection _parameters{{"Iter2", {{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}}}};
+            ParametersCollection _parameters{{"Iter2", {{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}, {"CostFunction", "\"leastSquares\""}}}};
 
             std::string _jsonInput;
 
