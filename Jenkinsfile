@@ -53,9 +53,9 @@ pipeline {
 
 								stage('RegressionTesting'){
 										steps{
-												script{
+												/*script{
 														functions.regressiontest()
-												}
+												}*/
 										}
 								}
 							   
@@ -81,7 +81,7 @@ pipeline {
 								}
 								echo 'Sending email'
 								script {
-									functions.sendEmail()
+									functions.sendEmail("Ubuntu")
 								}						
 							}
 						}
@@ -122,6 +122,15 @@ pipeline {
 								steps {
 									echo 'Deploying on windows....'
 								}
+							}
+						}
+						
+						post {
+							always {
+								echo 'Sending email'
+								script {
+									functions.sendEmail("Windows")
+								}						
 							}
 						}
 					}
