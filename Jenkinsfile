@@ -107,9 +107,11 @@ pipeline {
 							}
 							stage('Regression Testing on Windows'){
 								steps{
-									script{
-									echo "Running regression tests on windows"
-									bat(script:'copy tests/testScripts/unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+									ws("C:\\BuildFolder\\workspace") {
+										script{
+											echo "Running regression tests on windows"
+											bat(script:'copy tests/testScripts/unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+										}
 									}
 								}
 							} 
