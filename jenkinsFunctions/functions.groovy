@@ -90,7 +90,7 @@ def unitTestSummary() {
 
 
 
-def sendEmail( String osName = "" ) {
+def sendEmail( String osName = "undefined" ) {
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
                 email.sendEmail(osName)

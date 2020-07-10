@@ -1,6 +1,6 @@
 #!groovy
 
-def sendEmail(String osName = "") {
+def sendEmail(String osName = "undefined") {
 
         mail from: "noreply-jenkins-FWI@alten.nl", \
 
@@ -8,13 +8,13 @@ def sendEmail(String osName = "") {
 
         subject: osName + ": " + "${env.JOB_NAME} returned status " + currentBuild.currentResult, \
 
-        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult + " on" + osName
+        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem:${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
 
         echo "Email sent"
 
 }
 
-def sendEmailFailure(String osName = "") {
+def sendEmailFailure(String osName = "undefined") {
 
         mail from: "noreply-jenkins-FWI@alten.nl", \
 
@@ -22,7 +22,7 @@ def sendEmailFailure(String osName = "") {
 
         subject: osName + ": " +" ${env.JOB_NAME} returned status " + currentBuild.currentResult, \
 
-        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE}\nBranch: ${env.JOB_NAME}\nRan with status: FAILURE\nStage where failure occurred: ${env.MYSTAGE_NAME} on ${osName},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."
+        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE}\nSystem:${osName} \nBranch: ${env.JOB_NAME}\nRan with status: FAILURE\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."
 
         echo "Email sent"
 
