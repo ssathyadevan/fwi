@@ -110,7 +110,7 @@ pipeline {
 									ws("C:\\BuildFolder\\workspace") {
 										script{
 											echo "Running regression tests on windows"
-											bat(script:'copy ${WORKSPACE}\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+											bat(script:'copy C:\\BuildFolder\\workspace\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
 										}
 									}
 								}
