@@ -19,11 +19,12 @@ namespace fwi
             const std::string _filename = "FiniteDifferenceFMInputTest.json";
             const std::string _filepath = _inputFolder + _filename;
 
-            ParametersCollection _parameters{{"PMLWidthFactor", {{"x", "0.0"}, {"z", "0.0"}}}, {"SourceParameter", {{"r", "4"}, {"beta", "6.31"}}}};
+            ParametersCollection _groupParameters{{"PMLWidthFactor", {{"x", "0.0"}, {"z", "0.0"}}}, {"SourceParameter", {{"r", "4"}, {"beta", "6.31"}}}};
+            Parameters _singleParameters{{"CostFunction", "\"leastSquares\""}, {"boundaryConditionType", "\"FirstOrderABC\""}};
 
             std::string _jsonInput;
 
-            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_parameters); }
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters); }
 
             void TearDown() override
             {
@@ -33,17 +34,25 @@ namespace fwi
                 }
             }
 
-            std::string generateJsonWithInputParameters(const ParametersCollection &parameters)
+            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters, const Parameters &singleParameters)
             {
                 std::stringstream stream;
                 stream << "{\n";
-
-                if(!parameters.empty())
+                if(!singleParameters.empty())
                 {
-                    for(const auto &param : parameters)
+                    for(const auto &param : singleParameters)
                     {
                         addToJson(param.first, param.second, stream);
-                        if(&param != &*parameters.rbegin())
+                        stream << ",\n";
+                    }
+                }
+
+                if(!groupParameters.empty())
+                {
+                    for(const auto &param : groupParameters)
+                    {
+                        addToJson(param.first, param.second, stream);
+                        if(&param != &*groupParameters.rbegin())
                         {
                             stream << ",";
                         }
@@ -54,6 +63,7 @@ namespace fwi
                 return stream.str();
             }
 
+            void addToJson(const std::string &name, const std::string &param, std::stringstream &stream) { stream << "\t\"" << name << "\": " << param; }
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
                 stream << "\t\"" << name << "\": { \n";
@@ -102,8 +112,8 @@ namespace fwi
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionsThrown)
         {
             // Arrange
-            _parameters.at("PMLWidthFactor").erase("x");
-            auto jsonInput = generateJsonWithInputParameters(_parameters);
+            _groupParameters.at("PMLWidthFactor").erase("x");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -113,8 +123,8 @@ namespace fwi
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionsThrown)
         {
             // Arrange
-            _parameters.at("PMLWidthFactor").erase("z");
-            auto jsonInput = generateJsonWithInputParameters(_parameters);
+            _groupParameters.at("PMLWidthFactor").erase("z");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -124,8 +134,8 @@ namespace fwi
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionsThrown)
         {
             // Arrange
-            _parameters.at("SourceParameter").erase("r");
-            auto jsonInput = generateJsonWithInputParameters(_parameters);
+            _groupParameters.at("SourceParameter").erase("r");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -135,8 +145,8 @@ namespace fwi
         TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionsThrown)
         {
             // Arrange
-            _parameters.at("SourceParameter").erase("r");
-            auto jsonInput = generateJsonWithInputParameters(_parameters);
+            _groupParameters.at("SourceParameter").erase("r");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
