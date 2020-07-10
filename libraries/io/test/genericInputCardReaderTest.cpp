@@ -19,17 +19,17 @@ namespace fwi
             const std::string _filename = "GenericInputTest.json";
             const std::string _filePath = _inputFolder + _filename;
 
-            ParametersCollection groupParameters{{"Freq", {{"min", "10.0"}, {"max", "40.0"}, {"nTotal", "15"}}},
+            ParametersCollection _groupParameters{{"Freq", {{"min", "10.0"}, {"max", "40.0"}, {"nTotal", "15"}}},
                 {"reservoirTopLeft", {{"x", "-300.0"}, {"z", "0.0"}}}, {"reservoirBottomRight", {{"x", "300.0"}, {"z", "300.0"}}},
                 {"sourcesTopLeft", {{"x", "-480.0"}, {"z", "-5.0"}}}, {"sourcesBottomRight", {{"x", "480"}, {"z", "-5.0"}}},
                 {"receiversTopLeft", {{"x", "-480.0"}, {"z", "-5.0"}}}, {"receiversBottomRight", {{"x", "480"}, {"z", "-5.0"}}},
                 {"ngrid_original", {{"x", "64"}, {"z", "32"}}}, {"ngrid", {{"x", "64"}, {"z", "32"}}}};
 
-            Parameters singleParameters{{"c_0", "2000.0"}, {"verbosity", "false"}, {"nSources", "17"}, {"nReceivers", "17"}, {"fileName", "\"temple\""}};
+            Parameters _singleParameters{{"c_0", "2000.0"}, {"verbosity", "false"}, {"nSources", "17"}, {"nReceivers", "17"}, {"fileName", "\"temple\""}};
 
             std::string _jsonInput;
 
-            void SetUp() override { _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters); }
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters); }
 
             void TearDown() override
             {
@@ -39,33 +39,33 @@ namespace fwi
                 }
             }
 
-            void writeInputFile(const std::string &_jsonInputString) const
+            void writeInputFile(const std::string &jsonInputString) const
             {
                 std::ofstream inputFile;
                 inputFile.open(_filePath);
-                inputFile << _jsonInputString << std::endl;
+                inputFile << jsonInputString << std::endl;
                 inputFile.close();
             }
 
-            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters, const Parameters &singleParameters)
+            std::string generateJsonWithInputParameters(const ParametersCollection &_groupParameters, const Parameters &_singleParameters)
             {
                 std::stringstream stream;
                 stream << "{\n";
-                if(!singleParameters.empty())
+                if(!_singleParameters.empty())
                 {
-                    for(const auto &param : singleParameters)
+                    for(const auto &param : _singleParameters)
                     {
                         addToJson(param.first, param.second, stream);
                         stream << ",\n";
                     }
                 }
 
-                if(!groupParameters.empty())
+                if(!_groupParameters.empty())
                 {
-                    for(const auto &param : groupParameters)
+                    for(const auto &param : _groupParameters)
                     {
                         addToJson(param.first, param.second, stream);
-                        if(&param != &*groupParameters.rbegin())
+                        if(&param != &*_groupParameters.rbegin())
                         {
                             stream << ",";
                         }
@@ -255,9 +255,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_NegativeC0_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.at("c_0") = "-10.0";
+            _singleParameters.at("c_0") = "-10.0";
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -267,9 +267,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfSources_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.at("nSources") = "-1";
+            _singleParameters.at("nSources") = "-1";
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -279,9 +279,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfReceivers_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.at("nReceivers") = "-1";
+            _singleParameters.at("nReceivers") = "-1";
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -291,9 +291,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingC0_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.erase("c_0");
+            _singleParameters.erase("c_0");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -303,9 +303,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingVerbosity_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.erase("verbosity");
+            _singleParameters.erase("verbosity");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -315,9 +315,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfSources_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.erase("nSources");
+            _singleParameters.erase("nSources");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -327,9 +327,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfReceivers_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.erase("nReceivers");
+            _singleParameters.erase("nReceivers");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -339,9 +339,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingFilename_ExceptionsThrown)
         {
             // Arrange
-            singleParameters.erase("fileName");
+            _singleParameters.erase("fileName");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -351,9 +351,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingFreq_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("Freq");
+            _groupParameters.erase("Freq");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -363,9 +363,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingReservoirTopLeft_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("reservoirTopLeft");
+            _groupParameters.erase("reservoirTopLeft");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -375,9 +375,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingReservoirBottomRight_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("reservoirBottomRight");
+            _groupParameters.erase("reservoirBottomRight");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -387,9 +387,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingSourcesTopLeft_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("sourcesTopLeft");
+            _groupParameters.erase("sourcesTopLeft");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -399,9 +399,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingSourcesBottomRight_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("sourcesBottomRight");
+            _groupParameters.erase("sourcesBottomRight");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -411,9 +411,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingReceiversTopLeft_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("receiversTopLeft");
+            _groupParameters.erase("receiversTopLeft");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -423,9 +423,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingReceiversBottomRight_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("receiversBottomRight");
+            _groupParameters.erase("receiversBottomRight");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -435,9 +435,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingNgridOrinal_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("ngrid_original");
+            _groupParameters.erase("ngrid_original");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
@@ -447,9 +447,9 @@ namespace fwi
         TEST_F(genericInputCardReaderTest, constructor_MissingNgrid_ExceptionsThrown)
         {
             // Arrange
-            groupParameters.erase("ngrid");
+            _groupParameters.erase("ngrid");
 
-            _jsonInput = generateJsonWithInputParameters(groupParameters, singleParameters);
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
 
             // Act & Assert
