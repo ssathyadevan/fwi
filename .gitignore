@@ -1,28 +1,169 @@
-inputFiles/default/input/genericInput.json
-inputFiles/default/input/RandomInversionInput.json
-inputFiles/default/input/temp/temp0.json
-inputFiles/default/input/temp/temp1.json
-inputFiles/default/input/temp/temp2.json
-inputFiles/default/input/genericInput.json
-inputFiles/default/input/RandomInversionInput.json
-pythonScripts/__pycache__/
-pythonScripts/classes/__pycache__/
-*.idea
-*.vscode
-venv/*
-results/*
+#===========
+#=== C++ ===
+#===========
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+#==============
+#=== Python ===
+#==============
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+#=============
+#=== IDE's ===
+#=============
 .idea/
 .vscode/
+.vs/
+
+#=============
+#=== CMake ===
+#=============
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+#=======================
+#=== Build & Install ===
+#=======================
 Build/
 FWIInstall/
-doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.fdb_latexmk
-doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.fls
-doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.log
-doc/how-to-build-run-guide/BUILD_RUN_DOCUMENT.out
-doc/documentingStandard/documentingStandard.log
-doc/documentingStandard/documentingStandard.out
+results/
+
+#=============
+#=== Latex ===
+#=============
+# Core latex/pdflatex auxiliary files:
 *.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+# Intermediate documents:
+*.dvi
+*.xdv
+*-converted-to.*
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## Build tool auxiliary files:
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
 *.synctex.gz
-*.user
-*.so
-*.exe
+*.synctex.gz(busy)
+*.pdfsync
+
+## Build tool directories for auxiliary files
+# latexrun
+latex.out/
