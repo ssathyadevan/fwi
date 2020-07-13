@@ -23,8 +23,7 @@ namespace fwi
             finiteDifferenceForwardModelInputCardReader forwardModelInputReader(inputPath);
             finiteDifferenceForwardModelInput forwardModelInput(forwardModelInputReader.getInput());
 
-            // Review: Consider using std::make_unique to create a unique pointer
-            std::unique_ptr<finiteDifferenceForwardModel> forwardModel(new finiteDifferenceForwardModel(grid, source, receiver, freqGroup, forwardModelInput));
+            auto forwardModel = std::make_unique<finiteDifferenceForwardModel>(grid, source, receiver, freqGroup, forwardModelInput);
 
             EXPECT_EQ(forwardModel->getCostFunction(), forwardModelInput.costFunction);
         }
