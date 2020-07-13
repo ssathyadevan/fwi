@@ -114,7 +114,17 @@ pipeline {
 										}
 									}
 								}
-							} 
+							}
+							stage('Deploying on Windows'){
+								steps{
+									ws("C:\\BuildFolder\\workspace") {
+										script{
+											echo 'Deploying on windows'
+											bat(script:'xcopy inputFiles FWIInstall /E/H \n xcopy tests FWIInstall /E/H \n xcopy pythonScripts FWIInstall')
+										}
+									}
+								}
+							}							
 						}
 						post {
 							always {
