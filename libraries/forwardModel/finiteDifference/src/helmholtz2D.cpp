@@ -318,7 +318,7 @@ namespace fwi
                     }
 
                     // ABC
-                    if(j == 0)
+                    if(j == 0)   // top
                     {
                         val = (std::complex(0., 2.) * nxz * omega) / dx[1];
                         triplets.push_back(Eigen::Triplet(index, index, val));
@@ -326,7 +326,7 @@ namespace fwi
                         val = 1. / (dx[1] * dx[1]);
                         triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
                     }
-                    if(j == nx[1] - 1)
+                    if(j == nx[1] - 1)   // bottom
                     {
                         val = (std::complex(0., 2.) * nxz * omega) / dx[1];
                         triplets.push_back(Eigen::Triplet(index, index, val));
@@ -334,7 +334,7 @@ namespace fwi
                         val = 1. / (dx[1] * dx[1]);
                         triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
                     }
-                    if(i == 0)
+                    if(i == 0)   // left
                     {
                         val = (std::complex(0., 2.) * nxz * omega) / dx[0];
                         triplets.push_back(Eigen::Triplet(index, index, val));
@@ -342,7 +342,7 @@ namespace fwi
                         val = 1. / (dx[0] * dx[0]);
                         triplets.push_back(Eigen::Triplet(index, index + 1, val));
                     }
-                    if(i == nx[0] - 1)
+                    if(i == nx[0] - 1)   // right
                     {
                         val = (std::complex(0., 2.) * nxz * omega) / dx[0];
                         triplets.push_back(Eigen::Triplet(index, index, val));
@@ -393,8 +393,8 @@ namespace fwi
                         triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
                     }
 
-                    // ABC
-                    if(j == 0)   // top
+                    // Second Order ABC
+                    if(j == 0 && i > 0 && i < nx[0] - 1)   // top
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
@@ -410,7 +410,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - 1, val));
                     }
-                    if(j == nx[1] - 1)   // bottom
+                    if(j == nx[1] - 1 && i > 0 && i < nx[0] - 1)   // bottom
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
@@ -426,7 +426,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - 1, val));
                     }
-                    if(i == 0)   // left
+                    if(i == 0 && j > 0 && j < nx[1] - 1)   // left
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -442,7 +442,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
                     }
-                    if(i == nx[0] - 1)   // right
+                    if(i == nx[0] - 1 && j > 0 && j < nx[1] - 1)   // right
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -517,19 +517,13 @@ namespace fwi
             std::vector<Eigen::Triplet<std::complex<double>>> triplets;
             triplets.reserve(5 * nx[0] * nx[1]);   // Naive upper bound for nnz's
 
-            switch (boundaryCondition)
+            switch(boundaryCondition)
             {
-                case PML:
-                CreatePMLMatrix(triplets, nx, omega, dx, xMin);
-                break;
+                case PML: CreatePMLMatrix(triplets, nx, omega, dx, xMin); break;
 
-                case FirstOrderABC:
-                CreateABCMatrix(omega, dx, triplets, nx);
-                break;
+                case FirstOrderABC: CreateABCMatrix(omega, dx, triplets, nx); break;
 
-                case SecondOrderABC:
-                CreateABCSecondOrderMatrix(omega, dx, triplets, nx);
-                break;
+                case SecondOrderABC: CreateABCSecondOrderMatrix(omega, dx, triplets, nx); break;
             }
 
             _A.setFromTriplets(triplets.begin(), triplets.end());
