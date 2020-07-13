@@ -15,10 +15,7 @@ namespace fwi
         const core::freqInfo freq = {10, 40, 15};
         const core::FrequenciesGroup freqGroup(freq, 1.0);
 
-        // Review: The naming convention we agreed on is a bit different:
-        // MethodName_ShortDescriptionInput_ShortDescriptionExpectedOutput
-        // ,so I'd expect something like: costFunction_InputFromFile_SelectedCostFunction
-        TEST(IntegralForwardModelTest, CostFunctionInInputFileEqualsCostFunctionInForwardModel)
+        TEST(IntegralForwardModelTest, CostFunction_InputFromFile_SelectedCostFunction)
         {
             integralForwardModelInputCardReader forwardModelInputReader(inputPath);
             integralForwardModelInput forwardModelInput(forwardModelInputReader.getInput());
