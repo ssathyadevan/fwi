@@ -120,7 +120,7 @@ pipeline {
 									ws("C:\\BuildFolder\\workspace") {
 										script{
 											echo 'Deploying on windows'
-											bat(script:'xcopy inputFiles FWIInstall /E/H \n xcopy tests FWIInstall /E/H \n xcopy pythonScripts FWIInstall')
+											bat(script:'xcopy inputFiles FWIInstall\\inputFiles /s /i \n xcopy tests FWIInstall\\tests /s /i \n xcopy pythonScripts FWIInstall\\pythonScripts /s /i')
 										}
 									}
 								}
