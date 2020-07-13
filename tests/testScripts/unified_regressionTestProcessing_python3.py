@@ -36,17 +36,17 @@ if (new.endswith("/")):
 if (bench.endswith("/")):
     bench = bench[:-1]
 
-if forwardmodel == "integralForwardModel":
+if forwardmodel == "IntegralForwardModel":
     forwardinputfile = "IntegralFMInput.json"
-elif forwardmodel == "finiteDifferenceForwardModel":
+elif forwardmodel == "FiniteDifferenceForwardModel":
     forwardinputfile = "FiniteDifferenceFMInput.json"
 else:
     print("Forward model is not recognized")
     sys.exit()
 
-if inversionmodel == "conjugateGradientInversion":
+if inversionmodel == "ConjugateGradientInversion":
     inversioninputfile = "ConjugateGradientInversionInput.json"
-elif (inversionmodel == "gradientDescentInversion" or inversionmodel == "OpenmpgradientDescentInversion"):
+elif (inversionmodel == "GradientDescentInversion" or inversionmodel == "OpenmpgradientDescentInversion"):
     inversioninputfile = "GradientDescentInversionInput.json"
 else:
     print("Inversion model is not recognized")

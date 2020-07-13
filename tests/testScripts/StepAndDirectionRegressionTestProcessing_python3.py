@@ -32,9 +32,9 @@ if (new.endswith("/")):
 if (bench.endswith("/")):
     bench = bench[:-1]
 
-if forwardmodel == "integralForwardModel":
+if forwardmodel == "IntegralForwardModel":
     forwardinputfile = "IntegralFMInput.json"
-elif forwardmodel == "finiteDifferenceForwardModel":
+elif forwardmodel == "FiniteDifferenceForwardModel":
     forwardinputfile = "FiniteDifferenceFMInput.json"
 else:
     print("Forward model is not recognized")

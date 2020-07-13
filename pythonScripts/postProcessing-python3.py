@@ -36,21 +36,21 @@ def findTime(substr, whichin):
 argumentParser = argparse.ArgumentParser()
 
 # Possible selection choices
-inversionMethods = [ "conjugateGradientInversion", "gradientDescentInversion",
-                     "evolutionInversion", "MPIConjugateGradientInversion",
-                     "OpenMPgradientDescentInversion", "randomInversion"]
+inversionMethods = [ "ConjugateGradientInversion", "GradientDescentInversion",
+                     "EvolutionInversion", "MPIConjugateGradientInversion",
+                     "OpenMPgradientDescentInversion", "RandomInversion"]
 
-forwardModels = ["integralForwardModel", "finiteDifferenceForwardModel"]
+forwardModels = ["IntegralForwardModel", "FiniteDifferenceForwardModel"]
 
 # Input arguments
 argumentParser.add_argument("-o", "--output", type=str, required=True,
     help="Path to output directory.")
 argumentParser.add_argument("-i", "--inversion_method", type=str, required=True,
     choices=inversionMethods, help="Select inversion method. Allowed methods are "
-    + ', '.join(inversionMethods), metavar="", default="conjugateGradientInversion")
+    + ', '.join(inversionMethods), metavar="", default="ConjugateGradientInversion")
 argumentParser.add_argument("-f", "--forward_model", type=str, required=False,
-    choices=forwardModels,help="Select model method (default: finiteDifferenceForwardModel)."
-    + "Allowed models are " + ', '.join(forwardModels), metavar="", default="finiteDifferenceForwardModel")
+    choices=forwardModels,help="Select model method (default: FiniteDifferenceForwardModel)."
+    + "Allowed models are " + ', '.join(forwardModels), metavar="", default="FiniteDifferenceForwardModel")
 argumentParser.add_argument("-r", "--run_number", type=int, required=False,
     default=0, help="Run number (default: 0)")
 
