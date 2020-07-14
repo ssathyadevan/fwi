@@ -132,7 +132,7 @@ results/
 # Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
-#*.log # this is commented because otherwise it ignores also the .log files from the tests
+*.log # be careful with the .log files from the tests.
 *.lot
 *.fls
 *.out
