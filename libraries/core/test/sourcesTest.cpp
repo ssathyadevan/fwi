@@ -31,13 +31,13 @@ namespace fwi
             }
         }
 
-        TEST(ReceiversTest, NumberOfPositionsEqualsNumberOfReceivers)
+        TEST(SourcesTest, NumberOfPositionsEqualsNumberOfSources)
         {
             Sources sources = InitializeSources();
             EXPECT_EQ(sources.xSrc.size(), 11);
         }
 
-        TEST(ReceiversTest, ReceiversAreAtExpectedPositions)
+        TEST(SourcesTest, SourcesAreAtExpectedPositions)
         {
             Sources sources = InitializeSources();
 
