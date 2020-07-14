@@ -6,21 +6,43 @@ namespace fwi
 {
     namespace forwardModels
     {
-        // Review: consider to use Google test fixtures for this
-        const std::string inputPath = std::string(FWI_PROJECT_DIR) + "/tests";
-
-        const core::grid2D grid({0.0, 0.0}, {2.0, 2.0}, {4, 2});
-        const core::Sources source({0.0, 0.0}, {2.0, 2.0}, 8);
-        const core::Receivers receiver({0.0, 0.0}, {2.0, 2.0}, 8);
-        const core::freqInfo freq = {10, 40, 15};
-        const core::FrequenciesGroup freqGroup(freq, 1.0);
-
-        TEST(FiniteDifferenceForwardModelTest, CostFunction_InputFromFile_SelectedCostFunction)
+        class FiniteDifferenceForwardModelTest : public ::testing::Test
         {
-            finiteDifferenceForwardModelInputCardReader forwardModelInputReader(inputPath);
+        protected:
+            const std::string *inputPath;
+            const core::grid2D *grid;
+            const core::Sources *source;
+            const core::Receivers *receiver;
+            const core::freqInfo *freq;
+            const core::FrequenciesGroup *freqGroup;
+
+            virtual void SetUp()
+            {
+                inputPath = new const std::string(std::string(FWI_PROJECT_DIR) + "/tests");
+                grid = new const core::grid2D({0.0, 0.0}, {2.0, 2.0}, {4, 2});
+                source = new const core::Sources({0.0, 0.0}, {2.0, 2.0}, 8);
+                receiver = new const core::Receivers({0.0, 0.0}, {2.0, 2.0}, 8);
+                freq = new const core::freqInfo({10, 40, 15});
+                freqGroup = new const core::FrequenciesGroup(*freq, 1.0);
+            }
+
+            virtual void TearDown()
+            {
+                delete inputPath;
+                delete grid;
+                delete source;
+                delete receiver;
+                delete freq;
+                delete freqGroup;
+            }
+        };
+
+        TEST_F(FiniteDifferenceForwardModelTest, CostFunction_InputFromFile_SelectedCostFunction)
+        {
+            finiteDifferenceForwardModelInputCardReader forwardModelInputReader(*inputPath);
             finiteDifferenceForwardModelInput forwardModelInput(forwardModelInputReader.getInput());
 
-            auto forwardModel = std::make_unique<finiteDifferenceForwardModel>(grid, source, receiver, freqGroup, forwardModelInput);
+            auto forwardModel = std::make_unique<finiteDifferenceForwardModel>(*grid, *source, *receiver, *freqGroup, forwardModelInput);
 
             EXPECT_EQ(forwardModel->getCostFunction(), forwardModelInput.costFunction);
         }
