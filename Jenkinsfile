@@ -42,13 +42,13 @@ pipeline {
 												}
 										}
 								}
-								/*stage('Regression Testing on Ubuntu'){
+								stage('Regression Testing on Ubuntu'){
 										steps{
 												script{
 														functions.regressiontest()
 												}
 										}
-								}   */
+								}
 								stage('Deploying on Ubuntu') {
 									   steps{
 												script {
@@ -60,9 +60,10 @@ pipeline {
 						}
 						post {
 							always {
-							/*	script {
+								echo 'Recording test summary'
+								script {
 								   functions.unitTestSummary()
-								}*/
+								}
 								echo 'Sending email'
 								script {
 									functions.sendEmail("Ubuntu")
@@ -74,7 +75,7 @@ pipeline {
 						agent {
 							node {
                                 label 'Windows'
-                                customWorkspace 'C:\\BuildFolder\\workspace'
+                                customWorkspace "workspace\\FWI\\" + env.BRANCH_NAME.take(10)
                             }
 						}
 						stages {
@@ -100,7 +101,8 @@ pipeline {
 								 steps {
 										script {
 											echo "Testing on windows"
-											//bat(script:"cd build \n cd tests \n ctest ")
+											bat(script:"cd build \n ctest -T test --no-compress-output")
+											bat(script: 'for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i \n cd build \n echo %dirOutput% \n copy %dirOutput% .\\CTestResults.xml')
 										}
 								}
 							}
@@ -108,7 +110,7 @@ pipeline {
 								steps{
 										script{
 											echo "Running regression tests on windows"
-											//bat(script:'copy C:\\BuildFolder\\workspace\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+											bat(script:'copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
 										}
 								}
 							}
@@ -124,6 +126,10 @@ pipeline {
 						}
 						post {
 							always {
+								echo 'Recording test summary'
+							    script {
+								   functions.unitTestSummary()
+								}
 								echo 'Sending email'
 								script {
 									functions.sendEmail("Windows")
