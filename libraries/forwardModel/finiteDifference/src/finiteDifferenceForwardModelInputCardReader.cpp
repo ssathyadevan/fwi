@@ -62,6 +62,7 @@ namespace fwi
             try
             {
                 _input.costFunction = costFunctionStringMap.at(costFunctionString);
+                // you could create a unit test to capture an exception thrown here
             }
             catch(const std::out_of_range &e)
             {
@@ -84,6 +85,7 @@ namespace fwi
             try
             {
                 _input.boundaryConditionType = boundaryConditionTypeMap.at(boundaryConditionType);
+                // you could create a unit test to capture an exception thrown here
             } catch (std::exception &e)
             {
                 throw std::invalid_argument("Inavlid input boundary condition in  " + _fileName + ". The supported types are PML, FirstOrderABC and SecondOrderABC");

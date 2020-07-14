@@ -62,6 +62,7 @@ namespace fwi
             try
             {
                 costFunction = costFunctionStringMap.at(costFunctionInput);
+                // you could create a unit test to capture an exception thrown here
             }
             catch(const std::out_of_range &e)
             {
