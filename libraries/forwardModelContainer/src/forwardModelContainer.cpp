@@ -1,5 +1,5 @@
-#include "finiteDifferenceForwardModel.h"
-#include "finiteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
 #include "log.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "finiteDifferenceForwardModelInput.h"
+#include "FiniteDifferenceForwardModelInput.h"
 #include "forwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"

@@ -10,9 +10,9 @@
 #pragma warning(pop)
 #endif   // _MSC_VER
 
+#include "FiniteDifferenceForwardModelInput.h"
+#include "FiniteDifferenceGrid2D.h"
 #include "complexDataGrid2D.h"
-#include "finiteDifferenceForwardModelInput.h"
-#include "finiteDifferenceGrid2D.h"
 #include "frequenciesGroup.h"
 #include "grid2D.h"
 #include "sources.h"
@@ -32,7 +32,7 @@ namespace fwi
                 const finiteDifferenceForwardModelInput &fmInput);
             ~Helmholtz2D();
             core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);
-            Eigen::SparseMatrix<std::complex<double>> getMatrixA() { return _A; }
+            Eigen::SparseMatrix<std::complex<double>> getSparseMatrixA() { return _A; }
 
         private:
             Eigen::SparseMatrix<std::complex<double>> _A;

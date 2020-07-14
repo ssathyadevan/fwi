@@ -1,4 +1,4 @@
-#include "finiteDifferenceGrid2D.h"
+#include "FiniteDifferenceGrid2D.h"
 
 namespace fwi
 {

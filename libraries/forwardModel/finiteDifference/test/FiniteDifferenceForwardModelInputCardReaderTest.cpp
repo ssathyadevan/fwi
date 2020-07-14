@@ -1,5 +1,5 @@
-#include "finiteDifferenceForwardModelInputCardReader.h"
-#include "finiteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModel.h"
 
 #include <gtest/gtest.h>
 #include <map>
