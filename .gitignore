@@ -142,6 +142,7 @@ results/
 *.cb
 *.cb2
 .*.lb
+# Review: add *.nlo
 
 # Intermediate documents:
 *.dvi
