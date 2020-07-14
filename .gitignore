@@ -168,3 +168,12 @@ results/
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
+
+
+#==================
+#=== Exceptions ===
+#==================
+
+# Exceptions for regression_data
+!tests/regression_data/*.log
+!tests/parallelAnalyseData/*.log
