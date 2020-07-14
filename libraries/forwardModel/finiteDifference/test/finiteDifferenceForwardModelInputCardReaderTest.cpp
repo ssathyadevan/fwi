@@ -109,7 +109,7 @@ namespace fwi
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("x");
@@ -120,7 +120,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("z");
@@ -131,7 +131,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("r");
@@ -142,15 +142,27 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionsThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionThrown)
         {
             // Arrange
-            _groupParameters.at("SourceParameter").erase("r");
+            _groupParameters.at("SourceParameter").erase("beta");
             auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
+
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_InvalidCostFunction_ExceptionThrown)
+        {
+            // Arrange
+            _singleParameters.at("CostFunction") = "\"InvalidCostFunction\"";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
+        }
+
     }   // namespace forwardModels
 }   // namespace fwi

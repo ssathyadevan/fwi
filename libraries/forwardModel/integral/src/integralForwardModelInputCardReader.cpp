@@ -62,11 +62,10 @@ namespace fwi
             try
             {
                 costFunction = costFunctionStringMap.at(costFunctionInput);
-                // you could create a unit test to capture an exception thrown here
             }
             catch(const std::out_of_range &e)
             {
-                throw std::runtime_error("Invalid cost function in input file for integral forward model.");
+                throw std::invalid_argument("Invalid cost function in input file for integral forward model.");
             }
 
             return costFunction;

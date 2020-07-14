@@ -77,7 +77,7 @@ namespace fwi
             EXPECT_EQ(20, input.iter);
         }
 
-        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_NegativeH_ExceptionsThrown)
+        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_NegativeH_ExceptionThrown)
         {
             // Arrange
             _parameters.at("h") = "-0.5";
@@ -88,7 +88,7 @@ namespace fwi
             EXPECT_THROW(gradientDescentInversionInputCardReader gradientDescentReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_NegativeIter_ExceptionsThrown)
+        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_NegativeIter_ExceptionThrown)
         {
             // Arrange
             _parameters.at("iter") = "-20";
@@ -100,7 +100,7 @@ namespace fwi
             EXPECT_THROW(gradientDescentInversionInputCardReader gradientDescentReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingGamma0_ExceptionsThrown)
+        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingGamma0_ExceptionThrown)
         {
             // Arrange
             _parameters.erase("gamma0");
@@ -112,7 +112,7 @@ namespace fwi
             EXPECT_THROW(gradientDescentInversionInputCardReader gradientDescentReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingX0_ExceptionsThrown)
+        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingX0_ExceptionThrown)
         {
             // Arrange
             _parameters.erase("x0");
@@ -124,7 +124,7 @@ namespace fwi
             EXPECT_THROW(gradientDescentInversionInputCardReader gradientDescentReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingH_ExceptionsThrown)
+        TEST_F(GradientDescentInversionInputCardReaderTest, constructor_MissingH_ExceptionThrown)
         {
             // Arrange
             _parameters.erase("h");

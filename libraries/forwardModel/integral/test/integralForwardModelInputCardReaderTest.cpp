@@ -139,7 +139,6 @@ namespace fwi
         TEST_F(integralForwardModelInputCardReaderTest, constructor_MissingCalcAlpha_ExceptionThrown)
         {
             // Arrange
-            Parameters iter2{{"n", "5"}, {"tolerance", "5.0e-5"}};
             _parameters.at("Iter2").erase("calcAlpha");
             auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
@@ -147,5 +146,17 @@ namespace fwi
             // Act & Assert
             EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
+
+        TEST_F(integralForwardModelInputCardReaderTest, constructor_InvalidCostFunction_ExceptionThrown)
+        {
+            // Arrange
+            _parameters.at("Iter2").at("CostFunction") = "\"InvalidCostFunction\"";
+            auto jsonInput = generateJsonWithInputParameters(_parameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
+        }
+
     }   // namespace forwardModels
 }   // namespace fwi

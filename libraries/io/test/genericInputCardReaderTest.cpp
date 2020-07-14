@@ -252,7 +252,7 @@ namespace fwi
             EXPECT_EQ(reader.getInput().fileName, expectedFilename);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_NegativeC0_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_NegativeC0_ExceptionThrown)
         {
             // Arrange
             _singleParameters.at("c_0") = "-10.0";
@@ -264,7 +264,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfSources_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfSources_ExceptionThrown)
         {
             // Arrange
             _singleParameters.at("nSources") = "-1";
@@ -276,7 +276,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfReceivers_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfReceivers_ExceptionThrown)
         {
             // Arrange
             _singleParameters.at("nReceivers") = "-1";
@@ -288,7 +288,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingC0_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingC0_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("c_0");
@@ -300,7 +300,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingVerbosity_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingVerbosity_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("verbosity");
@@ -312,7 +312,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfSources_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfSources_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("nSources");
@@ -324,7 +324,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfReceivers_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfReceivers_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("nReceivers");
@@ -336,7 +336,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingFilename_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingFilename_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("fileName");
@@ -348,7 +348,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingFreq_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingFreq_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("Freq");
@@ -360,7 +360,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirTopLeft_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirTopLeft_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("reservoirTopLeft");
@@ -372,7 +372,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirBottomRight_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingReservoirBottomRight_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("reservoirBottomRight");
@@ -384,7 +384,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesTopLeft_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesTopLeft_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("sourcesTopLeft");
@@ -396,7 +396,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesBottomRight_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingSourcesBottomRight_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("sourcesBottomRight");
@@ -408,7 +408,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversTopLeft_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversTopLeft_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("receiversTopLeft");
@@ -420,7 +420,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversBottomRight_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingReceiversBottomRight_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("receiversBottomRight");
@@ -432,7 +432,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingNgridOrinal_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingNgridOrinal_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("ngrid_original");
@@ -444,7 +444,7 @@ namespace fwi
             EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(genericInputCardReaderTest, constructor_MissingNgrid_ExceptionsThrown)
+        TEST_F(genericInputCardReaderTest, constructor_MissingNgrid_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("ngrid");

@@ -112,7 +112,7 @@ namespace fwi
             ASSERT_TRUE(input.doConjugateGradientRegularisation);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeTolerance_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeTolerance_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").at("Tolerance") = "-0.01";
@@ -123,7 +123,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingTolerance_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingTolerance_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("Tolerance");
@@ -134,7 +134,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialChi_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialChi_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("InitialChi");
@@ -145,7 +145,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeMaxIterationNumber_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeMaxIterationNumber_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").at("MaxIterationNumber") = "-1";
@@ -156,7 +156,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingMaxIterationNumber_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingMaxIterationNumber_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("MaxIterationNumber");
@@ -167,7 +167,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_ZeroInitialStepSize_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_ZeroInitialStepSize_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").at("InitialStepSize") = "0.0";
@@ -178,7 +178,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialStepSize_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialStepSize_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").erase("InitialStepSize");
@@ -189,7 +189,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeSlope_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeSlope_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").at("Slope") = "-1";
@@ -200,7 +200,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingSlope_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingSlope_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").erase("Slope");
@@ -211,7 +211,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeDerivativeStepSize_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeDerivativeStepSize_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("DirectionParameters").at("DerivativeStepSize") = "-0.1";
@@ -222,7 +222,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDerivativeStepSize_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDerivativeStepSize_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("DirectionParameters").erase("DerivativeStepSize");
@@ -233,7 +233,7 @@ namespace fwi
             EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDoConjugateGradientRegularisation_ExpectThrow)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDoConjugateGradientRegularisation_ExceptionThrown)
         {
             _singleParameters.erase("DoConjugateGradientRegularisation");
             auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);

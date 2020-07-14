@@ -143,7 +143,7 @@ namespace fwi
             EXPECT_EQ(true, input.doRegularisation);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1N_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1N_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("Iter1").at("n") = "-1";
@@ -154,7 +154,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1Tolerance_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeIter1Tolerance_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("Iter1").at("tolerance") = "-1";
@@ -165,7 +165,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeNmax_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_NegativeNmax_ExceptionThrown)
         {
             // Arrange
             _singleParameters.at("n_max") = "-1";
@@ -176,7 +176,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingIter1_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingIter1_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("Iter1");
@@ -188,7 +188,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDeltaAmplification_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDeltaAmplification_ExceptionThrown)
         {
             // Arrange
             _groupParameters.erase("DeltaAmplification");
@@ -200,7 +200,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingNmax_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingNmax_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("n_max");
@@ -212,7 +212,7 @@ namespace fwi
             EXPECT_THROW(ConjugateGradientInversionInputCardReader conjugateGradientReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDoRegularisation_ExceptionsThrown)
+        TEST_F(ConjugateGradientInversionInputCardReaderTest, constructor_MissingDoRegularisation_ExceptionThrown)
         {
             // Arrange
             _singleParameters.erase("do_reg");
