@@ -132,7 +132,7 @@ results/
 # Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
-*.log
+*.log # be careful with the .log files from the tests.
 *.lot
 *.fls
 *.out
@@ -168,3 +168,8 @@ results/
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
+
+#==================
+#=== Exceptions ===
+#==================
+!tests/**/output/*.log
