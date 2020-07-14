@@ -164,5 +164,16 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_InvalidBoundaryCondition_ExceptionThrown)
+        {
+            // Arrange
+            _singleParameters.at("boundaryConditionType") = "\"InvalidBoundaryCondition\"";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
+        }
+
     }   // namespace forwardModels
 }   // namespace fwi
