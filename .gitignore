@@ -132,7 +132,7 @@ results/
 # Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
-#*.log
+#*.log # this is commented because otherwise it ignores also the .log files from the tests
 *.lot
 *.fls
 *.out
@@ -168,12 +168,3 @@ results/
 ## Build tool directories for auxiliary files
 # latexrun
 latex.out/
-
-
-#==================
-#=== Exceptions ===
-#==================
-
-# Exceptions for regression_data
-!tests/regression_data/*.log
-!tests/parallelAnalyseData/*.log
