@@ -32,16 +32,13 @@ namespace fwi
                 const finiteDifferenceForwardModelInput &fmInput);
             ~Helmholtz2D();
             core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);
-            void CreateABCMatrix(double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
-                std::array<int, 2> nx);   // Temporary for testing
-            void CreateABCSecondOrderMatrix(
-                double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx);
+            Eigen::SparseMatrix<std::complex<double>> getMatrixA() { return _A; }
 
         private:
             Eigen::SparseMatrix<std::complex<double>> _A;
             Eigen::VectorXcd _b;
-            const core::grid2D _oldgrid;
-            FiniteDifferenceGrid2D *_newgrid;
+            const core::grid2D _oldGrid;
+            FiniteDifferenceGrid2D *_newGrid;
             std::array<int, 2> _PMLwidth;
             std::array<int, 2> _idxUpperLeftDomain, _idxLowerRightDomain;
             double _coordPMLLeft, _coordPMLRight, _coordPMLUp, _coordPMLDown;
@@ -54,8 +51,12 @@ namespace fwi
             void buildMatrix(BoundaryConditionType boundaryCondition);
             void buildVector(const std::array<double, 2> &source);
             void updateChi(const core::dataGrid2D &chi);
-            void CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega, std::array<double, 2> dx,
-                std::array<double, 2> xMin);
+            void CreatePMLMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
+                const std::array<int, 2> &nx, const std::array<double, 2> &xMin) const;
+            void CreateABCMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
+                const std::array<int, 2> &nx) const;
+            void CreateABCSecondOrderMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
+                const std::array<int, 2> &nx) const;
         };
     }   // namespace forwardModels
 }   // namespace fwi

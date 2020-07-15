@@ -11,8 +11,8 @@ namespace fwi
             const finiteDifferenceForwardModelInput &fmInput)
             : _A()
             , _b()
-            , _oldgrid(grid)
-            , _newgrid()
+            , _oldGrid(grid)
+            , _newGrid()
             , _PMLwidth()
             , _freq(freq)
             , _c0(c0)
@@ -103,18 +103,18 @@ namespace fwi
             _b.setZero(nx[0] * nx[1]);
 
             _waveVelocity.resize(nx[0] * nx[1]);
-            _newgrid = new FiniteDifferenceGrid2D(xMin, xMax, nx);
+            _newGrid = new FiniteDifferenceGrid2D(xMin, xMax, nx);
 
             updateChi(chi);
             buildMatrix(boundaryCondition);
         }
 
-        Helmholtz2D::~Helmholtz2D() { delete _newgrid; }
+        Helmholtz2D::~Helmholtz2D() { delete _newGrid; }
 
         void Helmholtz2D::updateChi(const core::dataGrid2D &chi)
         {
-            std::array<int, 2> nx = _newgrid->GetGridDimensions();
-            std::array<int, 2> oldnx = _oldgrid.getGridDimensions();
+            std::array<int, 2> nx = _newGrid->GetGridDimensions();
+            std::array<int, 2> oldnx = _oldGrid.getGridDimensions();
             int indexChiVal, indexWaveVelo, idx1, idx2;
 
             for(int i = 0; i < nx[0] * nx[1]; ++i)
@@ -139,8 +139,8 @@ namespace fwi
 
         core::complexDataGrid2D Helmholtz2D::solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit)
         {
-            std::array<int, 2> nx = _newgrid->GetGridDimensions();
-            std::array<int, 2> oldnx = _oldgrid.getGridDimensions();
+            std::array<int, 2> nx = _newGrid->GetGridDimensions();
+            std::array<int, 2> oldnx = _oldGrid.getGridDimensions();
 
             // Construct vector for this source
             buildVector(source);
@@ -172,9 +172,9 @@ namespace fwi
 
             return pInit;
         }
-
-        void Helmholtz2D::CreatePMLMatrix(std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx, double omega,
-            std::array<double, 2> dx, std::array<double, 2> xMin)
+        // omega, dx,triplets, nx,  xMin
+        void Helmholtz2D::CreatePMLMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
+            const std::array<int, 2> &nx, const std::array<double, 2> &xMin) const
         {
             std::complex<double> val, Sx, Sz, dSx, dSz;
             double sigmax, sigmaz, nxz, xi, zj;
@@ -279,86 +279,10 @@ namespace fwi
             }
         }
 
-        void Helmholtz2D::CreateABCMatrix(
-            double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx)
+        void Helmholtz2D::CreateABCMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
+            const std::array<int, 2> &nx) const
         {
             std::complex<double> val;
-            double nxz;
-            int index;
-            for(int i = 0; i < nx[0]; ++i)   // x index
-            {
-                for(int j = 0; j < nx[1]; ++j)   // z index
-                {
-                    index = j * nx[0] + i;
-                    nxz = 1.0 / _waveVelocity[index];
-                    // Diagonal
-                    val = -2. / (dx[0] * dx[0]) - 2. / (dx[1] * dx[1]) + omega * omega * nxz * nxz;
-                    triplets.push_back(Eigen::Triplet(index, index, val));
-
-                    // Non-diagonal
-                    if(i != 0)
-                    {
-                        val = 1. / (dx[0] * dx[0]);
-                        triplets.push_back(Eigen::Triplet(index, index - 1, val));
-                    }
-                    if(i != nx[0] - 1)
-                    {
-                        val = 1. / (dx[0] * dx[0]);
-                        triplets.push_back(Eigen::Triplet(index, index + 1, val));
-                    }
-                    if(j != 0)
-                    {
-                        val = 1. / (dx[1] * dx[1]);
-                        triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
-                    }
-                    if(j != nx[1] - 1)
-                    {
-                        val = 1. / (dx[1] * dx[1]);
-                        triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
-                    }
-
-                    // ABC
-                    if(j == 0)
-                    {
-                        val = (std::complex(0., 2.) * nxz * omega) / dx[1];
-                        triplets.push_back(Eigen::Triplet(index, index, val));
-
-                        val = 1. / (dx[1] * dx[1]);
-                        triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
-                    }
-                    if(j == nx[1] - 1)
-                    {
-                        val = (std::complex(0., 2.) * nxz * omega) / dx[1];
-                        triplets.push_back(Eigen::Triplet(index, index, val));
-
-                        val = 1. / (dx[1] * dx[1]);
-                        triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
-                    }
-                    if(i == 0)
-                    {
-                        val = (std::complex(0., 2.) * nxz * omega) / dx[0];
-                        triplets.push_back(Eigen::Triplet(index, index, val));
-
-                        val = 1. / (dx[0] * dx[0]);
-                        triplets.push_back(Eigen::Triplet(index, index + 1, val));
-                    }
-                    if(i == nx[0] - 1)
-                    {
-                        val = (std::complex(0., 2.) * nxz * omega) / dx[0];
-                        triplets.push_back(Eigen::Triplet(index, index, val));
-
-                        val = 1. / (dx[0] * dx[0]);
-                        triplets.push_back(Eigen::Triplet(index, index - 1, val));
-                    }
-                }
-            }
-        }
-
-        void Helmholtz2D::CreateABCSecondOrderMatrix(
-            double omega, std::array<double, 2> dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets, std::array<int, 2> nx)
-        {
-            std::complex<double> val;
-            std::complex<double> tmp;
             double nxz;
             int index;
             for(int i = 0; i < nx[0]; ++i)   // x index
@@ -396,6 +320,82 @@ namespace fwi
                     // ABC
                     if(j == 0)   // top
                     {
+                        val = (std::complex(0., 2.) * nxz * omega) / dx[1];
+                        triplets.push_back(Eigen::Triplet(index, index, val));
+
+                        val = 1. / (dx[1] * dx[1]);
+                        triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+                    }
+                    if(j == nx[1] - 1)   // bottom
+                    {
+                        val = (std::complex(0., 2.) * nxz * omega) / dx[1];
+                        triplets.push_back(Eigen::Triplet(index, index, val));
+
+                        val = 1. / (dx[1] * dx[1]);
+                        triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+                    }
+                    if(i == 0)   // left
+                    {
+                        val = (std::complex(0., 2.) * nxz * omega) / dx[0];
+                        triplets.push_back(Eigen::Triplet(index, index, val));
+
+                        val = 1. / (dx[0] * dx[0]);
+                        triplets.push_back(Eigen::Triplet(index, index + 1, val));
+                    }
+                    if(i == nx[0] - 1)   // right
+                    {
+                        val = (std::complex(0., 2.) * nxz * omega) / dx[0];
+                        triplets.push_back(Eigen::Triplet(index, index, val));
+
+                        val = 1. / (dx[0] * dx[0]);
+                        triplets.push_back(Eigen::Triplet(index, index - 1, val));
+                    }
+                }
+            }
+        }
+
+        void Helmholtz2D::CreateABCSecondOrderMatrix(const double &omega, const std::array<double, 2> &dx,
+            std::vector<Eigen::Triplet<std::complex<double>>> &triplets, const std::array<int, 2> &nx) const
+        {
+            std::complex<double> val;
+            std::complex<double> tmp;
+            double nxz;
+            int index;
+            for(int i = 0; i < nx[0]; ++i)   // x index
+            {
+                for(int j = 0; j < nx[1]; ++j)   // z index
+                {
+                    index = j * nx[0] + i;
+                    nxz = 1.0 / _waveVelocity[index];
+                    // Diagonal
+                    val = -2. / (dx[0] * dx[0]) - 2. / (dx[1] * dx[1]) + omega * omega * nxz * nxz;
+                    triplets.push_back(Eigen::Triplet(index, index, val));
+
+                    // Non-diagonal
+                    if(i != 0)
+                    {
+                        val = 1. / (dx[0] * dx[0]);
+                        triplets.push_back(Eigen::Triplet(index, index - 1, val));
+                    }
+                    if(i != nx[0] - 1)
+                    {
+                        val = 1. / (dx[0] * dx[0]);
+                        triplets.push_back(Eigen::Triplet(index, index + 1, val));
+                    }
+                    if(j != 0)
+                    {
+                        val = 1. / (dx[1] * dx[1]);
+                        triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
+                    }
+                    if(j != nx[1] - 1)
+                    {
+                        val = 1. / (dx[1] * dx[1]);
+                        triplets.push_back(Eigen::Triplet(index, index + nx[0], val));
+                    }
+
+                    // Second Order ABC
+                    if(j == 0 && i > 0 && i < nx[0] - 1)   // top
+                    {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
                         val = std::complex(0., 2.) * omega * nxz / dx[1] + -2. * tmp;
@@ -410,7 +410,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - 1, val));
                     }
-                    if(j == nx[1] - 1)   // bottom
+                    if(j == nx[1] - 1 && i > 0 && i < nx[0] - 1)   // bottom
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[0] * dx[0] * dx[1]);
 
@@ -426,7 +426,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - 1, val));
                     }
-                    if(i == 0)   // left
+                    if(i == 0 && j > 0 && j < nx[1] - 1)   // left
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -442,7 +442,7 @@ namespace fwi
                         val = tmp;
                         triplets.push_back(Eigen::Triplet(index, index - nx[0], val));
                     }
-                    if(i == nx[0] - 1)   // right
+                    if(i == nx[0] - 1 && j > 0 && j < nx[1] - 1)   // right
                     {
                         tmp = std::complex(0., 1.) / (omega * nxz * dx[1] * dx[1] * dx[0]);
 
@@ -508,28 +508,22 @@ namespace fwi
 
         void Helmholtz2D::buildMatrix(BoundaryConditionType boundaryCondition)
         {
-            std::array<int, 2> nx = _newgrid->GetGridDimensions();
-            std::array<double, 2> dx = _newgrid->GetMeshSize();
-            std::array<double, 2> xMin = _newgrid->GetGridStart();
+            std::array<int, 2> nx = _newGrid->GetGridDimensions();
+            std::array<double, 2> dx = _newGrid->GetMeshSize();
+            std::array<double, 2> xMin = _newGrid->GetGridStart();
             double omega = _freq * 2.0 * pi;
 
             // Build matrix from new elements
             std::vector<Eigen::Triplet<std::complex<double>>> triplets;
             triplets.reserve(5 * nx[0] * nx[1]);   // Naive upper bound for nnz's
 
-            switch (boundaryCondition)
+            switch(boundaryCondition)
             {
-                case PML:
-                CreatePMLMatrix(triplets, nx, omega, dx, xMin);
-                break;
+                case PML: CreatePMLMatrix(omega, dx, triplets, nx, xMin); break;
 
-                case FirstOrderABC:
-                CreateABCMatrix(omega, dx, triplets, nx);
-                break;
+                case FirstOrderABC: CreateABCMatrix(omega, dx, triplets, nx); break;
 
-                case SecondOrderABC:
-                CreateABCSecondOrderMatrix(omega, dx, triplets, nx);
-                break;
+                case SecondOrderABC: CreateABCSecondOrderMatrix(omega, dx, triplets, nx); break;
             }
 
             _A.setFromTriplets(triplets.begin(), triplets.end());
@@ -546,9 +540,9 @@ namespace fwi
 
         void Helmholtz2D::buildVector(const std::array<double, 2> &source)
         {
-            std::array<int, 2> nx = _newgrid->GetGridDimensions();
-            std::array<double, 2> dx = _newgrid->GetMeshSize();
-            std::array<double, 2> xMin = _newgrid->GetGridStart();
+            std::array<int, 2> nx = _newGrid->GetGridDimensions();
+            std::array<double, 2> dx = _newGrid->GetMeshSize();
+            std::array<double, 2> xMin = _newGrid->GetGridStart();
 
             // Reset vector to zero
             _b.setZero(nx[0] * nx[1]);
@@ -556,7 +550,7 @@ namespace fwi
             if(_sourceInput.r == 0)
             {
                 // Add point source to the nearest grid point
-                std::array<double, 2> originalxMin = _oldgrid.getGridStart();
+                std::array<double, 2> originalxMin = _oldGrid.getGridStart();
                 int i = _idxUpperLeftDomain[0] + std::lround((source[0] - originalxMin[0]) / dx[0]);
                 int j = _idxUpperLeftDomain[1] + std::lround((source[1] - originalxMin[1]) / dx[1]);
                 _b[j * nx[0] + i] = 1. / (dx[0] * dx[1]);

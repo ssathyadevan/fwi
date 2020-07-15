@@ -8,5 +8,5 @@
 	"beta": 6.31
     },
     "CostFunction" : "leastSquares",
-    "boundaryConditionType": "FirstOrderABC"
+    "boundaryConditionType": "SecondOrderABC"
 }
