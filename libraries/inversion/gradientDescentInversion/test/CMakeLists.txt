@@ -3,5 +3,8 @@ include_directories( ${GTEST_INCLUDE_DIRS} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_GRADIENT_DESCENT_INVERSION} )
 # Might have to include core library as well.
 include_directories(../include)
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/io/include )
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 
-# Build the tests!
+#Build the tests!
+build_test(TARGET GradientDescentInversionInputCardReaderTest SOURCE GradientDescentInversionInputCardReaderTest.cpp LIBRARIES gradient_descent_inversion_library io_library)

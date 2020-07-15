@@ -1,204 +1,246 @@
 #include "StepAndDirectionReconstructorInputCardReader.h"
 #include <gtest/gtest.h>
-#include <sys/stat.h>
+#include <map>
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        const std::string writePath = "./../";
-        const std::string testFolder = writePath + "testInputFiles/";
-        const std::string inputfolder = testFolder + "input/";
-        const std::string filePath = inputfolder + "StepAndDirectionInput.json";
-
-        std::string convertInputToJsonString(const StepAndDirectionReconstructorInput &input)
+        class StepAndDirectionReconstructorInputCardReaderTest : public ::testing::Test
         {
-            std::stringstream stream;
-            stream << "{ \n";
-            stream << "\t \"ReconstructorParameters\": { \n";
-            stream << std::fixed << std::setprecision(2) << "\t \t \"Tolerance\": " << input.reconstructorParameters.tolerance << ", \n ";
-            stream << std::fixed << std::setprecision(2) << "\t \t \"InitialChi\": " << input.reconstructorParameters.startingChi << ", \n";
-            stream << " \t \t \"MaxIterationNumber\": " << input.reconstructorParameters.maxIterationsNumber << "\n";
-            stream << "\t }, \n";
-            stream << "\t \"StepSizeParameters\": { \n";
-            stream << std::fixed << std::setprecision(2) << "\t \t \"InitialStepSize\": " << input.stepSizeParameters.initialStepSize << ", \n";
-            stream << std::fixed << std::setprecision(2) << "\t \t \"Slope\": " << input.stepSizeParameters.slope << "\n";
-            stream << "\t }, \n";
-            stream << "\t \"DirectionParameters\": { \n";
-            stream << std::fixed << std::setprecision(2) << "\t \t \"DerivativeStepSize\": " << input.directionParameters.derivativeStepSize << "\n";
-            stream << "\t }, \n";
-            stream << std::boolalpha << "\t \"DoConjugateGradientRegularisation\": " << input.doConjugateGradientRegularisation << "\n";
-            stream << "}";
+        protected:
+            using Parameters = std::map<std::string, std::string>;
+            using ParametersCollection = std::map<std::string, Parameters>;
 
-            return stream.str();
-        }
+            const std::string _testFolder = std::string(FWI_PROJECT_DIR) + "/tests/";
+            const std::string _inputFolder = _testFolder + "input/";
+            const std::string _filename = "StepAndDirectionInputTest.json";
+            const std::string _filepath = _inputFolder + _filename;
 
-        void writeInputFile(const std::string &jsonInputString)
-        {
-            struct stat stats;
-            stat((testFolder).c_str(), &stats);
-            if(!S_ISDIR(stats.st_mode))
+            ParametersCollection _groupParameters{{"ReconstructorParameters", {{"Tolerance", "0.01"}, {"InitialChi", "0.001"}, {"MaxIterationNumber", "20"}}},
+                {"StepSizeParameters", {{"InitialStepSize", "0.1"}, {"Slope", "0.00"}}}, {"DirectionParameters", {{"DerivativeStepSize", "0.001"}}}};
+
+            Parameters _singleParameters{{"DoConjugateGradientRegularisation", "true"}};
+
+            std::string _jsonInput;
+
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters); }
+
+            void TearDown() override
             {
-				#if __unix__
-                mkdir((testFolder).c_str(), 0777);
-                mkdir((inputfolder).c_str(), 0777);
-				#else
-                mkdir((testFolder).c_str());
-                mkdir((inputfolder).c_str());					
-				#endif
+                if(remove((_filepath).c_str()) != 0)
+                {
+                    perror("Error deleting StepAndDirectionInput file");
+                }
             }
-            std::ofstream inputFile;
-            inputFile.open(filePath);
-            inputFile << jsonInputString << std::endl;
-            inputFile.close();
-        }
 
-        void removeInputFile()
-        {
-            if(remove((filePath).c_str()) != 0)
+            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters, const Parameters &singleParameters)
             {
-                perror("Error deleting StepAndDirectionInput file");
+                std::stringstream stream;
+                stream << "{\n";
+                if(!singleParameters.empty())
+                {
+                    for(const auto &param : singleParameters)
+                    {
+                        addToJson(param.first, param.second, stream);
+                        stream << ",\n";
+                    }
+                }
+
+                if(!groupParameters.empty())
+                {
+                    for(const auto &param : groupParameters)
+                    {
+                        addToJson(param.first, param.second, stream);
+                        if(&param != &*groupParameters.rbegin())
+                        {
+                            stream << ",";
+                        }
+                        stream << "\n";
+                    }
+                }
+                stream << "}";
+                return stream.str();
             }
-            if(rmdir((inputfolder).c_str()) != 0)
+
+            void addToJson(const std::string &name, const std::string &param, std::stringstream &stream) { stream << "\t\"" << name << "\": " << param; }
+
+            void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
-                perror("Error deleting input directory");
+                stream << "\t\"" << name << "\": { \n";
+                for(const auto &param : params)
+                {
+                    stream << "\t\t\"" << param.first << "\":" << param.second;
+                    // If not last element in the map add comma.
+                    if(&param != &*params.rbegin())
+                    {
+                        stream << ",";
+                    }
+                    stream << "\n";
+                }
+                stream << "\t }";
             }
-            if(rmdir((testFolder).c_str()) != 0)
+
+            void writeInputFile(const std::string &jsonInputString) const
             {
-                perror("Error deleting testInputFiles directory");
+                std::ofstream inputFile;
+                inputFile.open(_filepath);
+                inputFile << jsonInputString << std::endl;
+                inputFile.close();
             }
+        };
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_ValidInput)
+        {
+            // Arrange
+            writeInputFile(_jsonInput);
+
+            // Act
+            StepAndDirectionReconstructorInputCardReader StepAndDirectionReader(_testFolder, _filename);
+            StepAndDirectionReconstructorInput input = StepAndDirectionReader.getInput();
+
+            // Assert
+            ASSERT_DOUBLE_EQ(0.01, input.reconstructorParameters.tolerance);
+            ASSERT_DOUBLE_EQ(0.001, input.reconstructorParameters.startingChi);
+            EXPECT_EQ(20, input.reconstructorParameters.maxIterationsNumber);
+
+            ASSERT_DOUBLE_EQ(0.1, input.stepSizeParameters.initialStepSize);
+            ASSERT_DOUBLE_EQ(0.0, input.stepSizeParameters.slope);
+
+            ASSERT_DOUBLE_EQ(0.001, input.directionParameters.derivativeStepSize);
+
+            ASSERT_TRUE(input.doConjugateGradientRegularisation);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, writeFileTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeTolerance_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
-            StepSizeParameters stepSizeParameters(1.0, -0.01);
-            DirectionParameters directionParameters(1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("ReconstructorParameters").at("Tolerance") = "-0.01";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder);
-
-            StepAndDirectionReconstructorInput readInput = stepAndDirectionReader.getInput();
-
-            ASSERT_EQ(readInput.reconstructorParameters.maxIterationsNumber, writeInput.reconstructorParameters.maxIterationsNumber);
-            ASSERT_EQ(readInput.reconstructorParameters.startingChi, writeInput.reconstructorParameters.startingChi);
-            ASSERT_EQ(readInput.reconstructorParameters.tolerance, writeInput.reconstructorParameters.tolerance);
-
-            ASSERT_EQ(readInput.stepSizeParameters.initialStepSize, writeInput.stepSizeParameters.initialStepSize);
-            ASSERT_EQ(readInput.stepSizeParameters.slope, writeInput.stepSizeParameters.slope);
-
-            ASSERT_EQ(readInput.directionParameters.derivativeStepSize, writeInput.directionParameters.derivativeStepSize);
-
-            ASSERT_TRUE(readInput.doConjugateGradientRegularisation == writeInput.doConjugateGradientRegularisation);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidIterationTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingTolerance_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(0.01, 0.5, -10);
-            StepSizeParameters stepSizeParameters(1.0, -0.01);
-            DirectionParameters directionParameters(1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("ReconstructorParameters").erase("Tolerance");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidToleranceTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialChi_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(-0.01, 0.5, 10);
-            StepSizeParameters stepSizeParameters(1.0, -0.01);
-            DirectionParameters directionParameters(1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("ReconstructorParameters").erase("InitialChi");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidInitialStepSizeTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeMaxIterationNumber_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
-            StepSizeParameters stepSizeParameters(-1.0, -0.01);
-            DirectionParameters directionParameters(1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("ReconstructorParameters").at("MaxIterationNumber") = "-1";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidSlopeTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingMaxIterationNumber_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
-            StepSizeParameters stepSizeParameters(1.0, 0.01);
-            DirectionParameters directionParameters(1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("ReconstructorParameters").erase("MaxIterationNumber");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
-
-            stepSizeParameters.slope = -0.4;
-
-            writeInput.stepSizeParameters = stepSizeParameters;
-
-            jsonInput = convertInputToJsonString(writeInput);
-            writeInputFile(jsonInput);
-
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST(StepAndDirectionReconstructorInputCardReaderTest, expectThrowInvalidDerivativeStepSizeTest)
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_ZeroInitialStepSize_ExceptionThrown)
         {
-            StepAndDirectionReconstructorInput writeInput;
-            ReconstructorParameters reconstructParameters(0.01, 0.5, 10);
-            StepSizeParameters stepSizeParameters(1.0, -0.01);
-            DirectionParameters directionParameters(-1.0);
-
-            writeInput.reconstructorParameters = reconstructParameters;
-            writeInput.stepSizeParameters = stepSizeParameters;
-            writeInput.directionParameters = directionParameters;
-            writeInput.doConjugateGradientRegularisation = true;
-
-            std::string jsonInput = convertInputToJsonString(writeInput);
+            // Arrange
+            _groupParameters.at("StepSizeParameters").at("InitialStepSize") = "0.0";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(testFolder), std::invalid_argument);
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
 
-            removeInputFile();
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingInitialStepSize_ExceptionThrown)
+        {
+            // Arrange
+            _groupParameters.at("StepSizeParameters").erase("InitialStepSize");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeSlope_ExceptionThrown)
+        {
+            // Arrange
+            _groupParameters.at("StepSizeParameters").at("Slope") = "-1";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingSlope_ExceptionThrown)
+        {
+            // Arrange
+            _groupParameters.at("StepSizeParameters").erase("Slope");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeDerivativeStepSize_ExceptionThrown)
+        {
+            // Arrange
+            _groupParameters.at("DirectionParameters").at("DerivativeStepSize") = "-0.1";
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDerivativeStepSize_ExceptionThrown)
+        {
+            // Arrange
+            _groupParameters.at("DirectionParameters").erase("DerivativeStepSize");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
+        }
+
+        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDoConjugateGradientRegularisation_ExceptionThrown)
+        {
+            _singleParameters.erase("DoConjugateGradientRegularisation");
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(jsonInput);
+
+            // Act & Assert
+            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

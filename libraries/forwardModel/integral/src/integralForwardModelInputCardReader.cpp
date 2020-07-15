@@ -7,8 +7,9 @@ namespace fwi
 {
     namespace forwardModels
     {
-        integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder)
+        integralForwardModelInputCardReader::integralForwardModelInputCardReader(const std::string &caseFolder, const std::string &filename)
             : io::inputCardReader()
+            , _fileName(filename)
         {
             const std::string stringInputFolder = "/input/";
             std::string filePath = caseFolder + stringInputFolder + _fileName;
@@ -64,7 +65,7 @@ namespace fwi
             }
             catch(const std::out_of_range &e)
             {
-                throw std::runtime_error("Invalid cost function in input file for integral forward model.");
+                throw std::invalid_argument("Invalid cost function in input file for integral forward model.");
             }
 
             return costFunction;
