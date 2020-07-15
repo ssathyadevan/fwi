@@ -61,7 +61,7 @@ namespace fwi
             switch(_costFunction)
             {
                 case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
-                default: std::cout << "Invalid cost function selected." << std::endl;
+                default: throw std::invalid_argument("Invalid cost function selected.");
             }
 
             return cost;
