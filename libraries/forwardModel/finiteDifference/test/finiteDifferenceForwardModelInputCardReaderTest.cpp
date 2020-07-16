@@ -109,7 +109,7 @@ namespace fwi
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingX_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("x");
@@ -120,7 +120,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingZ_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("z");
@@ -131,7 +131,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingR_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("r");
@@ -142,7 +142,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingBeta_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("beta");

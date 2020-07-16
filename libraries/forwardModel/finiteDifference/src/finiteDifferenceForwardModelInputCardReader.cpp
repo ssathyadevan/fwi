@@ -85,7 +85,7 @@ namespace fwi
             catch(std::exception &e)
             {
                 throw std::invalid_argument(
-                    "Inavlid input boundary condition in  " + _fileName + ". The supported types are PML, FirstOrderABC and SecondOrderABC");
+                    "Invalid input boundary condition in  " + _fileName + ". The supported types are PML, FirstOrderABC and SecondOrderABC");
             }
         }
     }   // namespace forwardModels
