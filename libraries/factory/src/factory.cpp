@@ -2,6 +2,7 @@
 #include "ConjugateGradientDirectionCalculator.h"
 #include "ConjugateGradientStepSizeCalculator.h"
 #include "ConjugateGradientWithRegularisationCalculator.h"
+#include "DummyDirectionCalculator.h"
 #include "DummyStepSizeCalculator.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
@@ -165,6 +166,11 @@ namespace fwi
         {
             _createdDirectionCalculator = new inversionMethods::GradientDescentDirectionCalculator(
                 errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
+            return;
+        }
+        if(desiredDirectionMethod == "DummyStepSize")   // DummyDirection, update with your own.
+        {
+            _createdDirectionCalculator = new inversionMethods::DummyDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
             return;
         }
         L_(io::linfo) << "The Direction method " << desiredDirectionMethod << " was not found";
