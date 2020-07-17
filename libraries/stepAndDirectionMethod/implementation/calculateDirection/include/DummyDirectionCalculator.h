@@ -15,9 +15,6 @@ namespace fwi
             DummyDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *const forwardModel);
             virtual ~DummyDirectionCalculator();
 
-            // Review: I think that the documentation is not correct in this case since
-            // calculateDirection always returns zero for this class
-            // answer: the explanation is meant for a generic calculateDirection() method, not this one in particular
             /**
              * @brief calculateDirection computes the direction towards which to move
              * @param chi is a core::dataGrid2D
