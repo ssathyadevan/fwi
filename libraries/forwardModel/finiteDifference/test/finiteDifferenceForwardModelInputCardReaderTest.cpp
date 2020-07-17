@@ -49,17 +49,15 @@ namespace fwi
 
                 if(!groupParameters.empty())
                 {
+                    auto delim = "";
                     for(const auto &param : groupParameters)
                     {
+                        stream << delim;
                         addToJson(param.first, param.second, stream);
-                        if(&param != &*groupParameters.rbegin())
-                        {
-                            stream << ",";
-                        }
-                        stream << "\n";
+                        delim = ",\n";
                     }
                 }
-                stream << "}";
+                stream << "\n}";
                 return stream.str();
             }
 
@@ -67,17 +65,14 @@ namespace fwi
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
                 stream << "\t\"" << name << "\": { \n";
+                auto delim = "";
                 for(const auto &param : params)
                 {
+                    stream << delim;
                     stream << "\t\t\"" << param.first << "\":" << param.second;
-                    // If not last element in the map add comma.
-                    if(&param != &*params.rbegin())
-                    {
-                        stream << ",";
-                    }
-                    stream << "\n";
+                    delim = ",\n";
                 }
-                stream << "\t }";
+                stream << " }";
             }
 
             void writeInputFile(const std::string &jsonInputString) const
@@ -109,7 +104,7 @@ namespace fwi
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingX_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingX_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("x");
@@ -120,7 +115,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingZ_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingZ_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("PMLWidthFactor").erase("z");
@@ -131,7 +126,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingR_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingR_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("r");
@@ -142,7 +137,7 @@ namespace fwi
             EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
         }
 
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, construtor_missingBeta_ExceptionThrown)
+        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_missingBeta_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("beta");

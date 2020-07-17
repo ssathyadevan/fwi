@@ -35,17 +35,14 @@ namespace fwi
             {
                 std::stringstream stream;
                 stream << "{\n";
-
                 if(!parameters.empty())
                 {
+                    auto delim = "";
                     for(const auto &param : parameters)
                     {
+                        stream << delim;
                         addToJson(param.first, param.second, stream);
-                        if(&param != &*parameters.rbegin())
-                        {
-                            stream << ",";
-                        }
-                        stream << "\n";
+                        delim = ",\n";
                     }
                 }
                 stream << "}";
@@ -55,17 +52,14 @@ namespace fwi
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
                 stream << "\t\"" << name << "\": { \n";
+                auto delim = "";
                 for(const auto &param : params)
                 {
+                    stream << delim;
                     stream << "\t\t\"" << param.first << "\":" << param.second;
-                    // If not last element in the map add comma.
-                    if(&param != &*params.rbegin())
-                    {
-                        stream << ",";
-                    }
-                    stream << "\n";
+                    delim = ",\n";
                 }
-                stream << "\t }";
+                stream << " }";
             }
 
             void writeInputFile(const std::string &jsonInputString) const

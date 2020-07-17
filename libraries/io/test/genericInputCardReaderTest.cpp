@@ -47,32 +47,30 @@ namespace fwi
                 inputFile.close();
             }
 
-            std::string generateJsonWithInputParameters(const ParametersCollection &_groupParameters, const Parameters &_singleParameters)
+            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters, const Parameters &singleParameters)
             {
                 std::stringstream stream;
                 stream << "{\n";
-                if(!_singleParameters.empty())
+                if(!singleParameters.empty())
                 {
-                    for(const auto &param : _singleParameters)
+                    for(const auto &param : singleParameters)
                     {
                         addToJson(param.first, param.second, stream);
                         stream << ",\n";
                     }
                 }
 
-                if(!_groupParameters.empty())
+                if(!groupParameters.empty())
                 {
-                    for(const auto &param : _groupParameters)
+                    auto delim = "";
+                    for(const auto &param : groupParameters)
                     {
+                        stream << delim;
                         addToJson(param.first, param.second, stream);
-                        if(&param != &*_groupParameters.rbegin())
-                        {
-                            stream << ",";
-                        }
-                        stream << "\n";
+                        delim = ",\n";
                     }
                 }
-                stream << "}";
+                stream << "\n}";
                 return stream.str();
             }
 
@@ -81,17 +79,14 @@ namespace fwi
             void addToJson(const std::string &name, const Parameters &params, std::stringstream &stream)
             {
                 stream << "\t\"" << name << "\": { \n";
+                auto delim = "";
                 for(const auto &param : params)
                 {
+                    stream << delim;
                     stream << "\t\t\"" << param.first << "\":" << param.second;
-                    // If not last element in the map add comma.
-                    if(&param != &*params.rbegin())
-                    {
-                        stream << ",";
-                    }
-                    stream << "\n";
+                    delim = ",\n";
                 }
-                stream << "\t }";
+                stream << " }";
             }
         };
 
