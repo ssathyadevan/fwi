@@ -32,6 +32,7 @@ def buildAll() {
         //cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
 }
 
+/* TODO: Determine if parallelAnalysis should exist or be removed*/
 def parallelAnalysis() {
         echo 'Running parallel analysis'
 		env.MYSTAGE_NAME = 'Parallel analysis'
@@ -68,9 +69,9 @@ def deploy(){
         cp -r inputFiles FWIInstall/
         cp -r tests FWIInstall/
         cp -r pythonScripts/* FWIInstall/
-        tar -zcf FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+        tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
         '''
-        archiveArtifacts artifacts:"FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+        archiveArtifacts artifacts:"Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 
 }
 
@@ -90,13 +91,13 @@ def unitTestSummary() {
 
 
 
-def sendEmail() {
+def sendEmail( String osName = "undefined" ) {
         email = evaluate readTrusted('jenkinsFunctions/email.groovy')
         if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
-                email.sendEmail()
+                email.sendEmail(osName)
         }
         else{          
-                email.sendEmailFailure()
+                email.sendEmailFailure(osName)
         }
 }
 
