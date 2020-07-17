@@ -109,7 +109,7 @@ pipeline{
 							steps{
 								script{
 									echo "Running regression tests on windows"
-									bat(script:'copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	integralForwardModel conjugateGradientInversion')
+									bat(script:'copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py 0	IntegralForwardModel ConjugateGradientInversion')
 								}
 							}
 						}
