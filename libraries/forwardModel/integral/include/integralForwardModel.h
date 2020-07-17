@@ -51,6 +51,7 @@ namespace fwi
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
+            void configureCostFunction(CostFunction costFunction);
         };
 
     }   // namespace forwardModels

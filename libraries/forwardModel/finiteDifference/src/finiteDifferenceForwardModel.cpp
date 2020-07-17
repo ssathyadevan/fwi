@@ -22,6 +22,7 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
+            configureCostFunction(fMInput.costFunction);
         }
 
         finiteDifferenceForwardModel::~finiteDifferenceForwardModel()
@@ -143,6 +144,8 @@ namespace fwi
             delete[] _kappa;
             _kappa = nullptr;
         }
+
+        void finiteDifferenceForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
 
         void finiteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
         {

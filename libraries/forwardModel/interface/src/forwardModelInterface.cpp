@@ -25,6 +25,8 @@ namespace fwi
 
         const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
+        CostFunction forwardModelInterface::getCostFunction() { return _costFunction; }
+
         std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
@@ -54,13 +56,12 @@ namespace fwi
         double forwardModelInterface::calculateCost(
             std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
         {
-            costFunction = leastSquares;
-            double cost;
+            double cost = 0.0;
 
-            switch(costFunction)
+            switch(_costFunction)
             {
                 case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
-                default: std::cout << "Invalid cost function selected." << std::endl;
+                default: throw std::invalid_argument("Invalid cost function selected.");
             }
 
             return cost;

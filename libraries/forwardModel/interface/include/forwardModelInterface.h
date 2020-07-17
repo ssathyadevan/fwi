@@ -37,7 +37,7 @@ namespace fwi
             const core::Receivers &getReceiver();
             const core::FrequenciesGroup &getFreq();
 
-            CostFunction costFunction;
+            CostFunction getCostFunction();
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
@@ -74,6 +74,8 @@ namespace fwi
             const core::Sources &_source;
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
+
+            CostFunction _costFunction;
         };
     }   // namespace forwardModels
 }   // namespace fwi

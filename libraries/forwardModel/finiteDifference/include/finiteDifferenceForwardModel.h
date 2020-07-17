@@ -12,8 +12,8 @@ namespace fwi
         class finiteDifferenceForwardModel : public forwardModelInterface
         {
         public:
-            finiteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
-                const finiteDifferenceForwardModelInput &fmInput);
+            finiteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+                const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput);
 
             ~finiteDifferenceForwardModel();
 
@@ -50,6 +50,7 @@ namespace fwi
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
+            void configureCostFunction(CostFunction costFunction);
         };
 
     }   // namespace forwardModels

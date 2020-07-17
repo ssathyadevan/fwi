@@ -21,6 +21,7 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
+            configureCostFunction(fmInput.costFunction);
         }
 
         IntegralForwardModel::~IntegralForwardModel()
@@ -142,6 +143,8 @@ namespace fwi
             delete[] _Kappa;
             _Kappa = nullptr;
         }
+
+        void IntegralForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
 
         core::complexDataGrid2D IntegralForwardModel::calcTotalField(
             const core::greensRect2DCpu &G, const core::dataGrid2D &chi, const core::complexDataGrid2D &p_init)
