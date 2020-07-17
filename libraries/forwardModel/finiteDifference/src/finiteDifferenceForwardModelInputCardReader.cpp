@@ -74,9 +74,8 @@ namespace fwi
             const std::string boundaryConditionTypeArgument = "boundaryConditionType";
             std::string boundaryConditionType = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, boundaryConditionTypeArgument);
 
-            std::map<std::string, BoundaryConditionType> boundaryConditionTypeMap{ {"PML",            BoundaryConditionType::PML},
-                                                                                   {"FirstOrderABC",  BoundaryConditionType::FirstOrderABC},
-                                                                                   {"SecondOrderABC", BoundaryConditionType::SecondOrderABC} };
+            std::map<std::string, BoundaryConditionType> boundaryConditionTypeMap{{"PML", BoundaryConditionType::PML},
+                {"FirstOrderABC", BoundaryConditionType::FirstOrderABC}, {"SecondOrderABC", BoundaryConditionType::SecondOrderABC}};
             try
             {
                 _input.boundaryConditionType = boundaryConditionTypeMap.at(boundaryConditionType);
@@ -84,11 +83,13 @@ namespace fwi
             catch(std::exception &e)
             {
                 std::stringstream message;
+
                 message << "Invalid input boundary condition in " + _fileName + ". The supported types are: ";
-                for (const auto& parameter : boundaryConditionTypeMap)
+                auto delim = "";
+                for(const auto &parameter : boundaryConditionTypeMap)
                 {
-                    message << parameter.first;
-                    if(&parameter != &*boundaryConditionTypeMap.rbegin()) { message << ", "; }
+                    message << delim << parameter.first;
+                    delim = ", ";
                 }
                 message << ".";
                 throw std::invalid_argument(message.str());

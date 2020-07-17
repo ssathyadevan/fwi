@@ -43,18 +43,15 @@ namespace fwi
                 stream << "{\n";
                 if(!parameters.empty())
                 {
+                    auto delim = "";
                     for(const auto &param : parameters)
                     {
+                        stream << delim;
                         addToJson(param.first, param.second, stream);
-                        // If not last element in the map add comma.
-                        if(&param != &*parameters.rbegin())
-                        {
-                            stream << ",";
-                        }
-                        stream << "\n";
+                        delim = ",\n";
                     }
                 }
-                stream << "}";
+                stream << "\n}";
                 return stream.str();
             }
 
