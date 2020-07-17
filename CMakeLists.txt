@@ -57,7 +57,10 @@ endif()
 enable_testing()
 
 # We required both GTest and Eigen3 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}")
+include(FindGMock)
 find_package(GTest REQUIRED)
+find_package(GMock REQUIRED)
 find_package (Eigen3 REQUIRED)
 
 add_subdirectory( libraries )
