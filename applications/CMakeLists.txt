@@ -1,8 +1,5 @@
 add_subdirectory( preProcessing )
 add_subdirectory( finiteDifferencePreProcessing )
-add_subdirectory( finiteDifferenceProcessing )
 add_subdirectory( processing )
-add_subdirectory( randomInversionProcessing )
 add_subdirectory( unifiedProcessing )
-add_subdirectory( gradientDescentProcessing )
-add_subdirectory( stepAndDirectionProcessing )
+
