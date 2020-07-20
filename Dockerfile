@@ -35,7 +35,8 @@ RUN cd googleTest/googletest-build ; make all install -j8
 
 # Declare here the ENV variables that you wish to be able to overwrite in build time
 ARG GTEST_ROOT=/home/jenkins/googleTest/install
+ARG GMOCK_ROOT=/home/jenkins/googleTest/install
 
 # Here the sets up the variables to be overwritten if specified value on build time.
-
 ENV GTEST_ROOT=$GTEST_ROOT
+ENV GMOCK_ROOT=$GMOCK_ROOT
