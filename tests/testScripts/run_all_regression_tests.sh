@@ -30,8 +30,8 @@ do
 	cp -r $FWI_SOURCE_PATH/tests/regression_data/$TEST/* $TEST$RUN/
 	cp -r $FWI_SOURCE_PATH/tests/regression_data/$TEST/ .
 
-	$FWI_INSTALL_PATH/bin/FWI_PreProcess $TEST$RUN
-	$FWI_INSTALL_PATH/bin/FWI_Process $TEST$RUN
+	$FWI_INSTALL_PATH/bin/FWI_PreProcess_Integral $TEST$RUN
+	$FWI_INSTALL_PATH/bin/FWI_UnifiedProcess $TEST$RUN
 
 	python3 regressionTestPreProcessing_python3.py $TEST $TEST$RUN
 	python3 regressionTestProcessing_python3.py $TEST $TEST$RUN

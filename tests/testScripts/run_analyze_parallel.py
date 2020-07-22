@@ -122,7 +122,7 @@ print("Run in serial...")
 serialRunName = "{}Serial".format(runName)
 shutil.copytree(PreprocessLocation, os.path.join(copylocation, serialRunName))
 _modifyOutputFileNames(runName, serialRunName)
-os.system(os.path.join(applicationsLocation, "FWI_Process_Gradient_Descent {}".format(serialRunName)))
+os.system(os.path.join(applicationsLocation, "FWI_UnifiedProcess {}".format(serialRunName)))
 
 # Get the runtime and residuals from the serial run
 starttime_serial = _getTime(" INFO: Starting", serialRunName + "/output/" + serialRunName)

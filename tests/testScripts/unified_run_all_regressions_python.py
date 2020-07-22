@@ -117,7 +117,7 @@ for test in tests:
     print()
 
     if forwardmodel == "IntegralForwardModel":
-        os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
+        os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess_Integral {}RUN".format(test)))
     elif forwardmodel == "FiniteDifferenceForwardModel":
         os.system(os.path.join(FWI_INSTALL_PATH, "bin", "FWI_PreProcess_Finite_Difference {}RUN".format(test)))
     else:

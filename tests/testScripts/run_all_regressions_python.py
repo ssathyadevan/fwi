@@ -77,8 +77,8 @@ for test in tests:
 
 
 
-    os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess {}RUN".format(test)))
-    os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_Process {}RUN".format(test)))
+    os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess_Integral {}RUN".format(test)))
+    os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_UnifiedProcess {}RUN".format(test)))
     os.system("python3 regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
 
     destdir = "Regression_results.txt"
