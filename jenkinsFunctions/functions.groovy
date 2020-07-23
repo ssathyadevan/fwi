@@ -57,7 +57,6 @@ def deploy(){
 		env.MYSTAGE_NAME = 'Deploy'
         sh '''
         cp -r inputFiles FWIInstall/
-        cp -r tests FWIInstall/
         cp -r pythonScripts/* FWIInstall/
         tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
         '''
