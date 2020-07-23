@@ -89,10 +89,14 @@ namespace fwi
             // non diagonal
             matrixTestValues(0, 1) = 0.5;
             matrixTestValues(0, 2) = 0.5;
+            matrixTestValues(0, 3) = 0.0;
             matrixTestValues(1, 0) = 0.5;
+            matrixTestValues(1, 2) = 0.0;
             matrixTestValues(1, 3) = 0.5;
             matrixTestValues(2, 0) = 0.5;
+            matrixTestValues(2, 1) = 0.0;
             matrixTestValues(2, 3) = 0.5;
+            matrixTestValues(3, 0) = 0.0;
             matrixTestValues(3, 1) = 0.5;
             matrixTestValues(3, 2) = 0.5;
             //// Act
