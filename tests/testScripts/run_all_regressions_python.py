@@ -1,5 +1,7 @@
 import sys, os, shutil
 
+# Review: This script seems to be superseded by unified_run_all_regressions_python.py
+
 #from shutil import copyfile
 
 #
@@ -78,6 +80,9 @@ for test in tests:
 
 
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_PreProcess_Integral {}RUN".format(test)))
+    # Review: Here the application to run changed from FWI_Process to FWI_UnifiedProcess
+    # FWI_Process takes only one argument but FWI_UnifiedProcess takes 3, path to folder with parameters
+    # forwardModel and inversionMethod, so this will fail when someone tries to run it.
     os.system(os.path.join(FWI_INSTALL_PATH,"bin","FWI_UnifiedProcess {}RUN".format(test)))
     os.system("python3 regressionTestPreProcessing_python3.py {} {}RUN".format(test,test))
 

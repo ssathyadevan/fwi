@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Review: I think no one is using this script since it seems to be superseded by run_all_regressions_python.py
+
 #
 # 	This script automatically runs all regression tests and writes the results to
 # 	an XML file which can be used in Jenkins using Junit

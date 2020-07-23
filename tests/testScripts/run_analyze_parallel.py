@@ -6,6 +6,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import bisect
 
+# Review: This script is not being run by Jenkins, please make a US to determine the purpose of this
+# script and to add it to the jenkins pipeline.
+
 ######### Define all functions #################################################
 
 def _makeFolder(folder):
@@ -122,6 +125,9 @@ print("Run in serial...")
 serialRunName = "{}Serial".format(runName)
 shutil.copytree(PreprocessLocation, os.path.join(copylocation, serialRunName))
 _modifyOutputFileNames(runName, serialRunName)
+# Review: Here the application to run changed from FWI_Process_Gradient_Descent to FWI_UnifiedProcess
+# FWI_Process_Gradient_Descent takes only one argument but FWI_UnifiedProcess takes 3, path to folder with parameters
+# forwardModel and inversionMethod, so this will fail when someone tries to run it.
 os.system(os.path.join(applicationsLocation, "FWI_UnifiedProcess {}".format(serialRunName)))
 
 # Get the runtime and residuals from the serial run
