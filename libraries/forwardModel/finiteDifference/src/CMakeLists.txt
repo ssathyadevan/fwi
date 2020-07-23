@@ -1,11 +1,11 @@
 add_library(finite_difference_forward_model_library
-    finiteDifferenceForwardModel.cpp                    ../include/finiteDifferenceForwardModel.h
-                                                        ../include/finiteDifferenceForwardModelInput.h
-    finiteDifferenceForwardModelInputCardReader.cpp     ../include/finiteDifferenceForwardModelInputCardReader.h
-    finiteDifferenceGrid2D.cpp                          ../include/finiteDifferenceGrid2D.h
-    helmholtz2D.cpp                                     ../include/helmholtz2D.h
-                                                        ../include/pmlWidthFactor.h
-                                                        ../include/sourceParameter.h)
+    FiniteDifferenceForwardModel.cpp                    ../include/FiniteDifferenceForwardModel.h
+                                                        ../include/FiniteDifferenceForwardModelInput.h
+    FiniteDifferenceForwardModelInputCardReader.cpp     ../include/FiniteDifferenceForwardModelInputCardReader.h
+    FiniteDifferenceGrid2D.cpp                          ../include/FiniteDifferenceGrid2D.h
+    Helmholtz2D.cpp                                     ../include/Helmholtz2D.h
+                                                        ../include/PmlWidthFactor.h
+                                                        ../include/SourceParameter.h)
 
 set( LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL ${CMAKE_SOURCE_DIR}/libraries/forwardModel/finiteDifference/include CACHE INTERNAL "" )
 

@@ -1,4 +1,4 @@
-#include "helmholtz2D.h"
+#include "Helmholtz2D.h"
 #include "log.h"
 
 namespace fwi
@@ -172,7 +172,7 @@ namespace fwi
 
             return pInit;
         }
-        // omega, dx,triplets, nx,  xMin
+
         void Helmholtz2D::CreatePMLMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
             const std::array<int, 2> &nx, const std::array<double, 2> &xMin) const
         {
@@ -528,7 +528,6 @@ namespace fwi
 
             _A.setFromTriplets(triplets.begin(), triplets.end());
             _A.makeCompressed();
-
             _solver.analyzePattern(_A);
             _solver.factorize(_A);
             if(_solver.info() != Eigen::Success)

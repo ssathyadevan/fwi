@@ -1,6 +1,6 @@
+#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "cpuClock.h"
-#include "finiteDifferenceForwardModel.h"
-#include "finiteDifferenceForwardModelInputCardReader.h"
 #include "genericInputCardReader.h"
 #include "log.h"
 #include "utilityFunctions.h"

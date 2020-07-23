@@ -1,5 +1,5 @@
-#include "finiteDifferenceForwardModel.h"
-#include "finiteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
 #include <gtest/gtest.h>
 
 namespace fwi

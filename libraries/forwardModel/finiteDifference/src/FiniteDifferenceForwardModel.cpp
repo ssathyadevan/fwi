@@ -1,6 +1,6 @@
-#include "finiteDifferenceForwardModel.h"
-#include "finiteDifferenceForwardModelInputCardReader.h"
-#include "helmholtz2D.h"
+#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
+#include "Helmholtz2D.h"
 #include "log.h"
 
 namespace fwi

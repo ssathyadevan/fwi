@@ -1,8 +1,8 @@
 #pragma once
 
+#include "PmlWidthFactor.h"
+#include "SourceParameter.h"
 #include "costFunction.h"
-#include "pmlWidthFactor.h"
-#include "sourceParameter.h"
 
 #include <string>
 
@@ -12,9 +12,9 @@ namespace fwi
     {
         enum BoundaryConditionType
         {
-            PML, // Perfectly Matched Layers
-            FirstOrderABC, // First Order Absorbing Boundary Layers
-            SecondOrderABC // Second Order Absorbing Boundary Layers
+            PML,             // Perfectly Matched Layers
+            FirstOrderABC,   // First Order Absorbing Boundary Layers
+            SecondOrderABC   // Second Order Absorbing Boundary Layers
         };
 
         struct finiteDifferenceForwardModelInput

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 
-#include "finiteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "json.h"
 
 namespace fwi

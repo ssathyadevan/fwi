@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ReadJsonHelper.h"
-#include "finiteDifferenceForwardModelInput.h"
+#include "FiniteDifferenceForwardModelInput.h"
 #include "inputCardReader.h"
 
 #include <fstream>
