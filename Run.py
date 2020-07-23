@@ -54,12 +54,12 @@ if sys.platform.startswith('linux'):
         os.system('rm -r temp')
         os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')
         if ind_run[1] == 'IntegralForwardModel':
-            check = os.system('./FWI_PreProcess ../' + ind_run[5])
+            check = os.system('./FWI_PreProcess_Integral ../' + ind_run[5])
         elif ind_run[1] == 'FiniteDifferenceForwardModel':
             check = os.system('./FWI_PreProcess_Finite_Difference ../' + ind_run[5])
         else:
             print('there is something wrong with the ForwardModel you choose. The preprocessing was done with IntegralForwardModel')
-            check = os.system('./FWI_PreProcess ../' + ind_run[5])
+            check = os.system('./FWI_PreProcess_Integral ../' + ind_run[5])
         checking_for_errors(check, current_directory)
         if ind_run[0] != "MPIConjugateGradientInversion":
             check = os.system('./FWI_UnifiedProcess ../' + ind_run[5] + ' ' + ind_run[0] + ' ' + ind_run[1])
