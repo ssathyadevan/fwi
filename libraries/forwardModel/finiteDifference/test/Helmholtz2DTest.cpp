@@ -86,6 +86,7 @@ namespace fwi
             matrixTestValues(1, 1) = -1.0 + std::pow(omegaTimesNxz, 2) + 2.0 * std::complex<double>(0., 1.) * omegaTimesNxz;
             matrixTestValues(2, 2) = -1.0 + std::pow(omegaTimesNxz, 2) + 2.0 * std::complex<double>(0., 1.) * omegaTimesNxz;
             matrixTestValues(3, 3) = -1.0 + std::pow(omegaTimesNxz, 2) + 2.0 * std::complex<double>(0., 1.) * omegaTimesNxz;
+            // non diagonal
             matrixTestValues(0, 1) = 0.5;
             matrixTestValues(0, 2) = 0.5;
             matrixTestValues(1, 0) = 0.5;
@@ -94,7 +95,7 @@ namespace fwi
             matrixTestValues(2, 3) = 0.5;
             matrixTestValues(3, 1) = 0.5;
             matrixTestValues(3, 2) = 0.5;
-
+            // review: element (3,3) is missing. On purpose or by mistake ?
             //// Act
             Eigen::MatrixXcd denseFirstABCMatrix2x2 = getDenseMatrixFromHelmholtz2D(nx, boundaryConditionType, chiValue, c0, freq);
 
@@ -219,7 +220,6 @@ namespace fwi
             expectedMatrix(1, 0) = std::complex<double>(1, 0) + std::complex<double>(0, 0.159);
             expectedMatrix(2, 0) = 0.0;
             expectedMatrix(3, 0) = std::complex<double>(1, 0) + std::complex<double>(0, 0.159);
-            ;
             expectedMatrix(4, 0) = 0.0;
             expectedMatrix(5, 0) = 0.0;
             expectedMatrix(6, 0) = 0.0;
