@@ -112,6 +112,8 @@ namespace fwi
             //// Arrange
             BoundaryConditionType boundaryConditionType = BoundaryConditionType::FirstOrderABC;
 
+            double tolerance = 1.e-5;
+
             // grid
             std::array<int, 2> nx = {3, 3};
             int matrixSize = nx[0] * nx[1];
@@ -146,7 +148,7 @@ namespace fwi
             // Here only the diagonal is checked, but there are also 12 instances of 1.0 and 12 instances of 2.0 in denseFirstABCMatrix
             for(int it = 0; it < matrixSize; ++it)
             {
-                EXPECT_DOUBLE_EQ(std::norm(denseFirstABCMatrix3x3(it, it) - matrixTestValues(it, it)), 0.0);
+                EXPECT_NEAR(std::norm(denseFirstABCMatrix3x3(it, it) - matrixTestValues(it, it)), 0.0, tolerance);
             }
         }
 
