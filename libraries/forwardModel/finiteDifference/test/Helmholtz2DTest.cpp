@@ -95,7 +95,6 @@ namespace fwi
             matrixTestValues(2, 3) = 0.5;
             matrixTestValues(3, 1) = 0.5;
             matrixTestValues(3, 2) = 0.5;
-            // review: element (3,3) is missing. On purpose or by mistake ?
             //// Act
             Eigen::MatrixXcd denseFirstABCMatrix2x2 = getDenseMatrixFromHelmholtz2D(nx, boundaryConditionType, chiValue, c0, freq);
 
