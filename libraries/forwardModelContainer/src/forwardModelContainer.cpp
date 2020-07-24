@@ -53,7 +53,7 @@ namespace fwi
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
             for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
             {
-                forwardModels::forwardModelInterface *model = new forwardModels::finiteDifferenceForwardModel(
+                forwardModels::forwardModelInterface *model = new forwardModels::FiniteDifferenceForwardModel(
                     grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
                 _forwardmodels.push_back(model);
             }

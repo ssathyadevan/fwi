@@ -1,5 +1,5 @@
 #include "ConjugateGradientDirectionCalculator.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi
@@ -27,7 +27,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardModels::forwardModelInterface *forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create conjugate gradient direction calculator
             const double errorFunctionScalingFactor = 1.0;

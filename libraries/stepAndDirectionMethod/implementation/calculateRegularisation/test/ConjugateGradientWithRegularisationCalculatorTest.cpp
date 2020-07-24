@@ -1,5 +1,5 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -32,8 +32,8 @@ namespace fwi
             core::Receivers receiver(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::ForwardModelInterfaceMock *forwardModel;
-            forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, source, receiver, frequencies);
+            forwardModels::ForwardModelMock *forwardModel;
+            forwardModel = new forwardModels::ForwardModelMock(grid, source, receiver, frequencies);
 
             double initialKappaTimesResidualValue = 1.0;
             forwardModel->setKappaTimesResidualValue(initialKappaTimesResidualValue);

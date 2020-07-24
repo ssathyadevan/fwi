@@ -106,7 +106,7 @@ namespace fwi
         if(desiredForwardModel == "FiniteDifferenceForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
-            _createdForwardModel = new forwardModels::finiteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+            _createdForwardModel = new forwardModels::FiniteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
         L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";

@@ -1,4 +1,4 @@
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi
@@ -13,14 +13,14 @@ namespace fwi
 
         TEST(forwardModelInterfaceTest, constructorTest)
         {
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
-            EXPECT_TRUE(grid2D == forwardModelInterfaceMock.getGrid());
+            ForwardModelMock forwardModelMock(grid2D, source, receiver, freqGroup);
+            EXPECT_TRUE(grid2D == forwardModelMock.getGrid());
         }
 
         TEST(forwardModelInterfaceTest, calculateResidualTest)
         {
             // Given
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
+            ForwardModelMock forwardModelMock(grid2D, source, receiver, freqGroup);
             std::vector<std::complex<double>> pDataRef(freqGroup.count * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
@@ -31,7 +31,7 @@ namespace fwi
             core::dataGrid2D chiEst(grid2D);
             chiEst = 2.0;
             std::vector<std::complex<double>> residual;
-            residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
+            residual = forwardModelMock.calculateResidual(chiEst, pDataRef);
 
             // Then
             std::vector<std::complex<double>> expectedResidual(freqGroup.count * receiver.count * source.count);
@@ -49,7 +49,7 @@ namespace fwi
         TEST(forwardModelInterfaceTest, calculateResidualNormSqTest)
         {
             // Given
-            ForwardModelInterfaceMock forwardModelInterfaceMock(grid2D, source, receiver, freqGroup);
+            ForwardModelMock forwardModelMock(grid2D, source, receiver, freqGroup);
             std::vector<std::complex<double>> pDataRef(freqGroup.count * receiver.count * source.count);
             for(std::complex<double> &element : pDataRef)
             {
@@ -59,8 +59,8 @@ namespace fwi
             std::vector<std::complex<double>> residual;
 
             // When
-            residual = forwardModelInterfaceMock.calculateResidual(chiEst, pDataRef);
-            double residualSq = forwardModelInterfaceMock.calculateResidualNormSq(residual);
+            residual = forwardModelMock.calculateResidual(chiEst, pDataRef);
+            double residualSq = forwardModelMock.calculateResidualNormSq(residual);
             double expectedResidualSq = residual.size();
 
             // Then

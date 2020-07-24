@@ -7,9 +7,13 @@ namespace fwi
 {
     namespace forwardModels
     {
-        finiteDifferenceForwardModel::finiteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+        FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
-            : forwardModelInterface(grid, source, receiver, freq)
+            : ForwardModelBase(grid, source, receiver, freq)
+            , _grid(grid)
+            , _source(source)
+            , _receiver(receiver)
+            , _freq(freq)
             , _Greens()
             , _p0()
             , _pTot()
@@ -25,7 +29,7 @@ namespace fwi
             configureCostFunction(fMInput.costFunction);
         }
 
-        finiteDifferenceForwardModel::~finiteDifferenceForwardModel()
+        FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
         {
             if(_Greens != nullptr)
                 this->deleteGreens();
@@ -40,7 +44,7 @@ namespace fwi
                 this->deleteKappa();
         }
 
-        void finiteDifferenceForwardModel::createP0()
+        void FiniteDifferenceForwardModel::createP0()
         {
             assert(_Greens != nullptr);
             assert(_p0 == nullptr);
@@ -59,7 +63,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::deleteP0()
+        void FiniteDifferenceForwardModel::deleteP0()
         {
             for(int i = 0; i < _freq.count; i++)
             {
@@ -75,7 +79,7 @@ namespace fwi
             _p0 = nullptr;
         }
 
-        void finiteDifferenceForwardModel::createGreens()
+        void FiniteDifferenceForwardModel::createGreens()
         {
             _Greens = new core::greensRect2DCpu *[_freq.count];
 
@@ -85,7 +89,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::deleteGreens()
+        void FiniteDifferenceForwardModel::deleteGreens()
         {
             for(int i = 0; i < _freq.count; i++)
             {
@@ -96,7 +100,7 @@ namespace fwi
             _Greens = nullptr;
         }
 
-        void finiteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
+        void FiniteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
             _pTot = new core::complexDataGrid2D *[freq.count * source.count];
 
@@ -113,7 +117,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::deletePtot()
+        void FiniteDifferenceForwardModel::deletePtot()
         {
             for(int i = 0; i < _freq.count * _source.count; i++)
             {
@@ -124,7 +128,7 @@ namespace fwi
             _pTot = nullptr;
         }
 
-        void finiteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
+        void FiniteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
             _kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
 
@@ -134,7 +138,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::deleteKappa()
+        void FiniteDifferenceForwardModel::deleteKappa()
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
@@ -145,9 +149,9 @@ namespace fwi
             _kappa = nullptr;
         }
 
-        void finiteDifferenceForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
+        void FiniteDifferenceForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
 
-        void finiteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
+        void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
         {
             assert(_Greens != nullptr);
             assert(_p0 != nullptr);
@@ -170,12 +174,12 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator)
+        void FiniteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator)
         {
             applyKappa(chiEst, kOperator);
         }
 
-        void finiteDifferenceForwardModel::calculateKappa()
+        void FiniteDifferenceForwardModel::calculateKappa()
         {
             int li, lj;
 
@@ -195,12 +199,12 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+        void FiniteDifferenceForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
         {
             applyKappa(CurrentPressureFieldSerial, kOperator);
         }
 
-        void finiteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+        void FiniteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
@@ -208,7 +212,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void FiniteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
         {
             int l_i, l_j;
             kRes.zero();
@@ -230,7 +234,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::getUpdateDirectionInformationMPI(
+        void FiniteDifferenceForwardModel::getUpdateDirectionInformationMPI(
             std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
         {
             kRes.zero();
@@ -245,7 +249,7 @@ namespace fwi
             }
         }
 
-        void finiteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
         {
             int l_i, l_j;
 

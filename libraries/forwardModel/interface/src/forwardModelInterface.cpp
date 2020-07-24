@@ -17,64 +17,64 @@ namespace fwi
 
         forwardModelInterface::~forwardModelInterface() {}
 
-        const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
+        // const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
 
-        const core::Sources &forwardModelInterface::getSource() { return _source; }
+        // const core::Sources &forwardModelInterface::getSource() { return _source; }
 
-        const core::Receivers &forwardModelInterface::getReceiver() { return _receiver; }
+        // const core::Receivers &forwardModelInterface::getReceiver() { return _receiver; }
 
-        const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
+        // const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
 
-        CostFunction forwardModelInterface::getCostFunction() { return _costFunction; }
+        // CostFunction forwardModelInterface::getCostFunction() { return _costFunction; }
 
-        std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
-            const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
-        {
-            std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
+        // std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
+        //     const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
+        // {
+        //     std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
 
-            calculatePData(chiEst, pDataEst);
+        //     calculatePData(chiEst, pDataEst);
 
-            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
-            {
-                _residual[i] = pDataRef[i] - pDataEst[i];
-                if(isnan(std::abs(_residual[i])))
-                {
-                    throw std::overflow_error("Residual is not a number");
-                }
-            }
+        //     for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
+        //     {
+        //         _residual[i] = pDataRef[i] - pDataEst[i];
+        //         if(isnan(std::abs(_residual[i])))
+        //         {
+        //             throw std::overflow_error("Residual is not a number");
+        //         }
+        //     }
 
-            return _residual;
-        }
+        //     return _residual;
+        // }
 
-        double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
-        {
-            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
+        // double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
+        // {
+        //     double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
 
-            return residualSq;
-        }
+        //     return residualSq;
+        // }
 
-        double forwardModelInterface::calculateCost(
-            std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
-        {
-            double cost = 0.0;
+        // double forwardModelInterface::calculateCost(
+        //     std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+        // {
+        //     double cost = 0.0;
 
-            switch(_costFunction)
-            {
-                case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
-                default: throw std::invalid_argument("Invalid cost function selected.");
-            }
+        //     switch(_costFunction)
+        //     {
+        //         case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
+        //         default: throw std::invalid_argument("Invalid cost function selected.");
+        //     }
 
-            return cost;
-        }
+        //     return cost;
+        // }
 
-        double forwardModelInterface::calculateLeastSquaresCost(
-            std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
-        {
-            residualArray = calculateResidual(chiEstimate, pData);
-            double residualNormSquared = calculateResidualNormSq(residualArray);
-            double residual = eta * residualNormSquared;
+        // double forwardModelInterface::calculateLeastSquaresCost(
+        //     std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
+        // {
+        //     residualArray = calculateResidual(chiEstimate, pData);
+        //     double residualNormSquared = calculateResidualNormSq(residualArray);
+        //     double residual = eta * residualNormSquared;
 
-            return residual;
-        }
+        //     return residual;
+        // }
     }   // namespace forwardModels
 }   // namespace fwi

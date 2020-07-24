@@ -5,7 +5,7 @@ include_directories(../include)
 include_directories( ${CMAKE_SOURCE_DIR}/libraries/io/include)
 include_directories( ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 include_directories( ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include)
-
+include_directories( ${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include)
 # Build the tests!
 build_test(TARGET FiniteDifferenceFMICardReaderTest SOURCE FiniteDifferenceForwardModelInputCardReaderTest.cpp LIBRARIES finite_difference_forward_model_library io_library)
 build_test(TARGET Helmholtz2DTest SOURCE Helmholtz2DTest.cpp LIBRARIES finite_difference_forward_model_library)

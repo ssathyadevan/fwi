@@ -14,7 +14,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        inline double normSq(const std::vector<std::complex<double>> &data, int n)
+                inline double normSq(const std::vector<std::complex<double>> &data, int n)
         {
             double result = double(0.0);
             for(int i = 0; i < n; i++)
@@ -32,10 +32,10 @@ namespace fwi
 
             virtual ~forwardModelInterface();
 
-            const core::grid2D &getGrid();
-            const core::Sources &getSource();
-            const core::Receivers &getReceiver();
-            const core::FrequenciesGroup &getFreq();
+            virtual const core::grid2D &getGrid() = 0;
+            virtual const core::Sources &getSource() = 0;
+            virtual const core::Receivers &getReceiver() = 0;
+            virtual const core::FrequenciesGroup &getFreq() = 0;
 
             CostFunction getCostFunction();
 
@@ -43,33 +43,20 @@ namespace fwi
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
-            virtual void calculateKappa()
-            {
-                L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
-                exit(EXIT_FAILURE);
-            }
-            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &)
-            {
-                L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
-                exit(EXIT_FAILURE);
-            }
-            virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int)
-            {
-                L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
-                exit(EXIT_FAILURE);
-            }
+            virtual void calculateKappa() = 0;
+            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &) = 0;
+            virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int) = 0;
 
-            std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
-            double calculateResidualNormSq(const std::vector<std::complex<double>> &residual);
-            double calculateCost(
-                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
-            double calculateLeastSquaresCost(
-                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
+            virtual std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef) = 0;
+            virtual double calculateResidualNormSq(const std::vector<std::complex<double>> &residual ) = 0;
+            virtual double calculateCost(
+                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta) = 0;
+            virtual double calculateLeastSquaresCost(
+                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta) = 0;
 
         private:
             std::vector<std::complex<double>> _residual;
 
-        protected:
             const core::grid2D &_grid;
             const core::Sources &_source;
             const core::Receivers &_receiver;

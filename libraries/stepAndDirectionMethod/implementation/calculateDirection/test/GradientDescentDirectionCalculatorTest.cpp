@@ -1,5 +1,5 @@
 #include "GradientDescentDirectionCalculator.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi
@@ -28,7 +28,7 @@ namespace fwi
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create a gradient descent calculator with derivative step size zero
             double errorFunctionalScalingFactor = 1.0;
@@ -58,7 +58,7 @@ namespace fwi
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create gradient descent calculator
             double errorFunctionalScalingFactor = 1.0;
@@ -111,7 +111,7 @@ namespace fwi
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create gradient descent direction calculator
             const double errorFunctionalScalingFactor = 1.0;
