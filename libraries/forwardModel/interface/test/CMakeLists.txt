@@ -9,4 +9,4 @@ include_directories( ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/includ
 SET(build_test  "${build_test}" CACHE INTERNAL "build_test")
 
 # Build the tests!
-build_test(TARGET forwardModelInterfaceTest SOURCE forwardModelInterfaceTest.cpp LIBRARIES test_utils_library forward_model_interface_library)
+build_test(TARGET forwardModelInterfaceTest SOURCE forwardModelInterfaceTest.cpp LIBRARIES test_utils_library )

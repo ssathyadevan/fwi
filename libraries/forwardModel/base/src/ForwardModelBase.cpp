@@ -7,9 +7,7 @@ namespace fwi
     {
         ForwardModelBase::ForwardModelBase(
             const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
-            :
-            forwardModelInterface(grid, source, receiver, freq)
-            , _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)

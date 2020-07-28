@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ForwardModelBase.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
@@ -20,7 +19,6 @@ namespace fwi
             ~IntegralForwardModel();
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator);
-
 
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
             void calculateKappa();

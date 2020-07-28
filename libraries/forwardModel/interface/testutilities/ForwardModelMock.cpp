@@ -6,12 +6,11 @@ namespace fwi
     {
         ForwardModelMock::ForwardModelMock(
             const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
-            : forwardModelInterface(grid, source, receiver, freq)
-            , _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)
-            , _costFunction( CostFunction::leastSquares)
+            , _costFunction(CostFunction::leastSquares)
         {
             _kappaTimesResidualValue = 5.0;
         }
@@ -60,7 +59,6 @@ namespace fwi
             return cost;
         }
 
-
         double ForwardModelMock::calculateLeastSquaresCost(
             std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
         {
@@ -77,7 +75,7 @@ namespace fwi
 
             return residualSq;
         }
-        
+
         const core::grid2D &ForwardModelMock::getGrid() { return _grid; }
 
         const core::Sources &ForwardModelMock::getSource() { return _source; }
