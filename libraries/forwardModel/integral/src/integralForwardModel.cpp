@@ -8,7 +8,11 @@ namespace fwi
     {
         IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const integralForwardModelInput &fmInput)
-            : forwardModelInterface(grid, source, receiver, freq)
+            : ForwardModelBase(grid, source, receiver, freq, fmInput.costFunction)
+            , _grid(grid)
+            , _source(source)
+            , _receiver(receiver)
+            , _freq(freq)
             , _Greens()
             , _p0()
             , _pTot()
@@ -21,7 +25,6 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
-            configureCostFunction(fmInput.costFunction);
         }
 
         IntegralForwardModel::~IntegralForwardModel()
@@ -143,8 +146,6 @@ namespace fwi
             delete[] _Kappa;
             _Kappa = nullptr;
         }
-
-        void IntegralForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
 
         core::complexDataGrid2D IntegralForwardModel::calcTotalField(
             const core::greensRect2DCpu &G, const core::dataGrid2D &chi, const core::complexDataGrid2D &p_init)

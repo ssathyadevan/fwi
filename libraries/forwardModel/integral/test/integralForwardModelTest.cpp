@@ -9,7 +9,6 @@ namespace fwi
         class IntegralForwardModelTest : public ::testing::Test
         {
         protected:
-        protected:
             const std::string inputPath{std::string(FWI_PROJECT_DIR) + "/tests"};
             const integralForwardModelInputCardReader forwardModelInputReader{inputPath};
             const core::grid2D grid{{0.0, 0.0}, {2.0, 2.0}, {4, 2}};

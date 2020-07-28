@@ -1,33 +1,33 @@
-#include "forwardModelInterface.h"
+#include "ForwardModelMock.h"
 #include <math.h>
-
 namespace fwi
 {
     namespace forwardModels
     {
-        forwardModelInterface::forwardModelInterface(
+        ForwardModelMock::ForwardModelMock(
             const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
-            : /*_residual(), */ _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)
+            , _costFunction(CostFunction::leastSquares)
         {
-            _residual = std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count);
+            _kappaTimesResidualValue = 5.0;
+            _residual.resize(freq.count * _source.count * _receiver.count);
         }
 
-        forwardModelInterface::~forwardModelInterface() {}
+        void ForwardModelMock::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
+        {
+            const std::vector<double> &chiData = chiEst.getData();
+            const double newValue = chiData[0];
 
-        const core::grid2D &forwardModelInterface::getGrid() { return _grid; }
+            for(std::complex<double> &element : pData)
+            {
+                element = newValue;
+            }
+        }
 
-        const core::Sources &forwardModelInterface::getSource() { return _source; }
-
-        const core::Receivers &forwardModelInterface::getReceiver() { return _receiver; }
-
-        const core::FrequenciesGroup &forwardModelInterface::getFreq() { return _freq; }
-
-        CostFunction forwardModelInterface::getCostFunction() { return _costFunction; }
-
-        std::vector<std::complex<double>> &forwardModelInterface::calculateResidual(
+        std::vector<std::complex<double>> &ForwardModelMock::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
             std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
@@ -46,14 +46,7 @@ namespace fwi
             return _residual;
         }
 
-        double forwardModelInterface::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
-        {
-            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
-
-            return residualSq;
-        }
-
-        double forwardModelInterface::calculateCost(
+        double ForwardModelMock::calculateCost(
             std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
         {
             double cost = 0.0;
@@ -67,7 +60,7 @@ namespace fwi
             return cost;
         }
 
-        double forwardModelInterface::calculateLeastSquaresCost(
+        double ForwardModelMock::calculateLeastSquaresCost(
             std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
         {
             residualArray = calculateResidual(chiEstimate, pData);
@@ -76,5 +69,23 @@ namespace fwi
 
             return residual;
         }
+
+        double ForwardModelMock::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
+        {
+            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
+
+            return residualSq;
+        }
+
+        const core::grid2D &ForwardModelMock::getGrid() { return _grid; }
+
+        const core::Sources &ForwardModelMock::getSource() { return _source; }
+
+        const core::Receivers &ForwardModelMock::getReceiver() { return _receiver; }
+
+        const core::FrequenciesGroup &ForwardModelMock::getFreq() { return _freq; }
+
+        CostFunction ForwardModelMock::getCostFunction() { return _costFunction; }
+
     }   // namespace forwardModels
 }   // namespace fwi

@@ -1,7 +1,7 @@
 include_directories(../include)
 
 set(CPP_SOURCES_AND_H_HEADERS_TEST_UTILS
-    forwardmodelinterfacemock.cpp              include/forwardmodelinterfacemock.h)
+    ForwardModelMock.cpp              include/ForwardModelMock.h)
 
 add_library(test_utils_library ${CPP_SOURCES_AND_H_HEADERS_TEST_UTILS})
 

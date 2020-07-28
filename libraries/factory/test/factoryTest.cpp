@@ -1,5 +1,5 @@
 #include "factory.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi
@@ -67,7 +67,7 @@ namespace fwi
         core::Receivers receivers(xMin, xMax, 2);
         core::FrequenciesGroup frequencies(freq, 2000.0);
 
-        forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
 
         // Create a fixed step size with conjugate gradient method
         const std::string desiredStepSizeMethod = "FixedStepSize";
@@ -96,7 +96,7 @@ namespace fwi
         core::Receivers receivers(xMin, xMax, 2);
         core::FrequenciesGroup frequencies(freq, 2000.0);
 
-        forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
 
         // Create a not existing step size calculator
         const std::string desiredStepSizeMethod = "";
@@ -124,7 +124,7 @@ namespace fwi
         core::Receivers receivers(xMin, xMax, 2);
         core::FrequenciesGroup frequencies(freq, 2000.0);
 
-        forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
 
         // Create measurement data
         const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
@@ -153,7 +153,7 @@ namespace fwi
         core::Receivers receivers(xMin, xMax, 2);
         core::FrequenciesGroup frequencies(freq, 2000.0);
 
-        forwardModels::ForwardModelInterfaceMock forwardModel(grid, sources, receivers, frequencies);
+        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
 
         // Create measurement data
         const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;

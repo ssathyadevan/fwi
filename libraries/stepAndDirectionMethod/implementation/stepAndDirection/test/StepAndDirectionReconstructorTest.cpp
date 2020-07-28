@@ -1,7 +1,7 @@
 #include "StepAndDirectionReconstructor.h"
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi

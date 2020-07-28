@@ -1,6 +1,6 @@
 #include "DirectionCalculator.h"
 #include "DirectionCalculatorMock.h"
-#include "forwardmodelinterfacemock.h"
+#include "ForwardModelMock.h"
 #include <gtest/gtest.h>
 
 namespace fwi
@@ -30,7 +30,7 @@ namespace fwi
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardModel;
-            forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             DirectionCalculator *directionCalculator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel);
             double mockErrorFunctionalScalingFactor = directionCalculator->getErrorFunctionalScalingFactor();
@@ -54,7 +54,7 @@ namespace fwi
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
             forwardModels::forwardModelInterface *forwardModel;
-            forwardModel = new forwardModels::ForwardModelInterfaceMock(grid, sources, receivers, frequencies);
+            forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel), std::invalid_argument);
 

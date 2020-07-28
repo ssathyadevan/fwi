@@ -1,6 +1,7 @@
 include_directories( ${LIBRARY_INCLUDE_DIRS_FINITE_DIFFERENCE_FORWARD_MODEL} )
 include_directories( ${LIBRARY_INCLUDE_DIRS_CORE} )
 include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include)
+include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/performance/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/io/include)

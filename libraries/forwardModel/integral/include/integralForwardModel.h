@@ -1,6 +1,6 @@
 #pragma once
 
-#include "forwardModelInterface.h"
+#include "ForwardModelBase.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
@@ -10,7 +10,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class IntegralForwardModel : public forwardModelInterface
+        class IntegralForwardModel : public ForwardModelBase
         {
         public:
             IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
@@ -20,8 +20,8 @@ namespace fwi
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator);
 
-            void calculateKappa();
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
+            void calculateKappa();
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
             virtual void getUpdateDirectionInformationMPI(
                 std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
@@ -29,6 +29,15 @@ namespace fwi
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
         private:
+            std::vector<std::complex<double>> _residual;
+
+            const core::grid2D &_grid;
+            const core::Sources &_source;
+            const core::Receivers &_receiver;
+            const core::FrequenciesGroup &_freq;
+
+            CostFunction _costFunction;
+
             core::greensRect2DCpu **_Greens;
 
             core::complexDataGrid2D ***_p0;
@@ -51,7 +60,6 @@ namespace fwi
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
-            void configureCostFunction(CostFunction costFunction);
         };
 
     }   // namespace forwardModels

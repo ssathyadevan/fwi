@@ -24,7 +24,7 @@ namespace fwi
         {
             // Arrange
             forwardModelInput = finiteDifferenceForwardModelInput(forwardModelInputReader.getInput());
-            finiteDifferenceForwardModel forwardModel(grid, source, receiver, freqGroup, forwardModelInput);
+            FiniteDifferenceForwardModel forwardModel(grid, source, receiver, freqGroup, forwardModelInput);
 
             // Act
             auto costFunction = forwardModel.getCostFunction();
