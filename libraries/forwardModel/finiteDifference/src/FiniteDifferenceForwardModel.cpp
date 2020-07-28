@@ -9,7 +9,7 @@ namespace fwi
     {
         FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
-            : ForwardModelBase(grid, source, receiver, freq)
+            : ForwardModelBase(grid, source, receiver, freq, fMInput.costFunction)
             , _grid(grid)
             , _source(source)
             , _receiver(receiver)
@@ -26,7 +26,6 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
-            configureCostFunction(fMInput.costFunction);
         }
 
         FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
@@ -148,8 +147,6 @@ namespace fwi
             delete[] _kappa;
             _kappa = nullptr;
         }
-
-        void FiniteDifferenceForwardModel::configureCostFunction(CostFunction costFunction) { _costFunction = costFunction; }
 
         void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
         {

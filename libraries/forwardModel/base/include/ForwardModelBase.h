@@ -6,11 +6,11 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class ForwardModelBase: public forwardModelInterface
+        class ForwardModelBase : public forwardModelInterface
         {
-
         public:
-            ForwardModelBase(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq);
+            ForwardModelBase(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
+                const CostFunction costFunction);
 
             virtual ~ForwardModelBase();
 
@@ -24,7 +24,7 @@ namespace fwi
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
-             virtual void calculateKappa()
+            virtual void calculateKappa()
             {
                 L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
                 exit(EXIT_FAILURE);
@@ -45,6 +45,7 @@ namespace fwi
                 std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
             double calculateLeastSquaresCost(
                 std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
+
         private:
             std::vector<std::complex<double>> _residual;
 
@@ -54,7 +55,6 @@ namespace fwi
             const core::FrequenciesGroup &_freq;
 
             CostFunction _costFunction;
-
         };
-    }
-}
+    }   // namespace forwardModels
+}   // namespace fwi

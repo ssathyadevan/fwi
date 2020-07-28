@@ -28,8 +28,6 @@ namespace fwi
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
         private:
-
-
             void createP0();
             void deleteP0();
 
@@ -45,7 +43,6 @@ namespace fwi
             void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
-            void configureCostFunction(CostFunction costFunction);
 
         private:
             std::vector<std::complex<double>> _residual;

@@ -5,12 +5,13 @@ namespace fwi
 {
     namespace forwardModels
     {
-        ForwardModelBase::ForwardModelBase(
-            const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq)
+        ForwardModelBase::ForwardModelBase(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            const core::FrequenciesGroup &freq, const CostFunction costFunction)
             : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)
+            , _costFunction(costFunction)
         {
             _residual = std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count);
         }

@@ -28,9 +28,9 @@ namespace fwi
         class forwardModelInterface
         {
         public:
-            forwardModelInterface(){};
+            forwardModelInterface() = default;
 
-            virtual ~forwardModelInterface(){};
+            virtual ~forwardModelInterface() = default;
 
             virtual const core::grid2D &getGrid() = 0;
             virtual const core::Sources &getSource() = 0;

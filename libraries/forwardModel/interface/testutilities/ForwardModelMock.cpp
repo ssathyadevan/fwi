@@ -13,6 +13,7 @@ namespace fwi
             , _costFunction(CostFunction::leastSquares)
         {
             _kappaTimesResidualValue = 5.0;
+            _residual.resize(freq.count * _source.count * _receiver.count);
         }
 
         void ForwardModelMock::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
