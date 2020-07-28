@@ -28,7 +28,7 @@ namespace fwi
         class forwardModelInterface
         {
         public:
-            forwardModelInterface(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq);
+            forwardModelInterface();
 
             virtual ~forwardModelInterface();
 
@@ -37,7 +37,7 @@ namespace fwi
             virtual const core::Receivers &getReceiver() = 0;
             virtual const core::FrequenciesGroup &getFreq() = 0;
 
-            CostFunction getCostFunction();
+            virtual CostFunction getCostFunction() = 0;
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
@@ -54,15 +54,6 @@ namespace fwi
             virtual double calculateLeastSquaresCost(
                 std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta) = 0;
 
-        private:
-            std::vector<std::complex<double>> _residual;
-
-            const core::grid2D &_grid;
-            const core::Sources &_source;
-            const core::Receivers &_receiver;
-            const core::FrequenciesGroup &_freq;
-
-            CostFunction _costFunction;
         };
     }   // namespace forwardModels
 }   // namespace fwi
