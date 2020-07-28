@@ -11,7 +11,7 @@ function( build_test )
     target_link_libraries( ${TEST_TARGET} GTest::Main ${TEST_LIBRARIES} )
     gtest_discover_tests( ${TEST_TARGET} )
 endfunction( build_test )
-SET(CMAKE_BUILD_TYPE Debug)
+
 
 add_subdirectory( utilities )
 add_subdirectory( core )
