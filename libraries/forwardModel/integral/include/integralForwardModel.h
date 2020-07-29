@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ForwardModelBase.h"
+#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
@@ -10,7 +10,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class IntegralForwardModel : public ForwardModelBase
+        class IntegralForwardModel : public forwardModelInterface
         {
         public:
             IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
@@ -27,6 +27,14 @@ namespace fwi
                 std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
 
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
+
+            const core::grid2D &getGrid() { return _grid; }
+
+            const core::Sources &getSource() { return _source; }
+
+            const core::Receivers &getReceiver() { return _receiver; }
+
+            const core::FrequenciesGroup &getFreq() { return _freq; }
 
         private:
             std::vector<std::complex<double>> _residual;

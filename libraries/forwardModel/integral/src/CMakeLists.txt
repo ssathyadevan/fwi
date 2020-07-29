@@ -8,7 +8,6 @@ target_include_directories(integral_forward_model_library
 PUBLIC ${LIBRARY_INCLUDE_DIRS_INTEGRAL_FORWARD_MODEL}
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include
-PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 
-target_link_libraries(integral_forward_model_library core_library  forward_model_base_library)
+target_link_libraries(integral_forward_model_library core_library)

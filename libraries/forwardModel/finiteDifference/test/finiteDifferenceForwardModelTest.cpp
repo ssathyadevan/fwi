@@ -19,19 +19,5 @@ namespace fwi
 
             finiteDifferenceForwardModelInput forwardModelInput;
         };
-
-        TEST_F(FiniteDifferenceForwardModelTest, getCostFunction_InputFromFile_SelectedCostFunction)
-        {
-            // Arrange
-            forwardModelInput = finiteDifferenceForwardModelInput(forwardModelInputReader.getInput());
-            FiniteDifferenceForwardModel forwardModel(grid, source, receiver, freqGroup, forwardModelInput);
-
-            // Act
-            auto costFunction = forwardModel.getCostFunction();
-
-            // Assert
-            EXPECT_EQ(costFunction, forwardModelInput.costFunction);
-        }
-
     }   // namespace forwardModels
 }   // namespace fwi

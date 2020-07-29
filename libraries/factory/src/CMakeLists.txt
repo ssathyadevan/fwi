@@ -9,7 +9,6 @@ set( LIBRARY_INCLUDE_DIRS_FACTORY ${CMAKE_SOURCE_DIR}/libraries/factory/include 
 target_include_directories(factory_library PUBLIC ${LIBRARY_INCLUDE_DIRS_FACTORY} 
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include 
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include 
-PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 
 target_link_libraries(

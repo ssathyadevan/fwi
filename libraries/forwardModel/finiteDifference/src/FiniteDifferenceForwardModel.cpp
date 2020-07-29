@@ -9,8 +9,7 @@ namespace fwi
     {
         FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
-            : ForwardModelBase(grid, source, receiver, freq, fMInput.costFunction)
-            , _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)

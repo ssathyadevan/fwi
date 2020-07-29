@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FiniteDifferenceForwardModelInput.h"
-#include "ForwardModelBase.h"
+#include "forwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
 
@@ -9,7 +9,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class FiniteDifferenceForwardModel : public ForwardModelBase
+        class FiniteDifferenceForwardModel : public forwardModelInterface
         {
         public:
             FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
@@ -26,6 +26,14 @@ namespace fwi
                 std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
             virtual void getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
+
+            const core::grid2D &getGrid() { return _grid; }
+
+            const core::Sources &getSource() { return _source; }
+
+            const core::Receivers &getReceiver() { return _receiver; }
+
+            const core::FrequenciesGroup &getFreq() { return _freq; }
 
         private:
             void createP0();

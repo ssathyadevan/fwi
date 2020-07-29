@@ -8,8 +8,7 @@ namespace fwi
     {
         IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const integralForwardModelInput &fmInput)
-            : ForwardModelBase(grid, source, receiver, freq, fmInput.costFunction)
-            , _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)

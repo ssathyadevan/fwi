@@ -9,12 +9,12 @@ namespace fwi
         class CostFunctionCalculator
         {
         public:
-            enum CostFunction
+            enum class CostFunctionEnum
             {
                 leastSquares
             };
 
-            CostFunctionCalculator(CostFunction costFunctionSelected = leastSquares)
+            CostFunctionCalculator(CostFunctionEnum costFunctionSelected = CostFunctionEnum::leastSquares)
                 : _costFunction(costFunctionSelected)
             {
             }
@@ -24,8 +24,10 @@ namespace fwi
                 return eta * l2NormSq(pData - pDataEst);
             }
 
+            CostFunctionEnum getCostFunction() const { return _costFunction; }
+
         private:
-            const CostFunction _costFunction;
+            const CostFunctionEnum _costFunction;
         };
     }   // namespace core
 }   // namespace fwi

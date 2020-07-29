@@ -19,18 +19,5 @@ namespace fwi
 
             integralForwardModelInput forwardModelInput;
         };
-
-        TEST_F(IntegralForwardModelTest, getCostFunction_InputFromFile_SelectedCostFunction)
-        {
-            // Arrange
-            forwardModelInput = integralForwardModelInput(forwardModelInputReader.getInput());
-            IntegralForwardModel forwardModel(grid, source, receiver, freqGroup, forwardModelInput);
-
-            // Act
-            auto costFunction = forwardModel.getCostFunction();
-
-            // Assert
-            EXPECT_EQ(costFunction, forwardModelInput.costFunction);
-        }
     }   // namespace forwardModels
 }   // namespace fwi

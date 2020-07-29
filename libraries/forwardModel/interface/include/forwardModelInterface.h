@@ -26,8 +26,6 @@ namespace fwi
             virtual const core::Receivers &getReceiver() = 0;
             virtual const core::FrequenciesGroup &getFreq() = 0;
 
-            virtual CostFunction getCostFunction() = 0;
-
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
