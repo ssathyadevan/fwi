@@ -1,5 +1,7 @@
 #include "GradientDescentDirectionCalculator.h"
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
@@ -51,8 +53,8 @@ namespace fwi
         {
             std::vector<std::complex<double>> pDataEst(_pData.size());
             _forwardModel->calculatePData(chiEstimate, pDataEst);
-            std::vector<std::complex<double>> residual = _costCalculator.calculateResidual(_pData, pDataEst);
-            const double currentChiError = _errorFunctionalScalingFactor * core::normSq(residual);
+            std::vector<std::complex<double>> residual = _pData - pDataEst;
+            const double currentChiError = _errorFunctionalScalingFactor * core::l2NormSq(residual);
             return currentChiError;
         }
     }   // namespace inversionMethods

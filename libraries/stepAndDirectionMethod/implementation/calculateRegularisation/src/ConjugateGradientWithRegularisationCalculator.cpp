@@ -1,5 +1,7 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
@@ -202,8 +204,8 @@ namespace fwi
         {
             std::vector<std::complex<double>> pDataEst(_pData.size());
             _forwardModel->calculatePData(_chiEstimateCurrent, pDataEst);
-            _residualVector = _costCalculator.calculateResidual(_pData, pDataEst);
-            _residualValueCurrent = _errorFunctionalScalingFactor * core::normSq(_residualVector);
+            _residualVector = _pData - pDataEst;
+            _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSq(_residualVector);
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()

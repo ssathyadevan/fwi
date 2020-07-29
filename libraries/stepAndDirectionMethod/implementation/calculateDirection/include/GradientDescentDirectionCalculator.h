@@ -2,6 +2,7 @@
 
 #include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
+#include "commonVectorOperations.h"
 namespace fwi
 {
     namespace inversionMethods

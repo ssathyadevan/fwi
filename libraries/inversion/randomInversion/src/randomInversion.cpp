@@ -21,7 +21,7 @@ namespace fwi
         {
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
-            double eta = 1.0 / (core::normSq(pData));
+            double eta = 1.0 / (core::l2NormSq(pData));
             double chiEstRes, newChiEstRes;
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);

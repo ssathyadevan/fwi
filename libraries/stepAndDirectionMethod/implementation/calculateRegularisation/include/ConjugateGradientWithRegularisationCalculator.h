@@ -3,6 +3,7 @@
 #include "ConjugateGradientWithRegularisationParametersInput.h"
 #include "CostFunctionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
+#include "commonVectorOperations.h"
 
 namespace fwi
 {

@@ -3,6 +3,7 @@
 #include "DirectionCalculator.h"
 #include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
+#include "commonVectorOperations.h"
 #include "forwardModelInterface.h"
 #include "genericInput.h"
 

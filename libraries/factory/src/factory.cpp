@@ -155,7 +155,7 @@ namespace fwi
     void Factory::createDirectionCalculator(const inversionMethods::DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
         forwardModels::forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData)
     {
-        const double errorFunctionalScalingFactor = 1.0 / (core::normSq(pData));
+        const double errorFunctionalScalingFactor = 1.0 / (core::l2NormSq(pData));
 
         if(desiredDirectionMethod == "ConjugateGradientDirection")
         {
@@ -189,7 +189,7 @@ namespace fwi
             cgParametersInput._deltaAmplification._slope = stepSizeParameters.slope;
             cgParametersInput._deltaAmplification._start = stepSizeParameters.initialStepSize;
 
-            const double errorFunctionalScalingFactor = 1.0 / (core::normSq(pData));
+            const double errorFunctionalScalingFactor = 1.0 / (core::l2NormSq(pData));
             inversionMethods::ConjugateGradientWithRegularisationCalculator *OneInstance =
                 new inversionMethods::ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
             _createdStepSizeCalculator = OneInstance;

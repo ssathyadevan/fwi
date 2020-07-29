@@ -1,4 +1,5 @@
 #include "conjugateGradientInversion.h"
+#include "commonVectorOperations.h"
 #include "log.h"
 #include "progressBar.h"
 #include <iostream>
@@ -10,6 +11,8 @@
 #define TAG_SIZE 1
 #define TAG_RESARRAY 2
 #define TAG_RESULT 3
+
+using fwi::core::operator-;
 
 namespace fwi
 {
@@ -33,7 +36,7 @@ namespace fwi
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
             const int nTotal = _frequencies.count * _sources.count * _receivers.count;
-            const double eta = 1.0 / (core::normSq(pData));   // Scaling factor
+            const double eta = 1.0 / (core::l2NormSq(pData));   // Scaling factor
             _chiEstimate.zero();
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
@@ -50,7 +53,7 @@ namespace fwi
                 std::vector<std::complex<double>> pDataEst(pData.size());
                 _forwardModel->calculateKappa();
                 _forwardModel->calculatePData(_chiEstimate, pDataEst);
-                std::vector<std::complex<double>> residualArray = _costCalculator.calculateResidual(pData, pDataEst);
+                std::vector<std::complex<double>> residualArray = pData - pDataEst;
 
                 // Initialize Regularisation parameters
                 double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);

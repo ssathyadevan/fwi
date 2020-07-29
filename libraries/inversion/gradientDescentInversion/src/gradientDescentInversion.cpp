@@ -1,7 +1,10 @@
 #include "gradientDescentInversion.h"
+#include "commonVectorOperations.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "log.h"
 #include "progressBar.h"
+
+using fwi::core::operator-;
 
 namespace fwi
 {
@@ -31,7 +34,7 @@ namespace fwi
             _forwardModel->calculateKappa();
             _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
             _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
-            std::vector<std::complex<double>> residual = _costCalculator.calculateResidual(pData, pDataEst);
+            std::vector<std::complex<double>> residual = pData - pDataEst;
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
             std::vector<double> dFdxPrevious;
@@ -39,7 +42,7 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            double eta = 1.0 / (core::normSq(pData));
+            double eta = 1.0 / (core::l2NormSq(pData));
             double gamma = _gdInput.gamma0;   // First iteration
 
             for(int it1 = 0; it1 < _gdInput.iter; it1++)
