@@ -1,7 +1,7 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
-
 namespace fwi
 {
     namespace inversionMethods
@@ -25,7 +25,7 @@ namespace fwi
         private:
             const std::vector<std::complex<double>> &_pData;
             const double _derivativeDiscretisationStep;
-
+            core::CostFunctionCalculator _costCalculator;
             /**
              * @brief optimizationFunction represents the function for which the derivative will be calculated
              * @param chiEstimate

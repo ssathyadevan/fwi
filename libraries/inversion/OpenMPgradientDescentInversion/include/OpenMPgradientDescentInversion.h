@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "forwardModelContainer.h"
 #include "forwardModelInterface.h"
 #include "genericInput.h"

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
@@ -22,6 +23,7 @@ namespace fwi
 
         private:
             forwardModels::forwardModelInterface *_forwardModel;
+            core::CostFunctionCalculator _costCalculator;
             RandomInversionInput _riInput;
 
             const core::grid2D &_grid;

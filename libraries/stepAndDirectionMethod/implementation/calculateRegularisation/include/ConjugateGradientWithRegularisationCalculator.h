@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "ConjugateGradientRegularisationParameters.h"
 #include "ConjugateGradientWithRegularisationParametersInput.h"
+#include "CostFunctionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
 
 namespace fwi
@@ -22,6 +23,7 @@ namespace fwi
             core::dataGrid2D _gradientCurrent;
             int _iterationNumber;
 
+            core::CostFunctionCalculator _costCalculator;
             // Direction part
             const std::vector<std::complex<double>> &_pData;
 

@@ -33,7 +33,7 @@ namespace fwi
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
             const int nTotal = _frequencies.count * _sources.count * _receivers.count;
-            const double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // Scaling factor
+            const double eta = 1.0 / (core::normSq(pData));   // Scaling factor
             _chiEstimate.zero();
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
@@ -47,8 +47,10 @@ namespace fwi
                 core::dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
                 double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
 
+                std::vector<std::complex<double>> pDataEst(pData.size());
                 _forwardModel->calculateKappa();
-                std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
+                _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                std::vector<std::complex<double>> residualArray = _costCalculator.calculateResidual(pData, pDataEst);
 
                 // Initialize Regularisation parameters
                 double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
@@ -67,7 +69,8 @@ namespace fwi
                 _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
                 // Result + logging
-                residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);   // eq: errorFunc
+                _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -91,7 +94,9 @@ namespace fwi
                     _chiEstimate += alpha * zeta;
 
                     // Result + logging
-                    residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
+                    _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                    residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
+                    // residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 

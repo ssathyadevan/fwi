@@ -46,37 +46,6 @@ namespace fwi
             return _residual;
         }
 
-        double ForwardModelMock::calculateCost(
-            std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
-        {
-            double cost = 0.0;
-
-            switch(_costFunction)
-            {
-                case leastSquares: cost = calculateLeastSquaresCost(residualArray, chiEstimate, pData, eta); break;
-                default: throw std::invalid_argument("Invalid cost function selected.");
-            }
-
-            return cost;
-        }
-
-        double ForwardModelMock::calculateLeastSquaresCost(
-            std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta)
-        {
-            residualArray = calculateResidual(chiEstimate, pData);
-            double residualNormSquared = calculateResidualNormSq(residualArray);
-            double residual = eta * residualNormSquared;
-
-            return residual;
-        }
-
-        double ForwardModelMock::calculateResidualNormSq(const std::vector<std::complex<double>> &residual)
-        {
-            double residualSq = normSq(residual, _freq.count * _source.count * _receiver.count);
-
-            return residualSq;
-        }
-
         const core::grid2D &ForwardModelMock::getGrid() { return _grid; }
 
         const core::Sources &ForwardModelMock::getSource() { return _source; }

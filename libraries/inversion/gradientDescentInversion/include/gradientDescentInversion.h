@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "gradientDescentInversionInput.h"
@@ -13,6 +14,7 @@ namespace fwi
         {
         private:
             forwardModels::forwardModelInterface *_forwardModel;
+            core::CostFunctionCalculator _costCalculator;
             gradientDescentInversionInput _gdInput;
 
             const core::grid2D &_grid;
@@ -32,8 +34,7 @@ namespace fwi
             void logResidualResults(int iteration, double residual, bool isConverged);
 
             core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
-            std::vector<double> differential(
-                std::vector<std::complex<double>> &residual, core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
+            std::vector<double> differential(core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
             double determineGamma(const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
                 std::vector<double> dFdx);
         };

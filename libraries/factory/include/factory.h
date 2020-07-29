@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ConjugateGradientWithRegularisationParametersInput.h"
+#include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
 #include "StepAndDirectionReconstructorInput.h"

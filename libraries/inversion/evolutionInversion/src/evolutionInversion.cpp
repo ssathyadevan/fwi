@@ -30,7 +30,9 @@ namespace fwi
             // Create initial guess, generation 0, Adam
             core::dataGrid2D parent(_grid);
             parent.randomSaurabh();
-            double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
+            std::vector<std::complex<double>> pDataEst(pData.size());
+            _forwardModel->calculatePData(parent, pDataEst);
+            double parentResSq = core::normSq(costCalculator.calculateResidual(pData, pDataEst));
             preParentResSq = parentResSq;
             L_(io::linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
             std::cerr << "\n";
@@ -52,7 +54,8 @@ namespace fwi
                 {
                     core::dataGrid2D child(_grid);
                     child.randomChild(parent, generator, distribution);
-                    childResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(child, pData));
+                    _forwardModel->calculatePData(child, pDataEst);
+                    childResSq = core::normSq(costCalculator.calculateResidual(pData, pDataEst));
 
                     if(childResSq < favouriteChildResSq)
                     {

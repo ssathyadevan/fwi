@@ -14,17 +14,6 @@ namespace fwi
 {
     namespace forwardModels
     {
-        inline double normSq(const std::vector<std::complex<double>> &data, int n)
-        {
-            double result = double(0.0);
-            for(int i = 0; i < n; i++)
-            {
-                result += std::norm(data[i]);
-            }
-
-            return result;
-        }
-
         class forwardModelInterface
         {
         public:
@@ -46,13 +35,6 @@ namespace fwi
             virtual void calculateKappa() = 0;
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &) = 0;
             virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int) = 0;
-
-            virtual std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef) = 0;
-            virtual double calculateResidualNormSq(const std::vector<std::complex<double>> &residual) = 0;
-            virtual double calculateCost(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate,
-                const std::vector<std::complex<double>> &pData, double eta) = 0;
-            virtual double calculateLeastSquaresCost(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate,
-                const std::vector<std::complex<double>> &pData, double eta) = 0;
         };
     }   // namespace forwardModels
 }   // namespace fwi

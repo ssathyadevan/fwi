@@ -27,9 +27,11 @@ namespace fwi
             chiEstimateCurrent = _gdInput.x0;
             core::dataGrid2D chiEstimatePrevious(_grid);
 
+            std::vector<std::complex<double>> pDataEst(pData.size());
             _forwardModel->calculateKappa();
-            _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-            std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+            std::vector<std::complex<double>> residual = _costCalculator.calculateResidual(pData, pDataEst);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
             std::vector<double> dFdxPrevious;
@@ -37,14 +39,13 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            const int nTotal = _freq.count * _source.count * _receiver.count;
-            double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
+            double eta = 1.0 / (core::normSq(pData));
             double gamma = _gdInput.gamma0;   // First iteration
 
             for(int it1 = 0; it1 < _gdInput.iter; it1++)
             {
                 dFdxPrevious = dFdxCurrent;
-                dFdxCurrent = differential(residual, chiEstimateCurrent, pData, eta, _gdInput.h);
+                dFdxCurrent = differential(chiEstimateCurrent, pData, eta, _gdInput.h);
 
                 if(it1 > 0)
                 {
@@ -53,7 +54,8 @@ namespace fwi
 
                 chiEstimatePrevious = chiEstimateCurrent;
                 chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-                fx = _forwardModel->calculateCost(residual, chiEstimateCurrent, pData, eta);
+                _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+                fx = _costCalculator.calculateCost(pData, pDataEst, eta);
                 isConverged = (fx < _gdInput.h);
                 logResidualResults(counter, fx, isConverged);
                 residualLogFile << std::setprecision(17) << fx << "," << counter << std::endl;
@@ -81,11 +83,12 @@ namespace fwi
         }
 
         std::vector<double> gradientDescentInversion::differential(
-            std::vector<std::complex<double>> &residual, core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
+            core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
         {
             const int numGridPoints = chiEstimate.getNumberOfGridPoints();
-
-            double fx = _forwardModel->calculateCost(residual, chiEstimate, pData, eta);
+            std::vector<std::complex<double>> pDataEst(pData.size());
+            _forwardModel->calculatePData(chiEstimate, pDataEst);
+            double fx = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             double fxPlusH;
             core::dataGrid2D chiEstimatePlusH(chiEstimate);
@@ -93,7 +96,8 @@ namespace fwi
             for(int i = 0; i < numGridPoints; ++i)
             {
                 chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-                fxPlusH = _forwardModel->calculateCost(residual, chiEstimatePlusH, pData, eta);
+                _forwardModel->calculatePData(chiEstimate, pDataEst);
+                fxPlusH = _costCalculator.calculateCost(pData, pDataEst, eta);
                 chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 
                 dFdx[i] = (fxPlusH - fx) / h;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "evolutionInversionInput.h"
 #include "evolutionInversionInputCardReader.h"
 #include "forwardModelInterface.h"
@@ -23,6 +24,7 @@ namespace fwi
 
         private:
             forwardModels::forwardModelInterface *_forwardModel;
+            core::CostFunctionCalculator costCalculator;
             EvolutionInversionInput _eiInput;
 
             const core::grid2D &_grid;

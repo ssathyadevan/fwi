@@ -28,7 +28,9 @@ namespace fwi
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;
 
-            std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+            std::vector<std::complex<double>> pDataEst(pData.size());
+            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+            std::vector<std::complex<double>> residualVector = _costCalculator.calculateResidual(pData, pDataEst);
             double residualValue = calculateResidualNorm(residualVector, eta);
 
             _forwardModel->calculateKappa();
@@ -52,7 +54,8 @@ namespace fwi
 
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
-                residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+                _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+                residualVector = _costCalculator.calculateResidual(pData, pDataEst);
                 residualValue = calculateResidualNorm(residualVector, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
 
@@ -88,7 +91,7 @@ namespace fwi
 
         double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
         {
-            return eta * _forwardModel->calculateResidualNormSq(residualVector);
+            return eta * core::normSq(residualVector);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

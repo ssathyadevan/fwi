@@ -21,13 +21,14 @@ namespace fwi
         {
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
-            const int nTotal = _freq.count * _source.count * _receiver.count;
-            double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
-            double resSq, chiEstRes, newResSq, newChiEstRes;
+            double eta = 1.0 / (core::normSq(pData));
+            double chiEstRes, newChiEstRes;
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
 
             core::dataGrid2D chiEst(_grid);
+
+            std::vector<std::complex<double>> pDataEst(pData.size());
 
             _forwardModel->calculateKappa();
 
@@ -35,10 +36,8 @@ namespace fwi
             int counter = 1;
             for(int it = 0; it < _riInput.nMaxOuter; it++)
             {
-                std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
-
-                resSq = _forwardModel->calculateResidualNormSq(resArray);
-                chiEstRes = eta * resSq;
+                _forwardModel->calculatePData(chiEst, pDataEst);
+                chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                 // start the inner loop
                 for(int it1 = 0; it1 < _riInput.nMaxInner; it1++)
@@ -46,22 +45,22 @@ namespace fwi
                     core::dataGrid2D tempRandomChi(_grid);
                     tempRandomChi.randomSaurabh();
 
-                    newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
-                    newChiEstRes = eta * newResSq;
+                    _forwardModel->calculatePData(chiEst, pDataEst);
+                    newChiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                     if(it1 == 0 && it == 0)
                     {
                         tempRandomChi.copyTo(chiEst);
-                        resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
-                        chiEstRes = eta * resSq;
+                        _forwardModel->calculatePData(chiEst, pDataEst);
+                        chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     else if(std::abs(newChiEstRes) < std::abs(chiEstRes))
                     {
                         L_(io::linfo) << "Randomizing the temple again";
                         tempRandomChi.copyTo(chiEst);
 
-                        resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
-                        chiEstRes = eta * resSq;
+                        _forwardModel->calculatePData(chiEst, pDataEst);
+                        chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     L_(io::linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter
                                   << ")\t res: " << std::setprecision(17) << chiEstRes;

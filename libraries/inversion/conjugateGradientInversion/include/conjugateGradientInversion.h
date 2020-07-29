@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
 #include "conjugateGradientInversionInput.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "forwardModelInterface.h"
@@ -24,6 +25,7 @@ namespace fwi
         {
         private:
             forwardModels::forwardModelInterface *_forwardModel;
+            core::CostFunctionCalculator _costCalculator;
             ConjugateGradientInversionInput _cgInput;
 
             const core::grid2D &_grid;

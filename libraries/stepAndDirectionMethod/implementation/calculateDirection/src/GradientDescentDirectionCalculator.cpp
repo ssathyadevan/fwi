@@ -49,8 +49,10 @@ namespace fwi
 
         double GradientDescentDirectionCalculator::optimizationFunction(const core::dataGrid2D &chiEstimate) const
         {
-            std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, _pData);
-            const double currentChiError = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(residual);
+            std::vector<std::complex<double>> pDataEst(_pData.size());
+            _forwardModel->calculatePData(chiEstimate, pDataEst);
+            std::vector<std::complex<double>> residual = _costCalculator.calculateResidual(_pData, pDataEst);
+            const double currentChiError = _errorFunctionalScalingFactor * core::normSq(residual);
             return currentChiError;
         }
     }   // namespace inversionMethods

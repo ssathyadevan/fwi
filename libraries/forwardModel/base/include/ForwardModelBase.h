@@ -39,12 +39,6 @@ namespace fwi
                 L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
                 exit(EXIT_FAILURE);
             }
-            std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
-            double calculateResidualNormSq(const std::vector<std::complex<double>> &residual);
-            double calculateCost(
-                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
-            double calculateLeastSquaresCost(
-                std::vector<std::complex<double>> &residualArray, core::dataGrid2D &chiEstimate, const std::vector<std::complex<double>> &pData, double eta);
 
         private:
             std::vector<std::complex<double>> _residual;

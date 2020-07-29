@@ -1,4 +1,5 @@
 #pragma once
+#include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
 #include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
@@ -15,6 +16,7 @@ namespace fwi
             StepSizeCalculator *_desiredStep;
             DirectionCalculator *_desiredDirection;
             forwardModels::forwardModelInterface *_forwardModel;
+            core::CostFunctionCalculator _costCalculator;
             const ReconstructorParameters &_directionInput;
             /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
             const core::grid2D &_grid;
