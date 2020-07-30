@@ -21,8 +21,10 @@ namespace fwi
 
             _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
 
-            //_direction represents g_n in eq. (35) of /doc/ReadMe/1_ProjectDescription.pdf
-            _direction = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
+            // here we add g_n as in eq. (35), (37) of /doc/ReadMe/1_ProjectDescription.pdf
+
+            core::dataGrid2D minusGradient = 2.0 * _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
+            _direction = minusGradient;
 
             // this ensures that in the first step of the inversion process we do not add this term.
             // It also ensures that the division in calculateGammaPolakRibiere() will not throw exceptions.
@@ -32,7 +34,7 @@ namespace fwi
                 _direction += gamma * _zeta;
             }
 
-            _directionPrevious = _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
+            _directionPrevious = minusGradient;
             _zeta = _direction;
 
             return _direction;

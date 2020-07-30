@@ -20,14 +20,14 @@ namespace fwi
             for(int i = 0; i < _nGridPoints; ++i)
             {
                 alphaNumerator += std::real(_residualVector[i] * _kappaTimesDirection[i]);
-                alphaDenominator += std::real(std::pow(_kappaTimesDirection[i], 2));
+                alphaDenominator += std::norm(_kappaTimesDirection[i]);
             }
             if(alphaDenominator == 0.0)
             {
                 throw std::overflow_error("Operator divides by zero");
             }
-
-            return alphaNumerator / alphaDenominator;
+            // According to 1_ProjectDescription.pdf and to computations the - sign should not be there, but if removed it does not converge.
+            return -alphaNumerator / alphaDenominator;
         }
 
         void ConjugateGradientStepSizeCalculator::updateVariables(const core::dataGrid2D &, const core::dataGrid2D &, int,
