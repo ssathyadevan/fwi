@@ -13,6 +13,9 @@ namespace fwi
 {
     namespace forwardModels
     {
+        /**
+         * @brief The ForwardModelInterface Interface class for ForwardModel classes
+         */
         class ForwardModelInterface
         {
         public:
