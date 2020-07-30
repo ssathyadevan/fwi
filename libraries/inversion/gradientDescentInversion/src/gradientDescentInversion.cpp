@@ -1,5 +1,5 @@
 #include "gradientDescentInversion.h"
-#include "commonVectorOperations.h"
+#include "CommonVectorOperations.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "log.h"
 #include "progressBar.h"
@@ -10,7 +10,7 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        gradientDescentInversion::gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
+        gradientDescentInversion::gradientDescentInversion(forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
             : _forwardModel()
             , _gdInput(gdInput)
             , _grid(forwardModel->getGrid())

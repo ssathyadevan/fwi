@@ -7,7 +7,7 @@ namespace fwi
     namespace inversionMethods
     {
         ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor,
-            forwardModels::forwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
+            forwardModels::ForwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
             const std::vector<std::complex<double>> &pData)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
             , StepSizeCalculator()

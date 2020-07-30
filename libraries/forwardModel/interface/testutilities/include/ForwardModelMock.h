@@ -1,6 +1,6 @@
 #pragma once
 
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "freqInfo.h"
 #include "frequenciesGroup.h"
 #include "greensFunctions.h"
@@ -10,9 +10,8 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class ForwardModelMock : public forwardModelInterface
+        class ForwardModelMock : public ForwardModelInterface
         {
-           
             double _kappaTimesResidualValue;
 
         public:
@@ -38,7 +37,7 @@ namespace fwi
                 (void)CurrentPressureFieldSerial;
                 (void)kOperator;
             }
-            // to change value to kappaTimesResidual. Can only be invoked when creating a ForwardModelInterfaceMock* and not a forwardModelInterface*
+            // to change value to kappaTimesResidual. Can only be invoked when creating a ForwardModelInterfaceMock* and not a ForwardModelInterface*
             void setKappaTimesResidualValue(double newKTRValue) { _kappaTimesResidualValue = newKTRValue; }
             std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);
             double calculateResidualNormSq(const std::vector<std::complex<double>> &residual);
@@ -51,14 +50,14 @@ namespace fwi
                 L_(io::lerror) << "This ForwardModel is not compatible with the Inversion model";
                 exit(EXIT_FAILURE);
             }
-              private:
+
+        private:
             std::vector<std::complex<double>> _residual;
             const core::grid2D &_grid;
             const core::Sources &_source;
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
             const CostFunction _costFunction;
-
         };
     }   // namespace forwardModels
 }   // namespace fwi

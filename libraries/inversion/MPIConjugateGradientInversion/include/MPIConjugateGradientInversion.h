@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ForwardModelInterface.h"
 #include "MPIConjugateGradientInversionInput.h"
 #include "MPIConjugateGradientInversionInputCardReader.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include <fstream>

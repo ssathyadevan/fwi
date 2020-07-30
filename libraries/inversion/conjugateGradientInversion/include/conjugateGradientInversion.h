@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CostFunctionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "conjugateGradientInversionInput.h"
 #include "conjugateGradientInversionInputCardReader.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "log.h"
@@ -24,7 +24,7 @@ namespace fwi
         class ConjugateGradientInversion : public inversionInterface
         {
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::CostFunctionCalculator _costCalculator;
             ConjugateGradientInversionInput _cgInput;
 
@@ -159,7 +159,7 @@ namespace fwi
             void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
         public:
-            ConjugateGradientInversion(forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
+            ConjugateGradientInversion(forwardModels::ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
             ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
             ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
 

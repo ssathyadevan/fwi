@@ -1,8 +1,8 @@
 #pragma once
 
+#include "ForwardModelInterface.h"
 #include "complexDataGrid2D.h"
 #include "dataGrid2D.h"
-#include "forwardModelInterface.h"
 
 namespace fwi
 {
@@ -11,7 +11,7 @@ namespace fwi
         class DirectionCalculator
         {
         public:
-            DirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel);
+            DirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel);
             virtual ~DirectionCalculator();
 
             /**
@@ -26,7 +26,7 @@ namespace fwi
 
         protected:
             const double _errorFunctionalScalingFactor;   // = eta
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::dataGrid2D _direction;
         };
     }   // namespace inversionMethods

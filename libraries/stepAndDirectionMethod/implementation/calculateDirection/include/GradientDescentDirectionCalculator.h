@@ -1,8 +1,9 @@
 #pragma once
 
+#include "CommonVectorOperations.h"
 #include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
-#include "commonVectorOperations.h"
+
 namespace fwi
 {
     namespace inversionMethods
@@ -10,7 +11,7 @@ namespace fwi
         class GradientDescentDirectionCalculator : public DirectionCalculator
         {
         public:
-            GradientDescentDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel,
+            GradientDescentDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel,
                 double discretisationStep, const std::vector<std::complex<double>> &pData);
             virtual ~GradientDescentDirectionCalculator();
 

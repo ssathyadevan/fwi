@@ -1,6 +1,6 @@
 #pragma once
 
-#include "commonVectorOperations.h"
+#include "CommonVectorOperations.h"
 
 namespace fwi
 {
@@ -14,7 +14,7 @@ namespace fwi
                 leastSquares
             };
 
-            CostFunctionCalculator(CostFunctionEnum costFunctionSelected = CostFunctionEnum::leastSquares)
+            explicit CostFunctionCalculator(CostFunctionEnum costFunctionSelected = CostFunctionEnum::leastSquares)
                 : _costFunction(costFunctionSelected)
             {
             }

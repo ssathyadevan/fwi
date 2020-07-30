@@ -4,7 +4,7 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        DummyDirectionCalculator::DummyDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *const forwardModel)
+        DummyDirectionCalculator::DummyDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *const forwardModel)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
 
         {

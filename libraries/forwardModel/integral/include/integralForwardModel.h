@@ -1,6 +1,6 @@
 #pragma once
 
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
@@ -10,7 +10,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class IntegralForwardModel : public forwardModelInterface
+        class IntegralForwardModel : public ForwardModelInterface
         {
         public:
             IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,

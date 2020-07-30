@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CostFunctionCalculator.h"
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "gradientDescentInversionInput.h"
 #include "inversionInterface.h"
@@ -13,7 +13,7 @@ namespace fwi
         class gradientDescentInversion : public inversionInterface
         {
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::CostFunctionCalculator _costCalculator;
             gradientDescentInversionInput _gdInput;
 
@@ -26,7 +26,7 @@ namespace fwi
             std::ofstream openResidualLogFile(io::genericInput &gInput);
 
         public:
-            gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
+            gradientDescentInversion(forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
 
             gradientDescentInversion(const gradientDescentInversion &) = delete;
             gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;

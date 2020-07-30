@@ -1,5 +1,5 @@
 #include "evolutionInversion.h"
-#include "commonVectorOperations.h"
+#include "CommonVectorOperations.h"
 #include "log.h"
 #include "progressBar.h"
 
@@ -9,7 +9,7 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        EvolutionInversion::EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+        EvolutionInversion::EvolutionInversion(forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
             : _forwardModel()
             , _eiInput(eiInput)
             , _grid(forwardModel->getGrid())

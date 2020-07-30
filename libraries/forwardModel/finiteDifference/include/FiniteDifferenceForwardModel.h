@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FiniteDifferenceForwardModelInput.h"
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
 
@@ -9,7 +9,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class FiniteDifferenceForwardModel : public forwardModelInterface
+        class FiniteDifferenceForwardModel : public ForwardModelInterface
         {
         public:
             FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,

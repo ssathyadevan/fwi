@@ -6,7 +6,7 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        RandomInversion::RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+        RandomInversion::RandomInversion(forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
             : _forwardModel()
             , _riInput(riInput)
             , _grid(forwardModel->getGrid())

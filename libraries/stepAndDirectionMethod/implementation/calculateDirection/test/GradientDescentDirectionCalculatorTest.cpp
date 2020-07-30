@@ -27,7 +27,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardmodel;
+            forwardModels::ForwardModelInterface *forwardmodel;
             forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create a gradient descent calculator with derivative step size zero
@@ -57,7 +57,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardmodel;
+            forwardModels::ForwardModelInterface *forwardmodel;
             forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create gradient descent calculator
@@ -110,7 +110,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardmodel;
+            forwardModels::ForwardModelInterface *forwardmodel;
             forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             // Create gradient descent direction calculator

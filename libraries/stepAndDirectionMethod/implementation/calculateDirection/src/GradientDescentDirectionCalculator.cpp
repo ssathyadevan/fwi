@@ -7,7 +7,7 @@ namespace fwi
     namespace inversionMethods
     {
         GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(double errorFunctionalScalingFactor,
-            forwardModels::forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData)
+            forwardModels::ForwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
             , _pData(pData)
             , _derivativeDiscretisationStep(discretisationStep)

@@ -1,5 +1,5 @@
 #include "conjugateGradientInversion.h"
-#include "commonVectorOperations.h"
+#include "CommonVectorOperations.h"
 #include "log.h"
 #include "progressBar.h"
 #include <iostream>
@@ -19,7 +19,7 @@ namespace fwi
     namespace inversionMethods
     {
         ConjugateGradientInversion::ConjugateGradientInversion(
-            forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+            forwardModels::ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
             : _forwardModel()
             , _cgInput(invInput)
             , _grid(forwardModel->getGrid())

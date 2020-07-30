@@ -1,6 +1,6 @@
 set(CPP_SOURCES_AND_H_HEADERS 
     contraction.cpp                     ../include/contraction.h
-										../include/commonVectorOperations.h
+                                        ../include/CommonVectorOperations.h
                                         ../include/freqInfo.h
     frequenciesGroup.cpp                ../include/frequenciesGroup.h
     greensFunctions.cpp                 ../include/greensFunctions.h

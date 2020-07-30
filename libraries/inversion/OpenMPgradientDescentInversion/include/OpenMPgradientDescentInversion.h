@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CostFunctionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "forwardModelContainer.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "gradientDescentInversionInput.h"
 #include "inversionInterface.h"

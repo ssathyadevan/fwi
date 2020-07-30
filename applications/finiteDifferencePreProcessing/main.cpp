@@ -75,7 +75,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
 
     L_(fwi::io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
     fwi::forwardModels::finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
     model = new fwi::forwardModels::FiniteDifferenceForwardModel(grid, source, receiver, freqg, fmInput);

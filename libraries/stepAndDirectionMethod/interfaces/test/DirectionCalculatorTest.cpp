@@ -29,7 +29,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardModel;
+            forwardModels::ForwardModelInterface *forwardModel;
             forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             DirectionCalculator *directionCalculator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel);
@@ -53,7 +53,7 @@ namespace fwi
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *forwardModel;
+            forwardModels::ForwardModelInterface *forwardModel;
             forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
             EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel), std::invalid_argument);

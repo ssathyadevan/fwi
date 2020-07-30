@@ -73,7 +73,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     fwi::forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
     model = new fwi::forwardModels::IntegralForwardModel(grid, source, receiver, freqg, integralreader.getInput());
 

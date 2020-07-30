@@ -1,9 +1,9 @@
 ﻿#pragma once
+#include "CommonVectorOperations.h"
 #include "ConjugateGradientRegularisationParameters.h"
 #include "ConjugateGradientWithRegularisationParametersInput.h"
 #include "CostFunctionCalculator.h"
 #include "StepAndDirectionReconstructor.h"
-#include "commonVectorOperations.h"
 
 namespace fwi
 {
@@ -115,7 +115,7 @@ namespace fwi
             core::dataGrid2D calculateRegularisationGradient();
 
         public:
-            ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *forwardModel,
+            ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel,
                 ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData);   // constructor
             virtual ~ConjugateGradientWithRegularisationCalculator() {}                                                                  // destructor
 

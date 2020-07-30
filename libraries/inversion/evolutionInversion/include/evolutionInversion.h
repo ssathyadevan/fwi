@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CostFunctionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "evolutionInversionInput.h"
 #include "evolutionInversionInputCardReader.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "progressBar.h"
@@ -15,7 +15,7 @@ namespace fwi
         class EvolutionInversion : public inversionInterface
         {
         public:
-            EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
+            EvolutionInversion(forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
             EvolutionInversion(const EvolutionInversion &) = delete;
             EvolutionInversion &operator=(const EvolutionInversion &) = delete;
@@ -23,7 +23,7 @@ namespace fwi
             core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::CostFunctionCalculator costCalculator;
             EvolutionInversionInput _eiInput;
 

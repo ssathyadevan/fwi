@@ -14,12 +14,12 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class forwardModelInterface
+        class ForwardModelInterface
         {
         public:
-            forwardModelInterface() = default;
+            ForwardModelInterface() = default;
 
-            virtual ~forwardModelInterface() = default;
+            virtual ~ForwardModelInterface() = default;
 
             virtual const core::grid2D &getGrid() = 0;
             virtual const core::Sources &getSource() = 0;

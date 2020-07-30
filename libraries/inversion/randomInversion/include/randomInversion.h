@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CostFunctionCalculator.h"
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "randomInversionInput.h"
@@ -14,7 +14,7 @@ namespace fwi
         class RandomInversion : public inversionInterface
         {
         public:
-            RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput);
+            RandomInversion(forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput);
 
             RandomInversion(const RandomInversion &) = delete;
             RandomInversion &operator=(const RandomInversion &) = delete;
@@ -22,7 +22,7 @@ namespace fwi
             core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::CostFunctionCalculator _costCalculator;
             RandomInversionInput _riInput;
 

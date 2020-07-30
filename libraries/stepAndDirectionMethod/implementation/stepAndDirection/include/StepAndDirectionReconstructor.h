@@ -1,10 +1,10 @@
 #pragma once
+#include "CommonVectorOperations.h"
 #include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
-#include "commonVectorOperations.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 
 namespace fwi
@@ -16,7 +16,7 @@ namespace fwi
         private:
             StepSizeCalculator *_desiredStep;
             DirectionCalculator *_desiredDirection;
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
             core::CostFunctionCalculator _costCalculator;
             const ReconstructorParameters &_directionInput;
             /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
@@ -27,7 +27,7 @@ namespace fwi
 
         public:
             StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-                forwardModels::forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput);
+                forwardModels::ForwardModelInterface *forwardModel, const ReconstructorParameters &directionInput);
 
             /**
              * @brief reconstruct The main method of the class, where the desired steps and directions are combined and the reconstruction happens
