@@ -35,7 +35,7 @@ namespace fwi
             parent.randomSaurabh();
             std::vector<std::complex<double>> pDataEst(pData.size());
             _forwardModel->calculatePData(parent, pDataEst);
-            double parentResSq = core::l2NormSq(pData - pDataEst);
+            double parentResSq = core::l2NormSquared(pData - pDataEst);
             preParentResSq = parentResSq;
             L_(io::linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
             std::cerr << "\n";
@@ -58,7 +58,7 @@ namespace fwi
                     core::dataGrid2D child(_grid);
                     child.randomChild(parent, generator, distribution);
                     _forwardModel->calculatePData(child, pDataEst);
-                    childResSq = core::l2NormSq(pData - pDataEst);
+                    childResSq = core::l2NormSquared(pData - pDataEst);
 
                     if(childResSq < favouriteChildResSq)
                     {

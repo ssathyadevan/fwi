@@ -205,7 +205,7 @@ namespace fwi
             std::vector<std::complex<double>> pDataEst(_pData.size());
             _forwardModel->calculatePData(_chiEstimateCurrent, pDataEst);
             _residualVector = _pData - pDataEst;
-            _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSq(_residualVector);
+            _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSquared(_residualVector);
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()

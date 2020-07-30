@@ -42,7 +42,7 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            double eta = 1.0 / (core::l2NormSq(pData));
+            double eta = 1.0 / (core::l2NormSquared(pData));
             double gamma = _gdInput.gamma0;   // First iteration
 
             for(int it1 = 0; it1 < _gdInput.iter; it1++)

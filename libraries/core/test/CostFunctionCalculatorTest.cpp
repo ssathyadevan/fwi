@@ -6,20 +6,14 @@ namespace fwi
 {
     namespace core
     {
-        class CostFunctionCalculatorTest : public ::testing::Test
-        {
-        protected:
-            const CostFunctionCalculator costCalculator;
-        };
-
-        TEST_F(CostFunctionCalculatorTest, getCostFunction_CostFunctionEnumValidValue_SelectedCostFunction)
+        TEST(CostFunctionCalculatorTest, getCostFunction_CostFunctionEnumValidValue_SelectedCostFunction)
         {
             // Arrange
-            CostFunctionCalculator costCalculatora(CostFunctionCalculator::CostFunctionEnum::leastSquares);
+            CostFunctionCalculator costCalculator(CostFunctionCalculator::CostFunctionEnum::leastSquares);
             // Act
 
             // Assert
-            EXPECT_EQ(costCalculatora.getCostFunction(), CostFunctionCalculator::CostFunctionEnum::leastSquares);
+            EXPECT_EQ(costCalculator.getCostFunction(), CostFunctionCalculator::CostFunctionEnum::leastSquares);
         }
     }   // namespace core
 }   // namespace fwi

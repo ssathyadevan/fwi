@@ -93,7 +93,7 @@ namespace fwi
 
         double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
         {
-            return eta * core::l2NormSq(residualVector);
+            return eta * core::l2NormSquared(residualVector);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

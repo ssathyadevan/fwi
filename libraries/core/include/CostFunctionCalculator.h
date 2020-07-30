@@ -21,7 +21,7 @@ namespace fwi
 
             double calculateCost(const std::vector<std::complex<double>> &pData, const std::vector<std::complex<double>> &pDataEst, double eta) const
             {
-                return eta * l2NormSq(pData - pDataEst);
+                return eta * l2NormSquared(pData - pDataEst);
             }
 
             CostFunctionEnum getCostFunction() const { return _costFunction; }

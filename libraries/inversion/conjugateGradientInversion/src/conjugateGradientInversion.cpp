@@ -36,7 +36,7 @@ namespace fwi
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
 
             const int nTotal = _frequencies.count * _sources.count * _receivers.count;
-            const double eta = 1.0 / (core::l2NormSq(pData));   // Scaling factor
+            const double eta = 1.0 / (core::l2NormSquared(pData));   // Scaling factor
             _chiEstimate.zero();
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);

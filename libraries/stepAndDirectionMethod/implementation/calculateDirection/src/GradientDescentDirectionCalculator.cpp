@@ -54,7 +54,7 @@ namespace fwi
             std::vector<std::complex<double>> pDataEst(_pData.size());
             _forwardModel->calculatePData(chiEstimate, pDataEst);
             std::vector<std::complex<double>> residual = _pData - pDataEst;
-            const double currentChiError = _errorFunctionalScalingFactor * core::l2NormSq(residual);
+            const double currentChiError = _errorFunctionalScalingFactor * core::l2NormSquared(residual);
             return currentChiError;
         }
     }   // namespace inversionMethods

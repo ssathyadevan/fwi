@@ -10,20 +10,28 @@ namespace fwi
 {
     namespace core
     {
-        inline double l2NormSq(const std::vector<std::complex<double>> &data)
+        inline double l2NormSquared(const std::vector<std::complex<double>> &data)
         {
             double initialValue = 0.0;
             auto elementOperation = [](double accumulatedValue, std::complex<double> vectorElement) { return (accumulatedValue + std::norm(vectorElement)); };
             return std::accumulate(data.begin(), data.end(), initialValue, elementOperation);
         }
 
-        inline std::vector<std::complex<double>> operator-(const std::vector<std::complex<double>> &operandA, const std::vector<std::complex<double>> &operandB)
+        template<class type_t> inline std::vector<type_t> operator-(const std::vector<type_t> &operandA, const std::vector<type_t> &operandB)
         {
-            assert(operandA.size() == operandB.size() && "Substraction is not allowed in vectors of different size");
-            std::vector<std::complex<double>> result(operandA.size());
-            auto operationBetweenElements = [](std::complex<double> x, std::complex<double> y) { return x - y; };
-            std::transform(operandA.begin(), operandA.end(), operandB.begin(), result.begin(), operationBetweenElements);
+            assert(operandA.size() == operandB.size() && "Substraction is not defined for vectors of different size");
+            std::vector<type_t> result(operandA.size());
+            std::transform(operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](type_t x, type_t y) { return x - y; });
             return result;
         }
+
+        template<class type_t> inline std::vector<type_t> operator+(const std::vector<type_t> &operandA, const std::vector<type_t> &operandB)
+        {
+            assert(operandA.size() == operandB.size() && "Addition is not defined for vectors of different size");
+            std::vector<type_t> result(operandA.size());
+            std::transform(operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](type_t x, type_t y) { return x + y; });
+            return result;
+        }
+
     }   // namespace core
 }   // namespace fwi
