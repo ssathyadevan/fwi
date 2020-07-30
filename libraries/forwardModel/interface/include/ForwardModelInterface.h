@@ -19,12 +19,18 @@ namespace fwi
             ForwardModelInterface() = default;
 
             virtual ~ForwardModelInterface() = default;
-
+            ///@{
+            /** Getter functions for ForwardModel initialization parameters */
             virtual const core::grid2D &getGrid() = 0;
             virtual const core::Sources &getSource() = 0;
             virtual const core::Receivers &getReceiver() = 0;
             virtual const core::FrequenciesGroup &getFreq() = 0;
-
+            ///@}
+            /**
+             * @brief calculatePData Calculates pressure field from media properties
+             * @param chiEst reference to media properties
+             * @param pData
+             */
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData) = 0;
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
             virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
