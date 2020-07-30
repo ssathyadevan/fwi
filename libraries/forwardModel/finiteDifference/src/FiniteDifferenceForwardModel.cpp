@@ -170,9 +170,11 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator)
+        std::vector<std::complex<double>> FiniteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst)
         {
+            std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
             applyKappa(chiEst, kOperator);
+            return kOperator;
         }
 
         void FiniteDifferenceForwardModel::calculateKappa()

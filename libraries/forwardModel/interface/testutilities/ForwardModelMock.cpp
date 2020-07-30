@@ -15,23 +15,15 @@ namespace fwi
             _residual.resize(freq.count * _source.count * _receiver.count);
         }
 
-        void ForwardModelMock::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData)
+        std::vector<std::complex<double>> ForwardModelMock::calculatePData(const core::dataGrid2D &chiEst)
         {
-            const std::vector<double> &chiData = chiEst.getData();
-            const double newValue = chiData[0];
-
-            for(std::complex<double> &element : pData)
-            {
-                element = newValue;
-            }
+            return std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count, (chiEst.getData())[0]);
         }
 
         std::vector<std::complex<double>> &ForwardModelMock::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
-            std::vector<std::complex<double>> pDataEst(_freq.count * _receiver.count * _source.count);
-
-            calculatePData(chiEst, pDataEst);
+            std::vector<std::complex<double>> pDataEst = calculatePData(chiEst);
 
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {

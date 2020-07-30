@@ -18,7 +18,7 @@ namespace fwi
 
             ~IntegralForwardModel();
 
-            virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator);
+            virtual std::vector<std::complex<double>> calculatePData(const core::dataGrid2D &chiEst);
 
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
             void calculateKappa();

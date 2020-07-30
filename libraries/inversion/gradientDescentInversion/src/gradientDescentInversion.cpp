@@ -31,11 +31,9 @@ namespace fwi
             chiEstimateCurrent = _gdInput.x0;
             core::dataGrid2D chiEstimatePrevious(_grid);
 
-            std::vector<std::complex<double>> pDataEst(pData.size());
             _forwardModel->calculateKappa();
-            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
-            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
-            std::vector<std::complex<double>> residual = pData - pDataEst;
+            auto pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
+            pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
             std::vector<double> dFdxPrevious;
@@ -58,7 +56,7 @@ namespace fwi
 
                 chiEstimatePrevious = chiEstimateCurrent;
                 chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-                _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+                pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
                 fx = _costCalculator.calculateCost(pData, pDataEst, eta);
                 isConverged = (fx < _gdInput.h);
                 logResidualResults(counter, fx, isConverged);
@@ -90,8 +88,7 @@ namespace fwi
             core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
         {
             const int numGridPoints = chiEstimate.getNumberOfGridPoints();
-            std::vector<std::complex<double>> pDataEst(pData.size());
-            _forwardModel->calculatePData(chiEstimate, pDataEst);
+            auto pDataEst = _forwardModel->calculatePData(chiEstimate);
             double fx = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             double fxPlusH;
@@ -100,7 +97,7 @@ namespace fwi
             for(int i = 0; i < numGridPoints; ++i)
             {
                 chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-                _forwardModel->calculatePData(chiEstimate, pDataEst);
+                pDataEst = _forwardModel->calculatePData(chiEstimate);
                 fxPlusH = _costCalculator.calculateCost(pData, pDataEst, eta);
                 chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 

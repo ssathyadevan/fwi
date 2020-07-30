@@ -50,9 +50,8 @@ namespace fwi
                 core::dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
                 double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
 
-                std::vector<std::complex<double>> pDataEst(pData.size());
                 _forwardModel->calculateKappa();
-                _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                auto pDataEst = _forwardModel->calculatePData(_chiEstimate);
                 std::vector<std::complex<double>> residualArray = pData - pDataEst;
 
                 // Initialize Regularisation parameters
@@ -72,7 +71,7 @@ namespace fwi
                 _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
                 // Result + logging
-                _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                pDataEst = _forwardModel->calculatePData(_chiEstimate);
                 residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
@@ -97,7 +96,7 @@ namespace fwi
                     _chiEstimate += alpha * zeta;
 
                     // Result + logging
-                    _forwardModel->calculatePData(_chiEstimate, pDataEst);
+                    pDataEst = _forwardModel->calculatePData(_chiEstimate);
                     residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
                     // residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);

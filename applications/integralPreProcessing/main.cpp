@@ -80,7 +80,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     L_(fwi::io::linfo) << "Calculate pData (the reference pressure-field)...";
     model->calculatePTot(chi);
     model->calculateKappa();
-    model->calculatePData(chi, referencePressureData);
+    referencePressureData = model->calculatePData(chi);
 
     // writing the referencePressureData to a text file in complex form
     L_(fwi::io::linfo) << "calculateData done";

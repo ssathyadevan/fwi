@@ -66,8 +66,7 @@ namespace fwi
 
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
-            std::vector<std::complex<double>> pDataEst(_pData.size());
-            _forwardModel->calculatePData(_chiEstimateCurrent, pDataEst);
+            auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
 
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
 
@@ -203,8 +202,7 @@ namespace fwi
 
         void ConjugateGradientWithRegularisationCalculator::updateResidual()
         {
-            std::vector<std::complex<double>> pDataEst(_pData.size());
-            _forwardModel->calculatePData(_chiEstimateCurrent, pDataEst);
+            auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
             _residualVector = _pData - pDataEst;
             _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSquared(_residualVector);
         }

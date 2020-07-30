@@ -32,8 +32,7 @@ namespace fwi
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;
 
-            std::vector<std::complex<double>> pDataEst(pData.size());
-            _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+            auto pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
             std::vector<std::complex<double>> residualVector = pData - pDataEst;
             double residualValue = calculateResidualNorm(residualVector, eta);
 
@@ -58,7 +57,7 @@ namespace fwi
 
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
-                _forwardModel->calculatePData(chiEstimateCurrent, pDataEst);
+                pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
                 residualVector = pData - pDataEst;
                 residualValue = calculateResidualNorm(residualVector, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;

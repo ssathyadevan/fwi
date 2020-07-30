@@ -24,7 +24,7 @@ namespace fwi
             const core::FrequenciesGroup &getFreq();
             void calculateKappa() {}
 
-            virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData);
+            virtual std::vector<std::complex<double>> calculatePData(const core::dataGrid2D &chiEst);
             virtual void calculatePTot(const core::dataGrid2D &chiEst) { (void)chiEst; }
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &kappaTimesResidual)
             {
