@@ -18,9 +18,10 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        ConjugateGradientInversion::ConjugateGradientInversion(
+        ConjugateGradientInversion::ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator,
             forwardModels::ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
-            : _forwardModel()
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _cgInput(invInput)
             , _grid(forwardModel->getGrid())
             , _sources(forwardModel->getSource())
@@ -28,7 +29,6 @@ namespace fwi
             , _frequencies(forwardModel->getFreq())
             , _chiEstimate(_grid)
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)

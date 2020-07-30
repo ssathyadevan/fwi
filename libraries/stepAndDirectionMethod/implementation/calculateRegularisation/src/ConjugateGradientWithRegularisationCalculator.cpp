@@ -7,10 +7,11 @@ namespace fwi
     namespace inversionMethods
     {
         ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor,
-            forwardModels::ForwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
-            const std::vector<std::complex<double>> &pData)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+            ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
             , StepSizeCalculator()
+            , _costCalculator(costCalculator)
             , _chiEstimatePrevious(forwardModel->getGrid())
             , _chiEstimateCurrent(forwardModel->getGrid())
             , _gradientPrevious(forwardModel->getGrid())

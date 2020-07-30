@@ -17,6 +17,7 @@ namespace fwi
         class ConjugateGradientWithRegularisationCalculator : public DirectionCalculator, public StepSizeCalculator
         {
         private:
+            const core::CostFunctionCalculator &_costCalculator;
             // StepSize part
             core::dataGrid2D _chiEstimatePrevious;
             core::dataGrid2D _chiEstimateCurrent;
@@ -24,7 +25,6 @@ namespace fwi
             core::dataGrid2D _gradientCurrent;
             int _iterationNumber;
 
-            core::CostFunctionCalculator _costCalculator;
             // Direction part
             const std::vector<std::complex<double>> &_pData;
 
@@ -115,9 +115,10 @@ namespace fwi
             core::dataGrid2D calculateRegularisationGradient();
 
         public:
-            ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel,
-                ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData);   // constructor
-            virtual ~ConjugateGradientWithRegularisationCalculator() {}                                                                  // destructor
+            ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, const core::CostFunctionCalculator &costCalculator,
+                forwardModels::ForwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
+                const std::vector<std::complex<double>> &pData);          // constructor
+            virtual ~ConjugateGradientWithRegularisationCalculator() {}   // destructor
 
             /**
              * @brief calculateStepSize Invokes the whole regularisation process, where also the direction is updated

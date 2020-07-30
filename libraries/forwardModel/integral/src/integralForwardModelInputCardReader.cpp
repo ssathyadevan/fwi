@@ -45,30 +45,7 @@ namespace fwi
 
             bool calcAlpha = io::ReadJsonHelper::tryGetParameterFromJson<bool>(iterObject, _fileName, parameterCalcAlpha);
 
-            CostFunction costFunction = readCostFunctionParameters(iterObject);
-
-            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha, costFunction);
-        }
-
-        CostFunction integralForwardModelInputCardReader::readCostFunctionParameters(nlohmann::json &iterObject)
-        {
-            const std::string parameterCostFunction = "CostFunction";
-
-            std::string costFunctionInput = io::ReadJsonHelper::tryGetParameterFromJson<std::string>(iterObject, _fileName, parameterCostFunction);
-
-            std::map<std::string, CostFunction> costFunctionStringMap{std::make_pair("leastSquares", leastSquares)};
-
-            CostFunction costFunction;
-            try
-            {
-                costFunction = costFunctionStringMap.at(costFunctionInput);
-            }
-            catch(const std::out_of_range &e)
-            {
-                throw std::invalid_argument("Invalid cost function in input file for integral forward model.");
-            }
-
-            return costFunction;
+            _input = integralForwardModelInput(nrOfIterations, tolerance, calcAlpha);
         }
     }   // namespace forwardModels
 }   // namespace fwi

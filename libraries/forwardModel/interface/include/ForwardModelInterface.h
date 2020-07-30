@@ -1,7 +1,6 @@
 #pragma once
 
 #include "complexDataGrid2D.h"
-#include "costFunction.h"
 #include "dataGrid2D.h"
 #include "frequenciesGroup.h"
 #include "grid2D.h"

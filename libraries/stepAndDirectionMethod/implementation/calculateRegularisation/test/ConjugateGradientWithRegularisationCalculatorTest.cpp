@@ -24,9 +24,11 @@ namespace fwi
         {
             double errorFunctionalScalingFactor = 0.05;
 
-            core::grid2D grid = getGrid();
+            core::CostFunctionCalculator costCalculator;
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {2.0, 2.0};
+            std::array<int, 2> nX = {2, 5};
+            core::grid2D grid(xMin, xMax, nX);
             core::freqInfo freq(0.0, 10.0, 5);
             core::Sources source(xMin, xMax, 2);
             core::Receivers receiver(xMin, xMax, 2);
@@ -47,7 +49,7 @@ namespace fwi
             const double pDataValue = 1.0;
             std::vector<std::complex<double>> pData(nTotal, pDataValue);
 
-            ConjugateGradientWithRegularisationCalculator cGWRCTest(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
+            ConjugateGradientWithRegularisationCalculator cGWRCTest(errorFunctionalScalingFactor, costCalculator, forwardModel, cgParametersInput, pData);
 
             DirectionCalculator *directionCalculator;
             directionCalculator = &cGWRCTest;

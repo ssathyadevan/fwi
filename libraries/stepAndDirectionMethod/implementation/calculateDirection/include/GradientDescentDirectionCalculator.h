@@ -11,8 +11,8 @@ namespace fwi
         class GradientDescentDirectionCalculator : public DirectionCalculator
         {
         public:
-            GradientDescentDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel,
-                double discretisationStep, const std::vector<std::complex<double>> &pData);
+            GradientDescentDirectionCalculator(double errorFunctionalScalingFactor, const core::CostFunctionCalculator &costCalculator,
+                forwardModels::ForwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData);
             virtual ~GradientDescentDirectionCalculator();
 
             /**
@@ -27,7 +27,7 @@ namespace fwi
         private:
             const std::vector<std::complex<double>> &_pData;
             const double _derivativeDiscretisationStep;
-            core::CostFunctionCalculator _costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             /**
              * @brief optimizationFunction represents the function for which the derivative will be calculated
              * @param chiEstimate

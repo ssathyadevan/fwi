@@ -6,71 +6,63 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        core::grid2D getGrid()
+        class GradientDescentDirectionCalculatorTest : public ::testing::Test
         {
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            std::array<int, 2> nX = {2, 4};
+        public:
+            forwardModels::ForwardModelInterface *_forwardmodel;
+            const core::CostFunctionCalculator _costCalculator;
+            std::array<double, 2> _xMin, _xMax;
+            std::array<int, 2> _nX;
+            int _lengthOfPData;
+            double _errorFunctionalScalingFactor;
 
-            core::grid2D grid(xMin, xMax, nX);
-            return grid;
-        }
+        protected:
+            void SetUp() override
+            {
+                _xMin = std::array<double, 2>{0.0, 0.0};
+                _xMax = std::array<double, 2>{2.0, 2.0};
+                _nX = std::array<int, 2>{2, 4};
+                core::freqInfo freq(0.0, 10.0, 5);
+                core::Sources sources(_xMin, _xMax, 2);
+                core::Receivers receivers(_xMin, _xMax, 2);
+                core::FrequenciesGroup frequencies(freq, 2000.0);
+                core::grid2D grid(_xMin, _xMax, _nX);
+                _forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
+                _lengthOfPData = _forwardmodel->getSource().count * _forwardmodel->getFreq().count * _forwardmodel->getReceiver().count;
+                _errorFunctionalScalingFactor = 1.0;
+            }
 
-        TEST(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTest)
+            void TearDown() override { delete _forwardmodel; }
+        };
+
+        TEST_F(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTest)
         {
-            // Create forward model
-            core::grid2D grid = getGrid();
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            core::freqInfo freq(0.0, 10.0, 5);
-            core::Sources sources(xMin, xMax, 2);
-            core::Receivers receivers(xMin, xMax, 2);
-            core::FrequenciesGroup frequencies(freq, 2000.0);
-
-            forwardModels::ForwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
-
             // Create a gradient descent calculator with derivative step size zero
-            double errorFunctionalScalingFactor = 1.0;
             double derivativeStepSize = 0.0;
 
-            int lengthOfPData = forwardmodel->getSource().count * forwardmodel->getFreq().count * forwardmodel->getReceiver().count;
             const double pDataValue = 1.0;
-            std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
-            EXPECT_THROW(GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData), std::invalid_argument);
+            std::vector<std::complex<double>> pData(_lengthOfPData, pDataValue);
+            EXPECT_THROW(GradientDescentDirectionCalculator(_errorFunctionalScalingFactor, _costCalculator, _forwardmodel, derivativeStepSize, pData),
+                std::invalid_argument);
 
             // Create a gradient descent calculatr with negative step size
             derivativeStepSize = -1.0;
-            EXPECT_THROW(GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData), std::invalid_argument);
-
-            delete forwardmodel;
+            EXPECT_THROW(GradientDescentDirectionCalculator(_errorFunctionalScalingFactor, _costCalculator, _forwardmodel, derivativeStepSize, pData),
+                std::invalid_argument);
         }
 
-        TEST(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
+        TEST_F(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
         {
-            // Create forwardmodel
-            core::grid2D grid = getGrid();
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            core::freqInfo freq(0.0, 10.0, 5);
-            core::Sources sources(xMin, xMax, 2);
-            core::Receivers receivers(xMin, xMax, 2);
-            core::FrequenciesGroup frequencies(freq, 2000.0);
-
-            forwardModels::ForwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
-
             // Create gradient descent calculator
-            double errorFunctionalScalingFactor = 1.0;
             double derivativeStepSize = 0.1;
 
-            int lengthOfPData = forwardmodel->getSource().count * forwardmodel->getFreq().count * forwardmodel->getReceiver().count;
             const double pDataValue = 1.0;
-            std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
+            std::vector<std::complex<double>> pData(_lengthOfPData, pDataValue);
             DirectionCalculator *directionCalculator =
-                new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
+                new GradientDescentDirectionCalculator(_errorFunctionalScalingFactor, _costCalculator, _forwardmodel, derivativeStepSize, pData);
 
             // Compute gradient descent direction
+            core::grid2D grid(_xMin, _xMax, _nX);
             core::dataGrid2D chiEstimate(grid);
             const double chiEstimateValue = 2.0;
             chiEstimate = chiEstimateValue;
@@ -85,7 +77,7 @@ namespace fwi
             const int nrOfGridPoints = gDDirection->getNumberOfGridPoints();
             const double expectedDirection =
                 -(derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
-                (errorFunctionalScalingFactor * lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
+                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
 
             const std::vector<double> &gDDirectionData = gDDirection->getData();
 
@@ -95,35 +87,21 @@ namespace fwi
                 ASSERT_DOUBLE_EQ(gDDirectionData[i], 0.0);
             }
 
-            delete forwardmodel;
             delete directionCalculator;
         }
 
-        TEST(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
+        TEST_F(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
         {
-            // Create forwardmodel
-            core::grid2D grid = getGrid();
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            core::freqInfo freq(0.0, 10.0, 5);
-            core::Sources sources(xMin, xMax, 2);
-            core::Receivers receivers(xMin, xMax, 2);
-            core::FrequenciesGroup frequencies(freq, 2000.0);
-
-            forwardModels::ForwardModelInterface *forwardmodel;
-            forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
-
             // Create gradient descent direction calculator
-            const double errorFunctionalScalingFactor = 1.0;
             const double derivativeStepSize = 1.0;
 
-            const int lengthOfPData = forwardmodel->getSource().count * forwardmodel->getFreq().count * forwardmodel->getReceiver().count;
             const double pDataValue = 2.0;
-            std::vector<std::complex<double>> pData(lengthOfPData, pDataValue);
+            std::vector<std::complex<double>> pData(_lengthOfPData, pDataValue);
             DirectionCalculator *directionCalculator =
-                new GradientDescentDirectionCalculator(errorFunctionalScalingFactor, forwardmodel, derivativeStepSize, pData);
+                new GradientDescentDirectionCalculator(_errorFunctionalScalingFactor, _costCalculator, _forwardmodel, derivativeStepSize, pData);
 
             // Compute gradient descent direction
+            core::grid2D grid(_xMin, _xMax, _nX);
             core::dataGrid2D chiEstimate(grid);
             const double chiEstimateValue = 0.0;
             chiEstimate = chiEstimateValue;
@@ -136,7 +114,7 @@ namespace fwi
             const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
             const double expectedDirection =
                 -(derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
-                (errorFunctionalScalingFactor * lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
+                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
 
             const std::vector<double> &gDDirectionData = gDDirection.getData();
 
@@ -146,7 +124,6 @@ namespace fwi
                 ASSERT_DOUBLE_EQ(gDDirectionData[i], 0.0);
             }
 
-            delete forwardmodel;
             delete directionCalculator;
         }
     }   // namespace inversionMethods

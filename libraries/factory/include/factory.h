@@ -42,6 +42,7 @@ namespace fwi
             const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData);
 
     private:
+        const core::CostFunctionCalculator _costCalculator;
         inversionMethods::inversionInterface *_createdInversion;
         forwardModels::ForwardModelInterface *_createdForwardModel;
         inversionMethods::StepSizeCalculator *_createdStepSizeCalculator;

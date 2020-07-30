@@ -22,7 +22,6 @@ namespace fwi
             const core::Sources &getSource();
             const core::Receivers &getReceiver();
             const core::FrequenciesGroup &getFreq();
-            CostFunction getCostFunction();
             void calculateKappa() {}
 
             virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &pData);
@@ -57,7 +56,6 @@ namespace fwi
             const core::Sources &_source;
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
-            const CostFunction _costFunction;
         };
     }   // namespace forwardModels
 }   // namespace fwi

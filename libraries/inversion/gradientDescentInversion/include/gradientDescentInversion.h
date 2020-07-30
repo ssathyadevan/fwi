@@ -14,7 +14,7 @@ namespace fwi
         {
         private:
             forwardModels::ForwardModelInterface *_forwardModel;
-            core::CostFunctionCalculator _costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             gradientDescentInversionInput _gdInput;
 
             const core::grid2D &_grid;
@@ -26,7 +26,8 @@ namespace fwi
             std::ofstream openResidualLogFile(io::genericInput &gInput);
 
         public:
-            gradientDescentInversion(forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
+            gradientDescentInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+                const gradientDescentInversionInput &gdInput);
 
             gradientDescentInversion(const gradientDescentInversion &) = delete;
             gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;

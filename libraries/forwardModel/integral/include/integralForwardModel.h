@@ -44,8 +44,6 @@ namespace fwi
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
 
-            CostFunction _costFunction;
-
             core::greensRect2DCpu **_Greens;
 
             core::complexDataGrid2D ***_p0;

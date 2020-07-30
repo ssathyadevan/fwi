@@ -10,15 +10,16 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        gradientDescentInversion::gradientDescentInversion(forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
-            : _forwardModel()
+        gradientDescentInversion::gradientDescentInversion(const core::CostFunctionCalculator &costCalculator,
+            forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _gdInput(gdInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)

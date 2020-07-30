@@ -8,10 +8,12 @@ namespace fwi
     namespace inversionMethods
     {
         StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-            forwardModels::ForwardModelInterface *forwardModel, const ReconstructorParameters &directionInput)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+            const ReconstructorParameters &directionInput)
             : _desiredStep(desiredStep)
             , _desiredDirection(desiredDirection)
             , _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _directionInput(directionInput)
             , _grid(forwardModel->getGrid())
         {

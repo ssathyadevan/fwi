@@ -15,7 +15,8 @@ namespace fwi
         class EvolutionInversion : public inversionInterface
         {
         public:
-            EvolutionInversion(forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
+            EvolutionInversion(
+                const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
             EvolutionInversion(const EvolutionInversion &) = delete;
             EvolutionInversion &operator=(const EvolutionInversion &) = delete;
@@ -24,7 +25,7 @@ namespace fwi
 
         private:
             forwardModels::ForwardModelInterface *_forwardModel;
-            core::CostFunctionCalculator costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             EvolutionInversionInput _eiInput;
 
             const core::grid2D &_grid;

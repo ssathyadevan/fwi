@@ -2,7 +2,6 @@
 
 #include "PmlWidthFactor.h"
 #include "SourceParameter.h"
-#include "costFunction.h"
 
 #include <string>
 
@@ -21,7 +20,6 @@ namespace fwi
         {
             PMLWidthFactor pmlWidthFactor;
             SourceParameter sourceParameter;
-            CostFunction costFunction;
             BoundaryConditionType boundaryConditionType;
         };
     }   // namespace forwardModels

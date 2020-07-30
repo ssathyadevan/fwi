@@ -10,7 +10,6 @@ namespace fwi
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)
-            , _costFunction(CostFunction::leastSquares)
         {
             _kappaTimesResidualValue = 5.0;
             _residual.resize(freq.count * _source.count * _receiver.count);
@@ -53,8 +52,6 @@ namespace fwi
         const core::Receivers &ForwardModelMock::getReceiver() { return _receiver; }
 
         const core::FrequenciesGroup &ForwardModelMock::getFreq() { return _freq; }
-
-        CostFunction ForwardModelMock::getCostFunction() { return _costFunction; }
 
     }   // namespace forwardModels
 }   // namespace fwi

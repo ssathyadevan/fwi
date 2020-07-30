@@ -14,7 +14,8 @@ namespace fwi
         class RandomInversion : public inversionInterface
         {
         public:
-            RandomInversion(forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput);
+            RandomInversion(
+                const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput);
 
             RandomInversion(const RandomInversion &) = delete;
             RandomInversion &operator=(const RandomInversion &) = delete;
@@ -23,7 +24,7 @@ namespace fwi
 
         private:
             forwardModels::ForwardModelInterface *_forwardModel;
-            core::CostFunctionCalculator _costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             RandomInversionInput _riInput;
 
             const core::grid2D &_grid;

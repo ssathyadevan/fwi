@@ -25,7 +25,7 @@ namespace fwi
         {
         private:
             forwardModels::ForwardModelInterface *_forwardModel;
-            core::CostFunctionCalculator _costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             ConjugateGradientInversionInput _cgInput;
 
             const core::grid2D &_grid;
@@ -159,7 +159,8 @@ namespace fwi
             void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
         public:
-            ConjugateGradientInversion(forwardModels::ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
+            ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+                const ConjugateGradientInversionInput &invInput);
             ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
             ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ReadJsonHelper.h"
 #include "FiniteDifferenceForwardModelInput.h"
+#include "ReadJsonHelper.h"
 #include "inputCardReader.h"
 
 #include <fstream>
@@ -25,7 +25,6 @@ namespace fwi
             void readJsonFile(const std::string &filePath);
             void readPMLWidthFactorParameters(const nlohmann::json &jsonFile);
             void readSourceParameters(const nlohmann::json &jsonFile);
-            void readCostFunctionParameters(const nlohmann::json &jsonFile);
             void readBoundaryConditionType(const nlohmann::json &jsonFile);
         };
     }   // namespace forwardModels

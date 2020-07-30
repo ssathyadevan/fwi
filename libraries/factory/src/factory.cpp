@@ -25,7 +25,8 @@
 namespace fwi
 {
     Factory::Factory()
-        : _createdInversion()
+        : _costCalculator(core::CostFunctionCalculator::CostFunctionEnum::leastSquares)
+        , _createdInversion()
         , _createdForwardModel()
         , _createdStepSizeCalculator()
         , _createdDirectionCalculator()
@@ -59,35 +60,35 @@ namespace fwi
             delete _createdReconstructor;
         }
     }
-
+    const core::CostFunctionCalculator costCalculator(core::CostFunctionCalculator::CostFunctionEnum::leastSquares);
     inversionMethods::inversionInterface *Factory::createInversion(
         const std::string &desiredInversion, forwardModels::ForwardModelInterface *forwardModel, const io::genericInput &gInput)
     {
         if(desiredInversion == "ConjugateGradientInversion")
         {
             inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
-            _createdInversion = new inversionMethods::ConjugateGradientInversion(forwardModel, conjugateGradientReader.getInput());
+            _createdInversion = new inversionMethods::ConjugateGradientInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
 
         if(desiredInversion == "RandomInversion")
         {
             inversionMethods::RandomInversionInputCardReader randomReader(gInput.caseFolder);
-            _createdInversion = new inversionMethods::RandomInversion(forwardModel, randomReader.getInput());
+            _createdInversion = new inversionMethods::RandomInversion(costCalculator, forwardModel, randomReader.getInput());
             return _createdInversion;
         }
 
         if(desiredInversion == "GradientDescentInversion")
         {
             inversionMethods::gradientDescentInversionInputCardReader gradientDescentReader(gInput.caseFolder);
-            _createdInversion = new inversionMethods::gradientDescentInversion(forwardModel, gradientDescentReader.getInput());
+            _createdInversion = new inversionMethods::gradientDescentInversion(costCalculator, forwardModel, gradientDescentReader.getInput());
             return _createdInversion;
         }
 
         if(desiredInversion == "EvolutionInversion")
         {
             inversionMethods::EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
-            _createdInversion = new inversionMethods::EvolutionInversion(forwardModel, evolutionReader.getInput());
+            _createdInversion = new inversionMethods::EvolutionInversion(costCalculator, forwardModel, evolutionReader.getInput());
             return _createdInversion;
         }
         L_(io::linfo) << "The Inversion method " << desiredInversion << " was not found";
@@ -165,7 +166,7 @@ namespace fwi
         if(desiredDirectionMethod == "GradientDescentDirection")
         {
             _createdDirectionCalculator = new inversionMethods::GradientDescentDirectionCalculator(
-                errorFunctionalScalingFactor, forwardModel, directionParameters.derivativeStepSize, pData);
+                errorFunctionalScalingFactor, costCalculator, forwardModel, directionParameters.derivativeStepSize, pData);
             return;
         }
         if(desiredDirectionMethod == "DummyStepSize")   // DummyDirection, update with your own.
@@ -190,8 +191,8 @@ namespace fwi
             cgParametersInput._deltaAmplification._start = stepSizeParameters.initialStepSize;
 
             const double errorFunctionalScalingFactor = 1.0 / (core::l2NormSquared(pData));
-            inversionMethods::ConjugateGradientWithRegularisationCalculator *OneInstance =
-                new inversionMethods::ConjugateGradientWithRegularisationCalculator(errorFunctionalScalingFactor, forwardModel, cgParametersInput, pData);
+            inversionMethods::ConjugateGradientWithRegularisationCalculator *OneInstance = new inversionMethods::ConjugateGradientWithRegularisationCalculator(
+                errorFunctionalScalingFactor, costCalculator, forwardModel, cgParametersInput, pData);
             _createdStepSizeCalculator = OneInstance;
             _createdDirectionCalculator = OneInstance;
             return;
@@ -223,7 +224,7 @@ namespace fwi
         }
 
         _createdReconstructor = new inversionMethods::StepAndDirectionReconstructor(
-            _createdStepSizeCalculator, _createdDirectionCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
+            _createdStepSizeCalculator, _createdDirectionCalculator, costCalculator, forwardModel, stepAndDirectionInput.reconstructorParameters);
 
         return _createdReconstructor;
     }

@@ -9,15 +9,16 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        EvolutionInversion::EvolutionInversion(forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
-            : _forwardModel()
+        EvolutionInversion::EvolutionInversion(
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _eiInput(eiInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)

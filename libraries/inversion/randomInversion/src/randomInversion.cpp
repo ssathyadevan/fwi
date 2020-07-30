@@ -6,15 +6,16 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        RandomInversion::RandomInversion(forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
-            : _forwardModel()
+        RandomInversion::RandomInversion(
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _riInput(riInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)

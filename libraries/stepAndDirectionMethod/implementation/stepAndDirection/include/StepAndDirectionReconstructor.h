@@ -17,7 +17,7 @@ namespace fwi
             StepSizeCalculator *_desiredStep;
             DirectionCalculator *_desiredDirection;
             forwardModels::ForwardModelInterface *_forwardModel;
-            core::CostFunctionCalculator _costCalculator;
+            const core::CostFunctionCalculator &_costCalculator;
             const ReconstructorParameters &_directionInput;
             /**  _directionInput contains the specific values for the particular method adopted through the choice a Direction Calculator */
             const core::grid2D &_grid;
@@ -27,7 +27,8 @@ namespace fwi
 
         public:
             StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-                forwardModels::ForwardModelInterface *forwardModel, const ReconstructorParameters &directionInput);
+                const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+                const ReconstructorParameters &directionInput);
 
             /**
              * @brief reconstruct The main method of the class, where the desired steps and directions are combined and the reconstruction happens
