@@ -27,7 +27,7 @@ namespace fwi
 
             double step = 0.0;
 
-            double eta = _desiredDirection->getErrorFunctionalScalingFactor();
+            const double eta = _desiredDirection->getErrorFunctionalScalingFactor();
 
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;

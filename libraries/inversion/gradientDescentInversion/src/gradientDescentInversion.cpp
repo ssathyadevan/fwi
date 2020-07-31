@@ -41,9 +41,8 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            double eta = 1.0 / (core::l2NormSquared(pData));
-				//Review: update costFunction as
-	// const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
+            const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
+
             double gamma = _gdInput.gamma0;   // First iteration
 
             for(int it1 = 0; it1 < _gdInput.iter; it1++)

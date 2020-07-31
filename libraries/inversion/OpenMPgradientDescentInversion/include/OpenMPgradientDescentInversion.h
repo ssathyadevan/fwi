@@ -6,7 +6,6 @@
 #include "genericInput.h"
 #include "gradientDescentInversionInput.h"
 #include "inversionInterface.h"
-
 namespace fwi
 {
     namespace inversionMethods
@@ -14,6 +13,7 @@ namespace fwi
         class OpenMPGradientDescentInversion : public inversionInterface
         {
         private:
+            const core::CostFunctionCalculator &_costCalculator;
             ForwardModelContainer &_forwardModelsParallel;
             gradientDescentInversionInput _gdInput;
 
@@ -27,7 +27,8 @@ namespace fwi
             std::ofstream openResidualLogFile(io::genericInput &gInput);
 
         public:
-            OpenMPGradientDescentInversion(const io::genericInput &gdInput, ForwardModelContainer &forwardmodels);
+            OpenMPGradientDescentInversion(
+                const core::CostFunctionCalculator &costCalculator, ForwardModelContainer &forwardmodels, const io::genericInput &gdInput);
 
             OpenMPGradientDescentInversion(const OpenMPGradientDescentInversion &) = delete;
             OpenMPGradientDescentInversion &operator=(const OpenMPGradientDescentInversion &) = delete;
