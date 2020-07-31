@@ -23,6 +23,8 @@ namespace fwi
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
             double eta = 1.0 / (core::l2NormSquared(pData));
+			//Review: also update here costFunction as
+			// const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
             double chiEstRes, newChiEstRes;
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);

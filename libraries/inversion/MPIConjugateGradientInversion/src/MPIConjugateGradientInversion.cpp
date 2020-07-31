@@ -183,6 +183,8 @@ PressureFieldSerial MPIConjugateGradientInversion::Reconstruct(const std::vector
     const int nTotal = _freq.count * _source.count * _receiver.count;
 
     double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // scaling factor eq 2.10 in thesis
+	//Review: update costFunction as
+	// const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
     double gamma, alpha, resSq, res = 0;
 
     std::array<double, 2> alphaDiv;
