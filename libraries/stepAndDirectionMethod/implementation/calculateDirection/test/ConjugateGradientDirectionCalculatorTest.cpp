@@ -1,56 +1,50 @@
 #include "ConjugateGradientDirectionCalculator.h"
 #include "ForwardModelMock.h"
+
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        core::grid2D getGrid()
+        class ConjugateGradientDirectionCalculatorTest : public ::testing::Test
         {
+        protected:
             std::array<double, 2> xMin = {0.0, 0.0};
             std::array<double, 2> xMax = {2.0, 2.0};
             std::array<int, 2> nX = {2, 4};
-
-            core::grid2D grid(xMin, xMax, nX);
-            return grid;
-        }
-
-        TEST(ConjugateGradientDirectionCalculatorTest, calculateDirectionTest)
-        {
-            // Create forwardmodel
-            core::grid2D grid = getGrid();
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
             core::freqInfo freq;
+
+            const double errorFunctionScalingFactor = 1.0;
+        };
+
+        TEST_F(ConjugateGradientDirectionCalculatorTest, calculateDirection)
+        {
+            // Arrange
+            core::grid2D grid(xMin, xMax, nX);
             core::Sources sources(xMin, xMax, 2);
             core::Receivers receivers(xMin, xMax, 2);
             core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::ForwardModelInterface *forwardmodel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
+            forwardModels::ForwardModelInterface *forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
 
-            // Create conjugate gradient direction calculator
-            const double errorFunctionScalingFactor = 1.0;
-            DirectionCalculator *directionCalulator = new ConjugateGradientDirectionCalculator(errorFunctionScalingFactor, forwardmodel);
+            ConjugateGradientDirectionCalculator directionCalculator(errorFunctionScalingFactor, forwardModel);
 
-            // Compute conjugate gradient direction
-            core::dataGrid2D conjugateGradientDirection(grid);
             core::dataGrid2D chiEstimate(grid);
-            std::vector<std::complex<double>> residuals(grid.getNumberOfGridPoints(), 1.0);
-            conjugateGradientDirection = directionCalulator->calculateDirection(chiEstimate, residuals);
+            std::vector<std::complex<double>> residual(chiEstimate.getNumberOfGridPoints(), 1.0);
 
-            // Compare conjugate gradient direction with expected value
-            const int nrOfGridPoints = conjugateGradientDirection.getNumberOfGridPoints();
+            // Act
+            std::vector<double> conjugateGradientDirectionData = directionCalculator.calculateDirection(chiEstimate, residual).getData();
+
             const double expectedDirection = 5.0;
 
-            const std::vector<double> &conjugateGradientDirectionData = conjugateGradientDirection.getData();
-            for(int i = 0; i < nrOfGridPoints; i++)
+            for(int it = 0; it < chiEstimate.getNumberOfGridPoints(); ++it)
             {
-                ASSERT_DOUBLE_EQ(conjugateGradientDirectionData[i], expectedDirection);
+                ASSERT_DOUBLE_EQ(conjugateGradientDirectionData[it], expectedDirection);
             }
 
-            delete forwardmodel;
-            delete directionCalulator;
+            delete forwardModel;
         }
     }   // namespace inversionMethods
 }   // namespace fwi
