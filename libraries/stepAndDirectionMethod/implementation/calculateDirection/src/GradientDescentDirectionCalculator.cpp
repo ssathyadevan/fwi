@@ -53,7 +53,7 @@ namespace fwi
 
         double GradientDescentDirectionCalculator::optimizationFunction(const core::dataGrid2D &chiEstimate) const
         {
-            auto pDataEst = _forwardModel->calculatePData(chiEstimate);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimate);
             std::vector<std::complex<double>> residual = _pData - pDataEst;
             const double currentChiError = _errorFunctionalScalingFactor * core::l2NormSquared(residual);
             return currentChiError;

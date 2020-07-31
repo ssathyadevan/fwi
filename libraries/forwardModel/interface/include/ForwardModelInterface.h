@@ -34,7 +34,7 @@ namespace fwi
              * @param chiEst reference to media properties
              * @return pressure field
              */
-            virtual std::vector<std::complex<double>> calculatePData(const core::dataGrid2D &chiEst) = 0;
+            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst) = 0;
 
             // TODO: Evaluate the following functions for removal
             virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;

@@ -35,7 +35,7 @@ namespace fwi
             core::dataGrid2D parent(_grid);
             parent.randomSaurabh();
 
-            auto pDataEst = _forwardModel->calculatePData(parent);
+            auto pDataEst = _forwardModel->calculatePressureField(parent);
             double parentResSq = core::l2NormSquared(pData - pDataEst);
             preParentResSq = parentResSq;
             L_(io::linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
@@ -58,7 +58,7 @@ namespace fwi
                 {
                     core::dataGrid2D child(_grid);
                     child.randomChild(parent, generator, distribution);
-                    pDataEst = _forwardModel->calculatePData(child);
+                    pDataEst = _forwardModel->calculatePressureField(child);
                     childResSq = core::l2NormSquared(pData - pDataEst);
 
                     if(childResSq < favouriteChildResSq)

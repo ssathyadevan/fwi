@@ -200,13 +200,13 @@ namespace fwi
 
         void ConjugateGradientWithRegularisationCalculator::updateResidual()
         {
-            auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
+            auto pDataEst = _forwardModel->calculatePressureField(_chiEstimateCurrent);
             _residualValueCurrent = _costCalculator.calculateCost(_pData, pDataEst, _errorFunctionalScalingFactor);
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()
         {
-            std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePData(_directionCurrent);
+            std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePressureField(_directionCurrent);
 
             double a0 = _residualValuePrevious;
 

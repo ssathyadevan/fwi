@@ -35,7 +35,7 @@ namespace fwi
             int counter = 1;
             for(int it = 0; it < _riInput.nMaxOuter; it++)
             {
-                auto pDataEst = _forwardModel->calculatePData(chiEst);
+                auto pDataEst = _forwardModel->calculatePressureField(chiEst);
                 chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                 // start the inner loop
@@ -44,13 +44,13 @@ namespace fwi
                     core::dataGrid2D tempRandomChi(_grid);
                     tempRandomChi.randomSaurabh();
 
-                    pDataEst = _forwardModel->calculatePData(chiEst);
+                    pDataEst = _forwardModel->calculatePressureField(chiEst);
                     newChiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                     if(it1 == 0 && it == 0)
                     {
                         tempRandomChi.copyTo(chiEst);
-                        pDataEst = _forwardModel->calculatePData(chiEst);
+                        pDataEst = _forwardModel->calculatePressureField(chiEst);
                         chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     else if(std::abs(newChiEstRes) < std::abs(chiEstRes))
@@ -58,7 +58,7 @@ namespace fwi
                         L_(io::linfo) << "Randomizing the temple again";
                         tempRandomChi.copyTo(chiEst);
 
-                        pDataEst = _forwardModel->calculatePData(chiEst);
+                        pDataEst = _forwardModel->calculatePressureField(chiEst);
                         chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     L_(io::linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter

@@ -103,7 +103,7 @@ namespace fwi
 
             std::copy(pDataRef.begin() + privateOffset, pDataRef.begin() + privateOffset + privateLength, privatePDataRef.begin());
 
-            std::vector<std::complex<double>> privatePDataEst = _forwardmodels[omp_get_thread_num()]->calculatePData(chiEstimate);
+            std::vector<std::complex<double>> privatePDataEst = _forwardmodels[omp_get_thread_num()]->calculatePressureField(chiEstimate);
             std::vector<std::complex<double>> privateResiduals = privatePDataRef - privatePDataEst;
 
             std::copy(privateResiduals.begin(), privateResiduals.end(), allResiduals.begin() + privateOffset);

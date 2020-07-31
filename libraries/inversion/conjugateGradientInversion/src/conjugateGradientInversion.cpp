@@ -49,7 +49,7 @@ namespace fwi
                 double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
 
                 _forwardModel->calculateKappa();
-                auto pDataEst = _forwardModel->calculatePData(_chiEstimate);
+                auto pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
                 std::vector<std::complex<double>> residualArray = pData - pDataEst;
 
                 // Initialize Regularisation parameters
@@ -69,7 +69,7 @@ namespace fwi
                 _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
                 // Result + logging
-                pDataEst = _forwardModel->calculatePData(_chiEstimate);
+                pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
                 residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
@@ -94,7 +94,7 @@ namespace fwi
                     _chiEstimate += alpha * zeta;
 
                     // Result + logging
-                    pDataEst = _forwardModel->calculatePData(_chiEstimate);
+                    pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
                     residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
@@ -156,7 +156,7 @@ namespace fwi
             double alphaNumerator = 0.0;
             double alphaDenominator = 0.0;
 
-            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePData(zeta);
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
 
             for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
@@ -255,7 +255,7 @@ namespace fwi
             RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualArray, const double eta,
             const double fDataPrevious, const core::dataGrid2D &zeta)
         {
-            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePData(zeta);
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
 
             double a0 = fDataPrevious;
 

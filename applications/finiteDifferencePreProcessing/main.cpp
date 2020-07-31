@@ -86,7 +86,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     clock_t tStartCalculatePData = clock();
     model->calculatePTot(chi);
     model->calculateKappa();
-    referencePressureData = model->calculatePData(chi);
+    referencePressureData = model->calculatePressureField(chi);
     clock_t tEndCalculatePData = clock();
     L_(fwi::io::linfo) << "PData has been calculated in " << double(tEndCalculatePData - tStartCalculatePData) / CLOCKS_PER_SEC << "seconds.";
     // writing the referencePressureData to a text file in complex form

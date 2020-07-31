@@ -15,7 +15,7 @@ namespace fwi
             _residual.resize(freq.count * _source.count * _receiver.count);
         }
 
-        std::vector<std::complex<double>> ForwardModelMock::calculatePData(const core::dataGrid2D &chiEst)
+        std::vector<std::complex<double>> ForwardModelMock::calculatePressureField(const core::dataGrid2D &chiEst)
         {
             return std::vector<std::complex<double>>(_freq.count * _source.count * _receiver.count, (chiEst.getData())[0]);
         }
@@ -23,7 +23,7 @@ namespace fwi
         std::vector<std::complex<double>> &ForwardModelMock::calculateResidual(
             const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef)
         {
-            std::vector<std::complex<double>> pDataEst = calculatePData(chiEst);
+            std::vector<std::complex<double>> pDataEst = calculatePressureField(chiEst);
 
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {

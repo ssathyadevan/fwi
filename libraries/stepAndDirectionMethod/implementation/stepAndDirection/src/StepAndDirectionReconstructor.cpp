@@ -32,7 +32,7 @@ namespace fwi
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;
 
-            auto pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
             std::vector<std::complex<double>> residualVector = pData - pDataEst;
             double residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
 
@@ -45,7 +45,7 @@ namespace fwi
                 directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
 
                 // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
-                std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePData(*directionCurrent);
+                std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePressureField(*directionCurrent);
 
                 _desiredStep->updateVariables(
                     chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
@@ -54,7 +54,7 @@ namespace fwi
 
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
-                pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
                 residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
 

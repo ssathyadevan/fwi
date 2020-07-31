@@ -260,7 +260,7 @@ namespace fwi
             }
         }
 
-        std::vector<std::complex<double>> IntegralForwardModel::calculatePData(const core::dataGrid2D &chiEst)
+        std::vector<std::complex<double>> IntegralForwardModel::calculatePressureField(const core::dataGrid2D &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
             applyKappa(chiEst, kOperator);

@@ -18,7 +18,7 @@ namespace fwi
 
             ~IntegralForwardModel();
 
-            virtual std::vector<std::complex<double>> calculatePData(const core::dataGrid2D &chiEst);
+            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
 
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
             void calculateKappa();

@@ -32,8 +32,8 @@ namespace fwi
             core::dataGrid2D chiEstimatePrevious(_grid);
 
             _forwardModel->calculateKappa();
-            auto pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
-            pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+            pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
             std::vector<double> dFdxPrevious;
@@ -56,7 +56,7 @@ namespace fwi
 
                 chiEstimatePrevious = chiEstimateCurrent;
                 chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-                pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
                 fx = _costCalculator.calculateCost(pData, pDataEst, eta);
                 isConverged = (fx < _gdInput.h);
                 logResidualResults(counter, fx, isConverged);
@@ -88,7 +88,7 @@ namespace fwi
             core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
         {
             const int numGridPoints = chiEstimate.getNumberOfGridPoints();
-            auto pDataEst = _forwardModel->calculatePData(chiEstimate);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimate);
             double fx = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             double fxPlusH;
@@ -97,7 +97,7 @@ namespace fwi
             for(int i = 0; i < numGridPoints; ++i)
             {
                 chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-                pDataEst = _forwardModel->calculatePData(chiEstimate);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimate);
                 fxPlusH = _costCalculator.calculateCost(pData, pDataEst, eta);
                 chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 
