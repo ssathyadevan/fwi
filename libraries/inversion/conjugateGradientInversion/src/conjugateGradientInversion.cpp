@@ -38,6 +38,7 @@ namespace fwi
             const int nTotal = _frequencies.count * _sources.count * _receivers.count;
             const double eta = 1.0 / (core::l2NormSquared(pData));   // Scaling factor
             _chiEstimate.zero();
+// Review: Use costFunction instead of l2NormSquared
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
             bool isConverged = false;
@@ -99,6 +100,7 @@ namespace fwi
                     pDataEst = _forwardModel->calculatePData(_chiEstimate);
                     residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
                     // residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
+					//Review: remove commented line
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 

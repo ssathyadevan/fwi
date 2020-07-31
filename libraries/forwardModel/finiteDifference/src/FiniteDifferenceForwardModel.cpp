@@ -169,7 +169,7 @@ namespace fwi
                 }
             }
         }
-
+//Review: unify mapDomainToSignal and calculatePData
         std::vector<std::complex<double>> FiniteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);

@@ -67,7 +67,7 @@ namespace fwi
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
             auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
-
+//Review: the above line does nothing, remove
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
 
             double alpha = 0.0;
@@ -205,6 +205,7 @@ namespace fwi
             auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
             _residualVector = _pData - pDataEst;
             _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSquared(_residualVector);
+			//Review: invoke the generic costFunction 
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()

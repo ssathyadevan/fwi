@@ -36,7 +36,7 @@ namespace fwi
              * @return cost
              */
             double calculateCost(const std::vector<std::complex<double>> &pData, const std::vector<std::complex<double>> &pDataEst, double eta) const
-            {
+            {//Review: add comment saying to add a switch if there is more than one option possible
                 return eta * l2NormSquared(pData - pDataEst);
             }
 

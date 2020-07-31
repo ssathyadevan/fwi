@@ -91,7 +91,7 @@ namespace fwi
 
             return chiTemp;
         }
-
+		//Review: remove method below
         double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
         {
             return eta * core::l2NormSquared(residualVector);
