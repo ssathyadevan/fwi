@@ -18,7 +18,7 @@ namespace fwi
             const std::string _filename = "IntegralFMInputTest.json";
             const std::string _filepath = _inputFolder + _filename;
 
-            ParametersCollection _parameters{{"Iter2", {{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}, {"CostFunction", "\"leastSquares\""}}}};
+            ParametersCollection _parameters{{"Iter2", {{"n", "15"}, {"tolerance", "5.0e-5"}, {"calcAlpha", "false"}}}};
 
             std::string _jsonInput;
 
@@ -84,7 +84,6 @@ namespace fwi
             EXPECT_EQ(15, input.nrOfIterations);
             ASSERT_DOUBLE_EQ(5.0e-5, input.tolerance);
             ASSERT_FALSE(input.calcAlpha);
-            EXPECT_EQ(leastSquares, input.costFunction);
         }
 
         TEST_F(integralForwardModelInputCardReaderTest, constructor_ZeroN_ExceptionThrown)
@@ -130,21 +129,11 @@ namespace fwi
             // Act & Assert
             EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
         }
+
         TEST_F(integralForwardModelInputCardReaderTest, constructor_MissingCalcAlpha_ExceptionThrown)
         {
             // Arrange
             _parameters.at("Iter2").erase("calcAlpha");
-            auto jsonInput = generateJsonWithInputParameters(_parameters);
-            writeInputFile(jsonInput);
-
-            // Act & Assert
-            EXPECT_THROW(integralForwardModelInputCardReader integralReader(_testFolder, _filename), std::invalid_argument);
-        }
-
-        TEST_F(integralForwardModelInputCardReaderTest, constructor_InvalidCostFunction_ExceptionThrown)
-        {
-            // Arrange
-            _parameters.at("Iter2").at("CostFunction") = "\"InvalidCostFunction\"";
             auto jsonInput = generateJsonWithInputParameters(_parameters);
             writeInputFile(jsonInput);
 

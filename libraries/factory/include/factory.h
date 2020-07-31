@@ -1,11 +1,12 @@
 #pragma once
 
 #include "ConjugateGradientWithRegularisationParametersInput.h"
+#include "CostFunctionCalculator.h"
 #include "DirectionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "StepAndDirectionReconstructor.h"
 #include "StepAndDirectionReconstructorInput.h"
 #include "StepSizeCalculator.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include <string>
@@ -22,27 +23,28 @@ namespace fwi
         ~Factory();
 
         inversionMethods::inversionInterface *createInversion(
-            const std::string &desiredInversion, forwardModels::forwardModelInterface *forwardModel, const io::genericInput &gInput);
-        forwardModels::forwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
+            const std::string &desiredInversion, forwardModels::ForwardModelInterface *forwardModel, const io::genericInput &gInput);
+        forwardModels::ForwardModelInterface *createForwardModel(const std::string &caseFolder, const std::string &desiredForwardModel,
             const core::grid2D &grid, const core::Sources &sources, const core::Receivers &receivers, const core::FrequenciesGroup &frequencies);
 
         /**
          * @brief createStepAndDirectionReconstructor, creates stepSizeCalculator and directionCalculator
          * ToDo: Get input from files, idea: read files outside the factory and give them as input for the factory.
          * @param caseFolder is a string
-         * @param forwardmodel is a pointer to forwardmodelInterface
+         * @param forwardmodel is a pointer to ForwardModelInterface
          * @param desiredStepSizeMethod is a string
          * @param desiredDirectionMethod is a string
          * @param pData is a vector of complex doubles, represents the measurement for each combination of sources, receivers and frequencies
          * @return
          */
         inversionMethods::StepAndDirectionReconstructor *createStepAndDirectionReconstructor(
-            const inversionMethods::StepAndDirectionReconstructorInput &stepAndDirectionInput, forwardModels::forwardModelInterface *forwardmodel,
+            const inversionMethods::StepAndDirectionReconstructorInput &stepAndDirectionInput, forwardModels::ForwardModelInterface *forwardmodel,
             const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData);
 
     private:
+        const core::CostFunctionCalculator _costCalculator;
         inversionMethods::inversionInterface *_createdInversion;
-        forwardModels::forwardModelInterface *_createdForwardModel;
+        forwardModels::ForwardModelInterface *_createdForwardModel;
         inversionMethods::StepSizeCalculator *_createdStepSizeCalculator;
         inversionMethods::DirectionCalculator *_createdDirectionCalculator;
         inversionMethods::StepAndDirectionReconstructor *_createdReconstructor;
@@ -50,7 +52,7 @@ namespace fwi
         /**
          * @brief checkForwardModelExistence, makes sure the forwardmodel is created
          */
-        void checkForwardModelExistence(forwardModels::forwardModelInterface *forwardModel);
+        void checkForwardModelExistence(forwardModels::ForwardModelInterface *forwardModel);
 
         /**
          * @brief createStepSizeCalculator, reads in parameters from file and creates the desired step size calculator.
@@ -78,7 +80,7 @@ namespace fwi
          * @return DirectionCalculator
          */
         void createDirectionCalculator(const inversionMethods::DirectionParameters &directionParameters, const std::string &desiredDirectionMethod,
-            forwardModels::forwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
+            forwardModels::ForwardModelInterface *forwardModel, const std::vector<std::complex<double>> &pData);
         /**
          * @brief createCombinedDirectionAndStepSize, in case we cannot split our inversionMethods::StepSizeCalculator and DirectionCalculator, here we create
          * only one object and we point both related pointers of inversionMethods::StepAndDirectionReconstructor to it.
@@ -88,7 +90,7 @@ namespace fwi
          * @param pData, the data we want to simulate
          * @param desiredCombinedDirectionAndStepSizeMethod, the actual descent algorithm we want to implement
          */
-        void createCombinedDirectionAndStepSize(forwardModels::forwardModelInterface *forwardModel,
+        void createCombinedDirectionAndStepSize(forwardModels::ForwardModelInterface *forwardModel,
             const inversionMethods::StepSizeParameters &stepSizeParameters, const inversionMethods::ReconstructorParameters &reconstructorParameters,
             const std::vector<std::complex<double>> &pData, const std::string &desiredCombinedDirectionAndStepSizeMethod);
     };

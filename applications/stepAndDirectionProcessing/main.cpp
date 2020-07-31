@@ -144,7 +144,7 @@ void performInversion(const fwi::io::genericInput &gInput, const std::string &ru
     fwi::Factory factory;
 
     L_(fwi::io::linfo) << "Create ForwardModel";
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, desiredForwardModel, grid, source, receiver, freq);
 
     L_(fwi::io::linfo) << "Create StepAndDirectionReconstructor";

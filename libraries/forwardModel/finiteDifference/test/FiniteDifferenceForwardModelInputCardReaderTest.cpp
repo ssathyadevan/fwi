@@ -100,7 +100,6 @@ namespace fwi
             EXPECT_EQ(4, input.sourceParameter.r);
             EXPECT_EQ(6.31, input.sourceParameter.beta);
 
-            EXPECT_EQ(leastSquares, input.costFunction);
             EXPECT_EQ(BoundaryConditionType::FirstOrderABC, input.boundaryConditionType);
         }
 
@@ -141,17 +140,6 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("SourceParameter").erase("beta");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
-            writeInputFile(jsonInput);
-
-            // Act & Assert
-            EXPECT_THROW(finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(_testFolder, _filename), std::invalid_argument);
-        }
-
-        TEST_F(finiteDifferenceForwardModelInputCardReaderTest, constructor_InvalidCostFunction_ExceptionThrown)
-        {
-            // Arrange
-            _singleParameters.at("CostFunction") = "\"InvalidCostFunction\"";
             auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(jsonInput);
 

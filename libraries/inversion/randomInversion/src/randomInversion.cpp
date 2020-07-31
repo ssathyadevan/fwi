@@ -6,24 +6,25 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        RandomInversion::RandomInversion(forwardModels::forwardModelInterface *forwardModel, const RandomInversionInput &riInput)
-            : _forwardModel()
+        RandomInversion::RandomInversion(
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const RandomInversionInput &riInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _riInput(riInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
-            const int nTotal = _freq.count * _source.count * _receiver.count;
-            double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
-            double resSq, chiEstRes, newResSq, newChiEstRes;
+            const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
+
+            double chiEstRes, newChiEstRes;
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
 
@@ -35,10 +36,8 @@ namespace fwi
             int counter = 1;
             for(int it = 0; it < _riInput.nMaxOuter; it++)
             {
-                std::vector<std::complex<double>> &resArray = _forwardModel->calculateResidual(chiEst, pData);
-
-                resSq = _forwardModel->calculateResidualNormSq(resArray);
-                chiEstRes = eta * resSq;
+                auto pDataEst = _forwardModel->calculatePressureField(chiEst);
+                chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                 // start the inner loop
                 for(int it1 = 0; it1 < _riInput.nMaxInner; it1++)
@@ -46,22 +45,22 @@ namespace fwi
                     core::dataGrid2D tempRandomChi(_grid);
                     tempRandomChi.randomSaurabh();
 
-                    newResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(tempRandomChi, pData));
-                    newChiEstRes = eta * newResSq;
+                    pDataEst = _forwardModel->calculatePressureField(chiEst);
+                    newChiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
 
                     if(it1 == 0 && it == 0)
                     {
                         tempRandomChi.copyTo(chiEst);
-                        resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
-                        chiEstRes = eta * resSq;
+                        pDataEst = _forwardModel->calculatePressureField(chiEst);
+                        chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     else if(std::abs(newChiEstRes) < std::abs(chiEstRes))
                     {
                         L_(io::linfo) << "Randomizing the temple again";
                         tempRandomChi.copyTo(chiEst);
 
-                        resSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(chiEst, pData));
-                        chiEstRes = eta * resSq;
+                        pDataEst = _forwardModel->calculatePressureField(chiEst);
+                        chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     L_(io::linfo) << it1 + 1 << "/" << _riInput.nMaxInner << "\t (" << it + 1 << "/" << _riInput.nMaxOuter
                                   << ")\t res: " << std::setprecision(17) << chiEstRes;

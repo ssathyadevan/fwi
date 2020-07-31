@@ -1,14 +1,18 @@
 #include "GradientDescentDirectionCalculator.h"
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
     {
         GradientDescentDirectionCalculator::GradientDescentDirectionCalculator(double errorFunctionalScalingFactor,
-            forwardModels::forwardModelInterface *forwardModel, double discretisationStep, const std::vector<std::complex<double>> &pData)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, double discretisationStep,
+            const std::vector<std::complex<double>> &pData)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
             , _pData(pData)
             , _derivativeDiscretisationStep(discretisationStep)
+            , _costCalculator(costCalculator)
         {
             if(discretisationStep <= 0.0)
             {
@@ -49,8 +53,9 @@ namespace fwi
 
         double GradientDescentDirectionCalculator::optimizationFunction(const core::dataGrid2D &chiEstimate) const
         {
-            std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimate, _pData);
-            const double currentChiError = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(residual);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimate);
+            std::vector<std::complex<double>> residual = _pData - pDataEst;
+            const double currentChiError = _errorFunctionalScalingFactor * core::l2NormSquared(residual);
             return currentChiError;
         }
     }   // namespace inversionMethods

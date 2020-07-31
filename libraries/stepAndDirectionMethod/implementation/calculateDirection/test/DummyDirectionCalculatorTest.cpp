@@ -23,7 +23,7 @@ namespace fwi
             const core::Receivers receivers(xMin, xMax, 2);
             const core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::forwardModelInterface *const forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
+            forwardModels::ForwardModelInterface *const forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
             const double errorFunctionalScalingFactor = 1.0;
             DirectionCalculator *const directionCalculator = new DummyDirectionCalculator(errorFunctionalScalingFactor, forwardModel);
             const core::dataGrid2D chiEstimate(grid);

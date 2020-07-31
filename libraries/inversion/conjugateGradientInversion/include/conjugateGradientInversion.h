@@ -1,8 +1,9 @@
 #pragma once
 
+#include "CostFunctionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "conjugateGradientInversionInput.h"
 #include "conjugateGradientInversionInputCardReader.h"
-#include "forwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "log.h"
@@ -23,7 +24,8 @@ namespace fwi
         class ConjugateGradientInversion : public inversionInterface
         {
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
+            const core::CostFunctionCalculator &_costCalculator;
             ConjugateGradientInversionInput _cgInput;
 
             const core::grid2D &_grid;
@@ -134,8 +136,7 @@ namespace fwi
              * @return double alpha, the optimal stepsize
              */
             double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
-                const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious,
-                const core::dataGrid2D &zeta);
+                const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const core::dataGrid2D &zeta);
 
             /**
              * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -157,7 +158,8 @@ namespace fwi
             void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
 
         public:
-            ConjugateGradientInversion(forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput);
+            ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+                const ConjugateGradientInversionInput &invInput);
             ConjugateGradientInversion(const ConjugateGradientInversion &) = delete;
             ConjugateGradientInversion &operator=(const ConjugateGradientInversion &) = delete;
 

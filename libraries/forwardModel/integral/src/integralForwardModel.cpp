@@ -8,8 +8,7 @@ namespace fwi
     {
         IntegralForwardModel::IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const integralForwardModelInput &fmInput)
-            : ForwardModelBase(grid, source, receiver, freq, fmInput.costFunction)
-            , _grid(grid)
+            : _grid(grid)
             , _source(source)
             , _receiver(receiver)
             , _freq(freq)
@@ -261,9 +260,11 @@ namespace fwi
             }
         }
 
-        void IntegralForwardModel::calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator)
+        std::vector<std::complex<double>> IntegralForwardModel::calculatePressureField(const core::dataGrid2D &chiEst)
         {
+            std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
             applyKappa(chiEst, kOperator);
+            return kOperator;
         }
 
         void IntegralForwardModel::calculateKappa()
@@ -284,11 +285,6 @@ namespace fwi
                     }
                 }
             }
-        }
-
-        void IntegralForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
-        {
-            applyKappa(CurrentPressureFieldSerial, kOperator);
         }
 
         void IntegralForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)

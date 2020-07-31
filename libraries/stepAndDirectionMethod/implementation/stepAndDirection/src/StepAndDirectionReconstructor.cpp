@@ -1,15 +1,19 @@
 #include "StepAndDirectionReconstructor.h"
 #include "progressBar.h"
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
     {
         StepAndDirectionReconstructor::StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
-            forwardModels::forwardModelInterface *forwardModel, const ReconstructorParameters &directionInput)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+            const ReconstructorParameters &directionInput)
             : _desiredStep(desiredStep)
             , _desiredDirection(desiredDirection)
             , _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _directionInput(directionInput)
             , _grid(forwardModel->getGrid())
         {
@@ -23,27 +27,25 @@ namespace fwi
 
             double step = 0.0;
 
-            double eta = _desiredDirection->getErrorFunctionalScalingFactor();
+            const double eta = _desiredDirection->getErrorFunctionalScalingFactor();
 
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;
 
-            std::vector<std::complex<double>> residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-            double residualValue = calculateResidualNorm(residualVector, eta);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+            std::vector<std::complex<double>> residualVector = pData - pDataEst;
+            double residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             _forwardModel->calculateKappa();
 
             core::dataGrid2D const *directionCurrent;
-
-            int kappaTimesDirectionSize = _forwardModel->getFreq().count * _forwardModel->getSource().count * _forwardModel->getReceiver().count;
-            std::vector<std::complex<double>> kappaTimesDirection(kappaTimesDirectionSize);
 
             for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
             {
                 directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
 
                 // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
-                _forwardModel->mapDomainToSignal(*directionCurrent, kappaTimesDirection);
+                std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePressureField(*directionCurrent);
 
                 _desiredStep->updateVariables(
                     chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
@@ -52,8 +54,8 @@ namespace fwi
 
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
-                residualVector = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-                residualValue = calculateResidualNorm(residualVector, eta);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+                residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
 
                 if(residualValue < _directionInput.tolerance)
@@ -84,11 +86,6 @@ namespace fwi
             chiTemp += descentVector;
 
             return chiTemp;
-        }
-
-        double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
-        {
-            return eta * _forwardModel->calculateResidualNormSq(residualVector);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

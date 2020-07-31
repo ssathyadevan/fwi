@@ -1,21 +1,25 @@
 #include "gradientDescentInversion.h"
+#include "CommonVectorOperations.h"
 #include "gradientDescentInversionInputCardReader.h"
 #include "log.h"
 #include "progressBar.h"
+
+using fwi::core::operator-;
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        gradientDescentInversion::gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
-            : _forwardModel()
+        gradientDescentInversion::gradientDescentInversion(const core::CostFunctionCalculator &costCalculator,
+            forwardModels::ForwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _gdInput(gdInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
@@ -28,8 +32,8 @@ namespace fwi
             core::dataGrid2D chiEstimatePrevious(_grid);
 
             _forwardModel->calculateKappa();
-            _forwardModel->calculateResidual(chiEstimateCurrent, pData);
-            std::vector<std::complex<double>> residual = _forwardModel->calculateResidual(chiEstimateCurrent, pData);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+            pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
             std::vector<double> dFdxPrevious;
@@ -37,14 +41,14 @@ namespace fwi
             double fx;
             bool isConverged = false;
             int counter = 1;
-            const int nTotal = _freq.count * _source.count * _receiver.count;
-            double eta = 1.0 / (forwardModels::normSq(pData, nTotal));
+            const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
+
             double gamma = _gdInput.gamma0;   // First iteration
 
             for(int it1 = 0; it1 < _gdInput.iter; it1++)
             {
                 dFdxPrevious = dFdxCurrent;
-                dFdxCurrent = differential(residual, chiEstimateCurrent, pData, eta, _gdInput.h);
+                dFdxCurrent = differential(chiEstimateCurrent, pData, eta, _gdInput.h);
 
                 if(it1 > 0)
                 {
@@ -53,7 +57,8 @@ namespace fwi
 
                 chiEstimatePrevious = chiEstimateCurrent;
                 chiEstimateCurrent = gradientDescent(chiEstimateCurrent, dFdxCurrent, gamma);
-                fx = _forwardModel->calculateCost(residual, chiEstimateCurrent, pData, eta);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+                fx = _costCalculator.calculateCost(pData, pDataEst, eta);
                 isConverged = (fx < _gdInput.h);
                 logResidualResults(counter, fx, isConverged);
                 residualLogFile << std::setprecision(17) << fx << "," << counter << std::endl;
@@ -81,11 +86,11 @@ namespace fwi
         }
 
         std::vector<double> gradientDescentInversion::differential(
-            std::vector<std::complex<double>> &residual, core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
+            core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
         {
             const int numGridPoints = chiEstimate.getNumberOfGridPoints();
-
-            double fx = _forwardModel->calculateCost(residual, chiEstimate, pData, eta);
+            auto pDataEst = _forwardModel->calculatePressureField(chiEstimate);
+            double fx = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             double fxPlusH;
             core::dataGrid2D chiEstimatePlusH(chiEstimate);
@@ -93,7 +98,8 @@ namespace fwi
             for(int i = 0; i < numGridPoints; ++i)
             {
                 chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-                fxPlusH = _forwardModel->calculateCost(residual, chiEstimatePlusH, pData, eta);
+                pDataEst = _forwardModel->calculatePressureField(chiEstimate);
+                fxPlusH = _costCalculator.calculateCost(pData, pDataEst, eta);
                 chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
 
                 dFdx[i] = (fxPlusH - fx) / h;

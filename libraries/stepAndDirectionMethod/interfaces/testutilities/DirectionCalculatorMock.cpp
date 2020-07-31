@@ -4,7 +4,7 @@ namespace fwi
 {
     namespace inversionMethods
     {
-        DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModels::forwardModelInterface *forwardModel)
+        DirectionCalculatorMock::DirectionCalculatorMock(double errorFunctionalScalingfactor, forwardModels::ForwardModelInterface *forwardModel)
             : DirectionCalculator(errorFunctionalScalingfactor, forwardModel)
         {
         }

@@ -1,14 +1,17 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
     {
         ConjugateGradientWithRegularisationCalculator::ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor,
-            forwardModels::forwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
-            const std::vector<std::complex<double>> &pData)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+            ConjugateGradientWithRegularisationParametersInput cgParametersInput, const std::vector<std::complex<double>> &pData)
             : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
             , StepSizeCalculator()
+            , _costCalculator(costCalculator)
             , _chiEstimatePrevious(forwardModel->getGrid())
             , _chiEstimateCurrent(forwardModel->getGrid())
             , _gradientPrevious(forwardModel->getGrid())
@@ -63,8 +66,6 @@ namespace fwi
 
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
-            _forwardModel->calculateResidual(_chiEstimateCurrent, _pData);
-
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
 
             double alpha = 0.0;
@@ -199,21 +200,20 @@ namespace fwi
 
         void ConjugateGradientWithRegularisationCalculator::updateResidual()
         {
-            _residualVector = _forwardModel->calculateResidual(_chiEstimateCurrent, _pData);
-            _residualValueCurrent = _errorFunctionalScalingFactor * _forwardModel->calculateResidualNormSq(_residualVector);
+            auto pDataEst = _forwardModel->calculatePressureField(_chiEstimateCurrent);
+            _residualValueCurrent = _costCalculator.calculateCost(_pData, pDataEst, _errorFunctionalScalingFactor);
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()
         {
-            std::vector<std::complex<double>> kappaTimesDirection(_nTotal);
-            _forwardModel->mapDomainToSignal(_directionCurrent, kappaTimesDirection);
+            std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePressureField(_directionCurrent);
 
             double a0 = _residualValuePrevious;
 
             double a1 = 0.0;
             double a2 = 0.0;
 
-            for(int i = 0; i < _nTotal; i++)
+            for(size_t i = 0; i < kappaTimesDirection.size(); i++)
             {
                 a1 += -2.0 * _errorFunctionalScalingFactor * std::real(conj(_residualVector[i]) * kappaTimesDirection[i]);
                 a2 += _errorFunctionalScalingFactor * std::real(conj(kappaTimesDirection[i]) * kappaTimesDirection[i]);

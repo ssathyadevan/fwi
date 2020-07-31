@@ -12,7 +12,7 @@ namespace fwi
         class DummyDirectionCalculator : public DirectionCalculator
         {
         public:
-            DummyDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::forwardModelInterface *const forwardModel);
+            DummyDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *const forwardModel);
             virtual ~DummyDirectionCalculator();
 
             /**

@@ -146,7 +146,7 @@ void performInversion(
 
     L_(fwi::io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, desired_forward_model, grid, source, receiver, freq);
     clock_t tEndForwardModel = clock();
     L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << "seconds.";

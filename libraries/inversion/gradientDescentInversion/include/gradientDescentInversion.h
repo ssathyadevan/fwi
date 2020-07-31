@@ -1,6 +1,7 @@
 #pragma once
 
-#include "forwardModelInterface.h"
+#include "CostFunctionCalculator.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "gradientDescentInversionInput.h"
 #include "inversionInterface.h"
@@ -12,7 +13,8 @@ namespace fwi
         class gradientDescentInversion : public inversionInterface
         {
         private:
-            forwardModels::forwardModelInterface *_forwardModel;
+            forwardModels::ForwardModelInterface *_forwardModel;
+            const core::CostFunctionCalculator &_costCalculator;
             gradientDescentInversionInput _gdInput;
 
             const core::grid2D &_grid;
@@ -24,7 +26,8 @@ namespace fwi
             std::ofstream openResidualLogFile(io::genericInput &gInput);
 
         public:
-            gradientDescentInversion(forwardModels::forwardModelInterface *forwardModel, const gradientDescentInversionInput &gdInput);
+            gradientDescentInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
+                const gradientDescentInversionInput &gdInput);
 
             gradientDescentInversion(const gradientDescentInversion &) = delete;
             gradientDescentInversion &operator=(const gradientDescentInversion &) = delete;
@@ -32,8 +35,7 @@ namespace fwi
             void logResidualResults(int iteration, double residual, bool isConverged);
 
             core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
-            std::vector<double> differential(
-                std::vector<std::complex<double>> &residual, core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
+            std::vector<double> differential(core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
             double determineGamma(const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
                 std::vector<double> dFdx);
         };

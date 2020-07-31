@@ -22,7 +22,6 @@ namespace fwi
             integralForwardModelInput _input;
             void readJsonFile(const std::string &filePath);
             void readIterParameters(const nlohmann::json &jsonFile);
-            CostFunction readCostFunctionParameters(nlohmann::json &iterObject);
         };
     }   // namespace forwardModels
 }   // namespace fwi

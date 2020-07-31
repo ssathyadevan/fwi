@@ -1,4 +1,5 @@
 #include "conjugateGradientInversion.h"
+#include "CommonVectorOperations.h"
 #include "log.h"
 #include "progressBar.h"
 #include <iostream>
@@ -11,13 +12,16 @@
 #define TAG_RESARRAY 2
 #define TAG_RESULT 3
 
+using fwi::core::operator-;
+
 namespace fwi
 {
     namespace inversionMethods
     {
-        ConjugateGradientInversion::ConjugateGradientInversion(
-            forwardModels::forwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
-            : _forwardModel()
+        ConjugateGradientInversion::ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator,
+            forwardModels::ForwardModelInterface *forwardModel, const ConjugateGradientInversionInput &invInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _cgInput(invInput)
             , _grid(forwardModel->getGrid())
             , _sources(forwardModel->getSource())
@@ -25,15 +29,12 @@ namespace fwi
             , _frequencies(forwardModel->getFreq())
             , _chiEstimate(_grid)
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
-
-            const int nTotal = _frequencies.count * _sources.count * _receivers.count;
-            const double eta = 1.0 / (forwardModels::normSq(pData, nTotal));   // Scaling factor
+            const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
             _chiEstimate.zero();
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
@@ -48,7 +49,8 @@ namespace fwi
                 double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
 
                 _forwardModel->calculateKappa();
-                std::vector<std::complex<double>> &residualArray = _forwardModel->calculateResidual(_chiEstimate, pData);
+                auto pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+                std::vector<std::complex<double>> residualArray = pData - pDataEst;
 
                 // Initialize Regularisation parameters
                 double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
@@ -67,7 +69,8 @@ namespace fwi
                 _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
                 // Result + logging
-                residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);   // eq: errorFunc
+                pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+                residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -85,13 +88,14 @@ namespace fwi
 
                     zeta = calculateUpdateDirectionRegularisation(residualArray, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
                         regularisationPrevious, zeta, residualPrevious);   // eq: updateDirectionsCG
-                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, nTotal, residualArray, eta, residualPrevious, zeta);
+                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualArray, eta, residualPrevious, zeta);
 
                     // Update contrast-function
                     _chiEstimate += alpha * zeta;
 
                     // Result + logging
-                    residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
+                    pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+                    residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -152,12 +156,9 @@ namespace fwi
             double alphaNumerator = 0.0;
             double alphaDenominator = 0.0;
 
-            int nSignals = _frequencies.count * _sources.count * _receivers.count;
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
 
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.count * _sources.count * _receivers.count);
-            _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
-
-            for(int i = 0; i < nSignals; i++)
+            for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
                 alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
                 alphaDenominator += std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
@@ -251,18 +252,17 @@ namespace fwi
         }
 
         double ConjugateGradientInversion::calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious,
-            RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta,
+            RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualArray, const double eta,
             const double fDataPrevious, const core::dataGrid2D &zeta)
         {
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.count * _sources.count * _receivers.count);
-            _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
 
             double a0 = fDataPrevious;
 
             double a1 = 0.0;
             double a2 = 0.0;
 
-            for(int i = 0; i < nTotal; i++)
+            for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
                 a1 += -2.0 * eta * std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
                 a2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);

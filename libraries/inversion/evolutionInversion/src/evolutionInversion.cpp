@@ -1,20 +1,24 @@
 #include "evolutionInversion.h"
+#include "CommonVectorOperations.h"
 #include "log.h"
 #include "progressBar.h"
+
+using fwi::core::operator-;
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        EvolutionInversion::EvolutionInversion(forwardModels::forwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
-            : _forwardModel()
+        EvolutionInversion::EvolutionInversion(
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+            : _forwardModel(forwardModel)
+            , _costCalculator(costCalculator)
             , _eiInput(eiInput)
             , _grid(forwardModel->getGrid())
             , _source(forwardModel->getSource())
             , _receiver(forwardModel->getReceiver())
             , _freq(forwardModel->getFreq())
         {
-            _forwardModel = forwardModel;
         }
 
         core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
@@ -30,7 +34,9 @@ namespace fwi
             // Create initial guess, generation 0, Adam
             core::dataGrid2D parent(_grid);
             parent.randomSaurabh();
-            double parentResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(parent, pData));
+
+            auto pDataEst = _forwardModel->calculatePressureField(parent);
+            double parentResSq = core::l2NormSquared(pData - pDataEst);
             preParentResSq = parentResSq;
             L_(io::linfo) << "Parent Res | Gen | Mutation Rate | Convergence State" << std::endl;
             std::cerr << "\n";
@@ -52,7 +58,8 @@ namespace fwi
                 {
                     core::dataGrid2D child(_grid);
                     child.randomChild(parent, generator, distribution);
-                    childResSq = _forwardModel->calculateResidualNormSq(_forwardModel->calculateResidual(child, pData));
+                    pDataEst = _forwardModel->calculatePressureField(child);
+                    childResSq = core::l2NormSquared(pData - pDataEst);
 
                     if(childResSq < favouriteChildResSq)
                     {

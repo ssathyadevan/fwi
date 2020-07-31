@@ -73,14 +73,14 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
 
     chi.toFile(gInput.outputLocation + "chi_ref_" + runName + ".txt");
 
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     fwi::forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
     model = new fwi::forwardModels::IntegralForwardModel(grid, source, receiver, freqg, integralreader.getInput());
 
     L_(fwi::io::linfo) << "Calculate pData (the reference pressure-field)...";
     model->calculatePTot(chi);
     model->calculateKappa();
-    model->calculatePData(chi, referencePressureData);
+    referencePressureData = model->calculatePressureField(chi);
 
     // writing the referencePressureData to a text file in complex form
     L_(fwi::io::linfo) << "calculateData done";

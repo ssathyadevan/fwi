@@ -75,7 +75,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
 
     L_(fwi::io::linfo) << "Create forwardModel";
     clock_t tStartForwardModel = clock();
-    fwi::forwardModels::forwardModelInterface *model;
+    fwi::forwardModels::ForwardModelInterface *model;
     fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finiteDifferenceReader(gInput.caseFolder);
     fwi::forwardModels::finiteDifferenceForwardModelInput fmInput = finiteDifferenceReader.getInput();
     model = new fwi::forwardModels::FiniteDifferenceForwardModel(grid, source, receiver, freqg, fmInput);
@@ -86,7 +86,7 @@ void generateReferencePressureFieldFromChi(const fwi::io::genericInput &gInput, 
     clock_t tStartCalculatePData = clock();
     model->calculatePTot(chi);
     model->calculateKappa();
-    model->calculatePData(chi, referencePressureData);
+    referencePressureData = model->calculatePressureField(chi);
     clock_t tEndCalculatePData = clock();
     L_(fwi::io::linfo) << "PData has been calculated in " << double(tEndCalculatePData - tStartCalculatePData) / CLOCKS_PER_SEC << "seconds.";
     // writing the referencePressureData to a text file in complex form

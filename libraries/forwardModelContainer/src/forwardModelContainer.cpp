@@ -1,3 +1,4 @@
+#include "CommonVectorOperations.h"
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "integralForwardModel.h"
@@ -8,6 +9,8 @@
 #include <omp.h>
 
 #include <iostream>
+
+using fwi::core::operator-;
 
 namespace fwi
 {
@@ -43,7 +46,7 @@ namespace fwi
             forwardModels::integralForwardModelInputCardReader integralreader(gInput.caseFolder);
             for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
             {
-                forwardModels::forwardModelInterface *model =
+                forwardModels::ForwardModelInterface *model =
                     new forwardModels::IntegralForwardModel(grid, sources, receivers, _frequenciesVector[threadNumber], integralreader.getInput());
                 _forwardmodels.push_back(model);
             }
@@ -53,7 +56,7 @@ namespace fwi
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
             for(int threadNumber = 0; threadNumber < _numberOfThreads; threadNumber++)
             {
-                forwardModels::forwardModelInterface *model = new forwardModels::FiniteDifferenceForwardModel(
+                forwardModels::ForwardModelInterface *model = new forwardModels::FiniteDifferenceForwardModel(
                     grid, sources, receivers, _frequenciesVector[threadNumber], finitedifferencereader.getInput());
                 _forwardmodels.push_back(model);
             }
@@ -97,9 +100,11 @@ namespace fwi
             int privateLength = _numberOfReceivers * _numberOfSources * _numberOfFrequenciesPerThread[omp_get_thread_num()];
 
             std::vector<std::complex<double>> privatePDataRef(privateLength);
+
             std::copy(pDataRef.begin() + privateOffset, pDataRef.begin() + privateOffset + privateLength, privatePDataRef.begin());
 
-            std::vector<std::complex<double>> privateResiduals = _forwardmodels[omp_get_thread_num()]->calculateResidual(chiEstimate, privatePDataRef);
+            std::vector<std::complex<double>> privatePDataEst = _forwardmodels[omp_get_thread_num()]->calculatePressureField(chiEstimate);
+            std::vector<std::complex<double>> privateResiduals = privatePDataRef - privatePDataEst;
 
             std::copy(privateResiduals.begin(), privateResiduals.end(), allResiduals.begin() + privateOffset);
         }
@@ -119,7 +124,7 @@ namespace fwi
             std::vector<std::complex<double>> privateResidual(privateLength);
             std::copy(residual.begin() + privateOffset, residual.begin() + privateOffset + privateLength, privateResidual.begin());
 
-            double privateResidualNormSq = _forwardmodels[omp_get_thread_num()]->calculateResidualNormSq(privateResidual);
+            double privateResidualNormSq = core::l2NormSquared(privateResidual);
             residualNormSq = privateResidualNormSq;
         }
         return residualNormSq;

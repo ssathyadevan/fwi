@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ForwardModelBase.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "greensFunctions.h"
 #include "greensSerial.h"
@@ -10,7 +10,7 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class IntegralForwardModel : public ForwardModelBase
+        class IntegralForwardModel : public ForwardModelInterface
         {
         public:
             IntegralForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver, const core::FrequenciesGroup &freq,
@@ -18,7 +18,7 @@ namespace fwi
 
             ~IntegralForwardModel();
 
-            virtual void calculatePData(const core::dataGrid2D &chiEst, std::vector<std::complex<double>> &kOperator);
+            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
 
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
             void calculateKappa();
@@ -26,7 +26,13 @@ namespace fwi
             virtual void getUpdateDirectionInformationMPI(
                 std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
 
-            virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
+            const core::grid2D &getGrid() { return _grid; }
+
+            const core::Sources &getSource() { return _source; }
+
+            const core::Receivers &getReceiver() { return _receiver; }
+
+            const core::FrequenciesGroup &getFreq() { return _freq; }
 
         private:
             std::vector<std::complex<double>> _residual;
@@ -35,8 +41,6 @@ namespace fwi
             const core::Sources &_source;
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
-
-            CostFunction _costFunction;
 
             core::greensRect2DCpu **_Greens;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "forwardModelInterface.h"
+#include "ForwardModelInterface.h"
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include <string>
@@ -27,7 +27,7 @@ namespace fwi
         const core::Receivers &getReceivers() const { return _forwardmodels[0]->getReceiver(); }
 
     private:
-        std::vector<forwardModels::forwardModelInterface *> _forwardmodels;
+        std::vector<forwardModels::ForwardModelInterface *> _forwardmodels;
         const int _numberOfThreads;
         const int _numberOfSources;
         const int _numberOfReceivers;

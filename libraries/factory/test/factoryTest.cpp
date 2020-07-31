@@ -33,7 +33,7 @@ namespace fwi
     TEST(factoryTest, expectThrowMissingForwardModelTest)
     {
         // Create null pointer to forwardmodel
-        forwardModels::forwardModelInterface *forwardModel = nullptr;
+        forwardModels::ForwardModelInterface *forwardModel = nullptr;
 
         // Create a fixed step size with conjugate gradient method
         const std::string desiredStepSizeMethod = "FixedStepSize";
