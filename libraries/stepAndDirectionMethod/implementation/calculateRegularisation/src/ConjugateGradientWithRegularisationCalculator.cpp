@@ -66,8 +66,6 @@ namespace fwi
 
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
-            auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
-//Review: the above line does nothing, remove
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
 
             double alpha = 0.0;
@@ -203,22 +201,19 @@ namespace fwi
         void ConjugateGradientWithRegularisationCalculator::updateResidual()
         {
             auto pDataEst = _forwardModel->calculatePData(_chiEstimateCurrent);
-            _residualVector = _pData - pDataEst;
-            _residualValueCurrent = _errorFunctionalScalingFactor * core::l2NormSquared(_residualVector);
-			//Review: invoke the generic costFunction 
+            _residualValueCurrent = _costCalculator.calculateCost(_pData, pDataEst, _errorFunctionalScalingFactor);
         }
 
         double ConjugateGradientWithRegularisationCalculator::calculateStepSizeInRegularisation()
         {
-            std::vector<std::complex<double>> kappaTimesDirection(_nTotal);
-            _forwardModel->mapDomainToSignal(_directionCurrent, kappaTimesDirection);
+            std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePData(_directionCurrent);
 
             double a0 = _residualValuePrevious;
 
             double a1 = 0.0;
             double a2 = 0.0;
 
-            for(int i = 0; i < _nTotal; i++)
+            for(size_t i = 0; i < kappaTimesDirection.size(); i++)
             {
                 a1 += -2.0 * _errorFunctionalScalingFactor * std::real(conj(_residualVector[i]) * kappaTimesDirection[i]);
                 a2 += _errorFunctionalScalingFactor * std::real(conj(kappaTimesDirection[i]) * kappaTimesDirection[i]);

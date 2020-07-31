@@ -169,7 +169,7 @@ namespace fwi
                 }
             }
         }
-//Review: unify mapDomainToSignal and calculatePData
+
         std::vector<std::complex<double>> FiniteDifferenceForwardModel::calculatePData(const core::dataGrid2D &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
@@ -195,11 +195,6 @@ namespace fwi
                     }
                 }
             }
-        }
-
-        void FiniteDifferenceForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
-        {
-            applyKappa(CurrentPressureFieldSerial, kOperator);
         }
 
         void FiniteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)

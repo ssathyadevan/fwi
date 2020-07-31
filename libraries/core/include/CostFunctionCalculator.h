@@ -36,7 +36,8 @@ namespace fwi
              * @return cost
              */
             double calculateCost(const std::vector<std::complex<double>> &pData, const std::vector<std::complex<double>> &pDataEst, double eta) const
-            {//Review: add comment saying to add a switch if there is more than one option possible
+            {   // TODO: Add switch case to change the calculation of the cost function according to the selected enum value (add this whenever we have more
+                // than one option)
                 return eta * l2NormSquared(pData - pDataEst);
             }
 

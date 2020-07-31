@@ -31,11 +31,6 @@ namespace fwi
                 kappaTimesResidual = _kappaTimesResidualValue;
             }   // the real KtimesResidual method cannot be applied without defining the whole core::complexDataGrid2D** _Kappa member, which defies the intent
                 // of creating a mock class.
-            virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
-            {
-                (void)CurrentPressureFieldSerial;
-                (void)kOperator;
-            }
             // to change value to kappaTimesResidual. Can only be invoked when creating a ForwardModelInterfaceMock* and not a ForwardModelInterface*
             void setKappaTimesResidualValue(double newKTRValue) { _kappaTimesResidualValue = newKTRValue; }
             std::vector<std::complex<double>> &calculateResidual(const core::dataGrid2D &chiEst, const std::vector<std::complex<double>> &pDataRef);

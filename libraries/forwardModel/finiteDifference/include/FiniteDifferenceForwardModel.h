@@ -25,7 +25,6 @@ namespace fwi
             virtual void getUpdateDirectionInformationMPI(
                 std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
             virtual void getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
-            virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator);
 
             const core::grid2D &getGrid() { return _grid; }
 

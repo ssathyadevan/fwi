@@ -259,7 +259,7 @@ namespace fwi
                 }
             }
         }
-//Review: unify mapDomainToSignal and calculatePData
+
         std::vector<std::complex<double>> IntegralForwardModel::calculatePData(const core::dataGrid2D &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
@@ -285,11 +285,6 @@ namespace fwi
                     }
                 }
             }
-        }
-
-        void IntegralForwardModel::mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
-        {
-            applyKappa(CurrentPressureFieldSerial, kOperator);
         }
 
         void IntegralForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)

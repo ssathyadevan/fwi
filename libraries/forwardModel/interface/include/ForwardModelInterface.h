@@ -35,9 +35,9 @@ namespace fwi
              * @return pressure field
              */
             virtual std::vector<std::complex<double>> calculatePData(const core::dataGrid2D &chiEst) = 0;
-            virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
-            virtual void mapDomainToSignal(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator) = 0;
 
+            // TODO: Evaluate the following functions for removal
+            virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
             virtual void calculateKappa() = 0;
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &) = 0;
             virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int) = 0;

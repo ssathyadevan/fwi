@@ -23,30 +23,32 @@ namespace fwi
         }
 
         /**
-         * @brief Defines substraction operator between vectors of equal size, it performs element wise substraction
+         * @brief Defines substraction operator between std::vector<std::complex<double>> of equal size, it performs element wise substraction
          * @param operandA constant reference to the first operand
          * @param operandB constant reference to the second operand
          * @return a vector where its components are calculated as vector[i] = operandA[i] - operandB[i]
          */
-        template<class type_t> inline std::vector<type_t> operator-(const std::vector<type_t> &operandA, const std::vector<type_t> &operandB)
+        inline std::vector<std::complex<double>> operator-(const std::vector<std::complex<double>> &operandA, const std::vector<std::complex<double>> &operandB)
         {
             assert(operandA.size() == operandB.size() && "Substraction is not defined for vectors of different size");
-            std::vector<type_t> result(operandA.size());
-            std::transform(operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](type_t x, type_t y) { return x - y; });
+            std::vector<std::complex<double>> result(operandA.size());
+            std::transform(
+                operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](std::complex<double> x, std::complex<double> y) { return x - y; });
             return result;
         }
 
         /**
-         * @brief Defines addition operator between vectors of equal size, it performs element wise addition
+         * @brief Defines addition operator between std::vector<std::complex<double>> of equal size, it performs element wise addition
          * @param operandA constant reference to the first operand
          * @param operandB constant reference to the second operand
          * @return a vector where its components are calculated as vector[i] = operandA[i] + operandB[i]
          */
-        template<class type_t> inline std::vector<type_t> operator+(const std::vector<type_t> &operandA, const std::vector<type_t> &operandB)
+        inline std::vector<std::complex<double>> operator+(const std::vector<std::complex<double>> &operandA, const std::vector<std::complex<double>> &operandB)
         {
             assert(operandA.size() == operandB.size() && "Addition is not defined for vectors of different size");
-            std::vector<type_t> result(operandA.size());
-            std::transform(operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](type_t x, type_t y) { return x + y; });
+            std::vector<std::complex<double>> result(operandA.size());
+            std::transform(
+                operandA.begin(), operandA.end(), operandB.begin(), result.begin(), [](std::complex<double> x, std::complex<double> y) { return x + y; });
             return result;
         }
 

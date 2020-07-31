@@ -34,21 +34,18 @@ namespace fwi
 
             auto pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
             std::vector<std::complex<double>> residualVector = pData - pDataEst;
-            double residualValue = calculateResidualNorm(residualVector, eta);
+            double residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
 
             _forwardModel->calculateKappa();
 
             core::dataGrid2D const *directionCurrent;
-
-            int kappaTimesDirectionSize = _forwardModel->getFreq().count * _forwardModel->getSource().count * _forwardModel->getReceiver().count;
-            std::vector<std::complex<double>> kappaTimesDirection(kappaTimesDirectionSize);
 
             for(int it = 0; it < _directionInput.maxIterationsNumber; ++it)
             {
                 directionCurrent = &_desiredDirection->calculateDirection(chiEstimateCurrent, residualVector);
 
                 // here we compute kappaTimesDirection, which is used only in ConjugateGradientStepSize.
-                _forwardModel->mapDomainToSignal(*directionCurrent, kappaTimesDirection);
+                std::vector<std::complex<double>> kappaTimesDirection = _forwardModel->calculatePData(*directionCurrent);
 
                 _desiredStep->updateVariables(
                     chiEstimateCurrent, *directionCurrent, it, kappaTimesDirection, residualVector);   // update all StepSizeCalculator with last two items
@@ -58,8 +55,7 @@ namespace fwi
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
                 pDataEst = _forwardModel->calculatePData(chiEstimateCurrent);
-                residualVector = pData - pDataEst;
-                residualValue = calculateResidualNorm(residualVector, eta);
+                residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
 
                 if(residualValue < _directionInput.tolerance)
@@ -90,11 +86,6 @@ namespace fwi
             chiTemp += descentVector;
 
             return chiTemp;
-        }
-		//Review: remove method below
-        double StepAndDirectionReconstructor::calculateResidualNorm(const std::vector<std::complex<double>> &residualVector, double eta) const
-        {
-            return eta * core::l2NormSquared(residualVector);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

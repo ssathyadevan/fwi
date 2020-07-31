@@ -34,11 +34,8 @@ namespace fwi
         core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
-
-            const int nTotal = _frequencies.count * _sources.count * _receivers.count;
-            const double eta = 1.0 / (core::l2NormSquared(pData));   // Scaling factor
+            const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
             _chiEstimate.zero();
-// Review: Use costFunction instead of l2NormSquared
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
             bool isConverged = false;
@@ -91,7 +88,7 @@ namespace fwi
 
                     zeta = calculateUpdateDirectionRegularisation(residualArray, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
                         regularisationPrevious, zeta, residualPrevious);   // eq: updateDirectionsCG
-                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, nTotal, residualArray, eta, residualPrevious, zeta);
+                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualArray, eta, residualPrevious, zeta);
 
                     // Update contrast-function
                     _chiEstimate += alpha * zeta;
@@ -99,8 +96,6 @@ namespace fwi
                     // Result + logging
                     pDataEst = _forwardModel->calculatePData(_chiEstimate);
                     residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
-                    // residualCurrent = _forwardModel->calculateCost(residualArray, _chiEstimate, pData, eta);
-					//Review: remove commented line
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
 
@@ -161,12 +156,9 @@ namespace fwi
             double alphaNumerator = 0.0;
             double alphaDenominator = 0.0;
 
-            int nSignals = _frequencies.count * _sources.count * _receivers.count;
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePData(zeta);
 
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.count * _sources.count * _receivers.count);
-            _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
-
-            for(int i = 0; i < nSignals; i++)
+            for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
                 alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
                 alphaDenominator += std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
@@ -260,18 +252,17 @@ namespace fwi
         }
 
         double ConjugateGradientInversion::calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious,
-            RegularisationParameters &regularisationCurrent, const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta,
+            RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualArray, const double eta,
             const double fDataPrevious, const core::dataGrid2D &zeta)
         {
-            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.count * _sources.count * _receivers.count);
-            _forwardModel->mapDomainToSignal(zeta, kappaTimesZeta);
+            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePData(zeta);
 
             double a0 = fDataPrevious;
 
             double a1 = 0.0;
             double a2 = 0.0;
 
-            for(int i = 0; i < nTotal; i++)
+            for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
                 a1 += -2.0 * eta * std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
                 a2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);

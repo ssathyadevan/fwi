@@ -136,8 +136,7 @@ namespace fwi
              * @return double alpha, the optimal stepsize
              */
             double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
-                const int nTotal, const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious,
-                const core::dataGrid2D &zeta);
+                const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const core::dataGrid2D &zeta);
 
             /**
              * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
