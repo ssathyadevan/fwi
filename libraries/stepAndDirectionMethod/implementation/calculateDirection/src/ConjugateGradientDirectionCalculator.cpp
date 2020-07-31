@@ -21,13 +21,13 @@ namespace fwi
 
             _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
 
-            // here we add g_n as in eq. (35), (37) of /doc/ReadMe/1_ProjectDescription.pdf
+            // here we add g_n as in eq. (35), (37) of /doc/ReadMe/1_ProjectDescription.pdf Review: please add equation the reference to the Doxygen description of getUpdateDirectionInformation in the header file
 
             core::dataGrid2D minusGradient = 2.0 * _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
             _direction = minusGradient;
 
-            // this ensures that in the first step of the inversion process we do not add this term.
-            // It also ensures that the division in calculateGammaPolakRibiere() will not throw exceptions.
+            // this ensures that in the first step of the inversion process we do not add this term. //Review: Comment can be clearer, do not use "this" and It
+            // It also ensures that the division in calculateGammaPolakRibiere() will not throw exceptions. 
             if(_directionPrevious.norm() > 0.0)
             {
                 double gamma = calculateGammaPolakRibiere();
@@ -40,7 +40,7 @@ namespace fwi
             return _direction;
         }
 
-        double ConjugateGradientDirectionCalculator::calculateGammaPolakRibiere()
+        double ConjugateGradientDirectionCalculator::calculateGammaPolakRibiere() //Review, make reference to equations in documentation here
         {
             double gammaNumerator = 0.0;
             double gammaDenominator = 0.0;

@@ -26,7 +26,7 @@ namespace fwi
             {
                 throw std::overflow_error("Operator divides by zero");
             }
-            // According to 1_ProjectDescription.pdf and to computations the - sign should not be there, but if removed it does not converge.
+            // According to 1_ProjectDescription.pdf and to computations the - sign should not be there, but if removed it does not converge. //Review: Please check this with the PhD Thesis included in the docs and update document accordingly
             return alphaNumerator / alphaDenominator;
         }
 
