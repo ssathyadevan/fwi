@@ -38,8 +38,7 @@ namespace fwi
 
             double fx;
             int counter = 1;
-            const int nTotal = _freq.count * _source.count * _receiver.count;
-            double eta = 1.0 / (core::normSq(pData));
+            double eta = 1.0 / (core::l2NormSquared(pData));
             double gamma = _gdInput.gamma0;   // First iteration
             for(int it1 = 0; it1 < _gdInput.iter; it1++)
             {
