@@ -33,9 +33,6 @@ set(EXCLUDE_PATTERN "${EXCLUDE_OPENCL_LIBRARY_PATH} \\ \n ${EXCLUDE_TESTS_PATHS}
 #Replace variables inside @@ with the current values
 configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
 
-#This will be the main output of our command
-set(DOXYGEN_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/html/index.html)
-
 #Create output folder
 file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR}) #Doxygen won't create this for us
 
