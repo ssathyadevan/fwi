@@ -19,15 +19,15 @@ namespace fwi
         {
             core::complexDataGrid2D kappaTimesResidual(chi.getGrid());
 
+            // getUpdateDirectionInformation() updates kappaTimesResidual with the new residual vector
             _forwardModel->getUpdateDirectionInformation(residual, kappaTimesResidual);
 
-            // here we add g_n as in eq. (35), (37) of /doc/ReadMe/1_ProjectDescription.pdf Review: please add equation the reference to the Doxygen description of getUpdateDirectionInformation in the header file
-
+            // here we add g_n as in eq. (35) of /doc/ReadMe/1_ProjectDescription.pdf
             core::dataGrid2D minusGradient = 2.0 * _errorFunctionalScalingFactor * kappaTimesResidual.getRealPart();
             _direction = minusGradient;
 
-            // this ensures that in the first step of the inversion process we do not add this term. //Review: Comment can be clearer, do not use "this" and It
-            // It also ensures that the division in calculateGammaPolakRibiere() will not throw exceptions. 
+            // this ensures that in the first step of the inversion process we do not add the gamma*zeta term,
+            // and also that we never risk dividing by 0 in calculateGammaPolakRibiere().
             if(_directionPrevious.norm() > 0.0)
             {
                 double gamma = calculateGammaPolakRibiere();
@@ -40,12 +40,14 @@ namespace fwi
             return _direction;
         }
 
-        double ConjugateGradientDirectionCalculator::calculateGammaPolakRibiere() //Review, make reference to equations in documentation here
+        double ConjugateGradientDirectionCalculator::calculateGammaPolakRibiere()
         {
             double gammaNumerator = 0.0;
             double gammaDenominator = 0.0;
 
+            // gammaNumerator corresponds to int (g_n(x)*(g_n(x) -g_{n-1}(x)) dx
             gammaNumerator = _direction.innerProduct(_direction - _directionPrevious);
+            // gammaDenominator corresponds to int (g_{n-1}(x)^2)dx = ||g_{n-1}||^2
             gammaDenominator = _directionPrevious.innerProduct(_directionPrevious);
 
             return gammaNumerator / gammaDenominator;
