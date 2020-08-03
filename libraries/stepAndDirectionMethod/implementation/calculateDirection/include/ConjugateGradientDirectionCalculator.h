@@ -10,7 +10,6 @@ namespace fwi
         {
         public:
             ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel);
-			
             virtual ~ConjugateGradientDirectionCalculator();
 
             /**
