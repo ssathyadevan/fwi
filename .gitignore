@@ -126,6 +126,13 @@ Build/
 FWIInstall/
 results/
 
+#=============================
+#=== Doxygen Documentation ===
+#=============================
+doc/doxygen
+doc/Doxyfile
+
+
 #=============
 #=== Latex ===
 #=============
