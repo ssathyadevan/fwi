@@ -5,8 +5,8 @@ namespace fwi
     namespace inversionMethods
     {
         ConjugateGradientDirectionCalculator::ConjugateGradientDirectionCalculator(
-            double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardmodel)
-            : DirectionCalculator(errorFunctionalScalingFactor, forwardmodel)
+            double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel)
+            : DirectionCalculator(errorFunctionalScalingFactor, forwardModel)
         {
         }
 

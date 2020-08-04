@@ -9,7 +9,7 @@ namespace fwi
         class ConjugateGradientDirectionCalculator : public DirectionCalculator
         {
         public:
-            ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardmodel);
+            ConjugateGradientDirectionCalculator(double errorFunctionalScalingFactor, forwardModels::ForwardModelInterface *forwardModel);
             virtual ~ConjugateGradientDirectionCalculator();
 
             /**
