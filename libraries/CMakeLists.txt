@@ -12,7 +12,6 @@ function( build_test )
     gtest_discover_tests( ${TEST_TARGET} )
 endfunction( build_test )
 
-
 add_subdirectory( utilities )
 add_subdirectory( core )
 add_subdirectory( forwardModel )

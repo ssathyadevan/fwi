@@ -1,64 +1,47 @@
 #include "DirectionCalculator.h"
 #include "DirectionCalculatorMock.h"
 #include "ForwardModelMock.h"
+
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+using ::testing::_;
+using ::testing::NiceMock;
+using ::testing::ReturnRef;
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        core::grid2D getGrid()
+        class DirectionCalculatorTest : public ::testing::Test
         {
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            std::array<int, 2> nX = {2, 4};
+        protected:
+            std::array<double, 2> _xMin{0.0, 0.0};
+            std::array<double, 2> _xMax{2.0, 2.0};
+            std::array<int, 2> _nX{2, 4};
+            core::grid2D _grid{_xMin, _xMax, _nX};
+            double _errorFunctionScalingFactor = 1.0;
+            NiceMock<forwardModels::ForwardModelMock> _forwardModel;
+        };
 
-            core::grid2D grid(xMin, xMax, nX);
-            return grid;
+        TEST_F(DirectionCalculatorTest, ConstructorScalingFactorTest)
+        {
+            _errorFunctionScalingFactor = 1.0;
+            ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+            DirectionCalculatorMock directionCalculator(_errorFunctionScalingFactor, &_forwardModel);
+
+            double mockErrorFunctionalScalingFactor = directionCalculator.getErrorFunctionalScalingFactor();
+
+            EXPECT_EQ(_errorFunctionScalingFactor, mockErrorFunctionalScalingFactor);
         }
 
-        TEST(DirectionCalculatorTest, ConstructorScalingFactorTest)
+        TEST_F(DirectionCalculatorTest, ScalingFactorExceptionTest)
         {
-            //            double errorFunctionalScalingFactor = 1.0;
+            _errorFunctionScalingFactor = -1.0;
 
-            //            core::grid2D grid = getGrid();
-            //            std::array<double, 2> xMin = {0.0, 0.0};
-            //            std::array<double, 2> xMax = {2.0, 2.0};
-            //            core::freqInfo freq(0.0, 10.0, 5);
-            //            core::Sources sources(xMin, xMax, 2);
-            //            core::Receivers receivers(xMin, xMax, 2);
-            //            core::FrequenciesGroup frequencies(freq, 2000.0);
+            ON_CALL(_forwardModel, getGrid).WillByDefault(testing::ReturnRef(_grid));
 
-            //            forwardModels::ForwardModelInterface *forwardModel;
-            //            forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
-
-            //            DirectionCalculator *directionCalculator = new DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel);
-            //            double mockErrorFunctionalScalingFactor = directionCalculator->getErrorFunctionalScalingFactor();
-
-            //            EXPECT_EQ(errorFunctionalScalingFactor, mockErrorFunctionalScalingFactor);
-
-            //            delete forwardModel;
-            //            delete directionCalculator;
-        }
-
-        TEST(DirectionCalculatorTest, ScalingFactorExceptionTest)
-        {
-            //            double errorFunctionalScalingFactor = -1.0;
-
-            //            core::grid2D grid = getGrid();
-            //            std::array<double, 2> xMin = {0.0, 0.0};
-            //            std::array<double, 2> xMax = {2.0, 2.0};
-            //            core::freqInfo freq(0.0, 10.0, 5);
-            //            core::Sources sources(xMin, xMax, 2);
-            //            core::Receivers receivers(xMin, xMax, 2);
-            //            core::FrequenciesGroup frequencies(freq, 2000.0);
-
-            //            forwardModels::ForwardModelInterface *forwardModel;
-            //            forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
-
-            //            EXPECT_THROW(DirectionCalculatorMock(errorFunctionalScalingFactor, forwardModel), std::invalid_argument);
-
-            //            delete forwardModel;
+            EXPECT_THROW(DirectionCalculatorMock(_errorFunctionScalingFactor, &_forwardModel), std::invalid_argument);
         }
     }   // namespace inversionMethods
 }   // namespace fwi
