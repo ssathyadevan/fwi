@@ -25,7 +25,8 @@ namespace fwi
         {
             // Arrange
             core::grid2D grid(xMin, xMax, nX);
-
+            // Review: no need for dynamic allocation, please remove new and delete operators
+            // Review: can also change for testing::NiceMock<forwardModels::ForwardModelMock> * to remove the message about uninteresting function call
             forwardModels::ForwardModelMock *forwardModel = new forwardModels::ForwardModelMock();
             ON_CALL(*forwardModel, getGrid).WillByDefault(testing::ReturnRef(grid));
 
