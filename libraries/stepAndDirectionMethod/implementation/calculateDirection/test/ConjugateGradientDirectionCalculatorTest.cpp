@@ -4,6 +4,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using ::testing::_;
+
 namespace fwi
 {
     namespace inversionMethods
@@ -23,22 +25,25 @@ namespace fwi
         {
             // Arrange
             core::grid2D grid(xMin, xMax, nX);
-            core::Sources sources(xMin, xMax, 2);
-            core::Receivers receivers(xMin, xMax, 2);
-            core::FrequenciesGroup frequencies(freq, 2000.0);
 
-            forwardModels::ForwardModelInterface *forwardModel = new forwardModels::ForwardModelMock(grid, sources, receivers, frequencies);
+            forwardModels::ForwardModelMock *forwardModel = new forwardModels::ForwardModelMock();
 
             ConjugateGradientDirectionCalculator directionCalculator(errorFunctionScalingFactor, forwardModel);
 
             core::dataGrid2D chiEstimate(grid);
             std::vector<std::complex<double>> residual(chiEstimate.getNumberOfGridPoints(), 1.0);
 
+            core::dataGrid2D newKappaTimesResidual(grid);
+            newKappaTimesResidual = 2.0;
+
             // Act
+            EXPECT_CALL(*forwardModel, getUpdateDirectionInformation(_, _)).WillOnce(testing::SetArgReferee<1>(newKappaTimesResidual));
+
             std::vector<double> conjugateGradientDirectionData = directionCalculator.calculateDirection(chiEstimate, residual).getData();
 
-            const double expectedDirection = 5.0;
+            const double expectedDirection = 2.0;
 
+            // Assert
             for(int it = 0; it < chiEstimate.getNumberOfGridPoints(); ++it)
             {
                 ASSERT_DOUBLE_EQ(conjugateGradientDirectionData[it], expectedDirection);
