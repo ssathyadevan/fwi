@@ -55,4 +55,6 @@ find_package(GTest REQUIRED)
 find_package(GMock REQUIRED)
 find_package (Eigen3 REQUIRED)
 add_subdirectory( libraries )
+add_subdirectory( doc )
 add_subdirectory( applications )
+

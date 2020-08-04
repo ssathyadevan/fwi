@@ -1,0 +1,37 @@
+/**
+ * @namespace fwi
+ * General namespace that contains the entire library.
+ */
+ 
+ 
+/**
+ * @namespace fwi::core
+ * Contains mathematical methods and classes that are fundamental to the library.
+ */
+ 
+ 
+/**
+ * @namespace fwi::forwardModels
+ * Constains forwardModels of the library.
+ */
+ 
+ 
+/**
+ * @namespace fwi::inversionMethods
+ * Contains inversion methods of the library.
+ */
+ 
+/**
+ * @namespace fwi::io
+ * Contains methods and classes related to file input/output operations.
+ */
+ 
+/**
+ * @namespace fwi::performance
+ * Contains methods meant to measure performance.
+ */
+ 
+/**
+ * @namespace fwi::utilities
+ * Contains utility methods of the library.
+ */

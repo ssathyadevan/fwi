@@ -44,63 +44,66 @@ int getValue(const char* item){ //Note: this value is in KB!
 	
 } // namespace
 
-namespace performance
+namespace fwi
 {
-	
-CpuClockMPI::CpuClockMPI() {}
-CpuClockMPI::~CpuClockMPI() {}
+	namespace performance
+	{
+		
+	CpuClockMPI::CpuClockMPI() {}
+	CpuClockMPI::~CpuClockMPI() {}
 
-void CpuClockMPI::Start()
-{
-    t_start = MPI_Wtime();
-    start = std::chrono::system_clock::now();
-    L_(io::linfo) << "Starting";
-}
+	void CpuClockMPI::Start()
+	{
+		t_start = MPI_Wtime();
+		start = std::chrono::system_clock::now();
+		L_(io::linfo) << "Starting";
+	}
 
-void CpuClockMPI::End()
-{
-    t_end = MPI_Wtime();
-    finish = std::chrono::system_clock::now();
-    L_(io::linfo) << "Finished";
-}
+	void CpuClockMPI::End()
+	{
+		t_end = MPI_Wtime();
+		finish = std::chrono::system_clock::now();
+		L_(io::linfo) << "Finished";
+	}
 
-std::string CpuClockMPI::OutputString()
-{
-    L_(io::linfo) << "CPU time: " << (double(t_end - t_start)) << " seconds" ;
-    L_(io::linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000) << "seconds"; //nanosec / 10^9 = sec
-    long virtual_mem, physical_mem;
-    MemoryUse(virtual_mem, physical_mem);
-    std::stringstream ss;
-    ss << "Timing:"                                                         << std::endl;
-    ss << "Starting at "      << start.time_since_epoch().count()           << std::endl;
-    ss << "Finished at "      << finish.time_since_epoch().count()          << std::endl;
-    ss << "CPU time: "        << (double(t_end - t_start)) << std::endl;
-    ss << std::endl << "Others:"                                            << std::endl;
-    ss << "Virtual memory: "  << virtual_mem                                << std::endl;
-    ss << "Physical memory: " << physical_mem                               << std::endl;
+	std::string CpuClockMPI::OutputString()
+	{
+		L_(io::linfo) << "CPU time: " << (double(t_end - t_start)) << " seconds" ;
+		L_(io::linfo) << "Wall time: " << double(finish.time_since_epoch().count() - start.time_since_epoch().count()) / double(1000000000) << "seconds"; //nanosec / 10^9 = sec
+		long virtual_mem, physical_mem;
+		MemoryUse(virtual_mem, physical_mem);
+		std::stringstream ss;
+		ss << "Timing:"                                                         << std::endl;
+		ss << "Starting at "      << start.time_since_epoch().count()           << std::endl;
+		ss << "Finished at "      << finish.time_since_epoch().count()          << std::endl;
+		ss << "CPU time: "        << (double(t_end - t_start)) << std::endl;
+		ss << std::endl << "Others:"                                            << std::endl;
+		ss << "Virtual memory: "  << virtual_mem                                << std::endl;
+		ss << "Physical memory: " << physical_mem                               << std::endl;
 
-    return ss.str();
-}
+		return ss.str();
+	}
 
-void CpuClockMPI::MemoryUse(long& virtual_mem, long& physical_mem){
-    #if __unix__
-        virtual_mem = getValue("VmSize:");
-        physical_mem = getValue("VmRSS:");
-    #else   
-        PROCESS_MEMORY_COUNTERS_EX pmc;
-        GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
-        SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-        SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
-        virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
-        physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
-    #endif
-    L_(ldebug) << "Virtual memory used: " << virtual_mem<< " kB";
-    L_(ldebug) << "Physical memory used: " << physical_mem<< " kB";
-    return;
-}
+	void CpuClockMPI::MemoryUse(long& virtual_mem, long& physical_mem){
+		#if __unix__
+			virtual_mem = getValue("VmSize:");
+			physical_mem = getValue("VmRSS:");
+		#else   
+			PROCESS_MEMORY_COUNTERS_EX pmc;
+			GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+			SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
+			SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+			virtual_mem = static_cast<long> virtualMemUsedByMe  / 1024 ;
+			physical_mem = static_cast<long> physMemUsedByMe  / 1024 ;
+		#endif
+		L_(ldebug) << "Virtual memory used: " << virtual_mem<< " kB";
+		L_(ldebug) << "Physical memory used: " << physical_mem<< " kB";
+		return;
+	}
 
-void CpuClockMPI::DebugPrint(std::string msg)
-{
-    std::cerr << msg << "CPU time: " << t_end - t_start << " seconds" << std::endl;
-}
-} // namespace performance
+	void CpuClockMPI::DebugPrint(std::string msg)
+	{
+		std::cerr << msg << "CPU time: " << t_end - t_start << " seconds" << std::endl;
+	}
+	} // namespace performance
+}   // namespace fwi

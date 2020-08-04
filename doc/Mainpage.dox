@@ -1,0 +1,62 @@
+/*! \mainpage
+ * \section intro Introduction
+ * For many large applications C++ is the language of choice and so it seems
+ * reasonable to define C++ bindings for OpenCL.
+ *
+ * The interface is contained with a single C++ header file \em cl2.hpp and all
+ * definitions are contained within the namespace \em cl. There is no additional
+ * requirement to include \em cl.h and to use either the C++ or original C
+ * bindings; it is enough to simply include \em cl2.hpp.
+ * 
+ *
+ * \section compatibility Compatibility
+ * Due to the evolution of the underlying OpenCL API the 2.0 C++ bindings
+ * include an updated approach to defining supported feature versions
+ * and the range of valid underlying OpenCL runtime versions supported.
+ *
+ *
+ *
+ * \section parameterization Parameters
+ * This header may be parameterized by a set of preprocessor macros.
+ *
+ * \section example Example
+ *
+ * The following example shows a general use for the C++
+ * bindings, including support for the optional exception feature and
+ * also the supplied vector and string classes, see following sections for
+ * decriptions of these features.
+ *
+ * \code
+    #define CL_HPP_ENABLE_EXCEPTIONS
+    #define CL_HPP_TARGET_OPENCL_VERSION 200
+
+    #include <CL/cl2.hpp>
+    #include <iostream>
+    #include <vector>
+    #include <memory>
+    #include <algorithm>
+
+    const int numElements = 32;
+
+    int main(void)
+    {
+        // Filter for a 2.0 platform and set it as the default
+        std::vector<cl::Platform> platforms;
+        cl::Platform::get(&platforms);
+        cl::Platform plat;
+        for (auto &p : platforms) {
+            std::string platver = p.getInfo<CL_PLATFORM_VERSION>();
+            if (platver.find("OpenCL 2.") != std::string::npos) {
+                plat = p;
+            }
+        }
+        if (plat() == 0)  {
+            std::cout << "No OpenCL 2.0 platform found.";
+            return -1;
+        }
+
+	}
+ *
+ * \endcode
+ *
+ */
