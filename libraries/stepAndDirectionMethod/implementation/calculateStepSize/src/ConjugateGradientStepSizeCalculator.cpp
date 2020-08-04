@@ -19,14 +19,13 @@ namespace fwi
 
             for(int i = 0; i < _nGridPoints; ++i)
             {
-                alphaNumerator += std::real(_residualVector[i] * _kappaTimesDirection[i]);
-                alphaDenominator += std::real(std::pow(_kappaTimesDirection[i], 2));
+                alphaNumerator += std::real(conj(_residualVector[i]) * _kappaTimesDirection[i]);
+                alphaDenominator += std::norm(_kappaTimesDirection[i]);
             }
             if(alphaDenominator == 0.0)
             {
                 throw std::overflow_error("Operator divides by zero");
             }
-
             return alphaNumerator / alphaDenominator;
         }
 
