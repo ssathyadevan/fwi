@@ -21,12 +21,13 @@ namespace fwi
             const double errorFunctionScalingFactor = 1.0;
         };
 
-        TEST_F(ConjugateGradientDirectionCalculatorTest, calculateDirection)
+        TEST_F(ConjugateGradientDirectionCalculatorTest, calculateDirection_OneIteration_ExpectVectorOfTwo)
         {
             // Arrange
             core::grid2D grid(xMin, xMax, nX);
 
             forwardModels::ForwardModelMock *forwardModel = new forwardModels::ForwardModelMock();
+            ON_CALL(*forwardModel, getGrid).WillByDefault(testing::ReturnRef(grid));
 
             ConjugateGradientDirectionCalculator directionCalculator(errorFunctionScalingFactor, forwardModel);
 
