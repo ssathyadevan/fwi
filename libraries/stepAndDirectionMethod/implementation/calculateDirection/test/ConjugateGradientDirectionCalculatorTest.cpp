@@ -25,12 +25,10 @@ namespace fwi
         {
             // Arrange
             core::grid2D grid(xMin, xMax, nX);
-            // Review: no need for dynamic allocation, please remove new and delete operators
-            // Review: can also change for testing::NiceMock<forwardModels::ForwardModelMock> * to remove the message about uninteresting function call
-            forwardModels::ForwardModelMock *forwardModel = new forwardModels::ForwardModelMock();
-            ON_CALL(*forwardModel, getGrid).WillByDefault(testing::ReturnRef(grid));
+            testing::NiceMock<forwardModels::ForwardModelMock> forwardModel;
+            ON_CALL(forwardModel, getGrid).WillByDefault(testing::ReturnRef(grid));
 
-            ConjugateGradientDirectionCalculator directionCalculator(errorFunctionScalingFactor, forwardModel);
+            ConjugateGradientDirectionCalculator directionCalculator(errorFunctionScalingFactor, &forwardModel);
 
             core::dataGrid2D chiEstimate(grid);
             std::vector<std::complex<double>> residual(chiEstimate.getNumberOfGridPoints(), 1.0);
@@ -39,7 +37,7 @@ namespace fwi
             newKappaTimesResidual = 2.0;
 
             // Act
-            EXPECT_CALL(*forwardModel, getUpdateDirectionInformation(_, _)).WillOnce(testing::SetArgReferee<1>(newKappaTimesResidual));
+            EXPECT_CALL(forwardModel, getUpdateDirectionInformation(_, _)).WillOnce(testing::SetArgReferee<1>(newKappaTimesResidual));
 
             std::vector<double> conjugateGradientDirectionData = directionCalculator.calculateDirection(chiEstimate, residual).getData();
 
@@ -50,8 +48,6 @@ namespace fwi
             {
                 ASSERT_DOUBLE_EQ(conjugateGradientDirectionData[it], expectedDirection);
             }
-
-            delete forwardModel;
         }
     }   // namespace inversionMethods
 }   // namespace fwi
