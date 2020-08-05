@@ -55,6 +55,7 @@ namespace fwi
                 chiEstimateCurrent = calculateNextMove(chiEstimateCurrent, *directionCurrent, step);
 
                 pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
+                residualVector = pData - pDataEst;
                 residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
                 file << std::setprecision(17) << residualValue << "," << it + 1 << std::endl;
 
