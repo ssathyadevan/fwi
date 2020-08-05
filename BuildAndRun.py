@@ -40,31 +40,30 @@ if sys.platform.startswith('linux'):
         change_json(ind_run[3], ind_run[4].split('x'), current_directory)
 
         print('Build project:')
-        os.chdir(current_directory[:current_directory.rfind('/')])
-        if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/Build'):
-            os.mkdir('Build')
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/Build')
-        check = os.system('sudo cmake -D CMAKE_BUILD_TYPE=Release ' +
-                        '-DCMAKE_INSTALL_PREFIX=../FWIInstall ../parallelized-fwi/')
+        if not os.path.isdir(current_directory + '/build'):
+            os.mkdir('build')
+        os.chdir(current_directory + '/build')
+        check = os.system('sudo cmake -DCMAKE_BUILD_TYPE=Release ' +
+                        '-DCMAKE_INSTALL_PREFIX=../FWIInstall ../')
         checking_for_errors(check, current_directory)
         check = os.system('sudo make install')
         checking_for_errors(check, current_directory)
         
         print('Running project:')
-        if not os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall'):
+        if not os.path.isdir(current_directory + '/FWIInstall'):
             os.mkdir('../FWIInstall')
-        elif os.path.isdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5]):
+        elif os.path.isdir(current_directory + '/FWIInstall/' + ind_run[5]):
             os.system('rm -r ../FWIInstall/' + ind_run[5])
-        check = os.system('cp -R ../parallelized-fwi/inputFiles/default ../FWIInstall/' + ind_run[5])
+        check = os.system('cp -R ../inputFiles/default ../FWIInstall/' + ind_run[5])
         checking_for_errors(check, current_directory)
-        check = os.system('cp -r ../Build/runtime/bin/ ../FWIInstall')
+        check = os.system('cp -r ../build/runtime/bin/ ../FWIInstall')
         checking_for_errors(check, current_directory)
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/' + ind_run[5] + '/input/')
+        os.chdir(current_directory + '/FWIInstall/' + ind_run[5] + '/input/')
         check = os.system('cp -r temp/temp' + str(ind_run[6]) + '.json ' + ind_run[0][:1].upper() + ind_run[0][1:] +
                 'Input.json')
         checking_for_errors(check, current_directory)
         os.system('rm -r temp')
-        os.chdir(current_directory[:current_directory.rfind('/')] + '/FWIInstall/bin')    
+        os.chdir(current_directory + '/FWIInstall/bin')    
         if ind_run[1] == 'IntegralForwardModel':
             check = os.system('./FWI_PreProcess_Integral ../' + ind_run[5])
         elif ind_run[1] == 'FiniteDifferenceForwardModel':
