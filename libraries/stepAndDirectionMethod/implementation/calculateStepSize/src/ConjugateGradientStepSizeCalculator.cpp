@@ -20,7 +20,8 @@ namespace fwi
             for(int i = 0; i < _nGridPoints; ++i)
             {
                 alphaNumerator += std::real(conj(_residualVector[i]) * _kappaTimesDirection[i]);
-                alphaDenominator += std::norm(_kappaTimesDirection[i]);
+                // the proper way to compute the squared norm of a complex number X is conj(X)*X
+                alphaDenominator += std::real(conj(_kappaTimesDirection[i]) * _kappaTimesDirection[i]);
             }
             if(alphaDenominator == 0.0)
             {
