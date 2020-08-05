@@ -31,7 +31,7 @@ class OutputLogger(object):
     @staticmethod
     def open_generic_input_json():
         with open(
-            "../parallelized-fwi/inputFiles/default/input/GenericInput.json"
+            "../inputFiles/default/input/GenericInput.json"
         ) as json_file:
             return json.load(json_file)
 
@@ -58,13 +58,13 @@ class OutputLogger(object):
 
     def get_description(self, run_num):
         path = ''
-        if os.path.isfile("../parallelized-fwi/results/description" + str(run_num) + ".txt"):
-            with open("../parallelized-fwi/results/description" + str(run_num) + ".txt", 'r') as in_file:
+        if os.path.isfile("../results/description" + str(run_num) + ".txt"):
+            with open("../results/description" + str(run_num) + ".txt", 'r') as in_file:
                 self.log["inversion_method"] = in_file.readline()[:-1]
                 self.log["forward_model"] = in_file.readline()[:-1]
                 path = in_file.readline()[:-1]
                 self.log["description"] = in_file.readline()
-            os.remove("../parallelized-fwi/results/description" + str(run_num) + ".txt")
+            os.remove("../results/description" + str(run_num) + ".txt")
         else:
             self.log["inversion_method"] = self.input_parameters["inversion_method"]
             self.log["forward_model"] = self.input_parameters["forward_model"]
@@ -87,9 +87,9 @@ class OutputLogger(object):
 
     def save_output_log(self):
         log = self.log.copy()
-        if not os.path.exists("../parallelized-fwi/results"):
-            os.mkdir("../parallelized-fwi/results")
+        if not os.path.exists("../results"):
+            os.mkdir("../results")
         with open(
-            "../parallelized-fwi/results/log_"
+            "../results/log_"
             + datetime.now().strftime("%d_%m_%Y_%H_%M_%S") + ".json", "w") as out_file:
             json.dump(log, out_file, ensure_ascii=False, indent=4)
