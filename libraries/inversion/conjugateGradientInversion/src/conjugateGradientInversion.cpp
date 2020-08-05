@@ -50,7 +50,7 @@ namespace fwi
 
                 _forwardModel->calculateKappa();
                 auto pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
-                std::vector<std::complex<double>> residualArray = pData - pDataEst;
+                std::vector<std::complex<double>> residualVector = pData - pDataEst;
 
                 // Initialize Regularisation parameters
                 double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
@@ -62,14 +62,15 @@ namespace fwi
 
                 // First iteration
                 //------------------------------------------------------------------
-                zeta = calculateUpdateDirection(residualArray, gradientCurrent, eta);
-                alpha = calculateStepSize(zeta, residualArray);   // eq: optimalStepSizeCG
+                zeta = calculateUpdateDirection(residualVector, gradientCurrent, eta);
+                alpha = calculateStepSize(zeta, residualVector);   // eq: optimalStepSizeCG
 
                 // Update contrast-function
                 _chiEstimate += alpha * zeta;   // eq: contrastUpdate
 
                 // Result + logging
                 pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+                residualVector = pData - pDataEst;
                 residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
@@ -86,15 +87,16 @@ namespace fwi
                 {
                     calculateRegularisationParameters(regularisationPrevious, regularisationCurrent, deltaAmplification);
 
-                    zeta = calculateUpdateDirectionRegularisation(residualArray, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
+                    zeta = calculateUpdateDirectionRegularisation(residualVector, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
                         regularisationPrevious, zeta, residualPrevious);   // eq: updateDirectionsCG
-                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualArray, eta, residualPrevious, zeta);
+                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualVector, eta, residualPrevious, zeta);
 
                     // Update contrast-function
                     _chiEstimate += alpha * zeta;
 
                     // Result + logging
                     pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+                    residualVector = pData - pDataEst;
                     residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
                     isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                     logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
@@ -142,16 +144,16 @@ namespace fwi
         }
 
         core::dataGrid2D ConjugateGradientInversion::calculateUpdateDirection(
-            std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent, double eta)
+            std::vector<std::complex<double>> &residualVector, core::dataGrid2D &gradientCurrent, double eta)
         {
             core::complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
-            _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
+            _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * kappaTimesResidual.getRealPart();
 
             return gradientCurrent;
         }
 
-        double ConjugateGradientInversion::calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray)
+        double ConjugateGradientInversion::calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualVector)
         {
             double alphaNumerator = 0.0;
             double alphaDenominator = 0.0;
@@ -160,7 +162,7 @@ namespace fwi
 
             for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
-                alphaNumerator += std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+                alphaNumerator += std::real(conj(residualVector[i]) * kappaTimesZeta[i]);
                 alphaDenominator += std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
             }
 
@@ -235,14 +237,14 @@ namespace fwi
             return gradientBSquaredTimesGradientChiX + gradientBSquaredTimesGradientChiZ;
         }
 
-        core::dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray,
+        core::dataGrid2D ConjugateGradientInversion::calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualVector,
             core::dataGrid2D &gradientCurrent, const core::dataGrid2D &gradientPrevious, const double eta,
             const RegularisationParameters &regularisationCurrent, const RegularisationParameters &regularisationPrevious, const core::dataGrid2D &zeta,
             double residualPrevious)
         {
             core::complexDataGrid2D kappaTimesResidual(_grid);
             kappaTimesResidual.zero();
-            _forwardModel->getUpdateDirectionInformation(residualArray, kappaTimesResidual);
+            _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * regularisationPrevious.errorFunctional * kappaTimesResidual.getRealPart() +
                               residualPrevious * regularisationCurrent.gradient;   // eq: 2.25 of thesis
             double gamma = gradientCurrent.innerProduct(gradientCurrent - gradientPrevious) /
@@ -252,7 +254,7 @@ namespace fwi
         }
 
         double ConjugateGradientInversion::calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious,
-            RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualArray, const double eta,
+            RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualVector, const double eta,
             const double fDataPrevious, const core::dataGrid2D &zeta)
         {
             std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
@@ -264,7 +266,7 @@ namespace fwi
 
             for(size_t i = 0; i < kappaTimesZeta.size(); i++)
             {
-                a1 += -2.0 * eta * std::real(conj(residualArray[i]) * kappaTimesZeta[i]);
+                a1 += -2.0 * eta * std::real(conj(residualVector[i]) * kappaTimesZeta[i]);
                 a2 += eta * std::real(conj(kappaTimesZeta[i]) * kappaTimesZeta[i]);
             }
 
