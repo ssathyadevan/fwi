@@ -22,18 +22,17 @@ namespace fwi
         class ConjugateGradientWithRegularisationCalculatorTest : public ::testing::Test
         {
         protected:
-            std::array<double, 2> _xMin{0.0, 0.0};
-            std::array<double, 2> _xMax{2.0, 2.0};
-            std::array<int, 2> _nX{2, 5};
-            double _errorFunctionalScalingFactor = 0.05;
-            core::grid2D _grid{_xMin, _xMax, _nX};
-            core::Sources _source{_xMin, _xMax, 2};
-            core::Receivers _receiver{_xMin, _xMax, 2};
-            core::freqInfo _freq{0.0, 10.0, 5};
-            core::FrequenciesGroup _frequencies{_freq, 2000.0};
-
+            const std::array<double, 2> _xMin{0.0, 0.0};
+            const std::array<double, 2> _xMax{2.0, 2.0};
+            const std::array<int, 2> _nX{2, 5};
+            const double _errorFunctionalScalingFactor = 0.05;
+            const core::grid2D _grid{_xMin, _xMax, _nX};
+            const core::Sources _source{_xMin, _xMax, 2};
+            const core::Receivers _receiver{_xMin, _xMax, 2};
+            const core::freqInfo _freq{0.0, 10.0, 5};
+            const core::FrequenciesGroup _frequencies{_freq, 2000.0};
+            const core::CostFunctionCalculator _costCalculator;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
-            core::CostFunctionCalculator _costCalculator;
         };
 
         TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)

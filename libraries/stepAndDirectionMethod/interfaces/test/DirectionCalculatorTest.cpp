@@ -16,10 +16,10 @@ namespace fwi
         class DirectionCalculatorTest : public ::testing::Test
         {
         protected:
-            std::array<double, 2> _xMin{0.0, 0.0};
-            std::array<double, 2> _xMax{2.0, 2.0};
-            std::array<int, 2> _nX{2, 4};
-            core::grid2D _grid{_xMin, _xMax, _nX};
+            const std::array<double, 2> _xMin{0.0, 0.0};
+            const std::array<double, 2> _xMax{2.0, 2.0};
+            const std::array<int, 2> _nX{2, 4};
+            const core::grid2D _grid{_xMin, _xMax, _nX};
             double _errorFunctionScalingFactor = 1.0;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
