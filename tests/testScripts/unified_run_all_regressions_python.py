@@ -23,7 +23,6 @@ if len(sys.argv) < 3 or len(sys.argv) > 4:
 FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")
 FWI_SOURCE_PATH=os.path.join(ft)
 BUILD_PATH = os.path.join(os.path.join(ft, "build")) 
-# Review: Jenkins calls the folder 'build', while we always used 'Build'. Make sure that the other useful python scripts are updated accordingly
 
 if not os.path.exists(BUILD_PATH):
     print("Can not build project in {} because it does not exist, make sure it exists".format(BUILD_PATH))
@@ -134,8 +133,6 @@ for test in tests:
     f.write("Passed {} unit test: ".format(test))
     f.close()
 
-# Review: the results on Jenkins are not very promising for both Windows and Linux, check the VAF and FIT values of the regression tests at https://ci-full-waveform-inversion.alten.nl/job/FWI/job/CreateSystemTests/9/consoleFull 
-# Review: I tried to run the regression tests locally on Linux, added a couple of 'Review: ' to the wiki page. Moreover it could not find the {}results.xml file. The reason is probably the way the following line is written. If they were working for you, let's see which versions of the python/pytest and so on do we have
     os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
     os.system("python3 read_pytest.py")
     os.remove(destdir2)
@@ -146,9 +143,7 @@ for test in tests:
 f=open(os.path.join(ft,"Regression_results.txt"),'r')
 print(f.read())
 f.close()
-# Review: the following comment can be removed
-#not sure why 
+
 os.chdir(os.path.join(FWI_INSTALL_PATH))
-#shutil.rmtree(os.path.join(FWI_INSTALL_PATH,regressiontestName))
 
 
