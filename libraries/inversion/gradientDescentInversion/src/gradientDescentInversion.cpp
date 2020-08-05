@@ -33,10 +33,9 @@ namespace fwi
 
             _forwardModel->calculateKappa();
             auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
-            pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
-            std::vector<double> dFdxPrevious;
+            std::vector<double> dFdxPrevious(_grid.getNumberOfGridPoints(), 0);
 
             double fx;
             bool isConverged = false;
@@ -45,7 +44,7 @@ namespace fwi
 
             double gamma = _gdInput.gamma0;   // First iteration
 
-            for(int it1 = 0; it1 < _gdInput.iter; it1++)
+            for(int it1 = 0; it1 < _gdInput.iter; ++it1)
             {
                 dFdxPrevious = dFdxCurrent;
                 dFdxCurrent = differential(chiEstimateCurrent, pData, eta, _gdInput.h);
@@ -95,14 +94,14 @@ namespace fwi
             double fxPlusH;
             core::dataGrid2D chiEstimatePlusH(chiEstimate);
             std::vector<double> dFdx(numGridPoints, 0.0);
-            for(int i = 0; i < numGridPoints; ++i)
+            for(int it = 0; it < numGridPoints; ++it)
             {
-                chiEstimatePlusH.addValueAtIndex(h, i);   // Add h
-                pDataEst = _forwardModel->calculatePressureField(chiEstimate);
+                chiEstimatePlusH.addValueAtIndex(h, it);   // Add h
+                pDataEst = _forwardModel->calculatePressureField(chiEstimatePlusH);
                 fxPlusH = _costCalculator.calculateCost(pData, pDataEst, eta);
-                chiEstimatePlusH.addValueAtIndex(-h, i);   // Remove h
+                chiEstimatePlusH.addValueAtIndex(-h, it);   // Remove h
 
-                dFdx[i] = (fxPlusH - fx) / h;
+                dFdx[it] = (fxPlusH - fx) / h;
             }
 
             return dFdx;
