@@ -12,8 +12,8 @@ def run_postprocessing(parameters, directory):
         forward_model = parameter[1]
         run_number = parameter[6]
         print(output, ':')
-        os.chdir(directory[:directory.rfind('/')] + '/FWIInstall')
-        os.system('cp ../parallelized-fwi/pythonScripts/postProcessing-python3.py .')
+        os.chdir(directory + '/FWIInstall')
+        os.system('cp ../pythonScripts/postProcessing-python3.py .')
         command_line = "python3 postProcessing-python3.py -o {} -i {} -f {} -r {}".format(output, inversion_method, forward_model, run_number)
         check = os.system(command_line)
         checking_for_errors(check, directory)

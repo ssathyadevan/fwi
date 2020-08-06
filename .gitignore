@@ -100,8 +100,19 @@ venv.bak/
 #=============
 #=== IDE's ===
 #=============
-.idea/
-.vscode/
+inputFiles/default/input/temp/temp0.json
+inputFiles/default/input/temp/temp1.json
+inputFiles/default/input/temp/temp2.json
+inputFiles/default/input/genericInput.json
+inputFiles/default/input/RandomInversionInput.json
+unified_run_all_regressions_python.py
+Regression_results.txt
+pythonScripts/__pycache__/
+pythonScripts/classes/__pycache__/
+*.idea
+*.vscode
+venv/*
+results/*
 .vs/
 
 #=============

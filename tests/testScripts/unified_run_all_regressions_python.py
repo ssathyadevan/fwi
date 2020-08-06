@@ -3,64 +3,54 @@ import sys, os, shutil
 #
 # 	This script automatically runs all regression tests and writes the results to
 # 	a file in directory $HOMEPATH/FWIIntsall/test{}.format(inversionmodel)/Regression_results.txt.
-#	This script should be in the directory $HOMEPATH (to run it locally),
-#       together with folders parallelized-fwi and FWIInstall, 
-#       When running from terminal, type python3 unified_run_all_regressions_python.py, followed by 1 to run it locally
-#       or 0 to run on Jenkins, forwardmodel (IntegralForwardModel or FiniteDifferenceForwardModel) and inversion model (ConjugateGradientInversion or GradientDescentInversion)
+#	This script should be in the repository folder i.e. parallelized-fwi (to run it locally) 
+#	along with the build and FWIInstall folder,
+#       When running from terminal, type python3 unified_run_all_regressions_python.py, forwardmodel (IntegralForwardModel 
+#	or FiniteDifferenceForwardModel) and inversion model (ConjugateGradientInversion or GradientDescentInversion)
 #       If you want to run one single regression test, add the name of the
-#       testcase you want. For example: "python3 run_all_regressions_python.py 1 IntegralForwardModel ConjugateGradientInversion fast" will run locally only the
+#       testcase you want. For example: "python3 run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion fast" will run locally only the
 #       regression for the testcase "fast"
 
 cwd = os.getcwd()
 ft=cwd
 
-if len(sys.argv) < 4 or len(sys.argv) > 5:
-    print("Please enter 1 for running locally or 0 for running on Jenkins, forwardmodel (IntegralForwardModel or FiniteDifferenceForwardModel) "
+if len(sys.argv) < 3 or len(sys.argv) > 4:
+    print("Please enter a forwardmodel (IntegralForwardModel or FiniteDifferenceForwardModel) "
           "and inversion model (ConjugateGradientInversion or GradientDescentInversion)")
     sys.exit(1)
 
-if sys.argv[1]=='1':
-    print("You selected to run locally") 
-    FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")        #for locally
-    FWI_SOURCE_PATH=os.path.join(ft,"parallelized-fwi")   #for locally
-    BUILD_PATH = os.path.join(os.path.join(ft, "Build"))
 
-    if not os.path.exists(BUILD_PATH):
-        print("Can not build project in {} because it does not exist, make sure it exists".format(BUILD_PATH))
-        sys.exit(1)
+FWI_INSTALL_PATH=os.path.join(ft,"FWIInstall")
+FWI_SOURCE_PATH=os.path.join(ft)
+BUILD_PATH = os.path.join(os.path.join(ft, "build")) 
 
-    ### Make sure you use the current state of the project
-    # Build project
-    print("Build project in {}".format(BUILD_PATH))
-    os.chdir(os.path.join(BUILD_PATH))
-    os.system("make install")
-    # Copy Build to FWIInstall
-    if os.path.exists(os.path.join(FWI_INSTALL_PATH, "bin")):
-        shutil.rmtree(os.path.join(FWI_INSTALL_PATH, "bin"))
+if not os.path.exists(BUILD_PATH):
+    print("Can not build project in {} because it does not exist, make sure it exists".format(BUILD_PATH))
+    sys.exit(1)
+
+### Make sure you use the current state of the project
+# Build project
+print("Build project in {}".format(BUILD_PATH))
+os.chdir(os.path.join(BUILD_PATH))
+os.system("make install")
+# Copy Build to FWIInstall
+if os.path.exists(os.path.join(FWI_INSTALL_PATH, "bin")):
+    shutil.rmtree(os.path.join(FWI_INSTALL_PATH, "bin"))
     shutil.copytree(os.path.join(BUILD_PATH, "runtime", "bin"), os.path.join(FWI_INSTALL_PATH, "bin"))
     os.chdir(ft)
 
-elif sys.argv[1]=='0':
-    print("You selected to run on Jenkins") 
-    FWI_INSTALL_PATH= os.path.join(ft,"FWIInstall")   #for Jenkins
-    FWI_SOURCE_PATH= os.path.join(ft)                 #for Jenkins
-    BUILD_PATH = os.path.join(os.path.join(ft, "build"))
-else:
-    print("Please input 1 for running locally or 0 for running on Jenkins")
-    sys.exit(1)
-
-if sys.argv[2] == "IntegralForwardModel":
+if sys.argv[1] == "IntegralForwardModel":
     forwardmodel = "IntegralForwardModel"
-elif sys.argv[2] == "FiniteDifferenceForwardModel":
+elif sys.argv[1] == "FiniteDifferenceForwardModel":
     forwardmodel = "FiniteDifferenceForwardModel"
 else:
     print("Forward model is not recognized")
     sys.exit(1)
 
-if sys.argv[3] == "ConjugateGradientInversion":
+if sys.argv[2] == "ConjugateGradientInversion":
     inversionmodel = "ConjugateGradientInversion"
     regression_data_folder = os.path.join(FWI_SOURCE_PATH,"tests","regression_data", "ConjugateGradientTestData")
-elif sys.argv[3] == "GradientDescentInversion":
+elif sys.argv[2] == "GradientDescentInversion":
     inversionmodel = "GradientDescentInversion"
     regression_data_folder = os.path.join(FWI_SOURCE_PATH, "tests", "regression_data", "GradientDescentTestData")
 else:
@@ -75,10 +65,10 @@ okur = os.getcwd()
 
 tests=list()
 
-if len(sys.argv)==5:
-    testcase=sys.argv[4]
+if len(sys.argv)==4:
+    testcase=sys.argv[3]
     tests.append(testcase)
-elif len(sys.argv)==4:
+elif len(sys.argv)==3:
     for name in os.listdir("."):
         if os.path.isdir(name):
             tests.append(name)
@@ -143,24 +133,17 @@ for test in tests:
     f.write("Passed {} unit test: ".format(test))
     f.close()
 
-    if sys.argv[1]=='0': 
-        os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
-    else:
-        os.system("pytest-3 python_unittest.py --junitxml={}results.xml".format(test))
-    
+    os.system("python3 -m pytest python_unittest.py --junitxml={}results.xml".format(test))
     os.system("python3 read_pytest.py")
     os.remove(destdir2)
 
     shutil.copy("Regression_results.txt", os.path.join(ft,"Regression_results.txt"))
-    if sys.argv[1]=='0':    
-        shutil.copy("{}results.xml".format(test), os.path.join(ft,"build","{}results.xml".format(test)))
-    else:
-        shutil.copy("{}results.xml".format(test), os.path.join(ft,"{}results.xml".format(test)))
-
+    shutil.copy("{}results.xml".format(test), os.path.join(ft,"build","{}results.xml".format(test)))
+    
 f=open(os.path.join(ft,"Regression_results.txt"),'r')
 print(f.read())
 f.close()
-#not sure why 
+
 os.chdir(os.path.join(FWI_INSTALL_PATH))
-#shutil.rmtree(os.path.join(FWI_INSTALL_PATH,regressiontestName))
+
 

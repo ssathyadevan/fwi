@@ -15,7 +15,7 @@ import matplotlib
 from datetime import datetime, date
 import argparse
 
-sys.path.insert(0, "../parallelized-fwi/pythonScripts/classes")
+sys.path.insert(0, "../pythonScripts/classes")
 from OutputLogger import OutputLogger
 
 def find(substr, whichin):
