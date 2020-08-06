@@ -1,111 +1,111 @@
 #include "ConjugateGradientWithRegularisationCalculator.h"
 #include "ForwardModelMock.h"
-#include <gtest/gtest.h>
 #include <iostream>
 
-using std::cout;
-using std::endl;
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+using ::testing::_;
+using ::testing::NiceMock;
+using ::testing::Return;
+using ::testing::ReturnRef;
+
+using fwi::core::operator-;
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        core::grid2D getGrid()
+        class ConjugateGradientWithRegularisationCalculatorTest : public ::testing::Test
         {
-            std::array<double, 2> xMin = {0.0, 0.0};
-            std::array<double, 2> xMax = {2.0, 2.0};
-            std::array<int, 2> nX = {2, 5};
-            core::grid2D grid(xMin, xMax, nX);
+        protected:
+            const std::array<double, 2> _xMin{0.0, 0.0};
+            const std::array<double, 2> _xMax{2.0, 2.0};
+            const std::array<int, 2> _nX{2, 5};
+            const double _errorFunctionalScalingFactor = 0.05;
+            const core::grid2D _grid{_xMin, _xMax, _nX};
+            const core::Sources _source{_xMin, _xMax, 2};
+            const core::Receivers _receiver{_xMin, _xMax, 2};
+            const core::freqInfo _freq{0.0, 10.0, 5};
+            const core::FrequenciesGroup _frequencies{_freq, 2000.0};
+            const core::CostFunctionCalculator _costCalculator;
+            NiceMock<forwardModels::ForwardModelMock> _forwardModel;
+        };
 
-            return grid;
-        }
-
-        TEST(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
+        TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirection_TwoIterations_Convergence)
         {
-            //            double errorFunctionalScalingFactor = 0.05;
+            double initialKappaTimesResidualValue = 1.0;
 
-            //            core::CostFunctionCalculator costCalculator;
-            //            std::array<double, 2> xMin = {0.0, 0.0};
-            //            std::array<double, 2> xMax = {2.0, 2.0};
-            //            std::array<int, 2> nX = {2, 5};
-            //            core::grid2D grid(xMin, xMax, nX);
-            //            core::freqInfo freq(0.0, 10.0, 5);
-            //            core::Sources source(xMin, xMax, 2);
-            //            core::Receivers receiver(xMin, xMax, 2);
-            //            core::FrequenciesGroup frequencies(freq, 2000.0);
+            ConjugateGradientWithRegularisationParametersInput cgParametersInput;
+            cgParametersInput._deltaAmplification._start = 1.0;
+            cgParametersInput._deltaAmplification._slope = 0.0;
+            cgParametersInput._nIterations = 0;
+            cgParametersInput._tolerance = 0.001;
 
-            //            forwardModels::ForwardModelMock *forwardModel;
-            //            forwardModel = new forwardModels::ForwardModelMock(grid, source, receiver, frequencies);
+            const double pDataValue = 1.0;
+            std::vector<std::complex<double>> pData(_source.count * _frequencies.count * _receiver.count, pDataValue);
 
-            //            double initialKappaTimesResidualValue = 1.0;
-            //            forwardModel->setKappaTimesResidualValue(initialKappaTimesResidualValue);
-            //            ConjugateGradientWithRegularisationParametersInput cgParametersInput;
-            //            cgParametersInput._deltaAmplification._start = 1.0;
-            //            cgParametersInput._deltaAmplification._slope = 0.0;
-            //            cgParametersInput._nIterations = 0;
-            //            cgParametersInput._tolerance = 0.001;
+            ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+            ON_CALL(_forwardModel, getSource).WillByDefault(ReturnRef(_source));
+            ON_CALL(_forwardModel, getReceiver).WillByDefault(ReturnRef(_receiver));
+            ON_CALL(_forwardModel, getFreq).WillByDefault(ReturnRef(_frequencies));
 
-            //            int nTotal = forwardModel->getSource().count * forwardModel->getFreq().count * forwardModel->getReceiver().count;
-            //            const double pDataValue = 1.0;
-            //            std::vector<std::complex<double>> pData(nTotal, pDataValue);
+            ConjugateGradientWithRegularisationCalculator cGWRCTest(_errorFunctionalScalingFactor, _costCalculator, &_forwardModel, cgParametersInput, pData);
 
-            //            ConjugateGradientWithRegularisationCalculator cGWRCTest(errorFunctionalScalingFactor, costCalculator, forwardModel, cgParametersInput,
-            //            pData);
+            DirectionCalculator *directionCalculator;
+            directionCalculator = &cGWRCTest;
 
-            //            DirectionCalculator *directionCalculator;
-            //            directionCalculator = &cGWRCTest;
+            core::dataGrid2D chiEstimateCurrent(_grid);
+            ON_CALL(_forwardModel, calculatePressureField)
+                .WillByDefault(Return(std::vector<std::complex<double>>(pData.size(), (chiEstimateCurrent.getData())[0])));
+            std::vector<std::complex<double>> residualVector = pData - _forwardModel.calculatePressureField(chiEstimateCurrent);
+            core::dataGrid2D mockDataGrid(_grid);
+            core::dataGrid2D const *directionCurrent;
+            ON_CALL(_forwardModel, getUpdateDirectionInformation(_, _)).WillByDefault(testing::SetArgReferee<1>(initialKappaTimesResidualValue));
+            directionCurrent = &directionCalculator->calculateDirection(mockDataGrid, residualVector);
 
-            //            core::dataGrid2D chiEstimateCurrent(getGrid());
-            //            // chiEstimateCurrent.data[] =0
-            //            std::vector<std::complex<double>> residualVector =
-            //                forwardModel->calculateResidual(chiEstimateCurrent, pData);   // chiEstimateCurrent is all 0s and unused, pData is all 1s
-            //            core::dataGrid2D mockDataGrid(getGrid());
-            //            core::dataGrid2D const *directionCurrent;
-            //            directionCurrent = &directionCalculator->calculateDirection(mockDataGrid, residualVector);
+            core::dataGrid2D directionTest(_grid);
+            directionTest = _errorFunctionalScalingFactor;
 
-            //            core::dataGrid2D directionTest(getGrid());
-            //            directionTest = errorFunctionalScalingFactor;
-            //            int nGridPoints = directionTest.getNumberOfGridPoints();
+            std::vector<double> directionCurrentData = directionCurrent->getData();
+            std::vector<double> directionTestData1 = directionTest.getData();
 
-            //            std::vector<double> directionCurrentData = directionCurrent->getData();
-            //            std::vector<double> directionTestData1 = directionTest.getData();
+            // first iteration
+            EXPECT_TRUE(directionCurrentData == directionTestData1);
 
-            //            // first iteration
-            //            EXPECT_TRUE(directionCurrentData == directionTestData1);
+            // second iteration
+            const double step = 1.0;
+            for(size_t i = 0; i < directionCurrentData.size(); ++i)
+            {
+                chiEstimateCurrent.addValueAtIndex(step * directionCurrentData[i], i);
+            }
+            std::vector<std::complex<double>> mockVector;
+            int nextIteration = 1;
+            cGWRCTest.updateVariables(chiEstimateCurrent, mockDataGrid, nextIteration, mockVector, mockVector);
 
-            //            // second iteration
-            //            double step = 1.0;
-            //            for(int i = 0; i < nGridPoints; ++i)
-            //            {
-            //                chiEstimateCurrent.addValueAtIndex(step * directionCurrentData[i], i);
-            //            }
-            //            std::vector<std::complex<double>> mockVector;
-            //            int nextIteration = 1;
-            //            cGWRCTest.updateVariables(chiEstimateCurrent, mockDataGrid, nextIteration, mockVector, mockVector);
+            // updating KappaTimesResidual to simulate a change in the core::complexDataGrid2D** _Kappa in ForwardInterfaceMock
+            double kappaTimesResidualMultiplier = 3;
 
-            //            // updating KappaTimesResidual to simulate a change in the core::complexDataGrid2D** _Kappa in ForwardInterfaceMock
-            //            double kappaTimesResidualMultiplier = 3;
-            //            forwardModel->setKappaTimesResidualValue(kappaTimesResidualMultiplier * initialKappaTimesResidualValue);
+            residualVector = pData - _forwardModel.calculatePressureField(chiEstimateCurrent);
+            // second direction computed
 
-            //            residualVector = forwardModel->calculateResidual(chiEstimateCurrent, pData);
-            //            // second direction computed
-            //            directionCurrent = &directionCalculator->calculateDirection(mockDataGrid, residualVector);
+            ON_CALL(_forwardModel, getUpdateDirectionInformation(_, _))
+                .WillByDefault(testing::SetArgReferee<1>(kappaTimesResidualMultiplier * initialKappaTimesResidualValue));
+            directionCurrent = &directionCalculator->calculateDirection(mockDataGrid, residualVector);
 
-            //            directionCurrentData = directionCurrent->getData();
-            //            std::vector<double> directionTestData2 = directionTest.getData();
+            directionCurrentData = directionCurrent->getData();
+            std::vector<double> directionTestData2 = directionTest.getData();
 
-            //            // updating directionTestData2 and computing square error
-            //            double squareDiffNorm = 0.0;
-            //            for(int i = 0; i < nGridPoints; ++i)
-            //            {
-            //                directionTestData2[i] *= kappaTimesResidualMultiplier * kappaTimesResidualMultiplier;
+            // updating directionTestData2 and computing square error
+            double squareDiffNorm = 0.0;
+            for(size_t i = 0; i < directionCurrentData.size(); ++i)
+            {
+                directionTestData2[i] *= kappaTimesResidualMultiplier * kappaTimesResidualMultiplier;
 
-            //                squareDiffNorm += std::pow(directionCurrentData[i] - directionTestData2[i], 2);
-            //            }
+                squareDiffNorm += std::pow(directionCurrentData[i] - directionTestData2[i], 2);
+            }
 
-            //            EXPECT_NEAR(squareDiffNorm, 0, 1e-10);
-
-            //            delete forwardModel;
+            EXPECT_NEAR(squareDiffNorm, 0, 1e-10);
         }
     }   // namespace inversionMethods
 }   // namespace fwi

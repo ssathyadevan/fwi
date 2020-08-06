@@ -1,175 +1,119 @@
 #include "factory.h"
 #include "ForwardModelMock.h"
+
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+using ::testing::_;
+using ::testing::NiceMock;
+using ::testing::Return;
+using ::testing::ReturnRef;
 
 namespace fwi
 {
-    core::grid2D getGrid()
+    class factoryTest : public ::testing::Test
     {
-        std::array<double, 2> xMin = {0.0, 0.0};
-        std::array<double, 2> xMax = {2.0, 2.0};
-        std::array<int, 2> nX = {2, 4};
+    public:
+        const core::CostFunctionCalculator _costCalculator;
+        const std::array<double, 2> _xMin{0.0, 0.0};
+        const std::array<double, 2> _xMax{2.0, 2.0};
+        const std::array<int, 2> _nX{2, 4};
+        const core::freqInfo _freq{1.0, 2.0, 2};
+        const core::grid2D _grid{_xMin, _xMax, _nX};
+        const core::Sources _sources{_xMin, _xMax, 2};
+        const core::Receivers _receivers{_xMin, _xMax, 2};
+        const core::FrequenciesGroup _frequencies{_freq, 2000.0};
+        const int _lengthOfPData = _sources.count * _frequencies.count * _receivers.count;
+        double _errorFunctionalScalingFactor = 1.0;
 
-        core::grid2D grid(xMin, xMax, nX);
-        return grid;
-    }
+        const double _derivativeStepSize = 1.0;
+        const bool _doRegression = false;
+        const double _tolerance = 0.01;
+        const double _startChi = 0.0;
+        const int _maxIterations = 10;
+        const double _initStepiSze = 1.0;
+        const double _slope = -0.01;
+        const inversionMethods::StepAndDirectionReconstructorInput _stepAndDirectionInput{
+            {_tolerance, _startChi, _maxIterations}, {_initStepiSze, _slope}, {_derivativeStepSize}, _doRegression};
+        NiceMock<forwardModels::ForwardModelMock> _forwardModel;
+    };
 
-    inversionMethods::StepAndDirectionReconstructorInput getStepAndDirectionInput()
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_MissingForwardModel_ExpectThrow)
     {
-        double tolerance = 0.01;
-        double startChi = 0.0;
-        int maxIterations = 10;
-
-        double initStepiSze = 1.0;
-        double slope = -0.01;
-
-        double derivativeStepSize = 1.0;
-
-        bool doRegression = false;
-        return inversionMethods::StepAndDirectionReconstructorInput{
-            {tolerance, startChi, maxIterations}, {initStepiSze, slope}, {derivativeStepSize}, doRegression};
-    }
-
-    TEST(factoryTest, expectThrowMissingForwardModelTest)
-    {
-        // Create null pointer to forwardmodel
-        forwardModels::ForwardModelInterface *forwardModel = nullptr;
-
         // Create a fixed step size with conjugate gradient method
         const std::string desiredStepSizeMethod = "FixedStepSize";
         const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
-        std::array<double, 2> xMin = {0.0, 0.0};
-        std::array<double, 2> xMax = {2.0, 2.0};
-        core::freqInfo freq(1.0, 2.0, 2);
-        core::Sources sources(xMin, xMax, 2);
-        core::Receivers receivers(xMin, xMax, 2);
-        core::FrequenciesGroup frequencies(freq, 2000.0);
         // Create measurement data
-        const int lengthOfPData = sources.count * receivers.count * frequencies.count;
-        const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
-
-        inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
+        const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
 
         Factory factory;
-        EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),
+        EXPECT_THROW(factory.createStepAndDirectionReconstructor(_stepAndDirectionInput, nullptr, desiredStepSizeMethod, desiredDirectionMethod, pData),
             std::invalid_argument);
     }
 
-    TEST(factoryTest, createFixedStepSizeConjugateGradientMethodTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_FixedStepSizeAndConjugateGradientDirectionSelected_ReconstructorIsNotNullPtr)
     {
-        //        // Create forwardmodel
-        //        std::array<double, 2> xMin = {0.0, 0.0};
-        //        std::array<double, 2> xMax = {2.0, 2.0};
-        //        core::freqInfo freq(1.0, 2.0, 2);
-        //        core::grid2D grid = getGrid();
-        //        core::Sources sources(xMin, xMax, 2);
-        //        core::Receivers receivers(xMin, xMax, 2);
-        //        core::FrequenciesGroup frequencies(freq, 2000.0);
+        // Create a fixed step size with conjugate gradient method
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
-        //        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
+        // Create measurement data
+        const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
 
-        //        // Create a fixed step size with conjugate gradient method
-        //        const std::string desiredStepSizeMethod = "FixedStepSize";
-        //        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
-
-        //        // Create measurement data
-        //        const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
-        //        const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
-
-        //        inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
-
-        //        Factory factory;
-        //        inversionMethods::StepAndDirectionReconstructor *reconstructor;
-        //        reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod,
-        //        desiredDirectionMethod, pData); EXPECT_FALSE(reconstructor == nullptr);
+        Factory factory;
+        inversionMethods::StepAndDirectionReconstructor *reconstructor;
+        ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+        reconstructor =
+            factory.createStepAndDirectionReconstructor(_stepAndDirectionInput, &_forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData);
+        EXPECT_FALSE(reconstructor == nullptr);
     }
 
-    TEST(factoryTest, expectThrowStepSizeCalculatorTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_NoDesiredStepSizeMethodSelected_ExpectThrow)
     {
-        //        // Create forwardmodel
-        //        std::array<double, 2> xMin = {0.0, 0.0};
-        //        std::array<double, 2> xMax = {2.0, 2.0};
-        //        core::freqInfo freq(1.0, 2.0, 2);
-        //        core::grid2D grid = getGrid();
-        //        core::Sources sources(xMin, xMax, 2);
-        //        core::Receivers receivers(xMin, xMax, 2);
-        //        core::FrequenciesGroup frequencies(freq, 2000.0);
+        // Create a not existing step size calculator
+        const std::string desiredStepSizeMethod = "";
+        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
 
-        //        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
+        // Create measurement data
+        const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
 
-        //        // Create a not existing step size calculator
-        //        const std::string desiredStepSizeMethod = "";
-        //        const std::string desiredDirectionMethod = "ConjugateGradientDirection";
-
-        //        // Create measurement data
-        //        const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
-        //        const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
-
-        //        inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
-
-        //        Factory factory;
-        //        EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod,
-        //        pData),
-        //            std::invalid_argument);
+        Factory factory;
+        ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+        EXPECT_THROW(factory.createStepAndDirectionReconstructor(_stepAndDirectionInput, &_forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),
+            std::invalid_argument);
     }
 
-    TEST(factoryTest, createFixedStepSizeGradientDescentMethodTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_FixedStepSizeAndGradientDescentDirectionSelected_ReconstructorIsNotNullPtr)
     {
-        //        // Create forwardmodel
-        //        std::array<double, 2> xMin = {0.0, 0.0};
-        //        std::array<double, 2> xMax = {2.0, 2.0};
-        //        core::freqInfo freq(1.0, 2.0, 2);
-        //        core::grid2D grid = getGrid();
-        //        core::Sources sources(xMin, xMax, 2);
-        //        core::Receivers receivers(xMin, xMax, 2);
-        //        core::FrequenciesGroup frequencies(freq, 2000.0);
+        // Create measurement data
+        const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
 
-        //        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
+        // Create a fixed step with conjugate gradient descent method
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "GradientDescentDirection";
 
-        //        // Create measurement data
-        //        const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
-        //        const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
-
-        //        // Create a fixed step with conjugate gradient descent method
-        //        const std::string desiredStepSizeMethod = "FixedStepSize";
-        //        const std::string desiredDirectionMethod = "GradientDescentDirection";
-
-        //        inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
-
-        //        Factory factory;
-        //        inversionMethods::StepAndDirectionReconstructor *reconstructor;
-        //        reconstructor = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod,
-        //        desiredDirectionMethod, pData); EXPECT_FALSE(reconstructor == nullptr);
+        Factory factory;
+        inversionMethods::StepAndDirectionReconstructor *reconstructor;
+        ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+        reconstructor =
+            factory.createStepAndDirectionReconstructor(_stepAndDirectionInput, &_forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData);
+        EXPECT_FALSE(reconstructor == nullptr);
     }
 
-    TEST(factoryTest, expectThrowDirectionCalculatorTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_NoDesiredDirectionMethodSelected_ExpectThrow)
     {
-        //        // Create forwardmodel
-        //        std::array<double, 2> xMin = {0.0, 0.0};
-        //        std::array<double, 2> xMax = {2.0, 2.0};
-        //        core::freqInfo freq(1.0, 2.0, 2);
-        //        core::grid2D grid = getGrid();
-        //        core::Sources sources(xMin, xMax, 2);
-        //        core::Receivers receivers(xMin, xMax, 2);
-        //        core::FrequenciesGroup frequencies(freq, 2000.0);
+        // Create measurement data
 
-        //        forwardModels::ForwardModelMock forwardModel(grid, sources, receivers, frequencies);
+        const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
 
-        //        // Create measurement data
-        //        const int lengthOfPData = forwardModel.getSource().count * forwardModel.getReceiver().count * forwardModel.getFreq().count;
-        //        ;
-        //        const std::vector<std::complex<double>> pData(lengthOfPData, 1.0);
+        // Create a not existing direction calculator
+        const std::string desiredStepSizeMethod = "FixedStepSize";
+        const std::string desiredDirectionMethod = "";
 
-        //        // Create a not existing direction calculator
-        //        const std::string desiredStepSizeMethod = "FixedStepSize";
-        //        const std::string desiredDirectionMethod = "";
-
-        //        inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = getStepAndDirectionInput();
-
-        //        Factory factory;
-        //        EXPECT_THROW(factory.createStepAndDirectionReconstructor(stepAndDirectionInput, &forwardModel, desiredStepSizeMethod, desiredDirectionMethod,
-        //        pData),
-        //            std::invalid_argument);
+        Factory factory;
+        ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
+        EXPECT_THROW(factory.createStepAndDirectionReconstructor(_stepAndDirectionInput, &_forwardModel, desiredStepSizeMethod, desiredDirectionMethod, pData),
+            std::invalid_argument);
     }
 }   // namespace fwi
