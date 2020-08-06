@@ -30,9 +30,8 @@ namespace fwi
             double _derivativeStepSize = 0.0;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
-        // Review: if possible, try to follow the test naming format as described in
-        // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests (also for all the other tests)
-        TEST_F(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTest)
+
+        TEST_F(GradientDescentDirectionCalculatorTest, GradientDescentDirectionCalculator_InvalidDerivativeStepSize_ExpectThrow)
         {
             // Create a gradient descent calculator with derivative step size zero
             _derivativeStepSize = 0.0;
@@ -50,7 +49,7 @@ namespace fwi
                 std::invalid_argument);
         }
 
-        TEST_F(GradientDescentDirectionCalculatorTest, calculateDirectionTest)
+        TEST_F(GradientDescentDirectionCalculatorTest, CalculateDirection_OneIteration_FirstElementIsNearMinus60)
         {
             // Create gradient descent calculator
             _derivativeStepSize = 0.1;
@@ -74,7 +73,6 @@ namespace fwi
             core::dataGrid2D &gDDirection = directionCalculator.calculateDirection(chiEstimate, residuals);
 
             // Compare gradient descent direction with expected value
-            const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
             const double expectedDirection =
                 -(_derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
                 (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction approximates minus the gradient
@@ -82,50 +80,6 @@ namespace fwi
             const std::vector<double> &gDDirectionData = gDDirection.getData();
 
             EXPECT_NEAR(gDDirectionData[0], expectedDirection, 0.001);
-            for(int i = 1; i < nrOfGridPoints; i++)
-            {
-                ASSERT_DOUBLE_EQ(gDDirectionData[i], 0.0);
-            }
-        }
-
-        TEST_F(GradientDescentDirectionCalculatorTest, InitializeDirectionTest)
-        {
-            // Create gradient descent direction calculator
-            _derivativeStepSize = 1.0;
-
-            const double pDataValue = 2.0;
-            std::vector<std::complex<double>> pData(_lengthOfPData, pDataValue);
-            ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
-
-            GradientDescentDirectionCalculator directionCalculator(_errorFunctionalScalingFactor, _costCalculator, &_forwardModel, _derivativeStepSize, pData);
-
-            // Compute gradient descent direction
-
-            core::dataGrid2D chiEstimate(_grid);
-            const double chiEstimateValue = 0.0;
-            chiEstimate = chiEstimateValue;
-
-            std::vector<std::complex<double>> residuals(_grid.getNumberOfGridPoints(), 0.0);
-            core::dataGrid2D gDDirection(_grid);
-
-            ON_CALL(_forwardModel, calculatePressureField(_)).WillByDefault([&](const core::dataGrid2D &chiEstimate) {
-                return std::vector<std::complex<double>>(pData.size(), (chiEstimate.getData())[0]);
-            });
-            gDDirection = directionCalculator.calculateDirection(chiEstimate, residuals);
-
-            // Compare gradient descent direction with expected value
-            const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
-            const double expectedDirection =
-                -(_derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
-                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction approximates minus the gradient
-
-            const std::vector<double> &gDDirectionData = gDDirection.getData();
-
-            EXPECT_NEAR(gDDirectionData[0], expectedDirection, 0.001);
-            for(int i = 1; i < nrOfGridPoints; i++)
-            {
-                ASSERT_DOUBLE_EQ(gDDirectionData[i], 0.0);
-            }
         }
     }   // namespace inversionMethods
 }   // namespace fwi

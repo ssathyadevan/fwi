@@ -37,9 +37,8 @@ namespace fwi
             {_tolerance, _startChi, _maxIterations}, {_initStepiSze, _slope}, {_derivativeStepSize}, _doRegression};
         NiceMock<forwardModels::ForwardModelMock> _forwardModel;
     };
-    // Review: if possible, try to follow the test naming format as described in
-    // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests (also for all the other tests)
-    TEST_F(factoryTest, expectThrowMissingForwardModelTest)
+
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_MissingForwardModel_ExpectThrow)
     {
         // Create a fixed step size with conjugate gradient method
         const std::string desiredStepSizeMethod = "FixedStepSize";
@@ -53,7 +52,7 @@ namespace fwi
             std::invalid_argument);
     }
 
-    TEST_F(factoryTest, createFixedStepSizeConjugateGradientMethodTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_FixedStepSizeAndConjugateGradientDirectionSelected_ReconstructorIsNotNullPtr)
     {
         // Create a fixed step size with conjugate gradient method
         const std::string desiredStepSizeMethod = "FixedStepSize";
@@ -70,7 +69,7 @@ namespace fwi
         EXPECT_FALSE(reconstructor == nullptr);
     }
 
-    TEST_F(factoryTest, expectThrowStepSizeCalculatorTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_NoDesiredStepSizeMethodSelected_ExpectThrow)
     {
         // Create a not existing step size calculator
         const std::string desiredStepSizeMethod = "";
@@ -85,7 +84,7 @@ namespace fwi
             std::invalid_argument);
     }
 
-    TEST_F(factoryTest, createFixedStepSizeGradientDescentMethodTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_FixedStepSizeAndGradientDescentDirectionSelected_ReconstructorIsNotNullPtr)
     {
         // Create measurement data
         const std::vector<std::complex<double>> pData(_lengthOfPData, 1.0);
@@ -102,7 +101,7 @@ namespace fwi
         EXPECT_FALSE(reconstructor == nullptr);
     }
 
-    TEST_F(factoryTest, expectThrowDirectionCalculatorTest)
+    TEST_F(factoryTest, CreateStepAndDirectionReconstructor_NoDesiredDirectionMethodSelected_ExpectThrow)
     {
         // Create measurement data
 

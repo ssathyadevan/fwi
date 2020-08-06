@@ -12,10 +12,6 @@ using ::testing::ReturnRef;
 
 using fwi::core::operator-;
 
-// Review: remove those
-using std::cout;
-using std::endl;
-
 namespace fwi
 {
     namespace inversionMethods
@@ -35,9 +31,8 @@ namespace fwi
             const core::CostFunctionCalculator _costCalculator;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
-        // Review: if possible, try to follow the test naming format as described in
-        // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests
-        TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
+
+        TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirection_TwoIterations_Convergance)
         {
             double initialKappaTimesResidualValue = 1.0;
 
@@ -61,8 +56,6 @@ namespace fwi
             directionCalculator = &cGWRCTest;
 
             core::dataGrid2D chiEstimateCurrent(_grid);
-            // Review remove the comment below
-            // chiEstimateCurrent.data[] =0
             ON_CALL(_forwardModel, calculatePressureField)
                 .WillByDefault(Return(std::vector<std::complex<double>>(pData.size(), (chiEstimateCurrent.getData())[0])));
             std::vector<std::complex<double>> residualVector = pData - _forwardModel.calculatePressureField(chiEstimateCurrent);
@@ -73,7 +66,6 @@ namespace fwi
 
             core::dataGrid2D directionTest(_grid);
             directionTest = _errorFunctionalScalingFactor;
-            int nGridPoints = directionTest.getNumberOfGridPoints();
 
             std::vector<double> directionCurrentData = directionCurrent->getData();
             std::vector<double> directionTestData1 = directionTest.getData();
@@ -81,10 +73,9 @@ namespace fwi
             // first iteration
             EXPECT_TRUE(directionCurrentData == directionTestData1);
 
-            // Review: since there are some complex number involved, it's better to use 'it' as iterator rather than 'i'
             // second iteration
-            double step = 1.0;
-            for(int i = 0; i < nGridPoints; ++i)
+            const double step = 1.0;
+            for(size_t i = 0; i < directionCurrentData.size(); ++i)
             {
                 chiEstimateCurrent.addValueAtIndex(step * directionCurrentData[i], i);
             }
@@ -107,7 +98,7 @@ namespace fwi
 
             // updating directionTestData2 and computing square error
             double squareDiffNorm = 0.0;
-            for(int i = 0; i < nGridPoints; ++i)
+            for(size_t i = 0; i < directionCurrentData.size(); ++i)
             {
                 directionTestData2[i] *= kappaTimesResidualMultiplier * kappaTimesResidualMultiplier;
 
