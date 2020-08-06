@@ -25,11 +25,6 @@ namespace fwi
             readReconstructorParameters(jsonFile);
             readStepSizeParameters(jsonFile);
             readDirectionParameters(jsonFile);
-
-            const std::string parameterDoRegularisation = "DoConjugateGradientRegularisation";
-            const bool doRegularisation = io::ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, _fileName, parameterDoRegularisation);
-
-            _input.doConjugateGradientRegularisation = doRegularisation;
         }
 
         void StepAndDirectionReconstructorInputCardReader::readReconstructorParameters(const nlohmann::json &jsonFile)

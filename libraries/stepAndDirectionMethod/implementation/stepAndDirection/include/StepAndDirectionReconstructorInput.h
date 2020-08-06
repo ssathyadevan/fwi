@@ -13,7 +13,6 @@ namespace fwi
             ReconstructorParameters reconstructorParameters;
             StepSizeParameters stepSizeParameters;
             DirectionParameters directionParameters;
-            bool doConjugateGradientRegularisation;
         };
     }   // namespace inversionMethods
 }   // namespace fwi
