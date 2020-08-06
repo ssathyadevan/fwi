@@ -32,7 +32,7 @@ namespace fwi
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
 
-        TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirection_TwoIterations_Convergance)
+        TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirection_TwoIterations_Convergence)
         {
             double initialKappaTimesResidualValue = 1.0;
 
