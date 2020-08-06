@@ -31,10 +31,8 @@ namespace fwi
             const double _errorFunctionalScalingFactor = 1.0;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
-        // Review: if possible, try to follow the test naming format as described in
-        // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests (also for all the other tests)
-        // here you can use something like calculateDirection_inputVectorZeros_outputVectorZeros
-        TEST_F(DummyDirectionCalculatorTest, calculateDirectionTest)
+
+        TEST_F(DummyDirectionCalculatorTest, CalculateDirectionTest_ResidualVectorIsZero_ResultingDirectionIsZero)
         {
             // Arrange
             ON_CALL(_forwardModel, getGrid).WillByDefault(ReturnRef(_grid));
