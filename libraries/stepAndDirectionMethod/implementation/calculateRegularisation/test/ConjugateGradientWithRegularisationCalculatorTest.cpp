@@ -12,6 +12,7 @@ using ::testing::ReturnRef;
 
 using fwi::core::operator-;
 
+// Review: remove those
 using std::cout;
 using std::endl;
 
@@ -34,7 +35,8 @@ namespace fwi
             const core::CostFunctionCalculator _costCalculator;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
-
+        // Review: if possible, try to follow the test naming format as described in
+        // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests
         TEST_F(ConjugateGradientWithRegularisationCalculatorTest, calculateDirectionTest)
         {
             double initialKappaTimesResidualValue = 1.0;
@@ -59,6 +61,7 @@ namespace fwi
             directionCalculator = &cGWRCTest;
 
             core::dataGrid2D chiEstimateCurrent(_grid);
+            // Review remove the comment below
             // chiEstimateCurrent.data[] =0
             ON_CALL(_forwardModel, calculatePressureField)
                 .WillByDefault(Return(std::vector<std::complex<double>>(pData.size(), (chiEstimateCurrent.getData())[0])));
@@ -78,6 +81,7 @@ namespace fwi
             // first iteration
             EXPECT_TRUE(directionCurrentData == directionTestData1);
 
+            // Review: since there are some complex number involved, it's better to use 'it' as iterator rather than 'i'
             // second iteration
             double step = 1.0;
             for(int i = 0; i < nGridPoints; ++i)

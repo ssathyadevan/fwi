@@ -30,7 +30,8 @@ namespace fwi
             double _derivativeStepSize = 0.0;
             NiceMock<forwardModels::ForwardModelMock> _forwardModel;
         };
-
+        // Review: if possible, try to follow the test naming format as described in
+        // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests (also for all the other tests)
         TEST_F(GradientDescentDirectionCalculatorTest, expectThrowNegativeDerivativeStepTest)
         {
             // Create a gradient descent calculator with derivative step size zero
@@ -76,7 +77,7 @@ namespace fwi
             const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
             const double expectedDirection =
                 -(_derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
-                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
+                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction approximates minus the gradient
 
             const std::vector<double> &gDDirectionData = gDDirection.getData();
 
@@ -116,7 +117,7 @@ namespace fwi
             const int nrOfGridPoints = gDDirection.getNumberOfGridPoints();
             const double expectedDirection =
                 -(_derivativeStepSize - 2 * (pDataValue - chiEstimateValue)) *
-                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction is more or less minus the gradient
+                (_errorFunctionalScalingFactor * _lengthOfPData);   // the initial minus sign is because our direction approximates minus the gradient
 
             const std::vector<double> &gDDirectionData = gDDirection.getData();
 

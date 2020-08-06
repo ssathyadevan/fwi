@@ -37,7 +37,8 @@ namespace fwi
             {_tolerance, _startChi, _maxIterations}, {_initStepiSze, _slope}, {_derivativeStepSize}, _doRegression};
         NiceMock<forwardModels::ForwardModelMock> _forwardModel;
     };
-
+    // Review: if possible, try to follow the test naming format as described in
+    // https://redmine.alten.nl/projects/parallelized-fwi/wiki/Code_standards#Unit-tests (also for all the other tests)
     TEST_F(factoryTest, expectThrowMissingForwardModelTest)
     {
         // Create a fixed step size with conjugate gradient method
