@@ -181,7 +181,9 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
-OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original, arguments)
+# Will remove these lines at the end..
+# Remove the OutputLogger call from the postprocessing script, and instead log the input parameters that are set in the postprocessing script in the script itself. Don't call the OutputLogger.
+#OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original, arguments)
 
 print("The pictures have been generated with Python")
 
