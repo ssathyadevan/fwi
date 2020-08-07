@@ -20,11 +20,9 @@ namespace fwi
             ParametersCollection _groupParameters{{"ReconstructorParameters", {{"Tolerance", "0.01"}, {"InitialChi", "0.001"}, {"MaxIterationNumber", "20"}}},
                 {"StepSizeParameters", {{"InitialStepSize", "0.1"}, {"Slope", "0.00"}}}, {"DirectionParameters", {{"DerivativeStepSize", "0.001"}}}};
 
-            Parameters _singleParameters{{"DoConjugateGradientRegularisation", "true"}};
-
             std::string _jsonInput;
 
-            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters); }
+            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters); }
 
             void TearDown() override
             {
@@ -34,19 +32,10 @@ namespace fwi
                 }
             }
 
-            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters, const Parameters &singleParameters)
+            std::string generateJsonWithInputParameters(const ParametersCollection &groupParameters)
             {
                 std::stringstream stream;
                 stream << "{\n";
-                if(!singleParameters.empty())
-                {
-                    for(const auto &param : singleParameters)
-                    {
-                        addToJson(param.first, param.second, stream);
-                        stream << ",\n";
-                    }
-                }
-
                 if(!groupParameters.empty())
                 {
                     auto delim = "";
@@ -103,15 +92,13 @@ namespace fwi
             ASSERT_DOUBLE_EQ(0.0, input.stepSizeParameters.slope);
 
             ASSERT_DOUBLE_EQ(0.001, input.directionParameters.derivativeStepSize);
-
-            ASSERT_TRUE(input.doConjugateGradientRegularisation);
         }
 
         TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_NegativeTolerance_ExceptionThrown)
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").at("Tolerance") = "-0.01";
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -122,7 +109,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("Tolerance");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -133,7 +120,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("InitialChi");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -144,7 +131,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").at("MaxIterationNumber") = "-1";
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -155,7 +142,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("ReconstructorParameters").erase("MaxIterationNumber");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -166,7 +153,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").at("InitialStepSize") = "0.0";
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -177,7 +164,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").erase("InitialStepSize");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -188,7 +175,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").at("Slope") = "-1";
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -199,7 +186,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("StepSizeParameters").erase("Slope");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -210,7 +197,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("DirectionParameters").at("DerivativeStepSize") = "-0.1";
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert
@@ -221,17 +208,7 @@ namespace fwi
         {
             // Arrange
             _groupParameters.at("DirectionParameters").erase("DerivativeStepSize");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
-            writeInputFile(jsonInput);
-
-            // Act & Assert
-            EXPECT_THROW(StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(_testFolder, _filename), std::invalid_argument);
-        }
-
-        TEST_F(StepAndDirectionReconstructorInputCardReaderTest, constructor_MissingDoConjugateGradientRegularisation_ExceptionThrown)
-        {
-            _singleParameters.erase("DoConjugateGradientRegularisation");
-            auto jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            auto jsonInput = generateJsonWithInputParameters(_groupParameters);
             writeInputFile(jsonInput);
 
             // Act & Assert

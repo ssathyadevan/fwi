@@ -9,8 +9,7 @@ namespace fwi
     namespace inversionMethods
     {
         StepAndDirectionReconstructorInputCardReader::StepAndDirectionReconstructorInputCardReader(const std::string &caseFolder, const std::string &filename)
-            : io::inputCardReader()
-            , _fileName(filename)
+            : _fileName(filename)
         {
             const std::string stringInputFolder = "/input/";
             std::string filePath = caseFolder + stringInputFolder + _fileName;
@@ -25,11 +24,6 @@ namespace fwi
             readReconstructorParameters(jsonFile);
             readStepSizeParameters(jsonFile);
             readDirectionParameters(jsonFile);
-
-            const std::string parameterDoRegularisation = "DoConjugateGradientRegularisation";
-            const bool doRegularisation = io::ReadJsonHelper::tryGetParameterFromJson<bool>(jsonFile, _fileName, parameterDoRegularisation);
-
-            _input.doConjugateGradientRegularisation = doRegularisation;
         }
 
         void StepAndDirectionReconstructorInputCardReader::readReconstructorParameters(const nlohmann::json &jsonFile)

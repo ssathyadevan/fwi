@@ -10,6 +10,5 @@
     },
     "DirectionParameters": {
         "DerivativeStepSize": 0.001
-    },  
-    "DoConjugateGradientRegularisation": true
+    }
 }
