@@ -34,7 +34,7 @@ namespace fwi
         const double _initStepiSze = 1.0;
         const double _slope = -0.01;
         const inversionMethods::StepAndDirectionReconstructorInput _stepAndDirectionInput{
-            {_tolerance, _startChi, _maxIterations}, {_initStepiSze, _slope}, {_derivativeStepSize}, _doRegression};
+            {_tolerance, _startChi, _maxIterations}, {_initStepiSze, _slope}, {_derivativeStepSize}};
         NiceMock<forwardModels::ForwardModelMock> _forwardModel;
     };
 
