@@ -117,8 +117,8 @@ pipeline{
 							steps{
 								script{
 									echo 'Deploying on windows'
-									bat(script:'xcopy inputFiles FWIInstall\\inputFiles /s /i \n xcopy pythonScripts FWIInstall\\pythonScripts /s /i \n 7z a -ttar Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.tar.gz ./FWIInstall/*')
-									archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+									bat(script:'xcopy inputFiles FWIInstall\\inputFiles /s /i \n xcopy pythonScripts FWIInstall\\pythonScripts /s /i \n 7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*')
+									archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.zip"
 								}
 							}
 						}

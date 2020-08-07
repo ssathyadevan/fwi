@@ -57,7 +57,8 @@ def deploy(){
 		env.MYSTAGE_NAME = 'Deploy'
         sh '''
         cp -r inputFiles FWIInstall/
-        cp -r pythonScripts/* FWIInstall/
+		mkdir FWIInstall/pythonScripts
+        cp -r pythonScripts/* FWIInstall/pythonScripts
         tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
         '''
         archiveArtifacts artifacts:"Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
