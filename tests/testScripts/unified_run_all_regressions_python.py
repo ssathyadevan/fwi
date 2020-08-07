@@ -28,17 +28,6 @@ if not os.path.exists(BUILD_PATH):
     print("Can not build project in {} because it does not exist, make sure it exists".format(BUILD_PATH))
     sys.exit(1)
 
-### Make sure you use the current state of the project
-# Build project
-print("Build project in {}".format(BUILD_PATH))
-os.chdir(os.path.join(BUILD_PATH))
-os.system("make install")
-# Copy Build to FWIInstall
-if os.path.exists(os.path.join(FWI_INSTALL_PATH, "bin")):
-    shutil.rmtree(os.path.join(FWI_INSTALL_PATH, "bin"))
-    shutil.copytree(os.path.join(BUILD_PATH, "runtime", "bin"), os.path.join(FWI_INSTALL_PATH, "bin"))
-    os.chdir(ft)
-
 if sys.argv[1] == "IntegralForwardModel":
     forwardmodel = "IntegralForwardModel"
 elif sys.argv[1] == "FiniteDifferenceForwardModel":
@@ -145,5 +134,5 @@ print(f.read())
 f.close()
 
 os.chdir(os.path.join(FWI_INSTALL_PATH))
-
+shutil.rmtree(os.path.join(FWI_INSTALL_PATH,regressiontestName))
 
