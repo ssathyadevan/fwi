@@ -46,7 +46,6 @@ namespace fwi
             {
                 gamma = calculateGammaPolakRibiere();   // eq 2.14
             }
-
             _directionCurrent = _gradientCurrent + gamma * _directionPrevious;
             return _directionCurrent;
         }
@@ -113,7 +112,7 @@ namespace fwi
 
             _regularisationPrevious.gradientChiNormSquared =
                 (_regularisationPrevious.gradientChi[0] * _regularisationPrevious.gradientChi[0]) +
-                (_regularisationPrevious.gradientChi[1] * _regularisationPrevious.gradientChi[1]).summation();   // |dChi/dx^2 + dChi/dz^2|^2
+                (_regularisationPrevious.gradientChi[1] * _regularisationPrevious.gradientChi[1]);   // |dChi(x,z)/dx^2 + dChi(x,z)/dz^2|^2
 
             _regularisationCurrent.bSquared = calculateWeightingFactor();   //  eq. 2.22
 
@@ -141,7 +140,16 @@ namespace fwi
         {
             core::dataGrid2D bSquared(_grid);
             bSquared = _regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared;
-            bSquared.reciprocal();
+
+            if(bSquared.norm() > 0.0)
+            {
+                bSquared.reciprocal();
+            }
+            else
+            {
+                bSquared = 1.0;
+            }
+
             bSquared *= (1.0 / (_grid.getDomainArea()));
             return bSquared;
         }
