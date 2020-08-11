@@ -73,9 +73,9 @@ def executionMethod():
     Iter2_calcAlpha = data[n][32]
 
     ### Mode
-    Method = data[n][33]
+    InversionMethod = data[n][33]
     Direction = data[n][34]
-    Model = data[n][35]
+    ForwardModel = data[n][35]
 
     makeTestFolder(tempTestPath)
 
@@ -205,30 +205,33 @@ def executionMethod():
 
     with open(input_file_IntegralFMInput, 'w') as input_file_IntegralFMInput:
         input_file_IntegralFMInput.write("".join(rf_contents)) # Joining list as a string
-    return tempTestPath, Method, Direction, Model
+    return tempTestPath, InversionMethod, Direction, ForwardModel
 
-def preProcess(tempTestPath):
+def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess')
+    forwardModelArgument = ""
+    if(forwardModel == 'IntegralForwardModel'):
+        forwardModelArgument = 'Integral'
+    elif(forwardModel == 'FiniteDifferenceForwardModel'):
+        forwardModelArgument = 'Finite_Differnce'
+    else:
+        print('Invalid Forward Model')
+        exit()
     start_preTime = time.time()
     tempFWIInstallBin = os.path.join(root + '/FWIInstall/bin/')
     os.chdir(tempFWIInstallBin)
-    os.system('./FWI_PreProcess ' + tempTestPath)
+    
+    os.system('./FWI_PreProcess_Integral ' + tempTestPath)
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
-def Process(tempTestPath, Model):
+def Process(tempTestPath, Inversion, ForwardModel):
     print('\n------Start Process')
     start_processTime = time.time()
-    os.system('./FWI_UnifiedProcess ' + tempTestPath + ' conjugateGradientInversion ' + Model)
+    print('./FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
+    os.system('./FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
-
-#def StepDefinitionProcess(tempTestPath, Method, Direction, Model):
-    # print('\n------Start Process')
-    # start_processTime = time.time()
-    # os.system('./FWI_StepAndDirectionProcess ' + tempTestPath + ' ' + Method + ' ' + Direction + ' ' + Model)
-    # end_processTime = time.time()
-    # return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
 def postProcess(tempTestPath):
     print('\n------Start PostProcess')
@@ -262,13 +265,15 @@ if __name__ == "__main__":
             data = list(csv.reader(csvfile, delimiter=","))
         while n <= int(rowEnd):  # row[0] is the header of the colomns
             result = executionMethod()
-            preTime = preProcess(result[0])
-            processTime = Process(result[0], result[1])
+            print('printing result')
+            print(result)
+            preTime = preProcess(result[0], result[3])
+            processTime = Process(result[0], result[1], result[3])
             #processTime = StepDefinitionProcess(result[0], result[1], result[2], result[3])
-            postTime = postProcess(result[0])
+            #postTime = postProcess(result[0])
             print('\nPreProcess time   {}'.format(preTime))
             print('Process time      {}'.format(processTime))
-            print('PostProcess time  {}'.format(postTime))
+            #print('PostProcess time  {}'.format(postTime))
             n += 1
 
         end_totalTime = time.time()
