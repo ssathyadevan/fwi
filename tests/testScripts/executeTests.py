@@ -41,7 +41,7 @@ def executionMethod():
     DeltaAmplification_start = data[n][4]
     DeltaAmplification_slope = data[n][5]
     n_max = data[n][6]
-    d0_reg = data[n][7]
+    do_reg = data[n][7]
 
     ### GenericInput.json
     c_0 = data[n][8]
@@ -91,23 +91,23 @@ def executionMethod():
     replace_DeltaAmplification_slope = DeltaAmplification_slope
     find_n_max = '5'
     replace_n_max = n_max
-    find_d0_reg = 'true'
-    replace_d0_reg = d0_reg
+    find_do_reg = 'true'
+    replace_do_reg = do_reg
 
-    # input_file_CGInput = os.path.join(tempTestPath + '/input/CGInput.json')
+    input_file_CGInput = os.path.join(tempTestPath + '/input/ConjugateGradientInversionInput.json')
 
-    #with open(input_file_CGInput, 'r') as rf:
-    #    rf_contents = rf.readlines() # Read all lines as a list
+    with open(input_file_CGInput, 'r') as rf:
+        rf_contents = rf.readlines() # Read all lines as a list
     # Replace values
-    #rf_contents[2] = rf_contents[2].replace(find_Iter1_n, replace_Iter1_n)
-    #rf_contents[3] = rf_contents[3].replace(find_Iter1_tolerance, replace_Iter1_tolerance)
-    #rf_contents[6] = rf_contents[6].replace(find_DeltaAmplification_start, replace_DeltaAmplification_start)
-    #rf_contents[7] = rf_contents[7].replace(find_DeltaAmplification_slope, replace_DeltaAmplification_slope)
-    #rf_contents[9] = rf_contents[9].replace(find_n_max, replace_n_max)
-    #rf_contents[10] = rf_contents[10].replace(find_d0_reg, replace_d0_reg)
+    rf_contents[2] = rf_contents[2].replace(find_Iter1_n, replace_Iter1_n)
+    rf_contents[3] = rf_contents[3].replace(find_Iter1_tolerance, replace_Iter1_tolerance)
+    rf_contents[6] = rf_contents[6].replace(find_DeltaAmplification_start, replace_DeltaAmplification_start)
+    rf_contents[7] = rf_contents[7].replace(find_DeltaAmplification_slope, replace_DeltaAmplification_slope)
+    rf_contents[9] = rf_contents[9].replace(find_n_max, replace_n_max)
+    rf_contents[10] = rf_contents[10].replace(find_do_reg, replace_do_reg)
 
-    #with open(input_file_CGInput, 'w') as input_file_CGInput:
-    #    input_file_CGInput.write(''.join(rf_contents)) # Joining list as a string
+    with open(input_file_CGInput, 'w') as input_file_CGInput:
+        input_file_CGInput.write(''.join(rf_contents)) # Joining list as a string
 
     ### Replace input values of GenericInput.json file
     find_c_0 = '2000.0'
@@ -191,7 +191,7 @@ def executionMethod():
     replace_Iter2_n = Iter2_n
     find_Iter2_tolerance = '5.0e-5'
     replace_Iter2_tolerance = Iter2_tolerance
-    find_Iter2_calcAlpha = 'true'
+    find_Iter2_calcAlpha = 'false'
     replace_Iter2_calcAlpha = Iter2_calcAlpha
 
     input_file_IntegralFMInput = os.path.join(tempTestPath + '/input/IntegralFMInput.json')
