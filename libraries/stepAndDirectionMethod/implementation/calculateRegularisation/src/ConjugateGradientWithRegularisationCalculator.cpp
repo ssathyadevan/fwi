@@ -72,13 +72,16 @@ namespace fwi
             for(int it = 0; it < _cgParametersInput._nIterations; ++it)
             {
                 calculateRegularisationParameters();
-
+                std::cout << std::endl;
+                std::cout << "trying to calculateDirectionInRegularisation()" << std::endl;
                 _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
+                std::cout << "trying to calculateStepSizeInRegularisation()" << std::endl;
                 alpha = calculateStepSizeInRegularisation();
 
                 // Update contrast-function
                 _chiEstimateCurrent += alpha * _directionCurrent;
 
+                std::cout << "trying to updateResidual()" << std::endl;
                 // update _residualVector and _residualValueCurrent
                 updateResidual();
 
@@ -95,13 +98,14 @@ namespace fwi
                 // Save regularisation variables for next iteration
                 _chiEstimateCurrent.gradient(_regularisationCurrent.gradientChi);
 
-                // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
-                calculateRegularisationErrorFunctional();
-
                 _regularisationPrevious.deltaSquared = _regularisationCurrent.deltaSquared;
                 _regularisationPrevious.bSquared = _regularisationCurrent.bSquared;
-            }
 
+                // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
+                std::cout << "trying to calculateRegularisationErrorFunctional()" << std::endl;
+                calculateRegularisationErrorFunctional();
+            }
+            std::cout << "Returning final alpha, finished one inner loop" << std::endl;
             return alpha;
         }
 
@@ -128,14 +132,19 @@ namespace fwi
         {
             _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 _kappaTimesResidual updated
             _gradientCurrent =
-                _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
+                2.0 * _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
                 _residualValuePrevious *
                     _regularisationCurrent.gradient;   // eq: 2.25, bSquared is already included in .gradient, see calculateRegularisationGradient()
 
-            double step = calculateGammaPolakRibiere();
+            if(_gradientPrevious.norm() > 0.0)
+            {
+                double step = calculateGammaPolakRibiere();
+                _gradientCurrent += step * _directionCurrent;
+            }
 
-            return _gradientCurrent + step * _directionCurrent;
+            return _gradientCurrent;
         }
+
         core::dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
         {
             core::dataGrid2D bSquared(_grid);
@@ -282,10 +291,16 @@ namespace fwi
             core::dataGrid2D gradientChiNormsquaredCurrent(_grid);
             gradientChiNormsquaredCurrent = (_regularisationCurrent.gradientChi[0] * _regularisationCurrent.gradientChi[0]) +
                                             (_regularisationCurrent.gradientChi[1] * _regularisationCurrent.gradientChi[1]);
-
-            core::dataGrid2D integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
-                                        (_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared);
-
+            core::dataGrid2D integral(_grid);
+            if((_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared).norm() > 0.0)
+            {
+                integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
+                           (_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared);
+            }
+            else
+            {
+                integral = 1.0;
+            }
             _regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
         }
     }   // namespace inversionMethods
