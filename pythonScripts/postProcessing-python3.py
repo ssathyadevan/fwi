@@ -15,8 +15,14 @@ import matplotlib
 from datetime import datetime, date
 import argparse
 
-sys.path.insert(0, "../pythonScripts/classes")
-from OutputLogger import OutputLogger
+def readRunName(path):
+    parameter_file = open(path + "/output/lastRunName.txt", "r")
+    return parameter_file.readline()
+
+def readParameter(label, path, run_name):
+    parameter_file = open(path + "/output/" + run_name + ".pythonIn", "r")
+    line = [x for x in parameter_file if label in x ][0]
+    return line.split()[-1]
 
 def find(substr, whichin):
     lines = [x for x in open(whichin+".pythonIn") if substr in x]
@@ -31,26 +37,12 @@ def findTime(substr, whichin):
     start_or_finish = datetime.fromtimestamp( float(time_string) / 10**9)
     return start_or_finish
 
-
 # Configure the argument parser
 argumentParser = argparse.ArgumentParser()
-
-# Possible selection choices
-inversionMethods = [ "ConjugateGradientInversion", "GradientDescentInversion",
-                     "EvolutionInversion", "MPIConjugateGradientInversion",
-                     "OpenMPgradientDescentInversion", "RandomInversion"]
-
-forwardModels = ["IntegralForwardModel", "FiniteDifferenceForwardModel"]
 
 # Input arguments
 argumentParser.add_argument("-o", "--output", type=str, required=True,
     help="Path to output directory.")
-argumentParser.add_argument("-i", "--inversion_method", type=str, required=True,
-    choices=inversionMethods, help="Select inversion method. Allowed methods are "
-    + ', '.join(inversionMethods), metavar="", default="ConjugateGradientInversion")
-argumentParser.add_argument("-f", "--forward_model", type=str, required=False,
-    choices=forwardModels,help="Select model method (default: FiniteDifferenceForwardModel)."
-    + "Allowed models are " + ', '.join(forwardModels), metavar="", default="FiniteDifferenceForwardModel")
 argumentParser.add_argument("-r", "--run_number", type=int, required=False,
     default=0, help="Run number (default: 0)")
 
@@ -61,38 +53,17 @@ arguments = vars(argumentParser.parse_args())
 outputPath = arguments['output']
 run_number = arguments['run_number']
 
-g = open(outputPath + "/output/lastRunName.txt", "r")
-contents = g.readlines()
-runName = contents[0].rstrip()
+# Read name of the (test)run
+runName = readRunName(path = outputPath)
 
-# Open the file where we printed the settings used in Cpp, we'll reuse them
-f = open(outputPath + "/output/" + runName + ".pythonIn", "r")
-# Just dump the contents of this file into a big variable
-contents = f.readlines()
+# Read run parameters from files
+nxt = int(readParameter(label="nxt", path = outputPath, run_name = runName))
+nzt = int(readParameter(label="nzt", path = outputPath, run_name = runName))
 
-# Take the first line entirely...
-x = contents[1]
-# Split it into its constituent words
-_, _, v = x.split()
-# Cast the third word to an integer, we know this is nxt, we built the .txt after all
-nxt = int(v)
+nxt_original = int(readParameter(label="nxt_original", path = outputPath, run_name = runName))
+nzt_original = int(readParameter(label="nzt_original", path = outputPath, run_name = runName))
 
-# The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
-x = contents[2]
-_, _, v = x.split()
-nzt = int(v)
-
-# The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
-x = contents[3]
-_, _, v = x.split()
-nxt_original = int(v)
-
-# The rest of this block repeats this process for nzt and other parameters needed (dirty non-loop)
-x = contents[4]
-_, _, v = x.split()
-nzt_original = int(v)
-
-# zerothfile="src/ShowChi.py"
+# TODO: refactor to createFilename(prefix, path, name)
 filename1 = outputPath + "/output/chi_ref_" + runName + \
     ".txt"   # variable name for the original temple
 filename2 = outputPath + "/output/chi_est_" + runName + \
@@ -181,10 +152,8 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
 
-# Will remove these lines at the end..
-# Remove the OutputLogger call from the postprocessing script, and instead log the input parameters that are set in the postprocessing script in the script itself. Don't call the OutputLogger.
 #OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original, arguments)
 
 print("The pictures have been generated with Python")
 
-sys.exit()
+#sys.exit()
