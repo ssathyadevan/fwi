@@ -28,7 +28,7 @@ argumentParser.add_argument("-o", "--output", type=str, required=True,
 argumentParser.add_argument("-r", "--run_number", type=int, required=False,
     default=0, help="Run number (default: 0)")
 
-# Parse the input argumets
+# Parse the input arguments
 arguments = vars(argumentParser.parse_args())
 
 # Enter here the name of the case folder you want to post process
