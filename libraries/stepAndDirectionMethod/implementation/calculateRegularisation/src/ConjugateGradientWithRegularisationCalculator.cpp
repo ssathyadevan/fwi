@@ -66,22 +66,19 @@ namespace fwi
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
+            updateResidual();
 
             double alpha = 0.0;
             // regularisation loop
             for(int it = 0; it < _cgParametersInput._nIterations; ++it)
             {
                 calculateRegularisationParameters();
-                std::cout << std::endl;
-                std::cout << "trying to calculateDirectionInRegularisation()" << std::endl;
-                _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
-                std::cout << "trying to calculateStepSizeInRegularisation()" << std::endl;
-                alpha = calculateStepSizeInRegularisation();
 
+                _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
+                alpha = calculateStepSizeInRegularisation();
                 // Update contrast-function
                 _chiEstimateCurrent += alpha * _directionCurrent;
 
-                std::cout << "trying to updateResidual()" << std::endl;
                 // update _residualVector and _residualValueCurrent
                 updateResidual();
 
@@ -91,7 +88,6 @@ namespace fwi
                 {
                     break;
                 }
-
                 // Save variables for next iteration
                 _residualValuePrevious = _residualValueCurrent;
 
@@ -102,10 +98,8 @@ namespace fwi
                 _regularisationPrevious.bSquared = _regularisationCurrent.bSquared;
 
                 // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
-                std::cout << "trying to calculateRegularisationErrorFunctional()" << std::endl;
                 calculateRegularisationErrorFunctional();
             }
-            std::cout << "Returning final alpha, finished one inner loop" << std::endl;
             return alpha;
         }
 
@@ -124,7 +118,6 @@ namespace fwi
             _regularisationCurrent.b.sqrt();
 
             _regularisationCurrent.deltaSquared = calculateSteeringFactor();   // eq. 2.23
-
             _regularisationCurrent.gradient = calculateRegularisationGradient();
         }
 
@@ -174,7 +167,6 @@ namespace fwi
 
             double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
             double bSquaredSummed = _regularisationCurrent.bSquared.summation();
-
             if(bSquaredSummed == 0.0)
             {
                 throw std::overflow_error("Attempted division by zero.");
@@ -261,7 +253,6 @@ namespace fwi
 
             // Parameters for the derivative of F^tot with respect to alpha, see eq. 2.26-2.27.
             // The final polynomial to solve is derA*x^3 + derB*x^2 + derC*x +derD = 0.
-
             double derA = 4.0 * a2 * b2;
             double derB = 3.0 * (a2 * b1 + a1 * b2);
             double derC = 2.0 * (a2 * b0 + a1 * b1 + a0 * b2);
@@ -271,19 +262,26 @@ namespace fwi
             return findRealRootFromCubic(derA, derB, derC, derD);
         }
 
-        double ConjugateGradientWithRegularisationCalculator::findRealRootFromCubic(double a, double b, double c, double d)
+        double ConjugateGradientWithRegularisationCalculator::findRealRootFromCubic(
+            double thirdOrderCoeff, double secondOrderCoeff, double firstOrderCoeff, double zerothOrderCoeff)
         {
-            double f = ((3.0 * c / a) - (std::pow(b, 2) / std::pow(a, 2))) / 3.0;
-            double g = ((2.0 * std::pow(b, 3) / std::pow(a, 3)) - (9.0 * b * c / std::pow(a, 2)) + (27.0 * d / a)) / 27.0;
-            double h = (std::pow(g, 2) / 4.0) + (std::pow(f, 3) / 27.0);
-            double r = -(g / 2.0) + std::sqrt(h);
-            double s = std::cbrt(r);
-            double t = -(g / 2.0) - std::sqrt(h);
-            double u = std::cbrt(t);
+            // we use the discriminant approach
+            // normalize equation to have highest coefficient = 1
+            assert(thirdOrderCoeff != 0);
+            double a2 = secondOrderCoeff / thirdOrderCoeff;
+            double a1 = firstOrderCoeff / thirdOrderCoeff;
+            double a0 = zerothOrderCoeff / thirdOrderCoeff;
 
-            double realRoot = s + u - (b / (3.0 * a));
+            double q = a1 / 3.0 - std::pow(a2, 2) / 9.0;
+            double r = (a1 * a2 - 3.0 * a0) / 6.0 - std::pow(a2, 3) / 27.0;
 
-            return realRoot;
+            // assert(std::pow(q,3) +std::pow(r,2) >0); //for unique real solution
+            //  otherwise s1 and s2 are complex and we have three real roots
+            double s1 = std::cbrt(r + std::sqrt(std::pow(q, 3) + std::pow(r, 2)));
+            double s2 = std::cbrt(r - std::sqrt(std::pow(q, 3) + std::pow(r, 2)));
+
+            return s1 + s2 - a2 / 3.0;
+            ;
         }
 
         void ConjugateGradientWithRegularisationCalculator::calculateRegularisationErrorFunctional()

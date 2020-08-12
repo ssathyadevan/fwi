@@ -30,6 +30,8 @@ namespace fwi
                 const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
                 const ReconstructorParameters &directionInput);
 
+            ~StepAndDirectionReconstructor();
+
             /**
              * @brief reconstruct The main method of the class, where the desired steps and directions are combined and the reconstruction happens
              * @param pData is the data coming from the readings
