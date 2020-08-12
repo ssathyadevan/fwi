@@ -13,7 +13,7 @@ pipeline{
 					agent{
 						dockerfile{
 							customWorkspace "workspace/${env.JOB_NAME}".replace(' ', '_')
-							filename 'Dockerfile'
+							filename 'continuousIntegration/Dockerfile'
 							additionalBuildArgs  '--build-arg BM_SRC_DIR=${WORKSPACE} --build-arg BM_BUILD_DIR=${WORKSPACE}/build'
 						}
 					}
@@ -23,7 +23,7 @@ pipeline{
 								deleteDir()
 								checkout scm
 								script{
-									functions = evaluate readTrusted('jenkinsFunctions/functions.groovy')
+									functions = evaluate readTrusted('continuousIntegration/jenkinsFunctions/functions.groovy')
 									functions.setEnvironment()
 								}
 							}
@@ -84,7 +84,7 @@ pipeline{
 								deleteDir()
 								checkout scm
 								script{
-									functions = evaluate readTrusted('jenkinsFunctions/functions.groovy')
+									functions = evaluate readTrusted('continuousIntegration/jenkinsFunctions/functions.groovy')
 								}
 							}
 						}
