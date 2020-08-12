@@ -1,41 +1,23 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# MELISSEN 2018 10 25
-#
-# import (in Cpp this is hashtag include)...
-# ...the numpy and matplotlib libraries for the math and imagery
-# ...and sys library to quit
 import csv
-import sys
-from skimage.transform import resize
-from skimage import data, color
-import matplotlib.pyplot as plt
-import numpy as np
-import matplotlib
-from datetime import datetime, date
 import argparse
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage.transform import resize
 
 def readRunName(path):
     parameter_file = open(path + "/output/lastRunName.txt", "r")
     return parameter_file.readline()
 
-def readParameter(label, path, run_name):
+def readParameter(label, path):
+    run_name = readRunName(path)
     parameter_file = open(path + "/output/" + run_name + ".pythonIn", "r")
     line = [x for x in parameter_file if label in x ][0]
     return line.split()[-1]
 
-def find(substr, whichin):
-    lines = [x for x in open(whichin+".pythonIn") if substr in x]
-    line = lines[0]
-    return line.replace(substr, '').replace("\n", '')
-
-def findTime(substr, whichin):
-    lines = [x for x in open(whichin+".pythonIn") if substr in x]
-    line = lines[0]
-    time_string = line.replace(substr, '').replace("\n", '')
-    time_microseconds = 3
-    start_or_finish = datetime.fromtimestamp( float(time_string) / 10**9)
-    return start_or_finish
+def filename(path, prefix = "", suffix = ".txt"):
+    runName = readRunName(path)
+    filename = path + "/output/" + prefix + runName + suffix
+    return filename
 
 # Configure the argument parser
 argumentParser = argparse.ArgumentParser()
@@ -46,41 +28,27 @@ argumentParser.add_argument("-o", "--output", type=str, required=True,
 argumentParser.add_argument("-r", "--run_number", type=int, required=False,
     default=0, help="Run number (default: 0)")
 
-# Parse the argumets
+# Parse the input argumets
 arguments = vars(argumentParser.parse_args())
 
 # Enter here the name of the case folder you want to post process
 outputPath = arguments['output']
 run_number = arguments['run_number']
 
-# Read name of the (test)run
-runName = readRunName(path = outputPath)
-
 # Read run parameters from files
-nxt = int(readParameter(label="nxt", path = outputPath, run_name = runName))
-nzt = int(readParameter(label="nzt", path = outputPath, run_name = runName))
+nxt = int(readParameter(label="nxt", path = outputPath))
+nzt = int(readParameter(label="nzt", path = outputPath))
 
-nxt_original = int(readParameter(label="nxt_original", path = outputPath, run_name = runName))
-nzt_original = int(readParameter(label="nzt_original", path = outputPath, run_name = runName))
+nxt_original = int(readParameter(label="nxt_original", path = outputPath))
+nzt_original = int(readParameter(label="nzt_original", path = outputPath))
 
-# TODO: refactor to createFilename(prefix, path, name)
-filename1 = outputPath + "/output/chi_ref_" + runName + \
-    ".txt"   # variable name for the original temple
-filename2 = outputPath + "/output/chi_est_" + runName + \
-    ".txt"   # variable name for the calculated temple
-filenameout = outputPath + "/output/" + runName + \
-    "Result.png"   # how we store the image
-
-chi1 = np.genfromtxt(filename1)      # start image set up for original image
+# Start image set up for original image
+chi1 = np.genfromtxt(filename(path = outputPath, prefix = "chi_ref_"))     
 chi1 = chi1.reshape((nzt_original, nxt_original))
 
-# start image set up for reconstructed image
-chi2 = np.genfromtxt(filename2)
+# Start image set up for reconstructed image
+chi2 = np.genfromtxt(filename(path = outputPath, prefix = "chi_est_"))
 chi2 = chi2.reshape((nzt, nxt))
-
-# set the minimum and maximum values to chi...
-v_min = chi1.min()
-v_max = chi1.max()                   # ...(just copy-pasted this)
 
 # We upscale the smaller image to avoid information loss
 chi1_original = chi1
@@ -99,21 +67,19 @@ diff_chi = chi2-chi1
 mse = (np.square(diff_chi)).mean()
 square_mean_original = (np.square(chi1)).mean()
 avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
-print("The MSE (mean square error) is:       "+str(mse))
-print("The average relative error is:        "+str(avg_relative_error))
+total_seconds = readParameter("CPU time", path = outputPath)
 
-# We find the execution time in the logs
-datetime_new_start = findTime("Starting at ", outputPath + "/output/" + runName)
-datetime_new_finish = findTime("Finished at ", outputPath + "/output/" + runName)
-#new_total_seconds = (datetime_new_finish - datetime_new_start).seconds
-new_total_seconds = find("CPU time: ", outputPath + "/output/" + runName)
-virtual_mem = find("Virtual memory: ", outputPath + "/output/" + runName)
-physical_mem = find("Physical memory: ", outputPath + "/output/" + runName)
+print("The MSE (mean square error) is:       " + str(mse))
+print("The average relative error is:        " + str(avg_relative_error))
+print("Execution time in seconds:            " + total_seconds)
 
-print("Execution time in seconds:            "+str(new_total_seconds))
+# Set the minimum and maximum values to chi
+v_min = chi1.min()
+v_max = chi1.max()
 
-
-# Here we make and save the actual plots
+######################################
+####  Create plots of actual data ####
+######################################
 plt.clf
 plt.subplots_adjust(hspace=0.5)
 
@@ -132,13 +98,12 @@ plt.title("Difference between chi values")
 plt.imshow(np.absolute(diff_chi), interpolation='nearest')
 plt.colorbar()
 
-plt.savefig(filenameout, dpi=400, bbox_inches='tight')
+plt.savefig(filename(path = outputPath, suffix = "Result.png"), dpi=400, bbox_inches='tight')
 
-####################################
-####  Create the residual plots ####
-####################################
-residualLogFileName = outputPath+"/output/"+runName + "Residual.log"
-reader_residual = csv.reader(open(residualLogFileName), delimiter=',')
+#######################################
+####  Create plot of the residuals ####
+#######################################
+reader_residual = csv.reader(open(filename(path=outputPath, suffix = "Residual.log")), delimiter=',')
 dummy_variable_reader_pr = list(reader_residual)
 reader_residual_array = np.array(dummy_variable_reader_pr).astype("float")
 
@@ -150,10 +115,6 @@ residuals.insert(0, None)
 plt.plot(residuals)
 plt.ylabel("Residual")
 plt.grid(True)
-plt.savefig(outputPath+"/output/"+runName+"Residual.png", dpi=400)
-
-#OutputLogger(run_number, datetime_new_start, datetime_new_finish, new_total_seconds, virtual_mem, physical_mem, diff_chi, mse, square_mean_original, arguments)
+plt.savefig(filename(path = outputPath, suffix="Residual.png"), dpi=400)
 
 print("The pictures have been generated with Python")
-
-#sys.exit()
