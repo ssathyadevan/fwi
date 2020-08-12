@@ -265,8 +265,6 @@ if __name__ == "__main__":
             data = list(csv.reader(csvfile, delimiter=","))
         while n <= int(rowEnd):  # row[0] is the header of the colomns
             result = executionMethod()
-            print('printing result')
-            print(result)
             preTime = preProcess(result[0], result[3])
             processTime = Process(result[0], result[1], result[3])
             #processTime = StepDefinitionProcess(result[0], result[1], result[2], result[3])

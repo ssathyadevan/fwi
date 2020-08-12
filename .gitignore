@@ -130,11 +130,12 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-#=======================
-#=== Build & Install ===
-#=======================
+#==============================
+#=== Build & Install & Test ===
+#==============================
 Build/
 FWIInstall/
+FWITest/
 results/
 
 #=============================
