@@ -43,7 +43,7 @@ nxt_original = int(readParameter(label="nxt_original", path = outputPath))
 nzt_original = int(readParameter(label="nzt_original", path = outputPath))
 
 # Start image set up for original image
-chi1 = np.genfromtxt(filename(path = outputPath, prefix = "chi_ref_"))     
+chi1 = np.genfromtxt(filename(path = outputPath, prefix = "chi_ref_"))
 chi1 = chi1.reshape((nzt_original, nxt_original))
 
 # Start image set up for reconstructed image
