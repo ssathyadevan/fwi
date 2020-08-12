@@ -4,7 +4,7 @@ def functions
 pipeline{
 	agent none
 	triggers{
-		cron('H 12 * * 1-5')
+		cron('H 0 * * 1-5')
 	}
 	stages{
 		stage('Starting Pipeline'){
