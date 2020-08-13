@@ -24,7 +24,7 @@ pipeline{
 								checkout scm
 								script{
 									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
-									functions.setEnvironment("Ubuntu")
+									functions.setEnvironment()
 								}
 							}
 						}
@@ -85,7 +85,6 @@ pipeline{
 								checkout scm
 								script{
 									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
-									functions.setEnvironment("Windows")
 								}
 							}
 						}
