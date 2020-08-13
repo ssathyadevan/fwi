@@ -42,7 +42,7 @@ def unitTest(String osName = "undefined") {
 			bat '''
 				cd build 
 				ctest -T test --no-compress-output
-				for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i 
+				for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i
 				copy %dirOutput% .\\CTestResults.xml
 			'''
 		}
@@ -62,7 +62,7 @@ def regressionTest(String osName = "undefined") {
 			bat '''
 				copy tests\\testScripts\\unified_run_all_regressions_python.py . 
 				python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-			'''		
+			'''
 		}
 		else{
 			sh '''
@@ -104,23 +104,19 @@ def unitTestSummary() {
 		echo 'Cleaning the workspace'
 	}
 	else {
-		echo 'Previous steps failed, so no summary of unit-test is made'	
+		echo 'Previous steps failed, so no summary of unit-test is made'
 	}
 }
 
 def sendEmail( String osName = "undefined" ) {
-		String messageBody = "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult	
+		String messageBody = "Dear ${env.AUTHOR_NAME},\n\nYour commit: ${env.SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
 		if(currentBuild.currentResult != "SUCCESS") {
-			messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."		
+			messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${env.BUILD_URL}."
 		}
-		
 		mail from: "noreply-jenkins-FWI@alten.nl", \
-
-		to: "${COMITTER_EMAIL}", \
-
+		to: "${env.COMITTER_EMAIL}", \
 		subject: osName + ": " + "${env.JOB_NAME} returned status " + currentBuild.currentResult, \
-
-		body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
+		body: messageBody
 
 		echo "Email sent"
 }
