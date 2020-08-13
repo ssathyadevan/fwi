@@ -6,7 +6,7 @@ pipeline{
 	stages{
 		stage('Starting Pipeline'){
 			options{
-				timeout( time : 30, unit: "MINUTES")
+				timeout( time : 60, unit: "MINUTES")
 			}
 			parallel{
 				stage('Connecting to Ubuntu Agent') {
@@ -23,7 +23,7 @@ pipeline{
 								deleteDir()
 								checkout scm
 								script{
-									functions = evaluate readTrusted('continuousIntegration/jenkinsFunctions/functions.groovy')
+									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
 									functions.setEnvironment()
 								}
 							}
@@ -84,7 +84,7 @@ pipeline{
 								deleteDir()
 								checkout scm
 								script{
-									functions = evaluate readTrusted('continuousIntegration/jenkinsFunctions/functions.groovy')
+									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
 								}
 							}
 						}
