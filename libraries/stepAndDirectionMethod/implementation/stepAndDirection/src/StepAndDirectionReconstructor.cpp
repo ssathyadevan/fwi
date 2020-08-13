@@ -18,19 +18,7 @@ namespace fwi
             , _grid(forwardModel->getGrid())
         {
         }
-        StepAndDirectionReconstructor::~StepAndDirectionReconstructor()
-        {
-            if(_desiredDirection != nullptr)
-            {
-                delete _desiredDirection;
-                _desiredDirection = nullptr;
-            }
-            if(_desiredStep != nullptr)
-            {
-                delete _desiredStep;
-                _desiredDirection = nullptr;
-            }
-        }
+        StepAndDirectionReconstructor::~StepAndDirectionReconstructor() {}
 
         core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {

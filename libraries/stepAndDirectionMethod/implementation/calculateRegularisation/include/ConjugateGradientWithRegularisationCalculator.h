@@ -117,8 +117,8 @@ namespace fwi
         public:
             ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, const core::CostFunctionCalculator &costCalculator,
                 forwardModels::ForwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
-                const std::vector<std::complex<double>> &pData);          // constructor
-            virtual ~ConjugateGradientWithRegularisationCalculator() {}   // destructor
+                const std::vector<std::complex<double>> &pData);        // constructor
+            virtual ~ConjugateGradientWithRegularisationCalculator();   // destructor
 
             /**
              * @brief calculateStepSize Invokes the whole regularisation process, where also the direction is updated
