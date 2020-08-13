@@ -25,14 +25,19 @@ def build(String osName = "undefined") {
         echo 'Building on' + osName
 		env.MYSTAGE_NAME = 'Build'
 		if (osName == "Windows"){
-			bat(script:'mkdir build \n cd build \n cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..\n ninja install')
+			bat '''
+				mkdir build 
+				cd build 
+				cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
+				ninja install
+			'''
 		}
 		else{
 		    sh '''
-			mkdir build
-			cd build
-			cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
-			make install
+				mkdir build
+				cd build
+				cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/FWIInstall ..
+				make install
 			'''
 		}
 
@@ -48,10 +53,10 @@ def unitTest(String osName = "undefined") {
 		}
 		else{
 			sh '''
-			cd build
-			make test
-			ctest -T test --no-compress-output
-			cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+				cd build
+				make test
+				ctest -T test --no-compress-output
+				cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
 			'''
 		}
 }
@@ -64,8 +69,8 @@ def regressionTest(String osName = "undefined") {
 		}
 		else{
 			sh '''
-			cp tests/testScripts/unified_run_all_regressions_python.py .
-			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
+				cp tests/testScripts/unified_run_all_regressions_python.py .
+				python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
 			'''
 		}
 }
@@ -79,10 +84,10 @@ def deploy(String osName = "undefined"){
 		}
 		else{
 			sh '''
-			cp -r inputFiles FWIInstall/
-			mkdir FWIInstall/pythonScripts
-			cp -r pythonScripts/* FWIInstall/pythonScripts
-			tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+				cp -r inputFiles FWIInstall/
+				mkdir FWIInstall/pythonScripts
+				cp -r pythonScripts/* FWIInstall/pythonScripts
+				tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
 			'''
 			archiveArtifacts artifacts:"Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
 		}
@@ -107,7 +112,7 @@ def unitTestSummary() {
 def sendEmail( String osName = "undefined" ) {
 		String messageBody = "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult	
         if(currentBuild.currentResult != "SUCCESS") {
-				messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."		
+			messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."		
         }
 		
         mail from: "noreply-jenkins-FWI@alten.nl", \

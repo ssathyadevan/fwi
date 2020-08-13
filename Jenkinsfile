@@ -9,7 +9,7 @@ pipeline{
 				timeout( time : 60, unit: "MINUTES")
 			}
 			parallel{
-				stage('Connecting to Ubuntu Agent') {
+				stage('Connecting to Ubuntu agent') {
 					agent{
 						dockerfile{
 							customWorkspace "workspace/${env.JOB_NAME}".replace(' ', '_')
@@ -18,7 +18,7 @@ pipeline{
 						}
 					}
 					stages{
-						stage('Preparing Ubuntu Workspace'){
+						stage('Preparing Ubuntu workspace'){
 							steps{
 								deleteDir()
 								checkout scm
@@ -35,14 +35,14 @@ pipeline{
 								}
 							}
 						}
-						stage('Testing on Ubuntu'){
+						stage('Unit testing on Ubuntu'){
 							steps{
 								script{
 									functions.unitTest("Ubuntu")
 								}
 							}
 						}
-						stage('Regression Testing on Ubuntu'){
+						stage('Regression testing on Ubuntu'){
 							steps{
 								script{
 									functions.regressionTest("Ubuntu")
@@ -70,7 +70,7 @@ pipeline{
 						}
 					}
 				}
-				stage('Connecting to Windows Agent'){
+				stage('Connecting to Windows agent'){
 					agent{
 						node{
 							label 'Windows'
@@ -78,13 +78,14 @@ pipeline{
 						}
 					}
 					stages{
-						stage( 'Preparing Windows Workspace' ){
+						stage( 'Preparing Windows workspace' ){
 							steps{
 								echo "Preparing windows workspace"
 								deleteDir()
 								checkout scm
 								script{
 									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
+									functions.setEnvironment()
 								}
 							}
 						}
@@ -95,14 +96,14 @@ pipeline{
 								}
 							}
 						}
-						stage('Testing on Windows'){
+						stage('Unit testing on Windows'){
 							steps{
 								script{
 									functions.unitTest("Windows")
 								}
 							}
 						}
-						stage('Regression Testing on Windows'){
+						stage('Regression testing on Windows'){
 							steps{
 								script{
 									functions.regressionTest("Windows")
