@@ -17,13 +17,11 @@ def setEnvironment() {
 def build(String osName = "undefined") {
 		echo 'Building on ' + osName
 		env.MYSTAGE_NAME = 'Build'
-		String buildType = 'Release'
-		String installPrefix = '../FWIInstall ..'
 		if (osName == "Windows"){
 			bat '''
 				mkdir build 
 				cd build 
-				cmake -G "Ninja" -DCMAKE_BUILD_TYPE=%buildType% -DCMAKE_INSTALL_PREFIX=%installPrefix%
+				cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
 				ninja install
 			'''
 		}
@@ -31,7 +29,7 @@ def build(String osName = "undefined") {
 			sh '''
 				mkdir build
 				cd build
-				cmake -DCMAKE_BUILD_TYPE=${buildType} -DCMAKE_INSTALL_PREFIX=${installPrefix}
+				cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
 				make install
 			'''
 		}
