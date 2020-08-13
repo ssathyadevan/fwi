@@ -34,28 +34,28 @@ pipeline{
 						stage('Building on Ubuntu'){
 							steps{
 								script{
-									functions.buildAll()
+									functions.build("Ubuntu")
 								}
 							}
 						}
 						stage('Testing on Ubuntu'){
 							steps{
 								script{
-									functions.testAll()
+									functions.unitTest("Ubuntu")
 								}
 							}
 						}
 						stage('Regression Testing on Ubuntu'){
 							steps{
 								script{
-									functions.regressiontest()
+									functions.regressionTest("Ubuntu")
 								}
 							}
 						}
 						stage('Deploying on Ubuntu'){
 							steps{
 								script{
-									functions.deploy()
+									functions.deploy("Ubuntu")
 								}
 							}
 						}
@@ -94,34 +94,28 @@ pipeline{
 						stage( 'Building on Windows' ){
 							steps{
 								script{
-									echo "Building on windows"
-									bat(script:'mkdir build \n cd build \n cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..\n ninja install')
+									functions.build("Windows")
 								}
 							}
 						}
 						stage('Testing on Windows'){
 							steps{
 								script{
-									echo "Testing on windows"
-									bat(script:"cd build \n ctest -T test --no-compress-output")
-									bat(script: 'for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i \n cd build \n echo %dirOutput% \n copy %dirOutput% .\\CTestResults.xml')
+									functions.unitTest("Windows")
 								}
 							}
 						}
 						stage('Regression Testing on Windows'){
 							steps{
 								script{
-									echo "Running regression tests on windows"
-									bat(script:'copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion')
+									functions.regressionTest("Windows")
 								}
 							}
 						}
 						stage('Deploying on Windows'){
 							steps{
 								script{
-									echo 'Deploying on windows'
-									bat(script:'xcopy inputFiles FWIInstall\\inputFiles /s /i \n xcopy pythonScripts FWIInstall\\pythonScripts /s /i \n 7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*')
-									archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.zip"
+									functions.deploy("Windows")
 								}
 							}
 						}
