@@ -22,7 +22,7 @@ def setEnvironment() {
 }
 
 def build(String osName = "undefined") {
-        echo 'Building on' + osName
+        echo 'Building on ' + osName
 		env.MYSTAGE_NAME = 'Build'
 		if (osName == "Windows"){
 			bat '''
@@ -40,21 +40,22 @@ def build(String osName = "undefined") {
 				make install
 			'''
 		}
-
-        //cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/var/jenkins_home/workspace/FWI/${GIT_BRANCH}/FWIInstall ..
 }
 
 def unitTest(String osName = "undefined") {
-	    echo 'Running unit tests on' + osName
+	    echo 'Running unit tests on ' + osName
     	env.MYSTAGE_NAME = 'Unit Testing'
 		if (osName == "Windows"){
-			bat(script:"cd build \n ctest -T test --no-compress-output")
-			bat(script: 'for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i \n cd build \n echo %dirOutput% \n copy %dirOutput% .\\CTestResults.xml')
+			bat '''
+				cd build 
+				ctest -T test --no-compress-output
+				for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i 
+				copy %dirOutput% .\\CTestResults.xml
+			'''
 		}
 		else{
 			sh '''
 				cd build
-				make test
 				ctest -T test --no-compress-output
 				cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
 			'''
@@ -62,10 +63,13 @@ def unitTest(String osName = "undefined") {
 }
 
 def regressionTest(String osName = "undefined") {
-        echo 'Running regression tests on' + osName
+        echo 'Running regression tests on ' + osName
 		env.MYSTAGE_NAME = 'Regression Testing'
 		if (osName == "Windows"){
-			bat(script:'copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . \n python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion')		
+			bat '''
+				copy %WORKSPACE%\\tests\\testScripts\\unified_run_all_regressions_python.py . 
+				python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
+			'''		
 		}
 		else{
 			sh '''
@@ -76,10 +80,14 @@ def regressionTest(String osName = "undefined") {
 }
 
 def deploy(String osName = "undefined"){
-        echo 'Deploying on' + osName
+        echo 'Deploying on ' + osName
 		env.MYSTAGE_NAME = 'Deploy'
 		if (osName == "Windows"){
-			bat(script:'xcopy inputFiles FWIInstall\\inputFiles /s /i \n xcopy pythonScripts FWIInstall\\pythonScripts /s /i \n 7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*')
+			bat '''
+				xcopy inputFiles FWIInstall\\inputFiles /s /i 
+				xcopy pythonScripts FWIInstall\\pythonScripts /s /i 
+				7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*
+			'''
 			archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.zip"	
 		}
 		else{
