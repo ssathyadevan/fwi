@@ -82,15 +82,21 @@ def unitTestSummary() {
 
 
 def sendEmail( String osName = "undefined" ) {
-        email = evaluate readTrusted('jenkinsFunctions/email.groovy')
-        if(currentBuild.currentResult == "UNSTABLE" || currentBuild.currentResult == "SUCCESS") {
-                email.sendEmail(osName)
+		String messageBody = "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult	
+        if(currentBuild.currentResult != "SUCCESS") {
+				messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${BUILD_URL}."		
         }
-        else{          
-                email.sendEmailFailure(osName)
-        }
-}
+		
+        mail from: "noreply-jenkins-FWI@alten.nl", \
 
+        to: "${COMITTER_EMAIL}", \
+
+        subject: osName + ": " + "${env.JOB_NAME} returned status " + currentBuild.currentResult, \
+
+        body: "Dear ${AUTHOR_NAME},\n\nYour commit: ${SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
+
+        echo "Email sent"			
+}
 
 return this
 
