@@ -7,18 +7,26 @@ import hudson.model.Actionable
 import com.cloudbees.groovy.cps.NonCPS
 
 
-def setEnvironment() {
+def setEnvironment(String osName = "undefined") {
 
-        // Get commit parameters like commit code and author
+    // Get commit parameters like commit code and author
+	if (osName == "Windows"){
+		env.SHORT_COMMIT_CODE = bat(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+        env.COMMIT_MESSAGE = bat(returnStdout: true, script: "git log --format=%B -n 1 ${SHORT_COMMIT_CODE}").trim()
+        env.COMITTER_EMAIL = bat(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
+        env.AUTHOR_NAME = bat(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
+        env.MYSTAGE_NAME = 'Preparing'
+	}
+	else{
         env.SHORT_COMMIT_CODE = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
         env.COMMIT_MESSAGE = sh(returnStdout: true, script: "git log --format=%B -n 1 ${SHORT_COMMIT_CODE}").trim()
         env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
         env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
         env.MYSTAGE_NAME = 'Preparing'
-		
-		// Set build name and description accordingly
-        currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
-        currentBuild.description = "${COMMIT_MESSAGE}"
+	}
+	// Set build name and description accordingly
+    currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
+    currentBuild.description = "${COMMIT_MESSAGE}"
 }
 
 def build(String osName = "undefined") {
