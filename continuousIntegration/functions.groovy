@@ -108,7 +108,7 @@ def unitTestSummary() {
 	}
 }
 
-def executeTests() {
+def executeTests( String osName = "undefined" ) {
 	echo 'Running executeTests on ' + osName
 	env.MYSTAGE_NAME = 'Running executeTests'
 	if (osName == "Windows"){
