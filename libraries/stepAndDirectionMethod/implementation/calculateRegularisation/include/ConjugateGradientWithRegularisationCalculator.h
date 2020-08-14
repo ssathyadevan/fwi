@@ -118,11 +118,8 @@ namespace fwi
             ConjugateGradientWithRegularisationCalculator(double errorFunctionalScalingFactor, const core::CostFunctionCalculator &costCalculator,
                 forwardModels::ForwardModelInterface *forwardModel, ConjugateGradientWithRegularisationParametersInput cgParametersInput,
                 const std::vector<std::complex<double>> &pData);   // constructor
-            // Review: you can change the destructor to  ~ConjugateGradientWithRegularisationCalculator(){} or  ~ConjugateGradientWithRegularisationCalculator()
-            // = default this way you dont have to define an empty function in the .cpp file
-            // Review: also the virtual is not needed since no one inherits from ConjugateGradientWithRegularisationCalculator, the virtual destructor is only
-            // needed in base classes
-            virtual ~ConjugateGradientWithRegularisationCalculator();   // destructor
+
+            ~ConjugateGradientWithRegularisationCalculator() {}   // destructor
 
             /**
              * @brief calculateStepSize Invokes the whole regularisation process, where also the direction is updated

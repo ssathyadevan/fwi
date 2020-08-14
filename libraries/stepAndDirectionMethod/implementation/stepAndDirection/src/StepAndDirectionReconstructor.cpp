@@ -18,7 +18,6 @@ namespace fwi
             , _grid(forwardModel->getGrid())
         {
         }
-        StepAndDirectionReconstructor::~StepAndDirectionReconstructor() {}
 
         core::dataGrid2D StepAndDirectionReconstructor::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {

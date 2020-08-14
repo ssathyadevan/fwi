@@ -29,7 +29,6 @@ namespace fwi
         {
             _nTotal = forwardModel->getFreq().count * forwardModel->getSource().count * forwardModel->getReceiver().count;
         }
-        ConjugateGradientWithRegularisationCalculator::~ConjugateGradientWithRegularisationCalculator() {}
 
         core::dataGrid2D &ConjugateGradientWithRegularisationCalculator::calculateDirection(
             const core::dataGrid2D &, const std::vector<std::complex<double>> &residualVector)

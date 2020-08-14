@@ -47,15 +47,15 @@ namespace fwi
             delete _createdForwardModel;
             _createdForwardModel = nullptr;
         }
-        // Review: I understand that if _splittable == true then both _createdStepSizeCalculator and _createdDirectionCalculator
-        // point to the same memory location, and you can only call delete once on that memory location so that is why the '&& _splittable'
-        // appears only in one of the if statements. If this is the case please add this as a comment to fix for a future refactor
+
         if(_createdStepSizeCalculator != nullptr)
         {
             delete _createdStepSizeCalculator;
             _createdStepSizeCalculator = nullptr;
         }
 
+		// If the _createdStepSizeCalculator is so that _splittable == false, we can only delete the element pointed by _createdDirectionCalculator and _createdStepSizeCalculator once. 
+		// Once ConjugateGradientWithRegularisation is refactored and validated (and thus inherits uniquely from _StepSizeCalculator) the _splittable parameter and all of its occurrences can be removed, and the following if() can be fixed.
         if(_createdDirectionCalculator != nullptr && _splittable)
         {
             delete _createdDirectionCalculator;
