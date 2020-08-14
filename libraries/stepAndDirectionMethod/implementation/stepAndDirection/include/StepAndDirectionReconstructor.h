@@ -29,7 +29,8 @@ namespace fwi
             StepAndDirectionReconstructor(StepSizeCalculator *desiredStep, DirectionCalculator *desiredDirection,
                 const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
                 const ReconstructorParameters &directionInput);
-
+            // Review: you can change the destructor to  ~StepAndDirectionReconstructor(){} or  ~StepAndDirectionReconstructor() = default
+            // this way you dont have to define an empty function in the .cpp file
             ~StepAndDirectionReconstructor();
 
             /**
