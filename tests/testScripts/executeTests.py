@@ -279,17 +279,19 @@ def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess')
     forwardModelArgument = ""
     if(forwardModel == 'IntegralForwardModel'):
-        forwardModelArgument = 'Integral'
+        forwardModelArgument = "FWI_PreProcess_Integral"
     elif(forwardModel == 'FiniteDifferenceForwardModel'):
-        forwardModelArgument = 'Finite_Difference'
+        forwardModelArgument = "FWI_PreProcess_Finite_Difference"
     else:
         print('Invalid Forward Model')
         exit()
     start_preTime = time.time()
-    tempFWIInstallBin = os.path.join(root + '/FWIInstall/bin/')
-    os.chdir(tempFWIInstallBin)
-    print('FWI_PreProcess_' + forwardModelArgument + ' ' + tempTestPath)
-    os.system('FWI_PreProcess_' + forwardModelArgument + ' ' + Path(tempTestPath).as_posix())
+    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
+
+    execPath = os.path.join(tempFWIInstallBin, forwardModelArgument)
+    print(forwardModelArgument + ' ' + tempTestPath)
+
+    os.system(execPath + ' ' + Path(tempTestPath).as_posix())
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
@@ -297,7 +299,9 @@ def Process(tempTestPath, Inversion, ForwardModel):
     print('\n------Start Process')
     start_processTime = time.time()
     print('FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
-    os.system('FWI_UnifiedProcess ' + Path(tempTestPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
+    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
+    execPath = os.path.join(tempFWIInstallBin, "FWI_UnifiedProcess")
+    os.system(execPath + ' ' + Path(tempTestPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
