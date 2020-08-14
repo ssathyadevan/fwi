@@ -1,10 +1,6 @@
-#!/usr/bin/env python3
-# Adding json specific read out values
-# Add variable handling to Process
-# split executionMethod in importValues and ExecutionMethod
-
 import os, sys, shutil, csv, datetime, time
 from datetime import datetime as dt
+from pathlib import Path
 
 def makeExecutionFolder():
     print('\n------Creating a new execution folder')
@@ -292,16 +288,16 @@ def preProcess(tempTestPath, forwardModel):
     start_preTime = time.time()
     tempFWIInstallBin = os.path.join(root + '/FWIInstall/bin/')
     os.chdir(tempFWIInstallBin)
-    print('./FWI_PreProcess_' + forwardModelArgument + ' ' + tempTestPath)
-    os.system('./FWI_PreProcess_' + forwardModelArgument + ' ' + tempTestPath)
+    print('FWI_PreProcess_' + forwardModelArgument + ' ' + tempTestPath)
+    os.system('FWI_PreProcess_' + forwardModelArgument + ' ' + Path(tempTestPath).as_posix())
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
 def Process(tempTestPath, Inversion, ForwardModel):
     print('\n------Start Process')
     start_processTime = time.time()
-    print('./FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
-    os.system('./FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
+    print('FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
+    os.system('FWI_UnifiedProcess ' + Path(tempTestPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
