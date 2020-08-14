@@ -1,10 +1,6 @@
-#!/usr/bin/env python3
-# Adding json specific read out values
-# Add variable hendling to Processs
-# split executionMethod in importValues and ExecutionMethod
-
 import os, sys, shutil, csv, datetime, time
 from datetime import datetime as dt
+from pathlib import Path
 
 def makeExecutionFolder():
     print('\n------Creating a new execution folder')
@@ -21,7 +17,7 @@ def makeTestFolder(tempTestPath):
 
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
-    number_total = int(rowEnd) - int(rowStart) + 1 # The total amout of tests to be executed
+    number_total = int(rowEnd) - int(rowStart) + 1 # The total amount of tests to be executed
     print("""
 ##################################
       Start Test(s) {} of {}
@@ -32,8 +28,8 @@ def executionMethod():
     sequence = data[n][0]
     title = data[n][1]
     sequence = sequence.zfill(2) # Fill the number with 3 digits
-    testSeqenceFolder = sequence + title # mkdir name
-    tempTestPath = os.path.join(basename, executionFolder, testSeqenceFolder)  # /home/user/FWITest/Execution_yyyyMMdd-hhmmss/sequence+title
+    testSequenceFolder = sequence + title # mkdir name
+    tempTestPath = os.path.join(basename, executionFolder, testSequenceFolder)  # /home/user/FWITest/Execution_yyyyMMdd-hhmmss/sequence+title
 
     ### CGInput.json
     Iter1_n = data[n][2]
@@ -41,7 +37,7 @@ def executionMethod():
     DeltaAmplification_start = data[n][4]
     DeltaAmplification_slope = data[n][5]
     n_max = data[n][6]
-    d0_reg = data[n][7]
+    do_reg = data[n][7]
 
     ### GenericInput.json
     c_0 = data[n][8]
@@ -67,15 +63,29 @@ def executionMethod():
     verbosity = data[n][28]
     fileName = data[n][29]
 
-    ### IntergralFMIinput.json
+    ### IntegralFMIInput.json
     Iter2_n = data[n][30]
     Iter2_tolerance = data[n][31]
     Iter2_calcAlpha = data[n][32]
+    Iter2_CostFunction = data[n][33]
+
+    ### GradientDescentInversionInput.json
+    gamma = data[n][34]
+    x0 = data[n][35]
+    h = data[n][36]
+    iter = data[n][37]
+
+    ### FiniteDifferenceFMInput.json
+    PMLWidthFactor_x = data[n][38]
+    PMLWidthFactor_z = data[n][39]
+    SourceParameter_r = data[n][40]
+    SourceParameter_beta = data[n][41]
+    CostFunction = data[n][42]
+    boundaryConditionType = data[n][43]
 
     ### Mode
-    Method = data[n][33]
-    Direction = data[n][34]
-    Model = data[n][35]
+    InversionMethod = data[n][44]
+    ForwardModel = data[n][45]
 
     makeTestFolder(tempTestPath)
 
@@ -91,23 +101,23 @@ def executionMethod():
     replace_DeltaAmplification_slope = DeltaAmplification_slope
     find_n_max = '5'
     replace_n_max = n_max
-    find_d0_reg = 'true'
-    replace_d0_reg = d0_reg
+    find_do_reg = 'true'
+    replace_do_reg = do_reg
 
-    # input_file_CGInput = os.path.join(tempTestPath + '/input/CGInput.json')
+    input_file_CGInput = os.path.join(tempTestPath + '/input/ConjugateGradientInversionInput.json')
 
-    #with open(input_file_CGInput, 'r') as rf:
-    #    rf_contents = rf.readlines() # Read all lines as a list
+    with open(input_file_CGInput, 'r') as rf:
+        rf_contents = rf.readlines() # Read all lines as a list
     # Replace values
-    #rf_contents[2] = rf_contents[2].replace(find_Iter1_n, replace_Iter1_n)
-    #rf_contents[3] = rf_contents[3].replace(find_Iter1_tolerance, replace_Iter1_tolerance)
-    #rf_contents[6] = rf_contents[6].replace(find_DeltaAmplification_start, replace_DeltaAmplification_start)
-    #rf_contents[7] = rf_contents[7].replace(find_DeltaAmplification_slope, replace_DeltaAmplification_slope)
-    #rf_contents[9] = rf_contents[9].replace(find_n_max, replace_n_max)
-    #rf_contents[10] = rf_contents[10].replace(find_d0_reg, replace_d0_reg)
+    rf_contents[2] = rf_contents[2].replace(find_Iter1_n, replace_Iter1_n)
+    rf_contents[3] = rf_contents[3].replace(find_Iter1_tolerance, replace_Iter1_tolerance)
+    rf_contents[6] = rf_contents[6].replace(find_DeltaAmplification_start, replace_DeltaAmplification_start)
+    rf_contents[7] = rf_contents[7].replace(find_DeltaAmplification_slope, replace_DeltaAmplification_slope)
+    rf_contents[9] = rf_contents[9].replace(find_n_max, replace_n_max)
+    rf_contents[10] = rf_contents[10].replace(find_do_reg, replace_do_reg)
 
-    #with open(input_file_CGInput, 'w') as input_file_CGInput:
-    #    input_file_CGInput.write(''.join(rf_contents)) # Joining list as a string
+    with open(input_file_CGInput, 'w') as input_file_CGInput:
+        input_file_CGInput.write(''.join(rf_contents)) # Joining list as a string
 
     ### Replace input values of GenericInput.json file
     find_c_0 = '2000.0'
@@ -184,15 +194,17 @@ def executionMethod():
     rf_contents[38] = rf_contents[38].replace(find_fileName, replace_fileName)
 
     with open(input_file_GenericInput, 'w') as input_file_GenericInput:
-        input_file_GenericInput.write(''.join(rf_contents)) # Joining list as a string
+        input_file_GenericInput.write(''.join(rf_contents))
 
     ### Replace input values of IntegralFMInput.json file
     find_Iter2_n = '15'
     replace_Iter2_n = Iter2_n
     find_Iter2_tolerance = '5.0e-5'
     replace_Iter2_tolerance = Iter2_tolerance
-    find_Iter2_calcAlpha = 'true'
+    find_Iter2_calcAlpha = 'false'
     replace_Iter2_calcAlpha = Iter2_calcAlpha
+    find_Iter2_CostFunction = 'leastSquares'
+    replace_Iter2_CostFunction = Iter2_CostFunction
 
     input_file_IntegralFMInput = os.path.join(tempTestPath + '/input/IntegralFMInput.json')
 
@@ -201,34 +213,97 @@ def executionMethod():
     # Replace values
     rf_contents[2] = rf_contents[2].replace(find_Iter2_n, replace_Iter2_n)
     rf_contents[3] = rf_contents[3].replace(find_Iter2_tolerance, replace_Iter2_tolerance)
-    rf_contents[4] = rf_contents[4].replace(find_Iter2_calcAlpha, replace_Iter2_calcAlpha)
+    rf_contents[5] = rf_contents[5].replace(find_Iter2_CostFunction, replace_Iter2_CostFunction)
 
     with open(input_file_IntegralFMInput, 'w') as input_file_IntegralFMInput:
         input_file_IntegralFMInput.write("".join(rf_contents)) # Joining list as a string
-    return tempTestPath, Method, Direction, Model
 
-def preProcess(tempTestPath):
+    ### Replace input values of FiniteDifferenceFMInput.json file
+    
+    find_PMLWidthFactor_x = '0.0'
+    replace_PMLWidthFactor_x = PMLWidthFactor_x
+    find_PMLWidthFactor_z = '0.0'
+    replace_PMLWidthFactor_z = PMLWidthFactor_z
+    find_SourceParameter_r = '4'
+    replace_SourceParameter_r = SourceParameter_r
+    find_SourceParameter_beta = '6.31'
+    replace_SourceParameter_beta = SourceParameter_beta
+    find_CostFunction = 'leastSquares'
+    replace_CostFunction = CostFunction
+    find_boundaryConditionType = 'SecondOrderABC'
+    replace_boundaryConditionType = boundaryConditionType
+
+    input_file_FiniteDifferenceFMInput = os.path.join(tempTestPath + '/input/FiniteDifferenceFMInput.json')
+
+    with open(input_file_FiniteDifferenceFMInput, 'r') as rf:
+        rf_contents = rf.readlines() # Read all lines as a list
+    # Replace values
+    rf_contents[2] = rf_contents[2].replace(find_PMLWidthFactor_x, replace_PMLWidthFactor_x)
+    rf_contents[3] = rf_contents[3].replace(find_PMLWidthFactor_z, replace_PMLWidthFactor_z)
+    rf_contents[6] = rf_contents[6].replace(find_SourceParameter_r, find_SourceParameter_r)
+    rf_contents[7] = rf_contents[7].replace(find_SourceParameter_beta, replace_SourceParameter_beta)
+    rf_contents[9] = rf_contents[9].replace(find_CostFunction, replace_CostFunction)
+    rf_contents[10] = rf_contents[10].replace(find_boundaryConditionType, replace_boundaryConditionType)
+
+    with open(input_file_FiniteDifferenceFMInput, 'w') as input_file_FiniteDifferenceFMInput:
+        input_file_FiniteDifferenceFMInput.write("".join(rf_contents)) 
+
+
+    ### Replace input values of GradientDescentInversionInput.json file
+        
+    find_gamma = '0.1'
+    replace_gamma = gamma
+    find_x0 = '0.001'
+    replace_x0 = x0
+    find_h = '0.001'
+    replace_h = h
+    find_iter = '20'
+    replace_iter = iter
+    
+    input_file_GradientDescentInversionInput = os.path.join(tempTestPath + '/input/GradientDescentInversionInput.json')
+
+    with open(input_file_GradientDescentInversionInput, 'r') as rf:
+        rf_contents = rf.readlines() # Read all lines as a list
+    # Replace values
+    rf_contents[1] = rf_contents[1].replace(find_gamma, replace_gamma)
+    rf_contents[2] = rf_contents[2].replace(find_x0, replace_x0)
+    rf_contents[3] = rf_contents[3].replace(find_h, replace_h)
+    rf_contents[4] = rf_contents[4].replace(find_iter, replace_iter)
+    
+    with open(input_file_GradientDescentInversionInput, 'w') as input_file_GradientDescentInversionInput:
+        input_file_GradientDescentInversionInput.write("".join(rf_contents)) 
+    
+    return tempTestPath, InversionMethod, ForwardModel
+
+def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess')
+    forwardModelArgument = ""
+    if(forwardModel == 'IntegralForwardModel'):
+        forwardModelArgument = "FWI_PreProcess_Integral"
+    elif(forwardModel == 'FiniteDifferenceForwardModel'):
+        forwardModelArgument = "FWI_PreProcess_Finite_Difference"
+    else:
+        print('Invalid Forward Model')
+        exit()
     start_preTime = time.time()
-    tempFWIInstallBin = os.path.join(root + '/FWIInstall/bin/')
-    os.chdir(tempFWIInstallBin)
-    os.system('./FWI_PreProcess ' + tempTestPath)
+    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
+
+    execPath = os.path.join(tempFWIInstallBin, forwardModelArgument)
+    print(forwardModelArgument + ' ' + tempTestPath)
+
+    os.system(execPath + ' ' + Path(tempTestPath).as_posix())
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
-def Process(tempTestPath, Model):
+def Process(tempTestPath, Inversion, ForwardModel):
     print('\n------Start Process')
     start_processTime = time.time()
-    os.system('./FWI_UnifiedProcess ' + tempTestPath + ' conjugateGradientInversion ' + Model)
+    print('FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
+    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
+    execPath = os.path.join(tempFWIInstallBin, "FWI_UnifiedProcess")
+    os.system(execPath + ' ' + Path(tempTestPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
-
-#def StepDefinitionProcess(tempTestPath, Method, Direction, Model):
-    # print('\n------Start Process')
-    # start_processTime = time.time()
-    # os.system('./FWI_StepAndDirectionProcess ' + tempTestPath + ' ' + Method + ' ' + Direction + ' ' + Model)
-    # end_processTime = time.time()
-    # return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
 def postProcess(tempTestPath):
     print('\n------Start PostProcess')
@@ -260,15 +335,15 @@ if __name__ == "__main__":
         # Methods
         with open(input_file, 'r') as csvfile:
             data = list(csv.reader(csvfile, delimiter=","))
-        while n <= int(rowEnd):  # row[0] is the header of the colomns
+        while n <= int(rowEnd):  # row[0] is the header of the columns
             result = executionMethod()
-            preTime = preProcess(result[0])
-            processTime = Process(result[0], result[1])
+            preTime = preProcess(result[0], result[2])
+            processTime = Process(result[0], result[1], result[2])
             #processTime = StepDefinitionProcess(result[0], result[1], result[2], result[3])
-            postTime = postProcess(result[0])
+            #postTime = postProcess(result[0])
             print('\nPreProcess time   {}'.format(preTime))
             print('Process time      {}'.format(processTime))
-            print('PostProcess time  {}'.format(postTime))
+            #print('PostProcess time  {}'.format(postTime))
             n += 1
 
         end_totalTime = time.time()
