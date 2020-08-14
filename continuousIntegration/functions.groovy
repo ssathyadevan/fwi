@@ -15,83 +15,83 @@ def setEnvironment() {
 }
 
 def build(String osName = "undefined") {
-		echo 'Building on ' + osName
-		env.MYSTAGE_NAME = 'Build'
-		if (osName == "Windows"){
-			bat '''
-				mkdir build 
-				cd build 
-				cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
-				ninja install
-			'''
-		}
-		else{
-			sh '''
-				mkdir build
-				cd build
-				cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
-				make install
-			'''
-		}
+	echo 'Building on ' + osName
+	env.MYSTAGE_NAME = 'Build'
+	if (osName == "Windows"){
+		bat '''
+			mkdir build 
+			cd build 
+			cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
+			ninja install
+		'''
+	}
+	else{
+		sh '''
+			mkdir build
+			cd build
+			cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
+			make install
+		'''
+	}
 }
 
 def unitTest(String osName = "undefined") {
-		echo 'Running unit tests on ' + osName
-		env.MYSTAGE_NAME = 'Unit Testing'
-		if (osName == "Windows"){
-			bat '''
-				cd build 
-				ctest -T test --no-compress-output
-				for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i
-				copy %dirOutput% .\\CTestResults.xml
-			'''
-		}
-		else{
-			sh '''
-				cd build
-				ctest -T test --no-compress-output
-				cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
-			'''
-		}
+	echo 'Running unit tests on ' + osName
+	env.MYSTAGE_NAME = 'Unit Testing'
+	if (osName == "Windows"){
+		bat '''
+			cd build 
+			ctest -T test --no-compress-output
+			for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i
+			copy %dirOutput% .\\CTestResults.xml
+		'''
+	}
+	else{
+		sh '''
+			cd build
+			ctest -T test --no-compress-output
+			cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
+		'''
+	}
 }
 
 def regressionTest(String osName = "undefined") {
-		echo 'Running regression tests on ' + osName
-		env.MYSTAGE_NAME = 'Regression Testing'
-		if (osName == "Windows"){
-			bat '''
-				copy tests\\testScripts\\unified_run_all_regressions_python.py . 
-				python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-			'''
-		}
-		else{
-			sh '''
-				cp tests/testScripts/unified_run_all_regressions_python.py .
-				python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-			'''
-		}
+	echo 'Running regression tests on ' + osName
+	env.MYSTAGE_NAME = 'Regression Testing'
+	if (osName == "Windows"){
+		bat '''
+			copy tests\\testScripts\\unified_run_all_regressions_python.py . 
+			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
+		'''
+	}
+	else{
+		sh '''
+			cp tests/testScripts/unified_run_all_regressions_python.py .
+			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
+		'''
+	}
 }
 
 def deploy(String osName = "undefined"){
-		echo 'Deploying on ' + osName
-		env.MYSTAGE_NAME = 'Deploy'
-		if (osName == "Windows"){
-			bat '''
-				xcopy inputFiles FWIInstall\\inputFiles /s /i 
-				xcopy pythonScripts FWIInstall\\pythonScripts /s /i 
-				7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*
-			'''
-			archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.zip"	
-		}
-		else{
-			sh '''
-				cp -r inputFiles FWIInstall/
-				mkdir FWIInstall/pythonScripts
-				cp -r pythonScripts/* FWIInstall/pythonScripts
-				tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
-			'''
-			archiveArtifacts artifacts:"Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
-		}
+	echo 'Deploying on ' + osName
+	env.MYSTAGE_NAME = 'Deploy'
+	if (osName == "Windows"){
+		bat '''
+			xcopy inputFiles FWIInstall\\inputFiles /s /i 
+			xcopy pythonScripts FWIInstall\\pythonScripts /s /i 
+			7z a Windows-FWI-%GIT_BRANCH%-%SHORT_COMMIT_CODE%.zip ./FWIInstall/*
+		'''
+		archiveArtifacts artifacts:"Windows-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.zip"	
+	}
+	else{
+		sh '''
+			cp -r inputFiles FWIInstall/
+			mkdir FWIInstall/pythonScripts
+			cp -r pythonScripts/* FWIInstall/pythonScripts
+			tar -zcf Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz FWIInstall
+		'''
+		archiveArtifacts artifacts:"Ubuntu-FWI-${GIT_BRANCH}-${SHORT_COMMIT_CODE}.tar.gz"
+	}
 }
 
 def unitTestSummary() {
@@ -108,17 +108,41 @@ def unitTestSummary() {
 	}
 }
 
-def sendEmail( String osName = "undefined" ) {
-		String messageBody = "Dear ${env.AUTHOR_NAME},\n\nYour commit: ${env.SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
-		if(currentBuild.currentResult != "SUCCESS") {
-			messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${env.BUILD_URL}."
-		}
-		mail from: "noreply-jenkins-FWI@alten.nl", \
-		to: "${env.COMITTER_EMAIL}", \
-		subject: osName + ": " + "${env.JOB_NAME} returned status " + currentBuild.currentResult, \
-		body: messageBody
+def executeTests() {
+	echo 'Running executeTests on ' + osName
+	env.MYSTAGE_NAME = 'Running executeTests'
+	if (osName == "Windows"){
+		bat '''
+			mkdir FWITest
+			xcopy inputFiles\\default FWITest /s /i 
+			copy tests\\testScripts\\executeTests.py FWITest
+			copy tests\\inputParameters.csv FWITest
+			python3 executeTests.py 1 23
+		'''
+	}
+	else{
+		sh '''
+			mkdir FWITest
+			cp -r inputFiles/default FWITest
+			cp tests/testScripts/executeTests.py FWITest
+			cp tests/inputParameters.csv FWITest
+			python3 executeTests.py 1 23
+		'''
+	}
+}
 
-		echo "Email sent"
+
+def sendEmail( String osName = "undefined" ) {
+	String messageBody = "Dear ${env.AUTHOR_NAME},\n\nYour commit: ${env.SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult
+	if(currentBuild.currentResult != "SUCCESS") {
+		messageBody = messageBody + "\nStage where failure occurred: ${env.MYSTAGE_NAME},\nPlease check the Jenkins server console output to diagnose the problem: ${env.BUILD_URL}."
+	}
+	mail from: "noreply-jenkins-FWI@alten.nl", \
+	to: "${env.COMITTER_EMAIL}", \
+	subject: "Pipeline job: " + "${env.JOB_NAME} returned status " + currentBuild.currentResult + " on " + osName, \
+	body: messageBody
+
+	echo "Email sent"
 }
 
 return this
