@@ -117,6 +117,7 @@ def executeTests() {
 			xcopy inputFiles\\default FWITest /s /i 
 			copy tests\\testScripts\\executeTests.py FWITest
 			copy tests\\inputParameters.csv FWITest
+			cd FWITest
 			python3 executeTests.py 1 23
 		'''
 	}
@@ -126,6 +127,7 @@ def executeTests() {
 			cp -r inputFiles/default FWITest
 			cp tests/testScripts/executeTests.py FWITest
 			cp tests/inputParameters.csv FWITest
+			cd FWITest
 			python3 executeTests.py 1 23
 		'''
 	}
