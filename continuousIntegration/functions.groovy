@@ -114,7 +114,7 @@ def executeTests( String osName = "undefined" ) {
 	if (osName == "Windows"){
 		bat '''
 			mkdir FWITest
-			xcopy inputFiles\\default FWITest /s /i 
+			xcopy inputFiles\\default FWITest\\default /s /i 
 			copy tests\\testScripts\\executeTests.py FWITest
 			copy tests\\inputParameters.csv FWITest
 			cd FWITest
