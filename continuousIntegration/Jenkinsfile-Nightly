@@ -77,7 +77,7 @@ pipeline{
 					agent{
 						node{
 							label 'Windows'
-							customWorkspace "workspace\\FWI\\" + env.BRANCH_NAME.take(10)
+							customWorkspace "workspace/" + ({env.JOB_NAME}.replace(' ', '_')).take(20)
 						}
 					}
 					stages{
