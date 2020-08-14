@@ -31,6 +31,7 @@ namespace fwi
         , _createdStepSizeCalculator()
         , _createdDirectionCalculator()
         , _createdReconstructor()
+        , _splittable(true)
     {
     }
 
@@ -44,17 +45,23 @@ namespace fwi
         if(_createdForwardModel != nullptr)
         {
             delete _createdForwardModel;
+            _createdForwardModel = nullptr;
         }
 
         if(_createdStepSizeCalculator != nullptr)
         {
             delete _createdStepSizeCalculator;
+            _createdStepSizeCalculator = nullptr;
         }
 
-        if(_createdDirectionCalculator != nullptr)
+		// If the _createdStepSizeCalculator is so that _splittable == false, we can only delete the element pointed by _createdDirectionCalculator and _createdStepSizeCalculator once. 
+		// Once ConjugateGradientWithRegularisation is refactored and validated (and thus inherits uniquely from _StepSizeCalculator) the _splittable parameter and all of its occurrences can be removed, and the following if() can be fixed.
+        if(_createdDirectionCalculator != nullptr && _splittable)
         {
             delete _createdDirectionCalculator;
         }
+        _createdDirectionCalculator = nullptr;
+
         if(_createdReconstructor != nullptr)
         {
             delete _createdReconstructor;
@@ -207,8 +214,9 @@ namespace fwi
         const std::string &desiredStepSizeMethod, const std::string &desiredDirectionMethod, const std::vector<std::complex<double>> &pData)
     {
         checkForwardModelExistence(forwardModel);
+        _splittable = splittableInversion(desiredStepSizeMethod);
 
-        if(splittableInversion(desiredStepSizeMethod))
+        if(_splittable)
         {
             L_(io::linfo) << "Create StepSizeCalculator...";
             createStepSizeCalculator(stepAndDirectionInput.stepSizeParameters, desiredStepSizeMethod, forwardModel->getGrid());

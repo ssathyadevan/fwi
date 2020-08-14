@@ -48,7 +48,7 @@ namespace fwi
         inversionMethods::StepSizeCalculator *_createdStepSizeCalculator;
         inversionMethods::DirectionCalculator *_createdDirectionCalculator;
         inversionMethods::StepAndDirectionReconstructor *_createdReconstructor;
-
+        bool _splittable;
         /**
          * @brief checkForwardModelExistence, makes sure the forwardmodel is created
          */

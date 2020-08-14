@@ -46,7 +46,6 @@ namespace fwi
             {
                 gamma = calculateGammaPolakRibiere();   // eq 2.14
             }
-
             _directionCurrent = _gradientCurrent + gamma * _directionPrevious;
             return _directionCurrent;
         }
@@ -67,6 +66,7 @@ namespace fwi
         double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
         {
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
+            updateResidual();
 
             double alpha = 0.0;
             // regularisation loop
@@ -76,7 +76,6 @@ namespace fwi
 
                 _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
                 alpha = calculateStepSizeInRegularisation();
-
                 // Update contrast-function
                 _chiEstimateCurrent += alpha * _directionCurrent;
 
@@ -89,20 +88,18 @@ namespace fwi
                 {
                     break;
                 }
-
                 // Save variables for next iteration
                 _residualValuePrevious = _residualValueCurrent;
 
                 // Save regularisation variables for next iteration
                 _chiEstimateCurrent.gradient(_regularisationCurrent.gradientChi);
 
-                // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
-                calculateRegularisationErrorFunctional();
-
                 _regularisationPrevious.deltaSquared = _regularisationCurrent.deltaSquared;
                 _regularisationPrevious.bSquared = _regularisationCurrent.bSquared;
-            }
 
+                // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
+                calculateRegularisationErrorFunctional();
+            }
             return alpha;
         }
 
@@ -113,7 +110,7 @@ namespace fwi
 
             _regularisationPrevious.gradientChiNormSquared =
                 (_regularisationPrevious.gradientChi[0] * _regularisationPrevious.gradientChi[0]) +
-                (_regularisationPrevious.gradientChi[1] * _regularisationPrevious.gradientChi[1]).summation();   // |dChi/dx^2 + dChi/dz^2|^2
+                (_regularisationPrevious.gradientChi[1] * _regularisationPrevious.gradientChi[1]);   // |dChi(x,z)/dx^2 + dChi(x,z)/dz^2|^2
 
             _regularisationCurrent.bSquared = calculateWeightingFactor();   //  eq. 2.22
 
@@ -121,7 +118,6 @@ namespace fwi
             _regularisationCurrent.b.sqrt();
 
             _regularisationCurrent.deltaSquared = calculateSteeringFactor();   // eq. 2.23
-
             _regularisationCurrent.gradient = calculateRegularisationGradient();
         }
 
@@ -129,19 +125,33 @@ namespace fwi
         {
             _forwardModel->getUpdateDirectionInformation(_residualVector, _kappaTimesResidual);   // eq 2.13 _kappaTimesResidual updated
             _gradientCurrent =
-                _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
+                2.0 * _errorFunctionalScalingFactor * _regularisationPrevious.errorFunctional * _kappaTimesResidual.getRealPart() +
                 _residualValuePrevious *
                     _regularisationCurrent.gradient;   // eq: 2.25, bSquared is already included in .gradient, see calculateRegularisationGradient()
 
-            double step = calculateGammaPolakRibiere();
+            if(_gradientPrevious.norm() > 0.0)
+            {
+                double step = calculateGammaPolakRibiere();
+                _gradientCurrent += step * _directionCurrent;
+            }
 
-            return _gradientCurrent + step * _directionCurrent;
+            return _gradientCurrent;
         }
+
         core::dataGrid2D ConjugateGradientWithRegularisationCalculator::calculateWeightingFactor()
         {
             core::dataGrid2D bSquared(_grid);
             bSquared = _regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared;
-            bSquared.reciprocal();
+
+            if(bSquared.norm() > 0.0)
+            {
+                bSquared.reciprocal();
+            }
+            else
+            {
+                bSquared = 1.0;
+            }
+
             bSquared *= (1.0 / (_grid.getDomainArea()));
             return bSquared;
         }
@@ -157,7 +167,6 @@ namespace fwi
 
             double bTimesGradientChiNormSquared = (bTimesGradientChiXSquared + bTimesGradientChiZSquared).summation();
             double bSquaredSummed = _regularisationCurrent.bSquared.summation();
-
             if(bSquaredSummed == 0.0)
             {
                 throw std::overflow_error("Attempted division by zero.");
@@ -244,7 +253,6 @@ namespace fwi
 
             // Parameters for the derivative of F^tot with respect to alpha, see eq. 2.26-2.27.
             // The final polynomial to solve is derA*x^3 + derB*x^2 + derC*x +derD = 0.
-
             double derA = 4.0 * a2 * b2;
             double derB = 3.0 * (a2 * b1 + a1 * b2);
             double derC = 2.0 * (a2 * b0 + a1 * b1 + a0 * b2);
@@ -254,19 +262,26 @@ namespace fwi
             return findRealRootFromCubic(derA, derB, derC, derD);
         }
 
-        double ConjugateGradientWithRegularisationCalculator::findRealRootFromCubic(double a, double b, double c, double d)
+        double ConjugateGradientWithRegularisationCalculator::findRealRootFromCubic(
+            double thirdOrderCoeff, double secondOrderCoeff, double firstOrderCoeff, double zerothOrderCoeff)
         {
-            double f = ((3.0 * c / a) - (std::pow(b, 2) / std::pow(a, 2))) / 3.0;
-            double g = ((2.0 * std::pow(b, 3) / std::pow(a, 3)) - (9.0 * b * c / std::pow(a, 2)) + (27.0 * d / a)) / 27.0;
-            double h = (std::pow(g, 2) / 4.0) + (std::pow(f, 3) / 27.0);
-            double r = -(g / 2.0) + std::sqrt(h);
-            double s = std::cbrt(r);
-            double t = -(g / 2.0) - std::sqrt(h);
-            double u = std::cbrt(t);
+            // we use the discriminant approach
+            // normalize equation to have highest coefficient = 1
+            assert(thirdOrderCoeff != 0);
+            double a2 = secondOrderCoeff / thirdOrderCoeff;
+            double a1 = firstOrderCoeff / thirdOrderCoeff;
+            double a0 = zerothOrderCoeff / thirdOrderCoeff;
 
-            double realRoot = s + u - (b / (3.0 * a));
+            double q = a1 / 3.0 - std::pow(a2, 2) / 9.0;
+            double r = (a1 * a2 - 3.0 * a0) / 6.0 - std::pow(a2, 3) / 27.0;
 
-            return realRoot;
+            // assert(std::pow(q,3) +std::pow(r,2) >0); //for unique real solution
+            //  otherwise s1 and s2 are complex and we have three real roots
+            double s1 = std::cbrt(r + std::sqrt(std::pow(q, 3) + std::pow(r, 2)));
+            double s2 = std::cbrt(r - std::sqrt(std::pow(q, 3) + std::pow(r, 2)));
+
+            return s1 + s2 - a2 / 3.0;
+            ;
         }
 
         void ConjugateGradientWithRegularisationCalculator::calculateRegularisationErrorFunctional()
@@ -274,10 +289,16 @@ namespace fwi
             core::dataGrid2D gradientChiNormsquaredCurrent(_grid);
             gradientChiNormsquaredCurrent = (_regularisationCurrent.gradientChi[0] * _regularisationCurrent.gradientChi[0]) +
                                             (_regularisationCurrent.gradientChi[1] * _regularisationCurrent.gradientChi[1]);
-
-            core::dataGrid2D integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
-                                        (_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared);
-
+            core::dataGrid2D integral(_grid);
+            if((_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared).norm() > 0.0)
+            {
+                integral = (gradientChiNormsquaredCurrent + _regularisationPrevious.deltaSquared) /
+                           (_regularisationPrevious.gradientChiNormSquared + _regularisationPrevious.deltaSquared);
+            }
+            else
+            {
+                integral = 1.0;
+            }
             _regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
         }
     }   // namespace inversionMethods

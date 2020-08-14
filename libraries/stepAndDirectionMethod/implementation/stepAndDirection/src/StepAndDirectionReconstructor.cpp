@@ -68,7 +68,6 @@ namespace fwi
 
                 bar++;
             }
-
             return chiEstimateCurrent;
         }
 
