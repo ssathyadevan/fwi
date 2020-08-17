@@ -59,9 +59,10 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
@@ -74,7 +75,7 @@ pipeline{
 					agent{
 						node{
 							label 'Windows'
-							customWorkspace "workspace\\FWI\\" + env.BRANCH_NAME.take(10)
+							customWorkspace "workspace/" + (env.JOB_NAME.replace(' ', '_')).take(25)
 						}
 					}
 					stages{
@@ -119,9 +120,10 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{

@@ -9,7 +9,7 @@ pipeline{
 	stages{
 		stage('Starting Pipeline'){
 			options{
-				timeout( time : 60, unit: "MINUTES")
+				timeout( time : 180, unit: "MINUTES")
 			}
 			parallel{
 				stage('Connecting to Ubuntu agent') {
@@ -45,10 +45,10 @@ pipeline{
 								}
 							}
 						}
-						stage('Regression testing on Ubuntu'){
+						stage('Running executeTests on Ubuntu'){
 							steps{
 								script{
-									functions.regressionTest("Ubuntu")
+									functions.executeTests("Ubuntu")
 								}
 							}
 						}
@@ -62,9 +62,9 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish unit tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
@@ -77,7 +77,7 @@ pipeline{
 					agent{
 						node{
 							label 'Windows'
-							customWorkspace "workspace\\FWI\\" + env.BRANCH_NAME.take(10)
+							customWorkspace "workspace/" + (env.JOB_NAME.replace(' ', '_')).take(25)
 						}
 					}
 					stages{
@@ -105,10 +105,10 @@ pipeline{
 								}
 							}
 						}
-						stage('Regression testing on Windows'){
+						stage('Running executeTests on Windows'){
 							steps{
 								script{
-									functions.regressionTest("Windows")
+									functions.executeTests("Windows")
 								}
 							}
 						}
@@ -122,9 +122,9 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish unit tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
