@@ -42,15 +42,12 @@ def unitTest(String osName = "undefined") {
 		bat '''
 			cd build 
 			ctest -T test --no-compress-output
-			for /f "delims=" %%i in (\'where /r %WORKSPACE%\\build Test.xml\') do set dirOutput=%%i
-			copy %dirOutput% .\\CTestResults.xml
 		'''
 	}
 	else{
 		sh '''
 			cd build
 			ctest -T test --no-compress-output
-			cp Testing/`head -n 1 Testing/TAG`/Test.xml ./CTestResults.xml
 		'''
 	}
 }
@@ -94,16 +91,18 @@ def deploy(String osName = "undefined"){
 	}
 }
 
-def unitTestSummary() {
+def publishUnitTestsResultsOnJenkins() {
 	if (currentBuild.currentResult != "FAILURE") {
-		echo 'Creating unit-test Result Summary (junit)'
+		echo 'Publish unit tests results on jenkins'
 		xunit (
-			tools: [ CTest (pattern: 'build/*.xml') ])
-		// junit ('build/*.xml')
-		echo 'Cleaning the workspace'
+			tools: [ CTest (pattern: 'build/Testing/**/Test.xml') ])
 	}
-	else {
-		echo 'Previous steps failed, so no summary of unit-test is made'
+}
+
+def publishRegressionTestsResultsOnJenkins() {
+	if (currentBuild.currentResult != "FAILURE") {
+		echo 'Publish regression tests results on jenkins'
+		junit ('build/*.xml')
 	}
 }
 

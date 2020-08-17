@@ -62,9 +62,9 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish unit tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
@@ -122,9 +122,9 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish unit tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{

@@ -59,9 +59,10 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
@@ -119,9 +120,10 @@ pipeline{
 					}
 					post{
 						always{
-							echo 'Recording test summary'
+							echo 'Publish tests results'
 							script{
-								functions.unitTestSummary()
+								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
