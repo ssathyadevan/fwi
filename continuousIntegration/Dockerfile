@@ -15,7 +15,7 @@ RUN         apt-get update \
                    apt-utils\
                     software-properties-common \
                     g++\
-                    make \
+                    ninja-build \
                     vim \
                     git \
                     cmake \
@@ -30,8 +30,8 @@ RUN         apt-get update \
 
 RUN mkdir googleTest ; cd googleTest ; mkdir googletest-src googletest-build
 RUN cd googleTest/googletest-src; git clone https://github.com/google/googletest.git
-RUN cd googleTest/googletest-build ; cmake -DCMAKE_INSTALL_PREFIX=${PWD}/../install ../googletest-src/googletest
-RUN cd googleTest/googletest-build ; make all install -j8
+RUN cd googleTest/googletest-build ; cmake -G Ninja -DCMAKE_INSTALL_PREFIX=${PWD}/../install ../googletest-src/googletest
+RUN cd googleTest/googletest-build ; ninja all install
 
 # Declare here the ENV variables that you wish to be able to overwrite in build time
 ARG GTEST_ROOT=/home/jenkins/googleTest/install

@@ -29,8 +29,8 @@ def build(String osName = "undefined") {
 		sh '''
 			mkdir build
 			cd build
-			cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
-			make install
+			cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../FWIInstall ..
+			ninja install
 		'''
 	}
 }
