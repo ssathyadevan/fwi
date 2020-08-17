@@ -9,7 +9,7 @@ pipeline{
 	stages{
 		stage('Starting Pipeline'){
 			options{
-				timeout( time : 60, unit: "MINUTES")
+				timeout( time : 180, unit: "MINUTES")
 			}
 			parallel{
 				stage('Connecting to Ubuntu agent') {
