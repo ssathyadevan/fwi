@@ -13,7 +13,7 @@ def makeExecutionFolder():
 
 def makeTestFolder(testPath):
     print('\n------Coping default test folder')
-    shutil.copytree(os.path.join(basename, 'default'), testPath)
+    shutil.copytree(os.path.join(root,'inputFiles', 'default'), testPath)
     shutil.copy(os.path.join(basename, testData), testPath)
 
 def executionMethod():
@@ -313,7 +313,7 @@ def postProcess(testPath):
     execPath = os.path.join(root, 'pythonScripts', 'postProcessing-python3.py')
 
     os.system(execName + ' ' + execPath + ' '  + '-o' + testPath)
-    
+
     end_postTime = time.time()
     return datetime.timedelta(seconds=(end_postTime - start_postTime))
 
