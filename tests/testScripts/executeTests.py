@@ -1,4 +1,5 @@
 import os, sys, shutil, csv, datetime, time
+import platform
 from datetime import datetime as dt
 from pathlib import Path
 
@@ -29,7 +30,7 @@ def executionMethod():
     title = data[n][1]
     sequence = sequence.zfill(2) # Fill the number with 3 digits
     testSequenceFolder = sequence + title # mkdir name
-    tempTestPath = os.path.join(basename, executionFolder, testSequenceFolder)  # /home/user/FWITest/Execution_yyyyMMdd-hhmmss/sequence+title
+    testPath = os.path.join(basename, executionFolder, testSequenceFolder)  # /home/user/FWITest/Execution_yyyyMMdd-hhmmss/sequence+title
 
     ### CGInput.json
     Iter1_n = data[n][2]
@@ -87,7 +88,7 @@ def executionMethod():
     InversionMethod = data[n][44]
     ForwardModel = data[n][45]
 
-    makeTestFolder(tempTestPath)
+    makeTestFolder(testPath)
 
     print('\n------Changing input values')
     ### Replace input values of CGInput.json file
@@ -104,7 +105,7 @@ def executionMethod():
     find_do_reg = 'true'
     replace_do_reg = do_reg
 
-    input_file_CGInput = os.path.join(tempTestPath + '/input/ConjugateGradientInversionInput.json')
+    input_file_CGInput = os.path.join(testPath + '/input/ConjugateGradientInversionInput.json')
 
     with open(input_file_CGInput, 'r') as rf:
         rf_contents = rf.readlines() # Read all lines as a list
@@ -165,7 +166,7 @@ def executionMethod():
     find_fileName = 'temple'
     replace_fileName = fileName
 
-    input_file_GenericInput = os.path.join(tempTestPath + '/input/GenericInput.json')
+    input_file_GenericInput = os.path.join(testPath + '/input/GenericInput.json')
 
     with open(input_file_GenericInput, 'r') as rf:
         rf_contents = rf.readlines() # Read all lines as a list
@@ -206,7 +207,7 @@ def executionMethod():
     find_Iter2_CostFunction = 'leastSquares'
     replace_Iter2_CostFunction = Iter2_CostFunction
 
-    input_file_IntegralFMInput = os.path.join(tempTestPath + '/input/IntegralFMInput.json')
+    input_file_IntegralFMInput = os.path.join(testPath + '/input/IntegralFMInput.json')
 
     with open(input_file_IntegralFMInput, 'r') as rf:
         rf_contents = rf.readlines() # Read all lines as a list
@@ -233,7 +234,7 @@ def executionMethod():
     find_boundaryConditionType = 'SecondOrderABC'
     replace_boundaryConditionType = boundaryConditionType
 
-    input_file_FiniteDifferenceFMInput = os.path.join(tempTestPath + '/input/FiniteDifferenceFMInput.json')
+    input_file_FiniteDifferenceFMInput = os.path.join(testPath + '/input/FiniteDifferenceFMInput.json')
 
     with open(input_file_FiniteDifferenceFMInput, 'r') as rf:
         rf_contents = rf.readlines() # Read all lines as a list
@@ -248,9 +249,7 @@ def executionMethod():
     with open(input_file_FiniteDifferenceFMInput, 'w') as input_file_FiniteDifferenceFMInput:
         input_file_FiniteDifferenceFMInput.write("".join(rf_contents)) 
 
-
     ### Replace input values of GradientDescentInversionInput.json file
-        
     find_gamma = '0.1'
     replace_gamma = gamma
     find_x0 = '0.001'
@@ -260,7 +259,7 @@ def executionMethod():
     find_iter = '20'
     replace_iter = iter
     
-    input_file_GradientDescentInversionInput = os.path.join(tempTestPath + '/input/GradientDescentInversionInput.json')
+    input_file_GradientDescentInversionInput = os.path.join(testPath + '/input/GradientDescentInversionInput.json')
 
     with open(input_file_GradientDescentInversionInput, 'r') as rf:
         rf_contents = rf.readlines() # Read all lines as a list
@@ -273,7 +272,7 @@ def executionMethod():
     with open(input_file_GradientDescentInversionInput, 'w') as input_file_GradientDescentInversionInput:
         input_file_GradientDescentInversionInput.write("".join(rf_contents)) 
     
-    return tempTestPath, InversionMethod, ForwardModel
+    return testPath, InversionMethod, ForwardModel
 
 def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess')
@@ -295,22 +294,26 @@ def preProcess(tempTestPath, forwardModel):
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
-def Process(tempTestPath, Inversion, ForwardModel):
+def Process(testPath, Inversion, ForwardModel):
     print('\n------Start Process')
     start_processTime = time.time()
-    print('FWI_UnifiedProcess ' + tempTestPath + ' ' + Inversion + ' ' + ForwardModel)
-    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
-    execPath = os.path.join(tempFWIInstallBin, "FWI_UnifiedProcess")
-    os.system(execPath + ' ' + Path(tempTestPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
+    print('FWI_UnifiedProcess ' + testPath + ' ' + Inversion + ' ' + ForwardModel)
+    execPath = os.path.join(os.path.join(root,'FWIInstall','bin'), "FWI_UnifiedProcess")
+    os.system(execPath + ' ' + Path(testPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
-def postProcess(tempTestPath):
+def postProcess(testPath):
     print('\n------Start PostProcess')
     start_postTime = time.time()
+
+    execName = 'python3'
+    if (platform.system() == 'Windows'):
+        execName = 'python'
+    execPath = os.path.join(root, 'pythonScripts', 'postProcessing-python3.py')
+
+    os.system(execName + ' ' + execPath + ' '  + '-o' + testPath)
     
-    os.chdir(tempFWIInstall)
-    os.system('python3 postProcessing-python3.py ' + tempTestPath + ' 0')
     end_postTime = time.time()
     return datetime.timedelta(seconds=(end_postTime - start_postTime))
 
@@ -326,22 +329,21 @@ if __name__ == "__main__":
         executionFolder = makeExecutionFolder()
 
         # Define paths
-        root = os.path.dirname(os.getcwd())               # parallelized-fwi/
-        basename = os.getcwd()                            # parallelized-fwi/FWITest
-        input_file = os.path.join(basename, testData)     # parallelized-fwi/FWITest/inputParameters.csv
+        root = os.path.dirname(os.getcwd())           # parallelized-fwi/
+        basename = os.getcwd()                        # parallelized-fwi/FWITest/
+        input_file = os.path.join(basename, testData) # parallelized-fwi/FWITest/inputParameters.csv
 
         # Methods
         with open(input_file, 'r') as csvfile:
             data = list(csv.reader(csvfile, delimiter=","))
         while n <= int(rowEnd):  # row[0] is the header of the columns
-            result = executionMethod()
-            preTime = preProcess(result[0], result[2])
-            processTime = Process(result[0], result[1], result[2])
-            #processTime = StepDefinitionProcess(result[0], result[1], result[2], result[3])
-            #postTime = postProcess(result[0])
+            testPath, inversionMethod, forwardModel = executionMethod()
+            preTime = preProcess(testPath, forwardModel)
+            processTime = Process(testPath, inversionMethod, forwardModel)
+            postTime = postProcess(testPath)
             print('\nPreProcess time   {}'.format(preTime))
             print('Process time      {}'.format(processTime))
-            #print('PostProcess time  {}'.format(postTime))
+            print('PostProcess time  {}'.format(postTime))
             n += 1
 
         end_totalTime = time.time()
