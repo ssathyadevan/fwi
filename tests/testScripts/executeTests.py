@@ -10,10 +10,10 @@ def makeExecutionFolder():
     print("Name: " + execution_stamp)
     return execution_stamp
 
-def makeTestFolder(tempTestPath):
+def makeTestFolder(testPath):
     print('\n------Coping default test folder')
-    shutil.copytree(tempDefaultPath, tempTestPath)
-    shutil.copy(os.path.join(basename, testData), tempTestPath)
+    shutil.copytree(os.path.join(basename, 'default'), testPath)
+    shutil.copy(os.path.join(basename, testData), testPath)
 
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
@@ -308,6 +308,7 @@ def Process(tempTestPath, Inversion, ForwardModel):
 def postProcess(tempTestPath):
     print('\n------Start PostProcess')
     start_postTime = time.time()
+    
     os.chdir(tempFWIInstall)
     os.system('python3 postProcessing-python3.py ' + tempTestPath + ' 0')
     end_postTime = time.time()
@@ -325,10 +326,9 @@ if __name__ == "__main__":
         executionFolder = makeExecutionFolder()
 
         # Define paths
-        root = os.path.dirname(os.getcwd())                   # parallelized-fwi/
-        basename = os.getcwd()                                # parallelized-fwi/FWITest
-        input_file = os.path.join(basename, testData)         # parallelized-fwi/FWITest/inputParameters.csv
-        tempDefaultPath = os.path.join(basename, 'default/')  # parallelized-fwi/FWITest/default
+        root = os.path.dirname(os.getcwd())               # parallelized-fwi/
+        basename = os.getcwd()                            # parallelized-fwi/FWITest
+        input_file = os.path.join(basename, testData)     # parallelized-fwi/FWITest/inputParameters.csv
 
         # Methods
         with open(input_file, 'r') as csvfile:
