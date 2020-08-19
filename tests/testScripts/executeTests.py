@@ -325,12 +325,10 @@ if __name__ == "__main__":
         executionFolder = makeExecutionFolder()
 
         # Define paths
-        root = os.path.dirname(os.getcwd())  # /home/user
-        basename = os.getcwd()  # /home/user/FWITest
-        input_file = os.path.join(basename, testData)  #/home/user/FWITest/inputParameters.csv
-        tempFWIInstall = os.path.join(root, 'FWIInstall')  #/home/user/FWIInstall
-        tempDefaultPath = os.path.join(basename, 'default/')  #/home/user/FWITest/default
-        tempfileNameTestPath = os.path.join(basename, executionFolder, 'input')  #/home/user/FWITest/Execution_yyyyMMdd-hhmmss/input
+        root = os.path.dirname(os.getcwd())                   # parallelized-fwi/
+        basename = os.getcwd()                                # parallelized-fwi/FWITest
+        input_file = os.path.join(basename, testData)         # parallelized-fwi/FWITest/inputParameters.csv
+        tempDefaultPath = os.path.join(basename, 'default/')  # parallelized-fwi/FWITest/default
 
         # Methods
         with open(input_file, 'r') as csvfile:
