@@ -7,18 +7,26 @@ hide stereotype
 title Continuous Integration System
 
 Person(developer, "Developer")
-System(project, "Project doxygen documentation")
+Container(notification, "Notification","email","Email notification with the results of the pipeline job")
 
-Boundary(build_system, "Continuous Integration System") {
-    Container(configure_step, "Configure step", "Cmake")
-    Container(build_step, "Build documentation step", "Doxygen and GraphViz", "Doxygen generates .html files and uses GraphViz to create diagrams")
-Boundary(cmake_inputs, "Cmake input files") {
-    Container(doxyIn_file, "Doxygen.In", "file", "Doxygen default settings")
-    Container(cmakelists_file, "CMakeLists.txt", "file", "Doxygen settings")
+Boundary(ci_system, "Continuous Integration System") {
+    ContainerDb(git_server, "Git Repository","remote server","Contains a git hook to trigger a FWI pipeline job after a push")
+    Container(jenkins_server, "Jenkins","remote server","Executes pipeline jobs on the available agents")
+    Container(windows_vm, "Windows PC","remote Windows virtual machine","Used by jenkins to execute the windows stages on a pipeline job")
+    Boundary(jenkins_inputs, "Jenkins inputs") {
+        Container(jenkinsfile_file, "Jenkinsfile","file","Defines the FWI pipeline jobs")
+        Container(jenkinsfileNightly_file, "Jenkinsfile-Nightly","file","Defines the FWI - Nightly pipeline jobs")
+        Container(dockerfile_file, "Dockerfile","file","Defines an Ubuntu docker container that Jenkins uses as an agent")
+        Container(functionsgroovy_file, "functions.groovy","file","Contains function definitions used by the jenkinsfiles")
     }
 }
-Rel(developer, configure_step, "Uses buid documentation process")
-Rel(configure_step, cmake_inputs, "Reads")
-Rel(configure_step, build_step, "Generates Doxyfile")
-Rel(build_step, project, "Generates html files")
+Rel(developer, git_server, "Pushes changes on branch A to git repo")
+Rel(jenkins_server, git_server, "Checkouts corresponding branch")
+Rel(jenkins_server, windows_vm, "Uses")
+Rel(jenkins_server, jenkins_server, "Triggers a FWI - NIghtly pipeline job for each branch at the time defined by Jenkinsfile-Nightly")
+Rel(jenkins_server, jenkins_inputs, "Reads")
+Rel(jenkinsfile_file, functionsgroovy_file, "Reads")
+Rel(jenkinsfileNightly_file, functionsgroovy_file, "Reads")
+Rel(git_server, jenkins_server, "Triggers a FWI pipeline job for branch A on Jenkins")
+Rel(jenkins_server, notification, "Notifies the developer")
 @enduml
