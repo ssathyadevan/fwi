@@ -1,5 +1,6 @@
 import os, sys, shutil, csv, datetime, time
 import platform
+import argparse
 from datetime import datetime as dt
 from pathlib import Path
 
@@ -14,7 +15,7 @@ def makeExecutionFolder():
 def makeTestFolder(testPath):
     print('\n------Coping default test folder')
     shutil.copytree(os.path.join(root,'inputFiles', 'default'), testPath)
-    shutil.copy(os.path.join(basename, testData), testPath)
+    shutil.copy(os.path.join(basename, testParams), testPath)
 
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
@@ -28,9 +29,9 @@ def executionMethod():
     ### Dir information
     sequence = data[n][0]
     title = data[n][1]
-    sequence = sequence.zfill(2) # Fill the number with 3 digits
-    testSequenceFolder = sequence + title # mkdir name
-    testPath = os.path.join(basename, executionFolder, testSequenceFolder)  # /home/user/FWITest/Execution_yyyyMMdd-hhmmss/sequence+title
+    sequence = sequence.zfill(2)
+    testSequenceFolder = sequence + title
+    testPath = os.path.join(basename, executionFolder, testSequenceFolder)
 
     ### CGInput.json
     Iter1_n = data[n][2]
@@ -312,44 +313,52 @@ def postProcess(testPath):
         execName = 'python'
     execPath = os.path.join(root, 'pythonScripts', 'postProcessing-python3.py')
 
-    os.system(execName + ' ' + execPath + ' '  + '-o' + testPath)
+    os.system(execName + ' ' + execPath + ' ' + '-o' + testPath)
 
     end_postTime = time.time()
     return datetime.timedelta(seconds=(end_postTime - start_postTime))
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        start_totalTime = time.time()
 
-        rowStart = sys.argv[1]
-        rowEnd = sys.argv[2]
-        testData = "inputParameters.csv"
-        n = int(rowStart)
-        executionFolder = makeExecutionFolder()
+    # Configure the argument parser
+    parser = argparse.ArgumentParser(description="Execute specified range of test cases.")
 
-        # Define paths
-        root = os.path.dirname(os.getcwd())           # parallelized-fwi/
-        basename = os.getcwd()                        # parallelized-fwi/FWITest/
-        input_file = os.path.join(basename, testData) # parallelized-fwi/FWITest/inputParameters.csv
+    # Input arguments
+    parser.add_argument("-s", "--start", type=int, required=False,
+                                default = 1, choices = range(1,51), metavar = "[1-50]", help = "Start of the range argument for the test cases.")
+    parser.add_argument("-e", "--end", type=int, required=False,
+                                default = 1, choices = range(1,51), metavar = "[1-50]", help = "End of the range argument for the test cases.")
+    parser.add_argument("-i", "--input", type=str, required=True, help = "Input parameters file.")
 
-        # Methods
-        with open(input_file, 'r') as csvfile:
-            data = list(csv.reader(csvfile, delimiter=","))
-        while n <= int(rowEnd):  # row[0] is the header of the columns
-            testPath, inversionMethod, forwardModel = executionMethod()
-            preTime = preProcess(testPath, forwardModel)
-            processTime = Process(testPath, inversionMethod, forwardModel)
-            postTime = postProcess(testPath)
-            print('\nPreProcess time   {}'.format(preTime))
-            print('Process time      {}'.format(processTime))
-            print('PostProcess time  {}'.format(postTime))
-            n += 1
+    # Parse the input arguments
+    arguments = vars(parser.parse_args())
 
-        end_totalTime = time.time()
-        print('\nTotal execution time {}\n'.format(datetime.timedelta(seconds=(end_totalTime - start_totalTime))))
-    else:
-        print("Argument Syntax:")
-        print("    row_start   Give the start range argument (the headers are ignored)")
-        print("    row_end     Give the end range argument (if you want to run 1 test, give the same input value as 'row_start'")
-        print("\nExample: python <executionFile.py> <row_start> <row_end>")
+    rowStart = arguments["start"]
+    rowEnd = arguments["end"]
+    testParams = arguments["input"]
+    n = rowStart
+
+    start_totalTime = time.time()
+
+    executionFolder = makeExecutionFolder()
+
+    # Define paths
+    root = os.path.dirname(os.getcwd()) # parallelized-fwi/
+    basename = os.getcwd()              # parallelized-fwi/FWITest/
+
+    with open(Path(testParams), 'r') as csvfile:
+        data = list(csv.reader(csvfile, delimiter=","))
+
+    while n <= rowEnd:
+        testPath, inversionMethod, forwardModel = executionMethod()
+        preTime = preProcess(testPath, forwardModel)
+        processTime = Process(testPath, inversionMethod, forwardModel)
+        postTime = postProcess(testPath)
+        print('\nPreProcess time   {}'.format(preTime))
+        print('Process time      {}'.format(processTime))
+        print('PostProcess time  {}'.format(postTime))
+        n += 1
+        
+    end_totalTime = time.time()
+    print('\nTotal execution time {}\n'.format(datetime.timedelta(seconds=(end_totalTime - start_totalTime))))

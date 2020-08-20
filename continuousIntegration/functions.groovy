@@ -113,18 +113,18 @@ def executeTests( String osName = "undefined" ) {
 		bat '''
 			mkdir FWITest
 			copy tests\\testScripts\\executeTests.py FWITest
-			copy tests\\inputParameters.csv FWITest
+			copy tests\\regressionTests.csv FWITest
 			cd FWITest
-			python3 executeTests.py 1 23
+			python3 executeTests.py --start 1 --end 1 --input regressionTests.csv
 		'''
 	}
 	else{
 		sh '''
 			mkdir FWITest
 			cp tests/testScripts/executeTests.py FWITest
-			cp tests/inputParameters.csv FWITest
+			cp tests/regressionTests.csv FWITest
 			cd FWITest
-			python3 executeTests.py 1 23
+			python3 executeTests.py --start 1 --end 1 --input regressionTests.csv
 		'''
 	}
 }
