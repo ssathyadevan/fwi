@@ -1,9 +1,10 @@
 @startuml BuildingProcessOfTheDoxygenDocumentation
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
 
-title Building processes for doxygen documentation
 LAYOUT_LEFT_RIGHT
-LAYOUT_WITH_LEGEND()
+hide stereotype
+
+title Building process of the doxygen documentation
 
 Person(developer, "Developer")
 Container(project, "Doxygen documentation","files")
@@ -28,5 +29,4 @@ Rel(configure_step, cmake_inputs, "Reads")
 Rel(build_step, doxygen_inputs, "Reads")
 Rel(configure_step, build_step, "Generates configuration file for Doxygen (Doxyfile)")
 Rel(build_step, project, "Generates html files")
-
 @enduml

@@ -1,9 +1,10 @@
 @startuml ContinuousIntegrationSystem
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
 
-title Continuous Integration System
 LAYOUT_TOP_DOWN
-LAYOUT_WITH_LEGEND()
+hide stereotype
+
+title Continuous Integration System
 
 Person(developer, "Developer")
 System(project, "Project doxygen documentation")

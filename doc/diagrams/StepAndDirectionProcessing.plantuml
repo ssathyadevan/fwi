@@ -9,6 +9,8 @@ skinparam class {
     BorderColor #78A8D8
 }
 
+title StepAndDirectionProcessing
+
 set namespaceSeparator ::
 
 class core::Factory
