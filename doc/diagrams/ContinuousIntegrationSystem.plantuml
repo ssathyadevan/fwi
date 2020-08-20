@@ -1,0 +1,23 @@
+@startuml ContinuousIntegrationSystem
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+title Continuous Integration System
+LAYOUT_TOP_DOWN
+LAYOUT_WITH_LEGEND()
+
+Person(developer, "Developer")
+System(project, "Project doxygen documentation")
+
+Boundary(build_system, "Continuous Integration System") {
+    Container(configure_step, "Configure step", "Cmake")
+    Container(build_step, "Build documentation step", "Doxygen and GraphViz", "Doxygen generates .html files and uses GraphViz to create diagrams")
+Boundary(cmake_inputs, "Cmake input files") {
+    Container(doxyIn_file, "Doxygen.In", "file", "Doxygen default settings")
+    Container(cmakelists_file, "CMakeLists.txt", "file", "Doxygen settings")
+    }
+}
+Rel(developer, configure_step, "Uses buid documentation process")
+Rel(configure_step, cmake_inputs, "Reads")
+Rel(configure_step, build_step, "Generates Doxyfile")
+Rel(build_step, project, "Generates html files")
+@enduml

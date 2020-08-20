@@ -1,0 +1,32 @@
+@startuml BuildingProcessOfTheDoxygenDocumentation
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+title Building processes for doxygen documentation
+LAYOUT_LEFT_RIGHT
+LAYOUT_WITH_LEGEND()
+
+Person(developer, "Developer")
+Container(project, "Doxygen documentation","files")
+
+Boundary(build_system, " ") {
+    Container(configure_step, "Configure step", "Cmake")
+    Container(build_step, "Build documentation step", "Doxygen and GraphViz", "Doxygen generates .html files and uses GraphViz to create diagrams")
+    Container(configure_step, "Configure step", "Cmake")
+    Container(configure_step, "Configure step", "Cmake")
+Boundary(cmake_inputs, "Cmake input files") {
+    Container(doxyIn_file, "Doxygen.In", "file", "Doxygen default settings")
+    Container(cmakelists_file, "CMakeLists.txt", "file", "Doxygen settings")
+    }
+Boundary(doxygen_inputs, "Doxygen extra inputs") {
+    Container(sources_files, "Libraries files", "files", " ")
+    Container(namespaces_file, "Namespaces.dox", "file", "Single file documenting the namespaces (avoids documenting the namespaces in a random file in the libraries files)")
+    Container(mainpage_file, "Mainpage.dox", "file", "Main page of the doxygen documentation")
+    }
+}
+Rel(developer, configure_step, "Starts build documentation process")
+Rel(configure_step, cmake_inputs, "Reads")
+Rel(build_step, doxygen_inputs, "Reads")
+Rel(configure_step, build_step, "Generates configuration file for Doxygen (Doxyfile)")
+Rel(build_step, project, "Generates html files")
+
+@enduml

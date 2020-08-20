@@ -1,0 +1,50 @@
+
+@startuml StepAndDirectionProcessing
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+skinparam class {
+    StereotypeFontColor ELEMENT_FONT_COLOR
+    FontColor #000000
+    BackgroundColor COMPONENT_BG_COLOR
+    BorderColor #78A8D8
+}
+
+set namespaceSeparator ::
+
+class core::Factory
+class core::CostCalculator
+
+class forwardModels::ForwardModelInterface
+class forwardModels::IntegralForwardModel
+class forwardModels::FiniteDifferenceForwardModel
+
+class inversionMethods::StepAndDirectionReconstructor
+class inversionMethods::DirectionCalculator
+class inversionMethods::StepSizeCalculator
+class inversionMethods::ConjugateGradientDirectionCalculator
+class inversionMethods::ConjugateGradientStepSizeCalculator
+class inversionMethods::BorzilaiBorweinStepSizeCalculator
+class inversionMethods::ConjugateGradientWithRegularizationCalculator
+
+core::Factory *--> inversionMethods::StepAndDirectionReconstructor
+core::Factory *--> forwardModels::ForwardModelInterface
+core::Factory *--> core::CostCalculator
+core::Factory *--> inversionMethods::DirectionCalculator
+core::Factory *--> inversionMethods::StepSizeCalculator
+
+forwardModels::IntegralForwardModel .--> forwardModels::ForwardModelInterface
+forwardModels::FiniteDifferenceForwardModel .--> forwardModels::ForwardModelInterface
+
+inversionMethods::StepAndDirectionReconstructor o--> core::CostCalculator
+inversionMethods::StepAndDirectionReconstructor o--> forwardModels::ForwardModelInterface
+
+inversionMethods::StepAndDirectionReconstructor o--> inversionMethods::DirectionCalculator 
+inversionMethods::StepAndDirectionReconstructor o--> inversionMethods::StepSizeCalculator
+
+inversionMethods::ConjugateGradientDirectionCalculator .--> inversionMethods::DirectionCalculator
+inversionMethods::ConjugateGradientStepSizeCalculator .--> inversionMethods::StepSizeCalculator
+inversionMethods::BorzilaiBorweinStepSizeCalculator .--> inversionMethods::StepSizeCalculator
+
+inversionMethods::ConjugateGradientWithRegularizationCalculator .--> inversionMethods::DirectionCalculator
+inversionMethods::ConjugateGradientWithRegularizationCalculator .--> inversionMethods::StepSizeCalculator
+@enduml

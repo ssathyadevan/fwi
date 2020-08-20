@@ -1,0 +1,23 @@
+@startuml BuildingProcessOfTheProject
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+title Building Process
+LAYOUT_LEFT_RIGHT
+LAYOUT_WITH_LEGEND()
+
+Person(developer, "Developer")
+System(project, "Compiled Project", "Library binaries, unit tests executables and applications executables")
+
+Boundary(build_system, " ") {
+    Container(configure_step, "Configure step", "Cmake", "Generates the necessary files for the build tool")
+    Container(cmake_input, "CMakeLists.txt", "files", "Collection of CMakeLists.txt files on the project")
+    Container(build_step, "Build step", "Ninja", "Builds the binary files. Ninja is a multiplatform replacement for Unix Makefiles and MinGW Makefiles")
+
+}
+
+
+Rel(developer, configure_step, "starts building process")
+Rel(configure_step, build_step, "Generates build configuration")
+Rel(configure_step,cmake_input , "Reads")
+Rel(build_step, project, "Generates binary files")
+@enduml

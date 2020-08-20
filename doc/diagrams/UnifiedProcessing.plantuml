@@ -1,0 +1,42 @@
+
+@startuml UnifiedProcessing
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+skinparam class {
+    StereotypeFontColor ELEMENT_FONT_COLOR
+    FontColor #000000
+    BackgroundColor COMPONENT_BG_COLOR
+    BorderColor #78A8D8
+}
+
+set namespaceSeparator ::
+
+class core::Factory
+class core::CostCalculator
+
+class forwardModels::ForwardModelInterface
+class forwardModels::IntegralForwardModel
+class forwardModels::FiniteDifferenceForwardModel
+
+class inversionMethods::InversionInterface
+class inversionMethods::ConjugateGradientInversion
+class inversionMethods::GradientDescentInversion
+class inversionMethods::RandomInversion
+class inversionMethods::EvolutionInversion
+
+
+core::Factory *--> inversionMethods::InversionInterface
+core::Factory *--> forwardModels::ForwardModelInterface
+core::Factory *--> core::CostCalculator
+
+forwardModels::IntegralForwardModel .--> forwardModels::ForwardModelInterface
+forwardModels::FiniteDifferenceForwardModel .--> forwardModels::ForwardModelInterface
+
+inversionMethods::InversionInterface o--> core::CostCalculator
+inversionMethods::InversionInterface o--> forwardModels::ForwardModelInterface
+
+inversionMethods::ConjugateGradientInversion .--> inversionMethods::InversionInterface
+inversionMethods::GradientDescentInversion .--> inversionMethods::InversionInterface
+inversionMethods::RandomInversion .--> inversionMethods::InversionInterface
+inversionMethods::EvolutionInversion .--> inversionMethods::InversionInterface
+@enduml
