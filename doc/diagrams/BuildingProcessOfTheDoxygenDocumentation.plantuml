@@ -20,7 +20,7 @@ Boundary(cmake_inputs, "Cmake input files") {
     }
 Boundary(doxygen_inputs, "Doxygen extra inputs") {
     Container(sources_files, "Libraries files", "files", " ")
-    Container(namespaces_file, "Namespaces.dox", "file", "Single file documenting the namespaces (avoids documenting the namespaces in a random file in the libraries files)")
+    Container(namespaces_file, "Namespaces.dox", "file", "Single file documenting the namespaces")
     Container(mainpage_file, "Mainpage.dox", "file", "Main page of the doxygen documentation")
     }
 }

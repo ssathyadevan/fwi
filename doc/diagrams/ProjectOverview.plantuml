@@ -23,6 +23,7 @@ Boundary(estimatedmediaproperties_visualization, "Visualization of estimated med
 Rel(preprocessing_application, preprocessinginput_files, "Reads")
 Rel(preprocessing_application, mediaproperties_image, "Reads")
 Rel(processing_application, processinginput_files, "Reads")
-Rel(processing_application, preprocessing_application, "Reads output")
-Rel(postprocessing_application, processing_application, "Reads output")
+
+Rel(preprocessing_application, processing_application, "Reference pressure field")
+Rel(processing_application, postprocessing_application, "Estimated media properties")
 @enduml

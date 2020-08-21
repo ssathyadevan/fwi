@@ -1,0 +1,23 @@
+@startuml Arrows Meaning
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+LAYOUT_LEFT_RIGHT
+
+skinparam class {
+    StereotypeFontColor ELEMENT_FONT_COLOR
+    FontColor #000000
+    BackgroundColor COMPONENT_BG_COLOR
+    BorderColor #78A8D8
+}
+
+class A
+class B
+A*-->B : composition
+
+class C
+class D
+C.->D : implementation
+
+class E
+class F
+E o-->F : aggregation
+@enduml
