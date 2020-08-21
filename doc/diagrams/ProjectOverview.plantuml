@@ -1,0 +1,29 @@
+@startuml   ProjectOverview
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Component.puml
+
+hide stereotype
+
+title Project Overview
+
+Boundary(fakeinput_generation, "Generate a reference pressure field") {
+    Container(preprocessing_application, "Preprocessing", "finiteDifferencePreProcessing - integralPreProcessing", "Generates a reference pressure field as if it had been measured in an experiment")
+    Container(preprocessinginput_files, "Configuration files", ".json files", "")
+    Container(mediaproperties_image, "Media properties", ".txt files", "")
+}
+
+Boundary(mediaproperties_estimation, "Estimation of the media properties") {
+    Container(processing_application, "Processing", "stepAndDirectionProcessing - unifiedProcessing", "Estimates media properties")
+    Container(processinginput_files,"Configuration files", ".json files", "")
+}
+
+
+Boundary(estimatedmediaproperties_visualization, "Visualization of estimated media properties") {
+    Container(postprocessing_application, "PostProcessing", "postProcessing-python3", "Generates a .png file containing the generated image")
+}
+Rel(preprocessing_application, preprocessinginput_files, "Reads")
+Rel(preprocessing_application, mediaproperties_image, "Reads")
+Rel(processing_application, processinginput_files, "Reads")
+
+Rel(preprocessing_application, processing_application, "Reference pressure field")
+Rel(processing_application, postprocessing_application, "Estimated media properties")
+@enduml
