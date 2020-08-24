@@ -34,14 +34,6 @@ def writeJson(type, js, path):
     with open(json_file, 'w') as outfile:
         json.dump(js, outfile, sort_keys = True, indent = 4)
 
-def readJson(type, js, path):
-    jsonTypes = { "CG": "ConjugateGradientInversionInput.json" }
-    filename = os.path.join(path, 'input', jsonTypes[type])
-    with open(filename, 'r') as json_file:
-        data = json.load(json_file)
-        #json.dump(js, outfile, sort_keys = True, indent = 4)
-    return data
-
 def createJsonByType(type, seq, params, path):
     labels = params[0]
     selection = [x for x in labels if type in x ]
