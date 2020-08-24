@@ -1,6 +1,8 @@
 import os, sys, shutil, csv, datetime, time
 import platform
 import argparse
+import ast
+import json
 from datetime import datetime as dt
 from pathlib import Path
 
@@ -12,6 +14,63 @@ def tableElementByKey(key, seq, params):
         value = params[seq][column]
     return value
 
+def guess_type(x):
+    attempt_type_conversion = [ast.literal_eval,
+                               float,
+                               int, 
+                               bool
+                              ]
+
+    for fn in attempt_type_conversion:
+        try:
+            return fn(x)
+        except (ValueError, SyntaxError):
+            pass
+    return x
+
+def writeJson(type, js, path):
+    jsonTypes = { "CG": "ConjugateGradientInversionInput.json" }
+    json_file = os.path.join(path, 'input', jsonTypes[type])
+    with open(json_file, 'w') as outfile:
+        json.dump(js, outfile, sort_keys = True, indent = 4)
+
+def readJson(type, js, path):
+    jsonTypes = { "CG": "ConjugateGradientInversionInput.json" }
+    filename = os.path.join(path, 'input', jsonTypes[type])
+    with open(filename, 'r') as json_file:
+        data = json.load(json_file)
+        #json.dump(js, outfile, sort_keys = True, indent = 4)
+    return data
+
+def createJsonByType(type, seq, params, path):
+    labels = params[0]
+    selection = [x for x in labels if type in x ]
+
+    js = {}
+    names = []
+    keys = []
+    for s in selection:
+        key = s.split(":")
+        names.append(key[1])
+        keys.append(key)
+
+    # Extract unique names
+    names = list(set(names))
+
+    # Generate json for requested type
+    for name in names:
+        value = {}
+        for key in keys:
+            if (key[1] == name):
+                if (len(key) > 2):
+                    value[key[2]] = guess_type(tableElementByKey(":".join(key), seq, params))
+                    js[name] = value
+                else:
+                    js[name] = guess_type(tableElementByKey(":".join(key), seq, params))
+
+    writeJson(type, js, path)
+
+
 def makeExecutionFolder():
     print('\n------Creating a new execution folder')
     now = dt.now()
@@ -21,8 +80,10 @@ def makeExecutionFolder():
     return execution_stamp
 
 def makeTestFolder(testPath):
-    print('\n------Coping default test folder')
-    shutil.copytree(os.path.join(root,'inputFiles', 'default'), testPath)
+    print('\n------Create test folder')
+    #os.makedirs(os.path.join(testPath,'input'), exist_ok=True)
+    #os.makedirs(os.path.join(testPath,'output'), exist_ok=True)
+    shutil.copytree(os.path.join(root, 'inputFiles', 'default'), testPath)
     shutil.copy(os.path.join(basename, testParams), testPath)
 
 def executionMethod():
@@ -33,21 +94,16 @@ def executionMethod():
       Start Test(s) {} of {}
 ##################################""".format(number_current, number_total))
 
-    ### Read-in values from csv file
-    ### Dir information
-    sequence = data[n][0]
-    title = data[n][1]
-    sequence = sequence.zfill(2)
-    testSequenceFolder = sequence + title
+    ### Read some meta data from csv file
+    sequence = tableElementByKey(key = "sequence", seq = n, params = data)
+    title = tableElementByKey(key = "title", seq = n, params = data )
+    testSequenceFolder = sequence.zfill(2) + title
     testPath = os.path.join(basename, executionFolder, testSequenceFolder)
 
-    ### CGInput.json
-    Iter1_n = data[n][2]
-    Iter1_tolerance = data[n][3]
-    DeltaAmplification_start = data[n][4]
-    DeltaAmplification_slope = data[n][5]
-    n_max = data[n][6]
-    do_reg = data[n][7]
+    makeTestFolder(testPath)
+
+    ### ConjugateGradientInput.json
+    createJsonByType(type="CG", seq = n, params = data, path = testPath)
 
     ### GenericInput.json
     c_0 = data[n][8]
@@ -97,37 +153,9 @@ def executionMethod():
     InversionMethod = data[n][44]
     ForwardModel = data[n][45]
 
-    makeTestFolder(testPath)
+    #makeTestFolder(testPath)
 
     print('\n------Changing input values')
-    ### Replace input values of CGInput.json file
-    find_Iter1_n = '10'
-    replace_Iter1_n = Iter1_n
-    find_Iter1_tolerance = '1.0e-8'
-    replace_Iter1_tolerance = Iter1_tolerance
-    find_DeltaAmplification_start = '100.0'
-    replace_DeltaAmplification_start = DeltaAmplification_start
-    find_DeltaAmplification_slope = '10.0'
-    replace_DeltaAmplification_slope = DeltaAmplification_slope
-    find_n_max = '5'
-    replace_n_max = n_max
-    find_do_reg = 'true'
-    replace_do_reg = do_reg
-
-    input_file_CGInput = os.path.join(testPath + '/input/ConjugateGradientInversionInput.json')
-
-    with open(input_file_CGInput, 'r') as rf:
-        rf_contents = rf.readlines() # Read all lines as a list
-    # Replace values
-    rf_contents[2] = rf_contents[2].replace(find_Iter1_n, replace_Iter1_n)
-    rf_contents[3] = rf_contents[3].replace(find_Iter1_tolerance, replace_Iter1_tolerance)
-    rf_contents[6] = rf_contents[6].replace(find_DeltaAmplification_start, replace_DeltaAmplification_start)
-    rf_contents[7] = rf_contents[7].replace(find_DeltaAmplification_slope, replace_DeltaAmplification_slope)
-    rf_contents[9] = rf_contents[9].replace(find_n_max, replace_n_max)
-    rf_contents[10] = rf_contents[10].replace(find_do_reg, replace_do_reg)
-
-    with open(input_file_CGInput, 'w') as input_file_CGInput:
-        input_file_CGInput.write(''.join(rf_contents)) # Joining list as a string
 
     ### Replace input values of GenericInput.json file
     find_c_0 = '2000.0'
