@@ -4,6 +4,14 @@ import argparse
 from datetime import datetime as dt
 from pathlib import Path
 
+def tableElementByKey(key, seq, params):
+    value = "false"
+    labels = params[0]
+    if key in labels:
+        column = labels.index(key)
+        value = params[seq][column]
+    return value
+
 def makeExecutionFolder():
     print('\n------Creating a new execution folder')
     now = dt.now()
@@ -355,10 +363,15 @@ if __name__ == "__main__":
         preTime = preProcess(testPath, forwardModel)
         processTime = Process(testPath, inversionMethod, forwardModel)
         postTime = postProcess(testPath)
+
+        if (tableElementByKey(key = "doRegression", seq = n, params = data).upper() == "TRUE"):
+            print('\n------Start Regression Test')
+            print("...")
+
         print('\nPreProcess time   {}'.format(preTime))
         print('Process time      {}'.format(processTime))
         print('PostProcess time  {}'.format(postTime))
         n += 1
-        
+
     end_totalTime = time.time()
     print('\nTotal execution time {}\n'.format(datetime.timedelta(seconds=(end_totalTime - start_totalTime))))
