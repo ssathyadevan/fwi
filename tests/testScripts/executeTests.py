@@ -58,7 +58,7 @@ def createJsonByType(type, seq, params, path):
 
 def createInput(types, seq, params, path):
     for key, value in types.items():
-        js = createJsonByType(type = key, seq = n, params = data, path = path)
+        js = createJsonByType(key, n, params, path)
         writeJson(filename = value, data = js, path = path)
 
 def makeExecutionFolder():
@@ -83,27 +83,27 @@ def executionMethod():
 ##################################""".format(number_current, number_total), flush = True)
 
     ### Read some meta data from csv file
-    sequence = tableElementByKey(key = "sequence", seq = n, params = data)
-    title = tableElementByKey(key = "title", seq = n, params = data )
+    sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
+    title = tableElementByKey(key = "title", seq = n, params = csv_data )
     testSequenceFolder = sequence.zfill(2) + title
     testPath = os.path.join(basename, executionFolder, testSequenceFolder)
 
     makeTestFolder(testPath)
 
     inputTypes = { "CG": "ConjugateGradientInversionInput.json",
-                  "GD": "GradientDescentInversionInput.json",
-                  "GEN": "GenericInput.json",
-                  "IFM": "IntegralFMInput.json",
-                  "FDFM": "FiniteDifferenceFMInput.json"}
+                   "GD": "GradientDescentInversionInput.json",
+                   "GEN": "GenericInput.json" ,
+                   "IFM": "IntegralFMInput.json" ,
+                   "FDFM": "FiniteDifferenceFMInput.json" } 
 
     print('\n------Changing input values', flush = True)
 
     # Create input json's
-    createInput(types = inputTypes, seq = n, params = data, path = testPath)
+    createInput(types = inputTypes, seq = n, params = csv_data, path = testPath)
 
     # Model and inversion types
-    ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = data)
-    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = data)
+    ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = csv_data)
+    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = csv_data)
 
     return testPath, InversionMethod, ForwardModel
 
@@ -180,15 +180,16 @@ if __name__ == "__main__":
     basename = os.getcwd()              # parallelized-fwi/FWITest/
 
     with open(Path(testParams), 'r') as csvfile:
-        data = list(csv.reader(csvfile, delimiter=","))
+        csv_data = list(csv.reader(csvfile, delimiter=","))
 
     while n <= rowEnd:
         testPath, inversionMethod, forwardModel = executionMethod()
+
         preTime = preProcess(testPath, forwardModel)
         processTime = Process(testPath, inversionMethod, forwardModel)
         postTime = postProcess(testPath)
 
-        if (tableElementByKey(key = "doRegression", seq = n, params = data).upper() == "TRUE"):
+        if (tableElementByKey(key = "doRegression", seq = n, params = csv_data).upper() == "TRUE"):
             print('\n------Start Regression Test')
             print("...")
 
