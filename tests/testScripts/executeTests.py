@@ -12,7 +12,7 @@ def tableElementByKey(key, seq, params):
     if key in labels:
         column = labels.index(key)
         value = params[seq][column]
-    return value
+    return guess_type(value)
 
 def guess_type(s):
     if re.match("\A[0-9]+\Z", s):
@@ -50,10 +50,10 @@ def createJsonByType(type, seq, params, path):
         for key in keys:
             if (key[1] == name):
                 if (len(key) > 2):
-                    value[key[2]] = guess_type(tableElementByKey(":".join(key), seq, params))
+                    value[key[2]] = tableElementByKey(":".join(key), seq, params)
                     js[name] = value
                 else:
-                    js[name] = guess_type(tableElementByKey(":".join(key), seq, params))
+                    js[name] = tableElementByKey(":".join(key), seq, params)
     return js
 
 def createInput(types, seq, params, path):
@@ -85,7 +85,7 @@ def executionMethod():
     ### Read some meta data from csv file
     sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
     title = tableElementByKey(key = "title", seq = n, params = csv_data )
-    testSequenceFolder = sequence.zfill(2) + title
+    testSequenceFolder = str(sequence).zfill(2) + title
     testPath = os.path.join(basename, executionFolder, testSequenceFolder)
 
     makeTestFolder(testPath)
@@ -189,8 +189,8 @@ if __name__ == "__main__":
         processTime = Process(testPath, inversionMethod, forwardModel)
         postTime = postProcess(testPath)
 
-        if (tableElementByKey(key = "doRegression", seq = n, params = csv_data).upper() == "TRUE"):
-            print('\n------Start Regression Test')
+        if (tableElementByKey(key = "doRegression", seq = n, params = csv_data)):
+            print('\n------Start Regression Test', flush = True)
             print("...")
 
         print('\nPreProcess time   {}'.format(preTime))
