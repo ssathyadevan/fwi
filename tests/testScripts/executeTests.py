@@ -14,9 +14,6 @@ def tableElementByKey(key, seq, params):
         value = params[seq][column]
     return value
 
-"""
-Helper function to detect the appropriate type for a given string.
-"""
 def guess_type(s):
     if re.match("\A[0-9]+\Z", s):
         return int(s)
@@ -27,15 +24,10 @@ def guess_type(s):
     else:
         return str(s)
 
-def writeJson(type, js, path):
-    jsonTypes = { "CG": "ConjugateGradientInversionInput.json",
-                  "GD": "GradientDescentInversionInput.json",
-                  "GEN": "GenericInput.json",
-                  "IFM": "IntegralFMInput.json"}
-
-    json_file = os.path.join(path, 'input', jsonTypes[type])
+def writeJson(filename, data, path):
+    json_file = os.path.join(path, 'input', filename)
     with open(json_file, 'w') as outfile:
-        json.dump(js, outfile, sort_keys = True, indent = 4)
+        json.dump(data, outfile, sort_keys = True, indent = 4)
 
 def createJsonByType(type, seq, params, path):
     labels = params[0]
@@ -62,12 +54,15 @@ def createJsonByType(type, seq, params, path):
                     js[name] = value
                 else:
                     js[name] = guess_type(tableElementByKey(":".join(key), seq, params))
+    return js
 
-    writeJson(type, js, path)
-
+def createInput(types, seq, params, path):
+    for key, value in types.items():
+        js = createJsonByType(type = key, seq = n, params = data, path = path)
+        writeJson(filename = value, data = js, path = path)
 
 def makeExecutionFolder():
-    print('\n------Creating a new execution folder')
+    print('\n------Creating a new execution folder', flush = True)
     now = dt.now()
     execution_stamp = 'Execution_' + now.strftime("%Y%m%d_%H%M%S")
     os.mkdir(execution_stamp)
@@ -75,9 +70,7 @@ def makeExecutionFolder():
     return execution_stamp
 
 def makeTestFolder(testPath):
-    print('\n------Create test folder')
-    #os.makedirs(os.path.join(testPath,'input'), exist_ok=True)
-    #os.makedirs(os.path.join(testPath,'output'), exist_ok=True)
+    print('\n------Create test folder', flush = True)
     shutil.copytree(os.path.join(root, 'inputFiles', 'default'), testPath)
     shutil.copy(os.path.join(basename, testParams), testPath)
 
@@ -97,61 +90,20 @@ def executionMethod():
 
     makeTestFolder(testPath)
 
-    # Generic Input
-    createJsonByType(type="GEN", seq = n, params = data, path = testPath)
+    jsonTypes = { "CG": "ConjugateGradientInversionInput.json",
+                  "GD": "GradientDescentInversionInput.json",
+                  "GEN": "GenericInput.json",
+                  "IFM": "IntegralFMInput.json",
+                  "FDFM": "FiniteDifferenceFMInput.json"}
 
-    # Conjugate Gradient Input
-    createJsonByType(type="CG", seq = n, params = data, path = testPath)
+    print('\n------Changing input values', flush = True)
 
-    # Gradient Descent Inversion Input
-    createJsonByType(type = "GD", seq = n, params = data, path = testPath)
-
-    # Integral Forward Model Input
-    createJsonByType(type="IFM", seq = n, params = data, path = testPath)
-
-    ### FiniteDifferenceFMInput.json
-    PMLWidthFactor_x = data[n][38]
-    PMLWidthFactor_z = data[n][39]
-    SourceParameter_r = data[n][40]
-    SourceParameter_beta = data[n][41]
-    CostFunction = data[n][42]
-    boundaryConditionType = data[n][43]
+    # Create input json's
+    createInput(types = jsonTypes, seq = n, params = data, path = testPath)
 
     # Model and inversion types
     ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = data)
     InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = data)
-
-    print('\n------Changing input values')
-
-    ### Replace input values of FiniteDifferenceFMInput.json file
-    
-    find_PMLWidthFactor_x = '0.0'
-    replace_PMLWidthFactor_x = PMLWidthFactor_x
-    find_PMLWidthFactor_z = '0.0'
-    replace_PMLWidthFactor_z = PMLWidthFactor_z
-    find_SourceParameter_r = '4'
-    replace_SourceParameter_r = SourceParameter_r
-    find_SourceParameter_beta = '6.31'
-    replace_SourceParameter_beta = SourceParameter_beta
-    find_CostFunction = 'leastSquares'
-    replace_CostFunction = CostFunction
-    find_boundaryConditionType = 'SecondOrderABC'
-    replace_boundaryConditionType = boundaryConditionType
-
-    input_file_FiniteDifferenceFMInput = os.path.join(testPath + '/input/FiniteDifferenceFMInput.json')
-
-    with open(input_file_FiniteDifferenceFMInput, 'r') as rf:
-        rf_contents = rf.readlines() # Read all lines as a list
-    # Replace values
-    rf_contents[2] = rf_contents[2].replace(find_PMLWidthFactor_x, replace_PMLWidthFactor_x)
-    rf_contents[3] = rf_contents[3].replace(find_PMLWidthFactor_z, replace_PMLWidthFactor_z)
-    rf_contents[6] = rf_contents[6].replace(find_SourceParameter_r, find_SourceParameter_r)
-    rf_contents[7] = rf_contents[7].replace(find_SourceParameter_beta, replace_SourceParameter_beta)
-    rf_contents[9] = rf_contents[9].replace(find_CostFunction, replace_CostFunction)
-    rf_contents[10] = rf_contents[10].replace(find_boundaryConditionType, replace_boundaryConditionType)
-
-    with open(input_file_FiniteDifferenceFMInput, 'w') as input_file_FiniteDifferenceFMInput:
-        input_file_FiniteDifferenceFMInput.write("".join(rf_contents)) 
 
     return testPath, InversionMethod, ForwardModel
 
