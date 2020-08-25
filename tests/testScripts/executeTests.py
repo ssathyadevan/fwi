@@ -1,7 +1,8 @@
 import os, sys, shutil, csv, datetime, time
 import platform
 import argparse
-import ast
+#import ast
+import re
 import json
 from datetime import datetime as dt
 from pathlib import Path
@@ -14,22 +15,22 @@ def tableElementByKey(key, seq, params):
         value = params[seq][column]
     return value
 
-def guess_type(x):
-    attempt_type_conversion = [ast.literal_eval,
-                               float,
-                               int, 
-                               bool
-                              ]
-
-    for fn in attempt_type_conversion:
-        try:
-            return fn(x)
-        except (ValueError, SyntaxError):
-            pass
-    return x
+"""
+Helper function to detect the appropriate type for a given string.
+"""
+def guess_type(s):
+    if re.match("\A[0-9]+\Z", s):
+        return int(s)
+    elif re.match("[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?", s):
+        return float(s)
+    elif re.match("\A(true|false)\Z", s, re.IGNORECASE):
+        return (s == "true")
+    else:
+        return str(s)
 
 def writeJson(type, js, path):
-    jsonTypes = { "CG": "ConjugateGradientInversionInput.json" }
+    jsonTypes = { "CG": "ConjugateGradientInversionInput.json",
+                  "GEN": "GenericInput.json" }
     json_file = os.path.join(path, 'input', jsonTypes[type])
     with open(json_file, 'w') as outfile:
         json.dump(js, outfile, sort_keys = True, indent = 4)
@@ -38,7 +39,6 @@ def createJsonByType(type, seq, params, path):
     labels = params[0]
     selection = [x for x in labels if type in x ]
 
-    js = {}
     names = []
     keys = []
     for s in selection:
@@ -50,6 +50,7 @@ def createJsonByType(type, seq, params, path):
     names = list(set(names))
 
     # Generate json for requested type
+    js = {}
     for name in names:
         value = {}
         for key in keys:
@@ -84,7 +85,7 @@ def executionMethod():
     print("""
 ##################################
       Start Test(s) {} of {}
-##################################""".format(number_current, number_total))
+##################################""".format(number_current, number_total), flush = True)
 
     ### Read some meta data from csv file
     sequence = tableElementByKey(key = "sequence", seq = n, params = data)
@@ -98,28 +99,7 @@ def executionMethod():
     createJsonByType(type="CG", seq = n, params = data, path = testPath)
 
     ### GenericInput.json
-    c_0 = data[n][8]
-    Freq_max = data[n][9]
-    Freq_min = data[n][10]
-    Freq_nTotal = data[n][11]
-    reservoirTopLeft_x = data[n][12]
-    reservoirTopLeft_y = data[n][13]
-    reservoirBottomRight_x = data[n][14]
-    reservoirBottomRight_y = data[n][15]
-    sourcesTopLeft_x = data[n][16]
-    sourcesTopLeft_y = data[n][17]
-    sourcesBottomRight_x = data[n][18]
-    sourcesBottomRight_y = data[n][19]
-    receiverTopLeft_x = data[n][20]
-    receiverTopLeft_y = data[n][21]
-    receiverBottomRight_x = data[n][22]
-    receiverBottomRight_y = data[n][23]
-    nSources = data[n][24]
-    nReceivers = data[n][25]
-    ngrid_x = data[n][26]
-    ngrid_y = data[n][27]
-    verbosity = data[n][28]
-    fileName = data[n][29]
+    createJsonByType(type="GEN", seq = n, params = data, path = testPath)
 
     ### IntegralFMIInput.json
     Iter2_n = data[n][30]
@@ -142,89 +122,12 @@ def executionMethod():
     boundaryConditionType = data[n][43]
 
     ### Mode
-    InversionMethod = data[n][44]
-    ForwardModel = data[n][45]
+    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = data)
+    ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = data)
 
-    #makeTestFolder(testPath)
 
     print('\n------Changing input values')
 
-    ### Replace input values of GenericInput.json file
-    find_c_0 = '2000.0'
-    replace_c_0 = c_0
-    find_Freq_max = '10.0'
-    replace_Freq_max = Freq_max
-    find_Freq_min = '40.0'
-    replace_Freq_min = Freq_min
-    find_Freq_nTotal = '15'
-    replace_Freq_nTotal = Freq_nTotal
-    find_reservoirTopLeft_x = '-300.0'
-    replace_reservoirTopLeft_x = reservoirTopLeft_x
-    find_reservoirTopLeft_y = '0.0'
-    replace_reservoirTopLeft_y = reservoirTopLeft_y
-    find_reservoirBottomRight_x = '300.0'
-    replace_reservoirBottomRight_x = reservoirBottomRight_x
-    find_reservoirBottomRight_y = '300.0'
-    replace_reservoirBottomRight_y = reservoirBottomRight_y
-    find_sourcesTopLeft_x = '-480.0'
-    replace_sourcesTopLeft_x = sourcesTopLeft_x
-    find_sourcesTopLeft_y = '-5.0'
-    replace_sourcesTopLeft_y = sourcesTopLeft_y
-    find_sourcesBottomRight_x = '480.0'
-    replace_sourcesBottomRight_x = sourcesBottomRight_x
-    find_sourcesBottomRight_y = '-5.0'
-    replace_sourcesBottomRight_y = sourcesBottomRight_y
-    find_receiverTopLeft_x = '-480.0'
-    replace_receiverTopLeft_x = receiverTopLeft_x
-    find_receiverTopLeft_y = '-5.0'
-    replace_receiverTopLeft_y = receiverTopLeft_y
-    find_receiverBottomRight_x = '480.0'
-    replace_receiverBottomRight_x = receiverBottomRight_x
-    find_receiverBottomRight_y = '-5.0'
-    replace_receiverBottomRight_y = receiverBottomRight_y
-    find_nSources = '17'
-    replace_nSources = nSources
-    find_nReceivers = '17'
-    replace_nReceivers = nReceivers
-    find_ngrid_x = '64'
-    replace_ngrid_x = ngrid_x
-    find_ngrid_y = '32'
-    replace_ngrid_y = ngrid_y
-    find_verbosity = 'false'
-    replace_verbosity = verbosity
-    find_fileName = 'temple'
-    replace_fileName = fileName
-
-    input_file_GenericInput = os.path.join(testPath + '/input/GenericInput.json')
-
-    with open(input_file_GenericInput, 'r') as rf:
-        rf_contents = rf.readlines() # Read all lines as a list
-    # Replace values
-    rf_contents[1] = rf_contents[1].replace(find_c_0, replace_c_0)
-    rf_contents[3] = rf_contents[3].replace(find_Freq_max, replace_Freq_max)
-    rf_contents[4] = rf_contents[4].replace(find_Freq_min, replace_Freq_min)
-    rf_contents[5] = rf_contents[5].replace(find_Freq_nTotal, replace_Freq_nTotal)
-    rf_contents[8] = rf_contents[8].replace(find_reservoirTopLeft_x, replace_reservoirTopLeft_x)
-    rf_contents[9] = rf_contents[9].replace(find_reservoirTopLeft_y, replace_reservoirTopLeft_y)
-    rf_contents[12] = rf_contents[12].replace(find_reservoirBottomRight_x, replace_reservoirBottomRight_x)
-    rf_contents[13] = rf_contents[13].replace(find_reservoirBottomRight_y, replace_reservoirBottomRight_y)
-    rf_contents[16] = rf_contents[16].replace(find_sourcesTopLeft_x, replace_sourcesTopLeft_x)
-    rf_contents[17] = rf_contents[17].replace(find_sourcesTopLeft_y, replace_sourcesTopLeft_y)
-    rf_contents[20] = rf_contents[20].replace(find_sourcesBottomRight_x, replace_sourcesBottomRight_x)
-    rf_contents[21] = rf_contents[21].replace(find_sourcesBottomRight_y, replace_sourcesBottomRight_y)
-    rf_contents[24] = rf_contents[24].replace(find_receiverTopLeft_x, replace_receiverTopLeft_x)
-    rf_contents[25] = rf_contents[25].replace(find_receiverTopLeft_y, replace_receiverTopLeft_y)
-    rf_contents[28] = rf_contents[28].replace(find_receiverBottomRight_x, replace_receiverBottomRight_x)
-    rf_contents[29] = rf_contents[29].replace(find_receiverBottomRight_y, replace_receiverBottomRight_y)
-    rf_contents[31] = rf_contents[31].replace(find_nSources, replace_nSources)
-    rf_contents[32] = rf_contents[32].replace(find_nReceivers, replace_nReceivers)
-    rf_contents[34] = rf_contents[34].replace(find_ngrid_x, replace_ngrid_x)
-    rf_contents[35] = rf_contents[35].replace(find_ngrid_y, replace_ngrid_y)
-    rf_contents[37] = rf_contents[37].replace(find_verbosity, replace_verbosity)
-    rf_contents[38] = rf_contents[38].replace(find_fileName, replace_fileName)
-
-    with open(input_file_GenericInput, 'w') as input_file_GenericInput:
-        input_file_GenericInput.write(''.join(rf_contents))
 
     ### Replace input values of IntegralFMInput.json file
     find_Iter2_n = '15'
