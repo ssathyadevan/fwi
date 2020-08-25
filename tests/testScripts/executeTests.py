@@ -1,7 +1,6 @@
 import os, sys, shutil, csv, datetime, time
 import platform
 import argparse
-#import ast
 import re
 import json
 from datetime import datetime as dt
@@ -30,7 +29,10 @@ def guess_type(s):
 
 def writeJson(type, js, path):
     jsonTypes = { "CG": "ConjugateGradientInversionInput.json",
-                  "GEN": "GenericInput.json" }
+                  "GD": "GradientDescentInversionInput.json",
+                  "GEN": "GenericInput.json",
+                  "IFM": "IntegralFMInput.json"}
+
     json_file = os.path.join(path, 'input', jsonTypes[type])
     with open(json_file, 'w') as outfile:
         json.dump(js, outfile, sort_keys = True, indent = 4)
@@ -95,23 +97,17 @@ def executionMethod():
 
     makeTestFolder(testPath)
 
-    ### ConjugateGradientInput.json
-    createJsonByType(type="CG", seq = n, params = data, path = testPath)
-
-    ### GenericInput.json
+    # Generic Input
     createJsonByType(type="GEN", seq = n, params = data, path = testPath)
 
-    ### IntegralFMIInput.json
-    Iter2_n = data[n][30]
-    Iter2_tolerance = data[n][31]
-    Iter2_calcAlpha = data[n][32]
-    Iter2_CostFunction = data[n][33]
+    # Conjugate Gradient Input
+    createJsonByType(type="CG", seq = n, params = data, path = testPath)
 
-    ### GradientDescentInversionInput.json
-    gamma = data[n][34]
-    x0 = data[n][35]
-    h = data[n][36]
-    iter = data[n][37]
+    # Gradient Descent Inversion Input
+    createJsonByType(type = "GD", seq = n, params = data, path = testPath)
+
+    # Integral Forward Model Input
+    createJsonByType(type="IFM", seq = n, params = data, path = testPath)
 
     ### FiniteDifferenceFMInput.json
     PMLWidthFactor_x = data[n][38]
@@ -121,35 +117,11 @@ def executionMethod():
     CostFunction = data[n][42]
     boundaryConditionType = data[n][43]
 
-    ### Mode
-    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = data)
+    # Model and inversion types
     ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = data)
-
+    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = data)
 
     print('\n------Changing input values')
-
-
-    ### Replace input values of IntegralFMInput.json file
-    find_Iter2_n = '15'
-    replace_Iter2_n = Iter2_n
-    find_Iter2_tolerance = '5.0e-5'
-    replace_Iter2_tolerance = Iter2_tolerance
-    find_Iter2_calcAlpha = 'false'
-    replace_Iter2_calcAlpha = Iter2_calcAlpha
-    find_Iter2_CostFunction = 'leastSquares'
-    replace_Iter2_CostFunction = Iter2_CostFunction
-
-    input_file_IntegralFMInput = os.path.join(testPath + '/input/IntegralFMInput.json')
-
-    with open(input_file_IntegralFMInput, 'r') as rf:
-        rf_contents = rf.readlines() # Read all lines as a list
-    # Replace values
-    rf_contents[2] = rf_contents[2].replace(find_Iter2_n, replace_Iter2_n)
-    rf_contents[3] = rf_contents[3].replace(find_Iter2_tolerance, replace_Iter2_tolerance)
-    rf_contents[5] = rf_contents[5].replace(find_Iter2_CostFunction, replace_Iter2_CostFunction)
-
-    with open(input_file_IntegralFMInput, 'w') as input_file_IntegralFMInput:
-        input_file_IntegralFMInput.write("".join(rf_contents)) # Joining list as a string
 
     ### Replace input values of FiniteDifferenceFMInput.json file
     
@@ -181,29 +153,6 @@ def executionMethod():
     with open(input_file_FiniteDifferenceFMInput, 'w') as input_file_FiniteDifferenceFMInput:
         input_file_FiniteDifferenceFMInput.write("".join(rf_contents)) 
 
-    ### Replace input values of GradientDescentInversionInput.json file
-    find_gamma = '0.1'
-    replace_gamma = gamma
-    find_x0 = '0.001'
-    replace_x0 = x0
-    find_h = '0.001'
-    replace_h = h
-    find_iter = '20'
-    replace_iter = iter
-    
-    input_file_GradientDescentInversionInput = os.path.join(testPath + '/input/GradientDescentInversionInput.json')
-
-    with open(input_file_GradientDescentInversionInput, 'r') as rf:
-        rf_contents = rf.readlines() # Read all lines as a list
-    # Replace values
-    rf_contents[1] = rf_contents[1].replace(find_gamma, replace_gamma)
-    rf_contents[2] = rf_contents[2].replace(find_x0, replace_x0)
-    rf_contents[3] = rf_contents[3].replace(find_h, replace_h)
-    rf_contents[4] = rf_contents[4].replace(find_iter, replace_iter)
-    
-    with open(input_file_GradientDescentInversionInput, 'w') as input_file_GradientDescentInversionInput:
-        input_file_GradientDescentInversionInput.write("".join(rf_contents)) 
-    
     return testPath, InversionMethod, ForwardModel
 
 def preProcess(tempTestPath, forwardModel):
