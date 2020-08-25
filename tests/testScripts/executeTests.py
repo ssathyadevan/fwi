@@ -90,7 +90,7 @@ def executionMethod():
 
     makeTestFolder(testPath)
 
-    jsonTypes = { "CG": "ConjugateGradientInversionInput.json",
+    inputTypes = { "CG": "ConjugateGradientInversionInput.json",
                   "GD": "GradientDescentInversionInput.json",
                   "GEN": "GenericInput.json",
                   "IFM": "IntegralFMInput.json",
@@ -99,7 +99,7 @@ def executionMethod():
     print('\n------Changing input values', flush = True)
 
     # Create input json's
-    createInput(types = jsonTypes, seq = n, params = data, path = testPath)
+    createInput(types = inputTypes, seq = n, params = data, path = testPath)
 
     # Model and inversion types
     ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = data)
