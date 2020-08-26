@@ -1,4 +1,4 @@
-# Template function for building a test
+#Template function for building a test
 function( build_test )
     set( PREFIX "TEST" )
     set( OPTIONS )
