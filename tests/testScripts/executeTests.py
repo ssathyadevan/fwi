@@ -3,6 +3,7 @@ import platform
 import argparse
 import re
 import json
+import numpy as np
 from datetime import datetime as dt
 from pathlib import Path
 
@@ -23,6 +24,11 @@ def guess_type(s):
         return (s == "true")
     else:
         return str(s)
+
+def filename(path, name, prefix = "", suffix = ".csv"):
+    sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
+    title = tableElementByKey(key = "title", seq = n, params = csv_data )
+    return os.path.join(path,prefix + name + suffix)
 
 def writeJson(filename, data, path):
     json_file = os.path.join(path, 'input', filename)
@@ -62,31 +68,68 @@ def createInput(types, seq, params, path):
         writeJson(filename = value, data = js, path = path)
 
 def makeExecutionFolder():
-    print('\n------Creating a new execution folder', flush = True)
     now = dt.now()
     execution_stamp = 'Execution_' + now.strftime("%Y%m%d_%H%M%S")
     os.mkdir(execution_stamp)
-    print("Name: " + execution_stamp)
     return execution_stamp
 
 def makeTestFolder(testPath):
-    print('\n------Create test folder', flush = True)
     shutil.copytree(os.path.join(root, 'inputFiles', 'default'), testPath)
     shutil.copy(os.path.join(basename, testParams), testPath)
+
+def testMessage(name, current, total):
+    lineWidth = 35
+    print('\n'+'#'*lineWidth)
+    print("    Start Test(s) {} of {}".format(current, total), flush = True)
+    print("    Test Name: {}".format(name), flush = True)
+    print('#'*lineWidth)
+
+def regressionTest(name, path, tolerance):
+
+    passed = False
+
+    regression_data_path = os.path.join(root, 'tests', 'regression_data')
+    test_data_path = os.path.join(path, 'output')
+
+    # Read regression data
+    fileName = filename(regression_data_path, name, 'chi_est_')
+    if os.path.exists(fileName):
+        with open(fileName) as csvfile:
+            regression_data = np.array(list(csv.reader(csvfile, delimiter=","))).astype("float")
+    else:
+        print("Could not open/read the regression data file: {}".format(fileName), flush = True)
+        return passed
+
+    # Read current data
+    with open(filename(test_data_path, name, 'chi_est_')) as csvfile:
+        test_data = np.array(list(csv.reader(csvfile, delimiter=","))).astype("float")
+
+    # Compare regression data with current data
+    mean_square_error = np.square(test_data - regression_data).mean()
+    mean_square_original = np.square(regression_data).mean()
+
+    # Relative error in [%]
+    relative_error = 0
+    if (mean_square_original > 0):
+        relative_error = np.sqrt(mean_square_error/mean_square_original)*100
+
+    passed = relative_error < tolerance
+
+    return passed
+
 
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
     number_total = int(rowEnd) - int(rowStart) + 1 # The total amount of tests to be executed
-    print("""
-##################################
-      Start Test(s) {} of {}
-##################################""".format(number_current, number_total), flush = True)
 
     ### Read some meta data from csv file
     sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
     title = tableElementByKey(key = "title", seq = n, params = csv_data )
-    testSequenceFolder = str(sequence).zfill(2) + title
-    testPath = os.path.join(basename, executionFolder, testSequenceFolder)
+    testName = str(sequence).zfill(2) + title
+
+    testMessage(name = testName, current = number_current, total = number_total)
+
+    testPath = os.path.join(basename, executionFolder, testName)
 
     makeTestFolder(testPath)
 
@@ -96,8 +139,6 @@ def executionMethod():
                    "IFM": "IntegralFMInput.json" ,
                    "FDFM": "FiniteDifferenceFMInput.json" } 
 
-    print('\n------Changing input values', flush = True)
-
     # Create input json's
     createInput(types = inputTypes, seq = n, params = csv_data, path = testPath)
 
@@ -105,7 +146,7 @@ def executionMethod():
     ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = csv_data)
     InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = csv_data)
 
-    return testPath, InversionMethod, ForwardModel
+    return testName, testPath, InversionMethod, ForwardModel
 
 def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess')
@@ -183,7 +224,7 @@ if __name__ == "__main__":
         csv_data = list(csv.reader(csvfile, delimiter=","))
 
     while n <= rowEnd:
-        testPath, inversionMethod, forwardModel = executionMethod()
+        testName, testPath, inversionMethod, forwardModel = executionMethod()
 
         preTime = preProcess(testPath, forwardModel)
         processTime = Process(testPath, inversionMethod, forwardModel)
@@ -191,11 +232,13 @@ if __name__ == "__main__":
 
         if (tableElementByKey(key = "doRegression", seq = n, params = csv_data)):
             print('\n------Start Regression Test', flush = True)
-            print("...")
+            tolerance = tableElementByKey(key="regressionTolerance", seq = n, params = csv_data)
+            status = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
+            print("PASSED: " + str(status), flush = True)
 
-        print('\nPreProcess time   {}'.format(preTime))
-        print('Process time      {}'.format(processTime))
-        print('PostProcess time  {}'.format(postTime))
+        print('\nPreProcess time   {}'.format(preTime), flush = True)
+        print('Process time      {}'.format(processTime), flush = True)
+        print('PostProcess time  {}'.format(postTime), flush = True)
         n += 1
 
     end_totalTime = time.time()
