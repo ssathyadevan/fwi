@@ -6,6 +6,8 @@ import json
 import numpy as np
 from datetime import datetime as dt
 from pathlib import Path
+import junit_xml_output
+
 
 def tableElementByKey(key, seq, params):
     value = "false"
@@ -117,6 +119,11 @@ def regressionTest(name, path, tolerance):
 
     return passed
 
+def generate_xml_report(test_cases):
+    junit_xml = junit_xml_output.JunitXml("RegressionTests", test_cases)
+    junit_xml_path = os.path.join(root,'build')
+    with open(os.path.join(junit_xml_path, 'regressionTestResults.xml'), 'w') as f:
+        f.write(junit_xml.dump())
 
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
@@ -223,6 +230,7 @@ if __name__ == "__main__":
     with open(Path(testParams), 'r') as csvfile:
         csv_data = list(csv.reader(csvfile, delimiter=","))
 
+    test_cases = []
     while n <= rowEnd:
         testName, testPath, inversionMethod, forwardModel = executionMethod()
 
@@ -233,13 +241,18 @@ if __name__ == "__main__":
         if (tableElementByKey(key = "doRegression", seq = n, params = csv_data)):
             print('\n------Start Regression Test', flush = True)
             tolerance = tableElementByKey(key="regressionTolerance", seq = n, params = csv_data)
-            status = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
-            print("PASSED: " + str(status), flush = True)
+            passed = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
+            status = ""
+            if (not passed): status = "failure"
+            test_cases.append(junit_xml_output.TestCase(testName, "", status))
+            print("PASSED: " + str(passed), flush = True)
 
         print('\nPreProcess time   {}'.format(preTime), flush = True)
         print('Process time      {}'.format(processTime), flush = True)
         print('PostProcess time  {}'.format(postTime), flush = True)
         n += 1
+
+    generate_xml_report(test_cases)
 
     end_totalTime = time.time()
     print('\nTotal execution time {}\n'.format(datetime.timedelta(seconds=(end_totalTime - start_totalTime))))
