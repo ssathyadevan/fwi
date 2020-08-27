@@ -29,6 +29,4 @@ RUN         apt-get update \
                     python3-pytest \
                     python3-skimage
 
-FROM python:3
-
-RUN pip install junit-xml-output
+RUN pip3 install junit-xml-output
