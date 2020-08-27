@@ -21,7 +21,7 @@ RUN         apt-get update \
                     cmake \
                     qt5-default \
                     libeigen3-dev \
-                    junit_xml_output \
+                    junit-xml-output \
                     python3-dev \
                     python3 \
                     python3-tk \

@@ -8,7 +8,6 @@ from datetime import datetime as dt
 from pathlib import Path
 import junit_xml_output
 
-
 def tableElementByKey(key, seq, params):
     value = "false"
     labels = params[0]
