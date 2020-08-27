@@ -8,13 +8,14 @@ title Building process of the project
 
 Person(developer, "Developer")
 Container(project, "Binary files", "files","Libraries binaries, unit tests executables and applications executables")
-
+ContainerDb(git_server, "Google Test github","github.com/google/googletest","Contains gtest source files")
 Boundary(build_system, " ") {
     Container(configure_step, "Configure step", "Cmake", "Generates the necessary files for the build tool")
     Container(cmake_input, "CMakeLists.txt", "files", "Collection of CMakeLists.txt files on the project")
     Container(build_step, "Build step", "Ninja", "Builds the binary files. Ninja is a multiplatform replacement for Make and MinGW Make")
 }
 Rel(developer, configure_step, "starts building process")
+Rel(configure_step, git_server, "Downloads GTest master branch")
 Rel(configure_step, build_step, "Generates build configuration")
 Rel(configure_step,cmake_input , "Reads")
 Rel(build_step, project, "Generates binary files")
