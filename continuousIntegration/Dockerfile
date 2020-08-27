@@ -21,7 +21,6 @@ RUN         apt-get update \
                     cmake \
                     qt5-default \
                     libeigen3-dev \
-                    junit-xml-output \
                     python3-dev \
                     python3 \
                     python3-tk \
@@ -29,3 +28,7 @@ RUN         apt-get update \
                     python3-matplotlib \
                     python3-pytest \
                     python3-skimage
+
+FROM python:3
+
+RUN pip install junit-xml-output
