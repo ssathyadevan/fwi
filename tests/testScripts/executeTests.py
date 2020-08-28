@@ -120,9 +120,9 @@ def regressionTest(name, path, tolerance):
 
 def generate_xml_report(test_cases):
     junit_xml = junit_xml_output.JunitXml("RegressionTests", test_cases)
-    
+
     for test in junit_xml.root.findall("testcase"):
-        test.set('classname','regression_tests')
+        test.set('classname','regression.tests')
     junit_xml_path = os.path.join(root,'build')
     with open(os.path.join(junit_xml_path, 'regressionTestResults.xml'), 'w') as f:
         f.write(junit_xml.dump())
