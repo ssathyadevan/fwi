@@ -120,6 +120,9 @@ def regressionTest(name, path, tolerance):
 
 def generate_xml_report(test_cases):
     junit_xml = junit_xml_output.JunitXml("RegressionTests", test_cases)
+    
+    for test in junit_xml.root.findall("testcase"):
+        test.set('classname','regression_tests')
     junit_xml_path = os.path.join(root,'build')
     with open(os.path.join(junit_xml_path, 'regressionTestResults.xml'), 'w') as f:
         f.write(junit_xml.dump())
@@ -230,6 +233,7 @@ if __name__ == "__main__":
         csv_data = list(csv.reader(csvfile, delimiter=","))
 
     test_cases = []
+
     while n <= rowEnd:
         testName, testPath, inversionMethod, forwardModel = executionMethod()
 
@@ -243,7 +247,7 @@ if __name__ == "__main__":
             passed = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
             status = ""
             if (not passed): status = "failure"
-            test_cases.append(junit_xml_output.TestCase("regression." + testName, "regression_test", status))
+            test_cases.append(junit_xml_output.TestCase(testName, "", status))
 
             print("PASSED: " + str(passed), flush = True)
 
