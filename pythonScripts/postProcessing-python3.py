@@ -71,9 +71,9 @@ square_mean_original = (np.square(chi1)).mean()
 avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
 total_seconds = readParameter("CPU time", path = outputPath)
 
-print("The MSE (mean square error) is:       " + str(mse))
-print("The average relative error is:        " + str(avg_relative_error))
-print("Execution time in seconds:            " + total_seconds)
+print("The MSE (mean square error) is:       " + str(mse), flush = True)
+print("The average relative error is:        " + str(avg_relative_error), flush = True)
+print("Execution time in seconds:            " + total_seconds, flush = True)
 
 # Set the minimum and maximum values to chi
 v_min = chi1.min()

@@ -85,7 +85,7 @@ def testMessage(name, current, total):
     print("    Test Name: {}".format(name), flush = True)
     print('#'*lineWidth)
 
-def regressionTest(name, path, tolerance):
+def regressionTest(name, path, tolerance, generate_tests = False):
 
     passed = False
 
@@ -98,6 +98,8 @@ def regressionTest(name, path, tolerance):
         with open(fileName) as csvfile:
             regression_data = np.array(list(csv.reader(csvfile, delimiter=","))).astype("float")
     else:
+        if (generate_tests):
+            shutil.copyfile(filename(test_data_path, name, 'chi_est_'), fileName)
         print("Could not open/read the regression data file: {}".format(fileName), flush = True)
         return passed
 
@@ -118,11 +120,13 @@ def regressionTest(name, path, tolerance):
 
     return passed
 
-def generate_xml_report(test_cases):
+def generate_xml_report(test_cases, test_times):
     junit_xml = junit_xml_output.JunitXml("RegressionTests", test_cases)
 
-    for test in junit_xml.root.findall("testcase"):
+    for test, time in zip(junit_xml.root.findall("testcase"), test_times):
         test.set('classname','regression.tests')
+        test.set('time', str(time))
+
     junit_xml_path = os.path.join(root,'build')
     with open(os.path.join(junit_xml_path, 'regressionTestResults.xml'), 'w') as f:
         f.write(junit_xml.dump())
@@ -233,13 +237,15 @@ if __name__ == "__main__":
         csv_data = list(csv.reader(csvfile, delimiter=","))
 
     test_cases = []
-
+    test_time  = []
     while n <= rowEnd:
         testName, testPath, inversionMethod, forwardModel = executionMethod()
 
         preTime = preProcess(testPath, forwardModel)
         processTime = Process(testPath, inversionMethod, forwardModel)
         postTime = postProcess(testPath)
+
+        test_time.append(preTime.seconds + processTime.seconds + postTime.seconds)
 
         if (tableElementByKey(key = "doRegression", seq = n, params = csv_data)):
             print('\n------Start Regression Test', flush = True)
@@ -256,7 +262,7 @@ if __name__ == "__main__":
         print('PostProcess time  {}'.format(postTime), flush = True)
         n += 1
 
-    generate_xml_report(test_cases)
+    generate_xml_report(test_cases, test_time)
 
     end_totalTime = time.time()
     print('\nTotal execution time {}\n'.format(datetime.timedelta(seconds=(end_totalTime - start_totalTime))))
