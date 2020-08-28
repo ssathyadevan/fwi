@@ -243,7 +243,8 @@ if __name__ == "__main__":
             passed = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
             status = ""
             if (not passed): status = "failure"
-            test_cases.append(junit_xml_output.TestCase(testName, "", status))
+            test_cases.append(junit_xml_output.TestCase("regression." + testName, "regression_test", status))
+
             print("PASSED: " + str(passed), flush = True)
 
         print('\nPreProcess time   {}'.format(preTime), flush = True)
