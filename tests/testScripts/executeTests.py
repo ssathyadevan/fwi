@@ -79,7 +79,7 @@ def makeTestFolder(testPath):
     shutil.copy(os.path.join(basename, testParams), testPath)
 
 def testMessage(name, current, total):
-    lineWidth = 35
+    lineWidth = 70
     print('\n'+'#'*lineWidth)
     print("    Start Test(s) {} of {}".format(current, total), flush = True)
     print("    Test Name: {}".format(name), flush = True)
@@ -132,9 +132,9 @@ def executionMethod():
     number_total = int(rowEnd) - int(rowStart) + 1 # The total amount of tests to be executed
 
     ### Read some meta data from csv file
-    sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
+    id = tableElementByKey(key = "id", seq = n, params = csv_data)
     title = tableElementByKey(key = "title", seq = n, params = csv_data )
-    testName = str(sequence).zfill(2) + title
+    testName = id + '_' + title
 
     testMessage(name = testName, current = number_current, total = number_total)
 
