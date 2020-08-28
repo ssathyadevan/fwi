@@ -80,10 +80,10 @@ def makeTestFolder(testPath):
 
 def testMessage(name, current, total):
     lineWidth = 70
-    print('\n'+'#'*lineWidth)
+    print('\n'+'#'*lineWidth, flush = True)
     print("    Start Test(s) {} of {}".format(current, total), flush = True)
     print("    Test Name: {}".format(name), flush = True)
-    print('#'*lineWidth)
+    print('#'*lineWidth, flush = True)
 
 def regressionTest(name, path, tolerance, generate_tests = False):
 
@@ -162,36 +162,36 @@ def executionMethod():
     return testName, testPath, InversionMethod, ForwardModel
 
 def preProcess(tempTestPath, forwardModel):
-    print('\n------Start PreProcess')
+    print('\n------Start PreProcess', flush = True)
     forwardModelArgument = ""
     if(forwardModel == 'IntegralForwardModel'):
         forwardModelArgument = "FWI_PreProcess_Integral"
     elif(forwardModel == 'FiniteDifferenceForwardModel'):
         forwardModelArgument = "FWI_PreProcess_Finite_Difference"
     else:
-        print('Invalid Forward Model')
+        print('Invalid Forward Model', flush = True)
         exit()
     start_preTime = time.time()
     tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
 
     execPath = os.path.join(tempFWIInstallBin, forwardModelArgument)
-    print(forwardModelArgument + ' ' + tempTestPath)
+    print(forwardModelArgument + ' ' + tempTestPath, flush = True)
 
     os.system(execPath + ' ' + Path(tempTestPath).as_posix())
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
 def Process(testPath, Inversion, ForwardModel):
-    print('\n------Start Process')
+    print('\n------Start Process', flush = True)
     start_processTime = time.time()
-    print('FWI_UnifiedProcess ' + testPath + ' ' + Inversion + ' ' + ForwardModel)
+    print('FWI_UnifiedProcess ' + testPath + ' ' + Inversion + ' ' + ForwardModel, flush = True)
     execPath = os.path.join(os.path.join(root,'FWIInstall','bin'), "FWI_UnifiedProcess")
     os.system(execPath + ' ' + Path(testPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
 def postProcess(testPath):
-    print('\n------Start PostProcess')
+    print('\n------Start PostProcess', flush = True)
     start_postTime = time.time()
 
     execName = 'python3'
@@ -216,6 +216,8 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--end", type=int, required=False,
                                 default = 1, choices = range(1,51), metavar = "[1-50]", help = "End of the range argument for the test cases.")
     parser.add_argument("-i", "--input", type=str, required=True, help = "Input parameters file.")
+    parser.add_argument("-g", "--generate", type = bool, required = False, default= False, metavar="[true|false]", help = "Generate regression tests.")
+    parser.add_argument("-p", "--post", type = bool, required = False, default = False,  metavar="[true|false]", help = "Do post-processing (make pictures).")
 
     # Parse the input arguments
     arguments = vars(parser.parse_args())
@@ -223,6 +225,10 @@ if __name__ == "__main__":
     rowStart = arguments["start"]
     rowEnd = arguments["end"]
     testParams = arguments["input"]
+
+    generate_tests = arguments["generate"]
+    do_postprocessing = arguments["post"]
+
     n = rowStart
 
     start_totalTime = time.time()
@@ -243,14 +249,18 @@ if __name__ == "__main__":
 
         preTime = preProcess(testPath, forwardModel)
         processTime = Process(testPath, inversionMethod, forwardModel)
-        postTime = postProcess(testPath)
+        
+        if (do_postprocessing):
+            postTime = postProcess(testPath)
+        else:
+            postTime = datetime.timedelta(seconds=0)
 
         test_time.append(preTime.seconds + processTime.seconds + postTime.seconds)
 
         if (tableElementByKey(key = "doRegression", seq = n, params = csv_data)):
             print('\n------Start Regression Test', flush = True)
             tolerance = tableElementByKey(key="regressionTolerance", seq = n, params = csv_data)
-            passed = regressionTest(name = testName, path = testPath, tolerance  = tolerance)
+            passed = regressionTest(name = testName, path = testPath, tolerance  = tolerance, generate_tests = generate_tests)
             status = ""
             if (not passed): status = "failure"
             test_cases.append(junit_xml_output.TestCase(testName, "", status))

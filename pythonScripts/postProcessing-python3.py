@@ -119,4 +119,4 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(filename(path = outputPath, suffix="Residual.png"), dpi=400)
 
-print("The pictures have been generated with Python")
+print("The pictures have been generated with Python", flush = True)
