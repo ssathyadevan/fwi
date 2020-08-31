@@ -115,7 +115,7 @@ def executeTests( String osName = "undefined" ) {
 			copy tests\\testScripts\\executeTests.py FWITest
 			copy tests\\regressionTests.csv FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 5 --input regressionTests.csv
+			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
 		'''
 	}
 	else{
@@ -124,7 +124,7 @@ def executeTests( String osName = "undefined" ) {
 			cp tests/testScripts/executeTests.py FWITest
 			cp tests/regressionTests.csv FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 5 --input regressionTests.csv
+			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
 		'''
 	}
 }
