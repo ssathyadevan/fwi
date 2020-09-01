@@ -138,7 +138,9 @@ def executionMethod():
     ### Read some meta data from csv file
     id = tableElementByKey(key = "id", seq = n, params = csv_data)
     title = tableElementByKey(key = "title", seq = n, params = csv_data )
-    testName = id + '_' + title
+    fileName  = tableElementByKey(key="GEN:fileName", seq = n, params = csv_data)
+
+    testName = id + '_' + title + '_' + fileName
 
     testMessage(name = testName, current = number_current, total = number_total)
 
@@ -216,7 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--end", type=int, required=False,
                                 default = 1, choices = range(1,51), metavar = "[1-50]", help = "End of the range argument for the test cases.")
     parser.add_argument("-i", "--input", type=str, required=True, help = "Input parameters file.")
-    parser.add_argument("-g", "--generate", type = bool, required = False, default= False, metavar="[true|false]", help = "Generate regression tests.")
+    parser.add_argument("-g", "--generate", type = bool, required = False, default = False, metavar="[true|false]", help = "Generate regression tests.")
     parser.add_argument("-p", "--post", type = bool, required = False, default = False,  metavar="[true|false]", help = "Do post-processing (make pictures).")
 
     # Parse the input arguments
@@ -241,6 +243,10 @@ if __name__ == "__main__":
 
     with open(Path(testParams), 'r') as csvfile:
         csv_data = list(csv.reader(csvfile, delimiter=","))
+
+    # Make sure the the specified range is valid.
+    rowStart = max(rowStart, 1)
+    rowEnd = min(rowEnd, len(csv_data)-1)
 
     test_cases = []
     test_time  = []
