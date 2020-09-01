@@ -70,13 +70,12 @@ def createInput(types, seq, params, path):
 
 def makeExecutionFolder():
     now = dt.now()
-    execution_stamp = 'Execution_' + now.strftime("%Y%m%d_%H%M%S")
+    execution_stamp = Path(testParams).stem + '_' + now.strftime("%Y%m%d_%H%M%S")
     os.mkdir(execution_stamp)
     return execution_stamp
 
 def makeTestFolder(testPath):
     shutil.copytree(os.path.join(root, 'inputFiles', 'default'), testPath)
-    shutil.copy(os.path.join(basename, testParams), testPath)
 
 def testMessage(name, current, total):
     lineWidth = 70
