@@ -27,7 +27,6 @@ def guess_type(s):
         return str(s)
 
 def filename(path, name, prefix = "", suffix = ".csv"):
-    sequence = tableElementByKey(key = "sequence", seq = n, params = csv_data)
     title = tableElementByKey(key = "title", seq = n, params = csv_data )
     return os.path.join(path,prefix + name + suffix)
 
@@ -74,8 +73,11 @@ def makeExecutionFolder():
     os.mkdir(execution_stamp)
     return execution_stamp
 
-def makeTestFolder(testPath):
-    shutil.copytree(os.path.join(root, 'inputFiles', 'default'), testPath)
+def makeTestFolder(testPath, fileName):
+    os.makedirs(os.path.join(testPath,'input'))
+    os.makedirs(os.path.join(testPath,'output'))
+    input_file = os.path.join(root, 'inputFiles', 'default', 'input', fileName + '.txt')
+    shutil.copy2(input_file, os.path.join(testPath,'input'))
 
 def testMessage(name, current, total):
     lineWidth = 70
@@ -130,6 +132,20 @@ def generate_xml_report(test_cases, test_times):
     with open(os.path.join(junit_xml_path, 'regressionTestResults.xml'), 'w') as f:
         f.write(junit_xml.dump())
 
+def methodSelection(types, seq, params):
+    selection = {}
+    methods = {"ConjugateGradientInversion" : "CG", "GradientDescentInversion" : "GD", "IntegralForwardModel" : "IFM", "FiniteDifferenceForwardModel": "FDFM"}
+
+    selection["GEN"] = types["GEN"]
+    for key, value in methods.items():
+        if key == tableElementByKey("InversionMethod", seq, params):
+            selection[value] = types[value]
+        if key == tableElementByKey("ForwardModel", seq, params):
+            selection[value] = types[value]
+
+    return selection
+
+
 def executionMethod():
     number_current = n - int(rowStart) + 1 # The current test cycle
     number_total = int(rowEnd) - int(rowStart) + 1 # The total amount of tests to be executed
@@ -145,7 +161,7 @@ def executionMethod():
 
     testPath = os.path.join(basename, executionFolder, testName)
 
-    makeTestFolder(testPath)
+    makeTestFolder(testPath, fileName)
 
     inputTypes = { "CG": "ConjugateGradientInversionInput.json",
                    "GD": "GradientDescentInversionInput.json",
@@ -153,8 +169,11 @@ def executionMethod():
                    "IFM": "IntegralFMInput.json" ,
                    "FDFM": "FiniteDifferenceFMInput.json" } 
 
+    # Select used computational methods
+    selection = methodSelection(types = inputTypes, seq = n, params = csv_data)
+
     # Create input json's
-    createInput(types = inputTypes, seq = n, params = csv_data, path = testPath)
+    createInput(types = selection, seq = n, params = csv_data, path = testPath)
 
     # Model and inversion types
     ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = csv_data)
@@ -243,7 +262,7 @@ if __name__ == "__main__":
     with open(Path(testParams), 'r') as csvfile:
         csv_data = list(csv.reader(csvfile, delimiter=","))
 
-    # Make sure the the specified range is valid.
+    # Make sure the specified test range is valid.
     rowStart = max(rowStart, 1)
     rowEnd = min(rowEnd, len(csv_data)-1)
 
