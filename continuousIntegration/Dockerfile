@@ -26,4 +26,8 @@ RUN         apt-get update \
                     python3-tk \
                     python3-numpy \
                     python3-matplotlib \
-                    python3-pytest
+                    python3-pytest \
+                    python3-pip \
+                    python3-skimage
+
+RUN pip3 install junit-xml-output

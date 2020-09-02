@@ -1,6 +1,8 @@
 import csv
 import argparse
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from skimage.transform import resize
 
@@ -69,9 +71,9 @@ square_mean_original = (np.square(chi1)).mean()
 avg_relative_error = np.sqrt(mse)/np.sqrt(square_mean_original)*100
 total_seconds = readParameter("CPU time", path = outputPath)
 
-print("The MSE (mean square error) is:       " + str(mse))
-print("The average relative error is:        " + str(avg_relative_error))
-print("Execution time in seconds:            " + total_seconds)
+print("The MSE (mean square error) is:       " + str(mse), flush = True)
+print("The average relative error is:        " + str(avg_relative_error), flush = True)
+print("Execution time in seconds:            " + total_seconds, flush = True)
 
 # Set the minimum and maximum values to chi
 v_min = chi1.min()
@@ -117,4 +119,4 @@ plt.ylabel("Residual")
 plt.grid(True)
 plt.savefig(filename(path = outputPath, suffix="Residual.png"), dpi=400)
 
-print("The pictures have been generated with Python")
+print("The pictures have been generated with Python", flush = True)

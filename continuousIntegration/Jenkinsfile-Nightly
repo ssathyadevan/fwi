@@ -65,6 +65,7 @@ pipeline{
 							echo 'Publish unit tests results'
 							script{
 								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
@@ -125,6 +126,7 @@ pipeline{
 							echo 'Publish unit tests results'
 							script{
 								functions.publishUnitTestsResultsOnJenkins()
+								functions.publishRegressionTestsResultsOnJenkins()
 							}
 							echo 'Sending email'
 							script{
