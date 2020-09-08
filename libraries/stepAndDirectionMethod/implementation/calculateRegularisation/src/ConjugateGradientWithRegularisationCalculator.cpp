@@ -61,46 +61,14 @@ namespace fwi
             _chiEstimateCurrent = chiEstimateCurrent;
         }
 
-        double ConjugateGradientWithRegularisationCalculator::calculateStepSize() { return calculateRegularisationStep(); }
-
-        double ConjugateGradientWithRegularisationCalculator::calculateRegularisationStep()
+        double ConjugateGradientWithRegularisationCalculator::calculateStepSize()
         {
             _deltaAmplification = _cgParametersInput._deltaAmplification._start / (_cgParametersInput._deltaAmplification._slope * _iterationNumber + 1.0);
+
             updateResidual();
+            calculateRegularisationParameters();
 
-            double alpha = 0.0;
-            // regularisation loop
-            for(int it = 0; it < _cgParametersInput._nIterations; ++it)
-            {
-                calculateRegularisationParameters();
-
-                _directionCurrent = calculateDirectionInRegularisation();   // eq. 2.12
-                alpha = calculateStepSizeInRegularisation();
-                // Update contrast-function
-                _chiEstimateCurrent += alpha * _directionCurrent;
-
-                // update _residualVector and _residualValueCurrent
-                updateResidual();
-
-                // break check for the inner loop
-                if((it > 0) && ((_residualValueCurrent < _cgParametersInput._tolerance) ||
-                                   (std::abs(_residualValuePrevious - _residualValueCurrent) < _cgParametersInput._tolerance)))
-                {
-                    break;
-                }
-                // Save variables for next iteration
-                _residualValuePrevious = _residualValueCurrent;
-
-                // Save regularisation variables for next iteration
-                _chiEstimateCurrent.gradient(_regularisationCurrent.gradientChi);
-
-                _regularisationPrevious.deltaSquared = _regularisationCurrent.deltaSquared;
-                _regularisationPrevious.bSquared = _regularisationCurrent.bSquared;
-
-                // this overwrites the vector _regularisationCurrent.gradientChi (first element for dx, second element for dz)
-                calculateRegularisationErrorFunctional();
-            }
-            return alpha;
+            return calculateStepSizeInRegularisation();
         }
 
         void ConjugateGradientWithRegularisationCalculator::calculateRegularisationParameters()
