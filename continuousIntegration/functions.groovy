@@ -116,7 +116,7 @@ def executeTests( String osName = "undefined", String csv = "undefined" ) {
 		bat '''
 			mkdir FWITest
 			copy tests\\testScripts\\executeTests.py FWITest
-			copy tests\\${env.REGRESSION_TESTS} FWITest
+			copy tests\\%REGRESSION_TESTS% FWITest
 			cd FWITest
 			python3 executeTests.py --start 1 --end 11 --input csv
 		'''
@@ -125,7 +125,7 @@ def executeTests( String osName = "undefined", String csv = "undefined" ) {
 		sh '''
 			mkdir FWITest
 			cp tests/testScripts/executeTests.py FWITest
-			cp tests/${env.REGRESSION_TESTS} FWITest
+			cp tests/${REGRESSION_TESTS} FWITest
 			cd FWITest
 			python3 executeTests.py --start 1 --end 11 --input csv
 		'''
