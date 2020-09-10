@@ -45,7 +45,7 @@ pipeline{
 						stage('Regression testing on Ubuntu'){
 							steps{
 								script{
-									functions.regressionTest("Ubuntu")
+									functions.executeTests("Ubuntu")
 								}
 							}
 						}
@@ -106,7 +106,7 @@ pipeline{
 						stage('Regression testing on Windows'){
 							steps{
 								script{
-									functions.regressionTest("Windows")
+									functions.executeTests("Windows")
 								}
 							}
 						}
