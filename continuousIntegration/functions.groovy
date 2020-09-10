@@ -106,25 +106,25 @@ def publishRegressionTestsResultsOnJenkins() {
 	}
 }
 
-def executeTests( String osName = "undefined" ) {
+def executeTests( String osName = "undefined", String csv = "undefined" ) {
 	echo 'Running executeTests on ' + osName
 	env.MYSTAGE_NAME = 'Running executeTests'
 	if (osName == "Windows"){
 		bat '''
 			mkdir FWITest
 			copy tests\\testScripts\\executeTests.py FWITest
-			copy tests\\regressionTests.csv FWITest
+			copy tests\\csv FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
+			python3 executeTests.py --start 1 --end 11 --input csv
 		'''
 	}
 	else{
 		sh '''
 			mkdir FWITest
 			cp tests/testScripts/executeTests.py FWITest
-			cp tests/regressionTests.csv FWITest
+			cp tests/csv FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
+			python3 executeTests.py --start 1 --end 11 --input csv
 		'''
 	}
 }
