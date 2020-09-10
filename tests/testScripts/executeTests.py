@@ -235,6 +235,7 @@ if __name__ == "__main__":
                                 default = 1, choices = range(1,51), metavar = "[1-50]", help = "Start of the range argument for the test cases.")
     parser.add_argument("-e", "--end", type=int, required=False,
                                 default = 1, choices = range(1,51), metavar = "[1-50]", help = "End of the range argument for the test cases.")
+    parser.add_argument("-a", "--all", action="store_true", help = "Run all available tests.")
     parser.add_argument("-i", "--input", type=str, required=True, help = "Input parameters file.")
     parser.add_argument("-g", "--generate", type = bool, required = False, default = False, metavar="[true|false]", help = "Generate regression tests.")
     parser.add_argument("-p", "--post", type = bool, required = False, default = False,  metavar="[true|false]", help = "Do post-processing (make pictures).")
@@ -248,8 +249,9 @@ if __name__ == "__main__":
 
     generate_tests = arguments["generate"]
     do_postprocessing = arguments["post"]
+    run_all = arguments["all"]
 
-    n = rowStart
+
 
     start_totalTime = time.time()
 
@@ -268,6 +270,12 @@ if __name__ == "__main__":
 
     test_cases = []
     test_time  = []
+
+    if (run_all):
+        rowStart = 1
+        rowEnd = len(csv_data)-1
+
+    n = rowStart
     while n <= rowEnd:
         testName, testPath, inversionMethod, forwardModel = executionMethod()
 

@@ -111,14 +111,13 @@ def executeTests( String osName = "undefined", String csv = "undefined" ) {
 	echo 'Running executeTests on ' + osName
 	env.MYSTAGE_NAME = 'Running executeTests'
 	env.REGRESSION_TESTS = csv
-	echo 'REGRESSION_TESTS: ' + env.REGRESSION_TESTS
 	if (osName == "Windows"){
 		bat '''
 			mkdir FWITest
 			copy tests\\testScripts\\executeTests.py FWITest
 			copy tests\\%REGRESSION_TESTS% FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input %REGRESSION_TESTS%
+			python3 executeTests.py --all --input %REGRESSION_TESTS%
 		'''
 	}
 	else{
@@ -127,7 +126,7 @@ def executeTests( String osName = "undefined", String csv = "undefined" ) {
 			cp tests/testScripts/executeTests.py FWITest
 			cp tests/${REGRESSION_TESTS} FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input ${REGRESSION_TESTS}
+			python3 executeTests.py --all --input ${REGRESSION_TESTS}
 		'''
 	}
 }
