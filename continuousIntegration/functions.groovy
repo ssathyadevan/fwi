@@ -8,6 +8,7 @@ def setEnvironment() {
 	env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
 	env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
 	env.MYSTAGE_NAME = 'Preparing'
+	env.NIGHTLY = 'nightly'
 
 	// Set build name and description accordingly
 	currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
@@ -108,6 +109,7 @@ def publishRegressionTestsResultsOnJenkins() {
 
 def executeTests( String osName = "undefined", String csv = "undefined" ) {
 	echo 'Running executeTests on ' + osName
+	echo 'Nightly: ' + env.NIGHTLY
 	env.MYSTAGE_NAME = 'Running executeTests'
 	if (osName == "Windows"){
 		bat '''
