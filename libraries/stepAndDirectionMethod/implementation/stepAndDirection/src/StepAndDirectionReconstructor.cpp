@@ -32,11 +32,10 @@ namespace fwi
             core::dataGrid2D chiEstimateCurrent(_grid);
             chiEstimateCurrent = _directionInput.startingChi;
 
+            _forwardModel->calculateKappa();
             auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
             std::vector<std::complex<double>> residualVector = pData - pDataEst;
             double residualValue = _costCalculator.calculateCost(pData, pDataEst, eta);
-
-            _forwardModel->calculateKappa();
 
             core::dataGrid2D const *directionCurrent;
 

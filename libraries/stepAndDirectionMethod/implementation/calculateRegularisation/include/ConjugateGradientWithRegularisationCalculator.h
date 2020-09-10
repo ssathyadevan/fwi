@@ -54,12 +54,6 @@ namespace fwi
             void updateResidual();
 
             /**
-             * @brief calculateRegularisationStep is the main function, where the inner loop acts. It is called by calculateStepSize()
-             * @return the StepSize to be sent to StepAndDirectionReconstructor
-             */
-            double calculateRegularisationStep();
-
-            /**
              * @brief calculateGammaPolakRibiere computes the optimal step size according to the Polak-Ribiere formula, see eq. 2.14.
              * @return the optimal stepsize without regularisation
              */
