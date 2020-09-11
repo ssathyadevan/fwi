@@ -8,6 +8,7 @@ def setEnvironment() {
 	env.COMITTER_EMAIL = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%ae\'').trim()
 	env.AUTHOR_NAME = sh(returnStdout: true, script: 'git --no-pager show -s --format=\'%an\'').trim()
 	env.MYSTAGE_NAME = 'Preparing'
+	env.REGRESSION_TESTS = 'undefined'
 
 	// Set build name and description accordingly
 	currentBuild.displayName = "FWI | commit ${SHORT_COMMIT_CODE} | ${AUTHOR_NAME}"
@@ -52,23 +53,6 @@ def unitTest(String osName = "undefined") {
 	}
 }
 
-def regressionTest(String osName = "undefined") {
-	echo 'Running regression tests on ' + osName
-	env.MYSTAGE_NAME = 'Regression Testing'
-	if (osName == "Windows"){
-		bat '''
-			copy tests\\testScripts\\unified_run_all_regressions_python.py . 
-			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-		'''
-	}
-	else{
-		sh '''
-			cp tests/testScripts/unified_run_all_regressions_python.py .
-			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-		'''
-	}
-}
-
 def deploy(String osName = "undefined"){
 	echo 'Deploying on ' + osName
 	env.MYSTAGE_NAME = 'Deploy'
@@ -106,25 +90,26 @@ def publishRegressionTestsResultsOnJenkins() {
 	}
 }
 
-def executeTests( String osName = "undefined" ) {
+def executeTests( String osName = "undefined", String csv = "undefined" ) {
 	echo 'Running executeTests on ' + osName
 	env.MYSTAGE_NAME = 'Running executeTests'
+	env.REGRESSION_TESTS = csv
 	if (osName == "Windows"){
 		bat '''
 			mkdir FWITest
-			copy tests\\testScripts\\executeTests.py FWITest
-			copy tests\\regressionTests.csv FWITest
+			copy tests\\executeTests.py FWITest
+			copy tests\\%REGRESSION_TESTS% FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
+			python3 executeTests.py --all --input %REGRESSION_TESTS%
 		'''
 	}
 	else{
 		sh '''
 			mkdir FWITest
-			cp tests/testScripts/executeTests.py FWITest
-			cp tests/regressionTests.csv FWITest
+			cp tests/executeTests.py FWITest
+			cp tests/${REGRESSION_TESTS} FWITest
 			cd FWITest
-			python3 executeTests.py --start 1 --end 11 --input regressionTests.csv
+			python3 executeTests.py --all --input ${REGRESSION_TESTS}
 		'''
 	}
 }
