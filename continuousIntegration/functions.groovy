@@ -53,23 +53,6 @@ def unitTest(String osName = "undefined") {
 	}
 }
 
-def regressionTest(String osName = "undefined") {
-	echo 'Running regression tests on ' + osName
-	env.MYSTAGE_NAME = 'Regression Testing'
-	if (osName == "Windows"){
-		bat '''
-			copy tests\\testScripts\\unified_run_all_regressions_python.py . 
-			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-		'''
-	}
-	else{
-		sh '''
-			cp tests/testScripts/unified_run_all_regressions_python.py .
-			python3 unified_run_all_regressions_python.py IntegralForwardModel ConjugateGradientInversion
-		'''
-	}
-}
-
 def deploy(String osName = "undefined"){
 	echo 'Deploying on ' + osName
 	env.MYSTAGE_NAME = 'Deploy'
