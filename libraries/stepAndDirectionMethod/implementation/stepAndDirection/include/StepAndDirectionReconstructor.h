@@ -6,12 +6,13 @@
 #include "ReconstructorParameters.h"
 #include "StepSizeCalculator.h"
 #include "genericInput.h"
+#include "inversionInterface.h"
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        class StepAndDirectionReconstructor
+        class StepAndDirectionReconstructor : public inversionInterface
         {
         private:
             StepSizeCalculator *_desiredStep;
