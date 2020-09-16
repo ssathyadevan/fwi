@@ -53,6 +53,23 @@ def unitTest(String osName = "undefined") {
 	}
 }
 
+def RunStaticAnalysisCppcheck(String osName = "undefined") {
+	echo 'Running cppcheck on ' + osName
+	env.MYSTAGE_NAME = 'Static Analysis Cppcheck'
+	if (osName == "Windows"){
+		bat '''
+			cd build 
+			ninja cppcheck
+		'''
+	}
+	else{
+		sh '''
+			cd build 
+			ninja cppcheck
+		'''
+	}
+}
+
 def deploy(String osName = "undefined"){
 	echo 'Deploying on ' + osName
 	env.MYSTAGE_NAME = 'Deploy'
@@ -113,7 +130,6 @@ def executeTests( String osName = "undefined", String csv = "undefined" ) {
 		'''
 	}
 }
-
 
 def sendEmail( String osName = "undefined" ) {
 	String messageBody = "Dear ${env.AUTHOR_NAME},\n\nYour commit: ${env.SHORT_COMMIT_CODE} \nSystem: ${osName} \nBranch: ${env.JOB_NAME}\nRan with status: " + currentBuild.currentResult

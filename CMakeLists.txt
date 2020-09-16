@@ -40,3 +40,12 @@ add_subdirectory( libraries )
 add_subdirectory( doc )
 add_subdirectory( applications )
 
+#Add cppcheck target
+include(${CMAKE_SOURCE_DIR}/cmake/add_cppcheck_target.cmake)
+find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
+#TODO: Fix build system generation so that "libraries" is build as a single target and remove globing after
+file(GLOB_RECURSE LIBRARY_FILES ${CMAKE_SOURCE_DIR}/libraries/*.h ${CMAKE_SOURCE_DIR}/libraries/*.cpp)
+if(CMAKE_CXX_CPPCHECK)
+	set(CPPCHECK_PARAMETERS --enable=all --xml --xml-version=2 --suppress=missingIncludeSystem)
+	add_cppcheck_target(OUTPUTFILE ${CMAKE_BINARY_DIR}/staticAnalysisCppcheckReport.xml INPUTFILES ${LIBRARY_FILES} PARAMETERS ${CPPCHECK_PARAMETERS})
+endif()
