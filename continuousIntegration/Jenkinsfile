@@ -49,6 +49,13 @@ pipeline{
 								}
 							}
 						}
+						stage('Static Analysis with Cppcheck on Ubuntu'){
+							steps{
+								script{
+									functions.RunStaticAnalysisCppcheck("Ubuntu")
+								}
+							}
+						}
 						stage('Deploying on Ubuntu'){
 							steps{
 								script{
@@ -63,6 +70,7 @@ pipeline{
 							script{
 								functions.publishUnitTestsResultsOnJenkins()
 								functions.publishRegressionTestsResultsOnJenkins()
+								publishCppcheck pattern:'staticAnalysisCppcheckReport.xml'
 							}
 							echo 'Sending email'
 							script{

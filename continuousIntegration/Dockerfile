@@ -16,6 +16,7 @@ RUN         apt-get update \
                     software-properties-common \
                     g++\
                     ninja-build \
+                    cppcheck \
                     vim \
                     git \
                     cmake \
