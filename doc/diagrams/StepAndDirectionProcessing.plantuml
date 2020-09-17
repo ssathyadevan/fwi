@@ -23,6 +23,7 @@ class forwardModels::FiniteDifferenceForwardModel
 class inversionMethods::StepAndDirectionReconstructor
 class inversionMethods::DirectionCalculator
 class inversionMethods::StepSizeCalculator
+class inversionMethods::inversionInterface
 class inversionMethods::ConjugateGradientDirectionCalculator
 class inversionMethods::ConjugateGradientStepSizeCalculator
 class inversionMethods::BorzilaiBorweinStepSizeCalculator
@@ -37,6 +38,7 @@ core::Factory *--> inversionMethods::StepSizeCalculator
 forwardModels::IntegralForwardModel .--> forwardModels::ForwardModelInterface
 forwardModels::FiniteDifferenceForwardModel .--> forwardModels::ForwardModelInterface
 
+inversionMethods::StepAndDirectionReconstructor <|-- inversionMethods::inversionInterface
 inversionMethods::StepAndDirectionReconstructor o--> core::CostCalculator
 inversionMethods::StepAndDirectionReconstructor o--> forwardModels::ForwardModelInterface
 
