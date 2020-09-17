@@ -1,6 +1,6 @@
 function( add_cppcheck_target )
-	find_program(CMAKE_CXX_CPPCHECK NAMES cppcheck)
-	message(STATUS "Found Cppcheck: " ${CMAKE_CXX_CPPCHECK})
+	find_program(PATH_TO_CPPCHECK_EXECUTABLE NAMES cppcheck)
+	message(STATUS "Found Cppcheck: " ${PATH_TO_CPPCHECK_EXECUTABLE})
 
 	set(OPTIONS)
 	set(ONE_VALUE_ARGS OUTPUTFILE)
@@ -10,7 +10,7 @@ function( add_cppcheck_target )
 	list(FILTER PREF_PARAMETERS EXCLUDE REGEX --output-file=.*)
 
 	add_custom_target(	cppcheck 
-						COMMAND ${CMAKE_CXX_CPPCHECK} ${PREF_INPUTFILES} ${PREF_PARAMETERS} --output-file=${PREF_OUTPUTFILE}
+						COMMAND ${PATH_TO_CPPCHECK_EXECUTABLE} ${PREF_INPUTFILES} ${PREF_PARAMETERS} --output-file=${PREF_OUTPUTFILE}
 						MAIN_DEPENDENCY ${PREF_INPUTFILES})
 
 	add_custom_command(	TARGET cppcheck 
