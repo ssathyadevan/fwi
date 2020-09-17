@@ -38,7 +38,7 @@ core::Factory *--> inversionMethods::StepSizeCalculator
 forwardModels::IntegralForwardModel .--> forwardModels::ForwardModelInterface
 forwardModels::FiniteDifferenceForwardModel .--> forwardModels::ForwardModelInterface
 
-inversionMethods::StepAndDirectionReconstructor --|> inversionMethods::inversionInterface
+inversionMethods::StepAndDirectionReconstructor .--> inversionMethods::inversionInterface
 inversionMethods::StepAndDirectionReconstructor o--> core::CostCalculator
 inversionMethods::StepAndDirectionReconstructor o--> forwardModels::ForwardModelInterface
 
