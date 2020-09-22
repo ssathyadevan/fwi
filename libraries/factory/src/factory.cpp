@@ -104,7 +104,6 @@ namespace fwi
 		#ifdef	specialDependencyFound
 		if(desiredInversion == "NewPropietaryInversion")
         {
-            inversionMethods::EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::NewPropietaryInversion();
             return _createdInversion;
         }
