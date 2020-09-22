@@ -14,6 +14,9 @@
 #include "evolutionInversionInputCardReader.h"
 #include "gradientDescentInversion.h"
 #include "gradientDescentInversionInputCardReader.h"
+#ifdef	specialDependencyFound
+	#include "newPropietaryInversion.h"
+#endif
 #include "integralForwardModel.h"
 #include "integralForwardModelInputCardReader.h"
 #include "log.h"
@@ -98,6 +101,14 @@ namespace fwi
             _createdInversion = new inversionMethods::EvolutionInversion(costCalculator, forwardModel, evolutionReader.getInput());
             return _createdInversion;
         }
+		#ifdef	specialDependencyFound
+		if(desiredInversion == "NewPropietaryInversion")
+        {
+            inversionMethods::EvolutionInversionInputCardReader evolutionReader(gInput.caseFolder);
+            _createdInversion = new inversionMethods::NewPropietaryInversion();
+            return _createdInversion;
+        }
+		#endif
         L_(io::linfo) << "The Inversion method " << desiredInversion << " was not found";
         throw std::invalid_argument("The Inversion method " + desiredInversion + " was not found");
     }

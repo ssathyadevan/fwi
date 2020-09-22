@@ -1,0 +1,5 @@
+if(specialDependency_FOUND)
+	add_library(newPropietaryInversion_library newPropietaryInversion.cpp )
+	target_include_directories(newPropietaryInversion_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PUBLIC ${CMAKE_SOURCE_DIR}/libraries/io/include)
+	target_link_libraries(newPropietaryInversion_library core_library)
+endif()

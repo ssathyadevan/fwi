@@ -28,4 +28,10 @@ target_link_libraries(
 
     step_and_direction_reconstructor_library
     direction_calculator_library
-    step_size_calculator_library)
+    step_size_calculator_library
+)
+
+if(specialDependency_FOUND)
+	target_compile_definitions(factory_library PRIVATE specialDependencyFound)
+	target_link_libraries(factory_library newPropietaryInversion_library)
+endif()
