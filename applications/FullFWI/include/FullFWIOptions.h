@@ -43,12 +43,12 @@ struct FullFWIOptions {
                 skippre = true;
             else if (*it == "") {}
             else
-                throw std::invalid_argument("Illegal argument: " + *it + "\nUse -h for help.");
+                throw std::invalid_argument("Illegal argument: " + *it);
         }
 
         if (dir == "")
             throw std::invalid_argument(
-                "Program requires -d or --dir flag specifying the path to the input and output folders. \nUse -h for help."
+                "Program requires -d or --dir flag specifying the path to the input and output folders."
             );
 
         
