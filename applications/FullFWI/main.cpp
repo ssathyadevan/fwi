@@ -21,28 +21,13 @@
 #include "inputCardReader.h"
 #include "inversionInterface.h"
 
-
-
-
-// Unused?
-const std::vector<std::string> POSSIBLE_ARGS = {
-    "-d", "--dir"
-    "-p", "--preprocess",
-    "-s", "--solver",
-    "-i", "--inversion",
-    "--stepdir",
-    "--stepsize",
-    "--skip-post",
-    "--skip-pre"
-};
-
 const std::string HELP_TEXT = "This is the help message.";
-
 const std::string VERSION = "Version 0.1 - 15/03/2021";
 
 std::vector<std::string> readArguments(int argc, char* argv[]);
 void printHelpOrVersion(const std::string& firstArg);
 void executeFullFWI(const FullFWIOptions& fwiOpts);
+void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char* argv[])
 {
@@ -51,19 +36,7 @@ int main(int argc, char* argv[])
         std::vector<std::string> arguments = readArguments(argc, argv);
         printHelpOrVersion(arguments[0]);
         FullFWIOptions fwiOpts(arguments);
-
-        // Dummy code: Print all options as read from the input arguments
-        std::cout << "dir=" << fwiOpts.dir << std::endl;
-        std::cout << "preprocess=" << fwiOpts.preprocess << std::endl;
-        std::cout << "solver=" << fwiOpts.solver << std::endl;
-        std::cout << "inversion=" << fwiOpts.inversion << std::endl;
-        std::cout << "stepdir=" << fwiOpts.stepdir << std::endl;
-        std::cout << "stepsize=" << fwiOpts.stepsize << std::endl;
-        std::cout << "skippost=" << fwiOpts.skippost << std::endl;
-        std::cout << "skippre=" << fwiOpts.skippre << std::endl;
-
         executeFullFWI(fwiOpts);
-            
     }
     catch(const std::exception& e)
     {
@@ -105,67 +78,77 @@ void printHelpOrVersion(const std::string& firstArg)
 
 void executeFullFWI(const FullFWIOptions& fwiOpts)
 {
+    /********************************
+     Initialize
+    *********************************/
+    std::cout << "Initializing Full FWI program" << std::endl;
+    fwi::performance::CpuClock clock;
+
     // read input json files
     fwi::io::genericInputCardReader genericReader(fwiOpts.dir);
     const fwi::io::genericInput gInput = genericReader.getInput();
 
-    // Initialize logger
-    std::string logFilePath = gInput.outputLocation + gInput.runName + "PreProcess.log";
-    if(!gInput.verbose)
-        {
-            std::cout << "Printing the program output into" << logFilePath << std::endl;
-            fwi::io::initLogger(logFilePath.c_str(), fwi::io::ldebug);
-        }
-
     // initialize the grid sources receivers, grouped frequencies
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
-
-    fwi::core::dataGrid2D chi(grid);
-    std::string inputPath = gInput.inputFolder + gInput.fileName + ".txt";
-    chi.fromFile(inputPath);
-    std::string outputPath = gInput.outputLocation + "chi_ref_" + gInput.runName + ".txt";
-    chi.toFile(outputPath);
-
     fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
-    source.Print();
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
-    receiver.Print();
     fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
-    freq.Print(gInput.freq.nTotal);
-    
 
-    // Do preprocessing
+    /********************************
+     Do preprocessing
+    *********************************/
     if(!fwiOpts.skippre)
     {
+        std::cout << "Starting preprocessing with parameter\n  -p=" + fwiOpts.preprocess << std::endl;
+
+        // Initialize logger
+        std::string logFilePath = gInput.outputLocation + gInput.runName + "PreProcess.log";
+        if(!gInput.verbose)
+        {
+            std::cout << "Printing the preprocess output into file: " << logFilePath << std::endl;
+            fwi::io::initLogger(logFilePath.c_str(), fwi::io::ldebug);
+            
+        }
+
+        // Logging the setup
+        L_(fwi::io::linfo) << "Starting PreProcess";
+        source.Print();
+        receiver.Print();
+        freq.Print(gInput.freq.nTotal);
+
         // Create Model
         L_(fwi::io::linfo) << "Create forwardModel";
-        clock_t tStartForwardModel = clock();
+        
+        clock.Start();
         fwi::Factory factory;
         fwi::forwardModels::ForwardModelInterface *model = factory.createForwardModel(
             gInput.caseFolder, fwiOpts.solver + "ForwardModel", grid, source, receiver, freq);
-        clock_t tEndForwardModel = clock();
-        L_(fwi::io::linfo) << "Forwardmodel is created in " << double(tEndForwardModel - tStartForwardModel) / CLOCKS_PER_SEC << " seconds.";
+        clock.End();
+        clock.OutputString();
 
-
+        // Read chi from file and write to output file
+        fwi::core::dataGrid2D chi(grid);
+        std::string inputPath = gInput.inputFolder + gInput.fileName + ".txt";
+        chi.fromFile(inputPath);
+        std::string outputPath = gInput.outputLocation + "chi_ref_" + gInput.runName + ".txt";
+        chi.toFile(outputPath);
 
         // Calculate pressure field data
+        std::cout << "Calculating..." << std::endl;
         L_(fwi::io::linfo) << "Calculating pData (the reference pressure-field)...";
-        clock_t tStartCalculatePData = clock();
+        clock.Start();
         model->calculatePTot(chi);
         model->calculateKappa();
         std::vector<std::complex<double>> referencePressureData = model->calculatePressureField(chi);
-        clock_t tEndCalculatePData = clock();
-        L_(fwi::io::linfo) << "PData has been calculated in " << double(tEndCalculatePData - tStartCalculatePData) / CLOCKS_PER_SEC << " seconds.";
+        clock.End();
+        clock.OutputString();
         L_(fwi::io::linfo) << "calculateData done";
-
-
 
         // writing the referencePressureData to a text file in complex form
         std::string invertedChiToPressureFileName = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
         L_(fwi::io::linfo) << "Writing pData to file " << invertedChiToPressureFileName;
         std::ofstream file;
         file.open(invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
-
         if(!file)
         {
             L_(fwi::io::lerror) << "Failed to open the file to store inverted chi to pressure field";
@@ -179,7 +162,139 @@ void executeFullFWI(const FullFWIOptions& fwiOpts)
         }
         file.close();
         L_(fwi::io::linfo) << "PreProcessing Task finished successfully!";
+        fwi::io::endLogger();
+        std::cout << "Preprocessing completed" << std::endl;
+    }
+    else 
+        std::cout << "Preprocessing skipped" << std::endl;        
+
+
+    /********************************
+     Do inversion
+    *********************************/
+
+    std::cout << "Inversion Processing Started" << std::endl; 
+
+    //initialize logging
+    std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
+
+    if(!gInput.verbose)
+    {
+        std::cout << "Printing the program output onto a file named: " << logFileName << std::endl;
+        fwi::io::initLogger(logFileName.c_str(), fwi::io::ldebug);
     }
 
+    // Logging the setup
+    L_(fwi::io::linfo) << "Starting Inversion Process";
+    source.Print();
+    receiver.Print();
+    freq.Print(gInput.freq.nTotal);
 
+    // Logging chi from input
+    L_(fwi::io::linfo) << "Visualisation of input chi (to be reconstructed)";
+    fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
+    fwi::io::createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
+
+    
+    // Start inversion
+    clock.Start();
+    
+    // read referencePressureData from a CSV file format
+    std::string fileLocation = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
+    std::ifstream file(fileLocation);
+    fwi::io::CSVReader row;
+
+    if(!file.is_open())
+    {
+        L_(fwi::io::linfo) << "Could not open file at " << fileLocation;
+        throw std::runtime_error("Could not open file at " + fileLocation);
+    }
+
+    int magnitude = freq.count * source.count * receiver.count;
+    std::vector<std::complex<double>> referencePressureData(magnitude);
+    int i = 0;
+    L_(fwi::io::linfo) << "Read reference data" << fileLocation;
+    while(file >> row)
+    {
+        if(i < magnitude)
+        {
+            referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
+        }
+        ++i;
+    }
+
+    // Create model
+    fwi::Factory factory;
+    L_(fwi::io::linfo) << "Create ForwardModel";
+    fwi::forwardModels::ForwardModelInterface *model;
+    model = factory.createForwardModel(gInput.caseFolder, fwiOpts.solver + "ForwardModel", grid, source, receiver, freq);
+
+    L_(fwi::io::linfo) << "Create inversionModel";
+    fwi::inversionMethods::inversionInterface* inverse;
+
+    std::cout << "Creating InversionProcess using parameters:" << std::endl 
+              << "  -s=" << fwiOpts.solver << std::endl
+              << "  -i=" << fwiOpts.inversion << std::endl;
+
+    // Setup StepAndDirection or UnifiedProcess models
+    if(fwiOpts.inversion == "StepAndDirection")
+    {
+        std::cout << "  --stepdir="  << fwiOpts.stepdir << std::endl
+                  << "  --stepsize=" << fwiOpts.stepsize << std::endl;
+
+        L_(fwi::io::linfo) << "Create StepAndDirectionReconstructor";
+        fwi::inversionMethods::StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
+        fwi::inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
+        inverse = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, 
+                                                              fwiOpts.stepsize + "StepSize", fwiOpts.stepdir + "Direction", referencePressureData);  
+    }
+    else
+    {
+        L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
+        inverse = factory.createInversion(fwiOpts.inversion, model, gInput);
+    }
+
+    std::cout << "Calculating..." << std::endl;
+    L_(fwi::io::linfo) << "Estimating Chi...";
+    fwi::core::dataGrid2D chiEstimate = inverse->reconstruct(referencePressureData, gInput);
+    
+    L_(fwi::io::linfo) << "Writing to file";
+    chiEstimate.toFile(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt");
+
+    clock.End();
+
+    L_(fwi::io::linfo) << "Visualisation of the estimated chi using FWI";
+    fwi::io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
+    fwi::io::createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
+
+    std::string msg = clock.OutputString();
+    writePlotInput(gInput, msg);
+    fwi::io::endLogger();
+
+    std::cout << "InversionProcess completed" << std::endl;
+
+    /********************************
+     PostProcessing
+    *********************************/
+
+}
+
+void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
+{
+    // This part is needed for plotting the chi values in postProcessing.py
+    std::ofstream outputfwi;
+    std::string runName = gInput.runName;
+    outputfwi.open(gInput.outputLocation + runName + ".pythonIn");
+    outputfwi << "This run was parametrized as follows:" << std::endl;
+    outputfwi << "nxt   = " << gInput.nGrid[0] << std::endl;
+    outputfwi << "nzt   = " << gInput.nGrid[1] << std::endl;
+    outputfwi << "nxt_original   = " << gInput.nGridOriginal[0] << std::endl;
+    outputfwi << "nzt_original   = " << gInput.nGridOriginal[1] << std::endl << msg;
+    outputfwi.close();
+
+    // This part is needed for plotting the chi values in postProcessing.py
+    std::ofstream lastrun;
+    lastrun.open(gInput.outputLocation + "/lastRunName.txt");
+    lastrun << runName;
+    lastrun.close();
 }

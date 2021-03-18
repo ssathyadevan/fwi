@@ -18,8 +18,8 @@ struct FullFWIOptions {
         preprocess("FiniteDifference"),
         solver("FiniteDifference"),
         inversion("StepAndDirection"),
-        stepdir("ConjugateGradientDirection"),
-        stepsize("ConjugateGradientStepSize"),
+        stepdir("ConjugateGradient"),
+        stepsize("ConjugateGradient"),
         skippost(false),
         skippre(false)
     {
