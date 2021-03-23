@@ -4,7 +4,7 @@
 struct FullFWIOptions {
     std::string dir;
     std::string preprocess;
-    std::string solver;
+    std::string forward;
     std::string inversion;
     std::string stepdir;
     std::string stepsize;
@@ -16,7 +16,7 @@ struct FullFWIOptions {
     FullFWIOptions(const std::vector<std::string>& arguments) :
         dir(""),
         preprocess("FiniteDifference"),
-        solver("FiniteDifference"),
+        forward("FiniteDifference"),
         inversion("StepAndDirection"),
         stepdir("ConjugateGradient"),
         stepsize("ConjugateGradient"),
@@ -29,8 +29,8 @@ struct FullFWIOptions {
                 dir = * ++it;
             else if(*it == "-p" or *it == "--preprocess")
                 preprocess = * ++it;
-            else if(*it == "-s" or *it == "--solver")
-                solver = * ++it;
+            else if(*it == "-f" or *it == "--forward")
+                forward = * ++it;
             else if(*it == "-i" or *it == "--inversion")
                 inversion = * ++it;
             else if(*it == "--stepdir")
