@@ -10,6 +10,7 @@ struct FullFWIOptions {
     std::string stepsize;
     bool skippost;
     bool skippre;
+    bool skipprocess;
 
     FullFWIOptions() = delete;
 
@@ -21,7 +22,8 @@ struct FullFWIOptions {
         stepdir("ConjugateGradient"),
         stepsize("ConjugateGradient"),
         skippost(false),
-        skippre(false)
+        skippre(false),
+        skipprocess(false)
     {
         for(auto it = arguments.begin(); it!=arguments.end(); ++it)
         {
@@ -41,7 +43,10 @@ struct FullFWIOptions {
                 skippost = true;
             else if(*it == "--skip-pre")
                 skippre = true;
-            else if (*it == "") {}
+            else if(*it == "--skip-process")
+                skipprocess = true;
+            else if (*it == "") 
+                {}
             else
                 throw std::invalid_argument("Illegal argument: " + *it);
         }
