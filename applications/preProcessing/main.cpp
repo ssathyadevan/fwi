@@ -1,25 +1,10 @@
 #include <iostream>
 #include <vector>
 
-#include "log.h"
 #include "genericInputCardReader.h"
 #include "argumentReader.h"
 #include "cpuClock.h"
 #include "factory.h"
-#include "integralForwardModel.h"
-#include "integralForwardModelInputCardReader.h"
-#include "FiniteDifferenceForwardModel.h"
-#include "FiniteDifferenceForwardModelInputCardReader.h"
-#include "utilityFunctions.h"
-#include "DirectionCalculator.h"
-#include "StepAndDirectionReconstructor.h"
-#include "StepAndDirectionReconstructorInputCardReader.h"
-#include "StepSizeCalculator.h"
-#include "chiIntegerVisualisation.h"
-#include "createChiCSV.h"
-#include "csvReader.h"
-#include "inputCardReader.h"
-#include "inversionInterface.h"
 #include "HelpTextPreProcessing.h"
 
 void printHelpOrVersion(fwi::io::argumentReader& fwiOpts);
