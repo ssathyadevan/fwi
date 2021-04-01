@@ -183,30 +183,26 @@ def executionMethod():
 
 def preProcess(tempTestPath, forwardModel):
     print('\n------Start PreProcess', flush = True)
-    forwardModelArgument = ""
-    if(forwardModel == 'IntegralForwardModel'):
-        forwardModelArgument = "FWI_PreProcess_Integral"
-    elif(forwardModel == 'FiniteDifferenceForwardModel'):
-        forwardModelArgument = "FWI_PreProcess_Finite_Difference"
-    else:
-        print('Invalid Forward Model', flush = True)
-        exit()
+    forwardModel = forwardModel.replace('ForwardModel', '')
     start_preTime = time.time()
-    tempFWIInstallBin = os.path.join(root,'FWIInstall','bin')
-
-    execPath = os.path.join(tempFWIInstallBin, forwardModelArgument)
-    print(forwardModelArgument + ' ' + tempTestPath, flush = True)
-
-    os.system(execPath + ' ' + Path(tempTestPath).as_posix())
+    preprocessExe = os.path.join(root,'FWIInstall','bin','FWI_PreProcess')
+    execCmd = preprocessExe + ' -d ' + Path(tempTestPath).as_posix() + ' -f ' + forwardModel
+    print(execCmd, flush = True)
+    os.system(execCmd)
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
-def Process(testPath, Inversion, ForwardModel):
+def Process(testPath, inversion, forwardModel):
     print('\n------Start Process', flush = True)
     start_processTime = time.time()
-    print('FWI_UnifiedProcess ' + testPath + ' ' + Inversion + ' ' + ForwardModel, flush = True)
-    execPath = os.path.join(os.path.join(root,'FWIInstall','bin'), "FWI_UnifiedProcess")
-    os.system(execPath + ' ' + Path(testPath).as_posix() + ' ' + Inversion + ' ' + ForwardModel)
+    inversion = inversion.replace("Inversion","")
+    forwardModel = forwardModel.replace('ForwardModel', '')
+    
+    execCmd = os.path.join(root,'FWIInstall','bin','FWI_Process')
+    execCmd += ' -d ' + Path(testPath).as_posix() + ' -f ' + forwardModel + ' -i ' + inversion 
+    
+    print(execCmd, flush = True)
+    os.system(execCmd)
     end_processTime = time.time()
     return datetime.timedelta(seconds=(end_processTime - start_processTime))
 
