@@ -8,7 +8,8 @@ set(CPP_SOURCES_AND_H_HEADERS
     inputCardReader.cpp                 ../include/inputCardReader.h
 	chiIntegerVisualisation.cpp		    ../include/chiIntegerVisualisation.h
 	csvReader.cpp     			        ../include/csvReader.h
-	progressBar.cpp       			    ../include/progressBar.h)
+	progressBar.cpp       			    ../include/progressBar.h
+	argumentReader.cpp       			../include/argumentReader.h)
 
 add_library(io_library ${CPP_SOURCES_AND_H_HEADERS})
 
