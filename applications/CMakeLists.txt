@@ -1,6 +1,2 @@
-add_subdirectory( integralPreProcessing )
-add_subdirectory( finiteDifferencePreProcessing )
-add_subdirectory( unifiedProcessing )
-add_subdirectory( stepAndDirectionProcessing )
 add_subdirectory( preProcessing)
 add_subdirectory( processing)
