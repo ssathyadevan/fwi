@@ -142,7 +142,7 @@ void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInp
     else
     {
         L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
-        inverse = factory.createInversion(fwiOpts.inversion, model, gInput);
+        inverse = factory.createInversion(fwiOpts.inversion + "Inversion", model, gInput);
     }
 
     std::cout << "Calculating..." << std::endl;

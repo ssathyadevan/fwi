@@ -17,11 +17,11 @@ const std::string HELP_TEXT_PROCESSING =
     "          -f FiniteDifference            : Default option\n" +
     "          -f Integral                         \n" +
     "-i, --inversion <i_arg>  : Sets the inversion model of the processing step to <i_arg>. Available options are:\n" +
-    "          -i ConjugateGradientInversion  : Default option\n" +
-    "          -i GradientDescentInversion                    \n" +
-    "          -i EvolutionInversion                          \n" +
-    "          -i RandomInversion                             \n" +
-    "          -i StepAndDirection            : Depricated\n" +
+    "          -i ConjugateGradient           : Default option\n" +
+    "          -i GradientDescent                             \n" +
+    "          -i Evolution                                   \n" +
+    "          -i Random                                      \n" +
+    "          -i StepAndDirection            : Depricated    \n" +
     "    If StepAndDirection is chosen, the values for --step-dir and --step-size must be provided.\n" +
     "--step-dir <arg1>        : Sets the stepdirection method in the StepAndDirection processing to <arg1>. Options are:\n" +
     "          --step-dir ConjugateGradient    \n" +
