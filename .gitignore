@@ -88,6 +88,9 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Locally executed Regression tests
+tests/regressionTests*
+
 # Environments
 .env
 .venv
