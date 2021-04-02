@@ -55,7 +55,7 @@ void doPreprocess(const fwi::io::argumentReader& fwiOpts, const fwi::io::generic
 
     // initialize the clock, grid sources receivers, grouped frequencies
     fwi::performance::CpuClock clock;
-    fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
     fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
