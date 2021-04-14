@@ -2,6 +2,7 @@
 
 #include "freqInfo.h"
 #include <array>
+#include <string>
 
 namespace fwi
 {
