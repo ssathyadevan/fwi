@@ -6,17 +6,19 @@ namespace fwi
 {
     namespace io
     {
-        struct argumentReader {
+        struct argumentReader
+        {
             std::string dir;
             std::string forward;
             std::string inversion;
             std::string stepdir;
             std::string stepsize;
+            bool parallel;
             bool help;
             bool version;
 
             argumentReader() = delete;  
             argumentReader(std::vector<std::string>& arguments);
         };
-    }
-}
+    }   // namespace io
+}   // namespace fwi
