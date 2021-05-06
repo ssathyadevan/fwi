@@ -1,5 +1,8 @@
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModelParallel.h"
+#include "FixedStepSizeCalculator.h"
+#include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "evolutionInversion.h"
@@ -86,6 +89,13 @@ namespace fwi
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel = new forwardModels::FiniteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+            return _createdForwardModel;
+        }
+        if(desiredForwardModel == "FiniteDifferenceParallelForwardModel")
+        {
+            forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
+            _createdForwardModel =
+                new forwardModels::FiniteDifferenceForwardModelParallel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
         L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";

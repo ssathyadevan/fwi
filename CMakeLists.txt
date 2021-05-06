@@ -16,7 +16,7 @@ if( WIN32 )
 endif()
 
 #Set gcc compiler flags
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Werror=vla")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic -Werror -Werror=vla")
 
 #Set project path define
 add_definitions(-DFWI_PROJECT_DIR="${CMAKE_SOURCE_DIR}")
