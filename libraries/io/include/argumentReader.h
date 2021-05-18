@@ -15,7 +15,7 @@ namespace fwi
             bool help;
             bool version;
 
-            argumentReader() = delete;
+            argumentReader() = delete;  
             argumentReader(std::vector<std::string>& arguments);
         };
     }

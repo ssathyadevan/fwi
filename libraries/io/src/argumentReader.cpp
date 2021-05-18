@@ -6,8 +6,8 @@ namespace fwi
     {
         argumentReader::argumentReader(std::vector<std::string>& arguments) :
             dir("."),
-            forward("FiniteDifference"),
-            inversion("ConjugateGradient"),
+            forward(""),
+            inversion(""),
             stepdir(""),
             stepsize(""),
             help(false),

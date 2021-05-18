@@ -8,11 +8,11 @@ namespace fwi
 {
     namespace io
     {
-        genericInputCardReader::genericInputCardReader(const std::string &caseFolder, const std::string &filename)
+        genericInputCardReader::genericInputCardReader(const fwi::io::argumentReader inputArguments, const std::string &filename)
             : _fileName(filename)
         {
-            std::string filePath = setFolders(caseFolder);
-            readJsonFile(filePath);
+            std::string filePath = setFolders(inputArguments.dir);
+            readJsonFile(filePath, inputArguments);
         }
 
         std::string genericInputCardReader::setFolders(const std::string &caseFolderWithSlash)
@@ -32,7 +32,7 @@ namespace fwi
             return filePath;
         }
 
-        void genericInputCardReader::readJsonFile(const std::string &filePath)
+        void genericInputCardReader::readJsonFile(const std::string &filePath, const fwi::io::argumentReader inputArguments)
         {
             nlohmann::json jsonFile = readFile(filePath);
 
@@ -48,6 +48,12 @@ namespace fwi
 
             const std::string parameterFileName = "fileName";
             _input.fileName = ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterFileName);
+
+            const std::string parameterForward = "forward";
+            _input.forward = (!inputArguments.forward.empty()) ? inputArguments.forward : ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterForward);
+
+            const std::string parameterInversion = "inversion";
+            _input.inversion = (!inputArguments.inversion.empty()) ? inputArguments.inversion : ReadJsonHelper::tryGetParameterFromJson<std::string>(jsonFile, _fileName, parameterInversion);
 
             const std::string parameterVerbose = "verbosity";
 
