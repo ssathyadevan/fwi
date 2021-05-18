@@ -33,10 +33,24 @@ namespace fwi
             double value;                                          // value read in from file
             int dummy;                                             // value printed to screen
             std::string ss = "";
+            int linecount = 0;                                      // keep linecount in order to give useful error when something goes wrong reading file
 
             while(std::getline(myfile, line))
             {
-                value = stod(line);
+                linecount++;
+
+                try
+                {
+                    value = stod(line);
+                }
+                catch(const std::exception& e)
+                {
+                    std::cerr << "Error reading from file: " << filename << " , linenumber: " << linecount << '\n';
+                    std::cerr << "Cannot convert string to double, acquired value: " << line << '\n';
+                    std::cerr << e.what() << '\n';
+                    std::exit(EXIT_FAILURE);
+                }
+                
                 dummy = std::lround(((value) / contrast_difference * resolution) + rock_character);   // cast value read to int printed by linear interpol
                 if(dummy < 0)
                 {
