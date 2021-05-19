@@ -23,11 +23,11 @@ parser.add_argument("--post-dir", type=str, required=False, default="./",
                     help="Path to the folder containing postProcessing-python3.py")
 
 parser.add_argument("-p", "--preprocess", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel"],
                     help="Choice of ForwardModel for PreProcess")
 
 parser.add_argument("-f", "--forward", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel"],
                     help="Choice of ForwardModel for Process")
 
 parser.add_argument("-i", "--inversion", type=str, required=False, default="ConjugateGradient",
