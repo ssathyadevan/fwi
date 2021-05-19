@@ -17,8 +17,10 @@ namespace fwi
             FiniteDifferenceForwardModelParallel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
                 const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput);
             // Overriding ForwardModel
+            std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
             void calculateKappa();
             void calculatePTot(const core::dataGrid2D &chiEst);
+            void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
         };
     }   // namespace forwardModels
 
