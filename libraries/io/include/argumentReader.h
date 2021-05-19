@@ -13,7 +13,6 @@ namespace fwi
             std::string inversion;
             std::string stepdir;
             std::string stepsize;
-            bool parallel;
             bool help;
             bool version;
 

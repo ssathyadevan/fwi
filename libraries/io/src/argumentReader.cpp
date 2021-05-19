@@ -29,8 +29,6 @@ namespace fwi
                     stepdir = *++it;
                 else if((*it == "--stepsize") && (it + 1) != arguments.end())
                     stepsize = *++it;
-                else if((*it == "--parallel" || *it == "-p") && (it + 1) != arguments.end())
-                    parallel = *++it == "true" ? true : false;
             }
         }
     }   // namespace io
