@@ -1,6 +1,7 @@
 find_package(Doxygen)
 
 if (Doxygen_FOUND)
+	message("Doxygen found")
 	#Set the file that contains the mainpage for the doxygen documentation
 	set(MAINPAGE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Mainpage.dox)
 	#Set the file that contains the documentation for the namespaces
@@ -24,6 +25,18 @@ if (Doxygen_FOUND)
 	set(EXTRACT_ALL YES)
 	set(EXTRACT_PRIVATE YES)
 	set(EXTRACT_STATIC YES)
+	set(CLASS_GRAPH YES)
+	set(COLLABORATION_GRAPH YES)
+	set(UML_LOOK YES)
+	set(UML_LIMIT_NUM_FIELDS 50)
+	set(HAVE_DOT YES)
+	set(INTERACTIVE_SVG YES)
+	set(MAX_DOT_GRAPH_DEPTH 0)
+	set(DOT_GRAPH_MAX_NODES 100)
+	set(USE_PDFLATEX YES)
+	set(PDF_HYPERLINKS YES)
+	set(CALL_GRAPH YES)
+	set(CALLER_GRAPH YES)
 
 	#Define files and paths to be excluded from the doxygen documentation
 	set(EXCLUDE_NLOHMANN_JSON_LIBRARY_FILE ${CMAKE_SOURCE_DIR}/libraries/io/include/json.h)
