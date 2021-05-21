@@ -107,6 +107,32 @@ def publishRegressionTestsResultsOnJenkins() {
 	}
 }
 
+def publishCppCheckResultsOnJenkins(String osName = "undefined") {
+	if (currentBuild.currentResult != "FAILURE") {
+
+		// CppCheck upload has been disabled due to missing the CppCheck plugin on the new Jenkins server.
+		// CppCheck results can be converted to JUnit results using cppcheck_junit, but then the build will fail if the cppcheck finds any issues, which are quite some at the moment of writing.
+		// Therefore, the CppCheck report is currently uploaded as an artifact.
+
+		archiveArtifacts artifacts:"staticAnalysisCppcheckReport.xml"	
+
+		// The following code can be uncommented to upload the CppCheck result as JUnit.
+		// if (osName == "Windows"){
+		// 	bat '''
+		// 	cppcheck_junit staticAnalysisCppcheckReport.xml staticAnalysisCppcheckReport-junit.xml
+		// 	'''
+		// }
+		// else{
+		// 	sh '''
+		// 		cppcheck_junit staticAnalysisCppcheckReport.xml staticAnalysisCppcheckReport-junit.xml
+		// 	'''
+		// }
+
+		// echo 'Publish CppCheck results as JUnit on jenkins'
+		// junit ('staticAnalysisCppcheckReport-junit.xml')
+	}
+}
+
 def executeTests( String osName = "undefined", String csv = "undefined" ) {
 	echo 'Running executeTests on ' + osName
 	env.MYSTAGE_NAME = 'Running executeTests'
