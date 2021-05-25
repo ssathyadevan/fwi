@@ -9,4 +9,4 @@ include_directories(${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 include_directories(${GMOCK_INCLUDE_DIRS})
 
 # Build the tests!
-build_test(TARGET factoryTest SOURCE factoryTest.cpp LIBRARIES step_and_direction_interface_library factory_library test_utils_library ${GMOCK_BOTH_LIBRARIES})
+build_test(TARGET factoryTest SOURCE factoryTest.cpp LIBRARIES factory_library test_utils_library ${GMOCK_BOTH_LIBRARIES})

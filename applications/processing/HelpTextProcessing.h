@@ -21,16 +21,6 @@ const std::string HELP_TEXT_PROCESSING =
     "          -i GradientDescent                             \n" +
     "          -i Evolution                                   \n" +
     "          -i Random                                      \n" +
-    "          -i StepAndDirection            : Depricated    \n" +
-    "    If StepAndDirection is chosen, the values for --step-dir and --step-size must be provided.\n" +
-    "--step-dir <arg1>        : Sets the stepdirection method in the StepAndDirection processing to <arg1>. Options are:\n" +
-    "          --step-dir ConjugateGradient    \n" +
-    "          --step-dir GradientDescent      \n" +
-    "--step-size <arg2>       : Sets the stepsize method in the StepAndDirection processing to <arg2>. Options are:\n" +
-    "          --step-size ConjugateGradient               : works best with --step-dir ConjugateGradient\n" + 
-    "          --step-size ConjugateGradientRegularization : Works best with --step-dir ConjugateGradient\n" + 
-    "          --step-size BorzilaiBorwein                 : Works best with --step-dir GradientDescent  \n" + 
-    "          --step-size Fixed\n" +
  
     "All options are optional. Options are immediately followed by their arguments if required. All options can be used in any order,\n"+ 
     "except -h and -v, which are required to be first. Any unrecognized options are ignored (silently).\n\n" +
@@ -40,6 +30,5 @@ const std::string HELP_TEXT_PROCESSING =
     "FWI_Processing.exe -v\n" +
     "FWI_Processing.exe -d /path/to/folder\n" + 
     "FWI_Processing.exe -d \"/path/to/folder/with spaces/\" -f Integral\n"
-    "FWI_Processing.exe -d /path/to/folder -f Integral -i EvolutionInversion\n" +
-    "FWI_Processing.exe -d /path/to/folder -f Integral -i StepAndDirection --step-dir ConjugateGradient --step-size ConjugateGradientRegularization\n"
+    "FWI_Processing.exe -d /path/to/folder -f Integral -i EvolutionInversion\n"
 ;

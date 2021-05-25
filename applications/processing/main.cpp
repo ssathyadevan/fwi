@@ -6,7 +6,6 @@
 #include "argumentReader.h"
 #include "cpuClock.h"
 #include "factory.h"
-#include "StepAndDirectionReconstructorInputCardReader.h"
 #include "chiIntegerVisualisation.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
@@ -127,23 +126,8 @@ void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInp
             << "  forward =" << gInput.forward << std::endl
             << "  inversion =" << gInput.inversion << std::endl;
 
-    // Setup StepAndDirection or UnifiedProcess models
-    if(fwiOpts.inversion == "StepAndDirection")
-    {
-        std::cout << "  --stepdir="  << fwiOpts.stepdir << std::endl
-                  << "  --stepsize=" << fwiOpts.stepsize << std::endl;
-
-        L_(fwi::io::linfo) << "Create StepAndDirectionReconstructor";
-        fwi::inversionMethods::StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
-        fwi::inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
-        inverse = factory.createStepAndDirectionReconstructor(stepAndDirectionInput, model, 
-                                                            fwiOpts.stepsize + "StepSize", fwiOpts.stepdir + "Direction", referencePressureData);  
-    }
-    else
-    {
-        L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
-        inverse = factory.createInversion(gInput.inversion + "Inversion", model, gInput);
-    }
+    L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
+    inverse = factory.createInversion(gInput.inversion + "Inversion", model, gInput);
 
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Estimating Chi...";

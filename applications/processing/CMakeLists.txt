@@ -10,6 +10,6 @@ include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include)
 
 add_executable( FWI_Process main.cpp )
 target_include_directories(FWI_Process PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/performance/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
-target_link_libraries( FWI_Process factory_library step_and_direction_reconstructor_library integral_forward_model_library core_library integral_forward_model_library io_library performance_library)
+target_link_libraries( FWI_Process factory_library integral_forward_model_library core_library integral_forward_model_library io_library performance_library)
 install( TARGETS FWI_Process DESTINATION bin)
 
