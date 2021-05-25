@@ -13,4 +13,5 @@ target_include_directories(conjugate_gradient_inversion_library PUBLIC ${LIBRARY
 target_link_libraries(
     conjugate_gradient_inversion_library
     core_library
-    integral_forward_model_library)
+    integral_forward_model_library
+    io_library)

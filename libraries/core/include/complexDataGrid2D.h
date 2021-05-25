@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ignoreStupidWarnings.h"
 #include "dataGrid2D.h"
 #include "grid2D.h"
 #include <array>

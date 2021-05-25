@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ignoreStupidWarnings.h"
 #include <algorithm>
 #include <cassert>
 #include <complex>
