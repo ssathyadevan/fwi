@@ -2,6 +2,7 @@
 
 #include "genericInput.h"
 #include "inputCardReader.h"
+#include "argumentReader.h"
 #include <ReadJsonHelper.h>
 #include <string>
 #include <vector>
@@ -13,7 +14,7 @@ namespace fwi
         class genericInputCardReader : public inputCardReader
         {
         public:
-            genericInputCardReader(const std::string &caseFolder, const std::string &filename = "GenericInput.json");
+            genericInputCardReader(const fwi::io::argumentReader inputArguments, const std::string &filename = "GenericInput.json");
             genericInput getInput() const { return _input; }
 
         private:
@@ -21,7 +22,7 @@ namespace fwi
 
             const std::string _fileName;
             std::string setFolders(const std::string &caseFolderWithSlash);
-            void readJsonFile(const std::string &filePath);
+            void readJsonFile(const std::string &filePath, const fwi::io::argumentReader inputArguments);
 
             void readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<double, 2> &array);
             void readXZParametersFromJsonObject(const nlohmann::json &jsonFile, const std::string &fileName, std::array<int, 2> &array);

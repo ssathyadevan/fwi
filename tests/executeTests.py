@@ -134,13 +134,13 @@ def generate_xml_report(test_cases, test_times):
 
 def methodSelection(types, seq, params):
     selection = {}
-    methods = {"ConjugateGradientInversion" : "CG", "GradientDescentInversion" : "GD", "IntegralForwardModel" : "IFM", "FiniteDifferenceForwardModel": "FDFM"}
+    methods = {"ConjugateGradient" : "CG", "GradientDescent" : "GD", "Integral" : "IFM", "FiniteDifference": "FDFM"}
 
     selection["GEN"] = types["GEN"]
     for key, value in methods.items():
-        if key == tableElementByKey("InversionMethod", seq, params):
+        if key == tableElementByKey("GEN:inversion", seq, params):
             selection[value] = types[value]
-        if key == tableElementByKey("ForwardModel", seq, params):
+        if key == tableElementByKey("GEN:forward", seq, params):
             selection[value] = types[value]
 
     return selection
@@ -175,31 +175,24 @@ def executionMethod():
     # Create input json's
     createInput(types = selection, seq = n, params = csv_data, path = testPath)
 
-    # Model and inversion types
-    ForwardModel = tableElementByKey(key="ForwardModel", seq = n, params = csv_data)
-    InversionMethod = tableElementByKey(key="InversionMethod", seq = n, params = csv_data)
+    return testName, testPath
 
-    return testName, testPath, InversionMethod, ForwardModel
-
-def preProcess(tempTestPath, forwardModel):
+def preProcess(tempTestPath):
     print('\n------Start PreProcess', flush = True)
-    forwardModel = forwardModel.replace('ForwardModel', '')
     start_preTime = time.time()
     preprocessExe = os.path.join(root,'FWIInstall','bin','FWI_PreProcess')
-    execCmd = preprocessExe + ' -d ' + Path(tempTestPath).as_posix() + ' -f ' + forwardModel
+    execCmd = preprocessExe + ' -d ' + Path(tempTestPath).as_posix()
     print(execCmd, flush = True)
     os.system(execCmd)
     end_preTime = time.time()
     return datetime.timedelta(seconds=(end_preTime - start_preTime))
 
-def Process(testPath, inversion, forwardModel):
+def Process(testPath):
     print('\n------Start Process', flush = True)
     start_processTime = time.time()
-    inversion = inversion.replace("Inversion","")
-    forwardModel = forwardModel.replace('ForwardModel', '')
     
     execCmd = os.path.join(root,'FWIInstall','bin','FWI_Process')
-    execCmd += ' -d ' + Path(testPath).as_posix() + ' -f ' + forwardModel + ' -i ' + inversion 
+    execCmd += ' -d ' + Path(testPath).as_posix() 
     
     print(execCmd, flush = True)
     os.system(execCmd)
@@ -273,10 +266,10 @@ if __name__ == "__main__":
 
     n = rowStart
     while n <= rowEnd:
-        testName, testPath, inversionMethod, forwardModel = executionMethod()
+        testName, testPath = executionMethod()
 
-        preTime = preProcess(testPath, forwardModel)
-        processTime = Process(testPath, inversionMethod, forwardModel)
+        preTime = preProcess(testPath)
+        processTime = Process(testPath)
         
         if (do_postprocessing):
             postTime = postProcess(testPath)

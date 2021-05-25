@@ -15,6 +15,8 @@ namespace fwi
             std::string outputLocation;
             std::string runName;
             std::string fileName;
+            std::string forward;
+            std::string inversion;
             double c0;
             core::freqInfo freq;
             std::array<double, 2> reservoirTopLeftCornerInM;

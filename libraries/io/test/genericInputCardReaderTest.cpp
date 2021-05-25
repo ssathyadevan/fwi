@@ -1,5 +1,6 @@
 #include "genericInputCardReader.h"
 #include "genericInput.h"
+// #include "argumentReader.h"
 #include "utilityFunctions.h"
 #include <gtest/gtest.h>
 #include <ostream>
@@ -18,6 +19,7 @@ namespace fwi
             const std::string _inputFolder = _testFolder + "input/";
             const std::string _filename = "GenericInputTest.json";
             const std::string _filePath = _inputFolder + _filename;
+            std::vector<std::string> _arguments = {"-d",_testFolder};
 
             ParametersCollection _groupParameters{{"Freq", {{"min", "10.0"}, {"max", "40.0"}, {"nTotal", "15"}}},
                 {"reservoirTopLeft", {{"x", "-300.0"}, {"z", "0.0"}}}, {"reservoirBottomRight", {{"x", "300.0"}, {"z", "300.0"}}},
@@ -25,11 +27,14 @@ namespace fwi
                 {"receiversTopLeft", {{"x", "-480.0"}, {"z", "-5.0"}}}, {"receiversBottomRight", {{"x", "480"}, {"z", "-5.0"}}},
                 {"ngrid_original", {{"x", "64"}, {"z", "32"}}}, {"ngrid", {{"x", "64"}, {"z", "32"}}}};
 
-            Parameters _singleParameters{{"c_0", "2000.0"}, {"verbosity", "false"}, {"nSources", "17"}, {"nReceivers", "17"}, {"fileName", "\"temple\""}};
+            Parameters _singleParameters{{"c_0", "2000.0"}, {"verbosity", "false"}, {"nSources", "17"}, {"nReceivers", "17"}, {"fileName", "\"temple\""}, {"forward","\"FiniteDifference\""}, {"inversion","\"ConjugateGradient\""}};
 
             std::string _jsonInput;
 
-            void SetUp() override { _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters); }
+            
+            void SetUp() override { 
+                _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+                }
 
             void TearDown() override
             {
@@ -94,9 +99,10 @@ namespace fwi
         {
             // Arrange
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             ASSERT_DOUBLE_EQ(reader.getInput().c0, 2000.0);
@@ -107,9 +113,10 @@ namespace fwi
             // Arrange
             core::freqInfo expectedFreq = {10, 40, 15};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
             auto actualFreq = reader.getInput().freq;
 
             // Assert
@@ -124,9 +131,10 @@ namespace fwi
             std::array<double, 2> expectedTopLeft{-300.0, 0.0};
             std::array<double, 2> expectedBottomRight{300.0, 300.0};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
             auto actualTopLeft = reader.getInput().reservoirTopLeftCornerInM;
             auto actualBottomRight = reader.getInput().reservoirBottomRightCornerInM;
 
@@ -144,9 +152,10 @@ namespace fwi
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
             auto actualTopLeft = reader.getInput().sourcesTopLeftCornerInM;
             auto actualBottomRight = reader.getInput().sourcesBottomRightCornerInM;
 
@@ -164,9 +173,10 @@ namespace fwi
             std::array<double, 2> expectedTopLeft{-480.0, -5.0};
             std::array<double, 2> expectedBottomRight{480.0, -5.0};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
             auto actualTopLeft = reader.getInput().receiversTopLeftCornerInM;
             auto actualBottomRight = reader.getInput().receiversBottomRightCornerInM;
 
@@ -184,9 +194,10 @@ namespace fwi
             int expectedNumberOfSources = 17;
             int expectedNumberOfReceivers = 17;
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             ASSERT_EQ(reader.getInput().nSources, expectedNumberOfSources);
@@ -198,9 +209,10 @@ namespace fwi
             // Arrange
             std::array<int, 2> expectedNumberOfGridPoints{64, 32};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             ASSERT_EQ(reader.getInput().nGrid[0], expectedNumberOfGridPoints[0]);
@@ -212,9 +224,10 @@ namespace fwi
             // Arrange
             std::array<int, 2> expectedNumberOfOriginalGridPoints{64, 32};
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             ASSERT_EQ(reader.getInput().nGridOriginal[0], expectedNumberOfOriginalGridPoints[0]);
@@ -226,9 +239,10 @@ namespace fwi
             // Arrange
             bool expectedVerbosity = false;
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             EXPECT_EQ(reader.getInput().verbose, expectedVerbosity);
@@ -239,12 +253,41 @@ namespace fwi
             // Arrange
             std::string expectedFilename = "temple";
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act
-            genericInputCardReader reader(_testFolder, _filename);
+            genericInputCardReader reader(_fwiOpts, _filename);
 
             // Assert
             EXPECT_EQ(reader.getInput().fileName, expectedFilename);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_ValidInput_forward)
+        {
+            // Arrange
+            std::string expectedForward = "FiniteDifference";
+            writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
+
+            // Act
+            genericInputCardReader reader(_fwiOpts, _filename);
+
+            // Assert
+            EXPECT_EQ(reader.getInput().forward, expectedForward);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_ValidInput_inversion)
+        {
+            // Arrange
+            std::string expectedInversion = "ConjugateGradient";
+            writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
+
+            // Act
+            genericInputCardReader reader(_fwiOpts, _filename);
+
+            // Assert
+            EXPECT_EQ(reader.getInput().inversion, expectedInversion);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_NegativeC0_ExceptionThrown)
@@ -254,9 +297,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfSources_ExceptionThrown)
@@ -266,9 +310,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_NegativeNumberOfReceivers_ExceptionThrown)
@@ -278,9 +323,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingC0_ExceptionThrown)
@@ -290,9 +336,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingVerbosity_ExceptionThrown)
@@ -302,9 +349,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfSources_ExceptionThrown)
@@ -314,9 +362,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingNumberOfReceivers_ExceptionThrown)
@@ -326,9 +375,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingFilename_ExceptionThrown)
@@ -338,9 +388,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingFreq_ExceptionThrown)
@@ -350,9 +401,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingReservoirTopLeft_ExceptionThrown)
@@ -362,9 +414,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingReservoirBottomRight_ExceptionThrown)
@@ -374,9 +427,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingSourcesTopLeft_ExceptionThrown)
@@ -386,9 +440,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingSourcesBottomRight_ExceptionThrown)
@@ -398,9 +453,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingReceiversTopLeft_ExceptionThrown)
@@ -410,9 +466,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingReceiversBottomRight_ExceptionThrown)
@@ -422,9 +479,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingNgridOrinal_ExceptionThrown)
@@ -434,9 +492,10 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
         }
 
         TEST_F(genericInputCardReaderTest, constructor_MissingNgrid_ExceptionThrown)
@@ -446,10 +505,41 @@ namespace fwi
 
             _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
             writeInputFile(_jsonInput);
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
 
             // Act & Assert
-            EXPECT_THROW(genericInputCardReader reader(_testFolder, _filename), std::invalid_argument);
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename);, std::invalid_argument);
         }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingForward_ExceptionThrown)
+        {
+            // Arrange
+            _singleParameters.erase("forward");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
+        }
+
+        TEST_F(genericInputCardReaderTest, constructor_MissingInversion_ExceptionThrown)
+        {
+            // Arrange
+            _singleParameters.erase("inversion");
+
+            _jsonInput = generateJsonWithInputParameters(_groupParameters, _singleParameters);
+            writeInputFile(_jsonInput);
+
+            fwi::io::argumentReader _fwiOpts = argumentReader(_arguments);
+
+            // Act & Assert
+            EXPECT_THROW(genericInputCardReader reader(_fwiOpts, _filename), std::invalid_argument);
+        }
+
+
 
     }   // namespace io
 }   // namespace fwi

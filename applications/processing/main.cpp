@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
         
-        fwi::io::genericInputCardReader genericReader(fwiOpts.dir);
+        fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
         doProcess(fwiOpts, gInput);
 
@@ -118,14 +118,14 @@ void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInp
     fwi::Factory factory;
     L_(fwi::io::linfo) << "Create ForwardModel";
     fwi::forwardModels::ForwardModelInterface *model;
-    model = factory.createForwardModel(gInput.caseFolder, fwiOpts.forward + "ForwardModel", grid, source, receiver, freq);
+    model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
     L_(fwi::io::linfo) << "Create inversionModel";
     fwi::inversionMethods::inversionInterface* inverse;
 
-    std::cout << "Creating InversionProcess using parameters:" << std::endl 
-            << "  -f=" << fwiOpts.forward << std::endl
-            << "  -i=" << fwiOpts.inversion << std::endl;
+    std::cout << "Creating InversionProcess with:" << std::endl 
+            << "  forward =" << gInput.forward << std::endl
+            << "  inversion =" << gInput.inversion << std::endl;
 
     // Setup StepAndDirection or UnifiedProcess models
     if(fwiOpts.inversion == "StepAndDirection")
@@ -142,7 +142,7 @@ void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInp
     else
     {
         L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
-        inverse = factory.createInversion(fwiOpts.inversion + "Inversion", model, gInput);
+        inverse = factory.createInversion(gInput.inversion + "Inversion", model, gInput);
     }
 
     std::cout << "Calculating..." << std::endl;
