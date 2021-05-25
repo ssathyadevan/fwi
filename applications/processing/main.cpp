@@ -7,18 +7,21 @@
 #include "cpuClock.h"
 #include "factory.h"
 #include "chiIntegerVisualisation.h"
+#include "cpuClock.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
-#include "HelpTextProcessing.h"
+#include "factory.h"
+#include "genericInputCardReader.h"
+#include "log.h"
+#include "mpi.h"
 
-void printHelpOrVersion(fwi::io::argumentReader& fwiOpts);
-void executeFullFWI(const fwi::io::argumentReader& fwiOpts);
-void doProcess(const fwi::io::genericInput& gInput);
+void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
+void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
+void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-   
     try
     {
         std::vector<std::string> arguments = {argv + 1, argv + argc};
@@ -27,10 +30,9 @@ int main(int argc, char* argv[])
         
         fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcess(gInput);
-
+        doProcess(fwiOpts, gInput);
     }
-    catch(const std::exception& e)
+    catch(const std::exception &e)
     {
         std::cerr << e.what() << std::endl;
         std::cout << "Use -h for help on parameter options and values." << std::endl;
@@ -39,7 +41,7 @@ int main(int argc, char* argv[])
     }
 }
 
-void printHelpOrVersion(fwi::io::argumentReader& fwiOpts)
+void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
 {
     if(fwiOpts.help)
     {
@@ -64,7 +66,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
 
-    //initialize logging
+    // initialize logging
     std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
 
     if(!gInput.verbose)
@@ -84,10 +86,9 @@ void doProcess(const fwi::io::genericInput& gInput)
     fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
     fwi::io::createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
 
-    
     // Start inversion
     clock.Start();
-    
+
     // read referencePressureData from a CSV file format
     std::string fileLocation = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
@@ -119,7 +120,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
     L_(fwi::io::linfo) << "Create inversionModel";
-    fwi::inversionMethods::inversionInterface* inverse;
+    fwi::inversionMethods::inversionInterface *inverse;
 
     std::cout << "Creating InversionProcess with:" << std::endl 
             << "  forward =" << gInput.forward << std::endl
@@ -131,7 +132,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Estimating Chi...";
     fwi::core::dataGrid2D chiEstimate = inverse->reconstruct(referencePressureData, gInput);
-    
+
     L_(fwi::io::linfo) << "Writing to file";
     chiEstimate.toFile(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt");
 

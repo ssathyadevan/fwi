@@ -49,3 +49,5 @@ if(CPPCHECK_FOUND)
 	set(CPPCHECK_PARAMETERS --enable=all --xml --xml-version=2 --std=c++11 --language=c++)
 	add_cppcheck_target(OUTPUTFILE ${CMAKE_SOURCE_DIR}/staticAnalysisCppcheckReport.xml INPUTFILES ${LIBRARY_FILES} PARAMETERS ${CPPCHECK_PARAMETERS})
 endif()
+
+
