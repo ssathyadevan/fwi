@@ -13,7 +13,7 @@
 
 void printHelpOrVersion(fwi::io::argumentReader& fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader& fwiOpts);
-void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInput& gInput);
+void doProcess(const fwi::io::genericInput& gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char* argv[])
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         
         fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcess(fwiOpts, gInput);
+        doProcess(gInput);
 
     }
     catch(const std::exception& e)
@@ -54,9 +54,8 @@ void printHelpOrVersion(fwi::io::argumentReader& fwiOpts)
     }
 }
 
-void doProcess(const fwi::io::argumentReader& fwiOpts, const fwi::io::genericInput& gInput)
-{
-    std::cout << "Inversion Processing Started" << std::endl; 
+void doProcess(const fwi::io::genericInput& gInput)
+{    std::cout << "Inversion Processing Started" << std::endl; 
 
     // initialize the clock, grid sources receivers, grouped frequencies
     fwi::performance::CpuClock clock;
