@@ -1,12 +1,10 @@
-#include <iostream>
-#include <vector>
-
 #include "HelpTextPreProcessing.h"
 #include "argumentReader.h"
 #include "cpuClock.h"
 #include "factory.h"
 #include "genericInputCardReader.h"
-#include "mpi.h"
+#include <iostream>
+#include <vector>
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
@@ -16,7 +14,6 @@ int main(int argc, char *argv[])
 {
     try
     {
-        MPI_Init(&argc, &argv);
         std::vector<std::string> arguments = {argv + 1, argv + argc};
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
@@ -59,22 +56,21 @@ void doPreprocess(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
     fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
-    if(rank == 0)
-    {
-        // Initialize logger
-        std::string logFilePath = gInput.outputLocation + gInput.runName + "PreProcess.log";
-        if(!gInput.verbose)
-        {
-            std::cout << "Printing the preprocess output into file: " << logFilePath << std::endl;
-            fwi::io::initLogger(logFilePath.c_str(), fwi::io::ldebug);
-        }
 
-        // Logging the setup
-        L_(fwi::io::linfo) << "Starting PreProcess";
-        source.Print();
-        receiver.Print();
-        freq.Print(gInput.freq.nTotal);
+    // Initialize logger
+    std::string logFilePath = gInput.outputLocation + gInput.runName + "PreProcess.log";
+    if(!gInput.verbose)
+    {
+        std::cout << "Printing the preprocess output into file: " << logFilePath << std::endl;
+        fwi::io::initLogger(logFilePath.c_str(), fwi::io::ldebug);
     }
+
+    // Logging the setup
+    L_(fwi::io::linfo) << "Starting PreProcess";
+    source.Print();
+    receiver.Print();
+    freq.Print(gInput.freq.nTotal);
+
     // Start preprocess
     clock.Start();
 
@@ -96,34 +92,31 @@ void doPreprocess(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     L_(fwi::io::linfo) << "Calculating pData (the reference pressure-field)...";
     clock.Start();
     model->calculatePTot(chi);
-    if(rank == 0)
+    model->calculateKappa();
+    std::vector<std::complex<double>> referencePressureData = model->calculatePressureField(chi);
+
+    clock.End();
+    clock.OutputString();
+    L_(fwi::io::linfo) << "calculateData done";
+
+    // writing the referencePressureData to a text file in complex form
+    std::string invertedChiToPressureFileName = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
+    L_(fwi::io::linfo) << "Writing pData to file " << invertedChiToPressureFileName;
+    std::ofstream file;
+    file.open(invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
+    if(!file)
     {
-        model->calculateKappa();
-        std::vector<std::complex<double>> referencePressureData = model->calculatePressureField(chi);
-
-        clock.End();
-        clock.OutputString();
-        L_(fwi::io::linfo) << "calculateData done";
-
-        // writing the referencePressureData to a text file in complex form
-        std::string invertedChiToPressureFileName = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
-        L_(fwi::io::linfo) << "Writing pData to file " << invertedChiToPressureFileName;
-        std::ofstream file;
-        file.open(invertedChiToPressureFileName, std::ios::out | std::ios::trunc);
-        if(!file)
-        {
-            L_(fwi::io::lerror) << "Failed to open the file to store inverted chi to pressure field";
-            throw std::runtime_error("Could not open file at " + invertedChiToPressureFileName);
-        }
-
-        int magnitude = freq.count * source.count * receiver.count;
-        for(int i = 0; i < magnitude; i++)
-        {
-            file << std::setprecision(17) << referencePressureData[i].real() << "," << referencePressureData[i].imag() << std::endl;
-        }
-        file.close();
-        L_(fwi::io::linfo) << "PreProcessing Task finished successfully!";
-        fwi::io::endLogger();
-        std::cout << "Preprocessing completed" << std::endl;
+        L_(fwi::io::lerror) << "Failed to open the file to store inverted chi to pressure field";
+        throw std::runtime_error("Could not open file at " + invertedChiToPressureFileName);
     }
+
+    int magnitude = freq.count * source.count * receiver.count;
+    for(int i = 0; i < magnitude; i++)
+    {
+        file << std::setprecision(17) << referencePressureData[i].real() << "," << referencePressureData[i].imag() << std::endl;
+    }
+    file.close();
+    L_(fwi::io::linfo) << "PreProcessing Task finished successfully!";
+    fwi::io::endLogger();
+    std::cout << "Preprocessing completed" << std::endl;
 }

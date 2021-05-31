@@ -1,7 +1,9 @@
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "FiniteDifferenceForwardModelParallel.h"
+#ifdef MPI
 #include "FiniteDifferenceForwardModelParallelMPI.h"
+#endif
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
@@ -92,6 +94,7 @@ namespace fwi
             _createdForwardModel = new forwardModels::FiniteDifferenceForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
+
         if(desiredForwardModel == "FiniteDifferenceParallelForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
@@ -99,6 +102,8 @@ namespace fwi
                 new forwardModels::FiniteDifferenceForwardModelParallel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
+#ifdef MPI
+
         if(desiredForwardModel == "FiniteDifferenceParallelMPIForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
@@ -106,6 +111,7 @@ namespace fwi
                 new forwardModels::FiniteDifferenceForwardModelParallelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
+#endif
         L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
         throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
     }

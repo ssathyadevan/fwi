@@ -12,6 +12,10 @@ namespace fwi
             const core::Receivers &receiver, const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
             : FiniteDifferenceForwardModel(grid, source, receiver, freq, fmInput)
         {
+            int rank, size;
+            MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* get current process id */
+            MPI_Comm_size(MPI_COMM_WORLD, &size); /* get number of processes */
+            printf("Hello world from process %d of %d\n", rank, size);
         }
 
         void FiniteDifferenceForwardModelParallelMPI::calculatePTot(const core::dataGrid2D &chiEst)
@@ -24,7 +28,7 @@ namespace fwi
             int rank, size;
             MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* get current process id */
             MPI_Comm_size(MPI_COMM_WORLD, &size); /* get number of processes */
-            printf("Hello world from process %d of %d\n", rank, size);
+            // printf("Hello world from process %d of %d\n", rank, size);
             // calculate the size
             int total_loop_size = _freq.count;
             int sep_loop_size = total_loop_size / size;

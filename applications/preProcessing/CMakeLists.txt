@@ -13,7 +13,4 @@ target_include_directories(FWI_PreProcess PRIVATE ${CMAKE_SOURCE_DIR}/libraries/
 target_link_libraries( FWI_PreProcess factory_library integral_forward_model_library core_library integral_forward_model_library io_library performance_library)
 install( TARGETS FWI_PreProcess DESTINATION bin)
 
-find_package(MPI) #make it REQUIRED, if you want
-include_directories(SYSTEM ${MPI_INCLUDE_PATH})
- target_link_libraries(FWI_PreProcess ${MPI_CXX_LIBRARIES})
 
