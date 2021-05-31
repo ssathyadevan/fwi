@@ -13,7 +13,8 @@
 #include "factory.h"
 #include "genericInputCardReader.h"
 #include "log.h"
-#include "mpi.h"
+#include <iostream>
+#include <vector>
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);

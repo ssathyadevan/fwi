@@ -1,7 +1,6 @@
 #include "FiniteDifferenceForwardModelParallel.h"
 #include "Helmholtz2D.h"
 #include <complex>
-#include <mpi.h>
 #include <omp.h>
 #include <vector>
 
