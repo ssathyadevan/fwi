@@ -3,6 +3,7 @@
 #include "FiniteDifferenceForwardModelParallel.h"
 #ifdef MPI
 #include "FiniteDifferenceForwardModelParallelMPI.h"
+#include "conjugateGradientMPIInversion.h"
 #endif
 #include "FixedStepSizeCalculator.h"
 #include "GradientDescentDirectionCalculator.h"
@@ -54,7 +55,12 @@ namespace fwi
             _createdInversion = new inversionMethods::ConjugateGradientInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
-
+        if(desiredInversion == "ConjugateGradientMPIInversion")
+        {
+            inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+            _createdInversion = new inversionMethods::ConjugateGradientMPIInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
+            return _createdInversion;
+        }
         if(desiredInversion == "RandomInversion")
         {
             inversionMethods::RandomInversionInputCardReader randomReader(gInput.caseFolder);
@@ -108,7 +114,7 @@ namespace fwi
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel =
-                new forwardModels::FiniteDifferenceForwardModelParallelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+                new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
 #endif

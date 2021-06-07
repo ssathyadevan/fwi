@@ -64,7 +64,6 @@ namespace fwi
             core::complexDataGrid2D **_kappa;
             finiteDifferenceForwardModelInput _fMInput;
             friend class FiniteDifferenceForwardModelParallel;
-            friend class FiniteDifferenceForwardModelParallelMPI;
         };
 
     }   // namespace forwardModels

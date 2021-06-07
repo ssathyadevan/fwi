@@ -1,8 +1,8 @@
-#include <iostream>
-#include <vector>
-
 #include "HelpTextProcessing.h"
 #include "StepAndDirectionReconstructorInputCardReader.h"
+#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
+#include "FiniteDifferenceForwardModelParallelMPI.h"
 #include "argumentReader.h"
 #include "chiIntegerVisualisation.h"
 #include "cpuClock.h"
@@ -11,25 +11,40 @@
 #include "factory.h"
 #include "genericInputCardReader.h"
 #include "log.h"
-#include "mpi.h"
+#include <boost/mpi.hpp>
+#include <iostream>
+#include <mpi.h>
+#include <vector>
+namespace mpi = boost::mpi;
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
 void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
+void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char *argv[])
 {
     try
     {
-        MPI_Init(&argc, &argv);
+        mpi::environment env(argc, argv, mpi::threading::multiple);
+        mpi::communicator world;
+        printf("Started Process with %i threads \n", world.size());
         std::vector<std::string> arguments = {argv + 1, argv + argc};
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
 
         fwi::io::genericInputCardReader genericReader(fwiOpts.dir);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcess(fwiOpts, gInput);
+
+        if(world.rank() == 0)
+        {
+            doProcess(fwiOpts, gInput);
+        }
+        else
+        {
+            doProcessMPI(fwiOpts, gInput);
+        }
     }
     catch(const std::exception &e)
     {
@@ -127,21 +142,7 @@ void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInp
               << "  -i=" << fwiOpts.inversion << std::endl;
 
     // Setup StepAndDirection or UnifiedProcess models
-    if(fwiOpts.inversion == "StepAndDirection")
-    {
-        std::cout << "  --stepdir=" << fwiOpts.stepdir << std::endl << "  --stepsize=" << fwiOpts.stepsize << std::endl;
-
-        L_(fwi::io::linfo) << "Create StepAndDirectionReconstructor";
-        fwi::inversionMethods::StepAndDirectionReconstructorInputCardReader stepAndDirectionReader(gInput.caseFolder);
-        fwi::inversionMethods::StepAndDirectionReconstructorInput stepAndDirectionInput = stepAndDirectionReader.getInput();
-        inverse = factory.createStepAndDirectionReconstructor(
-            stepAndDirectionInput, model, fwiOpts.stepsize + "StepSize", fwiOpts.stepdir + "Direction", referencePressureData);
-    }
-    else
-    {
-        L_(fwi::io::linfo) << "Create UnifiedInversionReconstructor";
-        inverse = factory.createInversion(fwiOpts.inversion + "Inversion", model, gInput);
-    }
+    inverse = factory.createInversion(fwiOpts.inversion + "Inversion", model, gInput);
 
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Estimating Chi...";
@@ -161,6 +162,59 @@ void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInp
     fwi::io::endLogger();
 
     std::cout << "InversionProcess completed" << std::endl;
+}
+
+void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput)
+{
+    mpi::environment env;
+    mpi::communicator world;
+    fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
+    fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
+    fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
+    fwi::core::FrequenciesGroup freq(gInput.freq, gInput.c0);
+
+    // read referencePressureData from a CSV file format
+    std::string fileLocation = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
+    std::ifstream file(fileLocation);
+    fwi::io::CSVReader row;
+
+    if(!file.is_open())
+    {
+        //L_(fwi::io::linfo) << "Could not open file at " << fileLocation;
+        throw std::runtime_error("Could not open file at " + fileLocation);
+    }
+
+    int magnitude = freq.count * source.count * receiver.count;
+    std::vector<std::complex<double>> referencePressureData(magnitude);
+    int i = 0;
+
+    while(file >> row)
+    {
+        if(i < magnitude)
+        {
+            referencePressureData[i] = {atof(row[0].c_str()), atof(row[1].c_str())};
+        }
+        ++i;
+    }
+
+    // Create forward model
+    fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
+    fwi::forwardModels::FiniteDifferenceForwardModelMPI *createdForwardModel =
+        new fwi::forwardModels::FiniteDifferenceForwardModelMPI(grid, source, receiver, freq, finitedifferencereader.getInput());
+
+    std::vector<std::complex<double>> res;
+    fwi::core::complexDataGrid2D cgrid(grid);
+
+    bool loop = true;
+
+    while(loop)
+    {
+        //world.recv(0, 1, loop);
+        printf("Rank %i has received buffer %d, calculating now... \n", world.rank(), loop);
+        createdForwardModel->getUpdateDirectionInformationMPItest();
+    }
+
+    printf("Rank %i has broken from loop with buffer %d \n", world.rank(), loop);
 }
 
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)

@@ -1,6 +1,6 @@
-
 add_library(conjugate_gradient_inversion_library
     conjugateGradientInversion.cpp                      ../include/conjugateGradientInversion.h
+    conjugateGradientMPIInversion.cpp                      ../include/conjugateGradientMPIInversion.h
                                                         ../include/conjugateGradientInversionInput.h
     conjugateGradientInversionInputCardReader.cpp       ../include/conjugateGradientInversionInputCardReader.h
                                                         ../include/deltaAmplification.h

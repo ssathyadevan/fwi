@@ -1,69 +1,364 @@
+#ifdef MPI
+
 #include "FiniteDifferenceForwardModelParallelMPI.h"
+#include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "Helmholtz2D.h"
-#include <complex>
-#include <mpi.h>
-#include <vector>
+#include "log.h"
+#include <boost/mpi.hpp>
+#include <boost/serialization/complex.hpp>
+#include <boost/serialization/vector.hpp>
+namespace mpi = boost::mpi;
 
 namespace fwi
 {
     namespace forwardModels
     {
-        FiniteDifferenceForwardModelParallelMPI::FiniteDifferenceForwardModelParallelMPI(const core::grid2D &grid, const core::Sources &source,
-            const core::Receivers &receiver, const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
-            : FiniteDifferenceForwardModel(grid, source, receiver, freq, fmInput)
+        FiniteDifferenceForwardModelMPI::FiniteDifferenceForwardModelMPI(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
+            : _grid(grid)
+            , _source(source)
+            , _receiver(receiver)
+            , _freq(freq)
+            , _Greens()
+            , _p0()
+            , _pTot()
+            , _kappa()
+            , _fMInput(fMInput)
         {
-            int rank, size;
-            MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* get current process id */
-            MPI_Comm_size(MPI_COMM_WORLD, &size); /* get number of processes */
-            printf("Hello world from process %d of %d\n", rank, size);
+            //L_(io::linfo) << "Creating Greens function field...";
+            createGreens();
+            //L_(io::linfo) << "Creating p0...";
+            createP0();
+            createPTot(freq, source);
+            createKappa(freq, source, receiver);
         }
 
-        void FiniteDifferenceForwardModelParallelMPI::calculatePTot(const core::dataGrid2D &chiEst)
+        FiniteDifferenceForwardModelMPI::~FiniteDifferenceForwardModelMPI()
+        {
+            mpi::communicator world;
+            printf("Destructor Called for %i/%i\n",world.rank(),world.size());
+            if(_Greens != nullptr)
+                this->deleteGreens();
+
+            if(_p0 != nullptr)
+                this->deleteP0();
+
+            if(_pTot != nullptr)
+                this->deletePtot();
+
+            if(_kappa != nullptr)
+                this->deleteKappa();
+        }
+
+        void FiniteDifferenceForwardModelMPI::createP0()
+        {
+            assert(_Greens != nullptr);
+            assert(_p0 == nullptr);
+
+            _p0 = new core::complexDataGrid2D **[_freq.count];
+
+            for(int i = 0; i < _freq.count; i++)
+            {
+                _p0[i] = new core::complexDataGrid2D *[_source.count];
+
+                for(int j = 0; j < _source.count; j++)
+                {
+                    _p0[i][j] = new core::complexDataGrid2D(_grid);
+                    *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
+                }
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::deleteP0()
+        {
+            for(int i = 0; i < _freq.count; i++)
+            {
+                for(int j = 0; j < _source.count; j++)
+                {
+                    delete _p0[i][j];
+                }
+
+                delete[] _p0[i];
+            }
+
+            delete[] _p0;
+            _p0 = nullptr;
+        }
+
+        void FiniteDifferenceForwardModelMPI::createGreens()
+        {
+            _Greens = new core::greensRect2DCpu *[_freq.count];
+
+            for(int i = 0; i < _freq.count; i++)
+            {
+                _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]);
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::deleteGreens()
+        {
+            for(int i = 0; i < _freq.count; i++)
+            {
+                delete _Greens[i];
+            }
+
+            delete[] _Greens;
+            _Greens = nullptr;
+        }
+
+        void FiniteDifferenceForwardModelMPI::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
+        {
+            _pTot = new core::complexDataGrid2D *[freq.count * source.count];
+
+            int li;
+
+            for(int i = 0; i < freq.count; i++)
+            {
+                li = i * source.count;
+
+                for(int j = 0; j < source.count; j++)
+                {
+                    _pTot[li + j] = new core::complexDataGrid2D(*_p0[i][j]);
+                }
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::deletePtot()
+        {
+            for(int i = 0; i < _freq.count * _source.count; i++)
+            {
+                delete _pTot[i];
+            }
+
+            delete[] _pTot;
+            _pTot = nullptr;
+        }
+
+        void FiniteDifferenceForwardModelMPI::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
+        {
+            _kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
+
+            for(int i = 0; i < freq.count * source.count * receiver.count; i++)
+            {
+                _kappa[i] = new core::complexDataGrid2D(_grid);
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::deleteKappa()
+        {
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
+            {
+                delete _kappa[i];
+            }
+
+            delete[] _kappa;
+            _kappa = nullptr;
+        }
+
+        void FiniteDifferenceForwardModelMPI::calculatePTot(const core::dataGrid2D &chiEst)
         {
             assert(_Greens != nullptr);
             assert(_p0 != nullptr);
 
-            auto copyPTot = _pTot;
+            int li;
 
-            int rank, size;
-            MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* get current process id */
-            MPI_Comm_size(MPI_COMM_WORLD, &size); /* get number of processes */
-            // printf("Hello world from process %d of %d\n", rank, size);
-            // calculate the size
-            int total_loop_size = _freq.count;
-            int sep_loop_size = total_loop_size / size;
-            int loop_size = sep_loop_size;
-            // This
-            if(rank == 0)
-            {
-                loop_size = sep_loop_size + (total_loop_size - sep_loop_size * size);
-            }
-            else
-            {
-                loop_size = sep_loop_size;
-            }
-            int start = rank * loop_size;
-            int stop = (rank + 1) * loop_size;
-
-            int li, i, j;
-            for(i = start; i < stop; i++)
+            for(int i = 0; i < _freq.count; i++)
             {
                 li = i * _source.count;
 
                 Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _source, _freq.c0, chiEst, _fMInput);
 
-                L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.count << "freq. For rank:" << rank;
+                //L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.count << "freq";
 
-                for(j = 0; j < _source.count; j++)
+                for(int j = 0; j < _source.count; j++)
                 {
-                    // L_(io::linfo) << "Solving P_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
-
-                    *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *copyPTot[li + j]);
+                    //L_(io::linfo) << "Solving p_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
+                    *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *_pTot[li + j]);
                 }
             }
-            MPI_Finalize();
         }
 
-    }   // namespace forwardModels
+        std::vector<std::complex<double>> FiniteDifferenceForwardModelMPI::calculatePressureField(const core::dataGrid2D &chiEst)
+        {
+            std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
+            applyKappa(chiEst, kOperator);
+            return kOperator;
+        }
 
+        void FiniteDifferenceForwardModelMPI::calculateKappa()
+        {
+            int li, lj;
+
+            for(int i = 0; i < _freq.count; i++)
+            {
+                li = i * _receiver.count * _source.count;
+
+                for(int j = 0; j < _receiver.count; j++)
+                {
+                    lj = j * _source.count;
+
+                    for(int k = 0; k < _source.count; k++)
+                    {
+                        *_kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _source.count + k]);
+                    }
+                }
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+        {
+            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
+            {
+                kOperator[i] = dotProduct(*_kappa[i], CurrentPressureFieldSerial);
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        {
+            // Only the main program will get here
+            mpi::environment env;
+            mpi::communicator world;
+
+           for(int i = 1; i < world.size(); i++)
+            {
+                //printf("MAIN send to %i/%i\n",i,world.size());
+               //We should not wait for it to be received
+                world.send(i,2, res);
+            }
+
+           int devide = _freq.count / world.size();
+           int max = devide + (_freq.count - devide*world.size());
+           int rank = world.rank();
+            printf("devide = %i and max = %i for rank %i\n",devide,max, rank);
+           //Original
+           int l_i, l_j;
+           kRes.zero();
+           core::complexDataGrid2D kDummy(_grid);
+           //Assume rank=0
+           for(int i = 0; i < devide + max; i++)
+           {
+               l_i = i * _receiver.count * _source.count;
+               for(int j = 0; j < _receiver.count; j++)
+               {
+                   l_j = j * _source.count;
+                   for(int k = 0; k < _source.count; k++)
+                   {
+                       kDummy = *_kappa[l_i + l_j + k];
+                       kDummy.conjugate();
+                       kRes += kDummy * res[l_i + l_j + k];
+                   }
+               }
+           }
+           printf("Waiting on Others\n");
+           for(int i = 1; i < world.size(); i++)
+            {
+                std::vector<std::complex<double>> receiv;
+                world.recv(i,5, receiv);
+                kRes += receiv;
+            }
+
+       }
+
+
+        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPItest()
+
+        {
+            calculateKappa();
+            mpi::environment env;
+            mpi::communicator world;
+
+            std::vector<std::complex<double>> res;
+            world.recv(0, 2, res);
+            //std::cout << "Received " << res.size() << " numbers: " <<std::endl;
+            int devide = _freq.count / world.size();
+            int max = devide + (_freq.count - devide*world.size()) - 1;
+            int rank = world.rank();
+            printf("devide = %i and max = %i for rank %i\n",devide,max, rank);
+
+
+            int l_i, l_j;
+            core::complexDataGrid2D kRes(_grid);
+            kRes.zero();
+            core::complexDataGrid2D kDummy(_grid);
+            //Assume rank != 0
+            for(int i = devide*(rank-1) + max; i < devide*(rank) + max; i++)
+            {
+                l_i = i * _receiver.count * _source.count;
+                for(int j = 0; j < _receiver.count; j++)
+                {
+                    l_j = j * _source.count;
+                    for(int k = 0; k < _source.count; k++)
+                    {
+                        kDummy = *_kappa[l_i + l_j + k];
+                        kDummy.conjugate();
+                        kRes += kDummy * res[l_i + l_j + k];
+                    }
+                }
+            }
+            world.send(0,5,kRes.getData());
+
+        }
+
+        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
+            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
+        {
+            calculateKappa();
+            mpi::environment env;
+            mpi::communicator world;
+            //printf("GetUpdateDirection for %i/%i \n", world.rank() + 1, world.size());
+
+            world.recv(0, 2, res);
+            std::cout << "Received " << res.size() << " numbers: " <<std::endl;
+            int l_i, l_j;
+            kRes.zero();
+            printf("UpdateDirection received for  %i/%i \n", world.rank() + 1, world.size());
+            core::complexDataGrid2D kDummy(_grid);
+
+            int devide = _freq.count / world.size();
+            int max = devide + (_freq.count - devide);
+
+            for(int i = world.rank() * devide + max; i < (world.rank() + 1) * devide+ max; i++)
+            {
+                l_i = i * _receiver.count * _source.count;
+                for(int j = 0; j < _receiver.count; j++)
+                {
+                    l_j = j * _source.count;
+                    for(int k = 0; k < _source.count; k++)
+                    {
+                        kDummy = *_kappa[l_i + l_j + k];
+                        kDummy.conjugate();
+                        kDummy += kDummy * res[l_i + l_j + k];
+                    }
+                }
+            }
+            //world.send(0, 2, res);
+        }
+
+        void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        {
+            int l_i, l_j;
+
+            kRes.zero();
+
+            core::complexDataGrid2D kDummy(_grid);
+
+            for(int i = 0; i < _freq.count; i++)
+            {
+                l_i = i * _receiver.count * _source.count;
+
+                for(int j = 0; j < _receiver.count; j++)
+                {
+                    l_j = j * _source.count;
+
+                    for(int k = 0; k < _source.count; k++)
+                    {
+                        kDummy = *_kappa[l_i + l_j + k];
+
+                        kRes += kDummy * res[l_i + l_j + k];
+                    }
+                }
+            }
+        }
+    }   // namespace forwardModels
 }   // namespace fwi
+#endif

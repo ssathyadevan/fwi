@@ -18,7 +18,6 @@ PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include
 PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include)
 target_link_libraries(finite_difference_forward_model_library core_library)
 
-#MPI
-find_package(MPI) #make it REQUIRED, if you want
-include_directories(SYSTEM ${MPI_INCLUDE_PATH})
- target_link_libraries(finite_difference_forward_model_library ${MPI_CXX_LIBRARIES})
+
+
+
