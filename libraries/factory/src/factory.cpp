@@ -55,12 +55,14 @@ namespace fwi
             _createdInversion = new inversionMethods::ConjugateGradientInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
+#ifdef MPI
         if(desiredInversion == "ConjugateGradientMPIInversion")
         {
             inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::ConjugateGradientMPIInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
+#endif
         if(desiredInversion == "RandomInversion")
         {
             inversionMethods::RandomInversionInputCardReader randomReader(gInput.caseFolder);

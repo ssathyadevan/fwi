@@ -15,20 +15,20 @@ if( WIN32 )
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic")
 endif()
 
-#Set gcc compiler flags
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -ldl -lboost_mpi -lboost_serialization -fopenmp -Wall -Wextra -Wpedantic")
-
 #Set project path define
 add_definitions(-DFWI_PROJECT_DIR="${CMAKE_SOURCE_DIR}")
 
 #Check MPI/BOOST
 find_package(MPI)
 if(MPI_FOUND)
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -ldl -lboost_mpi -lboost_serialization -fopenmp -Wall -Wextra -Wpedantic")
     add_definitions(-DMPI)
     include_directories(SYSTEM ${MPI_INCLUDE_PATH})
     find_package(Boost REQUIRED COMPONENTS mpi serialization)
     link_libraries(${Boost_LIBRARIES})
     link_libraries(${MPI_CXX_LIBRARIES})
+else()
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic -Werror -Werror=vla")
 endif()
 
 #We require Eigen3 
