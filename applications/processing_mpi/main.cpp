@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     {
         mpi::environment env(argc, argv, mpi::threading::multiple);
         mpi::communicator world;
-        printf("Started Process with %i threads \n", world.size());
+
         std::vector<std::string> arguments = {argv + 1, argv + argc};
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
 
         if(world.rank() == 0)
         {
+            printf("Started Process with %i threads \n", world.size());
             doProcess(fwiOpts, gInput);
+            env.~environment();
         }
         else
         {
@@ -178,6 +180,7 @@ void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     std::ifstream file(fileLocation);
     fwi::io::CSVReader row;
 
+
     if(!file.is_open())
     {
         //L_(fwi::io::linfo) << "Could not open file at " << fileLocation;
@@ -198,20 +201,18 @@ void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     }
 
     // Create forward model
-    fwi::forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(gInput.caseFolder);
-    fwi::forwardModels::FiniteDifferenceForwardModelMPI *createdForwardModel =
-        new fwi::forwardModels::FiniteDifferenceForwardModelMPI(grid, source, receiver, freq, finitedifferencereader.getInput());
+    fwi::Factory factory;
+    L_(fwi::io::linfo) << "Create ForwardModel";
+    fwi::forwardModels::ForwardModelInterface *model;
+    model = factory.createForwardModel(gInput.caseFolder, fwiOpts.forward + "ForwardModel", grid, source, receiver, freq);
 
     std::vector<std::complex<double>> res;
     fwi::core::complexDataGrid2D cgrid(grid);
 
     bool loop = true;
-
     while(loop)
     {
-        //world.recv(0, 1, loop);
-        printf("Rank %i has received buffer %d, calculating now... \n", world.rank(), loop);
-        createdForwardModel->getUpdateDirectionInformationMPItest();
+       model->getUpdateDirectionInformationMPI(res, cgrid,2,5);
     }
 
     printf("Rank %i has broken from loop with buffer %d \n", world.rank(), loop);

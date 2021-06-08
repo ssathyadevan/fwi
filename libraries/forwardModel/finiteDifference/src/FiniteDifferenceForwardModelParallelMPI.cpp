@@ -213,6 +213,23 @@ namespace fwi
             }
         }
 
+        void determineStartStopMPI(int &start, int &stop, const int &freq) {
+            mpi::environment env;
+            mpi::communicator world;
+            int devide = freq / world.size();
+            int rest = freq % world.size();
+            start = world.rank()*devide;
+            stop = (world.rank()+1)*devide;
+
+            for(int j = 0;j < world.rank();j++){
+
+                if( j < rest) {
+                    start += j-1 == 0 ? 0: 1;
+                    stop += 1;
+                }
+            }
+        }
+
         void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
         {
             // Only the main program will get here
@@ -221,21 +238,16 @@ namespace fwi
 
            for(int i = 1; i < world.size(); i++)
             {
-                //printf("MAIN send to %i/%i\n",i,world.size());
-               //We should not wait for it to be received
                 world.send(i,2, res);
             }
 
-           int devide = _freq.count / world.size();
-           int max = devide + (_freq.count - devide*world.size());
-           int rank = world.rank();
-            printf("devide = %i and max = %i for rank %i\n",devide,max, rank);
-           //Original
+           int start,stop;
+           determineStartStopMPI(start,stop,_freq.count);
+
            int l_i, l_j;
            kRes.zero();
            core::complexDataGrid2D kDummy(_grid);
-           //Assume rank=0
-           for(int i = 0; i < devide + max; i++)
+           for(int i = start; i < stop; i++)
            {
                l_i = i * _receiver.count * _source.count;
                for(int j = 0; j < _receiver.count; j++)
@@ -249,7 +261,7 @@ namespace fwi
                    }
                }
            }
-           printf("Waiting on Others\n");
+           //printf("Waiting on Others\n");
            for(int i = 1; i < world.size(); i++)
             {
                 std::vector<std::complex<double>> receiv;
@@ -260,28 +272,22 @@ namespace fwi
        }
 
 
-        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPItest()
-
+        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
+            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
         {
             calculateKappa();
             mpi::environment env;
             mpi::communicator world;
 
-            std::vector<std::complex<double>> res;
-            world.recv(0, 2, res);
-            //std::cout << "Received " << res.size() << " numbers: " <<std::endl;
-            int devide = _freq.count / world.size();
-            int max = devide + (_freq.count - devide*world.size()) - 1;
-            int rank = world.rank();
-            printf("devide = %i and max = %i for rank %i\n",devide,max, rank);
+            world.recv(0, offset, res);
+            int start, stop;
+            determineStartStopMPI(start,stop,_freq.count);
 
 
             int l_i, l_j;
-            core::complexDataGrid2D kRes(_grid);
             kRes.zero();
             core::complexDataGrid2D kDummy(_grid);
-            //Assume rank != 0
-            for(int i = devide*(rank-1) + max; i < devide*(rank) + max; i++)
+            for(int i = start; i < stop; i++)
             {
                 l_i = i * _receiver.count * _source.count;
                 for(int j = 0; j < _receiver.count; j++)
@@ -295,43 +301,7 @@ namespace fwi
                     }
                 }
             }
-            world.send(0,5,kRes.getData());
-
-        }
-
-        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
-        {
-            calculateKappa();
-            mpi::environment env;
-            mpi::communicator world;
-            //printf("GetUpdateDirection for %i/%i \n", world.rank() + 1, world.size());
-
-            world.recv(0, 2, res);
-            std::cout << "Received " << res.size() << " numbers: " <<std::endl;
-            int l_i, l_j;
-            kRes.zero();
-            printf("UpdateDirection received for  %i/%i \n", world.rank() + 1, world.size());
-            core::complexDataGrid2D kDummy(_grid);
-
-            int devide = _freq.count / world.size();
-            int max = devide + (_freq.count - devide);
-
-            for(int i = world.rank() * devide + max; i < (world.rank() + 1) * devide+ max; i++)
-            {
-                l_i = i * _receiver.count * _source.count;
-                for(int j = 0; j < _receiver.count; j++)
-                {
-                    l_j = j * _source.count;
-                    for(int k = 0; k < _source.count; k++)
-                    {
-                        kDummy = *_kappa[l_i + l_j + k];
-                        kDummy.conjugate();
-                        kDummy += kDummy * res[l_i + l_j + k];
-                    }
-                }
-            }
-            //world.send(0, 2, res);
+            world.send(0,block_size,kRes.getData());
         }
 
         void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)

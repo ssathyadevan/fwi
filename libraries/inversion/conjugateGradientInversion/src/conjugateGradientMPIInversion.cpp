@@ -132,15 +132,6 @@ namespace fwi
             }
             residualLogFile.close();
 
-            bool loop = false;
-            mpi::environment env;
-            mpi::communicator world;
-
-            for(int i = 0; i < world.size(); i++)
-            {
-                world.send(i, 1, loop);
-            }
-
             return _chiEstimate;
         }
 
@@ -161,7 +152,6 @@ namespace fwi
         core::dataGrid2D ConjugateGradientMPIInversion::calculateUpdateDirection(
             std::vector<std::complex<double>> &residualVector, core::dataGrid2D &gradientCurrent, double eta)
         {
-
             core::complexDataGrid2D kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
             _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * kappaTimesResidual.getRealPart();
