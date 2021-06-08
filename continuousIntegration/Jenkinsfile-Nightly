@@ -74,66 +74,66 @@ pipeline{
 						}
 					}
 				}
-				stage('Connecting to Windows agent'){
-					agent{
-						node{
-							label 'Windows'
-							customWorkspace "workspace/" + (env.JOB_NAME.replace(' ', '_')).take(25)
-						}
-					}
-					stages{
-						stage( 'Preparing Windows workspace' ){
-							steps{
-								echo "Preparing windows workspace"
-								deleteDir()
-								checkout scm
-								script{
-									functions = evaluate readTrusted('continuousIntegration/functions.groovy')
-								}
-							}
-						}
-						stage( 'Building on Windows' ){
-							steps{
-								script{
-									functions.build("Windows")
-								}
-							}
-						}
-						stage('Unit testing on Windows'){
-							steps{
-								script{
-									functions.unitTest("Windows")
-								}
-							}
-						}
-						stage('Regression testing on Windows'){
-							steps{
-								script{
-									functions.executeTests("Windows", "regressionTests-Nightly.csv")
-								}
-							}
-						}
-						stage('Deploying on Windows'){
-							steps{
-								script{
-									functions.deploy("Windows")
-								}
-							}
-						}
-					}
-					post{
-						always{
-							echo 'Publish unit tests results'
-							script{
-								functions.publishUnitTestsResultsOnJenkins()
-								functions.publishRegressionTestsResultsOnJenkins()
-							}
-							echo 'Sending email'
-							script{
-								functions.sendEmail("Windows")
-							}
-						}
-					}
+				// stage('Connecting to Windows agent'){
+				// 	agent{
+				// 		node{
+				// 			label 'Windows'
+				// 			customWorkspace "workspace/" + (env.JOB_NAME.replace(' ', '_')).take(25)
+				// 		}
+				// 	}
+				// 	stages{
+				// 		stage( 'Preparing Windows workspace' ){
+				// 			steps{
+				// 				echo "Preparing windows workspace"
+				// 				deleteDir()
+				// 				checkout scm
+				// 				script{
+				// 					functions = evaluate readTrusted('continuousIntegration/functions.groovy')
+				// 				}
+				// 			}
+				// 		}
+				// 		stage( 'Building on Windows' ){
+				// 			steps{
+				// 				script{
+				// 					functions.build("Windows")
+				// 				}
+				// 			}
+				// 		}
+				// 		stage('Unit testing on Windows'){
+				// 			steps{
+				// 				script{
+				// 					functions.unitTest("Windows")
+				// 				}
+				// 			}
+				// 		}
+				// 		stage('Regression testing on Windows'){
+				// 			steps{
+				// 				script{
+				// 					functions.executeTests("Windows", "regressionTests-Nightly.csv")
+				// 				}
+				// 			}
+				// 		}
+				// 		stage('Deploying on Windows'){
+				// 			steps{
+				// 				script{
+				// 					functions.deploy("Windows")
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// 	post{
+				// 		always{
+				// 			echo 'Publish unit tests results'
+				// 			script{
+				// 				functions.publishUnitTestsResultsOnJenkins()
+				// 				functions.publishRegressionTestsResultsOnJenkins()
+				// 			}
+				// 			echo 'Sending email'
+				// 			script{
+				// 				functions.sendEmail("Windows")
+				// 			}
+				// 		}
+				// 	}
 				}
 			}
 		}
