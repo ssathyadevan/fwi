@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         {
             printf("Started Process with %i threads \n", world.size());
             doProcess(fwiOpts, gInput);
-            env.~environment();
+            env.abort(1);
         }
         else
         {
