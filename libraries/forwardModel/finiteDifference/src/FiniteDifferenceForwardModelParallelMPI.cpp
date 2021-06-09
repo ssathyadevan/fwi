@@ -25,9 +25,11 @@ namespace fwi
             , _kappa()
             , _fMInput(fMInput)
         {
-            //L_(io::linfo) << "Creating Greens function field...";
+            // Review: Remove logging statements?
+            // L_(io::linfo) << "Creating Greens function field...";
             createGreens();
-            //L_(io::linfo) << "Creating p0...";
+            // Review: Remove logging statements?
+            // L_(io::linfo) << "Creating p0...";
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
@@ -36,7 +38,8 @@ namespace fwi
         FiniteDifferenceForwardModelMPI::~FiniteDifferenceForwardModelMPI()
         {
             mpi::communicator world;
-            printf("Destructor Called for %i/%i\n",world.rank(),world.size());
+            // Review: Remove logging statements?
+            printf("Destructor Called for %i/%i\n", world.rank(), world.size());
             if(_Greens != nullptr)
                 this->deleteGreens();
 
@@ -168,11 +171,13 @@ namespace fwi
 
                 Helmholtz2D helmholtzFreq(_grid, _freq.freq[i], _source, _freq.c0, chiEst, _fMInput);
 
-                //L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.count << "freq";
+                // Review: Remove logging statements?
+                // L_(io::linfo) << "Creating this->p_tot for " << i + 1 << "/ " << _freq.count << "freq";
 
                 for(int j = 0; j < _source.count; j++)
                 {
-                    //L_(io::linfo) << "Solving p_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
+                    // Review: Remove logging statements?
+                    // L_(io::linfo) << "Solving p_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
                     *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *_pTot[li + j]);
                 }
             }
@@ -213,18 +218,21 @@ namespace fwi
             }
         }
 
-        void determineStartStopMPI(int &start, int &stop, const int &freq) {
+        void determineStartStopMPI(int &start, int &stop, const int &freq)
+        {
             mpi::environment env;
             mpi::communicator world;
+            // Review: Remove logging statements?
             int devide = freq / world.size();
             int rest = freq % world.size();
-            start = world.rank()*devide;
-            stop = (world.rank()+1)*devide;
+            start = world.rank() * devide;
+            stop = (world.rank() + 1) * devide;
 
-            for(int j = 0;j < world.rank();j++){
-
-                if( j < rest) {
-                    start += j-1 == 0 ? 0: 1;
+            for(int j = 0; j < world.rank(); j++)
+            {
+                if(j < rest)
+                {
+                    start += j - 1 == 0 ? 0 : 1;
                     stop += 1;
                 }
             }
@@ -236,53 +244,13 @@ namespace fwi
             mpi::environment env;
             mpi::communicator world;
 
-           for(int i = 1; i < world.size(); i++)
+            for(int i = 1; i < world.size(); i++)
             {
-                world.send(i,2, res);
+                world.send(i, 2, res);
             }
 
-           int start,stop;
-           determineStartStopMPI(start,stop,_freq.count);
-
-           int l_i, l_j;
-           kRes.zero();
-           core::complexDataGrid2D kDummy(_grid);
-           for(int i = start; i < stop; i++)
-           {
-               l_i = i * _receiver.count * _source.count;
-               for(int j = 0; j < _receiver.count; j++)
-               {
-                   l_j = j * _source.count;
-                   for(int k = 0; k < _source.count; k++)
-                   {
-                       kDummy = *_kappa[l_i + l_j + k];
-                       kDummy.conjugate();
-                       kRes += kDummy * res[l_i + l_j + k];
-                   }
-               }
-           }
-           //printf("Waiting on Others\n");
-           for(int i = 1; i < world.size(); i++)
-            {
-                std::vector<std::complex<double>> receiv;
-                world.recv(i,5, receiv);
-                kRes += receiv;
-            }
-
-       }
-
-
-        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
-        {
-            calculateKappa();
-            mpi::environment env;
-            mpi::communicator world;
-
-            world.recv(0, offset, res);
             int start, stop;
-            determineStartStopMPI(start,stop,_freq.count);
-
+            determineStartStopMPI(start, stop, _freq.count);
 
             int l_i, l_j;
             kRes.zero();
@@ -301,7 +269,45 @@ namespace fwi
                     }
                 }
             }
-            world.send(0,block_size,kRes.getData());
+            // Review: (commented) print statment
+            // printf("Waiting on Others\n");
+            for(int i = 1; i < world.size(); i++)
+            {
+                std::vector<std::complex<double>> receiv;
+                world.recv(i, 5, receiv);
+                kRes += receiv;
+            }
+        }
+
+        void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
+            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
+        {
+            calculateKappa();
+            mpi::environment env;
+            mpi::communicator world;
+
+            world.recv(0, offset, res);
+            int start, stop;
+            determineStartStopMPI(start, stop, _freq.count);
+
+            int l_i, l_j;
+            kRes.zero();
+            core::complexDataGrid2D kDummy(_grid);
+            for(int i = start; i < stop; i++)
+            {
+                l_i = i * _receiver.count * _source.count;
+                for(int j = 0; j < _receiver.count; j++)
+                {
+                    l_j = j * _source.count;
+                    for(int k = 0; k < _source.count; k++)
+                    {
+                        kDummy = *_kappa[l_i + l_j + k];
+                        kDummy.conjugate();
+                        kRes += kDummy * res[l_i + l_j + k];
+                    }
+                }
+            }
+            world.send(0, block_size, kRes.getData());
         }
 
         void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
