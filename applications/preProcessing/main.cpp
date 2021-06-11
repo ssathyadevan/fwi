@@ -91,7 +91,7 @@ void doPreprocess(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Calculating pData (the reference pressure-field)...";
     clock.Start();
-    model->calculatePTot(chi);
+    //model->calculatePTot(chi);
     model->calculateKappa();
     std::vector<std::complex<double>> referencePressureData = model->calculatePressureField(chi);
 

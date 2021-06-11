@@ -23,15 +23,15 @@ parser.add_argument("--post-dir", type=str, required=False, default="./",
                     help="Path to the folder containing postProcessing-python3.py")
 
 parser.add_argument("-p", "--preprocess", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"],
                     help="Choice of ForwardModel for PreProcess")
 
 parser.add_argument("-f", "--forward", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"],
                     help="Choice of ForwardModel for Process")
 
 parser.add_argument("-i", "--inversion", type=str, required=False, default="ConjugateGradient",
-                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection"],
+                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection","ConjugateGradient"],
                     help="Choice of inversion method for Process *StepAndDirection is deprecated*")
 
 parser.add_argument("--step-dir", type=str, required=False, default="ConjugateGradient",
@@ -41,6 +41,9 @@ parser.add_argument("--step-dir", type=str, required=False, default="ConjugateGr
 parser.add_argument("--step-size", type=str, required=False, default="ConjugateGradient",
                     choices=["ConjugateGradient", "ConjugateGradientRegularization", "BorzilaiBorwein", "Fixed"],
                     help="Used only if -i=StepAndDirection. Desired StepSize")
+
+parser.add_argument("--threads",type=int,default=1,required=False)
+parser.add_argument("--MPI",action='store_true',help="Activate mpirun ...")
 
 parser.add_argument('--skip-pre', action='store_true', help="Skip prepocessing")
 parser.add_argument('--skip-process', action='store_true', help="Skip pocessing")
@@ -72,13 +75,13 @@ else:
     print("------->PreProcessing skipped")
 
 if not arguments.skip_process:
-    processExe = Path(os.path.join(os.path.abspath(arguments.bin), "FWI_Process")).as_posix()
+    if not arguments.MPI:
+        processExe = Path(os.path.join(os.path.abspath(arguments.bin), "FWI_Process")).as_posix()
+    else:
+        processExe = "mpirun --use-hwthread-cpus -np " + arguments.threads + " " + Path(os.path.join(os.path.abspath(arguments.bin), "FWI_Process")).as_posix()
     processArgs = " -d \"" + Path(os.path.abspath(arguments.dir)).as_posix() + "\"" \
                   + " -f " + arguments.forward \
                   + " -i " + arguments.inversion
-
-    if arguments.inversion == "StepAndDirection":
-        processArgs += " --step-dir " + arguments.step_dir + " --step-size " + arguments.step_size
 
     print("------->Calling Processing:", flush=True)
     print(processExe + processArgs, flush=True)
