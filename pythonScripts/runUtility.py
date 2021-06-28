@@ -31,7 +31,7 @@ parser.add_argument("-f", "--forward", type=str, required=False, default="Finite
                     help="Choice of ForwardModel for Process")
 
 parser.add_argument("-i", "--inversion", type=str, required=False, default="ConjugateGradient",
-                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection","ConjugateGradient"],
+                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection","ConjugateGradientMPI"],
                     help="Choice of inversion method for Process *StepAndDirection is deprecated*")
 
 parser.add_argument("--step-dir", type=str, required=False, default="ConjugateGradient",
@@ -78,7 +78,7 @@ if not arguments.skip_process:
     if not arguments.MPI:
         processExe = Path(os.path.join(os.path.abspath(arguments.bin), "FWI_Process")).as_posix()
     else:
-        processExe = "mpirun --use-hwthread-cpus -np " + arguments.threads + " " + Path(os.path.join(os.path.abspath(arguments.bin), "FWI_Process")).as_posix()
+        processExe = "mpirun --use-hwthread-cpus -np " + str(arguments.threads) + " " + Path(os.path.join(os.path.abspath(arguments.bin), "FWI_ProcessMPI")).as_posix()
     processArgs = " -d \"" + Path(os.path.abspath(arguments.dir)).as_posix() + "\"" \
                   + " -f " + arguments.forward \
                   + " -i " + arguments.inversion
