@@ -13,19 +13,7 @@ namespace fwi
 {
 namespace forwardModels
 {
-    FiniteDifferenceForwardModelMPI::FiniteDifferenceForwardModelMPI(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
-        const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
-        : _grid(grid)
-        , _source(source)
-        , _receiver(receiver)
-        , _freq(freq)
-        , _Greens()
-        , _p0()
-        , _pTot()
-        , _kappa()
-        , _fMInput(fMInput)
-    {
-        FiniteDifferenceForwardModelMPI::FiniteDifferenceForwardModelMPI(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+   FiniteDifferenceForwardModelMPI::FiniteDifferenceForwardModelMPI(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
             const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
             : _grid(grid)
             , _source(source)
@@ -187,9 +175,8 @@ void FiniteDifferenceForwardModelMPI::calculatePTot(const core::dataGrid2D &chiE
                     *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *_pTot[li + j]);
                 }
             }
-        }
-    }
 }
+
 
 std::vector<std::complex<double>> FiniteDifferenceForwardModelMPI::calculatePressureField(const core::dataGrid2D &chiEst)
 {
@@ -248,16 +235,10 @@ void determineStartStopMPI(int &start, int &stop, const int &freq)
 void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
 {
         mpi::communicator world;
-        std::vector<std::complex<double>> kapp = (*_kappa)->getData();
-        mpi::request reqs[(world.size()-2)];
-        mpi::request reqs2[(world.size()-2)];
         for(int i = 1; i < world.size(); i++)
         {
-            reqs[i-1] = world.isend(i, 2, res);
-            reqs2[i-1] = world.isend(i, 17, kapp);
+            world.send(i, 2, res);
         }
-        mpi::test_all(reqs, reqs + world.size()-2);
-        mpi::test_all(reqs2, reqs2 + world.size()-2);
 
         int start, stop;
         determineStartStopMPI(start, stop, _freq.count);
@@ -279,7 +260,6 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::v
                 }
             }
         }
-        // printf("Waiting on Others\n");
         for(int i = 1; i < world.size(); i++)
         {
             std::vector<std::complex<double>> receiv;
@@ -293,13 +273,10 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::v
 void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
             std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
         {
-            calculateKappa();
-            mpi::environment env;
             mpi::communicator world;
-            std::vector<std::complex<double>> kappa;
             mpi::request req = world.irecv(0, offset, res);
             req.wait();
-            world.recv(0, offset+15,kappa);
+
             int start, stop;
             determineStartStopMPI(start, stop, _freq.count);
 
@@ -314,7 +291,7 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
                     l_j = j * _source.count;
                     for(int k = 0; k < _source.count; k++)
                     {
-                        kDummy = kappa[l_i + l_j + k];
+                        kDummy = *_kappa[l_i + l_j + k];
                         kDummy.conjugate();
                         kRes += kDummy * res[l_i + l_j + k];
                     }
@@ -322,11 +299,11 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
             }
             world.send(0, block_size, kRes.getData());
         }
-void FiniteDifferenceForwardModelMPI::getResidualGradient(
-    std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes) {
-  int l_i, l_j;
 
-  core::complexDataGrid2D kDummy(_grid);
+
+void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+{
+    int l_i, l_j;
 
     kRes.zero();
 
@@ -349,6 +326,7 @@ void FiniteDifferenceForwardModelMPI::getResidualGradient(
         }
     }
 }
+}
 } // namespace forwardModels
-} // namespace fwi
+ // namespace fwi
 #endif

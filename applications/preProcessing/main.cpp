@@ -8,7 +8,7 @@
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
-void doPreprocess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
+void doPreprocess(const fwi::io::genericInput &gInput);
 
 int main(int argc, char *argv[])
 {
@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
 
-        fwi::io::genericInputCardReader genericReader(fwiOpts.dir);
+        fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doPreprocess(fwiOpts, gInput);
+        doPreprocess(gInput);
     }
     catch(const std::exception &e)
     {
@@ -46,7 +46,7 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
     }
 }
 
-void doPreprocess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput)
+void doPreprocess(const fwi::io::genericInput &gInput)
 {
     std::cout << "Starting preprocessing with\n  forward =" + gInput.forward << std::endl;
 

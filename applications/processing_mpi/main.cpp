@@ -1,5 +1,4 @@
 #include "HelpTextProcessing.h"
-#include "StepAndDirectionReconstructorInputCardReader.h"
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "FiniteDifferenceForwardModelParallelMPI.h"
@@ -19,8 +18,8 @@ namespace mpi = boost::mpi;
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
-void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
-void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
+void doProcess(const fwi::io::genericInput &gInput);
+void doProcessMPI( const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char *argv[])
@@ -34,18 +33,18 @@ int main(int argc, char *argv[])
         fwi::io::argumentReader fwiOpts(arguments);
         printHelpOrVersion(fwiOpts);
 
-        fwi::io::genericInputCardReader genericReader(fwiOpts.dir);
+        fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
 
         if(world.rank() == 0)
         {
             printf("Started Process with %i threads \n", world.size());
-            doProcess(fwiOpts, gInput);
+            doProcess(gInput);
             env.abort(1);
         }
         else
         {
-            doProcessMPI(fwiOpts, gInput);
+            doProcessMPI(gInput);
         }
     }
     catch(const std::exception &e)
@@ -72,7 +71,7 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
     }
 }
 
-void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput)
+void doProcess(const fwi::io::genericInput &gInput)
 {
     std::cout << "Inversion Processing Started" << std::endl;
 
@@ -134,17 +133,17 @@ void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInp
     fwi::Factory factory;
     L_(fwi::io::linfo) << "Create ForwardModel";
     fwi::forwardModels::ForwardModelInterface *model;
-    model = factory.createForwardModel(gInput.caseFolder, fwiOpts.forward + "ForwardModel", grid, source, receiver, freq);
+    model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
     L_(fwi::io::linfo) << "Create inversionModel";
     fwi::inversionMethods::inversionInterface *inverse;
 
     std::cout << "Creating InversionProcess using parameters:" << std::endl
-              << "  -f=" << fwiOpts.forward << std::endl
-              << "  -i=" << fwiOpts.inversion << std::endl;
+              << "  -f=" << gInput.forward << std::endl
+              << "  -i=" << gInput.inversion << std::endl;
 
     // Setup StepAndDirection or UnifiedProcess models
-    inverse = factory.createInversion(fwiOpts.inversion + "Inversion", model, gInput);
+    inverse = factory.createInversion(gInput.inversion + "Inversion", model, gInput);
 
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Estimating Chi...";
@@ -166,7 +165,7 @@ void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInp
     std::cout << "InversionProcess completed" << std::endl;
 }
 
-void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput)
+void doProcessMPI(const fwi::io::genericInput &gInput)
 {
     mpi::environment env;
     mpi::communicator world;
@@ -204,7 +203,7 @@ void doProcessMPI(const fwi::io::argumentReader &fwiOpts, const fwi::io::generic
     fwi::Factory factory;
     L_(fwi::io::linfo) << "Create ForwardModel";
     fwi::forwardModels::ForwardModelInterface *model;
-    model = factory.createForwardModel(gInput.caseFolder, fwiOpts.forward + "ForwardModel", grid, source, receiver, freq);
+    model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
     std::vector<std::complex<double>> res;
     fwi::core::complexDataGrid2D cgrid(grid);

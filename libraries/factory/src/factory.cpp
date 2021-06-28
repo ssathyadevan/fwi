@@ -5,8 +5,6 @@
 #include "FiniteDifferenceForwardModelParallelMPI.h"
 #include "conjugateGradientMPIInversion.h"
 #endif
-#include "FixedStepSizeCalculator.h"
-#include "GradientDescentDirectionCalculator.h"
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "evolutionInversion.h"

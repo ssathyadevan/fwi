@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include "HelpTextProcessing.h"
 #include "log.h"
 #include "genericInputCardReader.h"
 #include "argumentReader.h"
@@ -18,7 +18,7 @@
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
-void doProcess(const fwi::io::argumentReader &fwiOpts, const fwi::io::genericInput &gInput);
+void doProcess( const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         
         fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcess(fwiOpts, gInput);
+        doProcess(gInput);
     }
     catch(const std::exception &e)
     {
