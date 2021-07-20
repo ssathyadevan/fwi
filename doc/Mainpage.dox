@@ -1,62 +1,21 @@
-/*! \mainpage
- * \section intro Introduction
- * For many large applications C++ is the language of choice and so it seems
- * reasonable to define C++ bindings for OpenCL.
- *
- * The interface is contained with a single C++ header file \em cl2.hpp and all
- * definitions are contained within the namespace \em cl. There is no additional
- * requirement to include \em cl.h and to use either the C++ or original C
- * bindings; it is enough to simply include \em cl2.hpp.
- * 
- *
- * \section compatibility Compatibility
- * Due to the evolution of the underlying OpenCL API the 2.0 C++ bindings
- * include an updated approach to defining supported feature versions
- * and the range of valid underlying OpenCL runtime versions supported.
- *
- *
- *
- * \section parameterization Parameters
- * This header may be parameterized by a set of preprocessor macros.
- *
- * \section example Example
- *
- * The following example shows a general use for the C++
- * bindings, including support for the optional exception feature and
- * also the supplied vector and string classes, see following sections for
- * decriptions of these features.
- *
- * \code
-    #define CL_HPP_ENABLE_EXCEPTIONS
-    #define CL_HPP_TARGET_OPENCL_VERSION 200
+/*!
+* \mainpage FWI Index Page
+*
+* \section sec_intro Introduction
+* This is a project containing the Full Waveform Inversion method. The FWI is an imaging technique that is used for extracting physical parameters of a medium using recorded waves.
 
-    #include <CL/cl2.hpp>
-    #include <iostream>
-    #include <vector>
-    #include <memory>
-    #include <algorithm>
-
-    const int numElements = 32;
-
-    int main(void)
-    {
-        // Filter for a 2.0 platform and set it as the default
-        std::vector<cl::Platform> platforms;
-        cl::Platform::get(&platforms);
-        cl::Platform plat;
-        for (auto &p : platforms) {
-            std::string platver = p.getInfo<CL_PLATFORM_VERSION>();
-            if (platver.find("OpenCL 2.") != std::string::npos) {
-                plat = p;
-            }
-        }
-        if (plat() == 0)  {
-            std::cout << "No OpenCL 2.0 platform found.";
-            return -1;
-        }
-
-	}
- *
- * \endcode
- *
- */
+* Within the Full waveform inversion (FWI) project, there are multiple goals. Apart from being a learning project for starting developers to get hands-on experience with scrum and C++, it should also provide a sandbox environment in which it it possible to test different concepts, ranging from testing coding skill to perform parallelization. Ideally, the project pipeline consists of multiple sequential base classes with interchangeable implementations without dependencies on other methods. This way it is not only possible to test different implementations of algorithms against each other in terms of accuracy, wall clock time or CPU time, but it is also possible to benchmark a parallelization implementation against running the algorithms on a single core.
+* Furthermore, this project could also function as a perfect showcase of the capabilities of ALTEN developers to (future) clients. A GUI is determined to be an essential prerequisite for this application, since that makes it easier to explain the FWI process to people who have not been involved in the project.
+*
+*
+* \subsection sec_FWI What is FWI?
+* The Full waveform inversion (FWI) is a relatively new technique that can be used in many fields, most prominently in seismic applications. The FWI is a data fitting method based on full-wavefield modelling to extract quantitative information from appropriate measurements. The first occurrence of an application arose in the late '70s with the first attempt at seismic modelling. This technique has a heavy reliance on computational power so only in recent years it has become feasible in practice. This application can model the interior of a medium in a non-destructive manner. An example of medical imaging is the construction of an image of an unborn baby with ultrasound.
+*
+* This method is used to discover the potential of new oil and gas wells in the oil and gas industry. The conventional option is to drill (oil) wells in the ground to discover the earth layers as well as potential gas and oil fields. This method is expensive and provides only limited information on a large area. The FWI method can be used to fill in the blanks of places where no drilling has taken place and so discover and characterize new oil and gas fields. Starting a FWI process requires placing acoustic sensors just below the surface of the earth. An acoustic source, like an explosion, causes the waves to travel through the earth and reflect and refract inside the subsurface. The sensors will measure these reflections and make a detailed view of the medium using the inversion process.
+*
+* Solving large scale 3D problems is still beyond the scope of many applications as it requires a lot of computational power and memory. In this implementation, a simplified FWI is used. First, a 2D version of the Helmholtz equation is utilized to model acoustic waves only. A single parameter, the relative wave propagation speed, is calculated to limit the memory and computational constraints. Secondly, the frequency domain is used to limit the non-linearity of the problem, so we can assume a linear solution. Lastly, the finite difference model is used for forward modelling. The solution to the model will only give a good solution when the underground model has moderately different subsurface properties.
+*
+\subsection sec_how_to_start How to work on this project
+The best start of this project is reading sequentially through the wiki pages on redmine. The concept of FWI is often hard to grasp, so the videos inside the introduction can help. Afterwards, the Getting Started guide can be followed for installation on your platform. If working alone, an outstanding task can be picked up. Please read the Way of working guide to correctly finish tasks.
+Be aware that most of the time consultants work on this project for a short period of time. Therefore, it is key to document very well what has been decided and where consultants have worked on, as this will smoothen the on-boarding of new consultants and knowledge transfer. For consultants working 2 sprints or longer on the project, a review of the performed work can be added to Developer Reviews.
+*/
