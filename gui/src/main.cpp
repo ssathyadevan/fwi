@@ -1,10 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QString>
+#include <QQmlContext>
+#include <QDir>
 
-#include "QFWIPreProcess.h"
-#include "QFWIProcess.h"
-#include "QFWIPostProcess.h"
+#include "Launcher.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,9 +12,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<QPreProcess>("com.fwi", 1, 0, "QPreProcess");
-    qmlRegisterType<QProcess>("com.fwi", 1, 0, "QProcess");
-    qmlRegisterType<QPostProcess>("com.fwi", 1, 0, "QPostProcess");
+    qmlRegisterType<Launcher>("com.fwi", 1, 0, "Launcher");
 
 
     QQmlApplicationEngine engine;
@@ -25,6 +23,10 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    engine.rootContext()->setContextProperty("applicationPath", "file://"+qApp->applicationDirPath()+ "/");
+    engine.rootContext()->setContextProperty("CurDirPath", QString(QDir::currentPath() + "/"));
+
 
     return app.exec();
 }

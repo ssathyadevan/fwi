@@ -14,17 +14,12 @@ ApplicationWindow {
     title: qsTr("Full Waveform Inversion")
     width: 1200
     height: 800
-    color: "#bebebc"
+    color: "#e6e6e5"
 
-    QPostProcess {
-        id: qPostProcess
-    }
-    QProcess {
-        id: qProcess
-    }
-    QPreProcess {
-        id: qPreProcess
-    }
+    Launcher {
+          id: qLauncher
+   }
+
 
 //    menu containing two menu items
     menuBar: MenuBar {
@@ -58,7 +53,7 @@ ApplicationWindow {
         y: 765
         width: 1074
         height: 14
-        value: 0.5
+        value: 0
     }
 
     Button {
@@ -78,12 +73,38 @@ ApplicationWindow {
         text: qsTr("Compute")
         transformOrigin: Item.TopLeft
         onClicked: {
-            console.log("JS compute clicked")
+//            console.log(CurDirPath, applicationPath)
 
-            preOut = qPreProcess.exec("ls");
-            console.log(preOut);
-            qProcess.basicPrint();
-            qPostProcess.basicPrint();
+            console.log(inputFolderTextEdit.text, forwardCombo.currentText, inversionCombo.currentText)
+            progressBar.value = 0.1
+
+            var preProcessCommand = CurDirPath+"../../../FWIInstall/bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
+            preProcessCommand = preProcessCommand.replace("%DATA%", CurDirPath+inputFolderTextEdit.text)
+            preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
+            console.log("==== PREPROCESS")
+            var output = qLauncher.exec("sh -c \"" + preProcessCommand +" < /dev/null \"");
+            console.log(output)
+            progressBar.value = 0.33;
+
+            var processCommand = CurDirPath+"../../../FWIInstall/bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
+            processCommand = processCommand.replace("%DATA%", CurDirPath+inputFolderTextEdit.text)
+            processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
+            processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
+            console.log("==== PROCESS")
+            qLauncher.exec(processCommand)
+            progressBar.value = 0.66
+
+            console.log("==== POST PROCESS")
+            var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
+            postProcessCommand = postProcessCommand.replace("%BIN%", CurDirPath+"../../../FWIInstall/")
+            postProcessCommand = postProcessCommand.replace("%DATA%", CurDirPath+inputFolderTextEdit.text)
+            qLauncher.exec(postProcessCommand);
+
+            progressBar.value = 1
+
+            inputImage.source = applicationPath + inputFolderTextEdit.text + "/output/defaultResidual.png"
+            outputImage.source = applicationPath + inputFolderTextEdit.text + "/output/defaultResult.png"
+
 
         }
     }
@@ -95,7 +116,7 @@ ApplicationWindow {
         width: 167
         height: 40
         flat: true
-        currentIndex: -1
+        currentIndex: 0
         Text {
             id: forwardText
             text: qsTr("Forward Model")
@@ -115,8 +136,8 @@ ApplicationWindow {
             id: inversionText
             text: qsTr("Inversion Model")
         }
-        currentIndex: -1
-        model: ["ConjugateDescent", "GradeientDescent", "EvolutionInversion", "RandomInversion"]
+        currentIndex: 0
+        model: ["ConjugateGradient", "GradientDescent", "EvolutionInversion", "RandomInversion"]
     }
 
     CheckBox {
@@ -175,8 +196,17 @@ ApplicationWindow {
         y: 151
         width: 428
         height: 23
-        text: qsTr("Text Edit")
+        text: qsTr("../../../FWIInstall/default")
         font.pixelSize: 16
+
+
+        property string placeholderText: "Enter path/to/data."
+
+        Text {
+            text: inputFolderTextEdit.placeholderText
+            color: "#aaa"
+            visible: !inputFolderTextEdit.text && !inputFolderTextEdit.activeFocus // <----------- ;-)
+        }
     }
 
     Text {
@@ -194,7 +224,7 @@ ApplicationWindow {
         y: 251
         width: 470
         height: 350
-        source: "qrc:/qtquickplugin/images/template_image.png"
+//        source: applicationPath + "../../../doc/background/investigationAboutIntegralForwardModelConvergence/Images/conjugateGradient_integral_calcAlphaTrueIntegralForwardModel_templeResult.png"
         fillMode: Image.PreserveAspectFit
     }
 
@@ -204,33 +234,7 @@ ApplicationWindow {
         y: 251
         width: 470
         height: 350
-        source: "qrc:/qtquickplugin/images/template_image.png"
         fillMode: Image.PreserveAspectFit
     }
 
-//    Content Area
-
-//    a button in the middle of the content area
-//    Button {
-//        text: qsTr("Hello World")
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.verticalCenter: parent.verticalCenter
-//    }
-
-//    Rectangle {
-//        x: 17
-//        y: 160
-//        width: 200
-//        height: 100
-//        color: "red"
-
-//        Text {
-//            anchors.centerIn: parent
-//            text: "Hello, World!"
-//        }
-
-//        TapHandler {
-//            onTapped: parent.color = "blue"
-//        }
-//    }
 }

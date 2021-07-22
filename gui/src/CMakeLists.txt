@@ -14,9 +14,7 @@ find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
 
 add_executable(${PROJECT}
   main.cpp
-  QFWIPreProcess.h
-  QFWIProcess.h
-  QFWIPostProcess.h
+  Launcher.h
   qml.qrc
 )
 
