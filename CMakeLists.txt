@@ -49,6 +49,7 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
 add_subdirectory( libraries )
 add_subdirectory( doc )
 add_subdirectory( applications )
+add_subdirectory( gui )
 
 #Add cppcheck target
 include(${CMAKE_SOURCE_DIR}/cmake/add_cppcheck_target.cmake)
