@@ -12,16 +12,18 @@ project(${PROJECT})
 
 find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
 
-add_executable(${PROJECT}
-  main.cpp
-  Launcher.h
-  qml.qrc
-)
+if (Qt5_FOUND)
+    add_executable(${PROJECT}
+      main.cpp
+      Launcher.h
+      qml.qrc
+    )
 
-target_compile_definitions(${PROJECT}
-  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(${PROJECT}
-    PRIVATE Qt5::Core Qt5::Quick Qt5::Qml Qt5::Widgets)
+    target_compile_definitions(${PROJECT}
+      PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+    target_link_libraries(${PROJECT}
+        PRIVATE Qt5::Core Qt5::Quick Qt5::Qml Qt5::Widgets)
 
-#target_link_libraries(${PROJECT}
-#    PUBLIC FWI_PreProcess FWI_Process FWI_PostProcess)
+    #target_link_libraries(${PROJECT}
+    #    PUBLIC FWI_PreProcess FWI_Process FWI_PostProcess)
+endif()
