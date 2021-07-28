@@ -73,7 +73,7 @@ ApplicationWindow {
         value: 0
     }
 
-    Button {Model size of -46 is less than 0
+    Button {
 
         id: cancelButton
         x: 902
