@@ -49,7 +49,11 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
 add_subdirectory( libraries )
 add_subdirectory( doc )
 add_subdirectory( applications )
-add_subdirectory( gui )
+
+find_package(Qt5 COMPONENTS Core Widgets Qml Quick)
+if (Qt5_FOUND)
+    add_subdirectory( gui )
+endif()
 
 #Add cppcheck target
 include(${CMAKE_SOURCE_DIR}/cmake/add_cppcheck_target.cmake)
