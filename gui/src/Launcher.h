@@ -22,7 +22,7 @@ public:
 
     Q_INVOKABLE QString exec2(const QString &command) const {
         m_process->start(command);
-//        m_process->waitForFinished(-1);
+        m_process->waitForFinished(-1);
         QByteArray bytes = m_process->readAllStandardOutput();
         QString output = QString::fromLocal8Bit(bytes);
         return output;
