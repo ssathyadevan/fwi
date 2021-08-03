@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QProcess>
 #include <iostream>
+#include <QCoreApplication>
 
 class Launcher : public QObject{
    Q_OBJECT
@@ -13,6 +14,7 @@ public:
     explicit Launcher (QObject* parent = 0) : QObject(parent), m_process(new QProcess(this)) {}
 
     Q_INVOKABLE int exec(QString command) const {
+        QCoreApplication::processEvents();
         std::string stdCommand = command.toStdString();
         std::cout << "Input: " << stdCommand << std::endl;
 
@@ -21,6 +23,7 @@ public:
     }
 
     Q_INVOKABLE QString exec2(const QString &command) const {
+        QCoreApplication::processEvents();
         m_process->start(command);
         m_process->waitForFinished(-1);
         QByteArray bytes = m_process->readAllStandardOutput();

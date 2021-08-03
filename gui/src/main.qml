@@ -71,6 +71,7 @@ ApplicationWindow {
         width: 1074
         height: 14
         value: 0
+        anchors.bottomMargin: 10
     }
 
     Button {
@@ -96,7 +97,7 @@ ApplicationWindow {
             progressBar.value = 0.1
 
             console.log("==== PREPROCESS")
-            var preProcessCommand = CurDirPath+"../../../FWIInstall/bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
+            var preProcessCommand = inputFolderTextEdit.text+"/../bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
             preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
             preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
             var output = callExec(preProcessCommand)
@@ -104,7 +105,7 @@ ApplicationWindow {
             progressBar.value = 0.33
 
             console.log("==== PROCESS")
-            var processCommand = CurDirPath+"../../../FWIInstall/bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
+            var processCommand = inputFolderTextEdit.text+"/../bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
             processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
             processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
             processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
@@ -114,8 +115,9 @@ ApplicationWindow {
 
             console.log("==== POST PROCESS")
             var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
-            postProcessCommand = postProcessCommand.replace("%BIN%", CurDirPath+"../../../FWIInstall/")
-            postProcessCommand = postProcessCommand.replace("%DATA%", CurDirPath+inputFolderTextEdit.text)
+            postProcessCommand = postProcessCommand.replace("%BIN%", inputFolderTextEdit.text+"/../")
+            postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
+            console.log(postProcessCommand)
             output = callExec(postProcessCommand)
             outputText.text = outputText.text + "\n" + output
 
@@ -220,7 +222,7 @@ ApplicationWindow {
         font.pixelSize: 12
 
 
-        text: qsTr("/home/wouter/Documents/parallelized-fwi/FWIInstall/default")
+        text: qsTr("/home/jan/parallelized-fwi/FWIInstall/default")
         property string placeholderText: "Enter path/to/data."
 
         Text {
