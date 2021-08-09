@@ -16,7 +16,7 @@ ApplicationWindow {
     id: root
     title: qsTr("Full Waveform Inversion")
     width: 1200
-    height: 800
+    height: 900
     color: "#e6e6e5"
 
     Launcher {
@@ -67,7 +67,7 @@ ApplicationWindow {
     ProgressBar {
         id: progressBar
         x: 64
-        y: 786
+        y: 840
         width: 1074
         height: 14
         value: 0
@@ -78,7 +78,7 @@ ApplicationWindow {
 
         id: cancelButton
         x: 902
-        y: 740
+        y: 790
         text: qsTr("Cancel")
         onClicked: {
             Qt.quit()
@@ -88,43 +88,55 @@ ApplicationWindow {
     Button {
         id: computeButton
         x: 1038
-        y: 740
+        y: 790
         text: qsTr("Compute")
         transformOrigin: Item.TopLeft
         onClicked: {
+            progressBar.value = 0
+            residualImage.source = ""
+            outputImage.source = ""
+
             console.log(CurDirPath)
             console.log(inputFolderTextEdit.text, forwardCombo.currentText, inversionCombo.currentText)
             progressBar.value = 0.1
 
-            console.log("==== PREPROCESS")
-            var preProcessCommand = inputFolderTextEdit.text+"/../bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
-            preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
-            preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
-            var output = callExec(preProcessCommand)
-            outputText.text = output
+            if (preProcessingCheckBox.checked)
+            {
+                console.log("==== PREPROCESS")
+                var preProcessCommand = inputFolderTextEdit.text+"/../bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
+                preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
+                preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
+                var output = callExec(preProcessCommand)
+                outputText.text = output
+            }
             progressBar.value = 0.33
 
-            console.log("==== PROCESS")
-            var processCommand = inputFolderTextEdit.text+"/../bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
-            processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
-            processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
-            processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
-            output = callExec(processCommand)
-            outputText.text = outputText.text + "\n" + output
+            if (processingCheckBox.checked)
+            {
+                console.log("==== PROCESS")
+                var processCommand = inputFolderTextEdit.text+"/../bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
+                processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
+                processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
+                processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
+                output = callExec(processCommand)
+                outputText.text = outputText.text + "\n" + output
+            }
             progressBar.value = 0.66
 
-            console.log("==== POST PROCESS")
-            var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
-            postProcessCommand = postProcessCommand.replace("%BIN%", inputFolderTextEdit.text+"/../")
-            postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
-            console.log(postProcessCommand)
-            output = callExec(postProcessCommand)
-            outputText.text = outputText.text + "\n" + output
+            if (postProcessingCheckBox.checked)
+            {
+                console.log("==== POSTPROCESS")
+                var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
+                postProcessCommand = postProcessCommand.replace("%BIN%", inputFolderTextEdit.text+"/../")
+                postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
+                console.log(postProcessCommand)
+                output = callExec(postProcessCommand)
+                outputText.text = outputText.text + "\n" + output
+                residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
+                outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
+            }
 
             progressBar.value = 1
-            residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
-
         }
     }
 
@@ -134,8 +146,8 @@ ApplicationWindow {
 
     ComboBox {
         id: forwardCombo
-        x: 599
-        y: 113
+        x: 600
+        y: 108
         width: 167
         height: 40
         flat: true
@@ -150,8 +162,8 @@ ApplicationWindow {
 
     ComboBox {
         id: inversionCombo
-        x: 599
-        y: 166
+        x: 600
+        y: 150
         width: 167
         height: 40
         flat: true
@@ -166,21 +178,21 @@ ApplicationWindow {
     CheckBox {
         id: mpiCheckBox
         x: 843
-        y: 117
+        y: 108
         text: qsTr("MPI Parallel")
     }
 
     CheckBox {
         id: verboseCheckBox
         x: 843
-        y: 166
+        y: 150
         text: qsTr("Verbose")
     }
 
     Text {
         id: residualImageLabel
         x: 64
-        y: 226
+        y: 280
         text: qsTr("Residual graph")
         font.bold: true
         font.pixelSize: 16
@@ -188,8 +200,8 @@ ApplicationWindow {
 
     Text {
         id: outputImageLabel
-        x: 599
-        y: 226
+        x: 600
+        y: 280
         text: qsTr("Output Images")
         font.pixelSize: 16
         font.bold: true
@@ -198,7 +210,7 @@ ApplicationWindow {
     Text {
         id: inputDataLabel
         x: 64
-        y: 117
+        y: 88
         text: qsTr("Input data")
         font.pixelSize: 16
         font.bold: true
@@ -206,7 +218,7 @@ ApplicationWindow {
 
     Text {
         id: parametersLabel
-        x: 599
+        x: 600
         y: 88
         text: qsTr("Parameters")
         font.pixelSize: 16
@@ -216,7 +228,7 @@ ApplicationWindow {
     TextEdit {
         id: inputFolderTextEdit
         x: 73
-        y: 151
+        y: 108
         width: 479
         height: 17
         font.pixelSize: 12
@@ -244,7 +256,7 @@ ApplicationWindow {
     Image {
         id: residualImage
         x: 64
-        y: 251
+        y: 300
         width: 450
         height: 320
         fillMode: Image.PreserveAspectFit
@@ -252,8 +264,8 @@ ApplicationWindow {
 
     Image {
         id: outputImage
-        x: 599
-        y: 251
+        x: 600
+        y: 300
         width: 450
         height: 320
         fillMode: Image.PreserveAspectFit
@@ -262,7 +274,7 @@ ApplicationWindow {
     ScrollView {
         id: scrollOutputText
         x: 64
-        y: 607
+        y: 650
         width: 1074
         height: 127
         clip: true
@@ -275,7 +287,7 @@ ApplicationWindow {
     Text {
         id: residualImageLabel1
         x: 64
-        y: 587
+        y: 630
         text: qsTr("Output")
         font.bold: true
         font.pixelSize: 16
@@ -283,16 +295,46 @@ ApplicationWindow {
 
     Button {
         id: button
-        x: 458
-        y: 174
-        width: 94
+        x: 467
+        y: 150
+        width: 110
         height: 25
         text: qsTr("Select folder")
         onClicked: {
-                fileDialog.open()
+            fileDialog.open()
         }
     }
 
+    Text {
+        id: inputDataLabel1
+        x: 64
+        y: 190
+        text: qsTr("Processing Steps")
+        font.pixelSize: 16
+        font.bold: true
+    }
 
+    CheckBox {
+        id: preProcessingCheckBox
+        x: 64
+        y: 210
+        text: qsTr("Pre-processing")
+        checked: true
+    }
 
+    CheckBox {
+        id: processingCheckBox
+        x: 244
+        y: 210
+        text: qsTr("Processing")
+        checked: true
+    }
+
+    CheckBox {
+        id: postProcessingCheckBox
+        x: 424
+        y: 210
+        text: qsTr("Post-processing")
+        checked: true
+    }
 }
