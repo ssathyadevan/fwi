@@ -180,6 +180,9 @@ ApplicationWindow {
         x: 843
         y: 108
         text: qsTr("MPI Parallel")
+        opacity: 0.5
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("This feature is currently not enabled")
     }
 
     CheckBox {
@@ -187,6 +190,9 @@ ApplicationWindow {
         x: 843
         y: 150
         text: qsTr("Verbose")
+        opacity: 0.5
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("This feature is currently not enabled")
     }
 
     Text {
