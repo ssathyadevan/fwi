@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.12
+import QtQuick.Controls.Styles 1.4
 
 import com.fwi 1.0
 
@@ -57,19 +58,32 @@ ApplicationWindow {
     ProgressBar {
         id: progressBar
         x: 64
-        y: 270
-        width: 1074
+        y: 280
+        width: 965
         height: 14
         value: 0
         anchors.bottomMargin: 10
     }
 
     Button {
-
         id: cancelButton
-        x: 800
-        y: 210
-        text: qsTr("Cancel")
+        x: 920
+        y: 230
+        contentItem: Text {
+            text: qsTr("Cancel")
+            color: "black"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+        background: Rectangle{
+            implicitWidth: 100
+            implicitHeight: 35
+            border.width: 2
+            border.color: "grey"
+            radius: 4
+            color: "light grey"
+        }
         onClicked: {
             Qt.quit()
         }
@@ -77,10 +91,23 @@ ApplicationWindow {
 
     Button {
         id: computeButton
-        x: 650
-        y: 210
-        text: qsTr("Compute")
-        transformOrigin: Item.TopLeft
+        x: 750
+        y: 230
+        contentItem: Text {
+            text: qsTr("Compute")
+            color: "white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+        background: Rectangle{
+            implicitWidth: 100
+            implicitHeight: 35
+            border.width: 2
+            border.color: "grey"
+            radius: 4
+            color: "#440154" // darkest color in viridis colormap
+        }
         onClicked: {
             progressBar.value = 0
             residualImage.source = ""
@@ -135,7 +162,7 @@ ApplicationWindow {
 
     ComboBox {
         id: forwardCombo
-        x: 600
+        x: 700
         y: 108
         width: 167
         height: 40
@@ -150,7 +177,7 @@ ApplicationWindow {
 
     ComboBox {
         id: inversionCombo
-        x: 600
+        x: 700
         y: 150
         width: 167
         height: 40
@@ -165,7 +192,7 @@ ApplicationWindow {
 
     CheckBox {
         id: mpiCheckBox
-        x: 843
+        x: 900
         y: 108
         text: qsTr("MPI Parallel")
         opacity: 0.5
@@ -175,7 +202,7 @@ ApplicationWindow {
 
     CheckBox {
         id: verboseCheckBox
-        x: 843
+        x: 900
         y: 150
         text: qsTr("Verbose")
         opacity: 0.5
@@ -212,7 +239,7 @@ ApplicationWindow {
 
     Text {
         id: parametersLabel
-        x: 600
+        x: 690
         y: 88
         text: qsTr("Parameters")
         font.pixelSize: 16
@@ -264,12 +291,23 @@ ApplicationWindow {
         fillMode: Image.PreserveAspectFit
     }
 
-    ScrollView {
-        id: scrollOutputText
+    Rectangle{
+        id: scrollViewParentRectangle
         x: 64
         y: 720
-        width: 1074
+        width: 955
         height: 127
+        border.width: 1
+        border.color: "grey"
+        radius: 3
+        color: "#e6e6e5"
+    }
+
+    ScrollView {
+        id: scrollOutputText
+        anchors.centerIn: scrollViewParentRectangle
+        width: scrollViewParentRectangle.width - 20
+        height: scrollViewParentRectangle.height - 2
         clip: true
 
         Text {
@@ -292,33 +330,48 @@ ApplicationWindow {
         y: 150
         width: 110
         height: 25
-        text: qsTr("Select folder")
+        contentItem: Text {
+            text: qsTr("Select folder")
+            color: "black"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
+        background: Rectangle{
+            implicitWidth: 100
+            implicitHeight: 35
+            border.width: 2
+            border.color: "grey"
+            radius: 4
+            color: "light grey"
+        }
+
         onClicked: {
             fileDialog.open()
         }
     }
 
-//    Text {
-//        id: inputDataLabel1
-//        x: 64
-//        y: 190
-//        text: qsTr("Processing Steps")
-//        font.pixelSize: 16
-//        font.bold: true
-//    }
+    Text {
+        id: inputDataLabel1
+        x: 64
+        y: 210
+        text: qsTr("Processing Steps")
+        font.pixelSize: 16
+        font.bold: true
+    }
 
     CheckBox {
         id: preProcessingCheckBox
         x: 64
-        y: 210
+        y: 230
         text: qsTr("Pre-processing")
         checked: false
     }
 
     CheckBox {
         id: processingCheckBox
-        x: 274
-        y: 210
+        x: 264
+        y: 230
         text: qsTr("Processing")
         checked: false
     }
@@ -326,7 +379,7 @@ ApplicationWindow {
     CheckBox {
         id: postProcessingCheckBox
         x: 424
-        y: 210
+        y: 230
         text: qsTr("Post-processing")
         checked: false
     }
