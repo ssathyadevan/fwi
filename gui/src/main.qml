@@ -67,7 +67,7 @@ ApplicationWindow {
     ProgressBar {
         id: progressBar
         x: 64
-        y: 840
+        y: 270
         width: 1074
         height: 14
         value: 0
@@ -77,8 +77,8 @@ ApplicationWindow {
     Button {
 
         id: cancelButton
-        x: 902
-        y: 790
+        x: 800
+        y: 210
         text: qsTr("Cancel")
         onClicked: {
             Qt.quit()
@@ -87,8 +87,8 @@ ApplicationWindow {
 
     Button {
         id: computeButton
-        x: 1038
-        y: 790
+        x: 650
+        y: 210
         text: qsTr("Compute")
         transformOrigin: Item.TopLeft
         onClicked: {
@@ -197,8 +197,8 @@ ApplicationWindow {
 
     Text {
         id: residualImageLabel
-        x: 64
-        y: 280
+        x: 500
+        y: 300
         text: qsTr("Residual graph")
         font.bold: true
         font.pixelSize: 16
@@ -206,8 +206,8 @@ ApplicationWindow {
 
     Text {
         id: outputImageLabel
-        x: 600
-        y: 280
+        x: 64
+        y: 300
         text: qsTr("Output Images")
         font.pixelSize: 16
         font.bold: true
@@ -261,8 +261,8 @@ ApplicationWindow {
 
     Image {
         id: residualImage
-        x: 64
-        y: 300
+        x: 500
+        y: 350
         width: 450
         height: 320
         fillMode: Image.PreserveAspectFit
@@ -270,8 +270,8 @@ ApplicationWindow {
 
     Image {
         id: outputImage
-        x: 600
-        y: 300
+        x: 25
+        y: 350
         width: 450
         height: 320
         fillMode: Image.PreserveAspectFit
@@ -280,10 +280,11 @@ ApplicationWindow {
     ScrollView {
         id: scrollOutputText
         x: 64
-        y: 650
+        y: 720
         width: 1074
         height: 127
         clip: true
+
         Text {
             id: outputText
 
@@ -293,8 +294,8 @@ ApplicationWindow {
     Text {
         id: residualImageLabel1
         x: 64
-        y: 630
-        text: qsTr("Output")
+        y: 700
+        text: qsTr("Log")
         font.bold: true
         font.pixelSize: 16
     }
@@ -311,29 +312,29 @@ ApplicationWindow {
         }
     }
 
-    Text {
-        id: inputDataLabel1
-        x: 64
-        y: 190
-        text: qsTr("Processing Steps")
-        font.pixelSize: 16
-        font.bold: true
-    }
+//    Text {
+//        id: inputDataLabel1
+//        x: 64
+//        y: 190
+//        text: qsTr("Processing Steps")
+//        font.pixelSize: 16
+//        font.bold: true
+//    }
 
     CheckBox {
         id: preProcessingCheckBox
         x: 64
         y: 210
         text: qsTr("Pre-processing")
-        checked: true
+        checked: false
     }
 
     CheckBox {
         id: processingCheckBox
-        x: 244
+        x: 274
         y: 210
         text: qsTr("Processing")
-        checked: true
+        checked: false
     }
 
     CheckBox {
@@ -341,6 +342,6 @@ ApplicationWindow {
         x: 424
         y: 210
         text: qsTr("Post-processing")
-        checked: true
+        checked: false
     }
 }
