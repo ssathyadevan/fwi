@@ -7,11 +7,7 @@ import Qt.labs.folderlistmodel 2.12
 
 import com.fwi 1.0
 
-//window containing the application
 ApplicationWindow {
-//Window {
-
-//    title of the application
     visible: true
     id: root
     title: qsTr("Full Waveform Inversion")
@@ -37,15 +33,9 @@ ApplicationWindow {
         }
     }
 
-
-//    menu containing two menu items
     menuBar: MenuBar {
         Menu {
             title: qsTr("&File")
-//            MenuItem {
-//                text: qsTr("&Open")
-//                onTriggered: console.log("Open action triggered");
-//            }
             MenuItem {
                 text: qsTr("E&xit")
                 onTriggered: Qt.quit();
@@ -135,7 +125,6 @@ ApplicationWindow {
                 residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
                 outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
             }
-
             progressBar.value = 1
         }
     }
@@ -156,7 +145,6 @@ ApplicationWindow {
             id: forwardText
             text: qsTr("Forward Model")
         }
-
         model: ["Integral", "FiniteDifference"]
     }
 
@@ -239,7 +227,6 @@ ApplicationWindow {
         height: 17
         font.pixelSize: 12
 
-
         text: qsTr("/home/jan/parallelized-fwi/FWIInstall/default")
         property string placeholderText: "Enter path/to/data."
 
@@ -287,7 +274,6 @@ ApplicationWindow {
 
         Text {
             id: outputText
-
         }
     }
 
