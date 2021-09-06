@@ -79,28 +79,41 @@ print("Execution time in seconds:            " + total_seconds, flush = True)
 v_min = chi1.min()
 v_max = chi1.max()
 
-######################################
-####  Create plots of actual data ####
-######################################
-plt.clf
-plt.subplots_adjust(hspace=0.5)
+#####################################
+#### Create plots of dummy image ####
+#####################################
 
-plt.subplot(3, 1, 1)
+plt.clf()
+plt.plot()
 plt.title("Chi values in original reservoir")
 plt.imshow(chi1_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
-plt.subplot(3, 1, 2)
+plt.savefig(filename(path = outputPath, suffix = "DummyImage.png"), dpi=400, bbox_inches='tight')
+
+#############################################
+#### Create plots of reconstructed image ####
+#############################################
+
+plt.clf()
+plt.plot()
 plt.title("Chi values in reconstructed reservoir")
 plt.imshow(chi2_original, interpolation='nearest', vmin=v_min, vmax=v_max)
 plt.colorbar()
 
-plt.subplot(3, 1, 3)
-plt.title("Difference between chi values")
-plt.imshow(np.absolute(diff_chi), interpolation='nearest')
+plt.savefig(filename(path = outputPath, suffix = "Result.png"), dpi=400, bbox_inches='tight')
+
+#############################################################
+####  Create plots of offset between dummy and real data ####
+#############################################################
+
+plt.clf()
+plt.plot()
+plt.title("difference between chi values")
+plt.imshow(np.abs(diff_chi), interpolation='nearest')
 plt.colorbar()
 
-plt.savefig(filename(path = outputPath, suffix = "Result.png"), dpi=400, bbox_inches='tight')
+plt.savefig(filename(path = outputPath, suffix = "ChiDifference.png"), dpi=400, bbox_inches='tight')
 
 #######################################
 ####  Create plot of the residuals ####
