@@ -149,8 +149,8 @@ ApplicationWindow {
                 console.log(postProcessCommand)
                 output = callExec(postProcessCommand)
                 outputText.text = outputText.text + "\n" + output
+                selectOutputImage()
                 residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
-                outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
             }
             progressBar.value = 1
         }
@@ -158,6 +158,21 @@ ApplicationWindow {
 
     function callExec(command) {
         return qLauncher.exec2("sh -c \"" + command + " \"");
+    }
+
+    function selectOutputImage() {
+        if (outputImageCombo.currentIndex == 0)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
+        }
+        else if (outputImageCombo.currentIndex == 1)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
+        }
+        else if (outputImageCombo.currentIndex == 2)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
+        }
     }
 
     ComboBox {
@@ -212,7 +227,7 @@ ApplicationWindow {
 
     Text {
         id: residualImageLabel
-        x: 500
+        x: 540
         y: 300
         text: qsTr("Residual graph")
         font.bold: true
@@ -223,7 +238,7 @@ ApplicationWindow {
         id: outputImageLabel
         x: 64
         y: 300
-        text: qsTr("Output Images")
+        text: qsTr("Output Image")
         font.pixelSize: 16
         font.bold: true
     }
@@ -273,9 +288,27 @@ ApplicationWindow {
         font.bold: true
     }
 
+    ComboBox {
+        id: outputImageCombo
+        x: 229
+        y: 290
+        width: 167
+        height: 40
+        currentIndex: 0
+        model: ["Output values", "Dummy Image", "Residuals"]
+        flat: true
+        onCurrentIndexChanged:
+        {
+            if (outputImage.source != "")
+            {
+                selectOutputImage()
+            }
+        }
+    }
+
     Image {
-        id: residualImage
-        x: 500
+        id: outputImage
+        x: 64
         y: 350
         width: 450
         height: 320
@@ -283,8 +316,8 @@ ApplicationWindow {
     }
 
     Image {
-        id: outputImage
-        x: 25
+        id: residualImage
+        x: 540
         y: 350
         width: 450
         height: 320
@@ -383,4 +416,5 @@ ApplicationWindow {
         text: qsTr("Post-processing")
         checked: false
     }
+
 }
