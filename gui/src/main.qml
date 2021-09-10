@@ -20,6 +20,16 @@ ApplicationWindow {
           id: qLauncher
    }
 
+    Rectangle {
+        width: 1180
+        height: 880
+        x: 10
+        y: 10
+        border.color: "black"
+        border.width: 1
+        radius: 5
+    }
+
     FileDialog {
         id: fileDialog
         title: "Please choose a folder"
@@ -183,23 +193,23 @@ ApplicationWindow {
         id: forwardCombo
         x: 700
         y: 108
-        width: 167
-        height: 40
+        width: 250
+        height: 50
         flat: true
         currentIndex: 0
         Text {
             id: forwardText
             text: qsTr("Forward Model")
         }
-        model: ["Integral", "FiniteDifference"]
+        model: ["Integral", "FiniteDifference", "FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"]
     }
 
     ComboBox {
         id: inversionCombo
         x: 700
         y: 150
-        width: 167
-        height: 40
+        width: 250
+        height: 50
         flat: true
         Text {
             id: inversionText
@@ -209,19 +219,29 @@ ApplicationWindow {
         model: ["ConjugateGradient", "GradientDescent", "Evolution", "Random"]
     }
 
-    CheckBox {
-        id: mpiCheckBox
-        x: 900
+    Text {
+        text: "Threads/Cores (Parallel Only)"
+        font.family: "Helvetica"
+        font.pixelSize: 16
+        font.bold: true
+        x: 950
+        y: 82
+    }
+
+
+    SpinBox {
+        value: 1
+        from: 1
+        to: 8
+        stepSize: 1
+        x: 1000
         y: 108
-        text: qsTr("MPI Parallel")
-        opacity: 0.5
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("This feature is currently not enabled")
+
     }
 
     CheckBox {
         id: verboseCheckBox
-        x: 900
+        x: 1000
         y: 150
         text: qsTr("Verbose")
         opacity: 0.5
@@ -356,7 +376,7 @@ ApplicationWindow {
         id: residualImageLabel1
         x: 64
         y: 700
-        text: qsTr("Log")
+        text: qsTr("")
         font.bold: true
         font.pixelSize: 16
     }
