@@ -27,12 +27,20 @@ ApplicationWindow {
         text: "Please open the (default) folder containing the input/output  for the FWI Process \n \nPlease note that the Python Files shold be located in the FWInstall folder"
         width: 300
         standardButtons: StandardButton.Ok | StandardButton.Close
-        onRejected:{}
         onAccepted: {
-            console.log(AcceptedRole)
             fileDialog.open()
         }
         Component.onCompleted: visible = true
+    }
+
+    function readJSON(path) {
+        var input = '{"c_0":2000,"Freq":{"min":10,"max":40,"nTotal":15},"reservoirTopLeft":{"x":-300,"z":0},"reservoirBottomRight":{"x":300,"z":300},"sourcesTopLeft":{"x":-480,"z":-5},"sourcesBottomRight":{"x":480,"z":-5},"receiversTopLeft":{"x":-480,"z":-5},"receiversBottomRight":{"x":480,"z":-5},"nSources":17,"nReceivers":17,"ngrid_original":{"x":64,"z":32},"ngrid":{"x":64,"z":32},"verbosity":false,"fileName":"temple","forward":"FiniteDifference","inversion":"ConjugateGradient"}'
+        var json = JSON.parse(input)
+        console.log(json.Freq.min)
+        gridLabel2.text = qsTr(String(json.ngrid_original.x) +'x'+String(json.ngrid_original.z))
+        currentFigure2.text = qsTr(json.fileName)
+        forwardCombo.currentIndex = forwardCombo.find(json.forward)
+        inversionCombo.currentIndex = inversionCombo.find(json.inversion)
     }
 
     function callExec(command) {
@@ -102,6 +110,7 @@ ApplicationWindow {
         folder: shortcuts.home
         onAccepted: {
             inputFolderTextEdit.text = fileDialog.folder.toString().replace("file://","")
+            readJSON('DUMMYINPUT')
             this.close()
         }
         onRejected: {
@@ -436,6 +445,39 @@ ApplicationWindow {
         font.pixelSize: 16
         font.bold: true
     }
+
+    Text {
+        id: gridLabel
+        x: 64
+        y: 150
+        text: qsTr("Grid Size: ")
+        font.pixelSize: 12
+        font.bold: true
+    }
+    Text {
+        id: gridLabel2
+        x: 64
+        y: 170
+        font.pixelSize: 12
+
+    }
+
+    Text {
+        id: currentFigure
+        x: 164
+        y: 150
+        text: qsTr("Subsurface Model: ")
+        font.pixelSize: 12
+        font.bold: true
+    }
+    Text {
+        id: currentFigure2
+        x: 164
+        y: 170
+        font.pixelSize: 12
+
+    }
+
 
     CheckBox {
         id: preProcessingCheckBox
