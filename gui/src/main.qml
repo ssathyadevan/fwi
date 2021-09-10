@@ -13,34 +13,29 @@ ApplicationWindow {
     id: root
     title: qsTr("Full Waveform Inversion")
     width: 1200
-    height: 900
+    height: 500
     color: "#e6e6e5"
 
     Launcher {
           id: qLauncher
    }
 
-    Rectangle {
-        width: 1180
-        height: 880
-        x: 10
-        y: 10
-        border.color: "black"
-        border.width: 1
-        radius: 5
+    function callExec(command) {
+        return qLauncher.exec2("sh -c \"" + command + " \"");
     }
 
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a folder"
-        selectFolder: true
-        folder: shortcuts.home
-        onAccepted: {
-            inputFolderTextEdit.text = fileDialog.folder.toString().replace("file://","")
-            this.close()
+    function selectOutputImage() {
+        if (outputImageCombo.currentIndex == 0)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
         }
-        onRejected: {
-            this.close()
+        else if (outputImageCombo.currentIndex == 1)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
+        }
+        else if (outputImageCombo.currentIndex == 2)
+        {
+            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
         }
     }
 
@@ -66,6 +61,36 @@ ApplicationWindow {
                     win.show();
                 }
             }
+        }
+    }
+
+    ScrollView {
+        width: 1200
+        height: 600
+        contentHeight: 1050  // Same
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+    Rectangle {
+        width: 1180
+        height: 880
+        x: 10
+        y: 10
+        border.color: "black"
+        border.width: 1
+        radius: 5
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a folder"
+        selectFolder: true
+        folder: shortcuts.home
+        onAccepted: {
+            inputFolderTextEdit.text = fileDialog.folder.toString().replace("file://","")
+            this.close()
+        }
+        onRejected: {
+            this.close()
         }
     }
 
@@ -170,25 +195,6 @@ ApplicationWindow {
         }
     }
 
-    function callExec(command) {
-        return qLauncher.exec2("sh -c \"" + command + " \"");
-    }
-
-    function selectOutputImage() {
-        if (outputImageCombo.currentIndex == 0)
-        {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
-        }
-        else if (outputImageCombo.currentIndex == 1)
-        {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
-        }
-        else if (outputImageCombo.currentIndex == 2)
-        {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
-        }
-    }
-
     ComboBox {
         id: forwardCombo
         x: 700
@@ -227,7 +233,6 @@ ApplicationWindow {
         x: 950
         y: 82
     }
-
 
     SpinBox {
         value: 1
@@ -441,4 +446,6 @@ ApplicationWindow {
         checked: false
     }
 
+
+    }
 }
