@@ -26,4 +26,5 @@ if (Qt5_FOUND)
 
     #target_link_libraries(${PROJECT}
     #    PUBLIC FWI_PreProcess FWI_Process FWI_PostProcess)
+    install(TARGETS ${PROJECT} DESTINATION bin)
 endif()
