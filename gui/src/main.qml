@@ -12,13 +12,28 @@ ApplicationWindow {
     visible: true
     id: root
     title: qsTr("Full Waveform Inversion")
-    width: 1200
+    width: 1220
     height: 500
     color: "#e6e6e5"
 
     Launcher {
           id: qLauncher
    }
+
+    MessageDialog {
+        id: messageDialog
+        icon: StandardIcon.Information
+        title: "Full Waveform Inversion"
+        text: "Please open the (default) folder containing the input/output  for the FWI Process \n \nPlease note that the Python Files shold be located in the FWInstall folder"
+        width: 300
+        standardButtons: StandardButton.Ok | StandardButton.Close
+        onRejected:{}
+        onAccepted: {
+            console.log(AcceptedRole)
+            fileDialog.open()
+        }
+        Component.onCompleted: visible = true
+    }
 
     function callExec(command) {
         return qLauncher.exec2("sh -c \"" + command + " \"");
