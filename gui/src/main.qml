@@ -93,7 +93,7 @@ Do you want to continue?"
     }
 
     function callExec(command) {
-        return qLauncher.exec2("sh -c \"" + command + " \"");
+        return qLauncher.exec2("sh -c \""  + command + " \"");
     }
 
     function selectOutputImage() {
@@ -110,6 +110,7 @@ Do you want to continue?"
             var path  = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
         }
         outputImage.source = path ? path: ""
+        residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png" ? "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png": ""
     }
 
     menuBar: MenuBar {
@@ -248,10 +249,10 @@ Do you want to continue?"
             if (preProcessingCheckBox.checked)
             {
                 console.log("==== PREPROCESS")
-                var preProcessCommand = inputFolderTextEdit.text+"/../bin/FWI_PreProcess -d '%DATA%' -f %FORWARD%"
+                var preProcessCommand = "./FWI_PreProcess -d '%DATA%'"
                 preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
-                preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
                 var output = callExec(preProcessCommand)
+                console.log(preProcessCommand)
                 outputText.text = output
             }
             progressBar.value = 0.33
@@ -259,7 +260,7 @@ Do you want to continue?"
             if (processingCheckBox.checked)
             {
                 console.log("==== PROCESS")
-                var processCommand = inputFolderTextEdit.text+"/../bin/FWI_Process -d '%DATA%' -f %FORWARD% -i %INVERSE%"
+                var processCommand = "./FWI_Process -d '%DATA%'"
                 processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
                 processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
                 processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
@@ -272,7 +273,7 @@ Do you want to continue?"
             {
                 console.log("==== POSTPROCESS")
                 var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
-                postProcessCommand = postProcessCommand.replace("%BIN%", inputFolderTextEdit.text+"/../")
+                postProcessCommand = postProcessCommand.replace("%BIN%", "./../")
                 postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
                 console.log(postProcessCommand)
                 output = callExec(postProcessCommand)
