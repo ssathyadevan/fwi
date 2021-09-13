@@ -53,6 +53,14 @@ Do you want to continue?"
 
     }
 
+    MessageDialog {
+        id: warningDialogWrongInput
+        icon: StandardIcon.Warning
+        title: "Did not detect correct input folder"
+        text: "Did not detect 'GenericInput.json'"
+        standardButtons: StandardButton.Ok
+    }
+
 
     function openFile(fileUrl) {
         console.log(fileUrl)
@@ -71,14 +79,21 @@ Do you want to continue?"
 
     function readJSON(path) {
         var input = openFile(path + '/input/GenericInput.json')
-        var json = JSON.parse(input)
-        console.log(json.Freq.min)
-        gridLabel2.text = qsTr(String(json.ngrid_original.x) +'x'+String(json.ngrid_original.z))
-        currentFigure2.text = qsTr(json.fileName)
-        forwardCombo.currentIndex = forwardCombo.find(json.forward)
-        inversionCombo.currentIndex = inversionCombo.find(json.inversion)
-        numberOfThreads.value = json.threads
-        verboseCheckBox.checked = json.verbosity
+        //Try/Catch to see if GenericInput.json is in the right position.
+        try {
+
+            var json = JSON.parse(input)
+            console.log(json.Freq.min)
+            gridLabel2.text = qsTr(String(json.ngrid_original.x) +'x'+String(json.ngrid_original.z))
+            currentFigure2.text = qsTr(json.fileName)
+            forwardCombo.currentIndex = forwardCombo.find(json.forward)
+            inversionCombo.currentIndex = inversionCombo.find(json.inversion)
+            numberOfThreads.value = json.threads
+            verboseCheckBox.checked = json.verbosity
+        }
+        catch(error) {
+            warningDialogWrongInput.open()
+        }
     }
 
     function saveJSON(path) {
