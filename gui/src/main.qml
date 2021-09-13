@@ -24,7 +24,7 @@ ApplicationWindow {
         id: messageDialog
         icon: StandardIcon.Information
         title: "Full Waveform Inversion"
-        text: "Please open the (default) folder containing the input/output  for the FWI Process \n \nPlease note that the Python Files shold be located in the FWInstall folder"
+        text: "Please open the (default) folder containing the input/output for the FWI Process \n \nPlease note that the Python Files should be located in the FWInstall folder"
         width: 300
         standardButtons: StandardButton.Ok | StandardButton.Close
         onAccepted: {
@@ -33,14 +33,41 @@ ApplicationWindow {
         Component.onCompleted: visible = true
     }
 
+    function openFile(fileUrl) {
+        console.log(fileUrl)
+        var request = new XMLHttpRequest();
+        request.open("GET", fileUrl, false);
+        request.send(null);
+        return request.responseText;
+    }
+
+    function saveFile(fileUrl, text) {
+        var request = new XMLHttpRequest();
+        request.open("PUT", fileUrl, false);
+        request.send(text);
+        return request.status;
+    }
+
     function readJSON(path) {
-        var input = '{"c_0":2000,"Freq":{"min":10,"max":40,"nTotal":15},"reservoirTopLeft":{"x":-300,"z":0},"reservoirBottomRight":{"x":300,"z":300},"sourcesTopLeft":{"x":-480,"z":-5},"sourcesBottomRight":{"x":480,"z":-5},"receiversTopLeft":{"x":-480,"z":-5},"receiversBottomRight":{"x":480,"z":-5},"nSources":17,"nReceivers":17,"ngrid_original":{"x":64,"z":32},"ngrid":{"x":64,"z":32},"verbosity":false,"fileName":"temple","forward":"FiniteDifference","inversion":"ConjugateGradient"}'
+        var input = openFile(path + '/input/GenericInput.json')
         var json = JSON.parse(input)
         console.log(json.Freq.min)
         gridLabel2.text = qsTr(String(json.ngrid_original.x) +'x'+String(json.ngrid_original.z))
         currentFigure2.text = qsTr(json.fileName)
         forwardCombo.currentIndex = forwardCombo.find(json.forward)
         inversionCombo.currentIndex = inversionCombo.find(json.inversion)
+        numberOfThreads.value = json.threads
+    }
+
+    function saveJSON(path) {
+        var input = openFile(path + '/input/GenericInput.json')
+        var json = JSON.parse(input)
+        json.forward = forwardCombo.currentText
+        json.inversion = inversionCombo.currentText
+        json.threads = numberOfThreads.value
+        //json.verbose = verboseCheckBox.checked
+        saveFile(path + '/input/GenericInput.json', JSON.stringify(json))
+
     }
 
     function callExec(command) {
@@ -65,9 +92,15 @@ ApplicationWindow {
     menuBar: MenuBar {
         Menu {
                     title: qsTr("&File")
-                    Action { text: qsTr("&Open...") }
-                    Action { text: qsTr("&Save") }
-                    Action { text: qsTr("Save &As...") }
+                    Action {
+                        text: qsTr("&Open...")
+                        onTriggered: fileDialog.open()
+                    }
+                    Action {
+                        text: qsTr("&Save")
+                        onTriggered: saveJSON(fileDialog.folder.toString())
+                    }
+
                     MenuSeparator { }
                     Action {
                         text: qsTr("&Quit")
@@ -110,7 +143,7 @@ ApplicationWindow {
         folder: shortcuts.home
         onAccepted: {
             inputFolderTextEdit.text = fileDialog.folder.toString().replace("file://","")
-            readJSON('DUMMYINPUT')
+            readJSON(fileDialog.folder.toString())
             this.close()
         }
         onRejected: {
@@ -259,6 +292,7 @@ ApplicationWindow {
     }
 
     SpinBox {
+        id: numberOfThreads
         value: 1
         from: 1
         to: 8
