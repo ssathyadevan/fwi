@@ -95,20 +95,20 @@ for root, dirs, files in os.walk(casedir):
         inversion = inputFile['inversion']
         model = inputFile['fileName']
         
+        print(root, forward, inversion, model)
+
         # Configure the arguments
         number_of_threads = inputFile['threads']
         location_input = root
         location_exe = "./bin"
-        location_log = root + "/output/" + caseName +"Process.log"
+        location_log = location_input + "/output/" + caseName +"Process.log"
         print("location log: ", location_log)
-        location_chi_input = root + "/output/chi_ref_" + caseName + ".txt"
-        location_chi_est = root + "/output/chi_est_" + caseName + ".txt"
-        final_location_csv = root + "./output/" + inversion + "_" + forward + "_" + model + ".csv"
+        location_chi_input = location_input + "/output/chi_ref_" + caseName + ".txt"
+        location_chi_est = location_input + "/output/chi_est_" + caseName + ".txt"
+        final_location_csv = location_input + "/output/" + inversion + "_" + forward + "_" + model + ".csv"
         reference = ["FiniteDifference", "ConjugateGradient"]
 
         standard_args = execName + " runUtility.py -d " + location_input + " -b " + location_exe + " "  
-
-        print(root, forward, inversion, model)
 
         #Start PreProcess
         print("Reference PreProcess with ForwardModel:" + reference[0])
@@ -130,8 +130,8 @@ for root, dirs, files in os.walk(casedir):
         print(parallel_command)
         start = time.time()
         argsp = "--skip-pre --skip-post -f " + forward + " -i " + inversion
-        if arguments.method == "MPI":
-            argsp = argsp + " --MPI --threads " + str(number_of_threads)
+        #if arguments.method == "MPI":
+        #    argsp = argsp + " --MPI --threads " + str(number_of_threads)
         os.system(standard_args + argsp)
         end = time.time()
         setVariables(round(end-start,2),number_of_threads)
