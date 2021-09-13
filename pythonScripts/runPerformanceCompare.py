@@ -86,7 +86,7 @@ for root, dirs, files in os.walk(casedir):
     #print('-------------------------------')
 
     if re.search("/case[1-9]$", root):
-    #    print('do_stuff')
+        caseName = os.path.basename(os.path.normpath(root))
 
         # read json input file
         inputFile = json.load(open(root + "/input/GenericInput.json"))
@@ -99,10 +99,10 @@ for root, dirs, files in os.walk(casedir):
         number_of_threads = inputFile['threads']
         location_input = root
         location_exe = "./bin"
-        location_log = root + "/output/defaultProcess.log"
+        location_log = root + "/output/" + caseName +"Process.log"
         print("location log: ", location_log)
-        location_chi_input = root + "/output/chi_ref_default.txt"
-        location_chi_est = root + "/output/chi_est_default.txt"
+        location_chi_input = root + "/output/chi_ref_" + caseName + ".txt"
+        location_chi_est = root + "/output/chi_est_" + caseName + ".txt"
         final_location_csv = root + "./output/" + inversion + "_" + forward + "_" + model + ".csv"
         reference = ["FiniteDifference", "ConjugateGradient"]
 
@@ -123,18 +123,18 @@ for root, dirs, files in os.walk(casedir):
         end = time.time()
         setVariables(str(round(end-start,2)))
 
-        for thread in number_of_threads:
+        #for thread in number_of_threads:
             #set variable of threads
-            parallel_command = "export OMP_NUM_THREADS=" + thread
-            os.environ["OMP_NUM_THREADS"] = thread
-            print(parallel_command)
-            start = time.time()
-            argsp = "--skip-pre --skip-post -f " + forward + " -i " + inversion
-            if arguments.method == "MPI":
-                argsp = argsp + " --MPI --threads " + str(thread)
-            os.system(standard_args + argsp)
-            end = time.time()
-            setVariables(round(end-start,2),thread)
+        parallel_command = "export OMP_NUM_THREADS=" + number_of_threads
+        os.environ["OMP_NUM_THREADS"] = number_of_threads
+        print(parallel_command)
+        start = time.time()
+        argsp = "--skip-pre --skip-post -f " + forward + " -i " + inversion
+        if arguments.method == "MPI":
+            argsp = argsp + " --MPI --threads " + str(number_of_threads)
+        os.system(standard_args + argsp)
+        end = time.time()
+        setVariables(round(end-start,2),number_of_threads)
 
         #save variables
         final_array = np.asarray([cpu_time, wall_time,python_time,avg_error,mean_error,cores])
