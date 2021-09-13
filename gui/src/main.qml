@@ -33,6 +33,27 @@ ApplicationWindow {
         Component.onCompleted: visible = true
     }
 
+    MessageDialog {
+        id: warningDialog
+        icon: StandardIcon.Warning
+        title: "Save Warning"
+        text: "It seems there is already an output for this case folder.
+
+Overwriting the save files creates a mismatch between input and results
+
+Do you want to continue?"
+        standardButtons: StandardButton.Yes | StandardButton.Cancel
+        onYes:  {
+            console.log("Saved File anyway")
+            saveJSON(fileDialog.folder.toString())
+        }
+        onRejected: {
+            console.log("Canceled saving due to warning")
+        }
+
+    }
+
+
     function openFile(fileUrl) {
         console.log(fileUrl)
         var request = new XMLHttpRequest();
@@ -57,6 +78,7 @@ ApplicationWindow {
         forwardCombo.currentIndex = forwardCombo.find(json.forward)
         inversionCombo.currentIndex = inversionCombo.find(json.inversion)
         numberOfThreads.value = json.threads
+        verboseCheckBox.checked = json.verbosity
     }
 
     function saveJSON(path) {
@@ -65,7 +87,7 @@ ApplicationWindow {
         json.forward = forwardCombo.currentText
         json.inversion = inversionCombo.currentText
         json.threads = numberOfThreads.value
-        //json.verbose = verboseCheckBox.checked
+        json.verbosity = verboseCheckBox.checked
         saveFile(path + '/input/GenericInput.json', JSON.stringify(json))
 
     }
@@ -77,16 +99,17 @@ ApplicationWindow {
     function selectOutputImage() {
         if (outputImageCombo.currentIndex == 0)
         {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
+            var path = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
         }
         else if (outputImageCombo.currentIndex == 1)
         {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
+            var path = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
         }
         else if (outputImageCombo.currentIndex == 2)
         {
-            outputImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
+            var path  = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
         }
+        outputImage.source = path ? path: ""
     }
 
     menuBar: MenuBar {
@@ -98,7 +121,14 @@ ApplicationWindow {
                     }
                     Action {
                         text: qsTr("&Save")
-                        onTriggered: saveJSON(fileDialog.folder.toString())
+                        onTriggered: {
+                            //Check if output exists, if so, display warning before saving
+                            if (outputImageCombo === "") {
+                                saveJSON(fileDialog.folder.toString())
+                            } else {
+                                warningDialog.open()
+                            }
+                        }
                     }
 
                     MenuSeparator { }
@@ -114,7 +144,7 @@ ApplicationWindow {
                 onTriggered: {
                     var component = Qt.createComponent("extraWindow.qml");
                     var win = component.createObject(this);
-                    win.show();
+
                 }
             }
         }
@@ -144,6 +174,7 @@ ApplicationWindow {
         onAccepted: {
             inputFolderTextEdit.text = fileDialog.folder.toString().replace("file://","")
             readJSON(fileDialog.folder.toString())
+            selectOutputImage()
             this.close()
         }
         onRejected: {
@@ -205,6 +236,7 @@ ApplicationWindow {
             color: "#440154" // darkest color in viridis colormap
         }
         onClicked: {
+            saveJSON(fileDialog.folder.toString())
             progressBar.value = 0
             residualImage.source = ""
             outputImage.source = ""
@@ -307,9 +339,8 @@ ApplicationWindow {
         x: 1000
         y: 150
         text: qsTr("Verbose")
-        opacity: 0.5
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("This feature is currently not enabled")
+        ToolTip.text: qsTr(" Hello there UwU")
     }
 
     Text {
@@ -355,8 +386,6 @@ ApplicationWindow {
         width: 479
         height: 17
         font.pixelSize: 12
-
-        text: qsTr("/home/jan/parallelized-fwi/FWIInstall/default")
         property string placeholderText: "Enter path/to/data."
 
         Text {
