@@ -43,7 +43,7 @@ ApplicationWindow {
 
     FileIO {
         id: myCSV
-        source: "../" + ('0'+itemsRunList.dateObj.getDate()).slice(-2) + ('0' + (itemsRunList.dateObj.getUTCMonth() +1)).slice(-2) + itemsRunList.dateObj.getFullYear().toString() + '_' + itemsRunList.dateObj.getHours() + ':' + itemsRunList.dateObj.getMinutes()  + "_comparison_runs.csv"
+        source: ('0'+itemsRunList.dateObj.getDate()).slice(-2) + ('0' + (itemsRunList.dateObj.getUTCMonth() +1)).slice(-2) + itemsRunList.dateObj.getFullYear().toString() + '_' + itemsRunList.dateObj.getHours() + ':' + itemsRunList.dateObj.getMinutes()  + "_comparison_runs.csv"
         onError: console.log(msg)
     }
 
@@ -59,10 +59,6 @@ ApplicationWindow {
             property var runNameList: {"name":"Run Name","Location":"Location on disk","Threads":"#threads","Inversion":"Inversion","Forward":"Forward","grid":"Grid size"}
             property var runList: []
             property var dateObj: new Date();
-
-            Component.onCompleted: {
-                console.log("Current date: " + dateObj.getUTCMonth())
-            }
         }
 
         FileDialog {
@@ -338,8 +334,7 @@ Do you want to continue?"
 
     function launchComparisonMode() {
         console.log("==== COMPARISON")
-        var postProcessCommand = "$(which python3) %BIN%runPerformanceCompare.py -c %DATA%"
-        postProcessCommand = postProcessCommand.replace("%BIN%", "./../")
+        var postProcessCommand = "$(which python3) runPerformanceCompare.py -c %DATA%"
         postProcessCommand = postProcessCommand.replace("%DATA%", "./"+ myCSV.source)
         console.log(postProcessCommand)
         var output = callExec(postProcessCommand)
@@ -546,7 +541,7 @@ Do you want to continue?"
                 if (preProcessingCheckBox.checked)
                 {
                     console.log("==== PREPROCESS")
-                    var preProcessCommand = "./FWI_PreProcess -d '%DATA%'"
+                    var preProcessCommand = "./bin/FWI_PreProcess -d '%DATA%'"
                     preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
                     var output = callExec(preProcessCommand)
                     console.log(preProcessCommand)
@@ -557,10 +552,8 @@ Do you want to continue?"
                 if (processingCheckBox.checked)
                 {
                     console.log("==== PROCESS")
-                    var processCommand = "./FWI_Process -d '%DATA%'"
+                    var processCommand = "./bin/FWI_Process -d '%DATA%'"
                     processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
-                    processCommand = processCommand.replace("%FORWARD%", forwardCombo.currentText)
-                    processCommand = processCommand.replace("%INVERSE%", inversionCombo.currentText)
                     output = callExec(processCommand)
                     outputText.text = outputText.text + "\n" + output
                 }
@@ -569,8 +562,7 @@ Do you want to continue?"
                 if (postProcessingCheckBox.checked)
                 {
                     console.log("==== POSTPROCESS")
-                    var postProcessCommand = "$(which python3) %BIN%postProcessing-python3.py -o '%DATA%'"
-                    postProcessCommand = postProcessCommand.replace("%BIN%", "./../")
+                    var postProcessCommand = "$(which python3) postProcessing-python3.py -o '%DATA%'"
                     postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
                     console.log(postProcessCommand)
                     output = callExec(postProcessCommand)
