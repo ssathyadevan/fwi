@@ -7,7 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(PROJECT "MinimalQml")
+set(PROJECT "FWI_Launch")
 project(${PROJECT})
 
 find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
