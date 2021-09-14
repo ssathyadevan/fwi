@@ -7,7 +7,7 @@ import Qt.labs.folderlistmodel 2.12
 import QtQuick.Controls.Styles 1.4
 
 import com.fwi 1.0
-
+import FileIO 1.0
 
 
 ApplicationWindow {
@@ -38,6 +38,13 @@ ApplicationWindow {
         for(var i in list){
             listModelData.append({"name": list[i]["fileName"],"Location": list[i]["location"],"Threads": list[i]["threads"].toString(),"Inversion": list[i]["inversion"],"Forward": list[i]["forward"],"grid": list[i].ngrid_original.x +"x"+list[i].ngrid_original.z})
         }
+        listViewComparison.forceLayout()
+    }
+
+    FileIO {
+        id: myCSV
+        source: "../" + ('0'+itemsRunList.dateObj.getDate()).slice(-2) + ('0' + (itemsRunList.dateObj.getUTCMonth() +1)).slice(-2) + itemsRunList.dateObj.getFullYear().toString() + '_' + itemsRunList.dateObj.getHours() + ':' + itemsRunList.dateObj.getMinutes()  + "_comparison_runs.csv"
+        onError: console.log(msg)
     }
 
 
@@ -49,8 +56,13 @@ ApplicationWindow {
 
         Item {
             id: itemsRunList
-            property var runNameList: {"name":"Run Name","Location":"Location on disk","Threads":"#threads","Inversion":"Inversion","Forward":"Forward","grid":"Gridsize"}
+            property var runNameList: {"name":"Run Name","Location":"Location on disk","Threads":"#threads","Inversion":"Inversion","Forward":"Forward","grid":"Grid size"}
             property var runList: []
+            property var dateObj: new Date();
+
+            Component.onCompleted: {
+                console.log("Current date: " + dateObj.getUTCMonth())
+            }
         }
 
         FileDialog {
@@ -152,7 +164,8 @@ ApplicationWindow {
                             color: "light grey"
                         }
                         onClicked: {
-                            delete itemsRunList.runList[index  -1]
+                            console.log("Deleted run at index:" + (index - 1) + "for total length:" +itemsRunList.runList.length)
+                            itemsRunList.runList.splice(index  -1,1)
                             refreshList()
                         }
                     }
@@ -211,26 +224,26 @@ ApplicationWindow {
                 radius: 4
                 color: "#f9013f"
             }
+            onClicked: {
+                createOuputRunList()
+                messageDialog.open()
+            }
         }
 
         Button {
             id: addRunButton
-            x: 1160
-            y: 10
-            width: 50
-            height: 50
+            width: 30
+            height: 30
             text: qsTr("+")
-            font.pointSize: 36
+            font.pointSize: 25
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.top: parent.top
             anchors.topMargin: 10
             background: Rectangle{
-                implicitWidth: 50
-                implicitHeight: 40
                 border.width: 2
                 border.color: "grey"
-                radius: 25
+                radius: 15
                 color: "green"
             }
             onClicked: {
@@ -261,12 +274,6 @@ ApplicationWindow {
             }
         }
 
-
-
-
-
-
-
     }
 
 
@@ -279,13 +286,12 @@ ApplicationWindow {
         id: messageDialog
         icon: StandardIcon.Information
         title: "Full Waveform Inversion"
-        text: "Please open the (default) folder containing the input/output for the FWI Process \n \nPlease note that the Python Files should be located in the FWInstall folder"
+        text: "The results will be placed in the FWInstall folder."
         width: 300
-        standardButtons: StandardButton.Ok | StandardButton.Close
+        standardButtons: StandardButton.Ok
         onAccepted: {
-            fileDialog.open()
+
         }
-        Component.onCompleted: visible = true
     }
 
     MessageDialog {
@@ -314,6 +320,19 @@ Do you want to continue?"
         title: "Did not detect correct input folder"
         text: "Did not detect 'GenericInput.json'"
         standardButtons: StandardButton.Ok
+    }
+
+    function createOuputRunList(){
+        var array = []
+
+        for( var i in itemsRunList.runList) {
+            array.push(itemsRunList.runList[i].location)
+        }
+        //Doing some not so-nice conversion between json/myCSV
+        var strtxt = JSON.stringify(array).replace("[","").replace("]","").replace(",","\n")
+        console.log(strtxt)
+        myCSV.write(strtxt)
+
     }
 
 
@@ -654,7 +673,7 @@ Do you want to continue?"
             width: 479
             height: 17
             font.pixelSize: 12
-            property string placeholderText: "Enter path/to/data."
+            property string placeholderText: "Enter path/to/data/default (containing input&output folders)."
 
             Text {
                 text: inputFolderTextEdit.placeholderText
