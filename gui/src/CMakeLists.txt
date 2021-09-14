@@ -15,6 +15,8 @@ find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
 if (Qt5_FOUND)
     add_executable(${PROJECT}
       main.cpp
+      fileio.cpp
+      fileio.h
       Launcher.h
       qml.qrc
     )

@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <iostream>
 #include <QCoreApplication>
+#include "fileio.h"
 
 class Launcher : public QObject{
    Q_OBJECT
@@ -30,6 +31,7 @@ public:
         QString output = QString::fromLocal8Bit(bytes);
         return output;
     }
+
 };
 
 #endif // QFWIPOSTPROCESS_CPP

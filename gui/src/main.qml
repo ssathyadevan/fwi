@@ -7,7 +7,7 @@ import Qt.labs.folderlistmodel 2.12
 import QtQuick.Controls.Styles 1.4
 
 import com.fwi 1.0
-
+import FileIO 1.0
 
 
 ApplicationWindow {
@@ -31,11 +31,64 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    function refreshList(){
+        var list = itemsRunList.runList
+        listModelData.clear()
+        listModelData.append({"name": itemsRunList.runNameList["name"],"Location": itemsRunList.runNameList["Location"],"Threads": itemsRunList.runNameList["Threads"],"Inversion": itemsRunList.runNameList["Inversion"],"Forward": itemsRunList.runNameList["Forward"],"grid": itemsRunList.runNameList["grid"]})
+        for(var i in list){
+            listModelData.append({"name": list[i]["fileName"],"Location": list[i]["location"],"Threads": list[i]["threads"].toString(),"Inversion": list[i]["inversion"],"Forward": list[i]["forward"],"grid": list[i].ngrid_original.x +"x"+list[i].ngrid_original.z})
+        }
+        listViewComparison.forceLayout()
+    }
+
+    FileIO {
+        id: myCSV
+        source: "../" + ('0'+itemsRunList.dateObj.getDate()).slice(-2) + ('0' + (itemsRunList.dateObj.getUTCMonth() +1)).slice(-2) + itemsRunList.dateObj.getFullYear().toString() + '_' + itemsRunList.dateObj.getHours() + ':' + itemsRunList.dateObj.getMinutes()  + "_comparison_runs.csv"
+        onError: console.log(msg)
+    }
+
 
     Page {
         id: quePopUpWindow
         anchors.fill: parent
         visible: false
+
+
+        Item {
+            id: itemsRunList
+            property var runNameList: {"name":"Run Name","Location":"Location on disk","Threads":"#threads","Inversion":"Inversion","Forward":"Forward","grid":"Grid size"}
+            property var runList: []
+            property var dateObj: new Date();
+
+            Component.onCompleted: {
+                console.log("Current date: " + dateObj.getUTCMonth())
+            }
+        }
+
+        FileDialog {
+            id: fileDialogQueRuns
+            title: "Please choose a folder"
+            selectFolder: true
+            folder: shortcuts.home
+            onAccepted: {
+                var dir = fileDialogQueRuns.folder.toString()
+                try {
+                    var json = JSON.parse(openFile(dir+'/input/GenericInput.json'))
+                    json.location = dir.replace("file://","")
+                    itemsRunList.runList.push(json)
+                    refreshList()
+
+                } catch (e) {
+                    warningDialogWrongInput.open()
+                    console.log(e)
+                }
+                this.close()
+            }
+            onRejected: {
+                this.close()
+            }
+        }
+
 
 
 
@@ -53,49 +106,81 @@ ApplicationWindow {
                 x: 5
                 width: 1000
                 height: 50
+                property int indexOfThisDelegate: index
                 Row {
                     id: row1
+                    spacing: 10
+
                     Text {
+                        width: 80
                         text: name
                         anchors.verticalCenter: parent.verticalCenter
-                        font.bold: true
+                        font.bold: index == 0 ?  true : false
                     }
-                    spacing: 10
+
                     Text {
                         text: grid
+                        width: 80
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Forward
+                        width: 160
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Inversion
+                        width: 160
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
+
                     }
                     Text {
                         text: Threads
+                        width: 60
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Location
+                        width: 500
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
+                    }
+                    Button {
+                        id: deleteRow
+                        width: 30
+                        height: 30
+                        visible: index == 0 ? false: true
+                        text: qsTr("X")
+                        background: Rectangle{
+                            implicitWidth: 30
+                            implicitHeight: 30
+                            border.width: 2
+                            border.color: "white"
+                            radius: 25
+                            color: "light grey"
+                        }
+                        onClicked: {
+                            console.log("Deleted run at index:" + (index - 1) + "for total length:" +itemsRunList.runList.length)
+                            itemsRunList.runList.splice(index  -1,1)
+                            refreshList()
+                        }
                     }
                 }
             }
             model: ListModel {id: listModelData}
+
             Component.onCompleted: {
-                var list = [
-                            {"name": "temple", "grid": "10x2","Forward": "Inversion","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
-                            {"name": "temple", "grid": "10x20","Forward": "FiniteDifferenceParallel","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
-                            {"name": "temple", "grid": "10x2","Forward": "FiniteDifferenceParallelMPI","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"}
-                        ]
-                listModelData.clear()
-                for(var i in list){
-                    listModelData.append({"name": list[i]["name"],"Location": list[i]["Location"],"Threads": list[i]["Threads"],"Inversion": list[i]["Inversion"],"Forward": list[i]["Forward"],"grid": list[i]["grid"]})
-                }
+                refreshList()
             }
+
+
         }
+
+
 
         Text {
             id: element
@@ -139,6 +224,32 @@ ApplicationWindow {
                 radius: 4
                 color: "#f9013f"
             }
+            onClicked: {
+                createOuputRunList()
+                launchComparisonMode()
+                messageDialog.open()
+            }
+        }
+
+        Button {
+            id: addRunButton
+            width: 30
+            height: 30
+            text: qsTr("+")
+            font.pointSize: 25
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            background: Rectangle{
+                border.width: 2
+                border.color: "grey"
+                radius: 15
+                color: "green"
+            }
+            onClicked: {
+                fileDialogQueRuns.open()
+            }
         }
 
         Button {
@@ -164,11 +275,6 @@ ApplicationWindow {
             }
         }
 
-
-
-
-
-
     }
 
 
@@ -181,13 +287,12 @@ ApplicationWindow {
         id: messageDialog
         icon: StandardIcon.Information
         title: "Full Waveform Inversion"
-        text: "Please open the (default) folder containing the input/output for the FWI Process \n \nPlease note that the Python Files should be located in the FWInstall folder"
+        text: "The results will be placed in the FWInstall folder."
         width: 300
-        standardButtons: StandardButton.Ok | StandardButton.Close
+        standardButtons: StandardButton.Ok
         onAccepted: {
-            fileDialog.open()
+
         }
-        Component.onCompleted: visible = true
     }
 
     MessageDialog {
@@ -216,6 +321,29 @@ Do you want to continue?"
         title: "Did not detect correct input folder"
         text: "Did not detect 'GenericInput.json'"
         standardButtons: StandardButton.Ok
+    }
+
+    function createOuputRunList(){
+        var array = []
+
+        for( var i in itemsRunList.runList) {
+            array.push(itemsRunList.runList[i].location)
+        }
+        //Doing some not so-nice conversion between json/myCSV
+        var strtxt = JSON.stringify(array).replace("[","").replace("]","").replace(",","\n")
+        console.log(strtxt)
+        myCSV.write(strtxt)
+
+    }
+
+    function launchComparisonMode() {
+        console.log("==== COMPARISON")
+        var postProcessCommand = "$(which python3) %BIN%runPerformanceCompare.py -c %DATA%"
+        postProcessCommand = postProcessCommand.replace("%BIN%", "./../")
+        postProcessCommand = postProcessCommand.replace("%DATA%", "./"+ myCSV.source)
+        console.log(postProcessCommand)
+        var output = callExec(postProcessCommand)
+        console.log(output)
     }
 
 
@@ -556,7 +684,7 @@ Do you want to continue?"
             width: 479
             height: 17
             font.pixelSize: 12
-            property string placeholderText: "Enter path/to/data."
+            property string placeholderText: "Enter path/to/data/default (containing input&output folders)."
 
             Text {
                 text: inputFolderTextEdit.placeholderText
@@ -750,12 +878,14 @@ Do you want to continue?"
 
 
 
+
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
-D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_x:10}D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}
-D{i:2;anchors_height:500;anchors_width:1220}D{i:31;invisible:true}D{i:29;invisible:true}
+    D{i:0;formeditorZoom:0.75}D{i:1;invisible:true}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
+D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_height:200;anchors_x:555;anchors_y:150}
+D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}D{i:2;anchors_height:500;anchors_width:1220}
+D{i:33;invisible:true}D{i:74;anchors_y:10}D{i:29;invisible:true}D{i:31;invisible:true}
 }
 ##^##*/
