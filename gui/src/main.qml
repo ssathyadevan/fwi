@@ -31,11 +31,52 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+    function refreshList(){
+        var list = itemsRunList.runList
+        listModelData.clear()
+        listModelData.append({"name": itemsRunList.runNameList["name"],"Location": itemsRunList.runNameList["Location"],"Threads": itemsRunList.runNameList["Threads"],"Inversion": itemsRunList.runNameList["Inversion"],"Forward": itemsRunList.runNameList["Forward"],"grid": itemsRunList.runNameList["grid"]})
+        for(var i in list){
+            listModelData.append({"name": list[i]["fileName"],"Location": list[i]["location"],"Threads": list[i]["threads"].toString(),"Inversion": list[i]["inversion"],"Forward": list[i]["forward"],"grid": list[i].ngrid_original.x +"x"+list[i].ngrid_original.z})
+        }
+    }
+
 
     Page {
         id: quePopUpWindow
         anchors.fill: parent
         visible: false
+
+
+        Item {
+            id: itemsRunList
+            property var runNameList: {"name":"Run Name","Location":"Location on disk","Threads":"#threads","Inversion":"Inversion","Forward":"Forward","grid":"Gridsize"}
+            property var runList: []
+        }
+
+        FileDialog {
+            id: fileDialogQueRuns
+            title: "Please choose a folder"
+            selectFolder: true
+            folder: shortcuts.home
+            onAccepted: {
+                var dir = fileDialogQueRuns.folder.toString()
+                try {
+                    var json = JSON.parse(openFile(dir+'/input/GenericInput.json'))
+                    json.location = dir.replace("file://","")
+                    itemsRunList.runList.push(json)
+                    refreshList()
+
+                } catch (e) {
+                    warningDialogWrongInput.open()
+                    console.log(e)
+                }
+                this.close()
+            }
+            onRejected: {
+                this.close()
+            }
+        }
+
 
 
 
@@ -53,49 +94,80 @@ ApplicationWindow {
                 x: 5
                 width: 1000
                 height: 50
+                property int indexOfThisDelegate: index
                 Row {
                     id: row1
+                    spacing: 10
+
                     Text {
+                        width: 80
                         text: name
                         anchors.verticalCenter: parent.verticalCenter
-                        font.bold: true
+                        font.bold: index == 0 ?  true : false
                     }
-                    spacing: 10
+
                     Text {
                         text: grid
+                        width: 80
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Forward
+                        width: 160
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Inversion
+                        width: 160
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
+
                     }
                     Text {
                         text: Threads
+                        width: 60
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
                     }
                     Text {
                         text: Location
+                        width: 500
                         anchors.verticalCenter: parent.verticalCenter
+                        font.bold: index == 0 ?  true : false
+                    }
+                    Button {
+                        id: deleteRow
+                        width: 30
+                        height: 30
+                        visible: index == 0 ? false: true
+                        text: qsTr("X")
+                        background: Rectangle{
+                            implicitWidth: 30
+                            implicitHeight: 30
+                            border.width: 2
+                            border.color: "white"
+                            radius: 25
+                            color: "light grey"
+                        }
+                        onClicked: {
+                            delete itemsRunList.runList[index  -1]
+                            refreshList()
+                        }
                     }
                 }
             }
             model: ListModel {id: listModelData}
+
             Component.onCompleted: {
-                var list = [
-                            {"name": "temple", "grid": "10x2","Forward": "Inversion","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
-                            {"name": "temple", "grid": "10x20","Forward": "FiniteDifferenceParallel","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
-                            {"name": "temple", "grid": "10x2","Forward": "FiniteDifferenceParallelMPI","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"}
-                        ]
-                listModelData.clear()
-                for(var i in list){
-                    listModelData.append({"name": list[i]["name"],"Location": list[i]["Location"],"Threads": list[i]["Threads"],"Inversion": list[i]["Inversion"],"Forward": list[i]["Forward"],"grid": list[i]["grid"]})
-                }
+                refreshList()
             }
+
+
         }
+
+
 
         Text {
             id: element
@@ -142,6 +214,31 @@ ApplicationWindow {
         }
 
         Button {
+            id: addRunButton
+            x: 1160
+            y: 10
+            width: 50
+            height: 50
+            text: qsTr("+")
+            font.pointSize: 36
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            background: Rectangle{
+                implicitWidth: 50
+                implicitHeight: 40
+                border.width: 2
+                border.color: "grey"
+                radius: 25
+                color: "green"
+            }
+            onClicked: {
+                fileDialogQueRuns.open()
+            }
+        }
+
+        Button {
             id: popupCancel
             x: 10
             y: 450
@@ -163,6 +260,7 @@ ApplicationWindow {
                 color: "white"
             }
         }
+
 
 
 
@@ -750,12 +848,14 @@ Do you want to continue?"
 
 
 
+
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
-D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_x:10}D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}
-D{i:2;anchors_height:500;anchors_width:1220}D{i:31;invisible:true}D{i:29;invisible:true}
+    D{i:0;formeditorZoom:0.75}D{i:1;invisible:true}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
+D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_height:200;anchors_x:555;anchors_y:150}
+D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}D{i:2;anchors_height:500;anchors_width:1220}
+D{i:33;invisible:true}D{i:74;anchors_y:10}D{i:29;invisible:true}D{i:31;invisible:true}
 }
 ##^##*/
