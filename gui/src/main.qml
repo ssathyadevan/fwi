@@ -226,6 +226,7 @@ ApplicationWindow {
             }
             onClicked: {
                 createOuputRunList()
+                launchComparisonMode()
                 messageDialog.open()
             }
         }
@@ -333,6 +334,16 @@ Do you want to continue?"
         console.log(strtxt)
         myCSV.write(strtxt)
 
+    }
+
+    function launchComparisonMode() {
+        console.log("==== COMPARISON")
+        var postProcessCommand = "$(which python3) %BIN%runPerformanceCompare.py -c %DATA%"
+        postProcessCommand = postProcessCommand.replace("%BIN%", "./../")
+        postProcessCommand = postProcessCommand.replace("%DATA%", "./"+ myCSV.source)
+        console.log(postProcessCommand)
+        var output = callExec(postProcessCommand)
+        console.log(output)
     }
 
 
