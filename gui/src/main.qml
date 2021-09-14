@@ -8,6 +8,8 @@ import QtQuick.Controls.Styles 1.4
 
 import com.fwi 1.0
 
+
+
 ApplicationWindow {
     visible: true
     id: root
@@ -29,9 +31,151 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
+
+    Page {
+        id: quePopUpWindow
+        anchors.fill: parent
+        visible: false
+
+
+
+        ListView {
+            id: listViewComparison
+            anchors.right: parent.right
+            anchors.rightMargin: 50
+            anchors.left: parent.left
+            anchors.leftMargin: 50
+            anchors.top: parent.top
+            anchors.topMargin: 60
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 60
+            delegate: Item {
+                x: 5
+                width: 1000
+                height: 50
+                Row {
+                    id: row1
+                    Text {
+                        text: name
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.bold: true
+                    }
+                    spacing: 10
+                    Text {
+                        text: grid
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: Forward
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: Inversion
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: Threads
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: Location
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+            }
+            model: ListModel {id: listModelData}
+            Component.onCompleted: {
+                var list = [
+                            {"name": "temple", "grid": "10x2","Forward": "Inversion","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
+                            {"name": "temple", "grid": "10x20","Forward": "FiniteDifferenceParallel","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"},
+                            {"name": "temple", "grid": "10x2","Forward": "FiniteDifferenceParallelMPI","Inversion": "temple","Threads": "temple", "Location": "/usr/lib/test"}
+                        ]
+                listModelData.clear()
+                for(var i in list){
+                    listModelData.append({"name": list[i]["name"],"Location": list[i]["Location"],"Threads": list[i]["Threads"],"Inversion": list[i]["Inversion"],"Forward": list[i]["Forward"],"grid": list[i]["grid"]})
+                }
+            }
+        }
+
+        Text {
+            id: element
+            x: 10
+            y: 10
+            text: qsTr("FWI Comparison Mode")
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            font.bold: true
+            font.pixelSize: 26
+        }        Rectangle {
+            id: rectangle
+            width: 200
+            color: "#000000"
+            anchors.right: listViewComparison.left
+            anchors.rightMargin: -5
+            anchors.left: listViewComparison.right
+            anchors.leftMargin: -5
+            anchors.bottom: listViewComparison.top
+            anchors.bottomMargin: -5
+            anchors.top: listViewComparison.bottom
+            anchors.topMargin: -5
+        }
+
+        Button {
+            id: popUpCompute
+            x: 1110
+            y: 450
+            text: qsTr("Compute")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            background: Rectangle{
+                implicitWidth: 100
+                implicitHeight: 35
+                border.width: 2
+                border.color: "grey"
+                radius: 4
+                color: "#f9013f"
+            }
+        }
+
+        Button {
+            id: popupCancel
+            x: 10
+            y: 450
+            text: qsTr("Cancel")
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            onClicked: {
+                quePopUpWindow.visible = false
+                scrollView.visible = true
+            }
+            background: Rectangle{
+                implicitWidth: 100
+                implicitHeight: 35
+                border.width: 2
+                border.color: "grey"
+                radius: 4
+                color: "white"
+            }
+        }
+
+
+
+
+
+
+    }
+
+
     Launcher {
         id: qLauncher
     }
+
 
     MessageDialog {
         id: messageDialog
@@ -179,9 +323,11 @@ Do you want to continue?"
         }
     }
 
+
     ScrollView {
         id: scrollView
         height: 600
+        visible: true
         anchors.right: parent.right
         anchors.rightMargin: 20
         anchors.left: parent.left
@@ -220,7 +366,7 @@ Do you want to continue?"
             x: 920
             y: 230
             contentItem: Text {
-                text: qsTr("Cancel")
+                text: qsTr("Compare runs")
                 color: "black"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -232,10 +378,11 @@ Do you want to continue?"
                 border.width: 2
                 border.color: "grey"
                 radius: 4
-                color: "light grey"
+                color: "#f9013f"
             }
             onClicked: {
-                Qt.quit()
+                quePopUpWindow.visible = true
+                scrollView.visible = false
             }
         }
 
@@ -573,6 +720,8 @@ Do you want to continue?"
             x: 64
             y: 230
             text: qsTr("Pre-processing")
+            checkState: Qt.Checked
+            tristate: false
             checked: false
         }
 
@@ -581,6 +730,7 @@ Do you want to continue?"
             x: 264
             y: 230
             text: qsTr("Processing")
+            checkState: Qt.Checked
             checked: false
         }
 
@@ -589,17 +739,23 @@ Do you want to continue?"
             x: 424
             y: 230
             text: qsTr("Post-processing")
+            checkState: Qt.Checked
             checked: false
         }
 
 
     }
 
+
+
+
+
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:1;anchors_height:880;anchors_width:1180;anchors_x:10;anchors_y:10}
-D{i:40;anchors_x:64}D{i:14;anchors_width:1200}
+    D{i:0;formeditorZoom:0.75}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
+D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_x:10}D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}
+D{i:2;anchors_height:500;anchors_width:1220}D{i:31;invisible:true}D{i:29;invisible:true}
 }
 ##^##*/
