@@ -26,6 +26,8 @@ parser = argparse.ArgumentParser(description="Execute all Forward and Inversion 
 parser.add_argument("-d", "--dir", type=str, required=False, default="./cases/",
                     help="Path to the folder containing input/output folders")
 
+parser.add_argument("-c", "--casefile", type=str, required=False, default="./cases/casepaths.csv",
+                    help="Path to csv file containg paths to cases")
 
 # Parse the input arguments
 arguments = parser.parse_args()
@@ -34,6 +36,7 @@ arguments = parser.parse_args()
 execName = 'python3'
 if platform.system() == 'Windows':
     execName = 'python'
+
 
 
 cpu_time = []
@@ -77,68 +80,58 @@ def setVariables(time,thread="1"):
     wall_time.append(float(searchLogFilesForNumber(location_log, "Wall")))
 
 casedir = arguments.dir
-
-# change to different file input structure later
-for root, dirs, files in os.walk(casedir):
-#print(root)
-    #print(dirs)
-    #print(files)
-    #print('-------------------------------')
-
-    if re.search("/case[1-9]$", root):
-        caseName = os.path.basename(os.path.normpath(root))
-
-        # read json input file
-        inputFile = json.load(open(root + "/input/GenericInput.json"))
-
-        forward = inputFile['forward']
-        inversion = inputFile['inversion']
-        model = inputFile['fileName']
+caselist = []
+with open(arguments.casefile) as csv_file:
+    csv_reader = csv.reader(csv_file)
+    line_count = 0
+    for row in csv_reader:
+        caselist.append(row[0])
         
-        print(root, forward, inversion, model)
+print("Computing for: ")
+for file in caselist:
+    print(file)
+print()
 
-        # Configure the arguments
-        number_of_threads = inputFile['threads']
-        location_input = root
-        location_exe = "./bin"
-        location_log = location_input + "/output/" + caseName +"Process.log"
-        print("location log: ", location_log)
-        location_chi_input = location_input + "/output/chi_ref_" + caseName + ".txt"
-        location_chi_est = location_input + "/output/chi_est_" + caseName + ".txt"
-        final_location_csv = location_input + "/output/" + inversion + "_" + forward + "_" + model + ".csv"
-        reference = ["FiniteDifference", "ConjugateGradient"]
+for root in caselist:
+    print("root: ", root)
+    caseName = os.path.basename(os.path.normpath(root))
 
-        standard_args = execName + " runUtility.py -d " + location_input + " -b " + location_exe + " "  
+    # read json input file
+    inputFile = json.load(open(root + "/input/GenericInput.json"))
 
-        #Start PreProcess
-        print("Reference PreProcess with ForwardModel:" + reference[0])
-        args = "--skip-post --skip-process -p " + reference[0]
-        os.system(standard_args + args)
+    forward = inputFile['forward']
+    inversion = inputFile['inversion']
+    model = inputFile['fileName']
+    
+    print(root, forward, inversion, model)
 
-        #Start Process Reference
-        print("Reference Process with ForwardModel: " + reference[0] + ' and Inversion: ' + reference[1])
-        args = "--skip-pre --skip-post -f " + reference[0] + " -i " + reference[1]
-        start = time.time()
-        os.system(standard_args + args)
-        end = time.time()
-        setVariables(str(round(end-start,2)))
+    # Configure the arguments
+    number_of_threads = inputFile['threads']
+    location_input = root
+    location_exe = "./bin"
+    location_log = location_input + "/output/" + caseName +"Process.log"
+    print("location log: ", location_log)
+    location_chi_input = location_input + "/output/chi_ref_" + caseName + ".txt"
+    location_chi_est = location_input + "/output/chi_est_" + caseName + ".txt"
+    final_location_csv = location_input + "/output/" + inversion + "_" + forward + "_" + model + ".csv"
+    reference = ["FiniteDifference", "ConjugateGradient"]
 
-        #for thread in number_of_threads:
-            #set variable of threads
-        parallel_command = "export OMP_NUM_THREADS=" + number_of_threads
-        os.environ["OMP_NUM_THREADS"] = number_of_threads
-        print(parallel_command)
-        start = time.time()
-        argsp = "--skip-pre --skip-post -f " + forward + " -i " + inversion
-        #if arguments.method == "MPI":
-        #    argsp = argsp + " --MPI --threads " + str(number_of_threads)
-        os.system(standard_args + argsp)
-        end = time.time()
-        setVariables(round(end-start,2),number_of_threads)
+    standard_args = execName + " runUtility.py -d " + location_input + " -b " + location_exe + " "  
 
-        #save variables
-        final_array = np.asarray([cpu_time, wall_time,python_time,avg_error,mean_error,cores])
-        np.savetxt(final_location_csv,final_array.transpose(),header="CPU,WALL,TIME,E_AVG,E_MEAN,CORES",delimiter=',')
+    #for thread in number_of_threads:
+    #set variable of threads
+    parallel_command = "export OMP_NUM_THREADS=" + number_of_threads
+    os.environ["OMP_NUM_THREADS"] = number_of_threads
+    print(parallel_command)
+    start = time.time()
+    argsp = "--skip-post -f " + forward + " -i " + inversion
+    os.system(standard_args + argsp)
+    end = time.time()
+    setVariables(round(end-start,2),number_of_threads)
+
+    #save variables
+    final_array = np.asarray([cpu_time, wall_time,python_time,avg_error,mean_error,cores])
+    np.savetxt(final_location_csv,final_array.transpose(),header="CPU,WALL,TIME,E_AVG,E_MEAN,CORES",delimiter=',')
 
 
 
