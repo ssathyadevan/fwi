@@ -37,7 +37,12 @@ execName = 'python3'
 if platform.system() == 'Windows':
     execName = 'python'
 
-
+#prepare results csv
+results_csv = './all_results.csv'
+with open(results_csv, 'w+', newline='') as out_file:
+    csv_writer = csv.writer(out_file)
+    header = ["CASE","CPU","WALL","TIME","E_AVG","E_MEAN","CORES"]
+    csv_writer.writerow(header)
 
 cpu_time = []
 wall_time = []
@@ -72,7 +77,7 @@ def compareChiEst():
 
 def setVariables(time,thread="1"):
     [mse, avg] = compareChiEst()
-    avg_error.append(float(avg))
+    avg_error .append(float(avg))
     mean_error.append(float(mse))
     python_time.append(float(time))
     cpu_time.append(float(searchLogFilesForNumber(location_log, "CPU")))
@@ -81,6 +86,8 @@ def setVariables(time,thread="1"):
 
 casedir = arguments.dir
 caselist = []
+
+
 with open(arguments.casefile) as csv_file:
     csv_reader = csv.reader(csv_file)
     line_count = 0
@@ -93,6 +100,13 @@ for file in caselist:
 print()
 
 for root in caselist:
+    cpu_time = []
+    wall_time = []
+    python_time = []    
+    avg_error = []
+    mean_error = []
+    cores = []
+
     print("root: ", root)
     caseName = os.path.basename(os.path.normpath(root))
 
@@ -114,25 +128,27 @@ for root in caselist:
     location_chi_input = location_input + "/output/chi_ref_" + caseName + ".txt"
     location_chi_est = location_input + "/output/chi_est_" + caseName + ".txt"
     final_location_csv = location_input + "/output/" + inversion + "_" + forward + "_" + model + ".csv"
-    reference = ["FiniteDifference", "ConjugateGradient"]
+    #reference = ["FiniteDifference", "ConjugateGradient"]
 
     standard_args = execName + " runUtility.py -d " + location_input + " -b " + location_exe + " "  
 
     #for thread in number_of_threads:
     #set variable of threads
-    parallel_command = "export OMP_NUM_THREADS=" + number_of_threads
-    os.environ["OMP_NUM_THREADS"] = number_of_threads
+    parallel_command = "export OMP_NUM_THREADS=" + str(number_of_threads)
+    os.environ["OMP_NUM_THREADS"] = str(number_of_threads)
     print(parallel_command)
     start = time.time()
-    argsp = "--skip-post -f " + forward + " -i " + inversion
+    argsp = " --skip-post -f " + forward + " -i " + inversion
     os.system(standard_args + argsp)
     end = time.time()
     setVariables(round(end-start,2),number_of_threads)
 
     #save variables
-    final_array = np.asarray([cpu_time, wall_time,python_time,avg_error,mean_error,cores])
+    final_array = np.asarray([cpu_time[0],wall_time[0],python_time[0],avg_error[0],mean_error[0],cores[0]])
     np.savetxt(final_location_csv,final_array.transpose(),header="CPU,WALL,TIME,E_AVG,E_MEAN,CORES",delimiter=',')
 
-
+    with open(results_csv, 'a', newline='') as out_file:
+        csv_writer = csv.writer(out_file)
+        csv_writer.writerow([caseName, cpu_time[0], wall_time[0],python_time[0],avg_error[0],mean_error[0],cores[0]])
 
 
