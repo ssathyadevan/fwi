@@ -77,6 +77,7 @@ ApplicationWindow {
                 } catch (e) {
                     warningDialogWrongInput.open()
                     console.log(e)
+                    consoleLog(e)
                 }
                 this.close()
             }
@@ -161,6 +162,7 @@ ApplicationWindow {
                         }
                         onClicked: {
                             console.log("Deleted run at index:" + (index - 1) + "for total length:" +itemsRunList.runList.length)
+                            consoleLog("Deleted run at index:" + (index - 1) + "for total length:" +itemsRunList.runList.length)
                             itemsRunList.runList.splice(index  -1,1)
                             refreshList()
                         }
@@ -303,10 +305,12 @@ Do you want to continue?"
         standardButtons: StandardButton.Yes | StandardButton.Cancel
         onYes:  {
             console.log("Saved File anyway")
+            consoleLog("Saved File anyway")
             saveJSON(fileDialog.folder.toString())
         }
         onRejected: {
             console.log("Canceled saving due to warning")
+            consoleLog("Canceled saving due to warning")
         }
 
     }
@@ -333,17 +337,18 @@ Do you want to continue?"
     }
 
     function launchComparisonMode() {
-        console.log("==== COMPARISON")
+        console.log("==== COMPARISON ====")
+        consoleLog("==== COMPARISON ====")
         var postProcessCommand = "$(which python3) runPerformanceCompare.py -c %DATA%"
         postProcessCommand = postProcessCommand.replace("%DATA%", "./"+ myCSV.source)
         console.log(postProcessCommand)
+        consoleLog(postProcessCommand)
         var output = callExec(postProcessCommand)
         console.log(output)
     }
 
 
     function openFile(fileUrl) {
-        console.log(fileUrl)
         var request = new XMLHttpRequest();
         request.open("GET", fileUrl, false);
         request.send(null);
@@ -363,7 +368,6 @@ Do you want to continue?"
         try {
 
             var json = JSON.parse(input)
-            console.log(json.Freq.min)
             gridLabel2.text = qsTr(String(json.ngrid_original.x) +'x'+String(json.ngrid_original.z))
             currentFigure2.text = qsTr(json.fileName)
             forwardCombo.currentIndex = forwardCombo.find(json.forward)
@@ -391,18 +395,23 @@ Do you want to continue?"
         return qLauncher.exec2("gnome-terminal -- bash -c \""  + command + " \"");
     }
 
+    function consoleLog(addtext) {
+        outputText.text = outputText.text + '\n' + addtext
+    }
+
     function selectOutputImage() {
+        var path = ""
         if (outputImageCombo.currentIndex == 0)
         {
-            var path = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
+            path = "file://" + inputFolderTextEdit.text + "/output/defaultResult.png"
         }
         else if (outputImageCombo.currentIndex == 1)
         {
-            var path = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
+            path = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
         }
         else if (outputImageCombo.currentIndex == 2)
         {
-            var path  = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
+            path  = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
         }
         outputImage.source = path ? path: ""
         residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png" ? "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png": ""
@@ -535,10 +544,13 @@ Do you want to continue?"
                 outputImage.source = ""
 
                 console.log(CurDirPath)
+                consoleLog(CurDirPath)
                 console.log(inputFolderTextEdit.text, forwardCombo.currentText, inversionCombo.currentText)
+                consoleLog(inputFolderTextEdit.text + forwardCombo.currentText + inversionCombo.currentText)
                 progressBar.value = 0.1
 
                 console.log("==== Start runUtility ====")
+                consoleLog("==== Start runUtility ====")
                 //should be python on windows.
                 var preProcessCommand = "python3 runUtility.py -d '%DATA%' -f %FORWARD% -p %PREFORWARD%  -i %INVERSE% --threads %CORES% %PRE% %PROS% %POST% "
                 preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
@@ -550,11 +562,13 @@ Do you want to continue?"
                 preProcessCommand = preProcessCommand.replace("%PROS%", processingCheckBox.checked === true ? "" : "--skip-process")
                 preProcessCommand = preProcessCommand.replace("%POST%", postProcessingCheckBox.checked === true ? "" : "--skip-post")
                 console.log(preProcessCommand)
+                consoleLog(preProcessCommand)
                 console.log("==== Click refresh ⟳ when the window is finished ====")
+                consoleLog("==== Click refresh ⟳ when the window is finished ====")
                 refreshResults.visible = true
                 var output = callExec(preProcessCommand)
-                outputText.text = output
                 console.log(output)
+                consoleLog(output)
 
                 progressBar.value = 1
             }
