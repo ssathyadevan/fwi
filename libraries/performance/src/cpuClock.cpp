@@ -2,23 +2,23 @@
 #include "log.h"
 #include <sstream>
 // For memory usage
-#if __unix__
+#if __win32__
+#include "psapi.h"
+#include "windows.h"
+
+#else
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-#else
-#include "psapi.h"
-#include "windows.h"
 #endif
-
 
 namespace
 {
 
-#if __unix__
-	bool makeUnixSpecificCall = true;
-#else
+#if __win32__
 	bool makeUnixSpecificCall = false;	
+#else
+    bool makeUnixSpecificCall = true;
 #endif
 
     long parseLine(char *line)

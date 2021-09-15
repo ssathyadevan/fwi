@@ -1,4 +1,8 @@
 cmake_minimum_required( VERSION 3.10 )
+
+set(CMAKE_C_COMPILER "gcc-11")
+set(CMAKE_CXX_COMPILER "g++-11")             
+
 project( FWI )
 
 #We enforce c++ 17 or later and disable any 
