@@ -10,18 +10,21 @@ import argparse
 from pathlib import Path
 import json
 
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from scipy.ndimage.measurements import label
+#import seaborn as sn
+
 # Configure argument parser
 parser = argparse.ArgumentParser(description="Execute all Forward and Inversion models in one call.",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 
 # Input Arguments
-# forward model 1
-# forward model 2
-# inversion method 1
-# inversion method 2
-# # if parallel: num threads
-
+# -d direct input to a folder containing case folders
+# -c point to a csv file which contains input
 
 parser.add_argument("-d", "--dir", type=str, required=False, default="./cases/",
                     help="Path to the folder containing input/output folders")
@@ -38,7 +41,12 @@ if platform.system() == 'Windows':
     execName = 'python'
 
 #prepare results csv
-results_csv = './all_results.csv'
+
+time_dir = time.strftime("%Y%m%d_%H:%M") + '_comparerun'
+path = './' + time_dir + '/'
+os.makedirs(time_dir, exist_ok=True)
+
+results_csv = path + 'all_results.csv'
 with open(results_csv, 'w+', newline='') as out_file:
     csv_writer = csv.writer(out_file)
     header = ["CASE","CPU","WALL","TIME","E_AVG","E_MEAN","CORES"]
@@ -86,6 +94,54 @@ def setVariables(time,thread="1"):
 
 casedir = arguments.dir
 caselist = []
+
+
+def createCompareImages():
+
+    results_df = pd.read_csv(results_csv)
+    print(results_df)
+
+    cpu_plot = plt.scatter(results_df.CASE, results_df.CPU)
+    plt.xlabel("case")
+    plt.ylabel("cpu_time")
+    plt.savefig((path + "CPUImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
+
+    wall_plot = plt.scatter(results_df.CASE, results_df.WALL)
+    plt.xlabel("case")
+    plt.ylabel("wall_time")
+    plt.savefig((path + "WALLImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
+
+    time_plot = plt.scatter(results_df.CASE, results_df.TIME)
+    plt.xlabel("case")
+    plt.ylabel("time")
+    plt.savefig((path + "TIMEImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
+
+    e_avg_plot = plt.scatter(results_df.CASE, results_df.E_AVG)
+    plt.xlabel("case")
+    plt.ylabel("e_avg")
+    plt.savefig((path + "AVGImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
+
+    e_mean_plot = plt.scatter(results_df.CASE, results_df.E_MEAN)
+    plt.xlabel("case")
+    plt.ylabel("e_mean")
+    plt.savefig((path + "MEANImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
+
+    core_plot = plt.scatter(results_df.CASE, results_df.CORES)
+    plt.xlabel("case")
+    plt.ylabel("cores")
+    plt.savefig((path + "COREImage.png"), dpi=400, bbox_inches='tight')
+    # plt.show()
+    plt.clf()
 
 
 with open(arguments.casefile) as csv_file:
@@ -138,7 +194,7 @@ for root in caselist:
     os.environ["OMP_NUM_THREADS"] = str(number_of_threads)
     print(parallel_command)
     start = time.time()
-    argsp = " --skip-post -f " + forward + " -i " + inversion
+    argsp = " -p" + forward + " -f " + forward + " -i " + inversion
     os.system(standard_args + argsp)
     end = time.time()
     setVariables(round(end-start,2),number_of_threads)
@@ -151,4 +207,4 @@ for root in caselist:
         csv_writer = csv.writer(out_file)
         csv_writer.writerow([caseName, cpu_time[0], wall_time[0],python_time[0],avg_error[0],mean_error[0],cores[0]])
 
-
+    createCompareImages()
