@@ -388,7 +388,7 @@ Do you want to continue?"
     }
 
     function callExec(command) {
-        return qLauncher.exec2("sh -c \""  + command + " \"");
+        return qLauncher.exec2("gnome-terminal -- bash -c \""  + command + " \"");
     }
 
     function selectOutputImage() {
@@ -538,38 +538,24 @@ Do you want to continue?"
                 console.log(inputFolderTextEdit.text, forwardCombo.currentText, inversionCombo.currentText)
                 progressBar.value = 0.1
 
-                if (preProcessingCheckBox.checked)
-                {
-                    console.log("==== PREPROCESS")
-                    var preProcessCommand = "./bin/FWI_PreProcess -d '%DATA%'"
-                    preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
-                    var output = callExec(preProcessCommand)
-                    console.log(preProcessCommand)
-                    outputText.text = output
-                }
-                progressBar.value = 0.33
+                console.log("==== Start runUtility ====")
+                //should be python on windows.
+                var preProcessCommand = "python3 runUtility.py -d '%DATA%' -f %FORWARD% -p %PREFORWARD%  -i %INVERSE% --threads %CORES% %PRE% %PROS% %POST% "
+                preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
+                preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
+                preProcessCommand = preProcessCommand.replace("%PREFORWARD%", forwardCombo.currentText)
+                preProcessCommand = preProcessCommand.replace("%INVERSE%", inversionCombo.currentText)
+                preProcessCommand = preProcessCommand.replace("%CORES%", numberOfThreads.value.toString())
+                preProcessCommand = preProcessCommand.replace("%PRE%", preProcessingCheckBox.checked === true ? "" : "--skip-pre")
+                preProcessCommand = preProcessCommand.replace("%PROS%", processingCheckBox.checked === true ? "" : "--skip-process")
+                preProcessCommand = preProcessCommand.replace("%POST%", postProcessingCheckBox.checked === true ? "" : "--skip-post")
+                console.log(preProcessCommand)
+                console.log("==== Click refresh ⟳ when the window is finished ====")
+                refreshResults.visible = true
+                var output = callExec(preProcessCommand)
+                outputText.text = output
+                console.log(output)
 
-                if (processingCheckBox.checked)
-                {
-                    console.log("==== PROCESS")
-                    var processCommand = "./bin/FWI_Process -d '%DATA%'"
-                    processCommand = processCommand.replace("%DATA%", inputFolderTextEdit.text)
-                    output = callExec(processCommand)
-                    outputText.text = outputText.text + "\n" + output
-                }
-                progressBar.value = 0.66
-
-                if (postProcessingCheckBox.checked)
-                {
-                    console.log("==== POSTPROCESS")
-                    var postProcessCommand = "$(which python3) postProcessing-python3.py -o '%DATA%'"
-                    postProcessCommand = postProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
-                    console.log(postProcessCommand)
-                    output = callExec(postProcessCommand)
-                    outputText.text = outputText.text + "\n" + output
-                    selectOutputImage()
-                    residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
-                }
                 progressBar.value = 1
             }
         }
@@ -861,6 +847,20 @@ Do you want to continue?"
             text: qsTr("Post-processing")
             checkState: Qt.Checked
             checked: false
+        }
+
+        Button {
+            id: refreshResults
+            x: 780
+            y: 290
+            width: 40
+            height: 40
+            text: qsTr("⟳")
+            visible: false
+            font.pointSize: 20
+            onClicked: {
+                selectOutputImage()
+            }
         }
 
 
