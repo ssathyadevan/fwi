@@ -1,15 +1,16 @@
 #include "cpuClock.h"
 #include "log.h"
 #include <sstream>
+
 // For memory usage
 #if __win32__
 #include "psapi.h"
 #include "windows.h"
-
 #else
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include "iostream"
 #endif
 
 namespace
@@ -38,15 +39,17 @@ namespace
         FILE *file = fopen("/proc/self/status", "r");
         int result = -1;
         char line[128];
-
+        std::cout << "inside break statement1 \n";
         while(fgets(line, 128, file) != NULL)
         {
             if(strncmp(line, item, 6) == 0)
             {
+                std::cout << "inside break statement2 \n";    
                 result = parseLine(line);
                 break;
             }
         }
+        std::cout << "inside break statement \n";
         fclose(file);
         return result;
     }
@@ -63,9 +66,11 @@ namespace fwi
 
         void CpuClock::Start()
         {
+            std::cout << "inside clock \n";
             start = std::chrono::system_clock::now();
             L_(io::linfo) << "Starting";
             long dummy;
+            std::cout << "final clock \n";
             MemoryUse(dummy, dummy);
             t_start = clock();
         }
@@ -105,7 +110,9 @@ namespace fwi
 			if(makeUnixSpecificCall)
 			{
 			    virtual_mem = getValue("VmSize:");
+                std::cout << "inside unix statement \n";
 				physical_mem = getValue("VmRSS:");	
+                
 			}
 
             L_(io::ldebug) << "Virtual memory used: " << virtual_mem << " kB";

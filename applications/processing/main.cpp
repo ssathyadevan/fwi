@@ -70,6 +70,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     // initialize logging
     std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
 
+
     if(!gInput.verbose)
     {
         std::cout << "Printing the program output onto a file named: " << logFileName << std::endl;
@@ -86,14 +87,17 @@ void doProcess(const fwi::io::genericInput& gInput)
     L_(fwi::io::linfo) << "Visualisation of input chi (to be reconstructed)";
     fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
     fwi::io::createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
-
+    
+    std::cout << "Before clock \n";
     // Start inversion
     clock.Start();
+    std::cout << "After clock \n";
 
     // read referencePressureData from a CSV file format
     std::string fileLocation = gInput.outputLocation + gInput.runName + "InvertedChiToPressure.txt";
     std::ifstream file(fileLocation);
     fwi::io::CSVReader row;
+    
 
     if(!file.is_open())
     {
@@ -113,7 +117,7 @@ void doProcess(const fwi::io::genericInput& gInput)
         }
         ++i;
     }
-
+    
     // Create model
     fwi::Factory factory;
     L_(fwi::io::linfo) << "Create ForwardModel";
