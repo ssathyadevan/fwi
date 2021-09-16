@@ -330,10 +330,20 @@ Do you want to continue?"
             array.push(itemsRunList.runList[i].location)
         }
         //Doing some not so-nice conversion between json/myCSV
-        var strtxt = JSON.stringify(array).replace("[","").replace("]","").replace(",","\n")
+        var strtxt = JSON.stringify(array)
+        strtxt = replaceAll(strtxt,'[',"")
+        strtxt = replaceAll(strtxt,']',"")
+        strtxt = replaceAll(strtxt,",","\n")
         console.log(strtxt)
         myCSV.write(strtxt)
 
+    }
+    function replaceAll(strs, strfind, replacestr) {
+
+        while(strs.indexOf(strfind) >= 0 ){
+            strs = strs.replace(strfind,replacestr)
+        }
+      return strs
     }
 
     function launchComparisonMode() {
