@@ -457,9 +457,7 @@ Do you want to continue?"
             MenuItem {
                 text: qsTr("&About")
                 onTriggered: {
-                    var component = Qt.createComponent("extraWindow.qml");
-                    var win = component.createObject(this);
-
+                    qLauncher.openWiki()
                 }
             }
         }
