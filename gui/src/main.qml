@@ -417,14 +417,14 @@ Do you want to continue?"
         }
         else if (outputImageCombo.currentIndex == 1)
         {
-            path = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png"
+            path = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png"
         }
         else if (outputImageCombo.currentIndex == 2)
         {
             path  = "file://" + inputFolderTextEdit.text + "/output/defaultChiDifference.png"
         }
         outputImage.source = path ? path: ""
-        residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png" ? "file://" + inputFolderTextEdit.text + "/output/defaultResidual.png": ""
+        residualImage.source = "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png" ? "file://" + inputFolderTextEdit.text + "/output/defaultDummyImage.png": ""
     }
 
     menuBar: MenuBar {
@@ -493,18 +493,22 @@ Do you want to continue?"
 
         ProgressBar {
             id: progressBar
-            x: 64
             y: 280
-            width: 965
             height: 14
+            anchors.left: parent.left
+            anchors.leftMargin: 64
+            anchors.right: parent.right
+            anchors.rightMargin: 6
             value: 0
             anchors.bottomMargin: 10
         }
 
         Button {
             id: cancelButton
-            x: 920
+            x: 1069
             y: 230
+            anchors.right: parent.right
+            anchors.rightMargin: 0
             contentItem: Text {
                 text: qsTr("Compare runs")
                 color: "black"
@@ -528,8 +532,10 @@ Do you want to continue?"
 
         Button {
             id: computeButton
-            x: 750
+            x: 950
             y: 230
+            anchors.right: cancelButton.left
+            anchors.rightMargin: 19
             contentItem: Text {
                 text: qsTr("Compute")
                 color: "white"
@@ -588,6 +594,8 @@ Do you want to continue?"
             y: 108
             width: 250
             height: 50
+            anchors.right: parent.right
+            anchors.rightMargin: 230
             flat: true
             currentIndex: 0
             Text {
@@ -603,6 +611,8 @@ Do you want to continue?"
             y: 150
             width: 250
             height: 50
+            anchors.right: parent.right
+            anchors.rightMargin: 230
             flat: true
             Text {
                 id: inversionText
@@ -614,6 +624,8 @@ Do you want to continue?"
 
         Text {
             text: "Threads/Cores (Parallel Only)"
+            anchors.right: parent.right
+            anchors.rightMargin: 6
             font.family: "Helvetica"
             font.pixelSize: 16
             font.bold: true
@@ -629,23 +641,27 @@ Do you want to continue?"
             stepSize: 1
             x: 1000
             y: 108
+            anchors.right: parent.right
+            anchors.rightMargin: 40
 
         }
 
         CheckBox {
             id: verboseCheckBox
-            x: 1000
-            y: 150
+            x: 1038
+            y: 160
             text: qsTr("Verbose")
+            anchors.right: parent.right
+            anchors.rightMargin: 40
             ToolTip.visible: hovered
             ToolTip.text: qsTr(" Hello there UwU")
         }
 
         Text {
             id: residualImageLabel
-            x: 540
-            y: 300
-            text: qsTr("Residual graph")
+            x: 600
+            y: 301
+            text: qsTr("Original Input")
             font.bold: true
             font.pixelSize: 16
         }
@@ -673,6 +689,8 @@ Do you want to continue?"
             x: 690
             y: 88
             text: qsTr("Parameters")
+            anchors.right: parent.right
+            anchors.rightMargin: 402
             font.pixelSize: 16
             font.bold: true
         }
@@ -704,12 +722,12 @@ Do you want to continue?"
 
         ComboBox {
             id: outputImageCombo
-            x: 229
-            y: 290
+            x: 369
+            y: 291
             width: 167
             height: 40
             currentIndex: 0
-            model: ["Output values", "Dummy Image", "Residuals"]
+            model: ["Output values", "Risidual Graph", "Residual field"]
             flat: true
             onCurrentIndexChanged:
             {
@@ -722,19 +740,23 @@ Do you want to continue?"
 
         Image {
             id: outputImage
-            x: 64
             y: 350
-            width: 450
-            height: 320
+            height: 369
+            anchors.right: residualImageLabel1.left
+            anchors.rightMargin: -530
+            anchors.left: parent.left
+            anchors.leftMargin: 64
             fillMode: Image.PreserveAspectFit
         }
 
         Image {
             id: residualImage
-            x: 540
             y: 350
-            width: 450
-            height: 320
+            height: 369
+            anchors.right: parent.right
+            anchors.rightMargin: 40
+            anchors.left: outputImage.right
+            anchors.leftMargin: 6
             fillMode: Image.PreserveAspectFit
         }
 
@@ -758,6 +780,8 @@ Do you want to continue?"
             anchors.centerIn: scrollViewParentRectangle
             width: scrollViewParentRectangle.width - 20
             height: scrollViewParentRectangle.height - 2
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: -246
             clip: true
 
             Text {
@@ -897,9 +921,11 @@ Do you want to continue?"
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}D{i:1;invisible:true}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51}
-D{i:13;anchors_x:10;anchors_y:5}D{i:15;anchors_x:10}D{i:16;anchors_height:200;anchors_x:555;anchors_y:150}
-D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}D{i:2;anchors_height:500;anchors_width:1220}
-D{i:33;invisible:true}D{i:74;anchors_y:10}D{i:29;invisible:true}D{i:31;invisible:true}
+    D{i:0;formeditorZoom:0.75}D{i:1;invisible:true}D{i:2;anchors_height:500;anchors_width:1220}
+D{i:13;anchors_x:10;anchors_y:5}D{i:16;anchors_height:200;anchors_x:555;anchors_y:150}
+D{i:15;anchors_x:10}D{i:18;anchors_height:200;anchors_x:555;anchors_y:150}D{i:3;anchors_height:398;anchors_width:1190;anchors_x:15;anchors_y:51;invisible:true}
+D{i:29;invisible:true}D{i:40;anchors_width:1110;anchors_x:64}D{i:62;anchors_width:530;anchors_x:64}
+D{i:63;anchors_width:540;anchors_x:600}D{i:74;anchors_y:10}D{i:33;invisible:true}
+D{i:31;invisible:true}
 }
 ##^##*/
