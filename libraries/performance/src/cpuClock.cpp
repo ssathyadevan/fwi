@@ -39,17 +39,17 @@ namespace
         FILE *file = fopen("/proc/self/status", "r");
         int result = -1;
         char line[128];
-        std::cout << "inside break statement1 \n";
+        std::cout << "inside getValue \n";
         while(fgets(line, 128, file) != NULL)
         {
             if(strncmp(line, item, 6) == 0)
             {
-                std::cout << "inside break statement2 \n";    
+                std::cout << "inside break statement \n";    
                 result = parseLine(line);
                 break;
             }
         }
-        std::cout << "inside break statement \n";
+        std::cout << "after break statement \n";
         fclose(file);
         return result;
     }
@@ -107,6 +107,7 @@ namespace fwi
         {
 			virtual_mem = 0;
             physical_mem = 0;
+            std::cout << makeUnixSpecificCall << '\n';
 			if(makeUnixSpecificCall)
 			{
 			    virtual_mem = getValue("VmSize:");

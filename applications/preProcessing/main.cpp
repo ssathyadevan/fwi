@@ -1,6 +1,6 @@
 #include "HelpTextPreProcessing.h"
 #include "argumentReader.h"
-#include "cpuClock.h"
+//#include "cpuClock.h"
 #include "factory.h"
 #include "genericInputCardReader.h"
 #include <iostream>
@@ -51,7 +51,7 @@ void doPreprocess(const fwi::io::genericInput &gInput)
     std::cout << "Starting preprocessing with\n  forward =" + gInput.forward << std::endl;
 
     // initialize the clock, grid sources receivers, grouped frequencies
-    fwi::performance::CpuClock clock;
+    //fwi::performance::CpuClock clock;
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGridOriginal);
     fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
@@ -72,7 +72,7 @@ void doPreprocess(const fwi::io::genericInput &gInput)
     freq.Print(gInput.freq.nTotal);
 
     // Start preprocess
-    clock.Start();
+    //clock.Start();
 
     // Create Model
     L_(fwi::io::linfo) << "Create forwardModel";
@@ -90,13 +90,13 @@ void doPreprocess(const fwi::io::genericInput &gInput)
     // Calculate pressure field data
     std::cout << "Calculating..." << std::endl;
     L_(fwi::io::linfo) << "Calculating pData (the reference pressure-field)...";
-    clock.Start();
+    //clock.Start();
     //model->calculatePTot(chi);
     model->calculateKappa();
     std::vector<std::complex<double>> referencePressureData = model->calculatePressureField(chi);
 
-    clock.End();
-    clock.OutputString();
+    //clock.End();
+    //clock.OutputString();
     L_(fwi::io::linfo) << "calculateData done";
 
     // writing the referencePressureData to a text file in complex form

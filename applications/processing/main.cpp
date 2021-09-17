@@ -61,7 +61,7 @@ void doProcess(const fwi::io::genericInput& gInput)
 {    std::cout << "Inversion Processing Started" << std::endl; 
 
     // initialize the clock, grid sources receivers, grouped frequencies
-    fwi::performance::CpuClock clock;
+    //fwi::performance::CpuClock clock;
     fwi::core::grid2D grid(gInput.reservoirTopLeftCornerInM, gInput.reservoirBottomRightCornerInM, gInput.nGrid);
     fwi::core::Sources source(gInput.sourcesTopLeftCornerInM, gInput.sourcesBottomRightCornerInM, gInput.nSources);
     fwi::core::Receivers receiver(gInput.receiversTopLeftCornerInM, gInput.receiversBottomRightCornerInM, gInput.nReceivers);
@@ -90,7 +90,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     
     std::cout << "Before clock \n";
     // Start inversion
-    clock.Start();
+    // clock.Start();
     std::cout << "After clock \n";
 
     // read referencePressureData from a CSV file format
@@ -141,14 +141,14 @@ void doProcess(const fwi::io::genericInput& gInput)
     L_(fwi::io::linfo) << "Writing to file";
     chiEstimate.toFile(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt");
 
-    clock.End();
+    // clock.End();
 
     L_(fwi::io::linfo) << "Visualisation of the estimated chi using FWI";
     fwi::io::chi_visualisation_in_integer_form(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput.nGrid[0]);
     fwi::io::createCsvFilesForChi(gInput.outputLocation + "chi_est_" + gInput.runName + ".txt", gInput, "chi_est_");
 
-    std::string msg = clock.OutputString();
-    writePlotInput(gInput, msg);
+    // std::string msg = clock.OutputString();
+   // writePlotInput(gInput, msg);
     fwi::io::endLogger();
 
     std::cout << "InversionProcess completed" << std::endl;
@@ -170,6 +170,7 @@ void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
     // This part is needed for plotting the chi values in postProcessing.py
     std::ofstream lastrun;
     lastrun.open(gInput.outputLocation + "/lastRunName.txt");
-    lastrun << runName;
     lastrun.close();
+    lastrun << runName;
+
 }
