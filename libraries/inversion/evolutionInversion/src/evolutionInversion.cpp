@@ -10,7 +10,7 @@ namespace fwi
     namespace inversionMethods
     {
         EvolutionInversion::EvolutionInversion(
-            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface<double> *forwardModel, const EvolutionInversionInput &eiInput)
             : _forwardModel(forwardModel)
             , _costCalculator(costCalculator)
             , _eiInput(eiInput)
@@ -21,7 +21,7 @@ namespace fwi
         {
         }
 
-        core::dataGrid2D EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
+        core::complexDataGrid2D<double> EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
 
@@ -32,7 +32,7 @@ namespace fwi
             std::normal_distribution<double> distribution(0.0, mutationRate);
 
             // Create initial guess, generation 0, Adam
-            core::dataGrid2D parent(_grid);
+            core::complexDataGrid2D<double> parent(_grid);
             parent.randomSaurabh();
 
             auto pDataEst = _forwardModel->calculatePressureField(parent);
@@ -50,20 +50,18 @@ namespace fwi
             int counter = 1;
             for(int it = 0; it < _eiInput.nGenerations; it++)
             {
-                core::dataGrid2D favouriteChild(_grid);   // This is the best child so far
-                parent.copyTo(favouriteChild);            // The first favourite child is a clone of the parent
+                core::complexDataGrid2D<double> favouriteChild = parent;   // This is the best child so far
                 favouriteChildResSq = parentResSq;
                 // start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
                 for(int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
                 {
-                    core::dataGrid2D child(_grid);
-                    child.randomChild(parent, generator, distribution);
+                    auto child = createRandomChild(parent, generator, distribution);
                     pDataEst = _forwardModel->calculatePressureField(child);
                     childResSq = core::l2NormSquared(pData - pDataEst);
 
                     if(childResSq < favouriteChildResSq)
                     {
-                        child.copyTo(favouriteChild);
+                        favouriteChild = child;
                         favouriteChildResSq = childResSq;
                     }
 
@@ -83,16 +81,37 @@ namespace fwi
                     mutationRate /= 1.1;
                     distribution = std::normal_distribution<double>(0.0, mutationRate);
                 }
-                favouriteChild.copyTo(parent);
+
+                parent = favouriteChild;
                 preParentResSq = parentResSq;
                 parentResSq = favouriteChildResSq;
             }
 
             residualLogFile.close();   // close the residual.log file
 
-            core::dataGrid2D result(_grid);
-            parent.copyTo(result);
-            return result;
+            return parent;
+        }
+
+        core::complexDataGrid2D<double> EvolutionInversion::createRandomChild(const core::complexDataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const
+        {
+            core::complexDataGrid2D<double> child(parent.getGrid());
+            auto parentData = parent.getData();
+            for(int i = 0; i < child.getGrid().getNumberOfGridPoints(); i++)
+            {
+                auto newVal = parentData[i] + distribution(generator);
+                if(newVal > 0.18)
+                {
+                    newVal -= 0.18;   // If larger than 0.18, loops back from 0
+                }
+                if(newVal < 0.00)
+                {
+                    newVal += 0.18;   // If negative, loops back from 0.18
+                }
+
+                child.setValueAtIndex(newVal, i);
+            }
+
+            return child;
         }
 
         std::ofstream EvolutionInversion::openResidualLogFile(io::genericInput &gInput)

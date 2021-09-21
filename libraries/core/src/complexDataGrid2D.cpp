@@ -98,5 +98,15 @@ namespace fwi
                 _data[i] = double(std::rand()) / double(RAND_MAX);
             }
         }
+
+        template<>
+        void complexDataGrid2D<double>::randomSaurabh()
+        {
+            for(int i = 0; i < getGrid().getNumberOfGridPoints(); i++)
+            {
+                int temp = rand() % 1800;
+                _data[i] = (double)temp / 10000;
+            }
+        }
     }   // namespace core
 }   // namespace fwi

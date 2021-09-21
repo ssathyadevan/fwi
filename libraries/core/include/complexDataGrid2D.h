@@ -93,6 +93,7 @@ namespace fwi
             }
 
             void random();
+            void randomSaurabh();
 
             double norm() const { return std::sqrt(innerProduct(*this)); }
             double relNorm() const { return std::sqrt(innerProduct(*this) / getNumberOfGridPoints()); }

@@ -16,6 +16,7 @@ namespace fwi
         /**
          * @brief Interface for ForwardModel classes
          */
+        template <class _V = double>
         class ForwardModelInterface
         {
         public:
@@ -34,17 +35,19 @@ namespace fwi
              * @param chiEst reference to media properties
              * @return pressure field
              */
-            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst) = 0;
+            virtual std::vector<std::complex<double>> calculatePressureField(const core::complexDataGrid2D<_V> &chiEst) = 0;
 
             // TODO: Evaluate the following functions for removal
-            virtual void calculatePTot(const core::dataGrid2D &chiEst) = 0;
+            virtual void calculatePTot(const core::complexDataGrid2D<_V> &chiEst) = 0;
             virtual void calculateKappa() = 0;
+
+            // TODO: Since this method is only used in conjugate gradient inversion algorithms, should this actually be in this class?
             /**
              * @brief given a newly computed std::vector<std::complex<double>> residual and a core::complexDataGrid2D kappaTimesResidual, updates kappaTimesResidual with the new value of _Kappa multiplied by residual.
              * getUpdateDirectionInformation() is used only by the conjugate gradient inversion algorithms, see eq. (37) of /doc/ReadMe/1_ProjectDescription.pdf
              */
-            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D &) = 0;
-            virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int) = 0;
+            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::complexDataGrid2D<std::complex<double>> &) = 0;
+            virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::complexDataGrid2D<std::complex<double>> &, const int, const int) = 0;
         };
     }   // namespace forwardModels
 }   // namespace fwi

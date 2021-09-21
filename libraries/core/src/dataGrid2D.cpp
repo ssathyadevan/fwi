@@ -79,51 +79,7 @@ namespace fwi
             return sum;
         }
 
-        void dataGrid2D::gradient(std::vector<dataGrid2D> &gradientField) const
-        {
-            const std::array<int, 2> &nx = getGrid().getGridDimensions();
-            const std::array<double, 2> &dx = getGrid().getCellDimensions();
 
-            for(int i = 0; i < nx[1]; i++)
-            {
-                for(int j = 0; j < nx[0]; j++)
-                {
-                    int index = i * nx[0] + j;
-
-                    // direction 1 dx
-                    double gradientDx;
-                    if(j == 0)
-                    {
-                        gradientDx = (_data[i * nx[0] + j + 2] - 4 * _data[i * nx[0] + j + 1] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[0]);
-                    }
-                    else if(j == nx[0] - 1)
-                    {
-                        gradientDx = (_data[i * nx[0] + j - 2] - 4 * _data[i * nx[0] + j - 1] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[0]);
-                    }
-                    else
-                    {
-                        gradientDx = (_data[i * nx[0] + j + 1] - _data[i * nx[0] + j - 1]) / (2.0 * dx[0]);
-                    }
-                    gradientField[0].setValueAtIndex(gradientDx, index);
-
-                    // direction 2 dz
-                    double gradientDz;
-                    if(i == 0)
-                    {
-                        gradientDz = (_data[(i + 2) * nx[0] + j] - 4 * _data[(i + 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (-2.0 * dx[1]);
-                    }
-                    else if(i == nx[1] - 1)
-                    {
-                        gradientDz = (_data[(i - 2) * nx[0] + j] - 4 * _data[(i - 1) * nx[0] + j] + 3 * _data[i * nx[0] + j]) / (2.0 * dx[1]);
-                    }
-                    else
-                    {
-                        gradientDz = (_data[(i + 1) * nx[0] + j] - _data[(i - 1) * nx[0] + j]) / (2.0 * dx[1]);
-                    }
-                    gradientField[1].setValueAtIndex(gradientDz, index);
-                }
-            }
-        }
 
         void dataGrid2D::toFile(const std::string &filePath) const
         {
