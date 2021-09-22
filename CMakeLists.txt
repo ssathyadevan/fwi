@@ -28,7 +28,7 @@ if(MPI_FOUND)
     link_libraries(${Boost_LIBRARIES})
     link_libraries(${MPI_CXX_LIBRARIES})
 else()
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic -Werror -Werror=vla -no-pie")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic")
 endif()
 
 #We require Eigen3 
