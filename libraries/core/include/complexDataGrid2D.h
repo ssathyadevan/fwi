@@ -95,8 +95,16 @@ namespace fwi
             void random();
             void randomSaurabh();
 
-            double norm() const { return std::sqrt(innerProduct(*this)); }
-            double relNorm() const { return std::sqrt(innerProduct(*this) / getNumberOfGridPoints()); }
+            double norm() const
+            {
+                return std::sqrt(innerProduct(*this));
+            }
+
+            double relNorm() const
+            {
+                return std::sqrt(innerProduct(*this) / getNumberOfGridPoints());
+            }
+
             _V summation() const
             {
                 _V result = 0.0;
@@ -146,12 +154,14 @@ namespace fwi
                 return result;
             }
 
+            // TODO: Implement these functions in a generic way, for now
+            // kep the manual implementations to maintain backward compatibility.
             void toFile(const std::string &fileName) const;
             void fromFile(const std::string &fileName);
 
 
             // Operators
-            complexDataGrid2D<_V> &operator=(const complexDataGrid2D &rhs)
+            complexDataGrid2D<_V> &operator=(const complexDataGrid2D<_V> &rhs)
             {
                 if(this == &rhs)
                 {
@@ -159,7 +169,7 @@ namespace fwi
                 }
 
                 assert(getGrid() == rhs.getGrid());
-                const std::vector<std::complex<double>> &rhsData = rhs.getData();
+                const std::vector<_V> &rhsData = rhs.getData();
                 for(int i = 0; i < getNumberOfGridPoints(); ++i)
                 {
                     _data[i] = rhsData[i];
@@ -167,7 +177,8 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator=(const std::vector<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator=(const std::vector<_W> &rhs)
             {
                 assert(getNumberOfGridPoints() == (int)rhs.size());
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -177,7 +188,8 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator=(const _V rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator=(const _W rhs)
             {
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
                 {
@@ -186,14 +198,17 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator+=(const complexDataGrid2D<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator+=(const complexDataGrid2D<_W> &rhs)
             {
                 assert(getGrid() == rhs.getGrid());
-                const std::vector<_V> &rhsData = rhs.getData();
-                this += rhsData;
+                auto &rhsData = rhs.getData();
+                *this += rhsData;
+                return *this;
             }
 
-            complexDataGrid2D<_V> &operator+=(const std::vector<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator+=(const std::vector<_W> &rhs)
             {
                 assert(getNumberOfGridPoints() == (int)rhs.size());
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -204,7 +219,8 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator+=(const _V rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator+=(const _W rhs)
             {
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
                 {
@@ -212,16 +228,19 @@ namespace fwi
                 }
 
                 return *this;
-            };
-
-            complexDataGrid2D<_V> &operator-=(const complexDataGrid2D &rhs)
-            {
-                assert(getGrid() == rhs.getGrid());
-                const std::vector<std::complex<double>> &rhsData = rhs.getData();
-                this -= rhsData;
             }
 
-            complexDataGrid2D<_V> &operator-=(const std::vector<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator-=(const complexDataGrid2D<_W> &rhs)
+            {
+                assert(getGrid() == rhs.getGrid());
+                const auto &rhsData = rhs.getData();
+                *this -= rhsData;
+                return *this;
+            }
+
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator-=(const std::vector<_W> &rhs)
             {
                 assert(getNumberOfGridPoints() == (int)rhs.size());
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -232,7 +251,7 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator-=(const _V rhs)
+            complexDataGrid2D<_V> &operator-=(const std::complex<double> rhs)
             {
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
                 {
@@ -242,14 +261,17 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator*=(const complexDataGrid2D &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator*=(const complexDataGrid2D<_W> &rhs)
             {
                 assert(getGrid() == rhs.getGrid());
                 const auto &rhsData = rhs.getData();
-                this *= rhsData;
+                *this *= rhsData;
+                return *this;
             }
 
-            complexDataGrid2D<_V> &operator*=(const std::vector<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator*=(const std::vector<_W> &rhs)
             {
                 assert(getNumberOfGridPoints() == (int)rhs.size());
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -260,7 +282,7 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator*=(const _V rhs)
+            complexDataGrid2D<_V> &operator*=(const std::complex<double> rhs)
             {
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
                 {
@@ -270,13 +292,16 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator/=(const complexDataGrid2D<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator/=(const complexDataGrid2D<_W> &rhs)
             {
-                const std::vector<_V> &rhsData = rhs.getData();
-                this /= rhsData;
+                const auto &rhsData = rhs.getData();
+                *this /= rhsData;
+                return *this;
             }
 
-            complexDataGrid2D<_V> &operator/=(const std::vector<_V> &rhs)
+            template<class _W = std::complex<double>>
+            complexDataGrid2D<_V> &operator/=(const std::vector<_W> &rhs)
             {
                 assert(getNumberOfGridPoints() == (int)rhs.size());
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
@@ -291,7 +316,7 @@ namespace fwi
                 return *this;
             }
 
-            complexDataGrid2D<_V> &operator/=(const _V rhs)
+            complexDataGrid2D<_V> &operator/=(const std::complex<double> rhs)
             {
                 if(rhs == 0.0)
                 {
