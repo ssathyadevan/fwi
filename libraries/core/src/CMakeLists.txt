@@ -6,7 +6,6 @@ set(CPP_SOURCES_AND_H_HEADERS
     greensFunctions.cpp                 ../include/greensFunctions.h
     greensSerial.cpp                    ../include/greensSerial.h
     grid2D.cpp                          ../include/grid2D.h
-    complexDataGrid2D.cpp               ../include/complexDataGrid2D.h
     dataGrid2D.cpp                      ../include/dataGrid2D.h
     receivers.cpp                       ../include/receivers.h
     sources.cpp                         ../include/sources.h)
