@@ -577,8 +577,8 @@ Do you want to continue?"
                 preProcessCommand = preProcessCommand.replace("%POST%", postProcessingCheckBox.checked === true ? "" : "--skip-post")
                 console.log(preProcessCommand)
                 consoleLog(preProcessCommand)
-                console.log("==== Click refresh ⟳ when the window is finished ====")
-                consoleLog("==== Click refresh ⟳ when the window is finished ====")
+                console.log("==== Click refresh ⟳ when the process is completed ====")
+                consoleLog("==== Click refresh ⟳ when the process is completed ====")
                 refreshResults.visible = true
                 var output = callExec(preProcessCommand)
                 console.log(output)
@@ -679,7 +679,7 @@ Do you want to continue?"
             id: inputDataLabel
             x: 64
             y: 88
-            text: qsTr("Input data")
+            text: qsTr("Case folder")
             font.pixelSize: 16
             font.bold: true
         }
