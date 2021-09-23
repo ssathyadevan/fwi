@@ -132,12 +132,13 @@ namespace fwi
                 return prod;
             }
 
-            _V dotProduct(const dataGrid2D<_V> &rhs) const
+            template <class _W = _V>
+            _V dotProduct(const dataGrid2D<_W> &rhs) const
             {
                 assert(getGrid() == rhs.getGrid());
 
                 _V sum = 0;
-                const std::vector<_V> &rhsData = rhs.getData();
+                const std::vector<_W> &rhsData = rhs.getData();
                 for(int i = 0; i < getNumberOfGridPoints(); i++)
                 {
                     sum += _data[i] * rhsData[i];
