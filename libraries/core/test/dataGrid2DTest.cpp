@@ -395,7 +395,7 @@ namespace fwi
             grid2D grid = getGrid();
             const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
-            std::complex<double> testValue = {2.0, 1.0};
+            std::complex<double> testValue = {2.0, 28.0};
             dataGrid2D<std::complex<double>>cdg(grid);
             cdg = testValue;
 
@@ -417,14 +417,13 @@ namespace fwi
             const int nrOfGridPoints = grid.getNumberOfGridPoints();
 
             double testValue = 2.0;
-            dataGrid2D<double> cdg(grid);
-            cdg = testValue;
+            dataGrid2D<double> dg(grid);
+            dg = testValue;
 
-            // Alternative calculation method
             double solution = testValue * testValue * (double) nrOfGridPoints;
 
             // When
-            double calculatedDotProduct = cdg.dotProduct(cdg);
+            double calculatedDotProduct = dg.dotProduct(dg);
 
             // Then
             ASSERT_DOUBLE_EQ(solution, calculatedDotProduct);
@@ -601,6 +600,26 @@ namespace fwi
 
             // When
             cdg = dataVector;
+
+            // Then
+            const std::vector<double> &data = cdg.getData();
+            for(int i = 0; i < nrOfGridPoints; i++)
+            {
+                ASSERT_DOUBLE_EQ(data[i], testValue);
+            }
+        }
+
+        TEST(dataGrid2DDoubleTest, operatorAssignDoubleTest)
+        {
+            // Given
+            grid2D grid = getGrid();
+            const int nrOfGridPoints = grid.getNumberOfGridPoints();
+            dataGrid2D<double> cdg(grid);
+
+            double testValue = 1.0;
+
+            // When
+            cdg = testValue;
 
             // Then
             const std::vector<double> &data = cdg.getData();
