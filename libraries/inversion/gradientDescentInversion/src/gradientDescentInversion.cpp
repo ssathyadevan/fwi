@@ -22,7 +22,7 @@ namespace fwi
         {
         }
 
-        core::dataGrid2D gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
+        core::dataGrid2D<double> gradientDescentInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar bar(_gdInput.iter);
             std::ofstream residualLogFile = openResidualLogFile(gInput);
@@ -85,7 +85,7 @@ namespace fwi
         }
 
         std::vector<double> gradientDescentInversion::differential(
-            core::dataGrid2D chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
+            core::dataGrid2D<double> chiEstimate, const std::vector<std::complex<double>> &pData, double eta, double h)
         {
             const int numGridPoints = chiEstimate.getNumberOfGridPoints();
             auto pDataEst = _forwardModel->calculatePressureField(chiEstimate);
@@ -107,7 +107,7 @@ namespace fwi
             return dFdx;
         }
 
-        core::dataGrid2D gradientDescentInversion::gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma)
+        core::dataGrid2D<double> gradientDescentInversion::gradientDescent(core::dataGrid2D<double> chiEstimate, const std::vector<double> &dfdx, const double gamma)
         {
             const int nGridPoints = chiEstimate.getNumberOfGridPoints();
 
@@ -127,7 +127,7 @@ namespace fwi
             L_(io::linfo) << "Iteration:" << iteration << "\t res: " << std::setprecision(17) << residual << "\t" << convergenceMessage;
         }
 
-        double gradientDescentInversion::determineGamma(const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent,
+        double gradientDescentInversion::determineGamma(const core::dataGrid2D<double> chiEstimatePrevious, const core::dataGrid2D<double> chiEstimateCurrent,
             std::vector<double> dFdxPrevious, std::vector<double> dFdxCurrent)
         {
             const int nGridPoints = chiEstimateCurrent.getNumberOfGridPoints();

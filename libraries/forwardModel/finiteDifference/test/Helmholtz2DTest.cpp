@@ -37,7 +37,7 @@ namespace fwi
                 core::Sources source(sourceMin, sourceMax, count);
 
                 // chiEst
-                core::dataGrid2D chiEst(grid);
+                core::dataGrid2D<double> chiEst(grid);
                 chiEst = chiValue;
 
                 // fmInput

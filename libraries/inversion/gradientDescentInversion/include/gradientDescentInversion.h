@@ -22,7 +22,7 @@ namespace fwi
             const core::Receivers &_receiver;
             const core::FrequenciesGroup _freq;
 
-            core::dataGrid2D gradientDescent(core::dataGrid2D chiEstimate, const std::vector<double> &dfdx, const double gamma);
+            core::dataGrid2D<double> gradientDescent(core::dataGrid2D<double> chiEstimate, const std::vector<double> &dfdx, const double gamma);
             std::ofstream openResidualLogFile(io::genericInput &gInput);
 
         public:
@@ -34,9 +34,9 @@ namespace fwi
 
             void logResidualResults(int iteration, double residual, bool isConverged);
 
-            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
-            std::vector<double> differential(core::dataGrid2D xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
-            double determineGamma(const core::dataGrid2D chiEstimatePrevious, const core::dataGrid2D chiEstimateCurrent, std::vector<double> dFdxPrevious,
+            core::dataGrid2D<double> reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
+            std::vector<double> differential(core::dataGrid2D<double> xi, const std::vector<std::complex<double>> &pData, double eta, double dxi);
+            double determineGamma(const core::dataGrid2D<double> chiEstimatePrevious, const core::dataGrid2D<double> chiEstimateCurrent, std::vector<double> dFdxPrevious,
                 std::vector<double> dFdx);
         };
     }   // namespace inversionMethods

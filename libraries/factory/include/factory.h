@@ -26,6 +26,7 @@ namespace fwi
         const core::CostFunctionCalculator _costCalculator;
         inversionMethods::inversionInterface *_createdInversion;
         forwardModels::ForwardModelInterface *_createdForwardModel;
+
         /**
          * @brief checkForwardModelExistence, makes sure the forwardmodel is created
          */

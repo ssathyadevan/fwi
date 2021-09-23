@@ -12,7 +12,7 @@
 
 #include "FiniteDifferenceForwardModelInput.h"
 #include "FiniteDifferenceGrid2D.h"
-#include "complexDataGrid2D.h"
+#include "dataGrid2D.h"
 #include "frequenciesGroup.h"
 #include "grid2D.h"
 #include "sources.h"
@@ -28,10 +28,10 @@ namespace fwi
         class Helmholtz2D
         {
         public:
-            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
+            explicit Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D<double> &chi,
                 const finiteDifferenceForwardModelInput &fmInput);
             ~Helmholtz2D();
-            core::complexDataGrid2D solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit);
+            core::dataGrid2D<std::complex<double>> solve(const std::array<double, 2> &source, core::dataGrid2D<std::complex<double>> &pInit);
             Eigen::SparseMatrix<std::complex<double>> getSparseMatrixA() { return _A; }
 
         private:
@@ -50,7 +50,7 @@ namespace fwi
 
             void buildMatrix(BoundaryConditionType boundaryCondition);
             void buildVector(const std::array<double, 2> &source);
-            void updateChi(const core::dataGrid2D &chi);
+            void updateChi(const core::dataGrid2D<double> &chi);
             void CreatePMLMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,
                 const std::array<int, 2> &nx, const std::array<double, 2> &xMin) const;
             void CreateABCMatrix(const double &omega, const std::array<double, 2> &dx, std::vector<Eigen::Triplet<std::complex<double>>> &triplets,

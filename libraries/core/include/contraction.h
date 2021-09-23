@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "complexDataGrid2D.h"
+#include "dataGrid2D.h"
 #include <complex>
 #include <functional>
 
@@ -19,6 +19,6 @@ namespace fwi
             std::function<std::complex<double>(double, double)> gFunc, double k);
 
         void contractGreensRect2D(
-            const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG);
+            const std::complex<double> *G, const dataGrid2D<std::complex<double>> &x, dataGrid2D<std::complex<double>> &testField, const std::array<int, 2> &nx, int ldG);
     }   // namespace core
 }   // namespace fwi

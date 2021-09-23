@@ -7,7 +7,7 @@
 #include "utilityFunctions.h"
 #include <Eigen/Dense>
 #include <cassert>
-#include <complexDataGrid2D.h>
+#include <dataGrid2D.h>
 
 using namespace Eigen;
 
@@ -25,16 +25,16 @@ namespace fwi
 
             const std::complex<double> *getGreensVolume() const { return gVol; }
 
-            const complexDataGrid2D *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
+            const dataGrid2D<std::complex<double>> *getReceiverCont(int iRecv) const { return gRecv[iRecv]; }
 
-            complexDataGrid2D contractWithField(const complexDataGrid2D &x) const;
+            dataGrid2D<std::complex<double>> contractWithField(const dataGrid2D<std::complex<double>> &x) const;
 
             const grid2D &getGrid() const { return grid; }
 
             // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast Sources dW
             // Equation ID: "rel:buildField"
 
-            complexDataGrid2D dot1(const complexDataGrid2D &dW) const;
+            dataGrid2D<std::complex<double>> dot1(const dataGrid2D<std::complex<double>> &dW) const;
 
         private:
             void createGreensVolume();
@@ -53,10 +53,10 @@ namespace fwi
             const double k;
 
             std::complex<double> *gVol;
-            std::vector<complexDataGrid2D *> gRecv;
+            std::vector<dataGrid2D<std::complex<double>> *> gRecv;
 
             Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
-            void setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
+            void setGreensFunction(dataGrid2D<std::complex<double>> &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
             greensRect2DCpu(const greensRect2DCpu &) = delete;
             greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;

@@ -10,7 +10,7 @@ namespace fwi
     namespace inversionMethods
     {
         EvolutionInversion::EvolutionInversion(
-            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface<double> *forwardModel, const EvolutionInversionInput &eiInput)
+            const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput)
             : _forwardModel(forwardModel)
             , _costCalculator(costCalculator)
             , _eiInput(eiInput)
@@ -21,7 +21,7 @@ namespace fwi
         {
         }
 
-        core::complexDataGrid2D<double> EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
+        core::dataGrid2D<double> EvolutionInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar bar(_eiInput.nGenerations * _eiInput.nChildrenPerGeneration);
 
@@ -32,7 +32,7 @@ namespace fwi
             std::normal_distribution<double> distribution(0.0, mutationRate);
 
             // Create initial guess, generation 0, Adam
-            core::complexDataGrid2D<double> parent(_grid);
+            core::dataGrid2D<double> parent(_grid);
             parent.randomSaurabh();
 
             auto pDataEst = _forwardModel->calculatePressureField(parent);
@@ -50,7 +50,7 @@ namespace fwi
             int counter = 1;
             for(int it = 0; it < _eiInput.nGenerations; it++)
             {
-                core::complexDataGrid2D<double> favouriteChild = parent;   // This is the best child so far
+                core::dataGrid2D<double> favouriteChild = parent;   // This is the best child so far
                 favouriteChildResSq = parentResSq;
                 // start the inner loop// Generating children (currently not parallel, only 1 child at a time is stored)
                 for(int it1 = 0; it1 < _eiInput.nChildrenPerGeneration; it1++)
@@ -92,9 +92,9 @@ namespace fwi
             return parent;
         }
 
-        core::complexDataGrid2D<double> EvolutionInversion::createRandomChild(const core::complexDataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const
+        core::dataGrid2D<double> EvolutionInversion::createRandomChild(const core::dataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const
         {
-            core::complexDataGrid2D<double> child(parent.getGrid());
+            core::dataGrid2D<double> child(parent.getGrid());
             auto parentData = parent.getData();
             for(int i = 0; i < child.getGrid().getNumberOfGridPoints(); i++)
             {

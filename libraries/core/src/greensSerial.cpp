@@ -29,11 +29,11 @@ namespace fwi
             delete[] gVol;
         }
 
-        complexDataGrid2D greensRect2DCpu::contractWithField(const complexDataGrid2D &x) const
+        dataGrid2D<std::complex<double>> greensRect2DCpu::contractWithField(const dataGrid2D<std::complex<double>> &x) const
         {
             // Assure we are working on the same grid
             assert(grid == x.getGrid());
-            complexDataGrid2D outputField(grid);
+            dataGrid2D<std::complex<double>> outputField(grid);
             const std::array<int, 2> &nx = grid.getGridDimensions();
             contractGreensRect2D(gVol, x, outputField, nx, 2 * nx[0] - 1);
             return outputField;
@@ -41,7 +41,7 @@ namespace fwi
 
         // Babak 2018 10 25: This method generates the dot product of two matrices Greens function and contrast sources dW
         // Equation ID: "rel:buildField"
-        complexDataGrid2D greensRect2DCpu::dot1(const complexDataGrid2D &dW) const
+        dataGrid2D<std::complex<double>> greensRect2DCpu::dot1(const dataGrid2D<std::complex<double>> &dW) const
         {
             const std::array<int, 2> &nx1 = grid.getGridDimensions();
             const int &nx = nx1[0];
@@ -114,7 +114,7 @@ namespace fwi
                 }
             }
 
-            complexDataGrid2D product(grid);
+            dataGrid2D<std::complex<double>> product(grid);
             std::vector<std::complex<double>> productData(product.getNumberOfGridPoints(), 0.0);
             for(int i = 0; i < nx * nz; i++)
             {
@@ -158,7 +158,7 @@ namespace fwi
             for(int i = 0; i < nx; i++)
             {
                 double p2_x = x_min[0] + (i + double(0.5)) * dx[0];
-                complexDataGrid2D G_x(grid);
+                dataGrid2D<std::complex<double>> G_x(grid);
                 setGreensFunction(
                     G_x, [this, vol, p2_x, p2_z](const double &x, const double &y) { return vol * G_func(k, utilities::dist(x - p2_x, y - p2_z)); });
 
@@ -172,12 +172,12 @@ namespace fwi
         void greensRect2DCpu::createGreensRecv()
         {
             double vol = grid.getCellVolume();
-            complexDataGrid2D G_bound_cpu(grid);
+            dataGrid2D<std::complex<double>> G_bound_cpu(grid);
             for(int i = 0; i < receiver.count; i++)
             {
                 double x_receiver = receiver.xRecv[i][0];
                 double z_receiver = receiver.xRecv[i][1];
-                complexDataGrid2D *G_bound = new complexDataGrid2D(grid);
+                dataGrid2D<std::complex<double>> *G_bound = new dataGrid2D<std::complex<double>>(grid);
 
                 setGreensFunction(*G_bound, [this, vol, x_receiver, z_receiver](
                                                 const double x, const double z) { return vol * G_func(k, utilities::dist(x - x_receiver, z - z_receiver)); });
@@ -194,7 +194,7 @@ namespace fwi
             }
         }
 
-        void greensRect2DCpu::setGreensFunction(complexDataGrid2D &greensFunctionField, const std::function<std::complex<double>(double, double)> func)
+        void greensRect2DCpu::setGreensFunction(dataGrid2D<std::complex<double>> &greensFunctionField, const std::function<std::complex<double>(double, double)> func)
         {
             const std::array<int, 2> &nx = getGrid().getGridDimensions();
             const std::array<double, 2> &dx = getGrid().getCellDimensions();   // Babak 2018 10 29: get rid of template for grid_rect_2D

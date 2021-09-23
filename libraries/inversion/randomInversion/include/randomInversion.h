@@ -20,7 +20,7 @@ namespace fwi
             RandomInversion(const RandomInversion &) = delete;
             RandomInversion &operator=(const RandomInversion &) = delete;
 
-            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
+            core::dataGrid2D<double> reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
         private:
             forwardModels::ForwardModelInterface *_forwardModel;

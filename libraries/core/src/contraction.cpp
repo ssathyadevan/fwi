@@ -23,7 +23,7 @@ namespace fwi
         }
 
         void contractGreensRect2D(
-            const std::complex<double> *G, const complexDataGrid2D &x, complexDataGrid2D &testField, const std::array<int, 2> &nx, int ldG)
+            const std::complex<double> *G, const dataGrid2D<std::complex<double>> &x, dataGrid2D<std::complex<double>> &testField, const std::array<int, 2> &nx, int ldG)
         {
             const std::vector<std::complex<double>> &inputFieldData = x.getData();
 

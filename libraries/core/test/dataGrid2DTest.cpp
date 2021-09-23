@@ -1485,6 +1485,32 @@ namespace fwi
             }
         }
 
+        TEST(dataGrid2DTest, operatorMultiplyDyDataGridDoubleTest)
+        {
+            // Given
+            grid2D grid = getGrid();
+            const int nrOfGridPoints = grid.getNumberOfGridPoints();
+
+            std::complex<double> gridValue1(2.1, 3.1);
+            dataGrid2D<std::complex<double>> cdg(grid);
+            cdg = gridValue1;
+
+            // When
+            double gridValue2 = 2.0;
+            dataGrid2D<double> dg(grid);
+            dg = gridValue2;
+
+            // Then
+            dataGrid2D<std::complex<double>> dgmult = cdg * dg;
+            const std::vector<std::complex<double>> &data = dgmult.getData();
+            std::complex<double> testSolution = gridValue1 * gridValue2;
+            for(int i = 0; i < nrOfGridPoints; i++)
+            {
+                ASSERT_DOUBLE_EQ(data[i].real(), real(testSolution));
+                ASSERT_DOUBLE_EQ(data[i].imag(), imag(testSolution));
+            }
+        }
+
         TEST(dataGrid2DComplexTest, operatorDivideByPressureFieldComplexSerialExceptionTest)
         {
             // Given
@@ -1826,5 +1852,6 @@ namespace fwi
                 ASSERT_DOUBLE_EQ(data[i].imag(), solution.imag());
             }
         }
+
     }   // namespace core
 }   // namespace fwi

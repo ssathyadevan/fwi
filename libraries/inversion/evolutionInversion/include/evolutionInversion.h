@@ -7,21 +7,22 @@
 #include "genericInput.h"
 #include "inversionInterface.h"
 #include "progressBar.h"
+#include <random>
 
 namespace fwi
 {
     namespace inversionMethods
     {
-        class EvolutionInversion : public inversionInterface<double>
+        class EvolutionInversion : public inversionInterface
         {
         public:
             EvolutionInversion(
-                const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface<double> *forwardModel, const EvolutionInversionInput &eiInput);
+                const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel, const EvolutionInversionInput &eiInput);
 
             EvolutionInversion(const EvolutionInversion &) = delete;
             EvolutionInversion &operator=(const EvolutionInversion &) = delete;
 
-            core::complexDataGrid2D<double> reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
+            core::dataGrid2D<double> reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
 
         private:
             forwardModels::ForwardModelInterface *_forwardModel;
@@ -34,7 +35,7 @@ namespace fwi
             const core::FrequenciesGroup &_freq;
 
             std::ofstream openResidualLogFile(io::genericInput &gInput);
-            core::complexDataGrid2D<double> createRandomChild(const core::complexDataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const;
+            core::dataGrid2D<double> createRandomChild(const core::dataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const;
         };
     }   // namespace inversionMethods
 }   // namespace fwi

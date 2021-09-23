@@ -51,7 +51,7 @@ namespace fwi
         {
             greensRect2DCpu *greens = getGreens();
 
-            const complexDataGrid2D *pfcs = greens->getReceiverCont(0);
+            const dataGrid2D<std::complex<double>> *pfcs = greens->getReceiverCont(0);
 
             // Assert some property of pfcs
             double ip = pfcs->innerProduct(*pfcs);

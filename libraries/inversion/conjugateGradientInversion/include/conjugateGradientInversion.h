@@ -33,7 +33,7 @@ namespace fwi
             const core::Receivers &_receivers;
             const core::FrequenciesGroup &_frequencies;
 
-            core::dataGrid2D _chiEstimate;
+            core::dataGrid2D<double> _chiEstimate;
 
             /**
              * @brief ConjugateGradientInversion::OpenResidualLogFile Opens a logfile in which the residuals can be stored.
@@ -50,7 +50,7 @@ namespace fwi
              * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
              * @return core::dataGrid2D zeta is the update direction for each value in the contrast function
              */
-            core::dataGrid2D calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent, double eta);
+            core::dataGrid2D<double> calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, core::dataGrid2D<double> &gradientCurrent, double eta);
 
             /**
              * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -58,7 +58,7 @@ namespace fwi
              * @param residualArray contains the residual for each combination of sources receivers and frequencies.
              * @return double alpha, the optimum step size
              */
-            double calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualArray);
+            double calculateStepSize(const core::dataGrid2D<double> &zeta, std::vector<std::complex<double>> &residualArray);
 
             /**
              * @brief logResidualResults saves the residuals in the logfile and in a separate file with iteration number for clarity.
@@ -97,14 +97,14 @@ namespace fwi
              * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
              * @return core::dataGrid2D deltaSquared, the weighting factor.
              */
-            core::dataGrid2D calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
+            core::dataGrid2D<double> calculateWeightingFactor(const RegularisationParameters &regularisationPrevious);
 
             /**
              * @brief calculateRegularisationGradient uses equation 2.25 from the thesis to calculate the regularisation gradient
              * @param regularisationPrevious struct containting the regularisation parameters of the previous loop
              * @return core::dataGrid2D the regularisation gradient
              */
-            core::dataGrid2D calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
+            core::dataGrid2D<double> calculateRegularisationGradient(const RegularisationParameters &regularisationPrevious);
 
             /**
              * @brief calculateUpdateDirection_regularisation uses multiplicative regularisation parameters to calculate an update direction (zeta) which leads
@@ -119,9 +119,9 @@ namespace fwi
              * @param residualPrevious scaled and averaged error of the previous loop
              * @return core::dataGrid2D zeta
              */
-            core::dataGrid2D calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, core::dataGrid2D &gradientCurrent,
-                const core::dataGrid2D &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-                const RegularisationParameters &regularisationPrevious, const core::dataGrid2D &zeta, double residualPrevious);
+            core::dataGrid2D<double> calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, core::dataGrid2D<double> &gradientCurrent,
+                const core::dataGrid2D<double> &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
+                const RegularisationParameters &regularisationPrevious, const core::dataGrid2D<double> &zeta, double residualPrevious);
 
             /**
              * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect
@@ -136,7 +136,7 @@ namespace fwi
              * @return double alpha, the optimal stepsize
              */
             double calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent,
-                const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const core::dataGrid2D &zeta);
+                const std::vector<std::complex<double>> &residualArray, const double eta, const double fDataPrevious, const core::dataGrid2D<double> &zeta);
 
             /**
              * @brief findRealRootFromCubic assuming y = ax^3 + bx^2 +cx + d and assuming only one real root, this function finds the real root
@@ -170,7 +170,7 @@ namespace fwi
              * @param gInput Struct containing general model parameters
              * @return core::dataGrid2D _chiEstimate, the optimized estimation for the contrast function.
              */
-            core::dataGrid2D reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
+            core::dataGrid2D<double> reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput);
         };
     }   // namespace inversionMethods
 }   // namespace fwi

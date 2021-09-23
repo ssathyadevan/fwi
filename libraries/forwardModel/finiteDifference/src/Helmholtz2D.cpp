@@ -7,7 +7,7 @@ namespace fwi
     {
         static const double pi = std::atan(1.0) * 4.0;
 
-        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D &chi,
+        Helmholtz2D::Helmholtz2D(const core::grid2D &grid, const double freq, const core::Sources &source, const double c0, const core::dataGrid2D<double> &chi,
             const finiteDifferenceForwardModelInput &fmInput)
             : _A()
             , _b()
@@ -111,7 +111,7 @@ namespace fwi
 
         Helmholtz2D::~Helmholtz2D() { delete _newGrid; }
 
-        void Helmholtz2D::updateChi(const core::dataGrid2D &chi)
+        void Helmholtz2D::updateChi(const core::dataGrid2D<double> &chi)
         {
             std::array<int, 2> nx = _newGrid->GetGridDimensions();
             std::array<int, 2> oldnx = _oldGrid.getGridDimensions();
@@ -137,7 +137,7 @@ namespace fwi
             }
         }
 
-        core::complexDataGrid2D Helmholtz2D::solve(const std::array<double, 2> &source, core::complexDataGrid2D &pInit)
+        core::dataGrid2D<std::complex<double>> Helmholtz2D::solve(const std::array<double, 2> &source, core::dataGrid2D<std::complex<double>> &pInit)
         {
             std::array<int, 2> nx = _newGrid->GetGridDimensions();
             std::array<int, 2> oldnx = _oldGrid.getGridDimensions();

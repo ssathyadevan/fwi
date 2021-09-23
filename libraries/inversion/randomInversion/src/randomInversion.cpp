@@ -18,7 +18,7 @@ namespace fwi
         {
         }
 
-        core::dataGrid2D RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
+        core::dataGrid2D<double> RandomInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar bar(_riInput.nMaxInner * _riInput.nMaxOuter);
 
@@ -50,14 +50,14 @@ namespace fwi
 
                     if(it1 == 0 && it == 0)
                     {
-                        tempRandomChi.copyTo(chiEst);
+                        chiEst = tempRandomChi;
                         pDataEst = _forwardModel->calculatePressureField(chiEst);
                         chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
                     }
                     else if(std::abs(newChiEstRes) < std::abs(chiEstRes))
                     {
                         L_(io::linfo) << "Randomizing the temple again";
-                        tempRandomChi.copyTo(chiEst);
+                        chiEst = tempRandomChi;
 
                         pDataEst = _forwardModel->calculatePressureField(chiEst);
                         chiEstRes = _costCalculator.calculateCost(pData, pDataEst, eta);
@@ -76,7 +76,7 @@ namespace fwi
             residualLogFile.close();   // close the residual.log file
 
             core::dataGrid2D result(chiEst);
-            chiEst.copyTo(result);
+            result = chiEst;
             return result;
         }
 

@@ -22,16 +22,16 @@ namespace fwi
             MOCK_METHOD(const core::Sources &, getSource, (), (override));
             MOCK_METHOD(const core::Receivers &, getReceiver, (), (override));
             MOCK_METHOD(const core::FrequenciesGroup &, getFreq, (), (override));
-            MOCK_METHOD(std::vector<std::complex<double>>, calculatePressureField, (const core::dataGrid2D &chiEst), (override));
+            MOCK_METHOD(std::vector<std::complex<double>>, calculatePressureField, (const core::dataGrid2D<double> &chiEst), (override));
 
-            MOCK_METHOD(void, calculatePTot, (const core::dataGrid2D &chiEst), (override));
+            MOCK_METHOD(void, calculatePTot, (const core::dataGrid2D<double> &chiEst), (override));
 
             MOCK_METHOD(void, calculateKappa, (), (override));
 
-            MOCK_METHOD(void, getUpdateDirectionInformation, (const std::vector<std::complex<double>> &, core::complexDataGrid2D &), (override));
+            MOCK_METHOD(void, getUpdateDirectionInformation, (const std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &), (override));
 
             MOCK_METHOD(
-                void, getUpdateDirectionInformationMPI, (std::vector<std::complex<double>> &, core::complexDataGrid2D &, const int, const int), (override));
+                void, getUpdateDirectionInformationMPI, (std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &, const int, const int), (override));
         };
     }   // namespace forwardModels
 }   // namespace fwi

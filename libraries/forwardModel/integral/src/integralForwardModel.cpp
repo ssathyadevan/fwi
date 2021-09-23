@@ -46,15 +46,15 @@ namespace fwi
             assert(_Greens != nullptr);
             assert(_p0 == nullptr);
 
-            _p0 = new core::complexDataGrid2D **[_freq.count];
+            _p0 = new core::dataGrid2D<std::complex<double>> **[_freq.count];
 
             for(int i = 0; i < _freq.count; i++)
             {
-                _p0[i] = new core::complexDataGrid2D *[_source.count];
+                _p0[i] = new core::dataGrid2D<std::complex<double>> *[_source.count];
 
                 for(int j = 0; j < _source.count; j++)
                 {
-                    _p0[i][j] = new core::complexDataGrid2D(_grid);
+                    _p0[i][j] = new core::dataGrid2D<std::complex<double>>(_grid);
                     *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
                 }
             }
@@ -99,7 +99,7 @@ namespace fwi
 
         void IntegralForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            _pTot = new core::complexDataGrid2D *[freq.count * source.count];
+            _pTot = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count];
 
             int li;
 
@@ -109,7 +109,7 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _pTot[li + j] = new core::complexDataGrid2D(*_p0[i][j]);
+                    _pTot[li + j] = new core::dataGrid2D<std::complex<double>>(*_p0[i][j]);
                 }
             }
         }
@@ -127,11 +127,11 @@ namespace fwi
 
         void IntegralForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
-            _Kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
+            _Kappa = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count * receiver.count];
 
             for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
-                _Kappa[i] = new core::complexDataGrid2D(_grid);
+                _Kappa[i] = new core::dataGrid2D<std::complex<double>>(_grid);
             }
         }
 
@@ -146,17 +146,17 @@ namespace fwi
             _Kappa = nullptr;
         }
 
-        core::complexDataGrid2D IntegralForwardModel::calcTotalField(
-            const core::greensRect2DCpu &G, const core::dataGrid2D &chi, const core::complexDataGrid2D &p_init)
+        core::dataGrid2D<std::complex<double>> IntegralForwardModel::calcTotalField(
+            const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chi, const core::dataGrid2D<std::complex<double>> &p_init)
         {
             assert(G.getGrid() == p_init.getGrid());
 
-            core::complexDataGrid2D chi_p(_grid), chi_p_old(_grid);
-            core::complexDataGrid2D dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
+            core::dataGrid2D<std::complex<double>> chi_p(_grid), chi_p_old(_grid);
+            core::dataGrid2D<std::complex<double>> dW(_grid), p_tot(_grid), f_rhs(_grid), matA_j(_grid);
 
             int n_cell = _grid.getNumberOfGridPoints();
 
-            std::vector<core::complexDataGrid2D> phi;
+            std::vector<core::dataGrid2D<std::complex<double>>> phi;
             Matrix<std::complex<double>, Dynamic, Dynamic, ColMajor> matA;
             Matrix<std::complex<double>, Dynamic, 1, ColMajor> b_f_rhs;
             Matrix<std::complex<double>, Dynamic, 1, ColMajor> alpha;
@@ -197,11 +197,11 @@ namespace fwi
                 if(_fmInput.calcAlpha)
                 {
                     phi.push_back(G.contractWithField(dW));
-                    f_rhs = G.contractWithField(chi * p_init);
+                    f_rhs = G.contractWithField(p_init * chi);
 
                     rhs_data = f_rhs.getData();
 
-                    matA_j = phi[it] - G.contractWithField(chi * phi[it]);
+                    matA_j = phi[it] - G.contractWithField(phi[it] * chi);
                     matA_j_data = matA_j.getData();
 
                     matA.conservativeResize(NoChange, it + 1);
@@ -240,7 +240,7 @@ namespace fwi
             return p_tot;
         }
 
-        void IntegralForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
+        void IntegralForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
             assert(_Greens != nullptr);
             assert(_p0 != nullptr);
@@ -260,7 +260,7 @@ namespace fwi
             }
         }
 
-        std::vector<std::complex<double>> IntegralForwardModel::calculatePressureField(const core::dataGrid2D &chiEst)
+        std::vector<std::complex<double>> IntegralForwardModel::calculatePressureField(const core::dataGrid2D<double> &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
             applyKappa(chiEst, kOperator);
@@ -287,7 +287,7 @@ namespace fwi
             }
         }
 
-        void IntegralForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+        void IntegralForwardModel::applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
@@ -295,11 +295,11 @@ namespace fwi
             }
         }
 
-        void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
         {
             int l_i, l_j;
             kRes.zero();
-            core::complexDataGrid2D kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
             for(int i = 0; i < _freq.count; i++)
             {
@@ -318,11 +318,11 @@ namespace fwi
         }
 
         void IntegralForwardModel::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
+            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size)
         {
             kRes.zero();
 
-            core::complexDataGrid2D kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
             for(int i = offset; i < offset + block_size; i++)
             {

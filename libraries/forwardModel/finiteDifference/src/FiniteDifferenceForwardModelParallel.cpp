@@ -36,7 +36,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModelParallel::calculatePTot(const core::dataGrid2D &chiEst)
+        void FiniteDifferenceForwardModelParallel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
             assert(_Greens != nullptr);
             assert(_p0 != nullptr);
@@ -63,7 +63,7 @@ namespace fwi
             }
         }
 
-        std::vector<std::complex<double>> FiniteDifferenceForwardModelParallel::calculatePressureField(const core::dataGrid2D &chiEst)
+        std::vector<std::complex<double>> FiniteDifferenceForwardModelParallel::calculatePressureField(const core::dataGrid2D<double> &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
 #pragma omp parallel for
@@ -74,13 +74,13 @@ namespace fwi
             return kOperator;
         }
 
-        void FiniteDifferenceForwardModelParallel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void FiniteDifferenceForwardModelParallel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
         {
-#pragma omp declare reduction(addition : class core::complexDataGrid2D : omp_out += omp_in) initializer(omp_priv(omp_orig))
-#pragma omp declare reduction(multiplication : class core::complexDataGrid2D : omp_out *omp_in) initializer(omp_priv(omp_orig))
+#pragma omp declare reduction(addition : class core::dataGrid2D<std::complex<double>> : omp_out += omp_in) initializer(omp_priv(omp_orig))
+#pragma omp declare reduction(multiplication : class core::dataGrid2D<std::complex<double>> : omp_out *omp_in) initializer(omp_priv(omp_orig))
             int l_i, l_j, k;
             kRes.zero();
-            core::complexDataGrid2D kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 #pragma omp parallel for reduction(addition : kRes) reduction(multiplication : kDummy) private(l_i, l_j, k)
             for(int i = 0; i < _freq.count; i++)
             {
