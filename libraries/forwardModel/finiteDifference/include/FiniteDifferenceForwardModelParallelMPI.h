@@ -17,15 +17,15 @@ namespace fwi
 
             ~FiniteDifferenceForwardModelMPI();
 
-            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
+            virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D<double> &chiEst);
 
             void calculateKappa();
-            virtual void calculatePTot(const core::dataGrid2D &chiEst);
-            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
+            virtual void calculatePTot(const core::dataGrid2D<double> &chiEst);
+            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
             virtual void getUpdateDirectionInformationMPI(
-                std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size);
+                std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size);
 
-            virtual void getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
+            virtual void getResidualGradient(std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
 
             const core::grid2D &getGrid() { return _grid; }
 
@@ -46,9 +46,9 @@ namespace fwi
 
             void deletePtot();
 
-            core::complexDataGrid2D calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D &chiEst, const core::complexDataGrid2D &Pinit);
+            core::dataGrid2D<std::complex<double>> calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chiEst, const core::dataGrid2D<std::complex<double>> &Pinit);
 
-            void applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
+            void applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
 
@@ -60,9 +60,9 @@ namespace fwi
             const core::FrequenciesGroup &_freq;
             core::greensRect2DCpu **_Greens;
 
-            core::complexDataGrid2D ***_p0;
-            core::complexDataGrid2D **_pTot;
-            core::complexDataGrid2D **_kappa;
+            core::dataGrid2D<std::complex<double>> ***_p0;
+            core::dataGrid2D<std::complex<double>> **_pTot;
+            core::dataGrid2D<std::complex<double>> **_kappa;
             finiteDifferenceForwardModelInput _fMInput;
         };
 

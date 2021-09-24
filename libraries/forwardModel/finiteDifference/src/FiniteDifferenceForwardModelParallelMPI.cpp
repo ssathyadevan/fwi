@@ -54,15 +54,15 @@ void FiniteDifferenceForwardModelMPI::createP0()
     assert(_Greens != nullptr);
     assert(_p0 == nullptr);
 
-    _p0 = new core::complexDataGrid2D **[_freq.count];
+    _p0 = new core::dataGrid2D<std::complex<double>> **[_freq.count];
 
     for(int i = 0; i < _freq.count; i++)
     {
-        _p0[i] = new core::complexDataGrid2D *[_source.count];
+        _p0[i] = new core::dataGrid2D<std::complex<double>> *[_source.count];
 
         for(int j = 0; j < _source.count; j++)
         {
-            _p0[i][j] = new core::complexDataGrid2D(_grid);
+            _p0[i][j] = new core::dataGrid2D<std::complex<double>>(_grid);
             *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
         }
     }
@@ -107,7 +107,7 @@ void FiniteDifferenceForwardModelMPI::deleteGreens()
 
 void FiniteDifferenceForwardModelMPI::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
 {
-    _pTot = new core::complexDataGrid2D *[freq.count * source.count];
+    _pTot = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count];
 
     int li;
 
@@ -117,7 +117,7 @@ void FiniteDifferenceForwardModelMPI::createPTot(const core::FrequenciesGroup &f
 
         for(int j = 0; j < source.count; j++)
         {
-            _pTot[li + j] = new core::complexDataGrid2D(*_p0[i][j]);
+            _pTot[li + j] = new core::dataGrid2D<std::complex<double>>(*_p0[i][j]);
         }
     }
 }
@@ -135,11 +135,11 @@ void FiniteDifferenceForwardModelMPI::deletePtot()
 
 void FiniteDifferenceForwardModelMPI::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
 {
-    _kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
+    _kappa = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count * receiver.count];
 
     for(int i = 0; i < freq.count * source.count * receiver.count; i++)
     {
-        _kappa[i] = new core::complexDataGrid2D(_grid);
+        _kappa[i] = new core::dataGrid2D<std::complex<double>>(_grid);
     }
 }
 
@@ -154,7 +154,7 @@ void FiniteDifferenceForwardModelMPI::deleteKappa()
     _kappa = nullptr;
 }
 
-void FiniteDifferenceForwardModelMPI::calculatePTot(const core::dataGrid2D &chiEst)
+void FiniteDifferenceForwardModelMPI::calculatePTot(const core::dataGrid2D<double> &chiEst)
 {
     assert(_Greens != nullptr);
     assert(_p0 != nullptr);
@@ -178,7 +178,7 @@ void FiniteDifferenceForwardModelMPI::calculatePTot(const core::dataGrid2D &chiE
 }
 
 
-std::vector<std::complex<double>> FiniteDifferenceForwardModelMPI::calculatePressureField(const core::dataGrid2D &chiEst)
+std::vector<std::complex<double>> FiniteDifferenceForwardModelMPI::calculatePressureField(const core::dataGrid2D<double> &chiEst)
 {
     std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
     applyKappa(chiEst, kOperator);
@@ -205,7 +205,7 @@ void FiniteDifferenceForwardModelMPI::calculateKappa()
     }
 }
 
-void FiniteDifferenceForwardModelMPI::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+void FiniteDifferenceForwardModelMPI::applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
 {
     for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
     {
@@ -232,7 +232,7 @@ void determineStartStopMPI(int &start, int &stop, const int &freq)
             }
 }
 
-void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
 {
         mpi::communicator world;
         for(int i = 1; i < world.size(); i++)
@@ -245,7 +245,7 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::v
 
         int l_i, l_j;
         kRes.zero();
-        core::complexDataGrid2D kDummy(_grid);
+        core::dataGrid2D<std::complex<double>> kDummy(_grid);
         for(int i = start; i < stop; i++)
         {
             l_i = i * _receiver.count * _source.count;
@@ -271,7 +271,7 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformation(const std::v
 
 
 void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
+            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size)
         {
             mpi::communicator world;
             mpi::request req = world.irecv(0, offset, res);
@@ -282,7 +282,7 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
 
             int l_i, l_j;
             kRes.zero();
-            core::complexDataGrid2D kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
             for(int i = start; i < stop; i++)
             {
                 l_i = i * _receiver.count * _source.count;
@@ -301,13 +301,13 @@ void FiniteDifferenceForwardModelMPI::getUpdateDirectionInformationMPI(
         }
 
 
-void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+void FiniteDifferenceForwardModelMPI::getResidualGradient(std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
 {
     int l_i, l_j;
 
     kRes.zero();
 
-    core::complexDataGrid2D kDummy(_grid);
+    core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
     for(int i = 0; i < _freq.count; i++)
     {

@@ -206,7 +206,7 @@ void doProcessMPI(const fwi::io::genericInput &gInput)
     model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
     std::vector<std::complex<double>> res;
-    fwi::core::complexDataGrid2D cgrid(grid);
+    fwi::core::dataGrid2D<std::complex<double>> cgrid(grid);
 
     bool loop = true;
     while(loop)
