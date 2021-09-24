@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("FWI");
 
     qmlRegisterType<Launcher>("com.fwi", 1, 0, "Launcher");
+    qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
 
 
     QQmlApplicationEngine engine;

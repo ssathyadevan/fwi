@@ -7,7 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(PROJECT "MinimalQml")
+set(PROJECT "FWI_Launch")
 project(${PROJECT})
 
 find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
@@ -15,6 +15,8 @@ find_package(Qt5 COMPONENTS Core Widgets Qml Quick REQUIRED)
 if (Qt5_FOUND)
     add_executable(${PROJECT}
       main.cpp
+      fileio.cpp
+      fileio.h
       Launcher.h
       qml.qrc
     )
@@ -26,4 +28,5 @@ if (Qt5_FOUND)
 
     #target_link_libraries(${PROJECT}
     #    PUBLIC FWI_PreProcess FWI_Process FWI_PostProcess)
+    install(TARGETS ${PROJECT} DESTINATION bin)
 endif()

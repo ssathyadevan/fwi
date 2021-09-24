@@ -42,5 +42,6 @@
     "verbosity": false,
     "fileName": "temple",
     "forward": "FiniteDifference",
-    "inversion": "ConjugateGradient"
+    "inversion": "ConjugateGradient",
+    "threads": 1
 }

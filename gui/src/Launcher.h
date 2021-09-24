@@ -5,6 +5,9 @@
 #include <QProcess>
 #include <iostream>
 #include <QCoreApplication>
+#include "fileio.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 class Launcher : public QObject{
    Q_OBJECT
@@ -30,6 +33,12 @@ public:
         QString output = QString::fromLocal8Bit(bytes);
         return output;
     }
+
+    Q_INVOKABLE void openWiki() {
+        QDesktopServices::openUrl(QUrl("https://redmine.alten.nl/projects/parallelized-fwi/wiki/Parallelization#GUI-Linux-only", QUrl::TolerantMode));
+    }
+
+
 };
 
 #endif // QFWIPOSTPROCESS_CPP
