@@ -36,20 +36,25 @@ namespace
 
     int getValue(const char *item)
     {   // Note: this value is in KB!
+        // directory /proc/self/status does not exist on Apple
         FILE *file = fopen("/proc/self/status", "r");
         int result = -1;
         char line[128];
-        std::cout << "inside getValue \n";
-        while(fgets(line, 128, file) != NULL)
-        {
-            if(strncmp(line, item, 6) == 0)
-            {
-                std::cout << "inside break statement \n";    
-                result = parseLine(line);
-                break;
-            }
+        if (file == 0){
+            result = 0; 
         }
-        std::cout << "after break statement \n";
+        else{
+                while(std::fgets(line, sizeof line, file) != NULL)
+                {
+                    if(strncmp(line, item, 6) == 0)
+                    {
+                        result = parseLine(line);
+                        break;
+                    }
+                }
+        }
+        
+  
         fclose(file);
         return result;
     }
@@ -66,11 +71,9 @@ namespace fwi
 
         void CpuClock::Start()
         {
-            std::cout << "inside clock \n";
             start = std::chrono::system_clock::now();
             L_(io::linfo) << "Starting";
             long dummy;
-            std::cout << "final clock \n";
             MemoryUse(dummy, dummy);
             t_start = clock();
         }
@@ -111,7 +114,6 @@ namespace fwi
 			if(makeUnixSpecificCall)
 			{
 			    virtual_mem = getValue("VmSize:");
-                std::cout << "inside unix statement \n";
 				physical_mem = getValue("VmRSS:");	
                 
 			}
