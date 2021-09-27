@@ -114,7 +114,7 @@ namespace fwi
                 }
             }
         }
-
+                                        // should be deletePTot()
         void FiniteDifferenceForwardModelOpenCL::deletePtot()
         {
             for(int i = 0; i < _freq.count * _source.count; i++)
@@ -180,7 +180,6 @@ namespace fwi
         void FiniteDifferenceForwardModelOpenCL::calculateKappa()
         {
             int li, lj;
-
             for(int i = 0; i < _freq.count; i++)
             {
                 li = i * _receiver.count * _source.count;
@@ -195,6 +194,7 @@ namespace fwi
                     }
                 }
             }
+            
         }
 
         void FiniteDifferenceForwardModelOpenCL::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)

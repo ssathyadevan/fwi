@@ -30,23 +30,18 @@ std::string filetostring(std::string kernelFileName);
 int main(int argc, char *argv[])
 {
        
-    // std::vector<cl::Platform> platforms;
-    // cl::Platform::get(&platforms);
-    
-    // cl::Platform platform = platforms.front();
-    // std::vector<cl::Device> devices;
-    // platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
-
-    // cl::Device device = devices.front();
-
-    // std::string kernelPath = "../applications/processingOpenCL/";
-    // std::string kernelFileName = "kernels";
-    // std::string kernelSource = filetostring(kernelPath + kernelFileName + ".cl");
-
-    // cl::Context context(device);
-    // cl::Program program(context,kernelSource);    
-
-    // cl_int err = program.build("-cl-std=CL1.2");
+    std::vector<cl::Platform> platforms;
+    cl::Platform::get(&platforms);
+    cl::Platform platform = platforms.front();
+    std::vector<cl::Device> devices;
+    platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
+    cl::Device device = devices.front();
+    std::string kernelPath = "../applications/processingOpenCL/";
+    std::string kernelFileName = "kernels";
+    std::string kernelSourceCode = filetostring(kernelPath + kernelFileName + ".cl");
+    cl::Context context(device);
+    cl::Program program(context,kernelSourceCode);    
+    cl_int err = program.build("-cl-std=CL1.2");
 
     try
     {
@@ -95,7 +90,6 @@ void doProcessOpenCL(const fwi::io::genericInput& gInput)
 
     // initialize logging
     std::string logFileName = gInput.outputLocation + gInput.runName + "Process.log";
-
 
     if(!gInput.verbose)
     {

@@ -20,6 +20,7 @@ namespace fwi
             virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
 
             void calculateKappa();
+            
             virtual void calculatePTot(const core::dataGrid2D &chiEst);
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes);
             virtual void getUpdateDirectionInformationMPI(
