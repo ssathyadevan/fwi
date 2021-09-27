@@ -6,6 +6,7 @@ add_library(finite_difference_forward_model_library
     Helmholtz2D.cpp                                     ../include/Helmholtz2D.h
     FiniteDifferenceForwardModelParallel.cpp            ../include/FiniteDifferenceForwardModelParallel.h
     FiniteDifferenceForwardModelParallelMPI.cpp         ../include/FiniteDifferenceForwardModelParallelMPI.h
+    FiniteDifferenceForwardModelParallelOpenCL.cpp      ../include/FiniteDifferenceForwardModelParallelOpenCL.h
                                                         ../include/PmlWidthFactor.h
                                                         ../include/SourceParameter.h)
 

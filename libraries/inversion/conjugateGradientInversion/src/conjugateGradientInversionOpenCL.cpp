@@ -30,7 +30,7 @@ namespace fwi
             , _chiEstimate(_grid)
         {
         }
-
+// Probably parallelize. This looks like the main inversion calculation \/
         core::dataGrid2D ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
             io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
@@ -152,7 +152,7 @@ namespace fwi
 
             return gradientCurrent;
         }
-
+// Looks parallizable. Maybe not worth it... 
         double ConjugateGradientInversion::calculateStepSize(const core::dataGrid2D &zeta, std::vector<std::complex<double>> &residualVector)
         {
             double alphaNumerator = 0.0;

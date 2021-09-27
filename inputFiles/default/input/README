@@ -15,11 +15,11 @@ below the explanation of all the input parameters:
 ###############################################################################
 
 #        VARIABLE (input.):                 TYPE (const):  DEFAULT:   UNIT:
-# D1.    c0                                dbl            2000.0     m per s
+# D1.    c0                                 dbl            2000.0     m per s
 2000.0
-# D2.    freqInfo.min                           dbl            10         ? Hz ?
+# D2.    freqInfo.min                       dbl            10         ? Hz ?
 10.0
-# D3.    freqInfo.max                           dbl            40         ? Hz ?
+# D3.    freqInfo.max                       dbl            40         ? Hz ?
 40.0
 # D4.    reservoirTopLeftCornerInM[0]       dbl            -300.0     m          
 -300.0

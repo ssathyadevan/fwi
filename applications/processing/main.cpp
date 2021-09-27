@@ -116,7 +116,7 @@ void doProcess(const fwi::io::genericInput& gInput)
         ++i;
     }
     
-    // Create model
+    // Create forward model
     fwi::Factory factory;
     L_(fwi::io::linfo) << "Create ForwardModel";
     fwi::forwardModels::ForwardModelInterface *model;

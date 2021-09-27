@@ -32,9 +32,9 @@ if(MPI_FOUND)
     link_libraries(${Boost_LIBRARIES})
     link_libraries(${MPI_CXX_LIBRARIES})
 else()
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic -Werror -Werror=vla -no-pie")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework OpenCL -fopenmp -Wall -Wextra -Wpedantic")
 endif()
-
+# -framework OpenCL might be apple specific flag, for linux it is probably -lOpenCL
 #We require Eigen3 
 find_package (Eigen3 REQUIRED)
 

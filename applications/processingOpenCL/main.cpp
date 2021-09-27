@@ -1,3 +1,7 @@
+#define CL_HPP_ENABLE_EXCEPTIONS
+#define CL_HPP_MINIMUM_OPENCL_VERSION 120
+#define CL_HPP_TARGET_OPENCL_VERSION 120
+
 #include <iostream>
 #include <vector>
 #include "HelpTextProcessing.h"
@@ -15,14 +19,35 @@
 #include "log.h"
 #include <iostream>
 #include <vector>
+#include "opencl.hpp"
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
-void doProcess( const fwi::io::genericInput &gInput);
+void doProcessOpenCL( const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
+std::string filetostring(std::string kernelFileName);
 
 int main(int argc, char *argv[])
 {
+       
+    // std::vector<cl::Platform> platforms;
+    // cl::Platform::get(&platforms);
+    
+    // cl::Platform platform = platforms.front();
+    // std::vector<cl::Device> devices;
+    // platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
+
+    // cl::Device device = devices.front();
+
+    // std::string kernelPath = "../applications/processingOpenCL/";
+    // std::string kernelFileName = "kernels";
+    // std::string kernelSource = filetostring(kernelPath + kernelFileName + ".cl");
+
+    // cl::Context context(device);
+    // cl::Program program(context,kernelSource);    
+
+    // cl_int err = program.build("-cl-std=CL1.2");
+
     try
     {
         std::vector<std::string> arguments = {argv + 1, argv + argc};
@@ -31,7 +56,7 @@ int main(int argc, char *argv[])
         
         fwi::io::genericInputCardReader genericReader(fwiOpts);
         const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcess(gInput);
+        doProcessOpenCL(gInput);
     }
     catch(const std::exception &e)
     {
@@ -40,6 +65,7 @@ int main(int argc, char *argv[])
         L_(fwi::io::lerror) << e.what() << std::endl;
         std::exit(EXIT_FAILURE);
     }
+
 }
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
@@ -57,7 +83,7 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
     }
 }
 
-void doProcess(const fwi::io::genericInput& gInput)
+void doProcessOpenCL(const fwi::io::genericInput& gInput)
 {    std::cout << "Inversion Processing Started" << std::endl; 
 
     // initialize the clock, grid sources receivers, grouped frequencies
@@ -171,4 +197,16 @@ void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
     lastrun.close();
     lastrun << runName;
 
+}
+
+std::string filetostring(std::string kernelFileName){
+	std::ifstream file(kernelFileName, std::ios::binary);
+    std::string fileStr;
+
+    std::istreambuf_iterator<char> inputIt(file), emptyInputIt;
+    std::back_insert_iterator<std::string> stringInsert(fileStr);
+
+    copy(inputIt, emptyInputIt, stringInsert);
+
+    return fileStr;
 }

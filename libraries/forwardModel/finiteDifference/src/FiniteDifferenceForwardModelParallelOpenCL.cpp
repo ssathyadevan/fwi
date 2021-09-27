@@ -1,4 +1,4 @@
-#include "FiniteDifferenceForwardModel.h"
+#include "FiniteDifferenceForwardModelParallelOpenCL.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "Helmholtz2D.h"
 #include "log.h"

@@ -7,9 +7,10 @@ include_directories(${CMAKE_SOURCE_DIR}/libraries/io/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/factory/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/libraries/forwardModel/base/include)
+include_directories(${CMAKE_SOURCE_DIR}/libraries/CL/include)
+
 
 add_executable( FWI_ProcessOpenCl main.cpp )
 target_include_directories(FWI_ProcessOpenCl PRIVATE ${CMAKE_SOURCE_DIR}/libraries/forwardModel/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/inversion/interface/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/utilities/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/performance/include PRIVATE ${CMAKE_SOURCE_DIR}/libraries/io/include)
 target_link_libraries( FWI_ProcessOpenCl factory_library integral_forward_model_library core_library integral_forward_model_library io_library performance_library)
 install( TARGETS FWI_ProcessOpenCl DESTINATION bin)
-
