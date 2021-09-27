@@ -1,7 +1,3 @@
-#define CL_HPP_ENABLE_EXCEPTIONS
-#define CL_HPP_MINIMUM_OPENCL_VERSION 120
-#define CL_HPP_TARGET_OPENCL_VERSION 120
-
 #include <iostream>
 #include <vector>
 #include "HelpTextProcessing.h"
@@ -19,7 +15,7 @@
 #include "log.h"
 #include <iostream>
 #include <vector>
-#include "opencl.hpp"
+
 
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
@@ -29,20 +25,8 @@ std::string filetostring(std::string kernelFileName);
 
 int main(int argc, char *argv[])
 {
-       
-    std::vector<cl::Platform> platforms;
-    cl::Platform::get(&platforms);
-    cl::Platform platform = platforms.front();
-    std::vector<cl::Device> devices;
-    platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
-    cl::Device device = devices.front();
-    std::string kernelPath = "../applications/processingOpenCL/";
-    std::string kernelFileName = "kernels";
-    std::string kernelSourceCode = filetostring(kernelPath + kernelFileName + ".cl");
-    cl::Context context(device);
-    cl::Program program(context,kernelSourceCode);    
-    cl_int err = program.build("-cl-std=CL1.2");
-
+ 
+/*
     try
     {
         std::vector<std::string> arguments = {argv + 1, argv + argc};
@@ -76,6 +60,7 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
         std::cout << VERSION_PROCESSING << std::endl;
         std::exit(EXIT_SUCCESS);
     }
+    */
 }
 
 void doProcessOpenCL(const fwi::io::genericInput& gInput)
