@@ -8,7 +8,7 @@ namespace fwi
     namespace forwardModels
     {
         FiniteDifferenceForwardModelOpenCL::FiniteDifferenceForwardModelOpenCL(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
-            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelOpenCLInput &fMInput)
+            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
             : _grid(grid)
             , _source(source)
             , _receiver(receiver)

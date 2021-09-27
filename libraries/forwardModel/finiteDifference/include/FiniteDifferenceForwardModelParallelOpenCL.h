@@ -9,13 +9,13 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class FiniteDifferenceForwardModel : public ForwardModelInterface
+        class FiniteDifferenceForwardModelOpenCL : public ForwardModelInterface
         {
         public:
-            FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            FiniteDifferenceForwardModelOpenCL(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
                 const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput);
 
-            ~FiniteDifferenceForwardModel();
+            ~FiniteDifferenceForwardModelOpenCL();
 
             virtual std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D &chiEst);
 
