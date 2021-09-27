@@ -5,6 +5,7 @@
 #include "FiniteDifferenceForwardModelParallelMPI.h"
 #include "conjugateGradientMPIInversion.h"
 #endif
+#include "FiniteDifferenceForwardModelParallelOpenCL.h"
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
 #include "evolutionInversion.h"
@@ -118,6 +119,12 @@ namespace fwi
             return _createdForwardModel;
         }
 #endif
+        if(desiredForwardModel == "FiniteDifferenceParallelOpenCLForwardModel")
+        {
+            forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
+            _createdForwardModel = new forwardModels::FiniteDifferenceForwardModelOp (grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+            return _createdForwardModel;
+        }
         L_(io::linfo) << "The ForwardModel " << desiredForwardModel << " was not found";
         throw std::invalid_argument("The ForwardModel " + desiredForwardModel + " was not found");
     }

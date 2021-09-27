@@ -7,8 +7,8 @@ namespace fwi
 {
     namespace forwardModels
     {
-        FiniteDifferenceForwardModel::FiniteDifferenceForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
-            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fMInput)
+        FiniteDifferenceForwardModelOpenCL::FiniteDifferenceForwardModelOpenCL(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelOpenCLInput &fMInput)
             : _grid(grid)
             , _source(source)
             , _receiver(receiver)
@@ -27,7 +27,7 @@ namespace fwi
             createKappa(freq, source, receiver);
         }
 
-        FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
+        FiniteDifferenceForwardModelOpenCL::~FiniteDifferenceForwardModelOpenCL()
         {
             if(_Greens != nullptr)
                 this->deleteGreens();
@@ -42,7 +42,7 @@ namespace fwi
                 this->deleteKappa();
         }
 
-        void FiniteDifferenceForwardModel::createP0()
+        void FiniteDifferenceForwardModelOpenCL::createP0()
         {
             assert(_Greens != nullptr);
             assert(_p0 == nullptr);
@@ -61,7 +61,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::deleteP0()
+        void FiniteDifferenceForwardModelOpenCL::deleteP0()
         {
             for(int i = 0; i < _freq.count; i++)
             {
@@ -77,7 +77,7 @@ namespace fwi
             _p0 = nullptr;
         }
 
-        void FiniteDifferenceForwardModel::createGreens()
+        void FiniteDifferenceForwardModelOpenCL::createGreens()
         {
             _Greens = new core::greensRect2DCpu *[_freq.count];
 
@@ -87,7 +87,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::deleteGreens()
+        void FiniteDifferenceForwardModelOpenCL::deleteGreens()
         {
             for(int i = 0; i < _freq.count; i++)
             {
@@ -98,7 +98,7 @@ namespace fwi
             _Greens = nullptr;
         }
 
-        void FiniteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
+        void FiniteDifferenceForwardModelOpenCL::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
             _pTot = new core::complexDataGrid2D *[freq.count * source.count];
 
@@ -115,7 +115,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::deletePtot()
+        void FiniteDifferenceForwardModelOpenCL::deletePtot()
         {
             for(int i = 0; i < _freq.count * _source.count; i++)
             {
@@ -126,7 +126,7 @@ namespace fwi
             _pTot = nullptr;
         }
 
-        void FiniteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
+        void FiniteDifferenceForwardModelOpenCL::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
             _kappa = new core::complexDataGrid2D *[freq.count * source.count * receiver.count];
 
@@ -136,7 +136,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::deleteKappa()
+        void FiniteDifferenceForwardModelOpenCL::deleteKappa()
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
@@ -147,7 +147,7 @@ namespace fwi
             _kappa = nullptr;
         }
 
-        void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D &chiEst)
+        void FiniteDifferenceForwardModelOpenCL::calculatePTot(const core::dataGrid2D &chiEst)
         {
             assert(_Greens != nullptr);
             assert(_p0 != nullptr);
@@ -170,14 +170,14 @@ namespace fwi
             }
         }
 
-        std::vector<std::complex<double>> FiniteDifferenceForwardModel::calculatePressureField(const core::dataGrid2D &chiEst)
+        std::vector<std::complex<double>> FiniteDifferenceForwardModelOpenCL::calculatePressureField(const core::dataGrid2D &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
             applyKappa(chiEst, kOperator);
             return kOperator;
         }
 
-        void FiniteDifferenceForwardModel::calculateKappa()
+        void FiniteDifferenceForwardModelOpenCL::calculateKappa()
         {
             int li, lj;
 
@@ -197,7 +197,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
+        void FiniteDifferenceForwardModelOpenCL::applyKappa(const core::dataGrid2D &CurrentPressureFieldSerial, std::vector<std::complex<double>> &kOperator)
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
@@ -205,7 +205,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void FiniteDifferenceForwardModelOpenCL::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
         {
             int l_i, l_j;
             kRes.zero();
@@ -227,7 +227,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::getUpdateDirectionInformationMPI(
+        void FiniteDifferenceForwardModelOpenCL::getUpdateDirectionInformationMPI(
             std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes, const int offset, const int block_size)
         {
             kRes.zero();
@@ -242,7 +242,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
+        void FiniteDifferenceForwardModelOpenCL::getResidualGradient(std::vector<std::complex<double>> &res, core::complexDataGrid2D &kRes)
         {
             int l_i, l_j;
 
