@@ -33,96 +33,76 @@ namespace fwi
 
         core::dataGrid2D<double> ConjugateGradientInversion::reconstruct(const std::vector<std::complex<double>> &pData, io::genericInput gInput)
         {
-            io::progressBar progressBar(_cgInput.n_max * _cgInput.iteration1.n);
+            // Initialization of variables
+            io::progressBar progressBar(_cgInput.n_max);
             const double eta = 1.0 / _costCalculator.calculateCost(pData, std::vector<std::complex<double>>(pData.size(), 0.0), 1.0);
             _chiEstimate.zero();
-
             std::ofstream residualLogFile = openResidualLogFile(gInput);
             bool isConverged = false;
-
-            // main loop//
             int counter = 1;
+
+            // Initialize conjugate gradient parameters
+            core::dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
+            double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
+            RegularisationParameters regularisationCurrent(_grid);
+            RegularisationParameters regularisationPrevious(_grid);
+            regularisationPrevious.bSquared.zero();
+
+            // Update contrast-function first time
+            auto pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
+            std::vector<std::complex<double>> residualVector = pData - pDataEst;
+            residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
+
+            zeta = calculateUpdateDirection(residualVector, gradientCurrent, eta);
+            alpha = calculateStepSize(zeta, residualVector);   // eq: optimalStepSizeCG
+
+            _chiEstimate += alpha * zeta;   // eq: contrastUpdate
+
+            gradientPrevious = gradientCurrent;
+            residualPrevious = residualCurrent;
+
+            // main loop
             for(int it = 0; it < _cgInput.n_max; it++)
             {
-                // Initialize conjugate gradient parameters
-                core::dataGrid2D gradientCurrent(_grid), gradientPrevious(_grid), zeta(_grid);
-                double residualCurrent = 0.0, residualPrevious = 0.0, alpha = 0.0;
-
-                _forwardModel->calculateKappa();
+                // Calculate the pressure data from _chiEstimate
                 auto pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
-                std::vector<std::complex<double>> residualVector = pData - pDataEst;
-
-                // Initialize Regularisation parameters
-                double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
-                // Note: deltaAmplification decreases the step size for increasing iteration step
-
-                RegularisationParameters regularisationCurrent(_grid);
-                RegularisationParameters regularisationPrevious(_grid);
-                regularisationPrevious.bSquared.zero();
-
-                // First iteration
-                //------------------------------------------------------------------
-                zeta = calculateUpdateDirection(residualVector, gradientCurrent, eta);
-                alpha = calculateStepSize(zeta, residualVector);   // eq: optimalStepSizeCG
-
-                // Update contrast-function
-                _chiEstimate += alpha * zeta;   // eq: contrastUpdate
-
-                // Result + logging
-                pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
                 residualVector = pData - pDataEst;
+
+                // Check residual
                 residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);   // eq: errorFunc
                 isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
                 logResidualResults(0, it, residualCurrent, counter, residualLogFile, isConverged);
 
-                // Save variables for next iteration
+                if((it > 0) && ((isConverged) || (std::abs(residualPrevious - residualCurrent) < _cgInput.iteration1.tolerance)))
+                {
+                    progressBar.setCounter(_cgInput.iteration1.n + progressBar.getCounter() - (progressBar.getCounter() % _cgInput.iteration1.n));
+                    break;
+                }
+
+                // Initialize Regularisation parameters
+                // Note: deltaAmplification decreases the step size for increasing iteration step
+                double deltaAmplification = _cgInput.dAmplification.start / (_cgInput.dAmplification.slope * it + 1.0);
+
+                // Start iteration with Regularisation
+                calculateRegularisationParameters(regularisationPrevious, regularisationCurrent, deltaAmplification);
+                zeta = calculateUpdateDirectionRegularisation(residualVector, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
+                    regularisationPrevious, zeta, residualPrevious);   // eq: updateDirectionsCG
+                alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualVector, eta, residualPrevious, zeta);
+
+                _chiEstimate += alpha * zeta;   // eq: contrastUpdate
+
+                // Save regularisation variables for next iteration
                 gradientPrevious = gradientCurrent;
                 residualPrevious = residualCurrent;
+                _chiEstimate.gradient(regularisationCurrent.gradientChi);
+                calculateRegularisationErrorFunctional(regularisationPrevious, regularisationCurrent);
 
+                regularisationPrevious.deltaSquared = regularisationCurrent.deltaSquared;
+                regularisationPrevious.bSquared = regularisationCurrent.bSquared;
+
+                // Update counter
                 counter++;
-                // -----------------------------------------------------------------
-
-                // start the inner loop
-                for(int it1 = 1; it1 < _cgInput.iteration1.n; it1++)
-                {
-                    calculateRegularisationParameters(regularisationPrevious, regularisationCurrent, deltaAmplification);
-
-                    zeta = calculateUpdateDirectionRegularisation(residualVector, gradientCurrent, gradientPrevious, eta, regularisationCurrent,
-                        regularisationPrevious, zeta, residualPrevious);   // eq: updateDirectionsCG
-                    alpha = calculateStepSizeRegularisation(regularisationPrevious, regularisationCurrent, residualVector, eta, residualPrevious, zeta);
-
-                    // Update contrast-function
-                    _chiEstimate += alpha * zeta;
-
-                    // Result + logging
-                    pDataEst = _forwardModel->calculatePressureField(_chiEstimate);
-                    residualVector = pData - pDataEst;
-                    residualCurrent = _costCalculator.calculateCost(pData, pDataEst, eta);
-                    isConverged = (residualCurrent < _cgInput.iteration1.tolerance);
-                    logResidualResults(it1, it, residualCurrent, counter, residualLogFile, isConverged);
-
-                    // breakout check
-                    if((it1 > 0) &&
-                        ((residualCurrent < _cgInput.iteration1.tolerance) || (std::abs(residualPrevious - residualCurrent) < _cgInput.iteration1.tolerance)))
-                    {
-                        progressBar.setCounter(_cgInput.iteration1.n + progressBar.getCounter() - (progressBar.getCounter() % _cgInput.iteration1.n));
-                        break;
-                    }
-
-                    // Save variables for next iteration
-                    gradientPrevious = gradientCurrent;
-                    residualPrevious = residualCurrent;
-
-                    // Save regularisation variables for next iteration
-                    _chiEstimate.gradient(regularisationCurrent.gradientChi);
-                    calculateRegularisationErrorFunctional(regularisationPrevious, regularisationCurrent);
-
-                    regularisationPrevious.deltaSquared = regularisationCurrent.deltaSquared;
-                    regularisationPrevious.bSquared = regularisationCurrent.bSquared;
-
-                    counter++;
-                    progressBar++;
-                }
+                progressBar++;
             }
             residualLogFile.close();
 
@@ -146,7 +126,8 @@ namespace fwi
         core::dataGrid2D<double> ConjugateGradientInversion::calculateUpdateDirection(
             std::vector<std::complex<double>> &residualVector, core::dataGrid2D<double> &gradientCurrent, double eta)
         {
-            core::dataGrid2D<std::complex<double>> kappaTimesResidual(_grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
+            core::dataGrid2D<std::complex<double>> kappaTimesResidual(
+                _grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
             _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * kappaTimesResidual.getRealPart();
 
@@ -324,7 +305,7 @@ namespace fwi
                                             (regularisationCurrent.gradientChi[1] * regularisationCurrent.gradientChi[1]);
 
             core::dataGrid2D<double> integral = (gradientChiNormsquaredCurrent + regularisationPrevious.deltaSquared) /
-                                        (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
+                                                (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
 
             regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
         }

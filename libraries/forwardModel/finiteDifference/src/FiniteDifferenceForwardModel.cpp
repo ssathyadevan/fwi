@@ -25,6 +25,7 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
+            calculateKappa();
         }
 
         FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
@@ -47,15 +48,15 @@ namespace fwi
             assert(_Greens != nullptr);
             assert(_p0 == nullptr);
 
-            _p0 = new core::dataGrid2D<std::complex<double>>  **[_freq.count];
+            _p0 = new core::dataGrid2D<std::complex<double>> **[_freq.count];
 
             for(int i = 0; i < _freq.count; i++)
             {
-                _p0[i] = new core::dataGrid2D<std::complex<double>>  *[_source.count];
+                _p0[i] = new core::dataGrid2D<std::complex<double>> *[_source.count];
 
                 for(int j = 0; j < _source.count; j++)
                 {
-                    _p0[i][j] = new core::dataGrid2D<std::complex<double>> (_grid);
+                    _p0[i][j] = new core::dataGrid2D<std::complex<double>>(_grid);
                     *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
                 }
             }
@@ -100,7 +101,7 @@ namespace fwi
 
         void FiniteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            _pTot = new core::dataGrid2D<std::complex<double>>  *[freq.count * source.count];
+            _pTot = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count];
 
             int li;
 
@@ -110,7 +111,7 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _pTot[li + j] = new core::dataGrid2D<std::complex<double>> (*_p0[i][j]);
+                    _pTot[li + j] = new core::dataGrid2D<std::complex<double>>(*_p0[i][j]);
                 }
             }
         }
@@ -128,11 +129,11 @@ namespace fwi
 
         void FiniteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
-            _kappa = new core::dataGrid2D<std::complex<double>>  *[freq.count * source.count * receiver.count];
+            _kappa = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count * receiver.count];
 
             for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
-                _kappa[i] = new core::dataGrid2D<std::complex<double>> (_grid);
+                _kappa[i] = new core::dataGrid2D<std::complex<double>>(_grid);
             }
         }
 
@@ -205,11 +206,12 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>>  &kRes)
+        void FiniteDifferenceForwardModel::getUpdateDirectionInformation(
+            const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
         {
             int l_i, l_j;
             kRes.zero();
-            core::dataGrid2D<std::complex<double>>  kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
             for(int i = 0; i < _freq.count; i++)
             {
@@ -228,11 +230,11 @@ namespace fwi
         }
 
         void FiniteDifferenceForwardModel::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>>  &kRes, const int offset, const int block_size)
+            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size)
         {
             kRes.zero();
 
-            core::dataGrid2D<std::complex<double>>  kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
             for(int i = offset; i < offset + block_size; i++)
             {
@@ -242,13 +244,13 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>>  &kRes)
+        void FiniteDifferenceForwardModel::getResidualGradient(std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
         {
             int l_i, l_j;
 
             kRes.zero();
 
-            core::dataGrid2D<std::complex<double>>  kDummy(_grid);
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
 
             for(int i = 0; i < _freq.count; i++)
             {
