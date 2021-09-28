@@ -55,7 +55,7 @@ namespace fwi
              */
             const std::vector<core::dataGrid2D<std::complex<double>>> &getKernel() { return _vkappa; }
 
-        private:
+        protected:
             void createPTot(const core::FrequenciesGroup &freq, const core::Sources &source);
 
             void createGreens();
@@ -66,7 +66,6 @@ namespace fwi
             void applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
 
-        private:
             std::vector<std::complex<double>> _residual;
             const core::grid2D &_grid;
             const core::Sources &_source;
@@ -78,7 +77,6 @@ namespace fwi
             std::vector<core::dataGrid2D<std::complex<double>>> _vkappa;
 
             finiteDifferenceForwardModelInput _fMInput;
-            friend class FiniteDifferenceForwardModelParallel;
         };
 
     }   // namespace forwardModels

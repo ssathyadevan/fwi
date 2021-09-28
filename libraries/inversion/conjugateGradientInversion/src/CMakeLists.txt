@@ -1,5 +1,6 @@
 add_library(conjugate_gradient_inversion_library
     conjugateGradientInversion.cpp                      ../include/conjugateGradientInversion.h
+    conjugateGradientOpenMPinversion.cpp                ../include/conjugateGradientOpenMPinversion.h
     conjugateGradientMPIInversion.cpp                      ../include/conjugateGradientMPIInversion.h
                                                         ../include/conjugateGradientInversionInput.h
     conjugateGradientInversionInputCardReader.cpp       ../include/conjugateGradientInversionInputCardReader.h

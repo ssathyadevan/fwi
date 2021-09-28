@@ -23,7 +23,7 @@ namespace fwi
 
         class ConjugateGradientInversion : public inversionInterface
         {
-        private:
+        protected:
             forwardModels::ForwardModelInterface *_forwardModel;
             const core::CostFunctionCalculator &_costCalculator;
             ConjugateGradientInversionInput _cgInput;

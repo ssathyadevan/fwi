@@ -7,6 +7,7 @@
 #endif
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
+#include "conjugateGradientOpenMPinversion.h"
 #include "evolutionInversion.h"
 #include "evolutionInversionInputCardReader.h"
 #include "gradientDescentInversion.h"
@@ -43,7 +44,7 @@ namespace fwi
     }
 
     const core::CostFunctionCalculator costCalculator(core::CostFunctionCalculator::CostFunctionEnum::leastSquares);
-    
+
     inversionMethods::inversionInterface *Factory::createInversion(
         const std::string &desiredInversion, forwardModels::ForwardModelInterface *forwardModel, const io::genericInput &gInput)
     {
@@ -51,6 +52,12 @@ namespace fwi
         {
             inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::ConjugateGradientInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
+            return _createdInversion;
+        }
+        if(desiredInversion == "ConjugateGradientOpenMPInversion")
+        {
+            inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+            _createdInversion = new inversionMethods::conjugateGradientOpenMPinversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
 #ifdef MPI
@@ -113,8 +120,7 @@ namespace fwi
         if(desiredForwardModel == "FiniteDifferenceParallelMPIForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
-            _createdForwardModel =
-                new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+            _createdForwardModel = new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
 #endif
