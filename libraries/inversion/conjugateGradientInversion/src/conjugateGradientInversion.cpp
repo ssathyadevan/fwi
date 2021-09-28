@@ -128,7 +128,7 @@ namespace fwi
         {
             core::dataGrid2D<std::complex<double>> kappaTimesResidual(
                 _grid);   // eq: integrandForDiscreteK of README, KappaTimesResidual is the argument of Re()
-            _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
+            getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * kappaTimesResidual.getRealPart();
 
             return gradientCurrent;
@@ -225,7 +225,7 @@ namespace fwi
         {
             core::dataGrid2D<std::complex<double>> kappaTimesResidual(_grid);
             kappaTimesResidual.zero();
-            _forwardModel->getUpdateDirectionInformation(residualVector, kappaTimesResidual);
+            getUpdateDirectionInformation(residualVector, kappaTimesResidual);
             gradientCurrent = eta * regularisationPrevious.errorFunctional * kappaTimesResidual.getRealPart() +
                               residualPrevious * regularisationCurrent.gradient;   // eq: 2.25 of thesis
             double gamma = gradientCurrent.innerProduct(gradientCurrent - gradientPrevious) /
@@ -308,6 +308,29 @@ namespace fwi
                                                 (regularisationPrevious.gradientChiNormSquared + regularisationPrevious.deltaSquared);
 
             regularisationPrevious.errorFunctional = (1.0 / (_grid.getDomainArea())) * integral.summation() * _grid.getCellVolume();
+        }
+
+        void ConjugateGradientInversion::getUpdateDirectionInformation(
+            const std::vector<std::complex<double>> &residualVector, core::dataGrid2D<std::complex<double>> &kappaTimesResidual)
+        {
+            int l_i, l_j;
+            kappaTimesResidual.zero();
+            core::dataGrid2D<std::complex<double>> kDummy(_grid);
+            auto kappa = _forwardModel->getKernel();
+            for(int i = 0; i < _frequencies.count; i++)
+            {
+                l_i = i * _receivers.count * _sources.count;
+                for(int j = 0; j < _receivers.count; j++)
+                {
+                    l_j = j * _receivers.count;
+                    for(int k = 0; k < _receivers.count; k++)
+                    {
+                        kDummy = kappa[l_i + l_j + k];
+                        kDummy.conjugate();
+                        kappaTimesResidual += kDummy * residualVector[l_i + l_j + k];
+                    }
+                }
+            }
         }
     }   // namespace inversionMethods
 }   // namespace fwi

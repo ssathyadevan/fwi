@@ -50,7 +50,8 @@ namespace fwi
              * @param eta is a scaling factor for the residual (eq: errorFuncSubEtaInv in the README)
              * @return core::dataGrid2D zeta is the update direction for each value in the contrast function
              */
-            core::dataGrid2D<double> calculateUpdateDirection(std::vector<std::complex<double>> &residualArray, core::dataGrid2D<double> &gradientCurrent, double eta);
+            core::dataGrid2D<double> calculateUpdateDirection(
+                std::vector<std::complex<double>> &residualArray, core::dataGrid2D<double> &gradientCurrent, double eta);
 
             /**
              * @brief calculateStepSize uses equation eq: optimalStepSizeCG (README) to calculate the optimal stepsize based on the update-direction
@@ -119,9 +120,10 @@ namespace fwi
              * @param residualPrevious scaled and averaged error of the previous loop
              * @return core::dataGrid2D zeta
              */
-            core::dataGrid2D<double> calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray, core::dataGrid2D<double> &gradientCurrent,
-                const core::dataGrid2D<double> &gradientPrevious, const double eta, const RegularisationParameters &regularisationCurrent,
-                const RegularisationParameters &regularisationPrevious, const core::dataGrid2D<double> &zeta, double residualPrevious);
+            core::dataGrid2D<double> calculateUpdateDirectionRegularisation(std::vector<std::complex<double>> &residualArray,
+                core::dataGrid2D<double> &gradientCurrent, const core::dataGrid2D<double> &gradientPrevious, const double eta,
+                const RegularisationParameters &regularisationCurrent, const RegularisationParameters &regularisationPrevious,
+                const core::dataGrid2D<double> &zeta, double residualPrevious);
 
             /**
              * @brief calculateStepSize_regularisation optimizes the total error functional by taking the derivative of equation 2.26 of the thesis with respect
@@ -156,6 +158,14 @@ namespace fwi
              * @param regularisationCurrent
              */
             void calculateRegularisationErrorFunctional(RegularisationParameters &regularisationPrevious, RegularisationParameters &regularisationCurrent);
+
+            /**
+             * @brief getUpdateDirectionInformation uses the kernel from the forward model to update the direction
+             * @param residualVector
+             * @param kappaTimesResidual
+             */
+            void getUpdateDirectionInformation(
+                const std::vector<std::complex<double>> &residualVector, core::dataGrid2D<std::complex<double>> &kappaTimesResidual);
 
         public:
             ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,

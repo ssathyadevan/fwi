@@ -63,7 +63,8 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _vpTot.push_back(core::dataGrid2D<std::complex<double>> (*_Greens[i]->getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
+                    _vpTot.push_back(
+                        core::dataGrid2D<std::complex<double>>(*_Greens[i]->getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
                 }
             }
         }
@@ -72,14 +73,11 @@ namespace fwi
         {
             for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
-                _vkappa.push_back(core::dataGrid2D<std::complex<double>> (_grid));
+                _vkappa.push_back(core::dataGrid2D<std::complex<double>>(_grid));
             }
         }
 
-        void FiniteDifferenceForwardModel::deleteKappa()
-        {
-
-        }
+        void FiniteDifferenceForwardModel::deleteKappa() {}
 
         void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
@@ -144,6 +142,7 @@ namespace fwi
             int l_i, l_j;
             kRes.zero();
             core::dataGrid2D<std::complex<double>> kDummy(_grid);
+            std::vector<core::dataGrid2D<std::complex<double>>> kappa;
 
             for(int i = 0; i < _freq.count; i++)
             {

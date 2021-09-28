@@ -27,6 +27,8 @@ namespace fwi
             virtual const core::Sources &getSource() = 0;
             virtual const core::Receivers &getReceiver() = 0;
             virtual const core::FrequenciesGroup &getFreq() = 0;
+            virtual const std::vector<core::dataGrid2D<std::complex<double>>> &getKernel() = 0;
+
             ///@}
             /**
              * @brief calculatePData Calculates pressure field from media properties
@@ -41,11 +43,13 @@ namespace fwi
 
             // TODO: Since this method is only used in conjugate gradient inversion algorithms, should this actually be in this class?
             /**
-             * @brief given a newly computed std::vector<std::complex<double>> residual and a core::complexDataGrid2D kappaTimesResidual, updates kappaTimesResidual with the new value of _Kappa multiplied by residual.
-             * getUpdateDirectionInformation() is used only by the conjugate gradient inversion algorithms, see eq. (37) of /doc/ReadMe/1_ProjectDescription.pdf
+             * @brief given a newly computed std::vector<std::complex<double>> residual and a core::complexDataGrid2D kappaTimesResidual, updates
+             * kappaTimesResidual with the new value of _Kappa multiplied by residual. getUpdateDirectionInformation() is used only by the conjugate gradient
+             * inversion algorithms, see eq. (37) of /doc/ReadMe/1_ProjectDescription.pdf
              */
             virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &) = 0;
-            virtual void getUpdateDirectionInformationMPI(std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &, const int, const int) = 0;
+            virtual void getUpdateDirectionInformationMPI(
+                std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &, const int, const int) = 0;
         };
     }   // namespace forwardModels
 }   // namespace fwi

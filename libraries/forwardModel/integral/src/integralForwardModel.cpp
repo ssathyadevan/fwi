@@ -24,6 +24,7 @@ namespace fwi
             createP0();
             createPTot(freq, source);
             createKappa(freq, source, receiver);
+            calculateKappa();
         }
 
         IntegralForwardModel::~IntegralForwardModel()
