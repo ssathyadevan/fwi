@@ -18,9 +18,13 @@ namespace fwi
         class greensRect2DCpu
         {
         public:
-            greensRect2DCpu(
-                const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const Sources &source_, const Receivers &receiver_, double k_);
+            greensRect2DCpu(const grid2D &grid_, const std::function<std::complex<double>(double, double)> gFunc, const Sources &source_,
+                const Receivers &receiver_, double k_);
 
+            greensRect2DCpu(const greensRect2DCpu &rhs)
+                : greensRect2DCpu(rhs.getGrid(), rhs.G_func, rhs.source, rhs.receiver, rhs.k)
+            {
+            }
             ~greensRect2DCpu();
 
             const std::complex<double> *getGreensVolume() const { return gVol; }
