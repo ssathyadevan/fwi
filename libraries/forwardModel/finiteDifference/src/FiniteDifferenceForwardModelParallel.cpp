@@ -30,7 +30,7 @@ namespace fwi
 
                     for(k = 0; k < _source.count; k++)
                     {
-                        _vkappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
+                        _vkappa[li + lj + k] = (*_Greens[i].getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
                     }
                 }
             }
@@ -38,8 +38,6 @@ namespace fwi
 
         void FiniteDifferenceForwardModelParallel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
-            assert(_Greens != nullptr);
-
             auto copyPTot = _vpTot;
 
             int li, i, j;

@@ -76,7 +76,7 @@ namespace fwi
             const core::Sources &_source;
             const core::Receivers &_receiver;
             const core::FrequenciesGroup &_freq;
-            core::greensRect2DCpu **_Greens;
+            std::vector<core::greensRect2DCpu> _Greens;
 
             std::vector<core::dataGrid2D<std::complex<double>>> _vpTot;
             std::vector<core::dataGrid2D<std::complex<double>>> _vkappa;

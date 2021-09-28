@@ -58,7 +58,6 @@ namespace fwi
             Matrix<std::complex<double>, Dynamic, Dynamic, RowMajor> G_vol2;
             void setGreensFunction(dataGrid2D<std::complex<double>> &greensFunctionField, const std::function<std::complex<double>(double, double)> func);
 
-            greensRect2DCpu(const greensRect2DCpu &) = delete;
             greensRect2DCpu &operator=(const greensRect2DCpu &) = delete;
         };
     }   // namespace core

@@ -28,43 +28,23 @@ namespace fwi
 
         FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
         {
-            if(_Greens != nullptr)
-                this->deleteGreens();
         }
 
         void FiniteDifferenceForwardModel::createGreens()
         {
-            _Greens = new core::greensRect2DCpu *[_freq.count];
-
             for(int i = 0; i < _freq.count; i++)
             {
-                _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]);
+                _Greens.push_back(core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]));
             }
-        }
-
-        void FiniteDifferenceForwardModel::deleteGreens()
-        {
-            for(int i = 0; i < _freq.count; i++)
-            {
-                delete _Greens[i];
-            }
-
-            delete[] _Greens;
-            _Greens = nullptr;
         }
 
         void FiniteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            int li;
-
             for(int i = 0; i < freq.count; i++)
             {
-                li = i * source.count;
-
                 for(int j = 0; j < source.count; j++)
                 {
-                    _vpTot.push_back(
-                        core::dataGrid2D<std::complex<double>>(*_Greens[i]->getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
+                    _vpTot.push_back(core::dataGrid2D<std::complex<double>> (*_Greens[i].getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
                 }
             }
         }
@@ -77,12 +57,8 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModel::deleteKappa() {}
-
         void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
-            assert(_Greens != nullptr);
-
             int li;
 
             for(int i = 0; i < _freq.count; i++)
@@ -122,7 +98,7 @@ namespace fwi
 
                     for(int k = 0; k < _source.count; k++)
                     {
-                        _vkappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
+                        _vkappa[li + lj + k] = (*_Greens[i].getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
                     }
                 }
             }
