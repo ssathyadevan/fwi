@@ -30,8 +30,6 @@ namespace fwi
 
             core::dataGrid2D chiEst(_grid);
 
-            _forwardModel->calculateKappa();
-
             // main loop//
             int counter = 1;
             for(int it = 0; it < _riInput.nMaxOuter; it++)

@@ -31,7 +31,6 @@ namespace fwi
             chiEstimateCurrent = _gdInput.x0;
             core::dataGrid2D chiEstimatePrevious(_grid);
 
-            _forwardModel->calculateKappa();
             auto pDataEst = _forwardModel->calculatePressureField(chiEstimateCurrent);
 
             std::vector<double> dFdxCurrent(_grid.getNumberOfGridPoints(), 0);
@@ -107,7 +106,8 @@ namespace fwi
             return dFdx;
         }
 
-        core::dataGrid2D<double> gradientDescentInversion::gradientDescent(core::dataGrid2D<double> chiEstimate, const std::vector<double> &dfdx, const double gamma)
+        core::dataGrid2D<double> gradientDescentInversion::gradientDescent(
+            core::dataGrid2D<double> chiEstimate, const std::vector<double> &dfdx, const double gamma)
         {
             const int nGridPoints = chiEstimate.getNumberOfGridPoints();
 
