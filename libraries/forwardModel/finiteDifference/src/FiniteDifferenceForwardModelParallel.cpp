@@ -30,7 +30,7 @@ namespace fwi
 
                     for(k = 0; k < _source.count; k++)
                     {
-                        *_kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _source.count + k]);
+                        _vkappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
                     }
                 }
             }
@@ -39,9 +39,8 @@ namespace fwi
         void FiniteDifferenceForwardModelParallel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
             assert(_Greens != nullptr);
-            assert(_p0 != nullptr);
 
-            auto copyPTot = _pTot;
+            auto copyPTot = _vpTot;
 
             int li, i, j;
 #pragma omp parallel for private(li, i, j)
@@ -58,7 +57,7 @@ namespace fwi
                     // Review: Remove logging statements?
                     // L_(io::linfo) << "Solving P_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
 
-                    *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *copyPTot[li + j]);
+                    _vpTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], copyPTot[li + j]);
                 }
             }
         }
@@ -69,7 +68,7 @@ namespace fwi
 #pragma omp parallel for
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
-                kOperator[i] = dotProduct(*_kappa[i], chiEst);
+                kOperator[i] = dotProduct(_vkappa[i], chiEst);
             }
             return kOperator;
         }
@@ -90,7 +89,7 @@ namespace fwi
                     l_j = j * _source.count;
                     for(k = 0; k < _source.count; k++)
                     {
-                        kDummy = *_kappa[l_i + l_j + k];
+                        kDummy = _vkappa[l_i + l_j + k];
                         kDummy.conjugate();
                         kRes += kDummy * res[l_i + l_j + k];
                     }

@@ -14,15 +14,13 @@ namespace fwi
             , _receiver(receiver)
             , _freq(freq)
             , _Greens()
-            , _p0()
-            , _pTot()
-            , _kappa()
+            , _vpTot()
+            , _vkappa()
             , _fMInput(fMInput)
         {
             L_(io::linfo) << "Creating Greens function field...";
             createGreens();
-            L_(io::linfo) << "Creating p0...";
-            createP0();
+            L_(io::linfo) << "Creating initial Ptot";
             createPTot(freq, source);
             createKappa(freq, source, receiver);
             calculateKappa();
@@ -32,50 +30,6 @@ namespace fwi
         {
             if(_Greens != nullptr)
                 this->deleteGreens();
-
-            if(_p0 != nullptr)
-                this->deleteP0();
-
-            if(_pTot != nullptr)
-                this->deletePtot();
-
-            if(_kappa != nullptr)
-                this->deleteKappa();
-        }
-
-        void FiniteDifferenceForwardModel::createP0()
-        {
-            assert(_Greens != nullptr);
-            assert(_p0 == nullptr);
-
-            _p0 = new core::dataGrid2D<std::complex<double>> **[_freq.count];
-
-            for(int i = 0; i < _freq.count; i++)
-            {
-                _p0[i] = new core::dataGrid2D<std::complex<double>> *[_source.count];
-
-                for(int j = 0; j < _source.count; j++)
-                {
-                    _p0[i][j] = new core::dataGrid2D<std::complex<double>>(_grid);
-                    *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
-                }
-            }
-        }
-
-        void FiniteDifferenceForwardModel::deleteP0()
-        {
-            for(int i = 0; i < _freq.count; i++)
-            {
-                for(int j = 0; j < _source.count; j++)
-                {
-                    delete _p0[i][j];
-                }
-
-                delete[] _p0[i];
-            }
-
-            delete[] _p0;
-            _p0 = nullptr;
         }
 
         void FiniteDifferenceForwardModel::createGreens()
@@ -101,8 +55,6 @@ namespace fwi
 
         void FiniteDifferenceForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            _pTot = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count];
-
             int li;
 
             for(int i = 0; i < freq.count; i++)
@@ -111,47 +63,27 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _pTot[li + j] = new core::dataGrid2D<std::complex<double>>(*_p0[i][j]);
+                    _vpTot.push_back(core::dataGrid2D<std::complex<double>> (*_Greens[i]->getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
                 }
             }
         }
 
-        void FiniteDifferenceForwardModel::deletePtot()
-        {
-            for(int i = 0; i < _freq.count * _source.count; i++)
-            {
-                delete _pTot[i];
-            }
-
-            delete[] _pTot;
-            _pTot = nullptr;
-        }
-
         void FiniteDifferenceForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
-            _kappa = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count * receiver.count];
-
             for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
-                _kappa[i] = new core::dataGrid2D<std::complex<double>>(_grid);
+                _vkappa.push_back(core::dataGrid2D<std::complex<double>> (_grid));
             }
         }
 
         void FiniteDifferenceForwardModel::deleteKappa()
         {
-            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
-            {
-                delete _kappa[i];
-            }
 
-            delete[] _kappa;
-            _kappa = nullptr;
         }
 
         void FiniteDifferenceForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
             assert(_Greens != nullptr);
-            assert(_p0 != nullptr);
 
             int li;
 
@@ -166,7 +98,7 @@ namespace fwi
                 for(int j = 0; j < _source.count; j++)
                 {
                     L_(io::linfo) << "Solving p_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
-                    *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *_pTot[li + j]);
+                    _vpTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], _vpTot[li + j]);
                 }
             }
         }
@@ -192,7 +124,7 @@ namespace fwi
 
                     for(int k = 0; k < _source.count; k++)
                     {
-                        *_kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _source.count + k]);
+                        _vkappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
                     }
                 }
             }
@@ -202,7 +134,7 @@ namespace fwi
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
-                kOperator[i] = dotProduct(*_kappa[i], CurrentPressureFieldSerial);
+                kOperator[i] = dotProduct(_vkappa[i], CurrentPressureFieldSerial);
             }
         }
 
@@ -221,7 +153,7 @@ namespace fwi
                     l_j = j * _source.count;
                     for(int k = 0; k < _source.count; k++)
                     {
-                        kDummy = *_kappa[l_i + l_j + k];
+                        kDummy = _vkappa[l_i + l_j + k];
                         kDummy.conjugate();
                         kRes += kDummy * res[l_i + l_j + k];
                     }
@@ -238,7 +170,7 @@ namespace fwi
 
             for(int i = offset; i < offset + block_size; i++)
             {
-                kDummy = *_kappa[i];
+                kDummy = _vkappa[i];
                 kDummy.conjugate();
                 kRes += kDummy * res[i - offset];
             }
@@ -262,8 +194,7 @@ namespace fwi
 
                     for(int k = 0; k < _source.count; k++)
                     {
-                        kDummy = *_kappa[l_i + l_j + k];
-
+                        kDummy = _vkappa[l_i + l_j + k];
                         kRes += kDummy * res[l_i + l_j + k];
                     }
                 }

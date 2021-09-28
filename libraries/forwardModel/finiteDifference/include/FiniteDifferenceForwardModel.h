@@ -34,10 +34,28 @@ namespace fwi
 
             const core::FrequenciesGroup &getFreq() { return _freq; }
 
-        private:
-            void createP0();
-            void deleteP0();
+            /**
+             * This vector contains the kernels for all combinations of frequencies, receivers, and sources.
+             *
+             * It is laid out using the following logic:
+             *   - Frequency  x
+             *     - Receiver y
+             *       - Source z
+             *
+             * @example
+             * E.g., for a problem with 5 frequencies, 4 receivers and 4 sources:
+             * - index 0 contains the kernel for frequencies 0, receiver 0, source 0;
+             * - index 1 contains the kernel for frequencies 0, receiver 0, source 1;
+             * - index 4 contains the kernel for frequencies 0, receiver 1, source 0;
+             * - index 16 contains the kernel for frequencies 1, receiver 0, source 0;
+             * - etc...
+             *
+             * @brief the vector of all kernels, laid out from frequencies -> receiver -> source. See docs for more details.
+             * @return a vector containing the kernels for all combinations of frequencies, receivers and sources.
+             */
+            const std::vector<core::dataGrid2D<std::complex<double>>> &getKernel() { return _vkappa; }
 
+        private:
             void createPTot(const core::FrequenciesGroup &freq, const core::Sources &source);
 
             void createGreens();
@@ -59,9 +77,9 @@ namespace fwi
             const core::FrequenciesGroup &_freq;
             core::greensRect2DCpu **_Greens;
 
-            core::dataGrid2D<std::complex<double>> ***_p0;
-            core::dataGrid2D<std::complex<double>> **_pTot;
-            core::dataGrid2D<std::complex<double>> **_kappa;
+            std::vector<core::dataGrid2D<std::complex<double>>> _vpTot;
+            std::vector<core::dataGrid2D<std::complex<double>>> _vkappa;
+
             finiteDifferenceForwardModelInput _fMInput;
             friend class FiniteDifferenceForwardModelParallel;
         };
