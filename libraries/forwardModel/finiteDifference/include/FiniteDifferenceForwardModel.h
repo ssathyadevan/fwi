@@ -59,16 +59,12 @@ namespace fwi
             void createPTot(const core::FrequenciesGroup &freq, const core::Sources &source);
 
             void createGreens();
-            void deleteGreens();
-
-            void deletePtot();
 
             core::dataGrid2D<std::complex<double>> calcTotalField(
                 const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chiEst, const core::dataGrid2D<std::complex<double>> &Pinit);
 
             void applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
-            void deleteKappa();
 
         private:
             std::vector<std::complex<double>> _residual;

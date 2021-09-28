@@ -14,8 +14,8 @@ namespace fwi
             , _freq(freq)
             , _Greens()
             , _p0()
-            , _pTot()
-            , _Kappa()
+            , _vpTot()
+            , _vKappa()
             , _fmInput(fmInput)
         {
             L_(io::linfo) << "Creating Greens function field...";
@@ -29,79 +29,33 @@ namespace fwi
 
         IntegralForwardModel::~IntegralForwardModel()
         {
-            if(_Greens != nullptr)
-                this->deleteGreens();
-
-            if(_p0 != nullptr)
-                this->deleteP0();
-
-            if(_pTot != nullptr)
-                this->deletePtot();
-
-            if(_Kappa != nullptr)
-                this->deleteKappa();
         }
 
         void IntegralForwardModel::createP0()
         {
-            assert(_Greens != nullptr);
-            assert(_p0 == nullptr);
-
-            _p0 = new core::dataGrid2D<std::complex<double>> **[_freq.count];
-
             for(int i = 0; i < _freq.count; i++)
             {
-                _p0[i] = new core::dataGrid2D<std::complex<double>> *[_source.count];
+                int li = i * _source.count;
 
                 for(int j = 0; j < _source.count; j++)
                 {
-                    _p0[i][j] = new core::dataGrid2D<std::complex<double>>(_grid);
-                    *_p0[i][j] = *(_Greens[i]->getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
+                    _p0[li + j] = core::dataGrid2D<std::complex<double>>(_grid);
+                    _p0[li + j] = *(_Greens[i].getReceiverCont(j)) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume());
                 }
             }
         }
 
-        void IntegralForwardModel::deleteP0()
-        {
-            for(int i = 0; i < _freq.count; i++)
-            {
-                for(int j = 0; j < _source.count; j++)
-                {
-                    delete _p0[i][j];
-                }
-
-                delete[] _p0[i];
-            }
-
-            delete[] _p0;
-            _p0 = nullptr;
-        }
 
         void IntegralForwardModel::createGreens()
         {
-            _Greens = new core::greensRect2DCpu *[_freq.count];
-
             for(int i = 0; i < _freq.count; i++)
             {
-                _Greens[i] = new core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]);
+                _Greens.push_back(core::greensRect2DCpu(_grid, core::greensFunctions::Helmholtz2D, _source, _receiver, _freq.k[i]));
             }
-        }
-
-        void IntegralForwardModel::deleteGreens()
-        {
-            for(int i = 0; i < _freq.count; i++)
-            {
-                delete _Greens[i];
-            }
-
-            delete[] _Greens;
-            _Greens = nullptr;
         }
 
         void IntegralForwardModel::createPTot(const core::FrequenciesGroup &freq, const core::Sources &source)
         {
-            _pTot = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count];
-
             int li;
 
             for(int i = 0; i < freq.count; i++)
@@ -110,42 +64,20 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _pTot[li + j] = new core::dataGrid2D<std::complex<double>>(*_p0[i][j]);
+                    _vpTot[li + j] = core::dataGrid2D<std::complex<double>>(_p0[li +j]);
                 }
             }
         }
 
-        void IntegralForwardModel::deletePtot()
-        {
-            for(int i = 0; i < _freq.count * _source.count; i++)
-            {
-                delete _pTot[i];
-            }
-
-            delete[] _pTot;
-            _pTot = nullptr;
-        }
 
         void IntegralForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
-            _Kappa = new core::dataGrid2D<std::complex<double>> *[freq.count * source.count * receiver.count];
-
             for(int i = 0; i < freq.count * source.count * receiver.count; i++)
             {
-                _Kappa[i] = new core::dataGrid2D<std::complex<double>>(_grid);
+                _vKappa.push_back(core::dataGrid2D<std::complex<double>>(_grid));
             }
         }
 
-        void IntegralForwardModel::deleteKappa()
-        {
-            for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
-            {
-                delete _Kappa[i];
-            }
-
-            delete[] _Kappa;
-            _Kappa = nullptr;
-        }
 
         core::dataGrid2D<std::complex<double>> IntegralForwardModel::calcTotalField(
             const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chi, const core::dataGrid2D<std::complex<double>> &p_init)
@@ -243,9 +175,6 @@ namespace fwi
 
         void IntegralForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
-            assert(_Greens != nullptr);
-            assert(_p0 != nullptr);
-
             int li;
 
             for(int i = 0; i < _freq.count; i++)
@@ -256,7 +185,7 @@ namespace fwi
 
                 for(int j = 0; j < _source.count; j++)
                 {
-                    *_pTot[li + j] = calcTotalField(*_Greens[i], chiEst, *_p0[i][j]);
+                    _vpTot[li + j] = calcTotalField(_Greens[i], chiEst, _p0[li + j]);
                 }
             }
         }
@@ -282,7 +211,7 @@ namespace fwi
 
                     for(int k = 0; k < _source.count; k++)
                     {
-                        *_Kappa[li + lj + k] = (*_Greens[i]->getReceiverCont(j)) * (*_pTot[i * _source.count + k]);
+                        _vKappa[li + lj + k] = (*_Greens[i].getReceiverCont(j)) * (_vpTot[i * _source.count + k]);
                     }
                 }
             }
@@ -292,7 +221,7 @@ namespace fwi
         {
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
-                kOperator[i] = dotProduct(*_Kappa[i], CurrentPressureFieldSerial);
+                kOperator[i] = dotProduct(_vKappa[i], CurrentPressureFieldSerial);
             }
         }
 
@@ -310,7 +239,7 @@ namespace fwi
                     l_j = j * _source.count;
                     for(int k = 0; k < _source.count; k++)
                     {
-                        kDummy = *_Kappa[l_i + l_j + k];
+                        kDummy = _vKappa[l_i + l_j + k];
                         kDummy.conjugate();
                         kRes += kDummy * res[l_i + l_j + k];
                     }
@@ -327,7 +256,7 @@ namespace fwi
 
             for(int i = offset; i < offset + block_size; i++)
             {
-                kDummy = *_Kappa[i];
+                kDummy = _vKappa[i];
                 kDummy.conjugate();
                 kRes += kDummy * res[i - offset];
             }
