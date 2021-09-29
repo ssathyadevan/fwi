@@ -51,7 +51,7 @@ namespace fwi
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);
             void deleteKappa();
 
-        private:
+        protected:
             std::vector<std::complex<double>> _residual;
             const core::grid2D &_grid;
             const core::Sources &_source;
@@ -63,9 +63,9 @@ namespace fwi
             core::complexDataGrid2D **_pTot;
             core::complexDataGrid2D **_kappa;
             finiteDifferenceForwardModelInput _fMInput;
-            friend class FiniteDifferenceForwardModelParallel;
-            friend class FiniteDifferenceForwardModelParallelOpenCL;
-        };
 
+        };
     }   // namespace forwardModels
 }   // namespace fwi
+
+

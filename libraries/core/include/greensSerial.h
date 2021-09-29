@@ -10,7 +10,7 @@
 #include <complexDataGrid2D.h>
 
 using namespace Eigen;
-
+ 
 namespace fwi
 {
     namespace core

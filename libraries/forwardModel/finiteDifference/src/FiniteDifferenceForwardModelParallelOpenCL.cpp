@@ -14,12 +14,19 @@ namespace fwi
             const core::Receivers &receiver, const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
             : FiniteDifferenceForwardModel(grid, source, receiver, freq, fmInput)
         {
-            L_(io::linfo) << "OpenMP number of threads: " << omp_get_max_threads();
+            // L_(io::linfo) << "OpenMP number of threads: " << omp_get_max_threads();
         }
-
         void FiniteDifferenceForwardModelParallelOpenCL::calculateKappa()
         {
-            
+            // cl::Kernel kern1(program, "calculateKappa");
+            // cl::CommandQueue queue(context, device, 0, &err); 
+
+            // cl::Buffer buf0(context, CL_MEM_READ_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(float)*_freq.count, "pointer or something");
+            // err = kern1.setArg(0, buf0);
+
+            // err = queue.enqueueNDRangeKernel(kern1, cl::NullRange, cl::NDRange(_freq.count,_receiver.count,_source.count));
+            // err = queue.enqueueReadBuffer(bufout, CL_TRUE, 0, sizeof(float)*vec.size(), vec.data());
+
             int li, lj, k;
 
 #pragma omp parallel for private(li, lj, k)
@@ -99,10 +106,20 @@ namespace fwi
                     }
                 }
             }
-
             // namespace forwardModels
         }
-
     }   // namespace forwardModels
-
+    void OpenCLParallelized::setProgram(cl::Program prog){
+            program = prog;
+        }
+    void OpenCLParallelized::setContext(cl::Context con){
+        context = con;
+    }
+    void OpenCLParallelized::setDevice(cl::Device dev){
+        device = dev;
+    }
 }   // namespace fwi
+
+cl::Program fwi::OpenCLParallelized::program;
+cl::Context fwi::OpenCLParallelized::context;
+cl::Device fwi::OpenCLParallelized::device;
