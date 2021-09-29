@@ -32,13 +32,15 @@ if(MPI_FOUND)
     link_libraries(${Boost_LIBRARIES})
     link_libraries(${MPI_CXX_LIBRARIES})
 else()
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework OpenCL -fopenmp")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -Wall -Wextra -Wpedantic")
 endif()
 
-find_package(OpenCL)
-include_directories(${OpenCL_INCLUDE_DIR})
+find_package(OpenCL REQUIRED)
+include_directories(${OpenCL_INCLUDE_DIRS})
+include_directories(${OpenCL_INCLUDE_PATH})
 link_directories(${OpenCL_LIBRARY})
 link_libraries (${OpenCL_LIBRARY})
+
 
 #We require Eigen3 
 find_package (Eigen3 REQUIRED)

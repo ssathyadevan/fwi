@@ -22,43 +22,75 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
 void doProcessOpenCL( const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
-std::string readKernelCode(std::string kernelFileName);
+std::string filetostring(std::string kernelFileName);
 
 
 int main(int argc, char *argv[])
 {
+     int num_el = 100000000;
+    std::vector<float> vec(num_el); 
+    std::vector<float> vec2(num_el);
+    std::fill(vec.begin(), vec.end(), 1);
+    std::fill(vec2.begin(), vec2.end(), 1);
+    
     std::vector<cl::Platform> platforms;
     cl::Platform::get(&platforms);
-    
     cl::Platform platform = platforms.front();
     std::vector<cl::Device> devices;
     platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
-    cl::Device device = devices.front();
-    std::string kernelPath = "../applications/processingOpenCL/";
-    std::string kernelFileName = "kernels";
-    std::string kernelSource = readKernelCode(kernelPath + kernelFileName + ".cl");
-    std::cout << kernelSource << std::endl;
+    cl::Device device = devices.front();    
     cl::Context context(device);
-    cl::Program program(context,kernelSource);    
+    std::string src = filetostring("kernels.cl");
+    cl::Program program(context,src);    
     cl_int err = program.build("-cl-std=CL1.2");
+    
+    // create memory buffer for input data
+    cl::Buffer buf(context, CL_MEM_READ_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(float)*vec.size(), vec.data(), &err);
+    // create kernel:
+    cl::Kernel kern1(program, "vectorMultiplication");
+    // set the first argument of the kernel
+    err = kern1.setArg(0, buf);
+    // command queue
+    cl::CommandQueue queue(context, device, 0, &err);
 
-    try
-    {
-        std::vector<std::string> arguments = {argv + 1, argv + argc};
-        fwi::io::argumentReader fwiOpts(arguments);
-        printHelpOrVersion(fwiOpts);
+    clock_t startTime = clock();
+    err = queue.enqueueNDRangeKernel(kern1, cl::NullRange, cl::NDRange(vec.size()));
+    err = queue.enqueueReadBuffer(buf, CL_TRUE, 0, sizeof(float)*vec.size(), vec.data());
+    clock_t endTime = clock();
+
+    clock_t clockTicksTaken = endTime - startTime;
+    double timeInSecondsPar = clockTicksTaken / (double) CLOCKS_PER_SEC;
+
+    std::cout << "parallel: " << timeInSecondsPar << " seconds\n" << "result: "<< vec[0] << std::endl;
+    
+    startTime = clock();
+    for(int i = 0; i<num_el; i++){
+        vec2[i] = sin(vec2[i])*sin(vec2[i]);
+    }
+     endTime = clock();
+     clockTicksTaken = endTime - startTime;
+     double timeInSecondsLin = clockTicksTaken / (double) CLOCKS_PER_SEC;
+
+    std::cout << "regular: " << timeInSecondsLin << " seconds\n" << "result: "<< vec2[0] << std::endl;;
+    std::cout << "speedup factor: " << timeInSecondsLin/timeInSecondsPar << std::endl;
+
+    // try
+    // {
+    //     std::vector<std::string> arguments = {argv + 1, argv + argc};
+    //     fwi::io::argumentReader fwiOpts(arguments);
+    //     printHelpOrVersion(fwiOpts);
         
-        fwi::io::genericInputCardReader genericReader(fwiOpts);
-        const fwi::io::genericInput gInput = genericReader.getInput();
-        doProcessOpenCL(gInput);
-    }
-    catch(const std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-        std::cout << "Use -h for help on parameter options and values." << std::endl;
-        L_(fwi::io::lerror) << e.what() << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
+    //     fwi::io::genericInputCardReader genericReader(fwiOpts);
+    //     const fwi::io::genericInput gInput = genericReader.getInput();
+    //     doProcessOpenCL(gInput);
+    // }
+    // catch(const std::exception &e)
+    // {
+    //     std::cerr << e.what() << std::endl;
+    //     std::cout << "Use -h for help on parameter options and values." << std::endl;
+    //     L_(fwi::io::lerror) << e.what() << std::endl;
+    //     std::exit(EXIT_FAILURE);
+    // }
 
 }
 
@@ -89,7 +121,7 @@ void doProcessOpenCL(const fwi::io::genericInput& gInput)
     std::vector<cl::Device> devices;
     platform.getDevices(CL_DEVICE_TYPE_GPU, &devices);
     cl::Device& device = devices.front();
-    std::string src = readKernelCode("kernels.cl");
+    std::string src = filetostring("kernels.cl");
     cl::Context context(devices);
     cl::Program program(context, src);  
     err = program.build("-cl-std=CL1.2");
@@ -213,7 +245,7 @@ void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
 
 }
 
-std::string readKernelCode(std::string kernelFileName){
+std::string filetostring(std::string kernelFileName){
 	std::ifstream file(kernelFileName, std::ios::binary);
     std::string fileStr;
 
