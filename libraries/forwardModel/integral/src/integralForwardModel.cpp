@@ -27,9 +27,7 @@ namespace fwi
             calculateKappa();
         }
 
-        IntegralForwardModel::~IntegralForwardModel()
-        {
-        }
+        IntegralForwardModel::~IntegralForwardModel() {}
 
         void IntegralForwardModel::createP0()
         {
@@ -44,7 +42,6 @@ namespace fwi
                 }
             }
         }
-
 
         void IntegralForwardModel::createGreens()
         {
@@ -64,11 +61,10 @@ namespace fwi
 
                 for(int j = 0; j < source.count; j++)
                 {
-                    _vpTot[li + j] = core::dataGrid2D<std::complex<double>>(_p0[li +j]);
+                    _vpTot[li + j] = core::dataGrid2D<std::complex<double>>(_p0[li + j]);
                 }
             }
         }
-
 
         void IntegralForwardModel::createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver)
         {
@@ -77,7 +73,6 @@ namespace fwi
                 _vKappa.push_back(core::dataGrid2D<std::complex<double>>(_grid));
             }
         }
-
 
         core::dataGrid2D<std::complex<double>> IntegralForwardModel::calcTotalField(
             const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chi, const core::dataGrid2D<std::complex<double>> &p_init)
@@ -225,41 +220,5 @@ namespace fwi
             }
         }
 
-        void IntegralForwardModel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
-        {
-            int l_i, l_j;
-            kRes.zero();
-            core::dataGrid2D<std::complex<double>> kDummy(_grid);
-
-            for(int i = 0; i < _freq.count; i++)
-            {
-                l_i = i * _receiver.count * _source.count;
-                for(int j = 0; j < _receiver.count; j++)
-                {
-                    l_j = j * _source.count;
-                    for(int k = 0; k < _source.count; k++)
-                    {
-                        kDummy = _vKappa[l_i + l_j + k];
-                        kDummy.conjugate();
-                        kRes += kDummy * res[l_i + l_j + k];
-                    }
-                }
-            }
-        }
-
-        void IntegralForwardModel::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size)
-        {
-            kRes.zero();
-
-            core::dataGrid2D<std::complex<double>> kDummy(_grid);
-
-            for(int i = offset; i < offset + block_size; i++)
-            {
-                kDummy = _vKappa[i];
-                kDummy.conjugate();
-                kRes += kDummy * res[i - offset];
-            }
-        }
     }   // namespace forwardModels
 }   // namespace fwi

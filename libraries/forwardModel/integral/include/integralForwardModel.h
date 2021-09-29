@@ -22,9 +22,6 @@ namespace fwi
 
             void calculateKappa();
             virtual void calculatePTot(const core::dataGrid2D<double> &chiEst);
-            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
-            virtual void getUpdateDirectionInformationMPI(
-                std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size);
 
             const core::grid2D &getGrid() { return _grid; }
 
@@ -76,7 +73,8 @@ namespace fwi
 
             void createGreens();
 
-            core::dataGrid2D<std::complex<double>> calcTotalField(const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chiEst, const core::dataGrid2D<std::complex<double>> &Pinit);
+            core::dataGrid2D<std::complex<double>> calcTotalField(
+                const core::greensRect2DCpu &G, const core::dataGrid2D<double> &chiEst, const core::dataGrid2D<std::complex<double>> &Pinit);
 
             void applyKappa(const core::dataGrid2D<double> &CurrentPressureFieldSerial, std::vector<std::complex<double>> &pData);
             void createKappa(const core::FrequenciesGroup &freq, const core::Sources &source, const core::Receivers &receiver);

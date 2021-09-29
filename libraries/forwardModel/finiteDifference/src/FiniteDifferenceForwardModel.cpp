@@ -26,9 +26,7 @@ namespace fwi
             calculateKappa();
         }
 
-        FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel()
-        {
-        }
+        FiniteDifferenceForwardModel::~FiniteDifferenceForwardModel() {}
 
         void FiniteDifferenceForwardModel::createGreens()
         {
@@ -44,7 +42,8 @@ namespace fwi
             {
                 for(int j = 0; j < source.count; j++)
                 {
-                    _vpTot.push_back(core::dataGrid2D<std::complex<double>> (*_Greens[i].getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
+                    _vpTot.push_back(
+                        core::dataGrid2D<std::complex<double>>(*_Greens[i].getReceiverCont(j) / (_freq.k[i] * _freq.k[i] * _grid.getCellVolume())));
                 }
             }
         }
@@ -109,45 +108,6 @@ namespace fwi
             for(int i = 0; i < _freq.count * _source.count * _receiver.count; i++)
             {
                 kOperator[i] = dotProduct(_vkappa[i], CurrentPressureFieldSerial);
-            }
-        }
-
-        // TO DO: function is deprecated
-        void FiniteDifferenceForwardModel::getUpdateDirectionInformation(
-            const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
-        {
-            int l_i, l_j;
-            kRes.zero();
-            core::dataGrid2D<std::complex<double>> kDummy(_grid);
-
-            for(int i = 0; i < _freq.count; i++)
-            {
-                l_i = i * _receiver.count * _source.count;
-                for(int j = 0; j < _receiver.count; j++)
-                {
-                    l_j = j * _source.count;
-                    for(int k = 0; k < _source.count; k++)
-                    {
-                        kDummy = _vkappa[l_i + l_j + k];
-                        kDummy.conjugate();
-                        kRes += kDummy * res[l_i + l_j + k];
-                    }
-                }
-            }
-        }
-
-        void FiniteDifferenceForwardModel::getUpdateDirectionInformationMPI(
-            std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size)
-        {
-            kRes.zero();
-
-            core::dataGrid2D<std::complex<double>> kDummy(_grid);
-
-            for(int i = offset; i < offset + block_size; i++)
-            {
-                kDummy = _vkappa[i];
-                kDummy.conjugate();
-                kRes += kDummy * res[i - offset];
             }
         }
 

@@ -21,9 +21,6 @@ namespace fwi
 
             void calculateKappa();
             virtual void calculatePTot(const core::dataGrid2D<double> &chiEst);
-            virtual void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
-            virtual void getUpdateDirectionInformationMPI(
-                std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes, const int offset, const int block_size);
             virtual void getResidualGradient(std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
 
             const core::grid2D &getGrid() { return _grid; }

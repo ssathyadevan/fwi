@@ -28,11 +28,6 @@ namespace fwi
             MOCK_METHOD(void, calculatePTot, (const core::dataGrid2D<double> &chiEst), (override));
 
             MOCK_METHOD(void, calculateKappa, (), (override));
-
-            MOCK_METHOD(void, getUpdateDirectionInformation, (const std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &), (override));
-
-            MOCK_METHOD(void, getUpdateDirectionInformationMPI,
-                (std::vector<std::complex<double>> &, core::dataGrid2D<std::complex<double>> &, const int, const int), (override));
         };
     }   // namespace forwardModels
 }   // namespace fwi
