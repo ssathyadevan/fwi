@@ -112,13 +112,13 @@ namespace fwi
             }
         }
 
+        // TO DO: function is deprecated
         void FiniteDifferenceForwardModel::getUpdateDirectionInformation(
             const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
         {
             int l_i, l_j;
             kRes.zero();
             core::dataGrid2D<std::complex<double>> kDummy(_grid);
-            std::vector<core::dataGrid2D<std::complex<double>>> kappa;
 
             for(int i = 0; i < _freq.count; i++)
             {

@@ -1,4 +1,4 @@
-#include "FiniteDifferenceForwardModelParallel.h"
+#include "FiniteDifferenceOpenMPForwardModel.h"
 #include "Helmholtz2D.h"
 #include <complex>
 #include <omp.h>
@@ -8,14 +8,16 @@ namespace fwi
 {
     namespace forwardModels
     {
-        FiniteDifferenceForwardModelParallel::FiniteDifferenceForwardModelParallel(const core::grid2D &grid, const core::Sources &source,
+        FiniteDifferenceOpenMPForwardModel::FiniteDifferenceOpenMPForwardModel(const core::grid2D &grid, const core::Sources &source,
             const core::Receivers &receiver, const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput)
             : FiniteDifferenceForwardModel(grid, source, receiver, freq, fmInput)
         {
             L_(io::linfo) << "OpenMP number of threads: " << omp_get_max_threads();
         }
 
-        void FiniteDifferenceForwardModelParallel::calculateKappa()
+        FiniteDifferenceOpenMPForwardModel::~FiniteDifferenceOpenMPForwardModel() {}
+
+        void FiniteDifferenceOpenMPForwardModel::calculateKappa()
         {
             int li, lj, k;
 
@@ -36,7 +38,7 @@ namespace fwi
             }
         }
 
-        void FiniteDifferenceForwardModelParallel::calculatePTot(const core::dataGrid2D<double> &chiEst)
+        void FiniteDifferenceOpenMPForwardModel::calculatePTot(const core::dataGrid2D<double> &chiEst)
         {
             auto copyPTot = _vpTot;
 
@@ -60,7 +62,7 @@ namespace fwi
             }
         }
 
-        std::vector<std::complex<double>> FiniteDifferenceForwardModelParallel::calculatePressureField(const core::dataGrid2D<double> &chiEst)
+        std::vector<std::complex<double>> FiniteDifferenceOpenMPForwardModel::calculatePressureField(const core::dataGrid2D<double> &chiEst)
         {
             std::vector<std::complex<double>> kOperator(_freq.count * _source.count * _receiver.count);
 #pragma omp parallel for
@@ -69,32 +71,6 @@ namespace fwi
                 kOperator[i] = dotProduct(_vkappa[i], chiEst);
             }
             return kOperator;
-        }
-
-        void FiniteDifferenceForwardModelParallel::getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes)
-        {
-#pragma omp declare reduction(addition : class core::dataGrid2D<std::complex<double>> : omp_out += omp_in) initializer(omp_priv(omp_orig))
-#pragma omp declare reduction(multiplication : class core::dataGrid2D<std::complex<double>> : omp_out *omp_in) initializer(omp_priv(omp_orig))
-            int l_i, l_j, k;
-            kRes.zero();
-            core::dataGrid2D<std::complex<double>> kDummy(_grid);
-#pragma omp parallel for reduction(addition : kRes) reduction(multiplication : kDummy) private(l_i, l_j, k)
-            for(int i = 0; i < _freq.count; i++)
-            {
-                l_i = i * _receiver.count * _source.count;
-                for(int j = 0; j < _receiver.count; j++)
-                {
-                    l_j = j * _source.count;
-                    for(k = 0; k < _source.count; k++)
-                    {
-                        kDummy = _vkappa[l_i + l_j + k];
-                        kDummy.conjugate();
-                        kRes += kDummy * res[l_i + l_j + k];
-                    }
-                }
-            }
-
-            // namespace forwardModels
         }
 
     }   // namespace forwardModels

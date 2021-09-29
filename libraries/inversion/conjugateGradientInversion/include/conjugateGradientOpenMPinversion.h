@@ -22,6 +22,8 @@ namespace fwi
             conjugateGradientOpenMPinversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
                 const ConjugateGradientInversionInput &invInput);
 
+            ~conjugateGradientOpenMPinversion();
+
             // Overloading conjugateGradient parameters
             void getUpdateDirectionInformation(
                 const std::vector<std::complex<double>> &residualVector, core::dataGrid2D<std::complex<double>> &kappaTimesResidual);

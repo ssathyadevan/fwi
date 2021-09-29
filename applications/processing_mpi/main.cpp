@@ -1,9 +1,10 @@
-#include "HelpTextProcessing.h"
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
 #include "FiniteDifferenceForwardModelParallelMPI.h"
+#include "HelpTextProcessing.h"
 #include "argumentReader.h"
 #include "chiIntegerVisualisation.h"
+#include "conjugateGradientMPIInversion.h"
 #include "cpuClock.h"
 #include "createChiCSV.h"
 #include "csvReader.h"
@@ -19,7 +20,7 @@ namespace mpi = boost::mpi;
 void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
 void doProcess(const fwi::io::genericInput &gInput);
-void doProcessMPI( const fwi::io::genericInput &gInput);
+void doProcessMPI(const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
 
 int main(int argc, char *argv[])
@@ -179,10 +180,9 @@ void doProcessMPI(const fwi::io::genericInput &gInput)
     std::ifstream file(fileLocation);
     fwi::io::CSVReader row;
 
-
     if(!file.is_open())
     {
-        //L_(fwi::io::linfo) << "Could not open file at " << fileLocation;
+        // L_(fwi::io::linfo) << "Could not open file at " << fileLocation;
         throw std::runtime_error("Could not open file at " + fileLocation);
     }
 
@@ -205,13 +205,18 @@ void doProcessMPI(const fwi::io::genericInput &gInput)
     fwi::forwardModels::ForwardModelInterface *model;
     model = factory.createForwardModel(gInput.caseFolder, gInput.forward + "ForwardModel", grid, source, receiver, freq);
 
+    // Create Inversion Model (DEFAULT TO CONJUGATE GRADIENT)
+    fwi::inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+    const fwi::core::CostFunctionCalculator costCalculator(fwi::core::CostFunctionCalculator::CostFunctionEnum::leastSquares);
+    fwi::inversionMethods::ConjugateGradientMPIInversion inversionModel(costCalculator, model, conjugateGradientReader.getInput());
+
     std::vector<std::complex<double>> res;
     fwi::core::dataGrid2D<std::complex<double>> cgrid(grid);
 
     bool loop = true;
     while(loop)
     {
-       model->getUpdateDirectionInformationMPI(res, cgrid,2,5);
+        inversionModel.getUpdateDirectionInformationMPI(res, cgrid, 2, 5);
     }
 
     printf("Rank %i has broken from loop with buffer %d \n", world.rank(), loop);

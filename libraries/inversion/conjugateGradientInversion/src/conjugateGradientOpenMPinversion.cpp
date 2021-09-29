@@ -11,6 +11,8 @@ namespace fwi
         {
         }
 
+        conjugateGradientOpenMPinversion::~conjugateGradientOpenMPinversion() {}
+
         void conjugateGradientOpenMPinversion::getUpdateDirectionInformation(
             const std::vector<std::complex<double>> &residualVector, core::dataGrid2D<std::complex<double>> &kappaTimesResidual)
         {
