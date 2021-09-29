@@ -66,7 +66,7 @@ namespace fwi
                 for(j = 0; j < _source.count; j++)
                 {
                     // Review: Remove logging statements?
-                    // L_(io::linfo) << "Solving P_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")";
+                    // L_(io::linfo) << "Solving P_tot for source: (" << _source.xSrc[j][0] << "," << _source.xSrc[j][1] << ")"; 
 
                     *_pTot[li + j] = helmholtzFreq.solve(_source.xSrc[j], *copyPTot[li + j]);
                 }
