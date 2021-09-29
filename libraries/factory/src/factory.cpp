@@ -1,6 +1,6 @@
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
-#include "FiniteDifferenceForwardModelParallel.h"
+#include "FiniteDifferenceOpenMPForwardModel.h"
 #ifdef MPI
 #include "FiniteDifferenceForwardModelParallelMPI.h"
 #include "conjugateGradientMPIInversion.h"
@@ -108,16 +108,16 @@ namespace fwi
             return _createdForwardModel;
         }
 
-        if(desiredForwardModel == "FiniteDifferenceParallelForwardModel")
+        if(desiredForwardModel == "FiniteDifferenceOpenMPForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel =
-                new forwardModels::FiniteDifferenceForwardModelParallel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+                new forwardModels::FiniteDifferenceOpenMPForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
 #ifdef MPI
 
-        if(desiredForwardModel == "FiniteDifferenceParallelMPIForwardModel")
+        if(desiredForwardModel == "FiniteDifferenceMPIForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel = new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());

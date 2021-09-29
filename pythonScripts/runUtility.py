@@ -23,15 +23,15 @@ parser.add_argument("--post-dir", type=str, required=False, default="./",
                     help="Path to the folder containing postProcessing-python3.py")
 
 parser.add_argument("-p", "--preprocess", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceOpenMP", "FiniteDifferenceMPI"],
                     help="Choice of ForwardModel for PreProcess")
 
 parser.add_argument("-f", "--forward", type=str, required=False, default="FiniteDifference",
-                    choices=["FiniteDifference", "Integral","FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"],
+                    choices=["FiniteDifference", "Integral","FiniteDifferenceOpenMP", "FiniteDifferenceMPI"],
                     help="Choice of ForwardModel for Process")
 
 parser.add_argument("-i", "--inversion", type=str, required=False, default="ConjugateGradient",
-                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection","ConjugateGradientMPI"],
+                    choices=["ConjugateGradient", "GradientDescent", "Evolution", "Random", "StepAndDirection","ConjugateGradientMPI","ConjugateGradientOpenMP"],
                     help="Choice of inversion method for Process *StepAndDirection is deprecated*")
 
 parser.add_argument("--step-dir", type=str, required=False, default="ConjugateGradient",
@@ -53,6 +53,9 @@ parser.add_argument('--suppress-warning', action='store_true',
 
 # Parse the input arguments
 arguments = parser.parse_args()
+
+#set number of threads omp
+os.environ["OMP_NUM_THREADS"] = str(arguments.threads)
 
 if os.path.basename(os.getcwd()) != "FWIInstall" and not arguments.suppress_warning:
     msg = "This script is used most easily from the FWIInstall folder.\n"

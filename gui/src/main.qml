@@ -566,7 +566,7 @@ Do you want to continue?"
                 console.log("==== Start runUtility ====")
                 consoleLog("==== Start runUtility ====")
                 //should be python on windows.
-                var preProcessCommand = "python3 runUtility.py -d '%DATA%' -f %FORWARD% -p %PREFORWARD%  -i %INVERSE% --threads %CORES% %PRE% %PROS% %POST% "
+                var preProcessCommand = "python3 runUtility.py -d '%DATA%' -f %FORWARD% -p %PREFORWARD%  -i %INVERSE% --threads %CORES% %PRE% %PROS% %POST% %MPI%"
                 preProcessCommand = preProcessCommand.replace("%DATA%", inputFolderTextEdit.text)
                 preProcessCommand = preProcessCommand.replace("%FORWARD%", forwardCombo.currentText)
                 preProcessCommand = preProcessCommand.replace("%PREFORWARD%", forwardCombo.currentText)
@@ -575,6 +575,7 @@ Do you want to continue?"
                 preProcessCommand = preProcessCommand.replace("%PRE%", preProcessingCheckBox.checked === true ? "" : "--skip-pre")
                 preProcessCommand = preProcessCommand.replace("%PROS%", processingCheckBox.checked === true ? "" : "--skip-process")
                 preProcessCommand = preProcessCommand.replace("%POST%", postProcessingCheckBox.checked === true ? "" : "--skip-post")
+                preProcessCommand = preProcessCommand.replace("%MPI%", inversionCombo.currentText.includes("MPI") === true ? "--MPI" : "")
                 console.log(preProcessCommand)
                 consoleLog(preProcessCommand)
                 console.log("==== Click refresh ⟳ when the process is completed ====")
@@ -602,7 +603,7 @@ Do you want to continue?"
                 id: forwardText
                 text: qsTr("Forward Model")
             }
-            model: ["Integral", "FiniteDifference", "FiniteDifferenceParallel", "FiniteDifferenceParallelMPI"]
+            model: ["Integral", "FiniteDifference", "FiniteDifferenceOpenMP", "FiniteDifferenceMPI"]
         }
 
         ComboBox {
@@ -619,7 +620,7 @@ Do you want to continue?"
                 text: qsTr("Inversion Model")
             }
             currentIndex: 0
-            model: ["ConjugateGradient", "GradientDescent", "Evolution", "Random"]
+            model: ["ConjugateGradient", "GradientDescent", "Evolution", "Random","ConjugateGradientOpenMP", "ConjugateGradientMPI"]
         }
 
         Text {
