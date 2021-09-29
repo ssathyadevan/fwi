@@ -167,6 +167,8 @@ namespace fwi
             void getUpdateDirectionInformation(
                 const std::vector<std::complex<double>> &residualVector, core::dataGrid2D<std::complex<double>> &kappaTimesResidual);
 
+            std::vector<std::complex<double>> calculateKappaTimesZeta(const core::dataGrid2D<double> &zeta, std::vector<std::complex<double>> &kernel);
+
         public:
             ConjugateGradientInversion(const core::CostFunctionCalculator &costCalculator, forwardModels::ForwardModelInterface *forwardModel,
                 const ConjugateGradientInversionInput &invInput);

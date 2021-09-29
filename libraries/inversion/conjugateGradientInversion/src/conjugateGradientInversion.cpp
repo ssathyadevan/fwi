@@ -1,5 +1,6 @@
 #include "conjugateGradientInversion.h"
 #include "CommonVectorOperations.h"
+#include "dataGrid2D.h"
 #include "log.h"
 #include "progressBar.h"
 #include <iostream>
@@ -234,11 +235,23 @@ namespace fwi
             return gradientCurrent + gamma * zeta;
         }
 
+        std::vector<std::complex<double>> ConjugateGradientInversion::calculateKappaTimesZeta(
+            const core::dataGrid2D<double> &zeta, std::vector<std::complex<double>> &kernel)
+        {
+            auto kappa = _forwardModel->getKernel();
+            for(int i = 0; i < _frequencies.count * _sources.count * _receivers.count; i++)
+            {
+                kernel[i] = dotProduct(kappa[i], zeta);
+            }
+            return kernel;
+        }
+
         double ConjugateGradientInversion::calculateStepSizeRegularisation(const RegularisationParameters &regularisationPrevious,
             RegularisationParameters &regularisationCurrent, const std::vector<std::complex<double>> &residualVector, const double eta,
             const double fDataPrevious, const core::dataGrid2D<double> &zeta)
         {
-            std::vector<std::complex<double>> kappaTimesZeta = _forwardModel->calculatePressureField(zeta);
+            std::vector<std::complex<double>> kappaTimesZeta(_frequencies.count * _sources.count * _receivers.count);
+            calculateKappaTimesZeta(zeta, kappaTimesZeta);
 
             double a0 = fDataPrevious;
 
