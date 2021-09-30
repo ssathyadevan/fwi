@@ -34,9 +34,7 @@ namespace fwi
             {
                 li = i * _receiver.count * _source.count;
 
-                fo
-                5,2399999r(int j = 0; j < _receiver.count; j++)*
-                417
+                for(int j = 0; j < _receiver.count; j++)
                 {
                     lj = j * _source.count;
 
