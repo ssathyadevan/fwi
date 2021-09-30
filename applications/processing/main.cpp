@@ -82,7 +82,7 @@ void doProcess(const fwi::io::genericInput& gInput)
     receiver.Print();
     freq.Print(gInput.freq.nTotal);
 
-    // Logging chi from input
+    // Logging Chi from input
     L_(fwi::io::linfo) << "Visualisation of input chi (to be reconstructed)";
     fwi::io::chi_visualisation_in_integer_form(gInput.inputFolder + gInput.fileName + ".txt", gInput.nGridOriginal[0]);
     fwi::io::createCsvFilesForChi(gInput.inputFolder + gInput.fileName + ".txt", gInput, "chi_reference_");
