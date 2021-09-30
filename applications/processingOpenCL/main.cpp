@@ -22,12 +22,13 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts);
 void executeFullFWI(const fwi::io::argumentReader &fwiOpts);
 void doProcessOpenCL( const fwi::io::genericInput &gInput);
 void writePlotInput(const fwi::io::genericInput &gInput, std::string msg);
-std::string filetostring(std::string kernelFileName);
+std::string readKernelCode(std::string kernelFileName);
 
 
 int main(int argc, char *argv[])
 {
-     int num_el = 100000000;
+    {
+         int num_el = 100000000;
     std::vector<float> vec(num_el); 
     std::vector<float> vec2(num_el);
     std::fill(vec.begin(), vec.end(), 1);
@@ -35,13 +36,17 @@ int main(int argc, char *argv[])
     
     std::vector<cl::Platform> platforms;
     cl::Platform::get(&platforms);
+    
     cl::Platform platform = platforms.front();
     std::vector<cl::Device> devices;
     platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
-    cl::Device device = devices.front();    
+    cl::Device device = devices.front();
+    std::string kernelPath = "../../applications/processingOpenCL/";
+    std::string kernelFileName = "kernels";
+    std::string kernelSource = readKernelCode(kernelPath + kernelFileName + ".cl");
+    std::cout << kernelSource << std::endl;
     cl::Context context(device);
-    std::string src = filetostring("kernels.cl");
-    cl::Program program(context,src);    
+    cl::Program program(context,kernelSource);    
     cl_int err = program.build("-cl-std=CL1.2");
     
     // create memory buffer for input data
@@ -73,7 +78,8 @@ int main(int argc, char *argv[])
 
     std::cout << "regular: " << timeInSecondsLin << " seconds\n" << "result: "<< vec2[0] << std::endl;;
     std::cout << "speedup factor: " << timeInSecondsLin/timeInSecondsPar << std::endl;
-
+    }
+    
     // try
     // {
     //     std::vector<std::string> arguments = {argv + 1, argv + argc};
@@ -112,22 +118,19 @@ void printHelpOrVersion(fwi::io::argumentReader &fwiOpts)
 
 void doProcessOpenCL(const fwi::io::genericInput& gInput)
 {    std::cout << "Inversion Processing Started" << std::endl; 
-    // initialize openCL
-    ////////////////////////////////////////////////////
-    cl_int err = 0;  
+
     std::vector<cl::Platform> platforms;
-    cl::Platform::get(&platforms);
+    cl::Platform::get(&platforms);    
     cl::Platform platform = platforms.front();
     std::vector<cl::Device> devices;
-    platform.getDevices(CL_DEVICE_TYPE_GPU, &devices);
-    cl::Device& device = devices.front();
-    std::string src = filetostring("kernels.cl");
-    cl::Context context(devices);
-    cl::Program program(context, src);  
-    err = program.build("-cl-std=CL1.2");
-
-    std::cout << err << std::endl;
-    ///////////////////////////////////////////////////
+    platform.getDevices(CL_DEVICE_TYPE_GPU,&devices);
+    cl::Device device = devices.front();
+    std::string kernelPath = "../../applications/processingOpenCL/";
+    std::string kernelFileName = "kernels";
+    std::string kernelSource = readKernelCode(kernelPath + kernelFileName + ".cl");
+    cl::Context context(device);
+    cl::Program program(context, kernelSource);    
+    cl_int err = program.build("-cl-std=CL1.2");
 
     fwi::OpenCLParallelized::setProgram(program);
     fwi::OpenCLParallelized::setContext(context);
@@ -245,7 +248,7 @@ void writePlotInput(const fwi::io::genericInput &gInput, std::string msg)
 
 }
 
-std::string filetostring(std::string kernelFileName){
+std::string readKernelCode(std::string kernelFileName){
 	std::ifstream file(kernelFileName, std::ios::binary);
     std::string fileStr;
 

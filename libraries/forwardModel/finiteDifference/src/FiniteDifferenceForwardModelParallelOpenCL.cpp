@@ -18,10 +18,10 @@ namespace fwi
         }
         void FiniteDifferenceForwardModelParallelOpenCL::calculateKappa()
         {
-            // cl::Kernel kern1(program, "calculateKappa");
-            // cl::CommandQueue queue(context, device, 0, &err); 
+            cl::Kernel kernKappa(program, "calculateKappa");
+            cl::CommandQueue queue(context, device, 0, &err); 
 
-            // cl::Buffer buf0(context, CL_MEM_READ_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(float)*_freq.count, "pointer or something");
+            // cl::Buffer bufFreq(context, CL_MEM_READ_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR, sizeof(float)*_freq.count, &_freq.count);
             // err = kern1.setArg(0, buf0);
 
             // err = queue.enqueueNDRangeKernel(kern1, cl::NullRange, cl::NDRange(_freq.count,_receiver.count,_source.count));
@@ -34,7 +34,9 @@ namespace fwi
             {
                 li = i * _receiver.count * _source.count;
 
-                for(int j = 0; j < _receiver.count; j++)
+                fo
+                5,2399999r(int j = 0; j < _receiver.count; j++)*
+                417
                 {
                     lj = j * _source.count;
 
