@@ -43,7 +43,6 @@ namespace fwi
 
             std::ofstream residualLogFile = openResidualLogFile(gInput);
 
-            _forwardModel->calculateKappa();
             bool isConverged = false;
 
             // main loop// Looping through the generations
@@ -92,7 +91,8 @@ namespace fwi
             return parent;
         }
 
-        core::dataGrid2D<double> EvolutionInversion::createRandomChild(const core::dataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const
+        core::dataGrid2D<double> EvolutionInversion::createRandomChild(
+            const core::dataGrid2D<double> &parent, std::default_random_engine &generator, std::normal_distribution<double> &distribution) const
         {
             core::dataGrid2D<double> child(parent.getGrid());
             auto parentData = parent.getData();

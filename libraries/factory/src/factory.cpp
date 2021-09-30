@@ -1,12 +1,13 @@
 #include "FiniteDifferenceForwardModel.h"
 #include "FiniteDifferenceForwardModelInputCardReader.h"
-#include "FiniteDifferenceForwardModelParallel.h"
+#include "FiniteDifferenceOpenMPForwardModel.h"
 #ifdef MPI
 #include "FiniteDifferenceForwardModelParallelMPI.h"
 #include "conjugateGradientMPIInversion.h"
 #endif
 #include "conjugateGradientInversion.h"
 #include "conjugateGradientInversionInputCardReader.h"
+#include "conjugateGradientOpenMPinversion.h"
 #include "evolutionInversion.h"
 #include "evolutionInversionInputCardReader.h"
 #include "gradientDescentInversion.h"
@@ -43,7 +44,7 @@ namespace fwi
     }
 
     const core::CostFunctionCalculator costCalculator(core::CostFunctionCalculator::CostFunctionEnum::leastSquares);
-    
+
     inversionMethods::inversionInterface *Factory::createInversion(
         const std::string &desiredInversion, forwardModels::ForwardModelInterface *forwardModel, const io::genericInput &gInput)
     {
@@ -51,6 +52,12 @@ namespace fwi
         {
             inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
             _createdInversion = new inversionMethods::ConjugateGradientInversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
+            return _createdInversion;
+        }
+        if(desiredInversion == "ConjugateGradientOpenMPInversion")
+        {
+            inversionMethods::ConjugateGradientInversionInputCardReader conjugateGradientReader(gInput.caseFolder);
+            _createdInversion = new inversionMethods::conjugateGradientOpenMPinversion(costCalculator, forwardModel, conjugateGradientReader.getInput());
             return _createdInversion;
         }
 #ifdef MPI
@@ -101,20 +108,19 @@ namespace fwi
             return _createdForwardModel;
         }
 
-        if(desiredForwardModel == "FiniteDifferenceParallelForwardModel")
+        if(desiredForwardModel == "FiniteDifferenceOpenMPForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
             _createdForwardModel =
-                new forwardModels::FiniteDifferenceForwardModelParallel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+                new forwardModels::FiniteDifferenceOpenMPForwardModel(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
 #ifdef MPI
 
-        if(desiredForwardModel == "FiniteDifferenceParallelMPIForwardModel")
+        if(desiredForwardModel == "FiniteDifferenceMPIForwardModel")
         {
             forwardModels::finiteDifferenceForwardModelInputCardReader finitedifferencereader(caseFolder);
-            _createdForwardModel =
-                new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
+            _createdForwardModel = new forwardModels::FiniteDifferenceForwardModelMPI(grid, sources, receivers, frequencies, finitedifferencereader.getInput());
             return _createdForwardModel;
         }
 #endif

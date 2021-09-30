@@ -11,16 +11,17 @@ namespace fwi
 {
     namespace forwardModels
     {
-        class FiniteDifferenceForwardModelParallel : public FiniteDifferenceForwardModel
+        class FiniteDifferenceOpenMPForwardModel : public FiniteDifferenceForwardModel
         {
         public:
-            FiniteDifferenceForwardModelParallel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
+            FiniteDifferenceOpenMPForwardModel(const core::grid2D &grid, const core::Sources &source, const core::Receivers &receiver,
                 const core::FrequenciesGroup &freq, const finiteDifferenceForwardModelInput &fmInput);
+            ~FiniteDifferenceOpenMPForwardModel();
+
             // Overriding ForwardModel
             std::vector<std::complex<double>> calculatePressureField(const core::dataGrid2D<double> &chiEst);
             void calculateKappa();
             void calculatePTot(const core::dataGrid2D<double> &chiEst);
-            void getUpdateDirectionInformation(const std::vector<std::complex<double>> &res, core::dataGrid2D<std::complex<double>> &kRes);
         };
     }   // namespace forwardModels
 
